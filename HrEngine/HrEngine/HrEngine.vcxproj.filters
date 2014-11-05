@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="HRLight">
+      <UniqueIdentifier>{794e7677-afe3-4c99-aa84-b5f2d2473453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRMaterial">
+      <UniqueIdentifier>{096f6433-b323-4973-80fe-59a5f7d52be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRSkeletalAnimation">
+      <UniqueIdentifier>{e1b820be-d27b-4d51-9813-d906c2340ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRFastTool">
+      <UniqueIdentifier>{5a09a89a-afb8-4ddd-8808-3ef0cf6596a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRD3DUtil">
+      <UniqueIdentifier>{6b7f969d-b48f-47f0-888b-e4900f3dd1dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRCamera">
+      <UniqueIdentifier>{83dfc8f3-809a-4ce7-9e40-6b0a2ba30514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRTexture">
+      <UniqueIdentifier>{e1b05b2e-b371-4119-b2da-979ff5bedbde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRInput">
+      <UniqueIdentifier>{a331f1ec-3a1d-44eb-b999-85ed59993f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRTerrain">
+      <UniqueIdentifier>{07b9f6ad-55b3-4d84-b656-839da718da77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRParticle">
+      <UniqueIdentifier>{811f6e7a-bcf9-4326-9fc0-cbf6567c9d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRPhysics">
+      <UniqueIdentifier>{aac997f2-6fed-4e5a-8dbb-4a883258aad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HRMath">
+      <UniqueIdentifier>{8015aa23-c060-4bed-8ce8-4f6a1da4a674}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrApplication.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Camera\HrCamera.cpp">
+      <Filter>HRCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_FastTool\HrD3DFastTool.cpp">
+      <Filter>HRFastTool</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Light\HrLight.cpp">
+      <Filter>HRLight</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Material\HrMaterial.cpp">
+      <Filter>HRMaterial</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_SkeletalAnimation\HrAllocateHierarchy.cpp">
+      <Filter>HRSkeletalAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_SkeletalAnimation\HrHierarchyCtrler.cpp">
+      <Filter>HRSkeletalAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_D3DUtil\HrD3DUtil.cpp">
+      <Filter>HRD3DUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Texture\HrTexture.cpp">
+      <Filter>HRTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Terrain\HrTerrain.cpp">
+      <Filter>HRTerrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Input\HrDirectInputTool.cpp">
+      <Filter>HRInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Particle\HrParticleSystem.cpp">
+      <Filter>HRParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Physics\HrBoundingSphere.cpp">
+      <Filter>HRPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Physics\HrBoundingBox.cpp">
+      <Filter>HRPhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Particle\HrSnow.cpp">
+      <Filter>HRParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Hr_Math\HrMath.cpp">
+      <Filter>HRMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Particle\HrFirework.cpp">
+      <Filter>HRParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HR_Particle\HrParticleGun.cpp">
+      <Filter>HRParticle</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\HrApplication.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrCommon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrDefine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Camera\HrCamera.h">
+      <Filter>HRCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_FastTool\HrD3DFastTool.h">
+      <Filter>HRFastTool</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Light\HrLight.h">
+      <Filter>HRLight</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Material\HrMaterial.h">
+      <Filter>HRMaterial</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_SkeletalAnimation\HrAllocateHierarchy.h">
+      <Filter>HRSkeletalAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_SkeletalAnimation\HrHierarchyCtrler.h">
+      <Filter>HRSkeletalAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_D3DUtil\HrD3DUtil.h">
+      <Filter>HRD3DUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Texture\HrTexture.h">
+      <Filter>HRTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Terrain\HrTerrain.h">
+      <Filter>HRTerrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Input\HrDirectInputTool.h">
+      <Filter>HRInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Particle\HrParticleSystem.h">
+      <Filter>HRParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Physics\HrBoundingSphere.h">
+      <Filter>HRPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Physics\HrBoundingBox.h">
+      <Filter>HRPhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Particle\HrSnow.h">
+      <Filter>HRParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrBaseType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Hr_Math\HrMath.h">
+      <Filter>HRMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Particle\HrFirework.h">
+      <Filter>HRParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HR_Particle\HrParticleGun.h">
+      <Filter>HRParticle</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
