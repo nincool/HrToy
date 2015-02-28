@@ -1,6 +1,8 @@
+#include "stdafx.h"
 #include <windows.h>
 #include "HrWinTools.h"
 #include "HrConsole.h"
+
 
 int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 	HINSTANCE hPrevInstance,                //前一个实例句柄
