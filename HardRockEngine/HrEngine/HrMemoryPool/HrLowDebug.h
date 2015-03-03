@@ -6,11 +6,11 @@
 
 namespace HrPool
 {
-	class HrLowDebug
+	class CHrLowDebug
 	{
 	public:
-		HrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFlag = false );
-		~HrLowDebug( void );
+		CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFlag = false );
+		~CHrLowDebug( void );
 
 	public:
 		static void		DeleteAFile( char* szFileName );

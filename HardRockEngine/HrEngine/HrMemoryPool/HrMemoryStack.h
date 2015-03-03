@@ -2,14 +2,18 @@
 
 namespace HrPool
 {
+	class CHrLowDebug;
 	class CHrMemoryStack
 	{
 	public:
-		CHrMemoryStack();
+		CHrMemoryStack(CHrLowDebug* pDebugLog);
 		~CHrMemoryStack();
 
 	public:
-		void*		Mallock( int nSize );
+		void*				Mallock( int nSize );
+
+	private:
+		CHrLowDebug*		m_pDebugLog;
 	};
 }
 

@@ -8,7 +8,7 @@
 using namespace std;
 using namespace HrPool;
 
-HrLowDebug::HrLowDebug(char* szPathName, char* szAppName, bool  bPrint2TTYFlag)
+CHrLowDebug::CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFlag )
 {
 	m_bPrint2TTYFlag = bPrint2TTYFlag;
 	if (szAppName)
@@ -24,7 +24,7 @@ HrLowDebug::HrLowDebug(char* szPathName, char* szAppName, bool  bPrint2TTYFlag)
 	Debug2File("HrLowDebug:Start\n");
 }
 
-HrLowDebug::~HrLowDebug(void)
+CHrLowDebug::~CHrLowDebug( void )
 {
 }
 
@@ -38,7 +38,7 @@ HrLowDebug::~HrLowDebug(void)
 //-------------------------------------------------------------------------
 // 得到完整的路径名
 //-------------------------------------------------------------------------
-void HrLowDebug::MakeFullName( char* path, char* name, char* fullname, char* ext_name )
+void CHrLowDebug::MakeFullName( char* path, char* name, char* fullname, char* ext_name )
 {
 	if (strlen(path))	//如果路径不为空
 	{
@@ -64,12 +64,12 @@ void HrLowDebug::MakeFullName( char* path, char* name, char* fullname, char* ext
 	}
 }
 
-void HrLowDebug::DeleteAFile( char* szFileName )
+void CHrLowDebug::DeleteAFile( char* szFileName )
 {
 	remove(szFileName);
 }
 
-char* HrLowDebug::GetTrueFileName( char* szBuffer )
+char* CHrLowDebug::GetTrueFileName( char* szBuffer )
 {
 	int i = 0;
 
@@ -92,7 +92,7 @@ char* HrLowDebug::GetTrueFileName( char* szBuffer )
 	return pRet;
 }
 
-int HrLowDebug::Debug2File( char* szFormat, ... )
+int CHrLowDebug::Debug2File( char* szFormat, ... )
 {
 	char szBuf[DEBUG_BUFFER_LENGTH];			//准备输出buffer
 	char szTemp[DEBUG_BUFFER_LENGTH];			//时间戳置换的中间buffer
@@ -102,7 +102,6 @@ int HrLowDebug::Debug2File( char* szFormat, ... )
 	int iListCount = 0;
 	va_list  pArgList;
 	
-
 	//构造时间戳
 	time_t t;
 	struct tm* pTM = NULL;
@@ -124,7 +123,8 @@ int HrLowDebug::Debug2File( char* szFormat, ... )
 			iListCount = DEBUG_BUFFER_LENGTH - 1;
 		}
 
-		*(szBuf + iListCount) = '\0';
+		*(szBuf + iListCount) = '\n';
+		*(szBuf + iListCount + 1) = '\0';
 		//开始输出
 		FILE* fp = NULL;
 		//fp = fopen(m_szFileName, "a+");	
@@ -151,7 +151,7 @@ int HrLowDebug::Debug2File( char* szFormat, ... )
 //-------------------------------------------------------------------------
 //格式化字符串
 //-------------------------------------------------------------------------
-int HrLowDebug::SafePrint( char* szBuf, int iMaxlength, char* szFormat, ... )
+int CHrLowDebug::SafePrint( char* szBuf, int iMaxlength, char* szFormat, ... )
 {	
 	if (!szBuf)
 		goto SafePrint_END_PROCESS;
@@ -176,7 +176,7 @@ SafePrint_END_PROCESS:
 
 
 
-void HrLowDebug::Debug2File4Bin( char* pBuffer, int iLength )
+void CHrLowDebug::Debug2File4Bin( char* pBuffer, int iLength )
 {
 
 }

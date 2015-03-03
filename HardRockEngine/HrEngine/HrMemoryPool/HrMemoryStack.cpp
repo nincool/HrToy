@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "HrMemoryStack.h"
+#include "HrLowDebug.h"
 
 using namespace HrPool;
-CHrMemoryStack::CHrMemoryStack()
+CHrMemoryStack::CHrMemoryStack(CHrLowDebug* pDebugLog)
 {
+	
 }
-
 
 CHrMemoryStack::~CHrMemoryStack()
 {
@@ -16,9 +17,11 @@ void* CHrMemoryStack::Mallock( int nSize )
 	void* pRetMemory = nullptr;
 	if (0 >= nSize)
 	{
-		//m_pDebug->Debug2File( "CHrMemoryStack::Malloc():ERROR! iSize=%d\n", iSize );
+		m_pDebugLog->Debug2File( "CHrMemoryStack::Mallock Error! Mallock MemorySize[%d]", nSize );
 
-		//return pRet;
+		return pRetMemory;
 	}
 	return pRetMemory;
+
+
 }
