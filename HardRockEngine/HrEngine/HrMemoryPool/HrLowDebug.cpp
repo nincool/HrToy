@@ -3,7 +3,7 @@
 #include <string>
 #include <time.h>
 #include <stdarg.h>
-#include "HrPlatformDef.h"
+#include "HrBaseDef.h"
 
 using namespace std;
 using namespace HrPool;
@@ -104,11 +104,12 @@ int CHrLowDebug::Debug2File( char* szFormat, ... )
 	
 	//构造时间戳
 	time_t t;
-	struct tm* pTM = NULL;
+	struct tm TM;
 	
 	time(&t);
-	LOCALTIME( pTM, &t );
-	strftime( szTemp, DEBUG_BUFFER_LENGTH, "%Y/%m/%d %A %X", pTM );
+	LOCALTIME( &TM, &t );
+	//localtime_s( pTM, &t );
+	strftime( szTemp, DEBUG_BUFFER_LENGTH, "%Y/%m/%d %A %X", &TM );
 	
 	SafePrint(szTime, DEBUG_BUFFER_LENGTH, "[%s]", szTemp);
 

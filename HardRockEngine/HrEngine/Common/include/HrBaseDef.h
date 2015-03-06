@@ -18,8 +18,7 @@
 #define FAILED_RETURN(x)	{ if (FAILED(x)) { return FALSE; }}
 #endif
 
-
-
+#define HR_CLEAN_CHAR_BUFFER(p) (*((char*)(p))='\0')
 
 
 #ifdef HR_WINDOWS 

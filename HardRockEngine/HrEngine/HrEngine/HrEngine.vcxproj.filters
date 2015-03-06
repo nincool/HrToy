@@ -24,7 +24,10 @@
     <ClCompile Include="source\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\debug_new\DebugNew.cpp">
+    <ClCompile Include="source\debug_new\DebugNew_impl.cpp">
+      <Filter>HrDebugNew</Filter>
+    </ClCompile>
+    <ClCompile Include="source\debug_new\HrNew.cpp">
       <Filter>HrDebugNew</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,6 +48,9 @@
       <Filter>HrDebugNew</Filter>
     </ClInclude>
     <ClInclude Include="source\debug_new\DebugNew_impl.h">
+      <Filter>HrDebugNew</Filter>
+    </ClInclude>
+    <ClInclude Include="source\debug_new\HrNew.h">
       <Filter>HrDebugNew</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,6 +33,18 @@
     <ClInclude Include="HrMemoryStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HrMemoryStackToken.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HrMemoryBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HrMemoryRegister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HrMemoryDllDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -51,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HrMemoryStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HrMemoryStackToken.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HrMemoryRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
