@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "HrWinTools.h"
 #include "HrConsole.h"
+#include "debug_new/HrNew.h"
 
 #include "debug_new/DebugNew_impl.h"
 
@@ -34,12 +35,18 @@ int WINAPI WinMain( HINSTANCE hInstance,	//µ±Ç°ÊµÀý¾ä±ú
 #endif // DEBUG
 
 	TestA* pTest = HR_NEW2( TestA, 1, 2 );
+
+	HrPool::CHrNew::PrintMemoryInfo();
 	
 	HR_DELETE( pTest );
+
+	HrPool::CHrNew::DestoryMemoryManager();
+
+	system( "PAUSE" );
 #ifdef _DEBUG
 	CHrConsole::CloseConsole();
 #endif // DEBUG
-
+	
 	return 0;
 }
 

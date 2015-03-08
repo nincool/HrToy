@@ -29,12 +29,12 @@
 class CHrMutexLock
 {
 public:
-	CHrMutexLock( void )
+	CHrMutexLock()
 	{
 		MUTEXINIT( &m_Lock );
 	}
 
-	~CHrMutexLock( void )
+	~CHrMutexLock()
 	{
 		MUTEXDESTROY( &m_Lock );
 	}

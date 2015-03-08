@@ -1,5 +1,6 @@
 #pragma once
 #include "HrMemoryBase.h"
+#include <memory>
 
 namespace HrPool
 {
@@ -38,11 +39,12 @@ namespace HrPool
 		/**
 		 *	@Brief: 打印信息 [3/6/2015 By Hr]
 		*/
-		void         PrintfInfo();
+		void         PrintInfo();
 	private:
 		void         RegisterCopy( SHrMemoryRegister* pDest, void* pMemory, char* szInfo );
 	private:
 		CHrLowDebug*        m_pDebugLog;
+
 		SHrMemoryRegister   m_registerArr[HR_MEMORY_REGISTER_MAX];
 
 		//最大使用节点数

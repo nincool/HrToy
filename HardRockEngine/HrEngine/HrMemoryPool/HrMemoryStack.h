@@ -9,7 +9,7 @@ namespace HrPool
 	class CHrMemoryStack
 	{
 	public:
-		CHrMemoryStack(std::shared_ptr<CHrLowDebug>& pDebugLog);
+		CHrMemoryStack( CHrLowDebug* pDebugLog );
 		~CHrMemoryStack();
 
 	public:
@@ -22,6 +22,15 @@ namespace HrPool
 		 *	@Comment: 释放资源 [3/6/2015 By Hr]
 		*/
 		bool                Free( void* pMemory );
+
+		/**
+		 *	@Comment: 打印开辟的队列信息 [3/8/2015 By Hr]
+		*/
+		void                PrintStack();
+		/**
+		 *	@Comment: 打印开辟的内存信息 [3/8/2015 By Hr]
+		*/
+		void                PrintInfo();
 	private:
 		CHrLowDebug*		m_pDebugLog;
 

@@ -16,8 +16,13 @@ void* operator new(size_t size, const char* file, int line)
 
 	return pRetMemory;
 }
+//no matching operator delete found
+void operator delete (void* p, const char* file, int line)
+{
+	
+}
 
-void HrDelete( void* pMemory )
+void HrDelete( void* pMemory, const char* file, int line )
 {
 	HrPool::CHrNew::Delete( pMemory );
 }
@@ -29,7 +34,7 @@ void HrDelete( void* pMemory )
 // Use this macro in the place of "new Type(Param1, Param2)"
 #define HR_NEW2(type, param1, param2) new(__FILE__, __LINE__)(type)(param1, param2)
 
-#define HR_DELETE(p) 
+#define HR_DELETE(p) HrDelete(p, __FILE__, __LINE__)
 //
 //#ifdef _DEBUG
 //

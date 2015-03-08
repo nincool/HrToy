@@ -4,7 +4,7 @@
 #include "HrMemoryStackToken.h"
 
 using namespace HrPool;
-CHrMemoryStack::CHrMemoryStack(CHrLowDebug* pDebugLog)
+CHrMemoryStack::CHrMemoryStack( CHrLowDebug* pDebugLog )
 {
 	m_pDebugLog = pDebugLog;
 	m_pStackTokenHead = new CHrMemoryStackToken( HR_MEM_BLOCK_MIN,  m_pDebugLog);
@@ -18,6 +18,8 @@ CHrMemoryStack::CHrMemoryStack(CHrLowDebug* pDebugLog)
 
 CHrMemoryStack::~CHrMemoryStack()
 {
+	m_pDebugLog->Debug2File( "Memory Stack: Max Point = 0x%p\n", m_nMaxMemoryAddress );
+
 	SAFE_DELETE( m_pStackTokenHead );
 }
 
@@ -50,4 +52,17 @@ bool CHrMemoryStack::Free( void* pMemory )
 	bool bRetVal = m_pStackTokenHead->Free( pMemory, m_bCloseFlag );
 
 	return bRetVal;
+}
+
+void CHrMemoryStack::PrintStack()
+{
+	m_pStackTokenHead->PrintStack();
+}
+
+void CHrMemoryStack::PrintInfo()
+{
+	m_pDebugLog->Debug2File( "block=%d, use=%d kbytes, biggest=%p\n"
+		, m_nAllBlockCount
+		, m_nMemoryUsed / 1024
+		, m_nMaxMemoryAddress );
 }

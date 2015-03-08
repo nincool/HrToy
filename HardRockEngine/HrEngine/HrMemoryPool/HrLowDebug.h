@@ -1,12 +1,14 @@
 #pragma once
+#include "HrMemoryDllDef.h"
 #include "HrMutexLock.h"
 
 #define DEBUG_BUFFER_LENGTH			1024    //debug缓冲区大小
 #define HR_DEBUG_FILENAME_LENGTH	256		//文件名长
 
+class CHrMutexLock;
 namespace HrPool
 {
-	class CHrLowDebug
+	class HR_MEMORY_DLL CHrLowDebug
 	{
 	public:
 		CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFlag = false );
@@ -34,7 +36,6 @@ namespace HrPool
 	private:
 		bool			m_bPrint2TTYFlag;
 		char			m_szFileName[HR_DEBUG_FILENAME_LENGTH];
-		CHrMutexLock	m_Lock;
+		CHrMutexLock*	m_pLock;
 	};
-
 }

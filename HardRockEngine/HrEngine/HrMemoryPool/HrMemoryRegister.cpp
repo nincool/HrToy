@@ -4,7 +4,7 @@
 
 using namespace HrPool;
 
-CHrMemoryRegister::CHrMemoryRegister(CHrLowDebug* pDebugLog)
+CHrMemoryRegister::CHrMemoryRegister( CHrLowDebug* pDebugLog )
 {
 	m_pDebugLog = pDebugLog;
 }
@@ -93,7 +93,7 @@ void CHrMemoryRegister::Modify( void* pOld, void* pNew )
 	return;
 }
 
-void CHrMemoryRegister::PrintfInfo()
+void CHrMemoryRegister::PrintInfo()
 {
 	m_pDebugLog->Debug2File( "memory pool: %d / %d, the biggest = %p\n", m_nMemoryAddressCount, m_nUsedMax + 1, m_pMaxMemoryAddress );
 }

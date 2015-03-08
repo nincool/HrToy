@@ -21,6 +21,17 @@ namespace HrPool
 		{
 			m_s_pPoolManager->Free( pMemory );
 		}
+
+		static void DestoryMemoryManager()
+		{
+			m_s_pPoolManager.reset();
+		}
+
+		static void PrintMemoryInfo()
+		{
+			m_s_pPoolManager->PrintInfo();
+			m_s_pPoolManager->PrintTree();
+		}
 	private:
 		static std::shared_ptr<CHrPoolManager> m_s_pPoolManager;
 	};

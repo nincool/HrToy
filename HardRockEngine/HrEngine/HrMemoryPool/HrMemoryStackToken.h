@@ -1,5 +1,6 @@
 #pragma once
 #include "HrMemoryBase.h"
+#include <memory>
 
 namespace HrPool
 {
@@ -23,7 +24,7 @@ namespace HrPool
 	class CHrMemoryStackToken
 	{
 	public:
-		CHrMemoryStackToken(int nBlockSize, CHrLowDebug* pDebugLog);
+		CHrMemoryStackToken( int nBlockSize, CHrLowDebug* pDebugLog );
 		~CHrMemoryStackToken();
 
 	public:

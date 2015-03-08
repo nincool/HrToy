@@ -7,7 +7,7 @@
 
 using namespace HrPool;
 
-CHrPoolManager::CHrPoolManager(bool bOpenRegister) : m_pDebugLog(new CHrLowDebug("..", "Test", false))
+CHrPoolManager::CHrPoolManager(bool bOpenRegister) : m_pDebugLog(new CHrLowDebug("..", "Test", true))
 {
 	m_pMemoryStack = new CHrMemoryStack( m_pDebugLog );
 	m_pRegister = nullptr;
@@ -23,7 +23,8 @@ CHrPoolManager::~CHrPoolManager()
 	SAFE_DELETE( m_pMemoryStack );
 	SAFE_DELETE( m_pRegister );
 
-	//×îºóÐ¶ÔØ
+	m_pDebugLog->Debug2File( "Hr Memory Pool close.\n" );
+
 	SAFE_DELETE( m_pDebugLog );
 }
 
@@ -41,6 +42,8 @@ void* CHrPoolManager::Malloc( int nSize, char* szInfo /*= NULL */ )
 
 void CHrPoolManager::Free( void* pMemory )
 {
+	m_pMemoryStack->Free( pMemory );
+
 	if (pMemory != nullptr)
 	{
 		UnRegisterMemoryInfo( pMemory );
@@ -61,4 +64,19 @@ void CHrPoolManager::UnRegisterMemoryInfo( void* pMemory )
 	{
 		m_pRegister->Del( pMemory );
 	}
+}
+
+void CHrPoolManager::PrintTree()
+{
+	m_pMemoryStack->PrintStack();
+}
+
+void CHrPoolManager::PrintInfo()
+{
+	if (m_pRegister != nullptr)
+	{
+		m_pRegister->PrintInfo();
+	}
+
+	m_pMemoryStack->PrintInfo();
 }

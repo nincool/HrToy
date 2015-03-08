@@ -10,6 +10,8 @@ using namespace HrPool;
 
 CHrLowDebug::CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFlag )
 {
+	m_pLock = new CHrMutexLock();
+
 	m_bPrint2TTYFlag = bPrint2TTYFlag;
 	if (szAppName)
 	{
@@ -26,6 +28,7 @@ CHrLowDebug::CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFla
 
 CHrLowDebug::~CHrLowDebug( void )
 {
+	SAFE_DELETE( m_pLock );
 }
 
 #ifdef WIN32
@@ -113,7 +116,7 @@ int CHrLowDebug::Debug2File( char* szFormat, ... )
 	
 	SafePrint(szTime, DEBUG_BUFFER_LENGTH, "[%s]", szTemp);
 
-	m_Lock.Lock();
+	m_pLock->Lock();
 	{
 		va_start(pArgList, szFormat);
 		iListCount = VSNPRINTF( szBuf, DEBUG_BUFFER_LENGTH, DEBUG_BUFFER_LENGTH, szFormat, pArgList );
@@ -144,7 +147,7 @@ int CHrLowDebug::Debug2File( char* szFormat, ... )
 			iListCount = 0;
 		}
 	}
-	m_Lock.UnLock();
+	m_pLock->UnLock();
 	
 	return iListCount;
 }

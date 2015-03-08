@@ -1,11 +1,10 @@
 #pragma once
 #include "HrMemoryDllDef.h"
-#include <memory>
 
 namespace HrPool
 {
-	class CHrMemoryStack;
 	class CHrLowDebug;
+	class CHrMemoryStack;
 	class CHrMemoryRegister;
 	class HR_MEMORY_DLL CHrPoolManager
 	{
@@ -24,11 +23,14 @@ namespace HrPool
 		*/
 		void        Free( void* pMemory );
 
+
+		void        PrintTree();
+		void        PrintInfo();
 	private:
 		void        RegisterMemoryInfo( void* pMemory, char* szInfo );
 		void        UnRegisterMemoryInfo( void* pMemory );
 	private:
-		std::shared_ptr<CHrLowDebug> m_pDebugLog;
+		CHrLowDebug*        m_pDebugLog;
 
 		CHrMemoryRegister*  m_pRegister;
 
