@@ -3,24 +3,18 @@
 #include "HrWinTools.h"
 #include "HrConsole.h"
 #include "debug_new/HrNew.h"
+#include <time.h>
+#include <iostream>
+#include <boost/format.hpp>
 
 #include "debug_new/DebugNew_impl.h"
 
+#include "HrLog.h"
 
 
-class TestA
-{
-public:
-	TestA( int _a, int _b )
-	{
-		c = _a;
-		a = _b;
-	}
-	int c;
-	int a;
-	double d;
-	float e;
-};
+using namespace std;
+
+
 
 
 int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
@@ -30,22 +24,26 @@ int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 {
 	SetMyCurrentDirectory();
 	
-#ifdef _DEBUG
-	CHrConsole::OpenConsole();
-#endif // DEBUG
+	//初始化Log
+	CHrLog::HrLogConf stHrLog;
+	stHrLog.nFileFlag = _HLOG_CONSOLE | _HLOG_FILE;
+	stHrLog.nFormatFlag = _HLOG_DATE | _HLOG_TIME | _HLOG_LEVEL | _HLOG_MODULE;
+	stHrLog.nLevelFlag = _HDEBUG;
+	char szModuleFilePath[255];
+	::ZeroMemory( szModuleFilePath, sizeof( szModuleFilePath ) );
+	GetModuleFileName( NULL, szModuleFilePath, sizeof( szModuleFilePath ) );
+	char* pFilePath = strrchr( szModuleFilePath, '\\' );
+	if (pFilePath != NULL)
+	{
+		*pFilePath = '\0';
+	}
+	boost::format fmt( "%1%\\%2%" );
+	fmt % szModuleFilePath % "HLog.log";
+	std::string str = fmt.str();
+	memcpy( stHrLog.szLogFileName, str.c_str(), sizeof( stHrLog.szLogFileName ) );
+	HLog.LogInit( stHrLog );
 
-	TestA* pTest = HR_NEW2( TestA, 1, 2 );
-
-	HrPool::CHrNew::PrintMemoryInfo();
-	
-	HR_DELETE( pTest );
-
-	HrPool::CHrNew::DestoryMemoryManager();
-
-	system( "PAUSE" );
-#ifdef _DEBUG
-	CHrConsole::CloseConsole();
-#endif // DEBUG
+	HLog.Log( _HDEBUG, "HR", "THIS IS A TEST LOG" );
 	
 	return 0;
 }
