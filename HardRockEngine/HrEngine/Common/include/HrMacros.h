@@ -1,6 +1,5 @@
-#ifndef _HR_PLATFORM_H_
-#define _HR_PLATFORM_H_
-
+#ifndef _HR_MACROS_H_
+#define _HR_MACROS_H_
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p) { if(p != NULL) { delete (p); (p)=NULL; } }
