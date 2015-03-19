@@ -3,7 +3,7 @@
 #include <string>
 #include <time.h>
 #include <stdarg.h>
-#include "HrBaseDef.h"
+#include "HrMacros.h"
 
 using namespace std;
 using namespace HrPool;
