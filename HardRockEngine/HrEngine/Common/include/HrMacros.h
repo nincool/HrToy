@@ -2,15 +2,15 @@
 #define _HR_MACROS_H_
 
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p) { if(p != NULL) { delete (p); (p)=NULL; } }
+#define SAFE_DELETE(p) { if(p != nullptr) { delete (p); (p) = nullptr; } }
 #endif
 
 #ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p) { if(p != NULL) { delete[] (p); (p)=NULL; } }
+#define SAFE_DELETE_ARRAY(p) { if(p != nullptr) { delete[] (p); (p)=nullptr; } }
 #endif
 
 #ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p) { if(p != NULL) { (p)->Release(); (p)=NULL; } }
+#define SAFE_RELEASE(p) { if(p != nullptr) { (p)->Release(); (p)=nullptr; } }
 #endif
 
 #ifndef FAILED_RETURN

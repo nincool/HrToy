@@ -19,6 +19,9 @@
     <Filter Include="HrBase">
       <UniqueIdentifier>{710f8561-b7c4-4ee0-9f0a-0c53f8bb4e38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{18df3828-e1c3-4e93-a5b7-64e11db1dcc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -42,8 +45,11 @@
     <ClCompile Include="source\base\HrRef.cpp">
       <Filter>HrBase</Filter>
     </ClCompile>
-    <ClCompile Include="HrAutoReleasePool.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source\base\HrAutoReleasePool.cpp">
+      <Filter>HrBase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\base\HrDirector.cpp">
+      <Filter>HrBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,8 +86,29 @@
     <ClInclude Include="include\HrEngineCom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HrAutoReleasePool.h">
+    <ClInclude Include="HrSingleton.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\include\HrBaseType.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\include\HrConsole.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\include\HrMacros.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\include\HrMutexLock.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\include\HrSingleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\base\HrAutoReleasePool.h">
+      <Filter>HrBase</Filter>
+    </ClInclude>
+    <ClInclude Include="source\base\HrDirector.h">
+      <Filter>HrBase</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
