@@ -11,23 +11,10 @@
 
 #include "HrLog.h"
 
-//Test For AutoRelease
-#include "HrAutoReleasePool.h"
-#include "HrNode.h"
-
-
 using namespace std;
 
-US_NS_HR;
-
-
-int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
-	HINSTANCE hPrevInstance,                //前一个实例句柄
-	LPSTR lpCmdLine,			            //命令行字符
-	int nCmdShow )			                //窗口显示方式
+void InitLogInfo()
 {
-	SetMyCurrentDirectory();
-	
 	//初始化Log
 	CHrLog::HrLogConf stHrLog;
 	stHrLog.nFileFlag = _HLOG_CONSOLE | _HLOG_FILE;
@@ -48,17 +35,19 @@ int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 	HLog.LogInit( stHrLog );
 
 	HLog.Log( _HDEBUG, "HR", "THIS IS A TEST LOG" );
+}
 
-	CHrNode* pNode = new CHrNode();
+int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
+	HINSTANCE hPrevInstance,                //前一个实例句柄
+	LPSTR lpCmdLine,			            //命令行字符
+	int nCmdShow )			                //窗口显示方式
+{
+	SetMyCurrentDirectory();
+	
+	InitLogInfo();
 
-	pNode->AutoRelease();
-	pNode->Retain();
-
-	CHrReleaseManager::Instance()->GetCurrentPool()->Clear();
-
-	pNode->Release();
-
-	CHrReleaseManager::Instance()->DestroyInstance();
+	int nSize = sizeof( int* );
+	int nSize2 = sizeof( long );
 
 	return 0;
 }
