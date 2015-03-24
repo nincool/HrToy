@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\base\HrApplication.cpp" />
     <ClCompile Include="source\base\HrAutoReleasePool.cpp" />
     <ClCompile Include="source\base\HrDirector.cpp" />
     <ClCompile Include="source\base\HrNode.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="include\HrEngineCom.h" />
     <ClInclude Include="include\HrEngineMacros.h" />
     <ClInclude Include="Include\HrWinTools.h" />
+    <ClInclude Include="source\base\HrApplication.h" />
     <ClInclude Include="source\base\HrAutoReleasePool.h" />
     <ClInclude Include="source\base\HrDirector.h" />
     <ClInclude Include="source\base\HrNode.h" />

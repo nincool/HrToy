@@ -11,10 +11,14 @@
 
 #include "HrLog.h"
 
+//Test For AutoRelease
+#include "HrAutoReleasePool.h"
+#include "HrNode.h"
+
 
 using namespace std;
 
-
+US_NS_HR;
 
 
 int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
@@ -28,7 +32,7 @@ int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 	CHrLog::HrLogConf stHrLog;
 	stHrLog.nFileFlag = _HLOG_CONSOLE | _HLOG_FILE;
 	stHrLog.nFormatFlag = _HLOG_DATE | _HLOG_TIME | _HLOG_LEVEL | _HLOG_MODULE;
-	stHrLog.nLevelFlag = _HDEBUG;
+	stHrLog.nLevelFlag = _HALL;
 	char szModuleFilePath[255];
 	::ZeroMemory( szModuleFilePath, sizeof( szModuleFilePath ) );
 	GetModuleFileName( NULL, szModuleFilePath, sizeof( szModuleFilePath ) );
@@ -44,7 +48,18 @@ int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 	HLog.LogInit( stHrLog );
 
 	HLog.Log( _HDEBUG, "HR", "THIS IS A TEST LOG" );
-	
+
+	CHrNode* pNode = new CHrNode();
+
+	pNode->AutoRelease();
+	pNode->Retain();
+
+	CHrReleaseManager::Instance()->GetCurrentPool()->Clear();
+
+	pNode->Release();
+
+	CHrReleaseManager::Instance()->DestroyInstance();
+
 	return 0;
 }
 

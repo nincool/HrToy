@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class CHrNode : CHrObject
+	class CHrNode : public CHrObject
 	{
 	public:
 		CHrNode();

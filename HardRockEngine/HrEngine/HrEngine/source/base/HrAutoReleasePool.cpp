@@ -19,8 +19,10 @@ CHrAutoReleasePool::CHrAutoReleasePool(const std::string& name)
 
 CHrAutoReleasePool::~CHrAutoReleasePool()
 {
-	HRLOG("HrAutoRelease", "Deallocing AutoreleasePool: %p", this );
+	HRLOG("Deallocing AutoreleasePool: %p AutoreleasePool: %s", this, m_strName );
 	Clear();
+
+	CHrReleaseManager::Instance()->Pop();
 }
 
 void CHrAutoReleasePool::AddObject( CHrRef* pRef )
@@ -74,7 +76,7 @@ CHrReleaseManager::CHrReleaseManager()
 
 CHrReleaseManager::~CHrReleaseManager()
 {
-	HRLOG( "Release", "Deallocing ReleaseManager: %p", this );
+	HRLOG( "Deallocing ReleaseManager: %p", this );
 	while (!m_vecReleaseStack.empty())
 	{
 		CHrAutoReleasePool* pool = m_vecReleaseStack.back();
@@ -122,7 +124,7 @@ CHrReleaseManager* CHrReleaseManager::Instance()
 	{
 		m_s_instance = new (std::nothrow) CHrReleaseManager();
 
-		new CHrAutoReleasePool( "" );
+		new CHrAutoReleasePool( "Hr Release Pool" );
 	}
 
 	return m_s_instance;

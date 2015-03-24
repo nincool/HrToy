@@ -22,6 +22,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{18df3828-e1c3-4e93-a5b7-64e11db1dcc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{6889b5cb-a57e-4400-91df-66506ab8f673}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -49,6 +52,9 @@
       <Filter>HrBase</Filter>
     </ClCompile>
     <ClCompile Include="source\base\HrDirector.cpp">
+      <Filter>HrBase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\base\HrApplication.cpp">
       <Filter>HrBase</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,6 +114,9 @@
       <Filter>HrBase</Filter>
     </ClInclude>
     <ClInclude Include="source\base\HrDirector.h">
+      <Filter>HrBase</Filter>
+    </ClInclude>
+    <ClInclude Include="source\base\HrApplication.h">
       <Filter>HrBase</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,8 +1,25 @@
-#pragma once
-class CHrApplication
+#ifndef _HR_APPLICATION_H_
+#define _HR_APPLICATION_H_
+
+#include "HrEngineCom.h"
+
+
+namespace Hr
 {
-public:
-	CHrApplication();
-	~CHrApplication();
-};
+	class CHrApplication
+	{
+	public:
+		CHrApplication();
+		~CHrApplication();
+
+	public:
+
+
+	};
+}
+
+
+
+#endif
+
 
