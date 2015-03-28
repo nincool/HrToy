@@ -31,7 +31,7 @@ namespace HrPool
 		/**
 		 *	@Brief: 基本的申请函数，返回成功申请的内存块指针 [3/4/2015 By Hr]
 		*/
-		void*		Malloc( int nSize, uint& nAllBlockCount, uint& nMemoryUse );
+		void*		Malloc( size_t nSize, uint& nAllBlockCount, uint& nMemoryUse );
 		/*
 		@brief:   	释放函数 bClose是一个特殊的优化，即在程序退出是释放内存不会再返回内存栈 直接free掉 加快程序退出速度 by Hr 2/17/2013
 					应用程序传进来的是p1, 内部需要逆向计算出p0实现操作

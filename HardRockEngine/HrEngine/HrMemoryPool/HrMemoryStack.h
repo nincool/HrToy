@@ -17,7 +17,7 @@ namespace HrPool
 		 *	@Comment: 申请资源 [3/6/2015 By Hr]
 		 *	@Param:   nSize:申请内存的大小
 		*/
-		void*				Mallock( int nSize );
+		void*				Mallock( size_t nSize );
 		/**
 		 *	@Comment: 释放资源 [3/6/2015 By Hr]
 		*/

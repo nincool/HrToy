@@ -25,6 +25,9 @@
     <Filter Include="Tools">
       <UniqueIdentifier>{6889b5cb-a57e-4400-91df-66506ab8f673}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Loki">
+      <UniqueIdentifier>{66e9f377-b015-4c2f-98be-a21642052504}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -118,6 +121,18 @@
     </ClInclude>
     <ClInclude Include="source\base\HrApplication.h">
       <Filter>HrBase</Filter>
+    </ClInclude>
+    <ClInclude Include="source\loki\Typelist.h">
+      <Filter>Loki</Filter>
+    </ClInclude>
+    <ClInclude Include="source\loki\TypelistMacros.h">
+      <Filter>Loki</Filter>
+    </ClInclude>
+    <ClInclude Include="source\loki\NullType.h">
+      <Filter>Loki</Filter>
+    </ClInclude>
+    <ClInclude Include="source\loki\TypeManip.h">
+      <Filter>Loki</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

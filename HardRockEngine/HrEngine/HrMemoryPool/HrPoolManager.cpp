@@ -28,7 +28,7 @@ CHrPoolManager::~CHrPoolManager()
 	SAFE_DELETE( m_pDebugLog );
 }
 
-void* CHrPoolManager::Malloc( int nSize, char* szInfo /*= NULL */ )
+void* CHrPoolManager::Malloc( size_t nSize, char* szInfo /*= NULL */ )
 {
 	void* pRetMemory = nullptr;
 	pRetMemory = m_pMemoryStack->Mallock( nSize );

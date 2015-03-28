@@ -17,7 +17,7 @@ namespace HrPool
 		/**
 		 *	@Brief: 分配内存 [3/5/2015 By Hr]
 		*/
-		void*		Malloc( int nSize, char* szInfo = nullptr );
+		void*		Malloc( size_t nSize, char* szInfo = nullptr );
 		/**
 		 *	@Brief: 释放内存 [3/5/2015 By Hr]
 		*/

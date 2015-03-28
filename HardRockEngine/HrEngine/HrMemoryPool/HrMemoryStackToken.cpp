@@ -38,7 +38,7 @@ CHrMemoryStackToken::~CHrMemoryStackToken()
 	}
 }
 
-void* CHrMemoryStackToken::Malloc( int nSize, uint& nAllBlockCount, uint& nMemoryUse )
+void* CHrMemoryStackToken::Malloc( size_t nSize, uint& nAllBlockCount, uint& nMemoryUse )
 {
 	void* pRetMemory = nullptr;
 	SHrMemBlockHead* pNewMemory = nullptr;

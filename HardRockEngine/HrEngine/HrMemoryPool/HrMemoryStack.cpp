@@ -23,7 +23,7 @@ CHrMemoryStack::~CHrMemoryStack()
 	SAFE_DELETE( m_pStackTokenHead );
 }
 
-void* CHrMemoryStack::Mallock( int nSize )
+void* CHrMemoryStack::Mallock( size_t nSize )
 {
 	void* pRetMemory = nullptr;
 	if (0 >= nSize)

@@ -53,6 +53,10 @@
     <ClInclude Include="source\debug_new\DebugNew.h" />
     <ClInclude Include="source\debug_new\DebugNew_impl.h" />
     <ClInclude Include="source\debug_new\HrNew.h" />
+    <ClInclude Include="source\loki\NullType.h" />
+    <ClInclude Include="source\loki\Typelist.h" />
+    <ClInclude Include="source\loki\TypelistMacros.h" />
+    <ClInclude Include="source\loki\TypeManip.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\targetver.h" />
   </ItemGroup>

@@ -11,6 +11,8 @@
 
 #include "HrLog.h"
 
+#include "loki/Typelist.h"
+
 using namespace std;
 
 void InitLogInfo()
@@ -46,8 +48,7 @@ int WINAPI WinMain( HINSTANCE hInstance,	//µ±Ç°ÊµÀý¾ä±ú
 	
 	InitLogInfo();
 
-	int nSize = sizeof( int* );
-	int nSize2 = sizeof( long );
+
 
 	return 0;
 }

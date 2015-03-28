@@ -5,6 +5,7 @@ US_NS_HR;
 
 CHrNode::CHrNode()
 {
+
 }
 
 
