@@ -30,9 +30,12 @@
     </ClCompile>
     <ClCompile Include="source\debug_new\HrNew.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="source\res\HrBaseRes.cpp" />
+    <ClCompile Include="source\res\HrResManager.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="source\tools\HrProfile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\include\HrBaseType.h" />
@@ -40,7 +43,6 @@
     <ClInclude Include="..\Common\include\HrMacros.h" />
     <ClInclude Include="..\Common\include\HrMutexLock.h" />
     <ClInclude Include="..\Common\include\HrSingleton.h" />
-    <ClInclude Include="HrSingleton.h" />
     <ClInclude Include="include\HrEngineCom.h" />
     <ClInclude Include="include\HrEngineMacros.h" />
     <ClInclude Include="Include\HrWinTools.h" />
@@ -57,8 +59,11 @@
     <ClInclude Include="source\loki\Typelist.h" />
     <ClInclude Include="source\loki\TypelistMacros.h" />
     <ClInclude Include="source\loki\TypeManip.h" />
+    <ClInclude Include="source\res\HrBaseRes.h" />
+    <ClInclude Include="source\res\HrResManager.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\targetver.h" />
+    <ClInclude Include="source\tools\HrProfile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83B8BAAD-0DE0-4CDD-8EBF-CA7030735588}</ProjectGuid>

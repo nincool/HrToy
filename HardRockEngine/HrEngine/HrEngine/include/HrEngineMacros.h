@@ -26,7 +26,15 @@
 	assert((cond) && msg) 
 #endif
 
+#ifdef _DEBUG
+extern bool HrAssertFunction( bool bFlag, const char* pFile, const char* pLine );
 
+#define CHRASSERT(exp, description) \
+	if (HrAssertFunction((int)exp, description, __LINE__, __FILE__)) \
+				{_asm{int 3)} } //this will cause the debugger to break here on pc's
+#else
+#define CHRASSERT(exp, description)
+#endif
 
 
 

@@ -28,6 +28,9 @@
     <Filter Include="Loki">
       <UniqueIdentifier>{66e9f377-b015-4c2f-98be-a21642052504}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HrRes">
+      <UniqueIdentifier>{941445b2-f311-4409-bbc8-9dae56bbda19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -59,6 +62,15 @@
     </ClCompile>
     <ClCompile Include="source\base\HrApplication.cpp">
       <Filter>HrBase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\res\HrBaseRes.cpp">
+      <Filter>HrRes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\res\HrResManager.cpp">
+      <Filter>HrRes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\tools\HrProfile.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +105,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\HrEngineCom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HrSingleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\include\HrBaseType.h">
@@ -133,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="source\loki\TypeManip.h">
       <Filter>Loki</Filter>
+    </ClInclude>
+    <ClInclude Include="source\res\HrBaseRes.h">
+      <Filter>HrRes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\res\HrResManager.h">
+      <Filter>HrRes</Filter>
+    </ClInclude>
+    <ClInclude Include="source\tools\HrProfile.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
