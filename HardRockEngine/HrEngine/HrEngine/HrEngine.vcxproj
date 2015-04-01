@@ -43,10 +43,7 @@
     <ClInclude Include="..\Common\include\HrMacros.h" />
     <ClInclude Include="..\Common\include\HrMutexLock.h" />
     <ClInclude Include="..\Common\include\HrSingleton.h" />
-    <ClInclude Include="include\HrEngineCom.h" />
-    <ClInclude Include="include\HrEngineMacros.h" />
     <ClInclude Include="include\HrInterLocked.h" />
-    <ClInclude Include="Include\HrWinTools.h" />
     <ClInclude Include="source\base\HrApplication.h" />
     <ClInclude Include="source\base\HrAutoReleasePool.h" />
     <ClInclude Include="source\base\HrDirector.h" />
@@ -56,6 +53,10 @@
     <ClInclude Include="source\debug_new\DebugNew.h" />
     <ClInclude Include="source\debug_new\DebugNew_impl.h" />
     <ClInclude Include="source\debug_new\HrNew.h" />
+    <ClInclude Include="source\include\HrEngineCom.h" />
+    <ClInclude Include="source\include\HrEngineMacros.h" />
+    <ClInclude Include="source\include\HrInterLocked.h" />
+    <ClInclude Include="source\include\HrWinTools.h" />
     <ClInclude Include="source\loki\NullType.h" />
     <ClInclude Include="source\loki\Typelist.h" />
     <ClInclude Include="source\loki\TypelistMacros.h" />
@@ -134,7 +135,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BOOST);source\include;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST);source\basichead;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>

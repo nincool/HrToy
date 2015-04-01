@@ -74,9 +74,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrWinTools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -100,12 +97,6 @@
     </ClInclude>
     <ClInclude Include="source\base\HrRef.h">
       <Filter>HrBase</Filter>
-    </ClInclude>
-    <ClInclude Include="include\HrEngineMacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\HrEngineCom.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\include\HrBaseType.h">
       <Filter>Common</Filter>
@@ -153,6 +144,18 @@
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="include\HrInterLocked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\HrEngineCom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\HrEngineMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\HrInterLocked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\HrWinTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

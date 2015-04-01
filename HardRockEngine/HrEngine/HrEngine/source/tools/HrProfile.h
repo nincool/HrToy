@@ -38,7 +38,16 @@ namespace Hr
 	public:
 		void ProfileBegin( char* name );
 
-		static float GetCurTimeElapse();
+		void ProfileEnd( char* name );
+
+		void ProfileDumpOutputToBuffer();
+
+		void StoreProfileInHistory();
+
+		void GetProfileFromHistory(char* name, float& fAve, float& fMin, float& fMax);
+
+		static float GetCurTimeFlag();
+
 	public:
 		static SProfileSample m_samples[NUM_PROFILE_SAMPLES];
 		static SProfileSampleHistory m_history[NUM_PROFILE_SAMPLES];
