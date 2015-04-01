@@ -13,6 +13,8 @@
 
 #include "loki/Typelist.h"
 
+#include "HrMutexLock.h"
+
 using namespace std;
 
 void InitLogInfo()

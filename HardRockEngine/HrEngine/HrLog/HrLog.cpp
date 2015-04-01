@@ -12,7 +12,7 @@
 #include "HrLogCommon.h"
 #include "HrConsole.h"
 
-#ifdef WIN32
+#ifdef HR_WIN
 #include <io.h>
 #else
 #include <unistd.h>
@@ -135,7 +135,7 @@ void CHrLog::GetFileName()
 
 void CHrLog::GetAllTodayLogFileNames(std::vector< std::string >& vecLogFileName)
 {
-#ifdef WIN32
+#ifdef HR_WIN
 	_finddata_t stFile;
 	long lf;
 	if ((lf = _findfirst("*.Hlog", &stFile)) == -1)

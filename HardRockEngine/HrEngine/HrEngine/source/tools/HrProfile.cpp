@@ -43,5 +43,5 @@ void CHrProfile::ProfileBegin( char* name )
 
 float CHrProfile::GetCurTimeElapse()
 {
-	(float)(std::clock()) / CLOCKS_PER_SEC;
+	return (float)(std::clock()) / CLOCKS_PER_SEC;
 }

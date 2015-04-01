@@ -45,6 +45,7 @@
     <ClInclude Include="..\Common\include\HrSingleton.h" />
     <ClInclude Include="include\HrEngineCom.h" />
     <ClInclude Include="include\HrEngineMacros.h" />
+    <ClInclude Include="include\HrInterLocked.h" />
     <ClInclude Include="Include\HrWinTools.h" />
     <ClInclude Include="source\base\HrApplication.h" />
     <ClInclude Include="source\base\HrAutoReleasePool.h" />
@@ -133,8 +134,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BOOST);Include\;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HR_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST);source\include;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -149,6 +150,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BOOST);Include\;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

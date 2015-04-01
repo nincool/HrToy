@@ -31,7 +31,7 @@ CHrLowDebug::~CHrLowDebug( void )
 	SAFE_DELETE( m_pLock );
 }
 
-#ifdef WIN32
+#ifdef HR_WIN
 #define PATH_CHAR ("\\")
 #else //not WIN32
 #define PATH_CHAR ("/")

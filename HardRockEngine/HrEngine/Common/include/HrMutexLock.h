@@ -1,14 +1,14 @@
 #ifndef _HR_MUTEXLOCK_H_
 #define _HR_MUTEXLOCK_H_
 
-#ifdef WIN32
+#ifdef HR_WIN
 #include <Windows.h>
 #else
 #include <pthread.h>
 #endif
 
 //采用临界区
-#ifdef WIN32
+#ifdef HR_WIN
 
 #define MUTEX					CRITICAL_SECTION
 #define MUTEXINIT(m)			InitializeCriticalSection(m)

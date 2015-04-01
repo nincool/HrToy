@@ -20,7 +20,7 @@
 #define HR_CLEAN_CHAR_BUFFER(p) (*((char*)(p))='\0')
 
 
-#ifdef HR_WINDOWS 
+#ifdef HR_WIN
 #define	VSNPRINTF(pBuff, nBufLen, nCount, pFormat, pArglist)	vsnprintf_s(pBuff, nBufLen, nCount, pFormat, pArglist)
 #define STRCAT(pBufDes, nBufLen, pBufSrc)						strcat_s(pBufDes, nBufLen, pBufSrc)
 #define LOCALTIME(tm, t)										localtime_s(tm, t)

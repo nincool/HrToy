@@ -152,5 +152,8 @@
     <ClInclude Include="source\tools\HrProfile.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="include\HrInterLocked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
