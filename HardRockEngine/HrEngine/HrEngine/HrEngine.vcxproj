@@ -43,20 +43,19 @@
     <ClInclude Include="..\Common\include\HrMacros.h" />
     <ClInclude Include="..\Common\include\HrMutexLock.h" />
     <ClInclude Include="..\Common\include\HrSingleton.h" />
-    <ClInclude Include="include\HrInterLocked.h" />
     <ClInclude Include="source\base\HrApplication.h" />
     <ClInclude Include="source\base\HrAutoReleasePool.h" />
     <ClInclude Include="source\base\HrDirector.h" />
     <ClInclude Include="source\base\HrNode.h" />
     <ClInclude Include="source\base\HrObject.h" />
     <ClInclude Include="source\base\HrRef.h" />
-    <ClInclude Include="source\debug_new\DebugNew.h" />
+    <ClInclude Include="source\basic_head\HrEngineCom.h" />
+    <ClInclude Include="source\basic_head\HrEngineMacros.h" />
+    <ClInclude Include="source\basic_head\HrInterLocked.h" />
+    <ClInclude Include="source\basic_head\HrWinTools.h" />
+    <ClInclude Include="source\debug_new\HrDebugNew.h" />
     <ClInclude Include="source\debug_new\DebugNew_impl.h" />
     <ClInclude Include="source\debug_new\HrNew.h" />
-    <ClInclude Include="source\include\HrEngineCom.h" />
-    <ClInclude Include="source\include\HrEngineMacros.h" />
-    <ClInclude Include="source\include\HrInterLocked.h" />
-    <ClInclude Include="source\include\HrWinTools.h" />
     <ClInclude Include="source\loki\NullType.h" />
     <ClInclude Include="source\loki\Typelist.h" />
     <ClInclude Include="source\loki\TypelistMacros.h" />
@@ -65,6 +64,7 @@
     <ClInclude Include="source\res\HrResManager.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\targetver.h" />
+    <ClInclude Include="source\tools\HrListPool.h" />
     <ClInclude Include="source\tools\HrProfile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -135,9 +135,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BOOST);source\basichead;..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST);..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\;source\basic_head;source\debug_new;source\loki;source\tools</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

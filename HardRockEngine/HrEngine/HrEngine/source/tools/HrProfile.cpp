@@ -2,116 +2,159 @@
 #include "HrProfile.h"
 #include <ctime>
 #include <cassert>
+#include "HrDebugNew.h"
+#include <boost/format.hpp>
 
-using namespace Hr;
+US_NS_HR;
+using namespace std;
 
-static SProfileSample m_samples[NUM_PROFILE_SAMPLES];
-static SProfileSampleHistory m_history[NUM_PROFILE_SAMPLES];
-
-static float m_fStartProfile;
-static float m_fEndProfile;
-
-SProfileSample CHrProfile::m_samples[NUM_PROFILE_SAMPLES];
-SProfileSampleHistory CHrProfile::m_history[NUM_PROFILE_SAMPLES];
+CHrListPool<SProfileSample> CHrProfile::m_s_listPool;
+list<SProfileSample*> CHrProfile::m_s_lisProfileSamples;
 
 float CHrProfile::m_fStartProfile;
 float CHrProfile::m_fEndProfile;
+
+uint CHrProfile::m_nOpenSamplesNum = 0;
+uint CHrProfile::m_nEndSamplesNum = 0;
 
 CHrProfile::CHrProfile()
 {
 }
 
-
 CHrProfile::~CHrProfile()
 {
 }
 
-void CHrProfile::ProfileBegin( char* name )
+void CHrProfile::InitProfileSamples()
 {
-	uint i = 0;
-
-	while (i < NUM_PROFILE_SAMPLES && m_samples[i].bValid)
-	{
-		if (strcmp( m_samples[i].szName, name ) == 0)
-		{
-			//找到一个同名样本
-			++m_samples[i].nOpenProfiles;
-			++m_samples[i].nProfileInstances;
-			m_samples[i].fStartTime = GetCurTimeFlag();
-			//每次的最大值为1
-			assert( m_samples[i].nOpenProfiles == 1 );
-
-			return;
-		}
-		++i;
-	}
-
-	if (i >= NUM_PROFILE_SAMPLES)
-	{
-		assert( !"Exceeded max Available Profile Samples" );
-		return;
-	}
-	
-	strcpy(m_samples[i].szName, name);
-	m_samples[i].bValid = true;
-	m_samples[i].nProfileInstances = 1;
-	m_samples[i].fAccumulator = 0.0f;
-	m_samples[i].fStartTime = GetCurTimeFlag();
-	m_samples[i].fChildrenSampleTime = 0.0f;
+	m_s_listPool.InitListPool( NUM_PROFILE_SAMPLES );
 }
 
-void CHrProfile::ProfileEnd( char* name )
+void CHrProfile::ReleaseProfile()
 {
-	uint i = 0;
-	uint nNumParents = 0;
+	m_s_listPool.Release();
+}
 
-	while (i < NUM_PROFILE_SAMPLES && m_samples[i].bValid)
+void CHrProfile::Reset()
+{
+	m_fStartProfile = 0;
+	m_fEndProfile = 0;
+	m_nOpenSamplesNum = 0;
+	m_nEndSamplesNum = 0;
+}
+
+SProfileSample* CHrProfile::FindChildSampleByName( SProfileSample* pSample, const char* name )
+{
+	if (strcmp( pSample->szName, name ) == 0)
 	{
-		if (strcmp( m_samples[i].szName, name ) == 0)
+		if (pSample->bValid)
 		{
-			//找到一个样本
-			uint nInner = 0;
-			int nParent = -1;
-			float fEndTime = GetCurTimeFlag();
-			--m_samples[i].nOpenProfiles;
+			assert( !"Already has a profile sample" );
+			return nullptr;
+		}
+		else
+		{
+			return pSample;
+		}
+	}
+	else
+	{
+		if (pSample->pNext != nullptr)
+		{
+			FindChildSampleByName( pSample->pNext, name );
+		}
+	}
 
-			//统计所有父节点并找到直接父节点
-			while (m_samples[nInner].bValid)
+	return nullptr;
+}
+
+SProfileSample* CHrProfile::FindSample( const char* name )
+{
+	//这里感觉有性能影响
+	for (auto& profileSample : m_s_lisProfileSamples)
+	{
+		if (profileSample->bValid)
+		{
+			if (strcmp( profileSample->szName, name ) == 0)
 			{
-				if (m_samples[nInner].nOpenProfiles > 0)
+				if (profileSample->bValid)
 				{
-					//找到一个父节点(任何开放的节点都是父节点)
-					++nNumParents;
-					if (nParent < 0)
+					assert( !"Already has a profile sample" );
+					return nullptr;
+				}
+				else
+				{
+					return profileSample;
+				}
+			}
+			else if (profileSample->bValid)
+			{
+				if (profileSample->pNext != nullptr)
+				{
+					SProfileSample* pProfile = FindChildSampleByName( profileSample->pNext, name );
+					if (pProfile != nullptr)
 					{
-						//替换无效父节点(索引)
-						nParent = nInner;
-					}
-					else if (m_samples[nInner].fStartTime >= m_samples[nParent].fStartTime)
-					{
-						nParent = nInner;
+						return pProfile;
 					}
 				}
-
-				++nInner;
 			}
-
-			//记录样本父节点当前数量
-			m_samples[i].nNumParents = nNumParents;
-
-			if (nParent >= 0)
-			{
-				//记录时间到FChildrenSampleTime(累加)
-				m_samples[nParent].fChildrenSampleTime += fEndTime - m_samples[i].fStartTime;
-			}
-
-			//保存累积样本时间
-			m_samples[i].fAccumulator += fEndTime - m_samples[i].fStartTime;
-			
-			return;
 		}
-		++i;
 	}
+	return nullptr;
+}
+
+void CHrProfile::ProfileBegin( char* name )
+{
+	//检测是否存在同名正在运行样本
+	SProfileSample* pProfileSample = FindSample( name );
+	if (pProfileSample == nullptr)
+	{
+		pProfileSample = m_s_listPool.GetOneFree();
+		pProfileSample->Reset();
+	}
+	else
+	{
+		//pProfileSample->
+	}
+	pProfileSample->bValid = true;
+	STRCPY( pProfileSample->szName, sizeof( pProfileSample->szName ), name );
+	pProfileSample->fStartTime = GetCurTimeFlag();
+
+	//检测当前是否存在根样本 如果存在，那么进行链接
+	SProfileSample* pParent = nullptr;
+	if (m_s_lisProfileSamples.size() > 0)
+	{
+		pParent = m_s_lisProfileSamples.back();
+		pParent->pNext = pProfileSample;
+		pProfileSample->pPrevius = pParent;
+	}
+	
+	m_s_lisProfileSamples.push_back( pProfileSample );
+}
+
+void CHrProfile::EndTailedSample(SProfileSample* pSample)
+{
+	if (pSample->pNext != nullptr)
+	{
+		EndTailedSample( pSample->pNext );
+	}
+	else
+	{
+		//设置关闭
+		pSample->bValid = false;
+		pSample->fLastTime = GetCurTimeFlag() - pSample->fStartTime;
+	}
+}
+
+void CHrProfile::ProfileEnd()
+{
+	//默认关闭最后一个
+	if (m_s_lisProfileSamples.size() <= 0)
+	{
+		assert( !"The samples is empty" );
+	}
+	SProfileSample* pProfileSample = m_s_lisProfileSamples.back();
+	EndTailedSample( pProfileSample );
 }
 
 float CHrProfile::GetCurTimeFlag()
@@ -121,61 +164,25 @@ float CHrProfile::GetCurTimeFlag()
 
 void CHrProfile::ProfileDumpOutputToBuffer()
 {
-
-
-	m_fEndProfile = GetCurTimeFlag();
-	//ClearTextBuffer();
-
-	//PutTexBuffer(" Ave : Min : Max : # Profile Name \n");
-	//PutTexBuffer( "-----------------------------------------\n" );
-	uint i = 0;
-	while (i < NUM_PROFILE_SAMPLES && m_samples[i].bValid)
+	//检测是否存在没有关闭的Sample
+	if (m_nOpenSamplesNum != m_nEndSamplesNum)
 	{
-		uint nIndent = 0;
-		float fSampleTime, fPercentTime, fAveTime, fMinTime, fMaxTime;
-		char szLine[256], szName[256], szIndentedName[256];
-		char fAve[16], fMin[16], fMax[16], fNum[16];
+		assert( !"ProfileBegin does not match ProfileEnd" );
+	}
 
-		if (m_samples[i].nOpenProfiles < 0)
-		{
-			assert( !"ProfileEnd() called without a ProfileBegin()" );
-		}
-		else if (m_samples[i].nOpenProfiles > 0)
-		{
-			assert( !"ProfileBegin() called without a ProfileEnd()" );
-		}
-
-		fSampleTime = m_samples[i].fAccumulator - m_samples[i].fChildrenSampleTime;
-		fPercentTime = (fSampleTime / (m_fEndProfile - m_fStartProfile)) * 100.0f;
-
-		fAveTime = fMinTime = fMaxTime = fPercentTime;
-
-		//在历史记录中增加新的测量值，并获取平均，最小和最大值
-		//StoreProfileInHistory( m_samples[i].szName, fPercentTime );
-		//GetProfileFromHistory( m_samples[i].szName, &fAveTime, &fMinTime, &fMaxTime );
-
-		//格式化数据并且输出
-
+	//把所有收集到的数据打印出来
+	/* 平均值 | 最小值 | 最大值 | 调用 | 剖析名 |*/
+	boost::format fmt( "Ave | Max | Min | Call | Name\n" );
 	
-		
-	}
-	//为下一帧重置样本数据
-	for (uint n = 0; n < NUM_PROFILE_SAMPLES; ++n)
-	{
-		m_samples[n].bValid = false;
-	}
-
-	m_fStartProfile = GetCurTimeFlag();
 }
 
 void CHrProfile::StoreProfileInHistory()
 {
-	uint i = 0;
-	float fOldRatio;
-	//float fNewRatio = 0.8f * GetElapseTime();
+
 }
 
 void CHrProfile::GetProfileFromHistory( char* name, float& fAve, float& fMin, float& fMax )
 {
 	
 }
+

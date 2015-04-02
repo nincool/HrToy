@@ -2,6 +2,8 @@
 #define _HR_PROFILE_H_
 
 #include "HrEngineCom.h"
+#include <list>
+#include "HrListPool.h"
 
 namespace Hr
 {
@@ -10,13 +12,26 @@ namespace Hr
 	struct SProfileSample
 	{
 		bool bValid;            //数据是否有效
-		uint nProfileInstances; //PorfileBegin调用次数
-		int  nOpenProfiles;     //没有相匹配ProfileEnd调用的ProfileBegin调用次数
 		char szName[256];       //样本名称 
 		float fStartTime;       //当前样本开始时间
-		float fAccumulator;     //帧内所有样本总计
-		float fChildrenSampleTime; //所有子样本耗时
-		uint nNumParents;       //父样本数
+		float fLastTime;        //样本持续时间
+
+		SProfileSample* pPrevius;
+		SProfileSample* pNext;
+		SProfileSample()
+		{
+			Reset();
+		}
+
+		void Reset()
+		{
+			bValid = false;
+			HR_ZEROMEM( szName, sizeof( szName ) );
+			fStartTime = 0;
+
+			pPrevius = NULL;
+			pNext = NULL;
+		}
 	};
 
 
@@ -36,25 +51,40 @@ namespace Hr
 		~CHrProfile();
 
 	public:
-		void ProfileBegin( char* name );
+		static void Reset();
 
-		void ProfileEnd( char* name );
+		static void ProfileBegin( char* name );
 
-		void ProfileDumpOutputToBuffer();
+		static void ProfileEnd();
 
-		void StoreProfileInHistory();
+		static void ProfileDumpOutputToBuffer();
 
-		void GetProfileFromHistory(char* name, float& fAve, float& fMin, float& fMax);
+		static void StoreProfileInHistory();
+
+		static void GetProfileFromHistory(char* name, float& fAve, float& fMin, float& fMax);
 
 		static float GetCurTimeFlag();
 
+	private:
+		static SProfileSample* FindSample( const char* name );
+
+		static SProfileSample* FindChildSampleByName( SProfileSample* pSample, const char* name );
+
+		static void InitProfileSamples();
+		static void ReleaseProfile();
+
+
+		static void EndTailedSample( SProfileSample* pSample );
 	public:
-		static SProfileSample m_samples[NUM_PROFILE_SAMPLES];
-		static SProfileSampleHistory m_history[NUM_PROFILE_SAMPLES];
-		
+		static CHrListPool<SProfileSample> m_s_listPool;
+		static std::list<SProfileSample*> m_s_lisProfileSamples;
 
 		static float m_fStartProfile;
 		static float m_fEndProfile;
+
+	private:
+		static uint m_nOpenSamplesNum;
+		static uint m_nEndSamplesNum;
 	};
 }
 

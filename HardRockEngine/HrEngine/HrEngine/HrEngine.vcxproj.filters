@@ -31,6 +31,9 @@
     <Filter Include="HrRes">
       <UniqueIdentifier>{941445b2-f311-4409-bbc8-9dae56bbda19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HrBasicHead">
+      <UniqueIdentifier>{b2fabde6-ad0d-4376-8c3c-ff7aef0cd9ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -79,9 +82,6 @@
     </ClInclude>
     <ClInclude Include="source\targetver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\debug_new\DebugNew.h">
-      <Filter>HrDebugNew</Filter>
     </ClInclude>
     <ClInclude Include="source\debug_new\DebugNew_impl.h">
       <Filter>HrDebugNew</Filter>
@@ -143,20 +143,23 @@
     <ClInclude Include="source\tools\HrProfile.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="include\HrInterLocked.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\basic_head\HrEngineCom.h">
+      <Filter>HrBasicHead</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\HrEngineCom.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\basic_head\HrEngineMacros.h">
+      <Filter>HrBasicHead</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\HrEngineMacros.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\basic_head\HrInterLocked.h">
+      <Filter>HrBasicHead</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\HrInterLocked.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\basic_head\HrWinTools.h">
+      <Filter>HrBasicHead</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\HrWinTools.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\tools\HrListPool.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="source\debug_new\HrDebugNew.h">
+      <Filter>HrDebugNew</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

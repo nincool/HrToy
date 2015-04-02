@@ -6,7 +6,7 @@
 
 #include "HrNew.h"
 
-void* operator new(size_t size, const char* file, int line)
+inline void* operator new(size_t size, const char* file, int line)
 {
 	void* pRetMemory = nullptr;
 	if (size > 0)
@@ -17,12 +17,12 @@ void* operator new(size_t size, const char* file, int line)
 	return pRetMemory;
 }
 //no matching operator delete found
-void operator delete (void* p, const char* file, int line)
+inline void operator delete (void* p, const char* file, int line)
 {
 	
 }
 
-void HrDelete( void* pMemory, const char* file, int line )
+inline void HrDelete( void* pMemory, const char* file, int line )
 {
 	HrPool::CHrNew::Delete( pMemory );
 }

@@ -17,6 +17,7 @@
 #define FAILED_RETURN(x)	{ if (FAILED(x)) { return FALSE; }}
 #endif
 
+#define HR_ZEROMEM(p, len) memset(p, 0, len)
 #define HR_CLEAN_CHAR_BUFFER(p) (*((char*)(p))='\0')
 
 
