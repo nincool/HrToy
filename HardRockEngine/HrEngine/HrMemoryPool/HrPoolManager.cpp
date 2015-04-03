@@ -7,7 +7,7 @@
 
 using namespace HrPool;
 
-CHrPoolManager::CHrPoolManager(bool bOpenRegister) : m_pDebugLog(new CHrLowDebug(".", "Test", true))
+CHrPoolManager::CHrPoolManager(bool bOpenRegister) : m_pDebugLog(new CHrLowDebug(".", "MemDetect", true))
 {
 	m_pMemoryStack = new CHrMemoryStack( m_pDebugLog );
 	m_pRegister = nullptr;
@@ -79,4 +79,9 @@ void CHrPoolManager::PrintInfo()
 	}
 
 	m_pMemoryStack->PrintInfo();
+}
+
+void CHrPoolManager::Release()
+{
+
 }

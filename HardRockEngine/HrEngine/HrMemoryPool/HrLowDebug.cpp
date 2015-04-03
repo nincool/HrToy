@@ -13,9 +13,19 @@ CHrLowDebug::CHrLowDebug( char* szPathName, char* szAppName, bool  bPrint2TTYFla
 	m_pLock = new CHrMutexLock();
 
 	m_bPrint2TTYFlag = bPrint2TTYFlag;
+
+	char szModuleFilePath[255];
+	HR_ZEROMEM( szModuleFilePath, sizeof( szModuleFilePath ) );
+	GetModuleFileName( NULL, szModuleFilePath, sizeof( szModuleFilePath ) );
+	char* pFilePath = strrchr( szModuleFilePath, '\\' );
+	if (pFilePath != NULL)
+	{
+		*pFilePath = '\0';
+	}
+
 	if (szAppName)
 	{
-		MakeFullName( szPathName, szAppName, m_szFileName, "dbg" );
+		MakeFullName( szModuleFilePath, szAppName, m_szFileName, "dbg" );
 	}
 	else
 	{
@@ -127,19 +137,21 @@ int CHrLowDebug::Debug2File( char* szFormat, ... )
 			iListCount = DEBUG_BUFFER_LENGTH - 1;
 		}
 
-		*(szBuf + iListCount) = '\n';
-		*(szBuf + iListCount + 1) = '\0';
+		//*(szBuf + iListCount) = '\n';
+		*(szBuf + iListCount) = '\0';
 		//¿ªÊ¼Êä³ö
 		FILE* fp = NULL;
-		//fp = fopen(m_szFileName, "a+");	
 		FOPEN( fp, m_szFileName, "a+" );
+		setvbuf( fp, NULL, _IONBF, 0 );
 		if (fp)
 		{
 			iListCount = fprintf(fp, "%s%s", szTime, szBuf);
+
 			if (m_bPrint2TTYFlag)
 			{
 				printf("%s %s", szTime, szBuf);
 			}
+			
 			fclose(fp);
 		}
 		else

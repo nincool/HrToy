@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "HrLogDllDef.h"
+#include <stdio.h> 
+#include <iosfwd>
 
 #define _HLOG_CONSOLE		0x01
 #define _HLOG_FILE			0x02
@@ -49,6 +51,7 @@ public:
 		char			    szLogFileName[HR_LOGFILENAME_LEN];
 	};
 
+	static std::streambuf* pBuf;
 public:
 	static CHrLog&		Instance();
 public:

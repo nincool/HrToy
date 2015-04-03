@@ -25,7 +25,8 @@ public:
 		HANDLE hCon = GetStdHandle( STD_OUTPUT_HANDLE );      //获取控制台输出句柄  
 		INT hCrt = _open_osfhandle( (INT)hCon, _O_TEXT );     //转化为C文件描述符  
 		FILE * hf = _fdopen( hCrt, "w" );					  //转化为C文件流  
-		setvbuf( hf, NULL, _IONBF, 0 );                       //无缓冲  
+		//setvbuf( hf, NULL, _IONBF, 0 );                       //无缓冲  
+		setvbuf( hf, szBuffer, _IOLBF, 1024 );                       //无缓冲 
 		*stdout = *hf;										  //重定向标准输出  
 	}
 
@@ -34,11 +35,12 @@ public:
 	*/
 	static void CloseConsole()
 	{
-
 		FreeConsole();
-
 	}
 
+	static char szBuffer[1024];
 };
+
+char CHrConsole::szBuffer[1024];
 
 #endif

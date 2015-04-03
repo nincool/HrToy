@@ -47,7 +47,55 @@ int WINAPI WinMain( HINSTANCE hInstance,	//µ±Ç°ÊµÀý¾ä±ú
 	SetMyCurrentDirectory();
 	InitLogInfo();
 
- 
+	cout.rdbuf( CHrLog::pBuf );
+	
+	CHrProfile::InitProfileSamples();
+
+
+	//cout << "Hello " << endl;
+	//printf("hello");
+	int nCount = 10;
+	while (--nCount > 0)
+	{
+		CHrProfile::Reset();
+
+		CHrProfile::ProfileBegin( "Test1" );
+
+		for (int i = 0; i < 100000000; ++i)
+		{
+
+		}
+
+		CHrProfile::ProfileBegin( "Test--1" );
+		for (int i = 0; i < 100000000; ++i)
+		{
+		}
+
+		CHrProfile::ProfileBegin( "Test--2" );
+		for (int i = 0; i < 100000000; ++i)
+		{
+		}
+		CHrProfile::ProfileEnd();
+
+		CHrProfile::ProfileEnd();
+
+		CHrProfile::ProfileEnd();
+
+		CHrProfile::ProfileBegin( "Test2" );
+
+		for (int i = 0; i < 100000000; ++i)
+		{
+
+		}
+
+		CHrProfile::ProfileEnd();
+
+
+		CHrProfile::ProfileDumpOutputToBuffer();
+
+		CHrProfile::ReleaseProfile();
+	}
+
 
 	return 0;
 }

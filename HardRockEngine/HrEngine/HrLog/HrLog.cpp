@@ -11,6 +11,7 @@
 #include <Windows.h>
 #include "HrLogCommon.h"
 #include "HrConsole.h"
+#include <iostream>
 
 #ifdef HR_WIN
 #include <io.h>
@@ -21,6 +22,9 @@
 #endif
 
 CHrLog CHrLog::m_s_instance;
+
+using namespace std;
+std::streambuf* CHrLog::pBuf;
 
 CHrLog::CHrLog(void)
 {
@@ -63,6 +67,7 @@ void CHrLog::LogInit( HrLogConf& stLogConf )
 		//setvbuf( hf, NULL, _IONBF, 0);						//无缓冲  
 		//*stdout = *hf;										//重定向标准输出  
 		CHrConsole::OpenConsole();
+		pBuf = cout.rdbuf();
 #endif  
 	}
 

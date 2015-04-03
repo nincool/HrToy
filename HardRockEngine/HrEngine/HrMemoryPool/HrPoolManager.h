@@ -26,6 +26,9 @@ namespace HrPool
 
 		void        PrintTree();
 		void        PrintInfo();
+
+		void        Release();
+
 	private:
 		void        RegisterMemoryInfo( void* pMemory, char* szInfo );
 		void        UnRegisterMemoryInfo( void* pMemory );

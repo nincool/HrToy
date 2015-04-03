@@ -54,11 +54,14 @@ namespace Hr
 		{
 			assert( !"List Pool Destroy Error!" );
 		}
+		m_lisBeUsed.clear();
 #endif
 		for (auto t : m_lisFree)
 		{
-			HR_DELETE( t );
+			//HR_DELETE( t );
+			delete t;
 		}
+		m_lisFree.clear();
 	}
 
 	template<typename T>
@@ -78,7 +81,8 @@ namespace Hr
 		if (m_lisFree.empty())
 		{
 			//只提供默认构造函数
-			pT = HR_NEW( T );
+			//pT = HR_NEW( T );
+			pT = new T();
 		}
 		else
 		{
