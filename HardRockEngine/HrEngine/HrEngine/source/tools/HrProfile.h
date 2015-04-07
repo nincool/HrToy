@@ -2,8 +2,9 @@
 #define _HR_PROFILE_H_
 
 #include "HrEngineCom.h"
-#include <list>
 #include "HrListPool.h"
+#include <list>
+
 
 namespace Hr
 {
