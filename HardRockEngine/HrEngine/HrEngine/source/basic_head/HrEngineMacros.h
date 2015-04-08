@@ -46,5 +46,9 @@
 //#define CHRASSERT(exp, description)
 //#endif
 
+#define HR_SYNTHESIZE(varType, varName, funName) \
+	protected:varType varName;\
+	public: varType Get##funName(void) const {return varName;}\
+	public: void Set##funName(varType var){varName = var;}
 
 #endif
