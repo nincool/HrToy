@@ -161,5 +161,8 @@
     <ClInclude Include="source\debug_new\HrDebugNew.h">
       <Filter>HrDebugNew</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\include\HrPlatformMacros.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

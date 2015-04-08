@@ -42,6 +42,7 @@
     <ClInclude Include="..\Common\include\HrConsole.h" />
     <ClInclude Include="..\Common\include\HrMacros.h" />
     <ClInclude Include="..\Common\include\HrMutexLock.h" />
+    <ClInclude Include="..\Common\include\HrPlatformMacros.h" />
     <ClInclude Include="..\Common\include\HrSingleton.h" />
     <ClInclude Include="source\base\HrApplication.h" />
     <ClInclude Include="source\base\HrAutoReleasePool.h" />
