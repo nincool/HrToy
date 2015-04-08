@@ -164,5 +164,8 @@
     <ClInclude Include="..\Common\include\HrPlatformMacros.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="source\loki\HrTypeList.h">
+      <Filter>Loki</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

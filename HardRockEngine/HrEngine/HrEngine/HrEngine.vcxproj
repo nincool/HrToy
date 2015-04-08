@@ -57,6 +57,7 @@
     <ClInclude Include="source\debug_new\HrDebugNew.h" />
     <ClInclude Include="source\debug_new\DebugNew_impl.h" />
     <ClInclude Include="source\debug_new\HrNew.h" />
+    <ClInclude Include="source\loki\HrTypeList.h" />
     <ClInclude Include="source\loki\NullType.h" />
     <ClInclude Include="source\loki\Typelist.h" />
     <ClInclude Include="source\loki\TypelistMacros.h" />
