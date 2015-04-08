@@ -473,6 +473,7 @@ int main()
     consumer4.join();
 }
 
+Ô­×ÓËø²Î¿¼ C++11 std::atomic
 
 */
 
