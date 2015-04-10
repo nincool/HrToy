@@ -12,6 +12,7 @@
 #include "HrLogCommon.h"
 #include "HrConsole.h"
 #include <iostream>
+#include "HrPlatformMacros.h"
 
 #ifdef HR_WIN
 #include <io.h>

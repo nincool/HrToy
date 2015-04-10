@@ -167,5 +167,8 @@
     <ClInclude Include="source\loki\HrTypeList.h">
       <Filter>Loki</Filter>
     </ClInclude>
+    <ClInclude Include="HrBoostLog.h">
+      <Filter>HrBasicHead</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdarg.h>
 #include "HrMacros.h"
+#include "HrPlatformMacros.h"
 
 using namespace std;
 using namespace HrPool;

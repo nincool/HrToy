@@ -38,7 +38,6 @@ void InitLogInfo()
 	HLog.Log( _HDEBUG, "HR", "THIS IS A TEST LOG" );
 }
 
-
 int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 	HINSTANCE hPrevInstance,                //前一个实例句柄
 	LPSTR lpCmdLine,			            //命令行字符
@@ -49,63 +48,9 @@ int WINAPI WinMain( HINSTANCE hInstance,	//当前实例句柄
 
 	cout.rdbuf( CHrLog::pBuf );
 	
-	CHrProfile::InitProfileSamples();
-
-
-	//cout << "Hello " << endl;
-	//printf("hello");
-	int nCount = 10;
-	while (--nCount > 0)
-	{
-		CHrProfile::Reset();
-
-		CHrProfile::ProfileBegin( "Test1" );
-
-		for (int i = 0; i < 100000000; ++i)
-		{
-
-		}
-
-		CHrProfile::ProfileBegin( "Test--1" );
-		for (int i = 0; i < 100000000; ++i)
-		{
-		}
-
-		CHrProfile::ProfileBegin( "Test--2" );
-		for (int i = 0; i < 100000000; ++i)
-		{
-		}
-		CHrProfile::ProfileEnd();
-
-		CHrProfile::ProfileEnd();
-
-		CHrProfile::ProfileEnd();
-
-		CHrProfile::ProfileBegin( "Test2" );
-
-		for (int i = 0; i < 100000000; ++i)
-		{
-
-		}
-
-		CHrProfile::ProfileEnd();
-
-
-		CHrProfile::ProfileDumpOutputToBuffer();
-
-		CHrProfile::ReleaseProfile();
-	}
-
 
 	return 0;
 }
-
-
-
-
-
-
-
 
 
 
