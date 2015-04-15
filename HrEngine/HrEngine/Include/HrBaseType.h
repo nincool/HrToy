@@ -7,6 +7,7 @@ namespace HR
 	typedef unsigned char		uint8;
 	typedef short				int16;
 	typedef unsigned short		uint16;
+	//
 	typedef long				int32;
 	typedef unsigned long		uint32;
 	typedef __int64				int64;
