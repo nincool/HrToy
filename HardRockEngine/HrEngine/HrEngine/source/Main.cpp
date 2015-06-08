@@ -10,9 +10,10 @@
 #include "HrMutexLock.h"
 #include "HrEngineCom.h"
 #include "HrProfile.h"
+#include "HrDebugNew.h"
 
 US_NS_HR;
-using namespace std;
+using namespace std;                
 
 void InitLogInfo()
 {

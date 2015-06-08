@@ -46,7 +46,17 @@ namespace HrPool
 		static void RegistListener(CHrPoolListener* pListener)
 		{
 			if (pListener != nullptr)
-				m_s_pPoolManager->RegisterPoolListener(pListener);
+			{
+				if (m_s_pPoolManager)
+					m_s_pPoolManager->RegisterPoolListener(pListener);
+			}
+
+		}
+		static void UnRegisteListener(CHrPoolListener* pListener)
+		{
+			if (pListener != nullptr)
+				if (m_s_pPoolManager)
+					m_s_pPoolManager->UnRegistePoolListener(pListener);
 		}
 	private:
 		static std::shared_ptr<CHrPoolManager> m_s_pPoolManager;

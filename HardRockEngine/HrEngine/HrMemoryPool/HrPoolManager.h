@@ -38,7 +38,17 @@ namespace HrPool
 				m_lisPoolListener.push_back(pListener);
 			}
 		}
-
+		void        UnRegistePoolListener(CHrPoolListener* pListener)
+		{
+			for (auto itItem = m_lisPoolListener.begin(); itItem != m_lisPoolListener.end(); ++itItem)
+			{
+				if (*itItem == pListener)
+				{
+					m_lisPoolListener.erase(itItem);
+					break;
+				}
+			}
+		}
 	private:
 		void        RegisterMemoryInfo( void* pMemory, char* szInfo );
 		void        UnRegisterMemoryInfo( void* pMemory );
