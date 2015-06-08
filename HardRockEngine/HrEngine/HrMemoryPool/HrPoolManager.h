@@ -1,11 +1,13 @@
 #pragma once
 #include "HrMemoryDllDef.h"
+#include <list>
 
 namespace HrPool
 {
 	class CHrLowDebug;
 	class CHrMemoryStack;
 	class CHrMemoryRegister;
+	class CHrPoolListener;
 	class HR_MEMORY_DLL CHrPoolManager
 	{
 	public:
@@ -29,6 +31,14 @@ namespace HrPool
 
 		void        Release();
 
+		void        RegisterPoolListener(CHrPoolListener* pListener)
+		{
+			if (pListener != nullptr)
+			{
+				m_lisPoolListener.push_back(pListener);
+			}
+		}
+
 	private:
 		void        RegisterMemoryInfo( void* pMemory, char* szInfo );
 		void        UnRegisterMemoryInfo( void* pMemory );
@@ -39,7 +49,7 @@ namespace HrPool
 
 		CHrMemoryStack*     m_pMemoryStack;
 
-		
+		std::list<CHrPoolListener*> m_lisPoolListener;
 	};
 }
 

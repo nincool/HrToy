@@ -4,6 +4,16 @@
 
 namespace HrPool
 {
+	class CHrPoolListener
+	{
+	public:
+		enum _POOL_NOTICE_
+		{
+			NOTICE_RELEASE,
+		};
+		virtual void OnNotice(_POOL_NOTICE_ notice) = 0;
+	};
+
 	class CHrNew
 	{
 	public:
@@ -31,6 +41,12 @@ namespace HrPool
 		{
 			m_s_pPoolManager->PrintInfo();
 			m_s_pPoolManager->PrintTree();
+		}
+
+		static void RegistListener(CHrPoolListener* pListener)
+		{
+			if (pListener != nullptr)
+				m_s_pPoolManager->RegisterPoolListener(pListener);
 		}
 	private:
 		static std::shared_ptr<CHrPoolManager> m_s_pPoolManager;
