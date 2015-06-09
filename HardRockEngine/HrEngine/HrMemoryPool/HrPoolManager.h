@@ -4,6 +4,16 @@
 
 namespace HrPool
 {
+	class CHrPoolListener
+	{
+	public:
+		enum _POOL_NOTICE_
+		{
+			NOTICE_RELEASE,
+		};
+		virtual void OnNotice(_POOL_NOTICE_ notice) = 0;
+	};
+
 	class CHrLowDebug;
 	class CHrMemoryStack;
 	class CHrMemoryRegister;

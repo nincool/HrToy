@@ -20,6 +20,12 @@ CHrPoolManager::CHrPoolManager(bool bOpenRegister) : m_pDebugLog(new CHrLowDebug
 
 CHrPoolManager::~CHrPoolManager()
 {
+	//先通知私用者清除内存，以防止全局单利对象的存在
+	for (auto item : m_lisPoolListener)
+	{
+		item->OnNotice(CHrPoolListener::NOTICE_RELEASE);
+	}
+
 	SAFE_DELETE( m_pMemoryStack );
 	SAFE_DELETE( m_pRegister );
 
