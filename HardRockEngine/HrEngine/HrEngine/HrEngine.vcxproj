@@ -19,56 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\base\HrApplication.cpp" />
-    <ClCompile Include="source\base\HrAutoReleasePool.cpp" />
-    <ClCompile Include="source\base\HrDirector.cpp" />
-    <ClCompile Include="source\base\HrNode.cpp" />
-    <ClCompile Include="source\base\HrObject.cpp" />
-    <ClCompile Include="source\base\HrRef.cpp" />
-    <ClCompile Include="source\debug_new\DebugNew_impl.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="source\debug_new\HrNew.cpp" />
-    <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="source\res\HrBaseRes.cpp" />
-    <ClCompile Include="source\res\HrResManager.cpp" />
-    <ClCompile Include="source\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="source\tools\HrProfile.cpp" />
+    <ClCompile Include="HrEngine\HrBasic\HrBasicRes.cpp" />
+    <ClCompile Include="HrEngine\HrBasic\HrResManager.cpp" />
+    <ClCompile Include="HrEngine\HrCore\HrAutoReleasePool.cpp" />
+    <ClCompile Include="HrEngine\HrCore\HrDirector.cpp" />
+    <ClCompile Include="HrEngine\HrCore\HrNode.cpp" />
+    <ClCompile Include="HrEngine\HrCore\HrObject.cpp" />
+    <ClCompile Include="HrEngine\HrCore\HrRef.cpp" />
+    <ClCompile Include="HrWin32\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\include\HrBaseType.h" />
-    <ClInclude Include="..\Common\include\HrConsole.h" />
-    <ClInclude Include="..\Common\include\HrMacros.h" />
-    <ClInclude Include="..\Common\include\HrMutexLock.h" />
-    <ClInclude Include="..\Common\include\HrPlatformMacros.h" />
-    <ClInclude Include="..\Common\include\HrSingleton.h" />
-    <ClInclude Include="HrBoostLog.h" />
-    <ClInclude Include="source\base\HrApplication.h" />
-    <ClInclude Include="source\base\HrAutoReleasePool.h" />
-    <ClInclude Include="source\base\HrDirector.h" />
-    <ClInclude Include="source\base\HrNode.h" />
-    <ClInclude Include="source\base\HrObject.h" />
-    <ClInclude Include="source\base\HrRef.h" />
-    <ClInclude Include="source\basic_head\HrEngineCom.h" />
-    <ClInclude Include="source\basic_head\HrEngineMacros.h" />
-    <ClInclude Include="source\basic_head\HrInterLocked.h" />
-    <ClInclude Include="source\basic_head\HrWinTools.h" />
-    <ClInclude Include="source\debug_new\HrDebugNew.h" />
-    <ClInclude Include="source\debug_new\DebugNew_impl.h" />
-    <ClInclude Include="source\debug_new\HrNew.h" />
-    <ClInclude Include="source\loki\HrTypeList.h" />
-    <ClInclude Include="source\loki\NullType.h" />
-    <ClInclude Include="source\loki\Typelist.h" />
-    <ClInclude Include="source\loki\TypelistMacros.h" />
-    <ClInclude Include="source\loki\TypeManip.h" />
-    <ClInclude Include="source\res\HrBaseRes.h" />
-    <ClInclude Include="source\res\HrResManager.h" />
-    <ClInclude Include="source\stdafx.h" />
-    <ClInclude Include="source\targetver.h" />
-    <ClInclude Include="source\tools\HrListPool.h" />
-    <ClInclude Include="source\tools\HrProfile.h" />
+    <ClInclude Include="HrEngine\HrBasic\HrBasicRes.h" />
+    <ClInclude Include="HrEngine\HrBasic\HrEngineMacros.h" />
+    <ClInclude Include="HrEngine\HrBasic\HrInterLocked.h" />
+    <ClInclude Include="HrEngine\HrBasic\HrResManager.h" />
+    <ClInclude Include="HrEngine\HrCore\HrAutoReleasePool.h" />
+    <ClInclude Include="HrEngine\HrCore\HrDirector.h" />
+    <ClInclude Include="HrEngine\HrCore\HrNode.h" />
+    <ClInclude Include="HrEngine\HrCore\HrObject.h" />
+    <ClInclude Include="HrEngine\HrCore\HrRef.h" />
+    <ClInclude Include="HrEngine\HrEngineCommon.h" />
+    <ClInclude Include="HrWin32\HrWinTools.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{83B8BAAD-0DE0-4CDD-8EBF-CA7030735588}</ProjectGuid>
@@ -138,9 +109,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(BOOST);..\Common\include;..\HrMemoryPool\;..\HrLog\;source\base\;source\basic_head;source\debug_new;source\loki;source\tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST);..\Common\include;..\HrMemoryPool\;..\HrLog\;HrEngine\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
