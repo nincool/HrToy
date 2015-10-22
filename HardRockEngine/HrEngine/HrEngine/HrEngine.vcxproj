@@ -20,16 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HrEngine\HrBasic\HrBasicRes.cpp" />
+    <ClCompile Include="HrEngine\HrBasic\HrConsole.cpp" />
     <ClCompile Include="HrEngine\HrBasic\HrResManager.cpp" />
     <ClCompile Include="HrEngine\HrCore\HrAutoReleasePool.cpp" />
     <ClCompile Include="HrEngine\HrCore\HrDirector.cpp" />
     <ClCompile Include="HrEngine\HrCore\HrNode.cpp" />
     <ClCompile Include="HrEngine\HrCore\HrObject.cpp" />
     <ClCompile Include="HrEngine\HrCore\HrRef.cpp" />
+    <ClCompile Include="HrEngine\HrPlatform\HrApplication.cpp" />
     <ClCompile Include="HrWin32\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HrEngine\HrBasic\HrBasicRes.h" />
+    <ClInclude Include="HrEngine\HrBasic\HrConsole.h" />
     <ClInclude Include="HrEngine\HrBasic\HrEngineMacros.h" />
     <ClInclude Include="HrEngine\HrBasic\HrInterLocked.h" />
     <ClInclude Include="HrEngine\HrBasic\HrResManager.h" />
@@ -39,6 +42,9 @@
     <ClInclude Include="HrEngine\HrCore\HrObject.h" />
     <ClInclude Include="HrEngine\HrCore\HrRef.h" />
     <ClInclude Include="HrEngine\HrEngineCommon.h" />
+    <ClInclude Include="HrEngine\HrPlatform\HrApplication.h" />
+    <ClInclude Include="HrEngine\HrPlatform\HrPlatformConfig.h" />
+    <ClInclude Include="HrEngine\HrPlatform\HrPlatformMacros.h" />
     <ClInclude Include="HrWin32\HrWinTools.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -110,7 +116,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BOOST);..\Common\include;..\HrMemoryPool\;..\HrLog\;HrEngine\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HR_WIN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;HR_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

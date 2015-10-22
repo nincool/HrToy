@@ -30,6 +30,9 @@
     <Filter Include="HrBasic">
       <UniqueIdentifier>{b2fabde6-ad0d-4376-8c3c-ff7aef0cd9ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HrPlatform">
+      <UniqueIdentifier>{2ad2ae8f-377e-482b-a2d4-d6543caab460}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HrWin32\Main.cpp">
@@ -54,6 +57,12 @@
       <Filter>HrBasic</Filter>
     </ClCompile>
     <ClCompile Include="HrEngine\HrBasic\HrResManager.cpp">
+      <Filter>HrBasic</Filter>
+    </ClCompile>
+    <ClCompile Include="HrEngine\HrPlatform\HrApplication.cpp">
+      <Filter>HrPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="HrEngine\HrBasic\HrConsole.cpp">
       <Filter>HrBasic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +99,18 @@
     </ClInclude>
     <ClInclude Include="HrEngine\HrEngineCommon.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HrEngine\HrPlatform\HrApplication.h">
+      <Filter>HrPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="HrEngine\HrBasic\HrConsole.h">
+      <Filter>HrBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="HrEngine\HrPlatform\HrPlatformConfig.h">
+      <Filter>HrPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="HrEngine\HrPlatform\HrPlatformMacros.h">
+      <Filter>HrPlatform</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
