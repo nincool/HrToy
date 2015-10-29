@@ -7,6 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrGameFramework", "..\HrGam
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrCommon", "..\HrCommon\HrCommon.vcxproj", "{D585B947-4946-4B91-82D6-0C7D06914554}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderD3D11", "..\HrRenderSystem\HrRenderD3D11\HrRenderD3D11.vcxproj", "{489A0806-F326-48DB-83DC-1575C3025D14}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HrRenderSystem", "HrRenderSystem", "{BB6E7841-F83F-4D09-8F52-2E02A10F1CA2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderSystem", "..\HrRenderSystem\HrRenderSystem.vcxproj", "{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,8 +27,20 @@ Global
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Debug|Win32.Build.0 = Debug|Win32
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Release|Win32.ActiveCfg = Release|Win32
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Release|Win32.Build.0 = Release|Win32
+		{489A0806-F326-48DB-83DC-1575C3025D14}.Debug|Win32.ActiveCfg = Debug|Win32
+		{489A0806-F326-48DB-83DC-1575C3025D14}.Debug|Win32.Build.0 = Debug|Win32
+		{489A0806-F326-48DB-83DC-1575C3025D14}.Release|Win32.ActiveCfg = Release|Win32
+		{489A0806-F326-48DB-83DC-1575C3025D14}.Release|Win32.Build.0 = Release|Win32
+		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Debug|Win32.Build.0 = Debug|Win32
+		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Release|Win32.ActiveCfg = Release|Win32
+		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{489A0806-F326-48DB-83DC-1575C3025D14} = {BB6E7841-F83F-4D09-8F52-2E02A10F1CA2}
+		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2} = {BB6E7841-F83F-4D09-8F52-2E02A10F1CA2}
 	EndGlobalSection
 EndGlobal

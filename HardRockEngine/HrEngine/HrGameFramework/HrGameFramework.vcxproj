@@ -51,8 +51,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>../../Bin_Win32/$(ProjectName)D/</OutDir>
-    <IntDir>../../Intermediate.Dir/$(ProjectName)/$(Configuration)/</IntDir>
+    <OutDir>..\..\Bin_Win32\$(ProjectName)D\</OutDir>
+    <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
     <ReferencePath>
