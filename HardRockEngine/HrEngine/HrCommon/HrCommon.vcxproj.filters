@@ -21,5 +21,14 @@
     <ClInclude Include="include\HrWin32Specific.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrLinuxSpecific.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrLinuxTchar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrDebugNew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

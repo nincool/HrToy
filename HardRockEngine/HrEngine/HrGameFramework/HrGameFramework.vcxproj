@@ -13,12 +13,14 @@
   <ItemGroup>
     <ClInclude Include="include\HrExport.h" />
     <ClInclude Include="include\HrFrameworkPrerequisites.h" />
+    <ClInclude Include="Include\HrGameFramework.h" />
     <ClInclude Include="include\IApplication.h" />
     <ClInclude Include="include\IGameFramework.h" />
     <ClInclude Include="include\Win32\HrApplication_Win32.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\HrExport.cpp" />
+    <ClCompile Include="Source\HrGameFramework.cpp" />
     <ClCompile Include="source\Win32\HrApplication_Win32.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -48,10 +50,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Solutions\ReleaseRefPropertySheet\HrEngineRelease.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\Bin_Win32\$(ProjectName)D\</OutDir>
+    <OutDir>..\..\Bin_Win32\HrEngineD\</OutDir>
     <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
@@ -73,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -1,6 +1,6 @@
-/************************************************************************
+ï»¿/************************************************************************
 *
-* @Comment£º
+* @Commentï¼š
 *
 * @Author: Hr
 * @Date: [10/21/2015 By Hr]
@@ -120,7 +120,7 @@
 /* Find CPU type
 */
 #if (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))) || \
-    (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+	(defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
 #   define HR_CPU HR_CPU_X86
 #else
 #	define HR_CPU HR_CPU_ARM
@@ -164,26 +164,32 @@ typedef long long int64;
 #define HR_EXPORT __declspec(dllexport)
 #define HR_IMPORT __declspec(dllimport)
 
-#define HR_OPEN(a) LoadLibraryEx(a, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
-#define HR_GETSYM(a,b) GetProcAddress(a,b)
-#define HR_FREE(a) FreeLibrary(a)
+#define HR_MODULE_OPEN(a) LoadLibraryEx(a, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+#define HR_MODULE_GETSYSTEM(a,b) GetProcAddress(a,b)
+#define HR_MODULE_FREE(a) FreeLibrary(a)
 
+#if (HR_DEBUG > 0)
+#define HR_PREFIX _T("")
+#define HR_SUFFIX _T("D.dll")
+#else
 #define HR_PREFIX _T("")
 #define HR_SUFFIX _T(".dll")
+#endif
+#define HR_MODULE_START_FUNC _T("HrModuleInitialize")
+#define HR_MUDULE_END_FUNC _T("HrModuleUnload")
 
 #else
 #define HR_EXPORT __attribute__ ((visibility("default")))
 #define HR_IMPORT __attribute__ ((visibility("default")))
 
-#define HR_OPEN(a) dlopen(a, RTLD_LAZY | RTLD_GLOBAL)
-#define HR_GETSYM(a,b) dlsym(a,b)
-#define HR_FREE(a) dlclose(a)
+#define HR_MODULE_OPEN(a) dlopen(a, RTLD_LAZY | RTLD_GLOBAL)
+#define HR_MODULE_GETSYM(a,b) dlsym(a,b)
+#define HR_MODULE_FREE(a) dlclose(a)
 
 #define HR_PREFIX _T("/data/data/com.kkstudio.gklauncher/lib/lib")
 #define HR_SUFFIX _T(".so")
 
 #endif
-
 
 #ifdef HR_STATIC_LIB
 #	define HR_ENGINE_API
@@ -197,7 +203,52 @@ typedef long long int64;
 
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32 || HR_TARGET_PLATFORM  == HR_PLATFORM_WINRT)
 #include "HrWin32Specific.h"
+#else if(HR_TARGET_PLATFORM == HR_PLATFORM_LINUX || HR_TARGET_PLATFORM == HR_PLATFORM_ANDROID)
+#include "HrLinuxSpecific.h"
 #endif
+
+//////////////////////////////////////////////////////////////////////////
+// Module Init
+
+// start & end func
+typedef void(*MODULE_START)();
+typedef void(*MODULE_END)(void);
+
+// module accessing func
+inline void HrFreeModule(HINSTANCE& hHandle)
+{
+	if (hHandle)
+	{
+		MODULE_END pFunc = (MODULE_END)HR_MODULE_GETSYSTEM(hHandle, HR_MUDULE_END_FUNC);
+		pFunc();
+		HR_MODULE_FREE(hHandle);
+	}
+}
+
+inline MODULE_START HrLoadModule(HINSTANCE& hHandle, const TCHAR* pModuleName)
+{
+	TCHAR finalModuleName[MAX_PATH] = HR_PREFIX;
+	_tcscat(finalModuleName, pModuleName);
+	_tcscat(finalModuleName, HR_SUFFIX);
+
+	hHandle = HR_MODULE_OPEN(finalModuleName);
+	if (hHandle)
+	{
+		MODULE_START pFunc = (MODULE_START)HR_MODULE_GETSYSTEM(hHandle, HR_MODULE_START_FUNC);
+		return pFunc;
+	}
+	else
+	{
+		int winError = GetLastError();
+		return nullptr;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//Macros
+//////////////////////////////////////////////////////////////////////////
+#define HR_INSTANCE(type) public: static type* GetInstance() {	if (m_s_pInstance == nullptr) { m_s_pInstance = HNEW(type); } return m_s_pInstance; } \
+	static void ReleaseInstance() { SAFE_DELETE(m_s_pInstance); } private: static type* m_s_pInstance;
 
 //////////////////////////////////////////////////////////////////////////
 // post configure
@@ -213,6 +264,11 @@ typedef long long int64;
 //#pragma warning (disable:4127) 
 //#endif 
 //#endif  // _PLATFORM_WIN32
+
+///////////////////////////////////////////////////////////////////////////
+//include
+//////////////////////////////////////////////////////////////////////////
+#include "HrDebugNew.h"
 
 #endif // !_HR_PLATFORMCONFIG_H_
 

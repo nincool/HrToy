@@ -1,4 +1,4 @@
-#include "Win32/HrApplication_Win32.h"
+﻿#include "Win32/HrApplication_Win32.h"
 
 using namespace Hr;
 

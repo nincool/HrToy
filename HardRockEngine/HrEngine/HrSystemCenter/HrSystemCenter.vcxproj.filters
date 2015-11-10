@@ -6,28 +6,43 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Include">
-      <UniqueIdentifier>{639d76e8-850d-4847-91db-32d3bd4ea5f2}</UniqueIdentifier>
+      <UniqueIdentifier>{7ba03f6a-b506-42b8-ad81-1973ab1e748e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source">
-      <UniqueIdentifier>{802b76d9-4302-4733-8bd5-c27a7d254fb5}</UniqueIdentifier>
+      <UniqueIdentifier>{0ad37dd0-b256-4e1e-9050-042f31e39150}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrD3D11Render.h">
+    <ClInclude Include="Include\IDirector.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrD3D11RendererPrerequisites.h">
+    <ClInclude Include="Include\HrDirector.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrSystemSupporter.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrSystemCenterPrerequisites.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrWin32WindowEventUtilities.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrD3D11Render.cpp">
+    <ClCompile Include="Source\HrDirector.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrSystemSupporter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrExport.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

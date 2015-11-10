@@ -6,27 +6,21 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Include">
-      <UniqueIdentifier>{639d76e8-850d-4847-91db-32d3bd4ea5f2}</UniqueIdentifier>
+      <UniqueIdentifier>{d358c991-1f79-49a6-b63a-d1407398d33e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source">
-      <UniqueIdentifier>{802b76d9-4302-4733-8bd5-c27a7d254fb5}</UniqueIdentifier>
+      <UniqueIdentifier>{30c3e0dd-91e8-455a-ab80-256d41ee0eeb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrD3D11Render.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrD3D11RendererPrerequisites.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrMainPrerequisiters.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrD3D11Render.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>

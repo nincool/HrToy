@@ -10,13 +10,27 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\HrWin32WindowEventUtilities.h" />
+    <ClInclude Include="Include\HrDirector.h" />
+    <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\HrSystemCenterPrerequisites.h" />
+    <ClInclude Include="Include\HrSystemSupporter.h" />
+    <ClInclude Include="Include\IDirector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
+    <ClCompile Include="Source\HrDirector.cpp" />
+    <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\HrSystemSupporter.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}</ProjectGuid>
-    <RootNamespace>HrRenderSystem</RootNamespace>
+    <ProjectGuid>{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}</ProjectGuid>
+    <RootNamespace>HrSystemCenter</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -33,6 +47,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Solutions\DebugRefPropertySheet\HrEngineDebug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -42,6 +57,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\..\Bin_Win32\HrEngineD\</OutDir>
     <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)D</TargetName>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,10 +84,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\HrRenderSysPrerequisites.h" />
-    <ClInclude Include="Include\IRenderer.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,6 +1,6 @@
-/************************************************************************
+ï»¿/************************************************************************
 *
-* @Comment£º
+* @Commentï¼š
 *
 * @Author: Hr
 * @Date: [10/28/2015 By Hr]
@@ -10,6 +10,8 @@
 #ifndef _I_RENDERER_H_
 #define _I_RENDERER_H_
 
+#include "../../HrCommon/Include/HrPlatformConfig.h"
+
 namespace Hr
 {
 	class IRenderer
@@ -18,14 +20,18 @@ namespace Hr
 		virtual ~IRenderer(){};
 
 		/**
-		 *	@Brief:  ´´½¨äÖÈ¾Æ÷[10/28/2015 By Hr]
+		 *	@Brief:  åˆ›å»ºæ¸²æŸ“å™¨[10/28/2015 By Hr]
 		 *	@Param:
 		 *	@Return:
 		*/
+#if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
+		virtual void Create(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc) = 0;
+#else
 		virtual void Create(unsigned int nWidth, unsigned int nHeight) = 0;
+#endif
 		
 		/**
-		*	@Brief:  ´İ»ÙäÖÈ¾Æ÷[10/28/2015 By Hr]
+		*	@Brief:  æ‘§æ¯æ¸²æŸ“å™¨[10/28/2015 By Hr]
 		*	@Param:
 		*	@Return:
 		*/

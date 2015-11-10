@@ -40,7 +40,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\Bin_Win32\$(ProjectName)D\</OutDir>
+    <OutDir>..\..\Bin_Win32\HrEngineD\</OutDir>
     <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
@@ -76,6 +76,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HrDebugNew.h" />
+    <ClInclude Include="Include\HrLinuxTchar.h" />
+    <ClInclude Include="Include\HrLinuxSpecific.h" />
     <ClInclude Include="include\HrPlatformConfig.h" />
     <ClInclude Include="include\HrWin32Specific.h" />
   </ItemGroup>

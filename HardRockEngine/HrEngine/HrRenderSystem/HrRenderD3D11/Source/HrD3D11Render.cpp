@@ -1,7 +1,8 @@
-#include "HrD3D11Render.h"
-#include "HrD3D11WindowEventUtilities.h"
+﻿#include "HrD3D11Render.h"
 
 using namespace Hr;
+
+HrD3D11Render* HrD3D11Render::m_s_pInstance = nullptr;
 
 HrD3D11Render::HrD3D11Render()
 {
@@ -12,7 +13,9 @@ HrD3D11Render::~HrD3D11Render()
 {
 }
 
-void HrD3D11Render::Create(unsigned int nWidth, unsigned int nHeight)
+#if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
+
+void HrD3D11Render::Create(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
 {
 	HINSTANCE hInst = NULL;
 	static const TCHAR staticVar;
@@ -21,27 +24,32 @@ void HrD3D11Render::Create(unsigned int nWidth, unsigned int nHeight)
 	WNDCLASS wc;
 	memset(&wc, 0, sizeof(wc));
 	wc.style = CS_DBLCLKS;
-	wc.lpfnWndProc = HrD3D11WindowEventUtilities::WinProc;
+	wc.lpfnWndProc = lpfnProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInst;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = "HrD3D11WindowClass";
+	wc.lpszClassName = _T("HrD3D11WindowClass");
 
 	if (!RegisterClass(&wc))
 	{
 		DWORD dwError = GetLastError();
 		if (dwError != ERROR_CLASS_ALREADY_EXISTS)
-			OutputDebugString(("Cannot Register Window Class."));
+			OutputDebugString((_T("Cannot Register Window Class.")));
 		return;
 	}
-	m_hWnd = CreateWindow("HrD3D11WindowClass", "HrEngine", WS_OVERLAPPEDWINDOW, 10, 10, nWidth, nHeight, NULL, NULL, hInst, 0);
+	m_hWnd = CreateWindow(_T("HrD3D11WindowClass"), _T("HrEngine"), WS_OVERLAPPEDWINDOW, 10, 10, nWidth, nHeight, NULL, NULL, hInst, 0);
 	ShowWindow(m_hWnd, SW_SHOWNORMAL);
 	SetFocus(m_hWnd);
 	SetForegroundWindow(m_hWnd);
 }
+#else
+void HrD3D11Render::Create(unsigned int nWidth, unsigned int nHeight)
+{
+}
+#endif
 
 void HrD3D11Render::Destroy()
 {

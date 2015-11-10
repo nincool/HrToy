@@ -6,12 +6,23 @@
 * @Date: [10/29/2015 By Hr]
 *
 ************************************************************************/  
-#ifndef _HR_RENDERD3D11PREREQUISITES_H_
-#define _HR_RENDERD3D11PREREQUISITES_H_
 
+#ifndef _I_DIRECTOR_H_
+#define _I_DIRECTOR_H_
 
-#include "HrCommon/Include/HrPlatformConfig.h"
+namespace Hr
+{
+	class IDirector
+	{
+	public:
+		IDirector(){}
+		virtual ~IDirector(){}
+
+		virtual bool Init() = 0;
+		virtual void Go() = 0;
+
+	};
+}
 
 #endif
-
 

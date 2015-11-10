@@ -13,11 +13,11 @@
   <ItemGroup>
     <ClInclude Include="Include\HrD3D11Render.h" />
     <ClInclude Include="Include\HrD3D11RendererPrerequisites.h" />
-    <ClInclude Include="Include\HrD3D11WindowEventUtilities.h" />
+    <ClInclude Include="Include\HrExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrD3D11Render.cpp" />
-    <ClCompile Include="Source\HrD3D11WindowEventUtilities.cpp" />
+    <ClCompile Include="Source\HrExport.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{489A0806-F326-48DB-83DC-1575C3025D14}</ProjectGuid>
@@ -46,11 +46,12 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Solutions\ReleaseRefPropertySheet\HrEngineRelease.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>..\..\..\Bin_Win32\$(ProjectName)D\</OutDir>
+    <OutDir>..\..\..\Bin_Win32\HrEngineD\</OutDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>

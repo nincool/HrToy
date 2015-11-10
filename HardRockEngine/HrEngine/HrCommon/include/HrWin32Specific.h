@@ -11,6 +11,9 @@
 #define __HRWIN32SPECIFIC_H__
 
 #include <Windows.h>
+#include <tchar.h>
+
+#   pragma warning( disable: 4996)
 
 #define DEPRICATED __declspec(deprecated)
 

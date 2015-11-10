@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HrRenderSysPrerequisites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Include\IRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

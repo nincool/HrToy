@@ -1,23 +1,23 @@
-/************************************************************************
+ï»¿/************************************************************************
 *
-* @Comment£º
+* @Commentï¼š
 *
 * @Author: Hr
 * @Date: [10/29/2015 By Hr]
 *
 ************************************************************************/  
-#ifndef _HR_D3D11WINDOWEVENTUTILITIES_H_
-#define _HR_D3D11WINDOWEVENTUTILITIES_H_
+#ifndef _HR_WIN32DWINDOWEVENTUTILITIES_H_
+#define _HR_WIN32DWINDOWEVENTUTILITIES_H_
 
-#include "HrD3D11RendererPrerequisites.h"
+#include "HrSystemCenterPrerequisites.h"
 
 namespace Hr
 {
-	class HrD3D11WindowEventUtilities
+	class HrWin32WindowEventUtilities
 	{
 	public:
-		HrD3D11WindowEventUtilities();
-		~HrD3D11WindowEventUtilities();
+		HrWin32WindowEventUtilities();
+		~HrWin32WindowEventUtilities();
 		/**
 		 *	@Brief:  Call this once per frame [10/29/2015 By Hr]
 		 *	@Param:

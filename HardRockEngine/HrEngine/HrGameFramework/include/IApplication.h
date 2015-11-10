@@ -1,19 +1,21 @@
-/************************************************************************
+ï»¿/************************************************************************
 *
-* @Comment£º
+* @Commentï¼š
 *
 * @Author: Hr
 * @Date: [10/28/2015 By Hr]
 *
-************************************************************************/  
+************************************************************************/
 
 
 #ifndef _HR_IAPPLICATION_H_
 #define _HR_IAPPLICATION_H_
 
+#include "HrFrameworkPrerequisites.h"
+
 namespace Hr
 {
-	class IApplication
+	class HR_ENGINE_API IApplication
 	{
 	public:
 		IApplication(){};

@@ -30,6 +30,9 @@
     <ClInclude Include="include\Win32\HrApplication_Win32.h">
       <Filter>Include\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrGameFramework.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\HrExport.cpp">
@@ -37,6 +40,9 @@
     </ClCompile>
     <ClCompile Include="source\Win32\HrApplication_Win32.cpp">
       <Filter>Source\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrGameFramework.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
