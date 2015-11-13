@@ -80,6 +80,8 @@
     <ClInclude Include="Include\HrLinuxTchar.h" />
     <ClInclude Include="Include\HrLinuxSpecific.h" />
     <ClInclude Include="include\HrPlatformConfig.h" />
+    <ClInclude Include="Include\HrPrerequisites.h" />
+    <ClInclude Include="Include\HrStringUtil.h" />
     <ClInclude Include="include\HrWin32Specific.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

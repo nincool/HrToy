@@ -11,12 +11,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HrD3D11Device.h" />
+    <ClInclude Include="Include\HrD3D11Driver.h" />
+    <ClInclude Include="Include\HrD3D11Enumeration.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
     <ClInclude Include="Include\HrD3D11RendererPrerequisites.h" />
+    <ClInclude Include="Include\HrD3D11DriverList.h" />
+    <ClInclude Include="Include\HrD3D11Utility.h" />
     <ClInclude Include="Include\HrExport.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\HrD3D11Device.cpp" />
+    <ClCompile Include="Source\HrD3D11Driver.cpp" />
+    <ClCompile Include="Source\HrD3D11Enumeration.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
+    <ClCompile Include="Source\HrD3D11DriverList.cpp" />
+    <ClCompile Include="Source\HrD3D11Utility.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -64,6 +74,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
