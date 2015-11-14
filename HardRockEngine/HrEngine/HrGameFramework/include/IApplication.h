@@ -15,7 +15,7 @@
 
 namespace Hr
 {
-	class HR_ENGINE_API IApplication
+	class IApplication
 	{
 	public:
 		IApplication(){};

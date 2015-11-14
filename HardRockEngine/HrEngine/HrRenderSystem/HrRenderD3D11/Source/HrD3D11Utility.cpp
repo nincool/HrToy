@@ -24,5 +24,7 @@ bool HrD3D11Utility::CreateDXGI()
 		}
 		HrD3D11Device::GetInstance()->SetDXGIFactory(pDXGIFactory);
 	}
+
+	return true;
 }
 

@@ -12,10 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\HrLog.h" />
     <ClInclude Include="Include\HrMainPrerequisiters.h" />
+    <ClInclude Include="Include\ILog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\HrLog.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>
@@ -58,6 +61,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>HR_MAIN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

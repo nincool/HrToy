@@ -191,16 +191,6 @@ typedef long long int64;
 
 #endif
 
-#ifdef HR_STATIC_LIB
-#	define HR_ENGINE_API
-#else
-#	ifdef HR_NONCLIENT_BUILD
-#		define HR_ENGINE_API HR_EXPORT
-#	else 
-#		define HR_ENGINE_API HR_IMPORT
-#	endif
-#endif // HR_NONCLIENT_BUILD
-
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32 || HR_TARGET_PLATFORM  == HR_PLATFORM_WINRT)
 #include "HrWin32Specific.h"
 #else if(HR_TARGET_PLATFORM == HR_PLATFORM_LINUX || HR_TARGET_PLATFORM == HR_PLATFORM_ANDROID)

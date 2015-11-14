@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HR_ENGINE_API HrApplication : public IApplication
+	class HrApplication : public IApplication
 	{
 	public:
 		HrApplication();

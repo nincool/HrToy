@@ -10,8 +10,12 @@
 #ifndef _I_DIRECTOR_H_
 #define _I_DIRECTOR_H_
 
+#include "HrSystemCenterPrerequisites.h"
+
 namespace Hr
 {
+	class HrSystemSupporter;
+
 	class IDirector
 	{
 	public:

@@ -1,16 +1,12 @@
 ﻿#include "HrExport.h"
 
 
-extern "C" HR_ENGINE_API  int HrModuleInitialize() throw()
+extern "C" HR_EXPORT  int HrModuleInitialize() throw()
 {
-	int a = 1 + 2;
-	int b = 3 + 2;
-	int c = a + b;
-	 
-	return c;
+	return 0;
 }
 
-extern "C"  HR_ENGINE_API void HrModuleUnload(void)
+extern "C"  HR_EXPORT void HrModuleUnload(void)
 {
 
 }

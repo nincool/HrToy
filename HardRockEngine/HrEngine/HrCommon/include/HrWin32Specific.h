@@ -33,6 +33,6 @@
 #define SAFE_release(p)			{ if(p) { (p)->release();	(p)=NULL; } }
 #endif
 
-
+#define HrString std::string
 
 #endif

@@ -15,6 +15,8 @@
 namespace Hr
 {
 	class IRenderer;
+	class HrSystemSupporter;
+
 	class HrDirector : public IDirector
 	{
 	public:
@@ -23,7 +25,10 @@ namespace Hr
 		virtual bool Init() override;
 		virtual void Go() override;
 
+
 		HR_INSTANCE(HrDirector);
+	public:
+		HR_SYNTHESIZE_READONLY(HrSystemSupporter*, m_pSystemSupporter, SystemSupporter);
 	protected:
 		HrDirector();
 

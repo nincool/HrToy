@@ -9,6 +9,10 @@
 #ifndef _HR_LINUXSPECIFIC_H_
 #define _HR_LINUXSPECIFIC_H_
 
+#include "stdarg.h"
+#include "stdio.h"
+#include "string.h"
+
 #ifndef  _UNICODE
 
 /* Formatted i/o */

@@ -2,6 +2,8 @@
 #include <tchar.h>
 #include "HrCommon/Include/HrPlatformConfig.h"
 
+#include "HrMain/Include/HrLog.h"
+
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPTSTR    lpCmdLine,

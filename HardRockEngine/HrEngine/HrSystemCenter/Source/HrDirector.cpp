@@ -1,6 +1,7 @@
 ﻿#include "HrDirector.h"
 #include "HrRenderSystem/Include/IRenderer.h"
 #include "HrWin32WindowEventUtilities.h"
+#include "HrSystemSupporter.h"
 
 using namespace Hr;
 
@@ -8,16 +9,25 @@ HrDirector* HrDirector::m_s_pInstance = nullptr;
 
 HrDirector::HrDirector()
 {
+	m_pSystemSupporter = nullptr;
+
 	m_hHandleRender = nullptr;
 	m_pRenderSystem = nullptr;
 }
 
 HrDirector::~HrDirector()
 {
+	SAFE_DELETE(m_pSystemSupporter);
 }
 
 bool HrDirector::Init()
 {
+	if (m_pSystemSupporter == nullptr)
+	{
+		m_pSystemSupporter = HNEW(HrSystemSupporter);
+	}
+	m_pSystemSupporter->Init();
+
 	if (!LoadRenderSystem())
 	{
 		return false;

@@ -200,5 +200,6 @@ typedef struct _GUID {
 
 #include "HrLinuxTchar.h"
 
+#define HrString std::string
 
 #endif

@@ -19,9 +19,18 @@
     <ClInclude Include="Include\HrMainPrerequisiters.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrLog.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ILog.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrLog.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

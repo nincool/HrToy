@@ -100,7 +100,7 @@ bool HrD3D11Render::CreateD3D11Device()
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
 
 	UINT deviceFlags = 0;
-	deviceFlags != D3D11_CREATE_DEVICE_DEBUG;
+	//deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 	
 	// determine feature levels
 	D3D_FEATURE_LEVEL requestedLevels[] = 

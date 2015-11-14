@@ -17,6 +17,7 @@
     <ClInclude Include="Include\HrSystemCenterPrerequisites.h" />
     <ClInclude Include="Include\HrSystemSupporter.h" />
     <ClInclude Include="Include\IDirector.h" />
+    <ClInclude Include="Include\ISupporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
