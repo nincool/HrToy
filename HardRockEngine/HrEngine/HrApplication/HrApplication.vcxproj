@@ -10,24 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\HrD3D11Device.h" />
-    <ClInclude Include="Include\HrD3D11Enumeration.h" />
-    <ClInclude Include="Include\HrD3D11Render.h" />
-    <ClInclude Include="Include\HrD3D11RendererPrerequisites.h" />
-    <ClInclude Include="Include\HrD3D11Utility.h" />
-    <ClInclude Include="Include\HrExport.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\HrD3D11Device.cpp" />
-    <ClCompile Include="Source\HrD3D11Enumeration.cpp" />
-    <ClCompile Include="Source\HrD3D11Render.cpp" />
-    <ClCompile Include="Source\HrD3D11Utility.cpp" />
-    <ClCompile Include="Source\HrExport.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{489A0806-F326-48DB-83DC-1575C3025D14}</ProjectGuid>
-    <RootNamespace>HrRenderD3D11</RootNamespace>
+    <ProjectGuid>{CB3F1BC5-B759-4871-A316-DC43990FEFE6}</ProjectGuid>
+    <RootNamespace>HrApplication</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -48,16 +33,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Solutions\DebugRefPropertySheet\HrEngineDebug.props" />
+    <Import Project="..\Solutions\DebugRefPropertySheet\HrEngineDebug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Solutions\ReleaseRefPropertySheet\HrEngineRelease.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>..\..\..\Bin_Win32\HrEngineD\</OutDir>
+    <OutDir>..\..\Bin_Win32\HrEngineD\</OutDir>
+    <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
@@ -66,12 +50,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\;..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;HrMainD.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>HrMainD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +71,16 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\HrApplicationPrerequisites.h" />
+    <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\IApplication.h" />
+    <ClInclude Include="Include\Win32\HrApplication_Win32.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\Win32\HrApplication_Win32.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

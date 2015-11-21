@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrD3D11DriverList;
+	class IDirector;
 	class HrD3D11Device;
 
 	class HrD3D11Render : public IRenderer
@@ -17,24 +17,17 @@ namespace Hr
 
 	public:
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
-		virtual bool Create(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc) override;
+		virtual bool Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc) override;
 #else
-		virtual bool Create(unsigned int nWidth, unsigned int nHeight) override;
+		virtual bool Init(unsigned int nWidth, unsigned int nHeight) override;
 #endif
 
 		virtual void Destroy() override;
 
 		HR_INSTANCE(HrD3D11Render);
-
 	protected:
-		bool CreateRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc);
 		bool CreateD3D11Device();
 	protected:
-		HWND m_hWnd;
-
-		IDXGIFactory1* m_pDXGIFactory;
-		HrD3D11DriverList* m_pDriverList;
-
 		HrD3D11Device* m_pD3D11Device;
 	};
 }

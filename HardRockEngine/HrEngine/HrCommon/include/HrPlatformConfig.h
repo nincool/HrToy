@@ -141,23 +141,6 @@
 # error "Could not determine compiler"
 #endif
 
-
-//Integer formats of fixed bit width
-typedef unsigned int uint32;
-typedef unsigned short uint16;
-typedef unsigned char uint8;
-typedef int int32;
-typedef short int16;
-typedef signed char int8;
-// define uint64 type
-#if  (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
-typedef unsigned __int64 uint64;
-typedef __int64 int64;
-#else
-typedef unsigned long long uint64;
-typedef long long int64;
-#endif
-
 //////////////////////////////////////////////////////////////////////////
 // shared lib access define
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32 || HR_TARGET_PLATFORM == HR_PLATFORM_WINRT)
@@ -234,61 +217,7 @@ inline MODULE_START HrLoadModule(HINSTANCE& hHandle, const TCHAR* pModuleName)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-//Macros
-//////////////////////////////////////////////////////////////////////////
-#define HR_INSTANCE(type) public: static type* GetInstance() {	if (m_s_pInstance == nullptr) { m_s_pInstance = HNEW(type); } return m_s_pInstance; } \
-	static void ReleaseInstance() { SAFE_DELETE(m_s_pInstance); } private: static type* m_s_pInstance;
-#define HR_INSTANCE_DEF(type) type* type::m_s_pInstance = nullptr
 
-#define HR_PROPERTY_READONLY(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType Get##funName(void) const;
-
-#define HR_PROPERTY_READONLY_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public: virtual const varType& Get##funName(void) const;
-
-#define HR_PROPERTY(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType Get##funName(void);\
-public: virtual void Set##funName(varType var);
-
-#define HR_PROPERTY_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public: virtual const varType& Get##funName(void) const;\
-public: virtual void Set##funName(const varType& var);
-
-#define HR_SYNTHESIZE_READONLY(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType Get##funName(void) const { return varName; }
-
-#define HR_SYNTHESIZE_READONLY_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public: virtual const varType& Get##funName(void) const { return varName; }
-
-#define HR_SYNTHESIZE(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType Get##funName(void) const { return varName; }\
-public: virtual void Set##funName(varType var){ varName = var; }
-
-#define HR_SYNTHESIZE_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public: virtual const varType& Get##funName(void) const { return varName; }\
-public: virtual void Set##funName(const varType& var){ varName = var; }
-
-#define HR_SYNTHESIZE_RETAIN(varType, varName, funName)    \
-private: varType varName; \
-public: virtual varType Get##funName(void) const { return varName; } \
-public: virtual void Set##funName(varType var)   \
-{ \
-	if (varName != var) \
-					{ \
-	CC_SAFE_RETAIN(var); \
-	CC_SAFE_RELEASE(varName); \
-	varName = var; \
-					} \
-} 
 //////////////////////////////////////////////////////////////////////////
 // post configure
 //////////////////////////////////////////////////////////////////////////
@@ -303,11 +232,6 @@ public: virtual void Set##funName(varType var)   \
 //#pragma warning (disable:4127) 
 //#endif 
 //#endif  // _PLATFORM_WIN32
-
-///////////////////////////////////////////////////////////////////////////
-//include
-//////////////////////////////////////////////////////////////////////////
-#include "HrDebugNew.h"
 
 #endif // !_HR_PLATFORMCONFIG_H_
 

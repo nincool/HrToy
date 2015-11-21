@@ -25,12 +25,36 @@
     <ClInclude Include="Include\ILog.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrDirector.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrSystemSupporter.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrWin32WindowEventUtilities.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IDirector.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ISupporter.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrLog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrDirector.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrSystemSupporter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

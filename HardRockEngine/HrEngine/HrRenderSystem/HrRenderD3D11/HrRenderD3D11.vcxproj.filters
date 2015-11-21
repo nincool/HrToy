@@ -22,12 +22,6 @@
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrD3D11Driver.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrD3D11DriverList.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrD3D11Device.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -43,12 +37,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrExport.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrD3D11Driver.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrD3D11DriverList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11Device.cpp">

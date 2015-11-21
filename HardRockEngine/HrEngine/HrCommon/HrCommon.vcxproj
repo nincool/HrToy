@@ -79,6 +79,7 @@
     <ClInclude Include="Include\HrDebugNew.h" />
     <ClInclude Include="Include\HrLinuxTchar.h" />
     <ClInclude Include="Include\HrLinuxSpecific.h" />
+    <ClInclude Include="Include\HrMacros.h" />
     <ClInclude Include="include\HrPlatformConfig.h" />
     <ClInclude Include="Include\HrPrerequisites.h" />
     <ClInclude Include="Include\HrStringUtil.h" />

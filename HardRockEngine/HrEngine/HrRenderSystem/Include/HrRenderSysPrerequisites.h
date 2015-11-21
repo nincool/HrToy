@@ -1,5 +1,6 @@
 #ifndef _HR_RENDERSYSPREREQUISITES_H_
 #define _HR_RENDERSYSPREREQUISITES_H_
 
+#include "HrCommon/Include/HrConfig.h"
 
 #endif // !_HR_RENDERSYSPREREQUISITES_H_

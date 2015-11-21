@@ -3,6 +3,8 @@
 
 using namespace Hr;
 
+HR_INSTANCE_DEF(HrLog);
+
 HrLog::HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)

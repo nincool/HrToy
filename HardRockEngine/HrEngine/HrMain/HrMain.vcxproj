@@ -11,14 +11,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HrDirector.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrLog.h" />
     <ClInclude Include="Include\HrMainPrerequisiters.h" />
+    <ClInclude Include="Include\HrSystemSupporter.h" />
+    <ClInclude Include="Include\HrWin32WindowEventUtilities.h" />
+    <ClInclude Include="Include\IDirector.h" />
     <ClInclude Include="Include\ILog.h" />
+    <ClInclude Include="Include\ISupporter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
+    <ClCompile Include="Source\HrSystemSupporter.cpp" />
+    <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>
