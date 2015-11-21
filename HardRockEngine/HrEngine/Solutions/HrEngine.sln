@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrGameFramework", "..\HrGameFramework\HrGameFramework.vcxproj", "{FC508EED-16E8-4233-ABC5-E4FFC820645D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrCommon", "..\HrCommon\HrCommon.vcxproj", "{D585B947-4946-4B91-82D6-0C7D06914554}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderD3D11", "..\HrRenderSystem\HrRenderD3D11\HrRenderD3D11.vcxproj", "{489A0806-F326-48DB-83DC-1575C3025D14}"
@@ -13,13 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HrRenderSystem", "HrRenderS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderSystem", "..\HrRenderSystem\HrRenderSystem.vcxproj", "{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrSystemCenter", "..\HrSystemCenter\HrSystemCenter.vcxproj", "{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrGameDemo", "..\HrGameDemo\HrGameDemo.vcxproj", "{59A4A68B-24AB-45AB-9A61-9D908C2077B2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrLauncher", "..\HrLauncher\HrLauncher.vcxproj", "{2BF4B2C5-1454-4E5F-A432-1774D71A8F22}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrMain", "..\HrMain\HrMain.vcxproj", "{384AEC92-6324-4505-BFFA-1118D67497C5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrApplication", "..\HrApplication\HrApplication.vcxproj", "{CB3F1BC5-B759-4871-A316-DC43990FEFE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FC508EED-16E8-4233-ABC5-E4FFC820645D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FC508EED-16E8-4233-ABC5-E4FFC820645D}.Debug|Win32.Build.0 = Debug|Win32
-		{FC508EED-16E8-4233-ABC5-E4FFC820645D}.Release|Win32.ActiveCfg = Release|Win32
-		{FC508EED-16E8-4233-ABC5-E4FFC820645D}.Release|Win32.Build.0 = Release|Win32
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Debug|Win32.Build.0 = Debug|Win32
 		{D585B947-4946-4B91-82D6-0C7D06914554}.Release|Win32.ActiveCfg = Release|Win32
@@ -43,10 +37,6 @@ Global
 		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Debug|Win32.Build.0 = Debug|Win32
 		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Release|Win32.ActiveCfg = Release|Win32
 		{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}.Release|Win32.Build.0 = Release|Win32
-		{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}.Debug|Win32.Build.0 = Debug|Win32
-		{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}.Release|Win32.ActiveCfg = Release|Win32
-		{8F5E2474-61CC-4375-BF4E-5DDCEFDFE01D}.Release|Win32.Build.0 = Release|Win32
 		{59A4A68B-24AB-45AB-9A61-9D908C2077B2}.Debug|Win32.ActiveCfg = Debug|Win32
 		{59A4A68B-24AB-45AB-9A61-9D908C2077B2}.Debug|Win32.Build.0 = Debug|Win32
 		{59A4A68B-24AB-45AB-9A61-9D908C2077B2}.Release|Win32.ActiveCfg = Release|Win32
@@ -59,6 +49,10 @@ Global
 		{384AEC92-6324-4505-BFFA-1118D67497C5}.Debug|Win32.Build.0 = Debug|Win32
 		{384AEC92-6324-4505-BFFA-1118D67497C5}.Release|Win32.ActiveCfg = Release|Win32
 		{384AEC92-6324-4505-BFFA-1118D67497C5}.Release|Win32.Build.0 = Release|Win32
+		{CB3F1BC5-B759-4871-A316-DC43990FEFE6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CB3F1BC5-B759-4871-A316-DC43990FEFE6}.Debug|Win32.Build.0 = Debug|Win32
+		{CB3F1BC5-B759-4871-A316-DC43990FEFE6}.Release|Win32.ActiveCfg = Release|Win32
+		{CB3F1BC5-B759-4871-A316-DC43990FEFE6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
