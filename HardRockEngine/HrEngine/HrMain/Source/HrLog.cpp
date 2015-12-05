@@ -65,7 +65,13 @@ void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, HrString& strContent)
 
 	}
 
+#ifdef UNICODE
+	std::wcout << strContent << std::endl;
+#else
 	std::cout << strContent << std::endl;
+#endif // UNICODE
+
+	
 	SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
 #endif
 }

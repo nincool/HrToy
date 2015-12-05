@@ -14,7 +14,6 @@ namespace Hr
 
 		void Log(ILog::EnumLogType nLevel, const TCHAR* pszFormat, ...);
 
-
 		HR_INSTANCE(HrLog);
 	private:
 		void LogStringToConsole(ILog::EnumLogType nLevel, HrString&  strContent);

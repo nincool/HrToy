@@ -11,6 +11,7 @@ HrApplication::HrApplication()
 
 HrApplication::~HrApplication()
 {
+	Destroy();
 }
 
 bool HrApplication::ApplicationDidFinishLaunching()
@@ -32,10 +33,12 @@ void HrApplication::Run()
 {
 	HrDirector::GetInstance()->Init();
 	HrDirector::GetInstance()->StartMainLoop();
+	HrDirector::GetInstance()->Release();
 }
 
 bool HrApplication::Destroy()
 {
+	HrDirector::ReleaseInstance();
 	return true;
 }
 

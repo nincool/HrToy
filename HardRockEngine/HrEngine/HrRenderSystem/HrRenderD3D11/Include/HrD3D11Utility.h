@@ -5,25 +5,9 @@
 
 namespace Hr
 {
-	class HrD3D11Adapter
-	{
-	public:
-		HrD3D11Adapter(unsigned int nAdapterNumer, IHRDXGIAdapter* pDXGIAdapter);
-		~HrD3D11Adapter();
+	class HrD3D11Adapter;
 
-		std::string GetDriverDescription() const;
-		IHRDXGIAdapter* GetDeviceAdapter() const
-		{
-			return m_pDXGIAdapter;
-		}
-	private:
-		unsigned int m_nApdapterNumber;
-		DXGI_ADAPTER_DESC1 m_AdapterIdentifier;
-
-		IHRDXGIAdapter* m_pDXGIAdapter;
-	};
-
-	class HrD3D11Utility
+	class HrD3D11Utility : public RenderSysAllocatedObject
 	{
 	public:
 		HrD3D11Utility();
@@ -32,20 +16,23 @@ namespace Hr
 	public:
 		bool Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc);
 
-		bool CreateRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc);
-		bool CreateDXGIFactory();
-		bool CreateDXDevice(HrD3D11Adapter* pD3DAdapter = nullptr);
+		bool CreateD3DRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc);
+		bool CreateD3DDXGIFactory();
+		bool CreateD3DDXDevice(HrD3D11Adapter* pD3DAdapter = nullptr);
 
-		bool EnumerateAdapter();
+		bool D3DEnumerate();
+		bool D3D3EnumerateAdapter();
+		void D3DEnumerateModeList();
 		//Check Mutisamplelevels
 		void BuildMutisampleQualityList();
-		HrD3D11Adapter* GetDefaultAdapter();
 
+		bool CreateD3DSwapChain();
+		bool CreateD3DViews();
 	protected:
 		HR_INSTANCE(HrD3D11Utility);
 	protected:
 		HR_SYNTHESIZE_READONLY(HWND, m_hWnd, hWnd);
-		std::vector<HrD3D11Adapter*> m_vecAdapters;
+
 	};
 }
 

@@ -11,12 +11,13 @@
 
 #include "HrMainPrerequisiters.h"
 #include "ISupporter.h"
+#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class ILog;
 
-	class HR_MAIN_API HrSystemSupporter : public ISupporter
+	class HR_MAIN_API HrSystemSupporter : public ISupporter, public GeneralAllocatedObject
 	{
 	public:
 		HrSystemSupporter();

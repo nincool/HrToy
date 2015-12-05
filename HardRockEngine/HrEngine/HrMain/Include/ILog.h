@@ -10,10 +10,11 @@
 #define _I_LOG_H_
 
 #include "HrMainPrerequisiters.h"
+#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HR_MAIN_API ILog
+	class HR_MAIN_API ILog : public GeneralAllocatedObject
 	{
 	public:
 		ILog(){}

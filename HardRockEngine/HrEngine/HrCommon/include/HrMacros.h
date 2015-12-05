@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////////
 //Macros
 //////////////////////////////////////////////////////////////////////////
-#define HR_INSTANCE(type) public: static type* GetInstance() {	if (m_s_pInstance == nullptr) { m_s_pInstance = HNEW(type); } return m_s_pInstance; } \
+#define HR_INSTANCE(type) public: static type* GetInstance() {	if (m_s_pInstance == nullptr) { m_s_pInstance = HR_NEW type; } return m_s_pInstance; } \
 	static void ReleaseInstance() { SAFE_DELETE(m_s_pInstance); } private: static type* m_s_pInstance;
 #define HR_INSTANCE_DEF(type) type* type::m_s_pInstance = nullptr
 
@@ -56,6 +56,18 @@ public: virtual void Set##funName(varType var)   \
 	varName = var; \
 							} \
 } 
+
+#ifndef SAFE_RELEASE
+#define SAFE_RELEASE(p)			{ if(p) { (p)->Release();	(p)=NULL; } }
+#endif
+
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(p)			{ if(p) { delete (p);		(p)=NULL; } }
+#endif
+
+#ifndef SAFE_DELETE_ARRAY
+#define SAFE_DELETE_ARRAY(p)	{ if(p) { delete [] (p);		(p)=NULL; } }
+#endif
 
 #if (HR_DEBUG > 0)
 #define HRLOG(format,...)      Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, format,  ##__VA_ARGS__)

@@ -11,6 +11,12 @@
     <Filter Include="Source">
       <UniqueIdentifier>{30c3e0dd-91e8-455a-ab80-256d41ee0eeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\MemoryAlloc">
+      <UniqueIdentifier>{dbe13f5c-7f8c-4343-b77d-4474cfad25d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\MemoryAlloc">
+      <UniqueIdentifier>{d392fa82-a68a-49c6-865f-d63a265a0b5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -40,6 +46,27 @@
     <ClInclude Include="Include\ISupporter.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ITimer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrTimer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -55,6 +82,21 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrTimer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

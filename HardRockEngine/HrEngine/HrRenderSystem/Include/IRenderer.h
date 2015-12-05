@@ -36,7 +36,7 @@ namespace Hr
 		*	@Param:
 		*	@Return:
 		*/
-		virtual void Destroy() = 0;
+		virtual void Release() = 0;
 	};
 }
 

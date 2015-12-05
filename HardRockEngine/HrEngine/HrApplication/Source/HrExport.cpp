@@ -7,7 +7,6 @@ using namespace Hr;
 extern "C" HR_EXPORT  void HrModuleInitialize() throw()
 {
 	auto pApp = HrApplication::GetInstance();
-	HrLog::GetInstance()->Log(ILog::_HALL, "Test %d", 10);
 	pApp->Run();
 }
 

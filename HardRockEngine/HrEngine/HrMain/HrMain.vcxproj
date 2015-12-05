@@ -16,17 +16,29 @@
     <ClInclude Include="Include\HrLog.h" />
     <ClInclude Include="Include\HrMainPrerequisiters.h" />
     <ClInclude Include="Include\HrSystemSupporter.h" />
+    <ClInclude Include="Include\HrTimer.h" />
     <ClInclude Include="Include\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\IDirector.h" />
     <ClInclude Include="Include\ILog.h" />
     <ClInclude Include="Include\ISupporter.h" />
+    <ClInclude Include="Include\ITimer.h" />
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
     <ClCompile Include="Source\HrSystemSupporter.cpp" />
+    <ClCompile Include="Source\HrTimer.cpp" />
     <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>
@@ -37,7 +49,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

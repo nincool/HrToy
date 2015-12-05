@@ -12,22 +12,6 @@
 
 #define DEPRICATED 
 
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p)			{ if(p) { delete (p);		(p)=NULL; } }
-#endif
-
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p)	{ if(p) { delete [] (p);		(p)=NULL; } }
-#endif
-
-#ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)			{ if(p) { (p)->Release();	(p)=NULL; } }
-#endif
-
-#ifndef SAFE_release
-#define SAFE_release(p)			{ if(p) { (p)->release();	(p)=NULL; } }
-#endif
-
 typedef signed char         int8;
 typedef signed short        int16;
 typedef signed int					int32;
@@ -148,24 +132,6 @@ typedef unsigned char				byte;
 #define HINSTANCE void*
 #define HRESULT void*
 #define HANDLE void*
-
-// Safe memory freeing
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p)			{ if(p) { delete (p);		(p)=NULL; } }
-#endif
-
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p)	{ if(p) { delete[] (p);		(p)=NULL; } }
-#endif
-
-#ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)			{ if(p) { (p)->Release();	(p)=NULL; } }
-#endif
-
-
-#ifndef SAFE_RELEASE_FORCE
-#define SAFE_RELEASE_FORCE(p)		{ if(p) { (p)->ReleaseForce();	(p)=NULL; } }
-#endif
 
 
 #define S_OK                                   ((HRESULT)0L)

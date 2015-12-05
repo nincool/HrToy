@@ -8,19 +8,18 @@ HrD3D11Render* HrD3D11Render::m_s_pInstance = nullptr;
 
 HrD3D11Render::HrD3D11Render()
 {
-	m_pD3D11Device = HNEW(HrD3D11Device);
 }
 
 HrD3D11Render::~HrD3D11Render()
 {
-	SAFE_DELETE(m_pD3D11Device);
+	HrD3D11Device::ReleaseInstance();
+	HrD3D11Utility::ReleaseInstance();
 }
 
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
 {
 	HrD3D11Utility::GetInstance()->Init(nWidth, nHeight, lpfnProc);
-	
 
 	return true;
 }
@@ -30,9 +29,9 @@ bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight)
 }
 #endif
 
-void HrD3D11Render::Destroy()
+void HrD3D11Render::Release()
 {
-
+	HrD3D11Device::GetInstance()->Release();
 }
 
 bool HrD3D11Render::CreateD3D11Device()

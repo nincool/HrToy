@@ -11,6 +11,7 @@
 
 #include "HrMainPrerequisiters.h"
 
+
 namespace Hr
 {
 	class HrWin32WindowEventUtilities

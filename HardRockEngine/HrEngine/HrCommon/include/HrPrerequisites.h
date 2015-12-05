@@ -6,7 +6,7 @@
 #include <list>
 #include <unordered_map>
 
-#include "HrDebugNew.h"
+#include "HrConfig.h"
 #include "HrPlatformConfig.h"
 #include "HrMacros.h"
 #include "HrCommon/Include/HrStringUtil.h"

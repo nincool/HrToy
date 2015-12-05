@@ -3,40 +3,6 @@
 
 using namespace Hr;
 
-HrD3D11Adapter::HrD3D11Adapter(unsigned int nAdapterNumer, IHRDXGIAdapter* pDXGIAdapter)
-{
-	m_nApdapterNumber = nAdapterNumer;
-	m_pDXGIAdapter = pDXGIAdapter;
-	if (m_pDXGIAdapter != nullptr)
-	{
-		m_pDXGIAdapter->AddRef();
-		m_pDXGIAdapter->GetDesc1(&m_AdapterIdentifier);
-	}
-}
-
-HrD3D11Adapter::~HrD3D11Adapter()
-{
-	SAFE_RELEASE(m_pDXGIAdapter);
-}
-
-std::string Hr::HrD3D11Adapter::GetDriverDescription() const
-{
-	size_t size = wcslen(m_AdapterIdentifier.Description);
-	char * str = new char[size + 1];
-
-	wcstombs(str, m_AdapterIdentifier.Description, size);
-	str[size] = '\0';
-	std::string driverDescription = str;
-	delete[] str;
-	HrStringUtil::Trim(driverDescription);
-
-	return  driverDescription;
-}
-
-/////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////
-
 HR_INSTANCE_DEF(HrD3D11Utility);
 
 HrD3D11Utility::HrD3D11Utility()
@@ -51,23 +17,33 @@ HrD3D11Utility::~HrD3D11Utility()
 bool Hr::HrD3D11Utility::Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
 {
 	//创建窗口
-	bool bRt = CreateRenderWindow(nWidth, nHeight, lpfnProc);
-	HRASSERT(bRt, "HrD3D11Utility Init : CreateRenderWindow Error!");
+	bool bRt = CreateD3DRenderWindow(nWidth, nHeight, lpfnProc);
+	HRASSERT(bRt, _T("HrD3D11Utility Init : CreateRenderWindow Error!"));
 	//创建DXGIFactory
-	bRt = CreateDXGIFactory();
-	HRASSERT(bRt, "HrD3D11Utility Init : CreateDXGIFactory Error!");
-	//Enumerater Adapter
-	bRt = EnumerateAdapter();
-	HRASSERT(bRt, "HrD3D11Utility Init : EnumerateAdapter Error!");
+	bRt = CreateD3DDXGIFactory();
+	HRASSERT(bRt, _T("HrD3D11Utility Init : CreateDXGIFactory Error!"));
 	//创建Device
-	bRt = CreateDXDevice();
-	HRASSERT(bRt, "HrD3D11Utility Init : CreateDXDevice Error!");
+	bRt = CreateD3DDXDevice();
+	HRASSERT(bRt, _T("HrD3D11Utility Init : CreateDXDevice Error!"));
+	//Enumerater Adapter
+	bRt = D3DEnumerate();
+	HRASSERT(bRt, _T("HrD3D11Utility Init : EnumerateAdapter Error!"));
+	//抗锯齿
+	BuildMutisampleQualityList();
+	
+	bRt = CreateD3DSwapChain();
+	HRASSERT(bRt, _T("HrD3D11Utility Init : CreateD3DSwapChain Error!"));
+	bRt = CreateD3DViews();
+	HRASSERT(bRt, _T("HrD3D11Utility Init : CreateD3DViews Error!"));
 
 	return true;
 }
 
-bool HrD3D11Utility::CreateRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
+bool HrD3D11Utility::CreateD3DRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
 {
+	HrD3D11Device::GetInstance()->SetWidth(nWidth);
+	HrD3D11Device::GetInstance()->SetHeight(nHeight);
+
 	HINSTANCE hInst = NULL;
 	static const TCHAR staticVar;
 	GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, &staticVar, &hInst);
@@ -99,7 +75,7 @@ bool HrD3D11Utility::CreateRenderWindow(unsigned int nWidth, unsigned int nHeigh
 	return true;
 }
 
-bool HrD3D11Utility::CreateDXGIFactory()
+bool HrD3D11Utility::CreateD3DDXGIFactory()
 {
 	if (HrD3D11Device::GetInstance()->GetDXGIFactory() == nullptr)
 	{
@@ -107,7 +83,6 @@ bool HrD3D11Utility::CreateDXGIFactory()
 		HRESULT hr = CreateDXGIFactory1(__uuidof(IHRDXGIFactory), (void**)&pDXGIFactory);
 		if (FAILED(hr))
 		{
-
 			return false;
 		}
 		HrD3D11Device::GetInstance()->SetDXGIFactory(pDXGIFactory);
@@ -116,7 +91,7 @@ bool HrD3D11Utility::CreateDXGIFactory()
 	return true;
 }
 
-bool HrD3D11Utility::CreateDXDevice(HrD3D11Adapter* pD3DAdapter)
+bool HrD3D11Utility::CreateD3DDXDevice(HrD3D11Adapter* pD3DAdapter)
 {
 	HrD3D11Adapter* pAdapter = pD3DAdapter;
 	IHRDXGIAdapter* pDeviceAdapter = pAdapter == nullptr ? nullptr : pAdapter->GetDeviceAdapter();
@@ -156,18 +131,122 @@ bool HrD3D11Utility::CreateDXDevice(HrD3D11Adapter* pD3DAdapter)
 		, 0);
 	if (hr != S_OK)
 	{
-		HRERROR("D3D11CreateDevice Error!");
+		HRERROR(_T("D3D11CreateDevice Error!"));
 		return false;
 	}
+
+	HrD3D11Device::GetInstance()->SetDevice(pD3DDevice);
 
 	return true;
 }
 
-bool HrD3D11Utility::EnumerateAdapter()
+bool Hr::HrD3D11Utility::D3DEnumerate()
+{
+	if (!D3D3EnumerateAdapter())
+	{
+		return false;
+	}
+
+	D3DEnumerateModeList();
+
+	return true;
+}
+
+void Hr::HrD3D11Utility::D3DEnumerateModeList()
+{
+	HRESULT hr = S_OK;
+	IDXGIOutput* pOutput = nullptr;
+	for (int nOutput = 0;; ++nOutput)
+	{
+		hr = HrD3D11Device::GetInstance()->GetCurrentAdapter()->GetDeviceAdapter()->EnumOutputs(nOutput, &pOutput);
+		if (DXGI_ERROR_NOT_FOUND == hr)
+		{
+			break;
+		}
+		else if (FAILED(hr))
+		{
+			break;
+		}
+		else
+		{
+			HrD3D11EnumOutputInfo* pEnumOutputInfo = new HrD3D11EnumOutputInfo();
+
+			pEnumOutputInfo->m_pOutput = pOutput;
+			pOutput->GetDesc(&(pEnumOutputInfo->desc));
+
+			// Fast-path: Try to grab at least 512 modes.
+			//			  This is to avoid calling GetDisplayModeList more times than necessary.
+			//			  GetDisplayModeList is an expensive call.
+			UINT NumModes = 512;
+			DXGI_MODE_DESC* pDesc = new DXGI_MODE_DESC[NumModes];
+			hr = pOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+				DXGI_ENUM_MODES_SCALING,
+				&NumModes,
+				pDesc);
+			if (DXGI_ERROR_NOT_FOUND == hr)
+			{
+				SAFE_DELETE_ARRAY(pDesc);
+				NumModes = 0;
+			}
+			else if (hr == DXGI_ERROR_NOT_CURRENTLY_AVAILABLE)
+			{
+				NumModes = 1;
+				pDesc[0].Width = pEnumOutputInfo->desc.DesktopCoordinates.right - pEnumOutputInfo->desc.DesktopCoordinates.left;
+				pDesc[0].Height = pEnumOutputInfo->desc.DesktopCoordinates.bottom - pEnumOutputInfo->desc.DesktopCoordinates.top;
+				pDesc[0].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+				pDesc[0].RefreshRate.Numerator = 60;
+				pDesc[0].RefreshRate.Denominator = 1;
+				pDesc[0].ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
+				pDesc[0].Scaling = DXGI_MODE_SCALING_CENTERED;
+				hr = S_OK;
+			}
+			else if (DXGI_ERROR_MORE_DATA == hr)
+			{
+				// Slow path.  There were more than 512 modes.
+				SAFE_DELETE_ARRAY(pDesc);
+				hr = pOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+					DXGI_ENUM_MODES_SCALING,
+					&NumModes,
+					NULL);
+
+				if (FAILED(hr))
+				{
+					NumModes = 0;
+					break;
+				}
+				pDesc = new DXGI_MODE_DESC[NumModes];
+				hr = pOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+					DXGI_ENUM_MODES_SCALING,
+					&NumModes,
+					pDesc);
+				if (FAILED(hr))
+				{
+					SAFE_DELETE_ARRAY(pDesc);
+					NumModes = 0;
+					break;
+				}
+			}
+			if (SUCCEEDED(hr))
+			{
+				HrD3D11Device::GetInstance()->GetCurrentAdapter()->m_vecEnumOutputInfo.push_back(pEnumOutputInfo);
+				for (UINT nNumIndex = 0; nNumIndex < NumModes; ++nNumIndex)
+				{
+					pEnumOutputInfo->m_vecPlayModeList.push_back(pDesc[nNumIndex]);
+				}
+			}
+			else
+			{
+				SAFE_DELETE(pEnumOutputInfo);
+			}
+		}
+	}
+}
+
+bool HrD3D11Utility::D3D3EnumerateAdapter()
 {
 	if (HrD3D11Device::GetInstance()->GetDXGIFactory() == nullptr)
 	{
-		HRASSERT( false, "EnumerateAdapter Error! DXGIFactory is Empty!");
+		HRASSERT(false, _T("EnumerateAdapter Error! DXGIFactory is Empty!"));
 		return false;
 	}
 	for (uint32 nAdapter = 0;; ++nAdapter)
@@ -186,7 +265,7 @@ bool HrD3D11Utility::EnumerateAdapter()
 		}
 
 		HrD3D11Adapter* pDriver = new HrD3D11Adapter(nAdapter, pDXGIAdapter);
-		m_vecAdapters.push_back(pDriver);
+		HrD3D11Device::GetInstance()->m_vecAdapters.push_back(pDriver);
 		SAFE_RELEASE(pDXGIAdapter);
 	}
 
@@ -199,22 +278,128 @@ void HrD3D11Utility::BuildMutisampleQualityList()
 	DXGI_FORMAT fm = DXGI_FORMAT_R8G8B8A8_UNORM;
 	for (uint32 n = 0; n < D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; ++n)
 	{
+		IHRD3D11Device* pDevice = HrD3D11Device::GetInstance()->GetDevice();
 		HRESULT hr = HrD3D11Device::GetInstance()->GetDevice()->CheckMultisampleQualityLevels(fm, n, &nNumLevels);
 		if (SUCCEEDED(hr) && nNumLevels > 0)
 		{
-
+			HrD3D11Device::GetInstance()->m_vecMultiSampleCountList.push_back(n);
+			HrD3D11Device::GetInstance()->m_vecMultiSampleQualityList.push_back(nNumLevels);
 		}
 	}
 }
 
-HrD3D11Adapter* Hr::HrD3D11Utility::GetDefaultAdapter()
+bool Hr::HrD3D11Utility::CreateD3DSwapChain()
 {
-	if (m_vecAdapters.size() > 0)
-	{
-		return m_vecAdapters[0];
-	}
+	auto pHrD3D11Device = HrD3D11Device::GetInstance();
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.Width = pHrD3D11Device->GetWidth();
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.Height = pHrD3D11Device->GetHeight();
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.Format = pHrD3D11Device->GetFormat();
 
-	HRASSERT(false, "GetDefaultAdapter Error! the size of adapters is 0");
-	return nullptr;
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
+
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	pHrD3D11Device->m_swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	pHrD3D11Device->m_swapChainDesc.SampleDesc.Count = 1;
+	pHrD3D11Device->m_swapChainDesc.SampleDesc.Quality = 0;
+
+	pHrD3D11Device->m_swapChainDesc.BufferCount = 1;
+	pHrD3D11Device->m_swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+
+	pHrD3D11Device->m_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	pHrD3D11Device->m_swapChainDesc.OutputWindow = m_hWnd;
+	pHrD3D11Device->m_swapChainDesc.Windowed = true;
+
+	IHRDXGISwapChain* pDXSwapChain = nullptr;
+	HRESULT hr = pHrD3D11Device->GetDXGIFactory()->CreateSwapChain(pHrD3D11Device->GetDevice(), &pHrD3D11Device->m_swapChainDesc, &pDXSwapChain);
+	if (FAILED(hr))
+	{
+		HRERROR(_T("D3D11CreateSwapChain Error!"));
+		return false;
+	}
+	pHrD3D11Device->SetSwapChain(pDXSwapChain);
+
+	return true;
 }
+
+bool Hr::HrD3D11Utility::CreateD3DViews()
+{
+	ID3D11RenderTargetView* pRenderTargetView = nullptr;
+	ID3D11Texture2D* pBackBuffer = nullptr;
+	HrD3D11Device::GetInstance()->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	HRESULT hr = HrD3D11Device::GetInstance()->GetDevice()->CreateRenderTargetView(pBackBuffer, 0, &pRenderTargetView);
+	if (FAILED(hr))
+	{
+		HRERROR(_T("D3D11CreateD3DViews Error!"));
+		return false;
+	}
+	HrD3D11Device::GetInstance()->SetRenderTargetView(pRenderTargetView);
+	SAFE_RELEASE(pBackBuffer);
+
+	ID3D11Texture2D* pDepthStencil = nullptr;
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	depthStencilDesc.Width = HrD3D11Device::GetInstance()->GetWidth();
+	depthStencilDesc.Height = HrD3D11Device::GetInstance()->GetHeight();
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+
+	hr = HrD3D11Device::GetInstance()->GetDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	if (FAILED(hr))
+	{
+		HRERROR(_T("D3D11CreateDepthStencil Error!"));
+		return false;
+	}
+	HrD3D11Device::GetInstance()->SetDepthStencil(pDepthStencil);
+
+	//Create the depth stencil view
+	ID3D11DepthStencilView* pDepthStencilView = nullptr;
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	descDSV.Format = depthStencilDesc.Format;
+	if (depthStencilDesc.SampleDesc.Count > 1)
+	{
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	}
+	else
+	{
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	}
+	descDSV.Texture2D.MipSlice = 0;
+	hr = HrD3D11Device::GetInstance()->GetDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &pDepthStencilView);
+	if (FAILED(hr))
+	{
+
+		HRERROR(_T("D3D11CreateDepthStencilView Error!"));
+		return false;
+	}
+	HrD3D11Device::GetInstance()->SetDepthStencilView(pDepthStencilView);
+
+	//ID3D11RenderTargetView* pRenderTargetView = nullptr;
+	//HrD3D11Device::GetInstance()->GetImmediateContext()->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+
+	// Setup the viewport to match the backbuffer
+	D3D11_VIEWPORT vp;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	vp.Width = static_cast<FLOAT>(depthStencilDesc.Width);
+	vp.Height = static_cast<FLOAT>(depthStencilDesc.Height);
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	HrD3D11Device::GetInstance()->GetImmediateContext()->RSSetViewports(1, &vp);
+
+	return true;
+}
+
+
 

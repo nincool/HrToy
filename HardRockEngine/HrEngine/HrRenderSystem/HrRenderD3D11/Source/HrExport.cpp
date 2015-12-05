@@ -11,6 +11,7 @@ extern "C" HR_EXPORT Hr::IRenderer* HrModuleInitialize() throw()
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)
 {
+	Hr::HrD3D11Render::GetInstance()->Release();
 	Hr::HrD3D11Render::ReleaseInstance();
 }
 

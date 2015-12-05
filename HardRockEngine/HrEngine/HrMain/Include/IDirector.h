@@ -24,7 +24,8 @@ namespace Hr
 
 		virtual bool Init() = 0;
 		virtual void StartMainLoop() = 0;
-		virtual void PurgeDirector() = 0;
+		virtual void End() = 0;
+		virtual void Release() = 0;
 
 	};
 }

@@ -20,20 +20,20 @@ HrDirector::HrDirector()
 
 HrDirector::~HrDirector()
 {
-	HDELETE(m_pSystemSupporter);
+	HR_DELETE(m_pSystemSupporter);
 }
 
 bool HrDirector::Init()
 {
 	if (m_pSystemSupporter == nullptr)
 	{
-		m_pSystemSupporter = HNEW(HrSystemSupporter);
+		m_pSystemSupporter = HR_NEW HrSystemSupporter();
 	}
 	m_pSystemSupporter->Init();
 
 	if (!LoadRenderSystem())
 	{
-		HRERROR("Director Init : LoadRenderSystem Error!");
+		HRERROR(_T("Director Init : LoadRenderSystem Error!"));
 		return false;
 	}
 	
@@ -44,7 +44,7 @@ bool Hr::HrDirector::LoadRenderSystem()
 {
 	typedef IRenderer*(*RENDER_START_FUNC)();
 	TCHAR finalModuleName[MAX_PATH] = HR_PREFIX;
-	_tcscat(finalModuleName, "HrRenderD3D11");
+	_tcscat(finalModuleName, _T("HrRenderD3D11"));
 	_tcscat(finalModuleName, HR_SUFFIX);
 
 	m_hHandleRender = HR_MODULE_OPEN(finalModuleName);
@@ -73,8 +73,26 @@ void HrDirector::StartMainLoop()
 	}
 }
 
-void HrDirector::PurgeDirector()
+void HrDirector::End()
 {
 	m_bEndMainLoop = true;
+	
+	Release();
 }
+
+void HrDirector::Release()
+{
+	typedef void(*RENDER_END_FUNC)();
+	if (m_hHandleRender != nullptr)
+	{
+		RENDER_END_FUNC pFuncEnd = (RENDER_END_FUNC)HR_MODULE_GETSYSTEM(m_hHandleRender, HR_MUDULE_END_FUNC);
+		if (pFuncEnd != nullptr)
+		{
+			pFuncEnd();
+		}
+		HR_MODULE_FREE(m_hHandleRender);
+	}
+}
+
+
 

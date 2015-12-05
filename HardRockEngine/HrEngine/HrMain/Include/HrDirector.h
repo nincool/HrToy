@@ -11,20 +11,23 @@
 
 #include "HrMainPrerequisiters.h"
 #include "IDirector.h"
+#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class IRenderer;
 	class HrSystemSupporter;
 
-	class HR_MAIN_API HrDirector : public IDirector
+	class HR_MAIN_API HrDirector : public IDirector, public GeneralAllocatedObject
 	{
 	public:
 		~HrDirector();
 
 		virtual bool Init() override;
 		virtual void StartMainLoop() override;
-		virtual void PurgeDirector() override;
+		virtual void End() override;
+		virtual void Release() override;
+		
 
 		HR_INSTANCE(HrDirector);
 	public:

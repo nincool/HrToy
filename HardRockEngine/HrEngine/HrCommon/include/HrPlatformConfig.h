@@ -158,8 +158,8 @@
 #define HR_PREFIX _T("")
 #define HR_SUFFIX _T(".dll")
 #endif
-#define HR_MODULE_START_FUNC _T("HrModuleInitialize")
-#define HR_MUDULE_END_FUNC _T("HrModuleUnload")
+#define HR_MODULE_START_FUNC ("HrModuleInitialize")
+#define HR_MUDULE_END_FUNC ("HrModuleUnload")
 
 #else
 #define HR_EXPORT __attribute__ ((visibility("default")))

@@ -3,13 +3,14 @@
 
 #include "HrD3D11RendererPrerequisites.h"
 #include "../Include/IRenderer.h"
+#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class IDirector;
 	class HrD3D11Device;
 
-	class HrD3D11Render : public IRenderer
+	class HrD3D11Render : public IRenderer , public RenderSysAllocatedObject
 	{
 	public:
 		HrD3D11Render();
@@ -22,13 +23,11 @@ namespace Hr
 		virtual bool Init(unsigned int nWidth, unsigned int nHeight) override;
 #endif
 
-		virtual void Destroy() override;
+		virtual void Release() override;
 
 		HR_INSTANCE(HrD3D11Render);
 	protected:
 		bool CreateD3D11Device();
-	protected:
-		HrD3D11Device* m_pD3D11Device;
 	};
 }
 

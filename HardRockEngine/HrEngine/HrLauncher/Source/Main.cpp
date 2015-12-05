@@ -9,7 +9,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPTSTR    lpCmdLine,
 	int       nCmdShow)
 {
-	Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, "Test222");
+	Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, _T("-------start-------"));
 
 	HINSTANCE hHandle = nullptr;
 	MODULE_START pFuncStart = HrLoadModule(hHandle, _T("HrApplication"));
@@ -17,6 +17,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		pFuncStart();
 	}
+	HrFreeModule(hHandle);
+
 	Hr::HrLog::ReleaseInstance();
 
 	return 0;

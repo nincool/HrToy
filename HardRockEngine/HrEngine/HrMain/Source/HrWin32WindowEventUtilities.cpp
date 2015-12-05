@@ -23,7 +23,7 @@ void Hr::HrWin32WindowEventUtilities::MessagePump()
 		}
 		else
 		{
-			HrDirector::GetInstance()->PurgeDirector();
+			HrDirector::GetInstance()->End();
 		}
 	}
 }

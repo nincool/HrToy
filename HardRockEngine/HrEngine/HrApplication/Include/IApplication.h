@@ -12,10 +12,11 @@
 #define _HR_IAPPLICATION_H_
 
 #include "HrApplicationPrerequisites.h"
+#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class IApplication
+	class IApplication : public GeneralAllocatedObject
 	{
 	public:
 		IApplication(){};
