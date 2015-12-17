@@ -3,6 +3,7 @@
 #include "HrWin32WindowEventUtilities.h"
 #include "HrSystemSupporter.h"
 #include "HrLog.h"
+#include "HrTimer.h"
 
 using namespace Hr;
 
@@ -15,12 +16,15 @@ HrDirector::HrDirector()
 	m_hHandleRender = nullptr;
 	m_pRenderSystem = nullptr;
 
+	m_pTimer = HR_NEW HrTimer();
+
 	m_bEndMainLoop = false;
 }
 
 HrDirector::~HrDirector()
 {
 	HR_DELETE(m_pSystemSupporter);
+	HR_DELETE(m_pTimer);
 }
 
 bool HrDirector::Init()
@@ -69,7 +73,11 @@ void HrDirector::StartMainLoop()
 {
 	while (!m_bEndMainLoop)
 	{
+#if HR_TARGET_PLATFORM == HR_PLATFORM_WIN32
 		HrWin32WindowEventUtilities::MessagePump();
+#endif
+		m_pTimer->Tick();
+
 	}
 }
 

@@ -9,6 +9,7 @@
 
 #include "HrCommon/Include/HrPrerequisites.h"
 
+typedef float REAL;
 
 #endif // !_HR_MAINPREREQUISITERS_H_
 

@@ -17,6 +17,12 @@
     <Filter Include="Include\MemoryAlloc">
       <UniqueIdentifier>{d392fa82-a68a-49c6-865f-d63a265a0b5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Math">
+      <UniqueIdentifier>{aa490f05-2ab4-4abb-9b2f-f43fe9b034d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Math">
+      <UniqueIdentifier>{897cf518-879a-4834-bf97-3592336f75d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -67,6 +73,15 @@
     <ClInclude Include="Include\HrTimer.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\HrMath.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\HrVector3.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\HrMatrix3.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -98,6 +113,15 @@
     </ClCompile>
     <ClCompile Include="Source\HrTimer.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\HrMath.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\HrVector3.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\HrMatrix3.cpp">
+      <Filter>Source\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

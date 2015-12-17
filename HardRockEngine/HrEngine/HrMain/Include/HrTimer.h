@@ -2,10 +2,11 @@
 #define _HR_TIMER_H_
 
 #include "ITimer.h"
+#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HR_MAIN_API HrTimer : public ITimer
+	class HR_MAIN_API HrTimer : public ITimer, public GeneralAllocatedObject
 	{
 	public:
 		HrTimer();

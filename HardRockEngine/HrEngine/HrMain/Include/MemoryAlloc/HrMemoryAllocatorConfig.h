@@ -43,7 +43,7 @@ namespace Hr
 
 #if HR_MEMORY_ALLOCATOR == HR_MEMORY_ALLOCATOR_NEDPOOLING
 	template <MemoryCategory Cat> class HrCategorisedAllocPolicy : public HrNedPoolingPolicy{};
-	template <MemoryCategory Cat, size_t align = 0> class HrCategorisedAlignAllocPolicy : public HrNedPoolingAlignedPolicy < align > {};
+	template <MemoryCategory Cat, size_t align = 0> class HrCategorisedAlignAllocPolicy : public HrNedPoolingAlignedPolicy< align > {};
 #elif HR_MEMORY_ALLOCATOR == HR_MEMORY_ALLOCATOR_NED
 	template <MemoryCategory cat> class HrCategorisedAllocPolicy : public HrNedAllocPolicy{};
 	template <MemoryCategory Cat, size_t align = 0> class HrCategorisedAlignAllocPolicy : public HrNedAlignedAllocPolicy < align > {};
