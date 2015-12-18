@@ -9,7 +9,7 @@
 
 namespace Hr
 {
-	class HrVector3
+	class HR_MAIN_API HrVector3
 	{
 	public:
 		inline HrVector3(){}

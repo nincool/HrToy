@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrMatrix3
+	class HR_MAIN_API HrMatrix3
 	{
 	public:
 		inline HrMatrix3(){};
@@ -90,6 +90,15 @@ namespace Hr
 		HrMatrix3 Inverse(REAL fTolerance = 1e-06) const;
 		//Determinant
 		REAL Determinant() const;
+
+		inline HR_MAIN_API friend std::ostream& operator <<
+			(std::ostream& o, const HrMatrix3& mat)
+		{
+			o << "Matrix3(" << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << ", "
+				<< mat[1][0] << ", " << mat[1][1] << ", " << mat[1][2] << ", "
+				<< mat[2][0] << ", " << mat[2][1] << ", " << mat[2][2] << ")";
+			return o;
+		}
 	public:
 		static const HrMatrix3 ZERO;
 		static const HrMatrix3 IDENTITY;

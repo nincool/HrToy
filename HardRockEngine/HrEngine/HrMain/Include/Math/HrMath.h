@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrMath
+	class HR_MAIN_API HrMath
 	{
 	public:
 		inline HrMath(){};
