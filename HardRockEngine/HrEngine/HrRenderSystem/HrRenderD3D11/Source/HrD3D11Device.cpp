@@ -95,6 +95,11 @@ void HrD3D11Device::Release()
 	{
 		m_pD3D11ImmediateContext->Flush();
 	}
+	SAFE_RELEASE(m_pSwapChain);
+	SAFE_RELEASE(m_pRenderTargetView);
+	SAFE_RELEASE(m_pDepthStencil);
+	SAFE_RELEASE(m_pDepthStencilView);
+
 	SAFE_RELEASE(m_pD3D11ImmediateContext);
 	SAFE_RELEASE(m_pD3D11Device);
 	SAFE_RELEASE(m_pD3D11DXGIFactory);

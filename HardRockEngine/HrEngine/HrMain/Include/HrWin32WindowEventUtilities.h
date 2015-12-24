@@ -24,7 +24,7 @@ namespace Hr
 		 *	@Param:
 		 *	@Return:
 		*/
-		static void MessagePump();
+		static bool MessagePump();
 
 		static LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	};

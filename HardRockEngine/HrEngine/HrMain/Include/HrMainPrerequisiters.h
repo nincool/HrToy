@@ -8,6 +8,8 @@
 #endif // HR_MAIN_EXPORT
 
 #include "HrCommon/Include/HrPrerequisites.h"
+#include <algorithm>
+#include <assert.h>
 
 typedef float REAL;
 

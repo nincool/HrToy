@@ -28,6 +28,8 @@ namespace Hr
 		virtual void StartMainLoop() override;
 		virtual void End() override;
 		virtual void Release() override;
+
+		virtual bool Render() override;
 		
 
 		HR_INSTANCE(HrDirector);
@@ -37,6 +39,7 @@ namespace Hr
 		HrDirector();
 
 		bool LoadRenderSystem();
+
 	private:
 		HINSTANCE m_hHandleRender;
 		IRenderer* m_pRenderSystem;

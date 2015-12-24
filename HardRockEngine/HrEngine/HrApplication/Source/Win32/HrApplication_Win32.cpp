@@ -31,7 +31,11 @@ void HrApplication::ApplicationWillEnterForeground()
 
 void HrApplication::Run()
 {
-	HrDirector::GetInstance()->Init();
+	if (!HrDirector::GetInstance()->Init())
+	{
+		HRERROR(_T("HrApplication Run : HrDirector Init Error!"));
+		return;
+	}
 	HrDirector::GetInstance()->StartMainLoop();
 	HrDirector::GetInstance()->Release();
 }

@@ -1,7 +1,7 @@
 #ifndef _HR_STRINGUTIL_H_
 #define _HR_STRINGUTIL_H_
 
-#include "HrCommon/Include/HrPlatformConfig.h"
+#include "HrPlatformConfig.h"
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>

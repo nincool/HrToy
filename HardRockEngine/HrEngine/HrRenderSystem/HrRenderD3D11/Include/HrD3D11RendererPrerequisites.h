@@ -10,6 +10,7 @@
 #define _HR_RENDERD3D11PREREQUISITES_H_
 
 #include <d3d11.h>
+#include <DirectXMath.h>
 #include "HrCommon/Include/HrPrerequisites.h"
 #include "HrMain/Include/HrLog.h"
 #include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"

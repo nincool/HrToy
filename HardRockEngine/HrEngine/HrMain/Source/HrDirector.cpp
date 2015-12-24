@@ -74,10 +74,13 @@ void HrDirector::StartMainLoop()
 	while (!m_bEndMainLoop)
 	{
 #if HR_TARGET_PLATFORM == HR_PLATFORM_WIN32
-		HrWin32WindowEventUtilities::MessagePump();
+		if (!HrWin32WindowEventUtilities::MessagePump())
+		{
+			break;
+		}
 #endif
 		m_pTimer->Tick();
-
+		Render();
 	}
 }
 
@@ -102,5 +105,11 @@ void HrDirector::Release()
 	}
 }
 
+bool HrDirector::Render()
+{
+	m_pRenderSystem->StartRender();
+
+	return true;
+}
 
 

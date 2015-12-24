@@ -10,49 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\HrDirector.h" />
-    <ClInclude Include="Include\HrExport.h" />
-    <ClInclude Include="Include\HrLog.h" />
-    <ClInclude Include="Include\HrMainPrerequisiters.h" />
-    <ClInclude Include="Include\HrSystemSupporter.h" />
-    <ClInclude Include="Include\HrTimer.h" />
-    <ClInclude Include="Include\HrWin32WindowEventUtilities.h" />
-    <ClInclude Include="Include\IDirector.h" />
-    <ClInclude Include="Include\ILog.h" />
-    <ClInclude Include="Include\ISupporter.h" />
-    <ClInclude Include="Include\ITimer.h" />
-    <ClInclude Include="Include\Math\HrMath.h" />
-    <ClInclude Include="Include\Math\HrMatrix3.h" />
-    <ClInclude Include="Include\Math\HrMatrix4.h" />
-    <ClInclude Include="Include\Math\HrQuaternion.h" />
-    <ClInclude Include="Include\Math\HrVector3.h" />
-    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
-    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
-    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
-    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
-    <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\HrDirector.cpp" />
-    <ClCompile Include="Source\HrExport.cpp" />
-    <ClCompile Include="Source\HrLog.cpp" />
-    <ClCompile Include="Source\HrSystemSupporter.cpp" />
-    <ClCompile Include="Source\HrTimer.cpp" />
-    <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
-    <ClCompile Include="Source\Math\HrMath.cpp" />
-    <ClCompile Include="Source\Math\HrMatrix3.cpp" />
-    <ClCompile Include="Source\Math\HrMatrix4.cpp" />
-    <ClCompile Include="Source\Math\HrQuaternion.cpp" />
-    <ClCompile Include="Source\Math\HrVector3.cpp" />
-    <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
-    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
-    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
-    <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>
-    <RootNamespace>HrMain</RootNamespace>
+    <ProjectGuid>{EF462F0C-C237-4DBB-BDDA-DA8A672428D3}</ProjectGuid>
+    <RootNamespace>HrRenderDemo</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,16 +33,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\Solutions\DebugRefPropertySheet\HrEngineDebug.props" />
+    <Import Project="..\..\Solutions\DebugRefPropertySheet\HrEngineDebug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\Solutions\ReleaseRefPropertySheet\HrEngineRelease.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\Bin_Win32\HrEngineD\</OutDir>
-    <IntDir>..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>..\..\..\Bin_Win32\HrEngineD\</OutDir>
+    <IntDir>..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)D</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
@@ -91,10 +50,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>HR_MAIN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HR_RENDERDEMO_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\;..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;D3DCompiler.lib;HrMainD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,6 +73,16 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\HrRenderD3D11Demo.h" />
+    <ClInclude Include="Include\HrRendererDemoPrerequisites.h" />
+    <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\IRenderDemo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\HrRenderD3D11Demo.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

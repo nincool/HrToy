@@ -2,13 +2,16 @@
 #define _HR_D3D11RENDER_H_
 
 #include "HrD3D11RendererPrerequisites.h"
-#include "../Include/IRenderer.h"
+#include "Include/IRenderer.h"
 #include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+
 
 namespace Hr
 {
 	class IDirector;
 	class HrD3D11Device;
+
+	class IRenderDemo;
 
 	class HrD3D11Render : public IRenderer , public RenderSysAllocatedObject
 	{
@@ -24,10 +27,12 @@ namespace Hr
 #endif
 
 		virtual void Release() override;
+		virtual bool StartRender() override;
 
 		HR_INSTANCE(HrD3D11Render);
-	protected:
-		bool CreateD3D11Device();
+
+		/////////////////////////////--- RenderTest ---/////////////////////////////////
+		IRenderDemo* m_pRenderDemo;
 	};
 }
 

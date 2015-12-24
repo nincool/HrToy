@@ -10,6 +10,7 @@
 #define _HR_APPLICATIONPREREQUISITES_H_
 
 #include "HrCommon/Include/HrPrerequisites.h"
+#include "HrMain/Include/HrLog.h"
 
 
 namespace Hr

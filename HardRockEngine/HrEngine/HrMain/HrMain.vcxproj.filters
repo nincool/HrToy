@@ -82,6 +82,12 @@
     <ClInclude Include="Include\Math\HrMatrix3.h">
       <Filter>Include\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\HrMatrix4.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\HrQuaternion.h">
+      <Filter>Include\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -121,6 +127,12 @@
       <Filter>Source\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\HrMatrix3.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\HrMatrix4.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\HrQuaternion.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
   </ItemGroup>

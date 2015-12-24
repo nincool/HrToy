@@ -2,6 +2,7 @@
 #define _HR_MATRIX3_H_
 
 #include "HrMainPrerequisiters.h"
+#include "HrMath.h"
 #include "HrVector3.h"
 
 namespace Hr
@@ -105,6 +106,8 @@ namespace Hr
 	protected:
 		REAL m[3][3];
 
+		// for faster access
+		friend class HrMatrix4;
 	};
 }
 

@@ -37,6 +37,8 @@ namespace Hr
 		*	@Return:
 		*/
 		virtual void Release() = 0;
+
+		virtual bool StartRender() = 0;
 	};
 }
 

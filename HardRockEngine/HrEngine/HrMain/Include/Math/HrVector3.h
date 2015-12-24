@@ -2,10 +2,7 @@
 #define _HR_VECTOR3_H_
 
 #include "HrMainPrerequisiters.h"
-#include <algorithm>
-#include <assert.h>
 #include "HrMath.h"
-
 
 namespace Hr
 {

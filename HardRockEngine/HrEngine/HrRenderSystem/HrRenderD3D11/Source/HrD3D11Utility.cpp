@@ -385,8 +385,7 @@ bool Hr::HrD3D11Utility::CreateD3DViews()
 	}
 	HrD3D11Device::GetInstance()->SetDepthStencilView(pDepthStencilView);
 
-	//ID3D11RenderTargetView* pRenderTargetView = nullptr;
-	//HrD3D11Device::GetInstance()->GetImmediateContext()->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+	HrD3D11Device::GetInstance()->GetImmediateContext()->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
 
 	// Setup the viewport to match the backbuffer
 	D3D11_VIEWPORT vp;

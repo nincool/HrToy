@@ -11,7 +11,7 @@ HrWin32WindowEventUtilities::~HrWin32WindowEventUtilities()
 {
 }
 
-void Hr::HrWin32WindowEventUtilities::MessagePump()
+bool Hr::HrWin32WindowEventUtilities::MessagePump()
 {
 	MSG msg;
 	while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -24,8 +24,11 @@ void Hr::HrWin32WindowEventUtilities::MessagePump()
 		else
 		{
 			HrDirector::GetInstance()->End();
+			return false;
 		}
 	}
+
+	return true;
 }
 
 LRESULT CALLBACK Hr::HrWin32WindowEventUtilities::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
