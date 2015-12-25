@@ -1,10 +1,8 @@
 ﻿#ifndef _HR_D3D11RENDER_H_
 #define _HR_D3D11RENDER_H_
 
-#include "HrD3D11RendererPrerequisites.h"
+#include "HrD3D11RenderPrerequisites.h"
 #include "Include/IRenderer.h"
-#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
-
 
 namespace Hr
 {
@@ -13,7 +11,7 @@ namespace Hr
 
 	class IRenderDemo;
 
-	class HrD3D11Render : public IRenderer , public RenderSysAllocatedObject
+	class HrD3D11Render : public IRenderer
 	{
 	public:
 		HrD3D11Render();

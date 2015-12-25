@@ -16,9 +16,6 @@
     <ClInclude Include="Include\HrD3D11Render.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrD3D11RendererPrerequisites.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -29,6 +26,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrD3D11Utility.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrD3D11RenderPrerequisites.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

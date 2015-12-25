@@ -57,6 +57,7 @@ namespace Hr
 	typedef HrCategorisedAllocPolicy<Hr::MEMCATEGORY_RESOURCE> ResourceAllocPolicy;
 	typedef HrCategorisedAllocPolicy<Hr::MEMCATEGORY_RENDERSYS> RenderSysAllocPolicy;
 
+	//注意多继承会导致回收错误 (delete parent)
 	typedef HrAllocatedObject<GeneralAllocPolicy> GeneralAllocatedObject;
 	typedef HrAllocatedObject<GeometryAllocPolicy> GeometryAllocatedObject;
 	typedef HrAllocatedObject<AnimationAllocPolicy> AnimationAllocatedObject;

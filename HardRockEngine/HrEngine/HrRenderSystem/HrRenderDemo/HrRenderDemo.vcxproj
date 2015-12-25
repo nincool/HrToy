@@ -74,14 +74,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrRenderD3D11Demo.h" />
-    <ClInclude Include="Include\HrRendererDemoPrerequisites.h" />
+    <ClInclude Include="Include\HrRenderD3D11DemoTexture.h" />
+    <ClInclude Include="Include\HrRenderD3D11DemoTriangle.h" />
+    <ClInclude Include="Include\HrRenderDemo.h" />
+    <ClInclude Include="Include\HrRenderDemoPrerequisites.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\IRenderDemo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\HrD3D11RenderDemoTexture.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
-    <ClCompile Include="Source\HrRenderD3D11Demo.cpp" />
+    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

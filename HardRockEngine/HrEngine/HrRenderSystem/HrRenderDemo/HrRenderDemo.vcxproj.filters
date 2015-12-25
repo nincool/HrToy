@@ -12,13 +12,19 @@
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRendererDemoPrerequisites.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\IRenderDemo.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11Demo.h">
+    <ClInclude Include="Include\HrRenderDemoPrerequisites.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoTriangle.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderDemo.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoTexture.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +32,10 @@
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11Demo.cpp">
+    <ClCompile Include="Source\HrD3D11RenderDemoTexture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

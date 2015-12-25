@@ -9,7 +9,7 @@
 #ifndef _HR_EXPORT_H_
 #define _HR_EXPORT_H_
 
-#include "HrRendererDemoPrerequisites.h"
+#include "HrRenderDemoPrerequisites.h"
 
 #endif
 

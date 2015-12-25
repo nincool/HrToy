@@ -11,12 +11,13 @@
 #define _I_RENDERER_H_
 
 #include "../../HrCommon/Include/HrPlatformConfig.h"
+#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class IDirector;
 
-	class IRenderer
+	class IRenderer : public RenderSysAllocatedObject
 	{
 	public:
 		virtual ~IRenderer(){};

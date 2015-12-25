@@ -1,7 +1,7 @@
 #ifndef _HR_D3D11DEVICE_H_
 #define _HR_D3D11DEVICE_H_
 
-#include "HrD3D11RendererPrerequisites.h"
+#include "HrD3D11RenderPrerequisites.h"
 
 namespace Hr
 {

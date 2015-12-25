@@ -10,7 +10,6 @@
 #define _HR_DIRECTOR_H_
 
 #include "IDirector.h"
-#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
@@ -19,7 +18,7 @@ namespace Hr
 
 	class HrSystemSupporter;
 
-	class HR_MAIN_API HrDirector : public IDirector, public GeneralAllocatedObject
+	class HR_MAIN_API HrDirector : public IDirector
 	{
 	public:
 		~HrDirector();

@@ -9,7 +9,7 @@
 #ifndef _HR_EXPORT_H_
 #define _HR_EXPORT_H_
 
-#include "HrD3D11RendererPrerequisites.h"
+#include "HrD3D11RenderPrerequisites.h"
 
 #endif
 

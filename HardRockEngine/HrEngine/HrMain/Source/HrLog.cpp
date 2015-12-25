@@ -37,6 +37,7 @@ void HrLog::Log(ILog::EnumLogType nLevel, const TCHAR* pszFormat, ...)
 	TCHAR szBuffer[HR_MAX_STRING_FORMAT_LENGTH];
 	memset(szBuffer, 0, HR_MAX_STRING_FORMAT_LENGTH);
 	int nCount = _vstprintf(szBuffer, pszFormat, ap);
+	va_end(ap);
 	if (nCount == -1 || nCount >= HR_MAX_STRING_FORMAT_LENGTH)
 	{
 		szBuffer[HR_MAX_STRING_FORMAT_LENGTH - 1] = '\0';

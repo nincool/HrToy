@@ -34,6 +34,7 @@ void HrApplication::Run()
 	if (!HrDirector::GetInstance()->Init())
 	{
 		HRERROR(_T("HrApplication Run : HrDirector Init Error!"));
+		HrDirector::GetInstance()->Release();
 		return;
 	}
 	HrDirector::GetInstance()->StartMainLoop();

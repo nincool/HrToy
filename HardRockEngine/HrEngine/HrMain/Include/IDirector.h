@@ -11,12 +11,13 @@
 #define _I_DIRECTOR_H_
 
 #include "HrMainPrerequisiters.h"
+#include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class HrSystemSupporter;
 
-	class HR_MAIN_API IDirector
+	class HR_MAIN_API IDirector : public GeneralAllocatedObject
 	{
 	public:
 		IDirector(){}

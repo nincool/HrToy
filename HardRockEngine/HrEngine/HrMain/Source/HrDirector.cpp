@@ -64,7 +64,12 @@ bool Hr::HrDirector::LoadRenderSystem()
 	{
 		return false;
 	}
-	m_pRenderSystem->Init(600, 480, HrWin32WindowEventUtilities::WinProc);
+	if (!m_pRenderSystem->Init(600, 480, HrWin32WindowEventUtilities::WinProc))
+	{
+		HRERROR(_T("RenderSystem Init Error!"));
+
+		return false;
+	}
 
 	return true;
 }

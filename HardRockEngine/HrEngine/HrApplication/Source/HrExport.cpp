@@ -12,7 +12,6 @@ extern "C" HR_EXPORT  void HrModuleInitialize() throw()
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)
 {
-	auto pApp = HrApplication::GetInstance();
-	pApp->ReleaseInstance();
+	HrApplication::ReleaseInstance();
 }
 
