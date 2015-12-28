@@ -42,7 +42,7 @@ bool HrRenderD3D11DemoTexture::LoadContent()
 {
 	ID3DBlob* pVSBuffer = nullptr;
 
-	bool bCompileResult = CompileD3DShader(_T("HrShader\\TextureMap.fx"), "VS_Main", "vs_5_0", &pVSBuffer);
+	bool bCompileResult = CompileD3DShader(L"HrShader\\TextureMap.fx", "VS_Main", "vs_5_0", &pVSBuffer);
 	if (!bCompileResult)
 	{
 		HRERROR(_T("Compile VS Shader Error!"));
@@ -67,6 +67,60 @@ bool HrRenderD3D11DemoTexture::LoadContent()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
+
+	uint32 nTotalLayoutElements = ARRAYSIZE(solidColorLayout);
+	rt = m_pD3D11Device->CreateInputLayout(solidColorLayout, nTotalLayoutElements,
+		pVSBuffer->GetBufferPointer(), pVSBuffer->GetBufferSize(), &m_pInputLayout);
+	pVSBuffer->Release();
+	if (FAILED(rt))
+	{
+		HRERROR(_T("Error creating the input layout!"));
+		return false;
+	}
+
+	ID3DBlob* pPSBuffer = nullptr;
+	bCompileResult = CompileD3DShader(L"HrShader\\TextureMap.fx", "PS_Main", "ps_4_0", &pPSBuffer);
+	if (bCompileResult == false)
+	{
+		HRERROR(_T("Error compiling pixel shader!"));
+		return false;
+	}
+
+	rt = m_pD3D11Device->CreatePixelShader(pPSBuffer->GetBufferPointer(), pPSBuffer->GetBufferSize(), 0, &m_pSolidColorPS);
+	pPSBuffer->Release();
+	if (FAILED(rt))
+	{
+		HRERROR(_T("Error creating pixel shader"));
+		return false;
+	}
+
+	VertexPos vertices[] =
+	{
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
+	};
+	D3D11_BUFFER_DESC vertexDesc;
+	ZeroMemory(&vertexDesc, sizeof(vertexDesc));
+	vertexDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexDesc.ByteWidth = sizeof(VertexPos) * 6;
+
+	D3D11_SUBRESOURCE_DATA resourceData;
+	ZeroMemory(&resourceData, sizeof(resourceData));
+	resourceData.pSysMem = vertices;
+	
+	rt = m_pD3D11Device->CreateBuffer(&vertexDesc, &resourceData, &m_pVertexBuffer);
+	if (FAILED(rt))
+	{
+		HRERROR(_T("FAILED to create vertex buffer!"));
+		return false;
+	}
+
 
 	return true;
 }

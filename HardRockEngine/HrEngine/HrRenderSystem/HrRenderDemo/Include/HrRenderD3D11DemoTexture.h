@@ -34,6 +34,7 @@ namespace Hr
 		struct VertexPos
 		{
 			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT2 tex0;
 		};
 
 
