@@ -27,7 +27,7 @@ namespace Hr
 	public:
 		bool CompileD3DShader(LPCWSTR pFilePath, char* pEntry, char* pTarget, ID3DBlob** pBuffer)
 		{
-			DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+			DWORD shaderFlags = 0;//D3DCOMPILE_ENABLE_STRICTNESS;
 
 			ID3DBlob* errorBuffer = 0;
 			HRESULT result;
@@ -38,6 +38,7 @@ namespace Hr
 			{
 				if (errorBuffer != 0)
 				{
+					char* pMsg = (char*)(errorBuffer->GetBufferPointer());
 					HRERROR((LPCWSTR)errorBuffer->GetBufferPointer());
 					errorBuffer->Release();
 				}

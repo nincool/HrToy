@@ -11,7 +11,9 @@ HrD3D11Render* HrD3D11Render::m_s_pInstance = nullptr;
 
 HrD3D11Render::HrD3D11Render()
 {
-	m_pRenderDemo = HR_NEW HrRenderD3D11DemoTriangle();
+	typedef HrRenderD3D11DemoPipleline DEMOCLASS;
+
+	m_pRenderDemo = HR_NEW DEMOCLASS();
 }
 
 HrD3D11Render::~HrD3D11Render()

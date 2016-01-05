@@ -27,15 +27,33 @@
     <ClInclude Include="Include\HrRenderD3D11DemoTexture.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoSprite.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoXNA.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoPipleline.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrD3D11RenderDemoTexture.cpp">
+    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp">
+    <ClCompile Include="Source\HrRenderD3D11DemoSprite.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoTexture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoXNA.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

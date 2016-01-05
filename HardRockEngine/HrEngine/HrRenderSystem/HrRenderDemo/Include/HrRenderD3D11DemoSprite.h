@@ -1,5 +1,5 @@
-#ifndef _HR_D3D11RENDERDEMOTEXTURE_H_
-#define _HR_D3D11RENDERDEMOTEXTURE_H_
+#ifndef _HR_RENDERD3D11DEMOSPRITE_H_
+#define _HR_RENDERD3D11DEMOSPRITE_H_
 
 #include "HrRenderDemoPrerequisites.h"
 #include "IRenderDemo.h"
@@ -9,12 +9,13 @@ namespace DirectX
 	class SpriteBatch;
 }
 
+
 namespace Hr
 {
-	class HR_RENDERDEMO_API HrRenderD3D11DemoTexture : public IRenderDemo
+	class HR_RENDERDEMO_API HrRenderD3D11DemoSprite : public IRenderDemo
 	{
 	public:
-		HrRenderD3D11DemoTexture();
+		HrRenderD3D11DemoSprite();
 
 		virtual void SetD3DDevice(ID3D11Device* pDevice
 			, ID3D11DeviceContext* pDeviceContex
@@ -28,6 +29,7 @@ namespace Hr
 
 	private:
 		bool LoadContent();
+
 	protected:
 		HR_SYNTHESIZE_READONLY(ID3D11Device*, m_pD3D11Device, Device);
 		HR_SYNTHESIZE_READONLY(ID3D11DeviceContext*, m_pD3D11ImmediateContext, ImmediateContext);
@@ -39,28 +41,32 @@ namespace Hr
 		struct VertexPos
 		{
 			DirectX::XMFLOAT3 pos;
-			//DirectX::XMFLOAT4 color;
 			DirectX::XMFLOAT2 tex0;
 		};
-		//struct VertexPos
-		//{
-		//	DirectX::XMFLOAT3 pos;
-		//};
-
 
 		ID3D11VertexShader* m_pSolidColorVS;
 		ID3D11PixelShader* m_pSolidColorPS;
 
 		ID3D11InputLayout* m_pInputLayout;
 		ID3D11Buffer* m_pVertexBuffer;
-
+		ID3D11Buffer* m_pIndexBuffer;
+		ID3D11Buffer* m_pConstBuffer;
 
 		ID3D11ShaderResourceView* m_pColorMap;
-		ID3D11SamplerState* m_pColorMapSampler;
+		
 		ID3D11Resource* m_pTexture;
+
+		ID3D11BlendState* m_pAlphaBlendState;
+		ID3D11DepthStencilState* m_pDepthStencilState;
+		ID3D11RasterizerState* m_pRasterizerState;
+		ID3D11SamplerState* m_pColorMapSampler;
+
+		
 
 		DirectX::SpriteBatch* m_pSprite1;
 	};
 }
 
 #endif
+
+

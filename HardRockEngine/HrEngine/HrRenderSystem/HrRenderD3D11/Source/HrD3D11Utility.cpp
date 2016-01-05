@@ -111,7 +111,7 @@ bool HrD3D11Utility::CreateD3DDXDevice(HrD3D11Adapter* pD3DAdapter)
 	};
 	D3D_FEATURE_LEVEL* pFirstFL = &requestedLevels[0];
 	D3D_FEATURE_LEVEL* pLastFL = &requestedLevels[1];
-	UINT nFeatureLevels = pLastFL - pFirstFL + 1;
+	uint64 nFeatureLevels = pLastFL - pFirstFL + 1;
 
 	D3D_DRIVER_TYPE driverType = pAdapter == nullptr ? D3D_DRIVER_TYPE_HARDWARE : D3D_DRIVER_TYPE_UNKNOWN;
 

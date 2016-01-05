@@ -39,6 +39,38 @@ bool HrRenderD3D11DemoTriangle::Init()
 	return LoadContent();
 }
 
+bool HrRenderD3D11DemoTriangle::Render()
+{
+	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
+	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pRenderTargetView, reinterpret_cast<const float*>(&Blue));
+	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	unsigned int stride = sizeof(VertexPos);
+	unsigned int offset = 0;
+
+	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
+	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
+	m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
+	m_pD3D11ImmediateContext->Draw(3, 0);
+
+	m_pSwapChain->Present(0, 0);
+
+	return true;
+}
+
+
+void HrRenderD3D11DemoTriangle::Release()
+{
+
+	SAFE_RELEASE(m_pSolidColorVS);
+	SAFE_RELEASE(m_pSolidColorPS);
+	SAFE_RELEASE(m_pInputLayout);
+	SAFE_RELEASE(m_pVertexBuffer);
+}
+
 bool HrRenderD3D11DemoTriangle::LoadContent()
 {
 	ID3DBlob* vsBuffer = 0;
@@ -117,36 +149,5 @@ bool HrRenderD3D11DemoTriangle::LoadContent()
 	}
 
 	return true;
-}
-
-bool HrRenderD3D11DemoTriangle::Render()
-{
-	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pRenderTargetView, reinterpret_cast<const float*>(&Blue));
-	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-	unsigned int stride = sizeof(VertexPos);
-	unsigned int offset = 0;
-
-	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
-	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
-	m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
-	m_pD3D11ImmediateContext->Draw(3, 0);
-
-	m_pSwapChain->Present(0, 0);
-
-	return true;
-}
-
-void HrRenderD3D11DemoTriangle::Release()
-{
-
-	SAFE_RELEASE(m_pSolidColorVS);
-	SAFE_RELEASE(m_pSolidColorPS);
-	SAFE_RELEASE(m_pInputLayout);
-	SAFE_RELEASE(m_pVertexBuffer);
 }
 
