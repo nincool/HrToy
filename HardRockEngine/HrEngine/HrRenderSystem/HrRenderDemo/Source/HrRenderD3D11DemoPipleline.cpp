@@ -64,6 +64,7 @@ bool HrRenderD3D11DemoPipleline::LoadContent()
 		HRERROR(_T("CreateEffectFromMemory Error!"));
 		return false;
 	}
+	SAFE_RELEASE(pShaderBuffer);
 
 	//开始创建输入布局
 	D3D11_INPUT_ELEMENT_DESC inputDesc[2] =
@@ -138,7 +139,14 @@ bool HrRenderD3D11DemoPipleline::LoadContent()
 bool HrRenderD3D11DemoPipleline::Render()
 {
 	//
+	static float phy(0.0f), theta(0.0f);
+	XMMATRIX rotation1 = XMMatrixRotationY(phy);
+	XMMATRIX rotation2 = XMMatrixRotationX(theta);
+	phy += XM_PI * 0.5f * 0.001f;
+	theta += XM_PI * 0.5f * 0.001f;
+
 	XMMATRIX world = XMMatrixIdentity();
+	world = rotation1 * rotation2;
 
 	//视变换 把摄像机变换到世界坐标系原点 所有物体都随摄像机变换 
 	XMVECTOR eyePos = XMVectorSet(0.0f, 2.0f, -5.0f, 1.0f);
@@ -179,7 +187,6 @@ bool HrRenderD3D11DemoPipleline::Render()
 		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
 	}
 
-
 	m_pSwapChain->Present(0, 0);
 
 	return true;
@@ -187,6 +194,8 @@ bool HrRenderD3D11DemoPipleline::Render()
 
 void HrRenderD3D11DemoPipleline::Release()
 {
-
+	SAFE_RELEASE(m_pEffect);
+	SAFE_RELEASE(m_pVertexBuffer);
+	SAFE_RELEASE(m_pIndexBuffer);
 }
 

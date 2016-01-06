@@ -7,6 +7,9 @@
     <Filter Include="Source">
       <UniqueIdentifier>{05487292-b229-4bc7-9c62-911ef47b7a2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FX">
+      <UniqueIdentifier>{ebb010a4-8466-462c-88e7-2f5ec9e3ecb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -36,6 +39,12 @@
     <ClInclude Include="Include\HrRenderD3D11DemoPipleline.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoGeometry.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoLight.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -56,5 +65,30 @@
     <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoGeometry.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoLight.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\..\Bin_Win\HrShader\TextureMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicDraw.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicColor.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicLight.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

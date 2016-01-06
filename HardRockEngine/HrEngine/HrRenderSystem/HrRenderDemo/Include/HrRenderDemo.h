@@ -6,6 +6,8 @@
 #include "HrRenderD3D11DemoSprite.h"
 #include "HrRenderD3D11DemoXNA.h"
 #include "HrRenderD3D11DemoPipleline.h"
+#include "HrRenderD3D11DemoGeometry.h"
+#include "HrRenderD3D11DemoLight.h"
 
 
 #endif
