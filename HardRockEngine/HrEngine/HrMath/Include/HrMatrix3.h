@@ -1,13 +1,12 @@
 #ifndef _HR_MATRIX3_H_
 #define _HR_MATRIX3_H_
 
-#include "HrMainPrerequisiters.h"
-#include "HrMath.h"
 #include "HrVector3.h"
+#include <ostream>
 
 namespace Hr
 {
-	class HR_MAIN_API HrMatrix3
+	class HrMatrix3
 	{
 	public:
 		inline HrMatrix3(){};
@@ -92,7 +91,7 @@ namespace Hr
 		//Determinant
 		REAL Determinant() const;
 
-		inline HR_MAIN_API friend std::ostream& operator <<
+		inline friend std::ostream& operator <<
 			(std::ostream& o, const HrMatrix3& mat)
 		{
 			o << "Matrix3(" << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << ", "

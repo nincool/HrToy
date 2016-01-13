@@ -1,18 +1,23 @@
 #ifndef _HR_VECTOR3_H_
 #define _HR_VECTOR3_H_
 
-#include "HrMainPrerequisiters.h"
-#include "HrMath.h"
+#include "HrMathPrerequisites.h"
 
 namespace Hr
 {
-	class HR_MAIN_API HrVector3
+	class HrVector3
 	{
 	public:
-		inline HrVector3(){}
-		inline HrVector3(const REAL fX, const REAL fY, const REAL fZ)
-			: x(fX), y(fY), z(fZ)
+		HrVector3()
+		{
+		}
+		HrVector3(const REAL fX, const REAL fY, const REAL fZ)
 		{}
+
+		inline void Set(float fX, float fY, float fZ)
+		{
+			x = fX; y = fY; z = fZ;
+		}
 
 		inline void Swap(HrVector3& other)
 		{
@@ -188,7 +193,7 @@ namespace Hr
 		*/
 		inline REAL Length() const
 		{
-			return HrMath::Sqrt(x * x + y * y + z * z);
+			return std::sqrt(x * x + y * y + z * z);
 		}
 
 		/**
@@ -236,7 +241,7 @@ namespace Hr
 
 		inline REAL Normalise()
 		{
-			REAL fLength = HrMath::Sqrt(x * x + y * y + z * z);
+			REAL fLength = std::sqrt(x * x + y * y + z * z);
 
 			if (fLength > REAL(0.0f))
 			{
@@ -252,14 +257,14 @@ namespace Hr
 	public:
 		REAL x, y, z;
 
-		static const HrVector3 ZERO;
-		static const HrVector3 UNIT_X;
-		static const HrVector3 UNIT_Y;
-		static const HrVector3 UNIT_Z;
-		static const HrVector3 NEGATIVE_UNIT_X;
-		static const HrVector3 NEGATIVE_UNIT_Y;
-		static const HrVector3 NEGATIVE_UNIT_Z;
-		static const HrVector3 UNIT_SCALE;
+		//static const HrVector3 ZERO;
+		//static const HrVector3 UNIT_X;
+		//static const HrVector3 UNIT_Y;
+		//static const HrVector3 UNIT_Z;
+		//static const HrVector3 NEGATIVE_UNIT_X;
+		//static const HrVector3 NEGATIVE_UNIT_Y;
+		//static const HrVector3 NEGATIVE_UNIT_Z;
+		//static const HrVector3 UNIT_SCALE;
 
 	};
 }

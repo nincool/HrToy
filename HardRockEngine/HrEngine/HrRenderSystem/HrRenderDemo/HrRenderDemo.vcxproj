@@ -188,8 +188,12 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\Bin_Win\HrShader;%(Outputs)</Outputs>
     </CustomBuild>
-    <FxCompile Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx" />
-    <FxCompile Include="..\..\..\Bin_Win\HrShader\TextureMap.fx" />
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\TextureMap.fx">
+      <FileType>Document</FileType>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

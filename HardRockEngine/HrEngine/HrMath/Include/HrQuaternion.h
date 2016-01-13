@@ -1,7 +1,7 @@
 #ifndef _HR_QUATERNION_H_
 #define _HR_QUATERNION_H_
 
-#include "HrMainPrerequisiters.h"
+#include "HrMathPrerequisites.h"
 #include "HrMath.h"
 #include "HrVector3.h"
 #include "HrMatrix3.h"

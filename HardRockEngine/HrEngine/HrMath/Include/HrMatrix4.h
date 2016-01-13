@@ -1,8 +1,7 @@
 #ifndef _HR_MATRIX4_H_
 #define _HR_MATRIX4_H_
 
-#include "HrMainPrerequisiters.h"
-#include "HrMath.h"
+#include "HrMathPrerequisites.h"
 #include "HrMatrix3.h"
 
 namespace Hr
@@ -181,7 +180,9 @@ namespace Hr
 				m[0][2], m[1][2], m[2][2], m[3][2],
 				m[0][3], m[1][3], m[2][3], m[3][3]);
 		}
-
+	public:
+		static const HrMatrix4 ZERO;
+		static const HrMatrix4 IDENTITY;
 	protected:
 		/// The matrix entries, indexed by [row][col].
 		union {

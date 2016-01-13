@@ -30,16 +30,14 @@
     <ClInclude Include="Include\ILog.h" />
     <ClInclude Include="Include\ISupporter.h" />
     <ClInclude Include="Include\ITimer.h" />
-    <ClInclude Include="Include\Math\HrMath.h" />
-    <ClInclude Include="Include\Math\HrMatrix3.h" />
-    <ClInclude Include="Include\Math\HrMatrix4.h" />
-    <ClInclude Include="Include\Math\HrQuaternion.h" />
-    <ClInclude Include="Include\Math\HrVector3.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
+    <ClInclude Include="Include\Render\HrCamera.h" />
+    <ClInclude Include="Include\Render\HrFrustum.h" />
+    <ClInclude Include="Include\Render\ICamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrDirector.cpp" />
@@ -48,15 +46,17 @@
     <ClCompile Include="Source\HrSystemSupporter.cpp" />
     <ClCompile Include="Source\HrTimer.cpp" />
     <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />
-    <ClCompile Include="Source\Math\HrMath.cpp" />
-    <ClCompile Include="Source\Math\HrMatrix3.cpp" />
-    <ClCompile Include="Source\Math\HrMatrix4.cpp" />
-    <ClCompile Include="Source\Math\HrQuaternion.cpp" />
-    <ClCompile Include="Source\Math\HrVector3.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
+    <ClCompile Include="Source\Render\HrCamera.cpp" />
+    <ClCompile Include="Source\Render\HrFrustom.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HrMath\HrMath.vcxproj">
+      <Project>{98f611ff-addb-43ef-8443-e7753c858cbf}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>

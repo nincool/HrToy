@@ -17,11 +17,11 @@
     <Filter Include="Include\MemoryAlloc">
       <UniqueIdentifier>{d392fa82-a68a-49c6-865f-d63a265a0b5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Math">
-      <UniqueIdentifier>{aa490f05-2ab4-4abb-9b2f-f43fe9b034d0}</UniqueIdentifier>
+    <Filter Include="Include\Render">
+      <UniqueIdentifier>{896a30f4-1749-4623-a5a1-cc1ff8e4bc48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Math">
-      <UniqueIdentifier>{897cf518-879a-4834-bf97-3592336f75d0}</UniqueIdentifier>
+    <Filter Include="Source\Render">
+      <UniqueIdentifier>{9ced46a9-c75b-4707-baae-f6c542d913f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,20 +73,14 @@
     <ClInclude Include="Include\HrTimer.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Math\HrMath.h">
-      <Filter>Include\Math</Filter>
+    <ClInclude Include="Include\Render\ICamera.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Math\HrVector3.h">
-      <Filter>Include\Math</Filter>
+    <ClInclude Include="Include\Render\HrCamera.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Math\HrMatrix3.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Math\HrMatrix4.h">
-      <Filter>Include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Math\HrQuaternion.h">
-      <Filter>Include\Math</Filter>
+    <ClInclude Include="Include\Render\HrFrustum.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,20 +114,11 @@
     <ClCompile Include="Source\HrTimer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\HrMath.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="Source\Render\HrCamera.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\HrVector3.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\HrMatrix3.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\HrMatrix4.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\HrQuaternion.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="Source\Render\HrFrustom.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

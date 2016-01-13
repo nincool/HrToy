@@ -1,5 +1,5 @@
-#include "Math/HrMatrix3.h"
-#include "Math/HrMath.h"
+#include "HrMatrix3.h"
+#include "HrMath.h"
 
 using namespace Hr;
 

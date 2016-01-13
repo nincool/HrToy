@@ -1,4 +1,4 @@
-#include "Math/HrQuaternion.h"
+#include "HrQuaternion.h"
 
 using namespace Hr;
 

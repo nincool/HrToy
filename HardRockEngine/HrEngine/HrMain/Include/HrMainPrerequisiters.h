@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <assert.h>
 
-typedef float REAL;
 
 #endif // !_HR_MAINPREREQUISITERS_H_
 
