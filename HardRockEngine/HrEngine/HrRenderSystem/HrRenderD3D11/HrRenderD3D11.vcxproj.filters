@@ -13,9 +13,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrD3D11Render.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -28,14 +25,14 @@
     <ClInclude Include="Include\HrD3D11Utility.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrD3D11Render.h">
+      <Filter>Include</Filter>
+    </ClInclude>
     <ClInclude Include="Include\HrD3D11RenderPrerequisites.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrD3D11Render.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -46,6 +43,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11Utility.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11Render.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

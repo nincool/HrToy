@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EF462F0C-C237-4DBB-BDDA-DA8A672428D3}</ProjectGuid>
     <RootNamespace>HrRenderDemo</RootNamespace>
+    <ProjectName>HrRendererDemo</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -143,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrRenderD3D11DemoGeometry.h" />
+    <ClInclude Include="Include\HrRenderD3D11DemoHrMath.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoLight.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoPipleline.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoSprite.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Include\IRenderDemo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\HrRenderD3D11DemoHrMath.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoGeometry.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoLight.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp" />
@@ -170,6 +173,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\DirectXTK\DirectXTK_Desktop_2013.vcxproj">
       <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\HrMath\HrMath.vcxproj">
+      <Project>{98f611ff-addb-43ef-8443-e7753c858cbf}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

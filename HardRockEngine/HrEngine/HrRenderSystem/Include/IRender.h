@@ -17,10 +17,10 @@ namespace Hr
 {
 	class IDirector;
 
-	class IRenderer : public RenderSysAllocatedObject
+	class IRender : public RenderSysAllocatedObject
 	{
 	public:
-		virtual ~IRenderer(){};
+		virtual ~IRender(){};
 		/**
 		 *	@Brief:  创建渲染器[10/28/2015 By Hr]
 		 *	@Param:

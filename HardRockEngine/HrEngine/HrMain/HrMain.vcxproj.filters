@@ -82,6 +82,12 @@
     <ClInclude Include="Include\Render\HrFrustum.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrSceneManager.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrEngine.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -119,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrFrustom.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrSceneManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrEngine.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

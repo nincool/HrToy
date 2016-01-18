@@ -49,10 +49,10 @@ namespace Hr
 				rhs += col_num;
 			}
 		}
-		Matrix4_T(Matrix4_T const & rhs) : m_(rhs.m_)
+		Matrix4_T(Matrix4_T&& rhs) : m_(std::move(rhs.m_))
 		{
 		}
-		Matrix4_T(Matrix4_T&& rhs) : m_(std::move(rhs.m_))
+		Matrix4_T(Matrix4_T const & rhs) : m_(rhs.m_)
 		{
 		}
 		Matrix4_T(T f11, T f12, T f13, T f14,
@@ -81,7 +81,7 @@ namespace Hr
 			return out;
 		}
 
-		Matrix4_T<T> const & Identity() 
+		static Matrix4_T<T> const & Identity() 
 		{
 			static Matrix4_T const out(
 			1, 0, 0, 0,
@@ -99,29 +99,14 @@ namespace Hr
 		{
 			return m_[row][col];
 		}
-		iterator begin() 
+
+		Vector_T<T, col_num>& operator[](size_t index)
 		{
-			return &m_[0][0];
+			return m_[index];
 		}
-		const_iterator begin() const 
+		const Vector_T<T, col_num>& operator[](size_t index) const
 		{
-			return &m_[0][0];
-		}
-		iterator end() 
-		{
-			return this->begin() + elem_num;
-		}
-		const_iterator end() const 
-		{
-			return this->begin() + elem_num;
-		}
-		reference operator[](size_t index) 
-		{
-			return *(this->begin() + index);
-		}
-		const_reference operator[](size_t index) const 
-		{
-			return *(this->begin() + index);
+			return m_[index];
 		}
 
 		void Row(size_t index, Vector_T<T, col_num> const & rhs)
@@ -160,9 +145,35 @@ namespace Hr
 			m_ -= rhs.m_;
 			return *this;
 		}
+
+		Matrix4_T Concatenate(const Matrix4_T &m2) const
+		{
+			Matrix4_T r;
+			r[0][0] = m_[0][0] * m2[0][0] + m_[0][1] * m2[1][0] + m_[0][2] * m2[2][0] + m_[0][3] * m2[3][0];
+			r[0][1] = m_[0][0] * m2[0][1] + m_[0][1] * m2[1][1] + m_[0][2] * m2[2][1] + m_[0][3] * m2[3][1];
+			r[0][2] = m_[0][0] * m2[0][2] + m_[0][1] * m2[1][2] + m_[0][2] * m2[2][2] + m_[0][3] * m2[3][2];
+			r[0][3] = m_[0][0] * m2[0][3] + m_[0][1] * m2[1][3] + m_[0][2] * m2[2][3] + m_[0][3] * m2[3][3];
+
+			r[1][0] = m_[1][0] * m2[0][0] + m_[1][1] * m2[1][0] + m_[1][2] * m2[2][0] + m_[1][3] * m2[3][0];
+			r[1][1] = m_[1][0] * m2[0][1] + m_[1][1] * m2[1][1] + m_[1][2] * m2[2][1] + m_[1][3] * m2[3][1];
+			r[1][2] = m_[1][0] * m2[0][2] + m_[1][1] * m2[1][2] + m_[1][2] * m2[2][2] + m_[1][3] * m2[3][2];
+			r[1][3] = m_[1][0] * m2[0][3] + m_[1][1] * m2[1][3] + m_[1][2] * m2[2][3] + m_[1][3] * m2[3][3];
+
+			r[2][0] = m_[2][0] * m2[0][0] + m_[2][1] * m2[1][0] + m_[2][2] * m2[2][0] + m_[2][3] * m2[3][0];
+			r[2][1] = m_[2][0] * m2[0][1] + m_[2][1] * m2[1][1] + m_[2][2] * m2[2][1] + m_[2][3] * m2[3][1];
+			r[2][2] = m_[2][0] * m2[0][2] + m_[2][1] * m2[1][2] + m_[2][2] * m2[2][2] + m_[2][3] * m2[3][2];
+			r[2][3] = m_[2][0] * m2[0][3] + m_[2][1] * m2[1][3] + m_[2][2] * m2[2][3] + m_[2][3] * m2[3][3];
+
+			r[3][0] = m_[3][0] * m2[0][0] + m_[3][1] * m2[1][0] + m_[3][2] * m2[2][0] + m_[3][3] * m2[3][0];
+			r[3][1] = m_[3][0] * m2[0][1] + m_[3][1] * m2[1][1] + m_[3][2] * m2[2][1] + m_[3][3] * m2[3][1];
+			r[3][2] = m_[3][0] * m2[0][2] + m_[3][1] * m2[1][2] + m_[3][2] * m2[2][2] + m_[3][3] * m2[3][2];
+			r[3][3] = m_[3][0] * m2[0][3] + m_[3][1] * m2[1][3] + m_[3][2] * m2[2][3] + m_[3][3] * m2[3][3];
+
+			return r;
+		}
 		Matrix4_T& operator*=(Matrix4_T const & rhs)
 		{
-			*this = MathLib::mul(*this, rhs);
+			*this = Concatenate(rhs);
 			return *this;
 		}
 		Matrix4_T& operator*=(T rhs)
@@ -208,9 +219,12 @@ namespace Hr
 		{
 			return m_ == rhs.m_;
 		}
+
 	private:
 		Vector_T< Vector_T<T, col_num>, row_num> m_;
 	};
+
+
 }
 
 

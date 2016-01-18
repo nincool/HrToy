@@ -11,7 +11,7 @@ HrD3D11Render* HrD3D11Render::m_s_pInstance = nullptr;
 
 HrD3D11Render::HrD3D11Render()
 {
-	typedef HrRenderD3D11DemoLight DEMOCLASS;
+	typedef HrRenderD3D11DemoHrMath DEMOCLASS;
 
 	m_pRenderDemo = HR_NEW DEMOCLASS();
 }
@@ -50,7 +50,7 @@ bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight)
 
 void HrD3D11Render::Release()
 {
-	HrD3D11Device::GetInstance()->Release();
+	HrD3D11Render::GetInstance()->Release();
 	m_pRenderDemo->Release();
 }
 

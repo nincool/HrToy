@@ -15,34 +15,37 @@
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\IRenderDemo.h">
+    <ClInclude Include="Include\HrRenderD3D11DemoGeometry.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRenderDemoPrerequisites.h">
+    <ClInclude Include="Include\HrRenderD3D11DemoHrMath.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoTriangle.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrRenderDemo.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoTexture.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoSprite.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoXNA.h">
+    <ClInclude Include="Include\HrRenderD3D11DemoLight.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrRenderD3D11DemoPipleline.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoGeometry.h">
+    <ClInclude Include="Include\HrRenderD3D11DemoSprite.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrRenderD3D11DemoLight.h">
+    <ClInclude Include="Include\HrRenderD3D11DemoTexture.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoTriangle.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderD3D11DemoXNA.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderDemo.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrRenderDemoPrerequisites.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IRenderDemo.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,7 +53,16 @@
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp">
+    <ClCompile Include="Source\HrRenderD3D11DemoGeometry.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\HrRenderD3D11DemoHrMath.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoLight.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrRenderD3D11DemoSprite.cpp">
@@ -59,26 +71,12 @@
     <ClCompile Include="Source\HrRenderD3D11DemoTexture.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HrRenderD3D11DemoTriangle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\HrRenderD3D11DemoXNA.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11DemoGeometry.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrRenderD3D11DemoLight.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx">
-      <Filter>FX</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\..\Bin_Win\HrShader\TextureMap.fx">
-      <Filter>FX</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicDraw.fx">
@@ -90,5 +88,7 @@
     <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicLight.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx" />
+    <CustomBuild Include="..\..\..\Bin_Win\HrShader\TextureMap.fx" />
   </ItemGroup>
 </Project>

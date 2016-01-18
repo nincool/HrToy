@@ -1,4 +1,5 @@
 #include "HrQuaternion.h"
+#include "HrMathCom.h"
 
 using namespace Hr;
 
@@ -8,9 +9,9 @@ void HrQuaternion::FromAxes(const HrVector3* akAxis)
 	
 	for (size_t nCol = 0; nCol < 3; ++nCol)
 	{
-		kRot[0][nCol] = akAxis[nCol].x;
-		kRot[1][nCol] = akAxis[nCol].y;
-		kRot[2][nCol] = akAxis[nCol].z;
+		kRot[0][nCol] = akAxis[nCol].x();
+		kRot[1][nCol] = akAxis[nCol].y();
+		kRot[2][nCol] = akAxis[nCol].z();
 	}
 }
 

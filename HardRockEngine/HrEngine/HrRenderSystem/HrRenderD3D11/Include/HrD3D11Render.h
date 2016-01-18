@@ -2,7 +2,7 @@
 #define _HR_D3D11RENDER_H_
 
 #include "HrD3D11RenderPrerequisites.h"
-#include "Include/IRenderer.h"
+#include "Include/IRender.h"
 
 namespace Hr
 {
@@ -11,7 +11,7 @@ namespace Hr
 
 	class IRenderDemo;
 
-	class HrD3D11Render : public IRenderer
+	class HrD3D11Render : public IRender
 	{
 	public:
 		HrD3D11Render();

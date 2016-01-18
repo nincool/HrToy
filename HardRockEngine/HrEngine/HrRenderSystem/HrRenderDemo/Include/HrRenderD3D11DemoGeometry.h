@@ -25,7 +25,6 @@ namespace Hr
 		virtual void Release() override;
 
 
-
 		struct VertexPos
 		{
 			XMFLOAT3 pos;

@@ -1,11 +1,13 @@
 ﻿#include "HrDirector.h"
-#include "HrRenderSystem/Include/IRenderer.h"
+#include "HrSceneManager.h"
+#include "HrRenderSystem/Include/IRender.h"
 #include "HrWin32WindowEventUtilities.h"
 #include "HrSystemSupporter.h"
 #include "HrLog.h"
 #include "HrTimer.h"
 
 using namespace Hr;
+using namespace std;
 
 HrDirector* HrDirector::m_s_pInstance = nullptr;
 
@@ -35,6 +37,8 @@ bool HrDirector::Init()
 	}
 	m_pSystemSupporter->Init();
 
+	m_pShareSceneManager = make_shared<HrSceneManager>();
+
 	if (!LoadRenderSystem())
 	{
 		HRERROR(_T("Director Init : LoadRenderSystem Error!"));
@@ -46,7 +50,7 @@ bool HrDirector::Init()
 
 bool Hr::HrDirector::LoadRenderSystem()
 {
-	typedef IRenderer*(*RENDER_START_FUNC)();
+	typedef IRender*(*RENDER_START_FUNC)();
 	TCHAR finalModuleName[MAX_PATH] = HR_PREFIX;
 	_tcscat(finalModuleName, _T("HrRenderD3D11"));
 	_tcscat(finalModuleName, HR_SUFFIX);

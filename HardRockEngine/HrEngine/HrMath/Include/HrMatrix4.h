@@ -2,19 +2,51 @@
 #define _HR_MATRIX4_H_
 
 #include "HrMathPrerequisites.h"
-#include "HrMatrix3.h"
+#include "HrVector3.h"
+#include <boost/operators.hpp>
 
 namespace Hr
 {
-	class HrMatrix4
+	class HrMatrix4 : boost::addable < HrMatrix4,
+		boost::subtractable < HrMatrix4,
+		boost::dividable2 < HrMatrix4, REAL,
+		boost::multipliable2 < HrMatrix4, REAL,
+		boost::multipliable < HrMatrix4,
+		boost::equality_comparable<HrMatrix4> >> >> >
 	{
+		typedef REAL				value_type;
+
+		typedef value_type*			pointer;
+		typedef value_type const *	const_pointer;
+
+		typedef value_type&			reference;
+		typedef value_type const &	const_reference;
+
+		typedef value_type*			iterator;
+		typedef value_type const *	const_iterator;
+
+		enum { row_num = 4, col_num = 4 };
+		enum { elem_num = row_num * col_num };
 	public:
 		inline HrMatrix4()
 		{
-			memset(m, 0, sizeof(m));
 			memset(_m, 0, sizeof(_m));
 		};
-
+		explicit HrMatrix4( const REAL * rhs)
+		{
+			for (size_t i = 0; i < row_num * col_num; ++i)
+			{
+				_m[i] = *(rhs + i);
+			}
+		}
+		HrMatrix4(HrMatrix4&& rhs)
+		{
+			memcpy(_m, rhs._m, sizeof(_m));
+		}
+		HrMatrix4(HrMatrix4 const & rhs)
+		{
+			memcpy(_m, rhs._m, sizeof(_m));
+		}
 		inline HrMatrix4(
 			REAL m00, REAL m01, REAL m02, REAL m03,
 			REAL m10, REAL m11, REAL m12, REAL m13,
@@ -39,21 +71,88 @@ namespace Hr
 			m[3][3] = m33;
 		}
 
+		static size_t size()
+		{
+			return elem_num;
+		}
 
+		static HrMatrix4 const & Zero()
+		{
+			static HrMatrix4 const out(
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0);
+			return out;
+		}
+		static HrMatrix4 const & Identity()
+		{
+			static HrMatrix4 const out(
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1);
+			return out;
+		}
+
+		reference operator()(size_t row, size_t col) 
+		{
+			return _m[row * elem_num + col];
+		}
+		const_reference operator()(size_t row, size_t col) const 
+		{
+			return _m[row * elem_num + col];
+		}
+		
 		inline REAL* operator [] (size_t iRow)
 		{
 			assert(iRow < 4);
 			return m[iRow];
 		}
-
-
 		inline const REAL *operator [] (size_t iRow) const
 		{
 			assert(iRow < 4);
 			return m[iRow];
 		}
 
-		inline HrMatrix4 Concatenate(const HrMatrix4 &m2) const
+		void Row(size_t index, HrVector3 const & rhs)
+		{
+			for (size_t i = index * elem_num, j = 0; i < (index + 1) * elem_num; ++i, ++j)
+			{
+				//_m[i] = rhs[j];
+			}
+		}
+		HrVector3 const & Row(size_t index) const
+		{
+			size_t nStartIndex = index * elem_num;
+			return HrVector3(_m[nStartIndex], _m[nStartIndex+1], _m[nStartIndex+2]);
+		}
+		void Col(size_t index, HrVector3 const & rhs)
+		{
+			_m[index] = rhs.x();
+			_m[index + elem_num] = rhs.y();
+			_m[index + elem_num * 2] = rhs.z();
+		}
+		HrVector3 const Col(size_t index) const
+		{
+			return HrVector3(_m[index], _m[index + elem_num], _m[index + elem_num * 2]);
+		}
+
+		/** Matrix concatenation using '*'.
+		*/
+		HrMatrix4& operator+=(HrMatrix4 const & rhs)
+		{
+			for (size_t i = 0; i < elem_num * elem_num; ++i)
+			{
+			}
+			return *this;
+		}
+		HrMatrix4& operator-=(HrMatrix4 const & rhs)
+		{
+			return *this;
+		}
+
+		HrMatrix4 Concatenate(const HrMatrix4 &m2) const
 		{
 			HrMatrix4 r;
 			r.m[0][0] = m[0][0] * m2.m[0][0] + m[0][1] * m2.m[1][0] + m[0][2] * m2.m[2][0] + m[0][3] * m2.m[3][0];
@@ -79,17 +178,44 @@ namespace Hr
 			return r;
 		}
 
-
-		/** Matrix concatenation using '*'.
-		*/
-		inline HrMatrix4 operator * (const HrMatrix4 &m2) const
+		HrMatrix4& operator*=(HrMatrix4 const & rhs)
 		{
-			return Concatenate(m2);
+			*this = Concatenate(rhs);
+			return *this;
+		}
+		HrMatrix4& operator*=(REAL rhs)
+		{
+			for (size_t i = 0; i < row_num; ++i)
+			{
+				_m[i] *= rhs;
+			}
+			return *this;
+		}
+		HrMatrix4& operator/=(REAL rhs)
+		{
+			return this->operator*=(1 / rhs);
+		}
+
+		HrMatrix4& operator=(HrMatrix4 const & rhs)
+		{
+			if (this != &rhs)
+			{
+				memcpy(_m, rhs._m, sizeof(_m));
+			}
+			return *this;
+		}
+		HrMatrix4& operator=(HrMatrix4&& rhs)
+		{
+			if (this != &rhs)
+			{
+				memcpy(_m, rhs._m, sizeof(_m));
+			}
+			return *this;
 		}
 
 		/** Matrix addition.
 		*/
-		inline HrMatrix4 operator + (const HrMatrix4 &m2) const
+		HrMatrix4 operator + (const HrMatrix4 &m2) const
 		{
 			HrMatrix4 r;
 
@@ -154,35 +280,6 @@ namespace Hr
 				return false;
 			return true;
 		}
-
-		inline bool operator != (const HrMatrix4& m2) const
-		{
-			if (
-				m[0][0] != m2.m[0][0] || m[0][1] != m2.m[0][1] || m[0][2] != m2.m[0][2] || m[0][3] != m2.m[0][3] ||
-				m[1][0] != m2.m[1][0] || m[1][1] != m2.m[1][1] || m[1][2] != m2.m[1][2] || m[1][3] != m2.m[1][3] ||
-				m[2][0] != m2.m[2][0] || m[2][1] != m2.m[2][1] || m[2][2] != m2.m[2][2] || m[2][3] != m2.m[2][3] ||
-				m[3][0] != m2.m[3][0] || m[3][1] != m2.m[3][1] || m[3][2] != m2.m[3][2] || m[3][3] != m2.m[3][3])
-				return true;
-			return false;
-		}
-
-		inline void operator = (const HrMatrix3& mat3)
-		{
-			m[0][0] = mat3.m[0][0]; m[0][1] = mat3.m[0][1]; m[0][2] = mat3.m[0][2];
-			m[1][0] = mat3.m[1][0]; m[1][1] = mat3.m[1][1]; m[1][2] = mat3.m[1][2];
-			m[2][0] = mat3.m[2][0]; m[2][1] = mat3.m[2][1]; m[2][2] = mat3.m[2][2];
-		}
-
-		inline HrMatrix4 Transpose(void) const
-		{
-			return HrMatrix4(m[0][0], m[1][0], m[2][0], m[3][0],
-				m[0][1], m[1][1], m[2][1], m[3][1],
-				m[0][2], m[1][2], m[2][2], m[3][2],
-				m[0][3], m[1][3], m[2][3], m[3][3]);
-		}
-	public:
-		static const HrMatrix4 ZERO;
-		static const HrMatrix4 IDENTITY;
 	protected:
 		/// The matrix entries, indexed by [row][col].
 		union {

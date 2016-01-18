@@ -1,5 +1,5 @@
-#ifndef _HR_RENDERD3D11DEMOPIPLELINE_H_
-#define _HR_RENDERD3D11DEMOPIPLELINE_H_
+#ifndef _HR_RENDERD3D11DEMOHRMATH_H_
+#define _HR_RENDERD3D11DEMOHRMATH_H_
 
 #include "IRenderDemo.h"
 
@@ -9,10 +9,10 @@ class ID3DX11Effect;
 class ID3DX11EffectMatrixVariable;
 namespace Hr
 {
-	class HR_RENDERDEMO_API HrRenderD3D11DemoPipleline : public IRenderDemo
+	class HR_RENDERDEMO_API HrRenderD3D11DemoHrMath : public IRenderDemo
 	{
 	public:
-		HrRenderD3D11DemoPipleline();
+		HrRenderD3D11DemoHrMath();
 
 		virtual void SetD3DDevice(ID3D11Device* pDevice
 			, ID3D11DeviceContext* pDeviceContex

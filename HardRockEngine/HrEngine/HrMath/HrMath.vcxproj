@@ -71,21 +71,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrMath.h" />
+    <ClInclude Include="Include\HrMathCalculate.h" />
+    <ClInclude Include="Include\HrMathCom.h" />
     <ClInclude Include="Include\HrMathConfig.h" />
     <ClInclude Include="Include\HrMathPreDeclare.h" />
     <ClInclude Include="Include\HrMathPrerequisites.h" />
     <ClInclude Include="Include\HrMatrix4.h" />
-    <ClInclude Include="Include\HrQuaternion.h" />
     <ClInclude Include="Include\HrVector3.h" />
-    <ClInclude Include="Include\MathHelper_T.h" />
+    <ClInclude Include="Include\MathTemplateHelper_T.h" />
     <ClInclude Include="Include\Matrix_T.h" />
     <ClInclude Include="Include\Plane_T.h" />
     <ClInclude Include="Include\Vector_T.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\HrMatrix4.cpp" />
-    <ClCompile Include="Source\HrQuaternion.cpp" />
-    <ClCompile Include="Source\HrVector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

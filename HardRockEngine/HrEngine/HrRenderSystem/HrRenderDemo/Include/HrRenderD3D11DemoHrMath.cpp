@@ -1,4 +1,4 @@
-#include "HrRenderD3D11DemoPipleline.h"
+#include "HrRenderD3D11DemoHrMath.h"
 #include "DirectXTK/Inc/DDSTextureLoader.h"
 #include "DirectXTK/Inc/WICTextureLoader.h"
 #include "DirectXTK/Inc/SpriteBatch.h"
@@ -19,7 +19,7 @@ const XMFLOAT4 Cyan = { 0.0f, 1.0f, 1.0f, 1.0f };
 const XMFLOAT4 Magenta = { 1.0f, 0.0f, 1.0f, 1.0f };
 const XMFLOAT4 Silver = { 0.75f, 0.75f, 0.75f, 1.0f };
 
-HrRenderD3D11DemoPipleline::HrRenderD3D11DemoPipleline()
+HrRenderD3D11DemoHrMath::HrRenderD3D11DemoHrMath()
 {
 	m_pD3D11Device = nullptr;
 	m_pD3D11ImmediateContext = nullptr;
@@ -36,7 +36,7 @@ HrRenderD3D11DemoPipleline::HrRenderD3D11DemoPipleline()
 	m_pFxWorldViewProj = nullptr;
 }
 
-void HrRenderD3D11DemoPipleline::SetD3DDevice(ID3D11Device* pDevice
+void HrRenderD3D11DemoHrMath::SetD3DDevice(ID3D11Device* pDevice
 	, ID3D11DeviceContext* pDeviceContex
 	, ID3D11RenderTargetView* pRenderTargetView
 	, ID3D11DepthStencilView* pDepthStencilView
@@ -50,14 +50,14 @@ void HrRenderD3D11DemoPipleline::SetD3DDevice(ID3D11Device* pDevice
 
 }
 
-bool HrRenderD3D11DemoPipleline::Init()
+bool HrRenderD3D11DemoHrMath::Init()
 {
 	m_pShareCamera = std::make_shared<HrCamera>();
 
 	return LoadContent();
 }
 
-bool HrRenderD3D11DemoPipleline::LoadContent()
+bool HrRenderD3D11DemoHrMath::LoadContent()
 {
 	ID3DBlob* pShaderBuffer(nullptr);
 	bool bCompile = CompileD3DShader(L"HrShader\\BasicDraw.fx", nullptr, "fx_5_0", &pShaderBuffer);
@@ -141,39 +141,38 @@ bool HrRenderD3D11DemoPipleline::LoadContent()
 	return true;
 }
 
-bool HrRenderD3D11DemoPipleline::Render()
+bool HrRenderD3D11DemoHrMath::Render()
 {
-	//
-	static float phy(0.0f), theta(0.0f);
-	XMMATRIX rotation1 = XMMatrixRotationY(phy);
-	XMMATRIX rotation2 = XMMatrixRotationX(theta);
-	phy += XM_PI * 0.5f * 0.001f;
-	theta += XM_PI * 0.5f * 0.001f;
+	static float phy2(0.0f), theta2(0.0f);
+	Matrix4 rotation21 = HrMath::RotationX(phy2);
+	Matrix4 rotation22 = HrMath::RotationY(theta2);
+	phy2 += XM_PI * 0.5f * 0.001f;
+	theta2 += XM_PI * 0.5f * 0.001f;
 
-	XMMATRIX world = XMMatrixIdentity();
-	world = rotation1 * rotation2;
-
+	Matrix4 world2 = Matrix4::Identity();
+	world2 = rotation21 * rotation22;
 	//视变换 把摄像机变换到世界坐标系原点 所有物体都随摄像机变换 
-	XMVECTOR eyePos = XMVectorSet(0.0f, 2.0f, -5.0f, 1.0f);
-	XMVECTOR lookAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-	XMMATRIX view = XMMatrixLookAtLH(eyePos, lookAt, up);
+	Vector3 v3EyePos(0.0f, 2.0f, -5.0f);
+	Vector3 v3LookAt(0.0f, 0.0f, 0.0f);
+	Vector3 v3Up(0.0f, 1.0f, 0.0f);
+	m_pShareCamera->ViewParams(v3EyePos, v3LookAt, v3Up);
+	Matrix4 view2 = m_pShareCamera->GetViewMatrix();
 
 	//投影变换
-	XMMATRIX proj = XMMatrixPerspectiveFovLH(XM_PI * 0.25f, 600.0f / 480.0f, 1.0f, 1000.0f);
 	m_pShareCamera->ProjectParams(Hr::PI * 0.25f, 600.0f / 480.0f, 1.0f, 1000.0f);
 	Matrix4 projMatrix = m_pShareCamera->GetProjectMatrix();
 
-	XMMATRIX worldViewProj = world * view * proj;
+	Matrix4 worldViewProj = world2 * view2 * projMatrix;
 
+	//auto value = worldViewProj[0];
 	//更新Shader相应的变量
-	m_pFxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+	m_pFxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj[0][0]));
 
 	XMVECTORF32 Blue = { 0.0f, 0.0f, 0.25f, 1.0f };
 	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pRenderTargetView, reinterpret_cast<const float*>(&Blue));
 	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	 //指定输入布局
+	//指定输入布局
 	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
 
 	uint32 nStride = sizeof(Vertex);
@@ -199,7 +198,7 @@ bool HrRenderD3D11DemoPipleline::Render()
 	return true;
 }
 
-void HrRenderD3D11DemoPipleline::Release()
+void HrRenderD3D11DemoHrMath::Release()
 {
 	SAFE_RELEASE(m_pEffect);
 	SAFE_RELEASE(m_pVertexBuffer);

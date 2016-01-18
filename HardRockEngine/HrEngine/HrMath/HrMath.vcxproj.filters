@@ -22,13 +22,7 @@
     <ClInclude Include="Include\HrMatrix4.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrQuaternion.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrVector3.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MathHelper_T.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\Matrix_T.h">
@@ -46,16 +40,14 @@
     <ClInclude Include="Include\HrMathConfig.h">
       <Filter>Include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\HrMatrix4.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrQuaternion.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrVector3.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
+    <ClInclude Include="Include\MathTemplateHelper_T.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrMathCalculate.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrMathCom.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

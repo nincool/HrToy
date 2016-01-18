@@ -10,7 +10,7 @@
 
 #include <array>
 #include <boost/operators.hpp>
-#include "MathHelper_T.h"
+#include "MathTemplateHelper_T.h"
 
 namespace Hr
 {
@@ -141,6 +141,7 @@ namespace Hr
 		}
 
 		// 取向量
+		/*
 		iterator Begin() 
 		{
 			return vec_.begin();
@@ -157,6 +158,7 @@ namespace Hr
 		{
 			return vec_.end();
 		}
+		*/
 		reference operator[](size_t index) 
 		{
 			return vec_[index];
@@ -209,7 +211,6 @@ namespace Hr
 			static_assert(elem_num >= 4, "Must be 4D vector.");
 			return vec_[3];
 		}
-
 
 		// 赋值操作符
 		template <typename U>
@@ -300,6 +301,72 @@ namespace Hr
 		bool operator==(Vector_T const & rhs) const 
 		{
 			return detail::vector_helper<T, N>::DoEqual(&vec_[0], &rhs[0]);
+		}
+
+		/**
+		*	@Brief: Returns the length of the vector [12/8/2015 By Hr]
+		*/
+		inline value_type Length() const
+		{
+			return HrMath::Sqrt(SquareLength());
+		}
+
+		/**
+		*	@Brief:  Returns the square of the vector  [12/8/2015 By Hr]
+		*/
+		inline value_type SquareLength() const
+		{
+			return DotProduct(*this);
+		}
+
+		/**
+		*	@Brief:  Returns the distance to another vector.[12/8/2015 By Hr]
+		*/
+		inline value_type Distance(const HrVector3& rhs) const
+		{
+			return (*this - rhs).Length();
+		}
+
+		/**
+		*	@Brief:Returns the square of the distance to another vector.  [12/8/2015 By Hr]
+		*/
+		inline value_type SquareDistance(const HrVector3& rhs) const
+		{
+			return (*this - rhs).SquareLength();
+		}
+
+		/**
+		*	@Brief:Calculates the dot (scalar) product of this vector with another.  [12/8/2015 By Hr]
+		*/
+		inline value_type DotProduct(const Vector_T<T, elem_num>& vec) const
+		{
+			return detail::dot_helper<value_type, elem_num>::Do(&vec_[0], &vec[0]);
+		}
+
+		/**
+		*	@Brief:  Calculates the cross-product of 2 vectors[12/8/2015 By Hr]
+		*/
+		inline HrVector3 CrossProduct(const HrVector3& rkVector) const
+		{
+			return HrVector3(
+				m_y * rkVector.m_z - m_z * rkVector.m_y,
+				m_z * rkVector.m_x - m_x * rkVector.m_z,
+				m_x * rkVector.m_y - m_y * rkVector.m_x);
+		}
+
+		inline REAL Normalise()
+		{
+			REAL fLength = HrMath::Sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+
+			if (fLength > REAL(0.0f))
+			{
+				REAL fInvLength = 1.0f / fLength;
+				m_x *= fInvLength;
+				m_y *= fInvLength;
+				m_z *= fInvLength;
+			}
+
+			return fLength;
 		}
 	private:
 		DetailType vec_;

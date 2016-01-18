@@ -13,7 +13,7 @@
 
 namespace Hr
 {
-	class IRenderer;
+	class IRender;
 	class ITimer;
 
 	class HrSystemSupporter;
@@ -40,8 +40,11 @@ namespace Hr
 		bool LoadRenderSystem();
 
 	private:
+		HrSceneManagerPtr m_pShareSceneManager;
+		
 		HINSTANCE m_hHandleRender;
-		IRenderer* m_pRenderSystem;
+		IRender* m_pRenderSystem;
+		
 
 		bool m_bEndMainLoop;
 

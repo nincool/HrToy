@@ -21,6 +21,12 @@
 
 #define HR_MEMORY_TRACKER
 
+#pragma warning(disable: 4251) // STL classes are not dllexport.
+#pragma warning(disable: 4275) // Derived from non dllexport classes.
+#pragma warning(disable: 4503) // Some decorated name in boost are very long.
+#pragma warning(disable: 4819) // Allow non-ANSI characters. 
+#pragma warning(disable: 4521) // multiple copy constructors specified.
+
 #endif //__HR_CONFIG_H__
 
 

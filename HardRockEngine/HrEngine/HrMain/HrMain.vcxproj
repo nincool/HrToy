@@ -20,9 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrDirector.h" />
+    <ClInclude Include="Include\HrEngine.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrLog.h" />
     <ClInclude Include="Include\HrMainPrerequisiters.h" />
+    <ClInclude Include="Include\HrSceneManager.h" />
     <ClInclude Include="Include\HrSystemSupporter.h" />
     <ClInclude Include="Include\HrTimer.h" />
     <ClInclude Include="Include\HrWin32WindowEventUtilities.h" />
@@ -41,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrDirector.cpp" />
+    <ClCompile Include="Source\HrEngine.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
+    <ClCompile Include="Source\HrSceneManager.cpp" />
     <ClCompile Include="Source\HrSystemSupporter.cpp" />
     <ClCompile Include="Source\HrTimer.cpp" />
     <ClCompile Include="Source\HrWin32WindowEventUtilities.cpp" />

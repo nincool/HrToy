@@ -1,7 +1,7 @@
 #ifndef _HR_CAMERA_H_
 #define _HR_CAMERA_H_
 
-#include "HrMainPrerequisiters.h"
+#include "HrMain/Include/HrMainPrerequisiters.h"
 #include "ICamera.h"
 
 namespace Hr
@@ -23,6 +23,8 @@ namespace Hr
 		virtual void ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up) override;
 		virtual void ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane) override;
 
+		virtual Matrix4 const& GetViewMatrix() const override;
+		virtual Matrix4 const& GetProjectMatrix() const override;
 	private:
 		float m_fLookAtDistance;
 

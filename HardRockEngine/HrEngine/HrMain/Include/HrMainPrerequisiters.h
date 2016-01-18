@@ -9,7 +9,6 @@
 
 #include "HrCommon/Include/HrPrerequisites.h"
 #include <algorithm>
-#include <assert.h>
 
 
 #endif // !_HR_MAINPREREQUISITERS_H_

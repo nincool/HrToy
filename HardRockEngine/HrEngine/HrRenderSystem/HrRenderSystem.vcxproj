@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}</ProjectGuid>
     <RootNamespace>HrRenderSystem</RootNamespace>
+    <ProjectName>HrRendererSystem</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -129,7 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrRenderSysPrerequisites.h" />
-    <ClInclude Include="Include\IRenderer.h" />
+    <ClInclude Include="Include\IRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
