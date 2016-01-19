@@ -13,9 +13,7 @@
 
 namespace Hr
 {
-	class IRender;
 	class ITimer;
-
 	class HrSystemSupporter;
 
 	class HR_MAIN_API HrDirector : public IDirector
@@ -43,7 +41,7 @@ namespace Hr
 		HrSceneManagerPtr m_pShareSceneManager;
 		
 		HINSTANCE m_hHandleRender;
-		IRender* m_pRenderSystem;
+		HrD3D11RenderPtr m_pShareRenderSystem;
 		
 
 		bool m_bEndMainLoop;

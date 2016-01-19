@@ -50,7 +50,6 @@ bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight)
 
 void HrD3D11Render::Release()
 {
-	HrD3D11Render::GetInstance()->Release();
 	m_pRenderDemo->Release();
 }
 

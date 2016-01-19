@@ -39,7 +39,12 @@ namespace Hr
 		*/
 		virtual void Release() = 0;
 
+		//学习测试渲染用
 		virtual bool StartRender() = 0;
+
+	public:
+		virtual void Render() = 0;
+
 	};
 }
 

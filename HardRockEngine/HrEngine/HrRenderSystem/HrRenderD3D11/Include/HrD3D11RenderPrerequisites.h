@@ -24,6 +24,7 @@ typedef IDXGIDevice1            IHRDXGIDevice;
 typedef IDXGISwapChain          IHRDXGISwapChain;
 typedef DXGI_SWAP_CHAIN_DESC    DXGI_HR_SWAP_CHAIN_DESC;
 
+
 //#define D3D11DEVICE HrD3D11Device::GetInstance()->GetDevice()
 
 #endif

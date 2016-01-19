@@ -19,9 +19,6 @@
     <ClInclude Include="Include\HrD3D11Device.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrD3D11Enumeration.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrD3D11Utility.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11Device.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrD3D11Enumeration.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11Utility.cpp">

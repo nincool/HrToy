@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\HrRenderPreDeclare.h" />
     <ClInclude Include="Include\HrRenderSysPrerequisites.h" />
     <ClInclude Include="Include\IRender.h" />
   </ItemGroup>

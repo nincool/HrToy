@@ -1,6 +1,6 @@
 ﻿#include "HrDirector.h"
 #include "HrSceneManager.h"
-#include "HrRenderSystem/Include/IRender.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
 #include "HrWin32WindowEventUtilities.h"
 #include "HrSystemSupporter.h"
 #include "HrLog.h"
@@ -16,7 +16,7 @@ HrDirector::HrDirector()
 	m_pSystemSupporter = nullptr;
 
 	m_hHandleRender = nullptr;
-	m_pRenderSystem = nullptr;
+	m_pShareRenderSystem = nullptr;
 
 	m_pTimer = HR_NEW HrTimer();
 
@@ -50,7 +50,7 @@ bool HrDirector::Init()
 
 bool Hr::HrDirector::LoadRenderSystem()
 {
-	typedef IRender*(*RENDER_START_FUNC)();
+	typedef void (*RENDER_START_FUNC)(HrD3D11RenderPtr& ptr);
 	TCHAR finalModuleName[MAX_PATH] = HR_PREFIX;
 	_tcscat(finalModuleName, _T("HrRenderD3D11"));
 	_tcscat(finalModuleName, HR_SUFFIX);
@@ -61,14 +61,14 @@ bool Hr::HrDirector::LoadRenderSystem()
 		RENDER_START_FUNC pFuncStart = (RENDER_START_FUNC)HR_MODULE_GETSYSTEM(m_hHandleRender, HR_MODULE_START_FUNC);
 		if (pFuncStart != nullptr)
 		{
-			m_pRenderSystem = pFuncStart();
+			pFuncStart(m_pShareRenderSystem);
 		}
 	}
-	if (m_pRenderSystem == nullptr)
+	if (m_pShareRenderSystem == nullptr)
 	{
 		return false;
 	}
-	if (!m_pRenderSystem->Init(600, 480, HrWin32WindowEventUtilities::WinProc))
+	if (!m_pShareRenderSystem->Init(600, 480, HrWin32WindowEventUtilities::WinProc))
 	{
 		HRERROR(_T("RenderSystem Init Error!"));
 
@@ -96,12 +96,11 @@ void HrDirector::StartMainLoop()
 void HrDirector::End()
 {
 	m_bEndMainLoop = true;
-	
-	Release();
 }
 
 void HrDirector::Release()
 {
+	m_pShareRenderSystem->Release();
 	typedef void(*RENDER_END_FUNC)();
 	if (m_hHandleRender != nullptr)
 	{
@@ -110,13 +109,14 @@ void HrDirector::Release()
 		{
 			pFuncEnd();
 		}
+		m_pShareRenderSystem.reset();
 		HR_MODULE_FREE(m_hHandleRender);
 	}
 }
 
 bool HrDirector::Render()
 {
-	m_pRenderSystem->StartRender();
+	m_pShareRenderSystem->StartRender();
 
 	return true;
 }

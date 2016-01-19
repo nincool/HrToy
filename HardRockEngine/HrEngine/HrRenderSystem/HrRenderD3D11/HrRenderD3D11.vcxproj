@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrD3D11Device.h" />
-    <ClInclude Include="Include\HrD3D11Enumeration.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
     <ClInclude Include="Include\HrD3D11RenderPrerequisites.h" />
     <ClInclude Include="Include\HrD3D11Utility.h" />
@@ -28,7 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrD3D11Device.cpp" />
-    <ClCompile Include="Source\HrD3D11Enumeration.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
     <ClCompile Include="Source\HrD3D11Utility.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
