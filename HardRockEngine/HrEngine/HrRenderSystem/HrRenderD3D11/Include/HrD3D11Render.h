@@ -2,13 +2,12 @@
 #define _HR_D3D11RENDER_H_
 
 #include "HrD3D11RenderPrerequisites.h"
-#include "HrRenderSystem/Include/IRender.h"
+#include "HrRenderSystem/HrRenderCommon/IRender.h"
 
 namespace Hr
 {
 	class IDirector;
 	class HrD3D11Device;
-
 	class IRenderDemo;
 
 	class HrD3D11Render : public IRender
@@ -29,8 +28,24 @@ namespace Hr
 
 		HR_INSTANCE(HrD3D11Render);
 
+	public:
+		virtual void Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout) override;
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
+	public:
 		IRenderDemo* m_pRenderDemo;
+
+	private:
+		//IHRD3D11DeviceContext* GetImmediateContext()
+		//{
+		//	if (m_pImmediateContext == nullptr)
+		//	{
+		//		m_pImmediateContext = HrD3D11Device::GetInstance()->GetImmediateContext();
+		//	}
+		//	return m_pImmediateContext;
+		//}
+
+	private:
+		IHRD3D11DeviceContext* m_pImmediateContext;
 	};
 }
 

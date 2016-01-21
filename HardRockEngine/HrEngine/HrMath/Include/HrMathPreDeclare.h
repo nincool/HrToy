@@ -21,7 +21,6 @@ namespace Hr
 	typedef Hr::Matrix4_T<float> Matrix4;
 }
 
-
 #endif
 
 

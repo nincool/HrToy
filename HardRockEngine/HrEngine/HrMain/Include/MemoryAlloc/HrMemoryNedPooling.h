@@ -9,8 +9,8 @@
 #ifndef _HR_MEMORYNEDPOOLING_H_
 #define _HR_MEMORYNEDPOOLING_H_
 
-#include "../HrMainPrerequisiters.h"
 #include <limits>
+#include "HrMain/Include/HrMainPrerequisiters.h"
 
 namespace Hr
 {

@@ -1,17 +1,21 @@
-#ifndef _HR_RENDERTECHNIQUE_H_
-#define _HR_RENDERTECHNIQUE_H_
+#ifndef _I_RENDERLATOUT_H_
+#define _I_RENDERLATOUT_H_
 
 #include "HrMain/Include/HrMainPrerequisiters.h"
 #include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrRenderTechnique : public RenderSysAllocatedObject
+	class HR_MAIN_API IRenderLayout : public RenderSysAllocatedObject
 	{
 	public:
-		HrRenderTechnique();
+		virtual ~IRenderLayout(){}
+
 	};
 }
 
 #endif
+
+
+
 

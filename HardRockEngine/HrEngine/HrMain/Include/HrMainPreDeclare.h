@@ -9,8 +9,15 @@ namespace Hr
 	typedef std::shared_ptr<ICamera> ICameraPtr;
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
+
+	class HrRenderable;
+	class HrRenderLayout;
+	class HrRenderTechnique;
+
 	class HrSceneManager;
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
+
+
 }
 
 

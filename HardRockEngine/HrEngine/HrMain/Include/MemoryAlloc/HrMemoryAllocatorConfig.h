@@ -1,8 +1,6 @@
 ﻿#ifndef _HR_MEMORYALLOCATORCONFIG_H_
 #define _HR_MEMORYALLOCATORCONFIG_H_
 
-#include "HrMain/Include/HrMainPrerequisiters.h"
-
 #include "HrMemoryNedAlloc.h"
 #include "HrMemoryNedPooling.h"
 #include "HrMemoryAllocatedObject.h"

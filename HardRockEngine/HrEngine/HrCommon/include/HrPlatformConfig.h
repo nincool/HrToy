@@ -169,7 +169,7 @@
 #define HR_MODULE_GETSYM(a,b) dlsym(a,b)
 #define HR_MODULE_FREE(a) dlclose(a)
 
-#define HR_PREFIX _T("/data/data/com.kkstudio.gklauncher/lib/lib")
+#define HR_PREFIX _T("")
 #define HR_SUFFIX _T(".so")
 
 #endif

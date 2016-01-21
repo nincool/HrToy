@@ -15,11 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HrRenderCommon\HrRenderPreDeclare.h">
+    <ClInclude Include="HrModuleLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HrRenderCommon\IRender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HrModuleLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

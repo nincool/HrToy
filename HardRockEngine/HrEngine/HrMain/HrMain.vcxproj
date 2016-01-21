@@ -44,6 +44,7 @@
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
     <ClInclude Include="Include\Render\ICamera.h" />
+    <ClInclude Include="Include\Render\IRenderLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrDirector.cpp" />
@@ -63,11 +64,6 @@
     <ClCompile Include="Source\Render\HrRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HrMath\HrMath.vcxproj">
-      <Project>{98f611ff-addb-43ef-8443-e7753c858cbf}</Project>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384AEC92-6324-4505-BFFA-1118D67497C5}</ProjectGuid>
@@ -134,7 +130,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_MAIN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -145,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_MAIN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>

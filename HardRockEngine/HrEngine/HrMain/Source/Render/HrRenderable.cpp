@@ -2,16 +2,16 @@
 
 using namespace Hr;
 
-HrRenderable::HrRenderable()
-{
-
-}
-
-HrRenderable::~HrRenderable()
-{
-
-}
-
-
+//HrRenderable::HrRenderable()
+//{
+//
+//}
+//
+//HrRenderable::~HrRenderable()
+//{
+//
+//}
+//
+//
 
 

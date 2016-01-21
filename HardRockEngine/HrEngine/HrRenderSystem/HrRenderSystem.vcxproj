@@ -18,6 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HrRenderCommon\HrRenderPreDeclare.h" />
+    <ClInclude Include="HrRenderCommon\IRender.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}</ProjectGuid>
     <RootNamespace>HrRenderSystem</RootNamespace>
@@ -128,11 +132,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\HrRenderPreDeclare.h" />
-    <ClInclude Include="Include\HrRenderSysPrerequisites.h" />
-    <ClInclude Include="Include\IRender.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

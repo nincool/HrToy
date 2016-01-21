@@ -29,7 +29,6 @@ THE SOFTWARE.
 #ifndef _HR_MEMORYALLOCATEOBJECT_H_
 #define _HR_MEMORYALLOCATEOBJECT_H_
 
-#include "HrMain/Include/HrMainPrerequisiters.h"
 
 // Anything that has done a #define new <blah> will screw operator new definitions up
 // so undefine

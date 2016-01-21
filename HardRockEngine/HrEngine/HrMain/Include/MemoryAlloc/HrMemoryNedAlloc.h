@@ -1,8 +1,8 @@
 ﻿#ifndef _HR_MEMORYNEDALLOC_H_
 #define _HR_MEMORYNEDALLOC_H_
 
-#include "../HrMainPrerequisiters.h"
 #include <limits>
+#include "HrMain/Include/HrMainPrerequisiters.h"
 
 namespace Hr
 {

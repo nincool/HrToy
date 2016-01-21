@@ -14,6 +14,8 @@
 #include "HrCommon/Include/HrPrerequisites.h"
 #include "HrMain/Include/HrLog.h"
 #include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+#include "HrMain/Include/HrMainPreDeclare.h"
+
 
 typedef ID3D11Device            IHRD3D11Device;
 typedef ID3D11DeviceContext     IHRD3D11DeviceContext;

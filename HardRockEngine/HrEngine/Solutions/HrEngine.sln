@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderD3D11", "..\HrRende
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HrRenderSystem", "HrRenderSystem", "{BB6E7841-F83F-4D09-8F52-2E02A10F1CA2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderSystem", "..\HrRenderSystem\HrRenderSystem.vcxproj", "{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRendererSystem", "..\HrRenderSystem\HrRenderSystem.vcxproj", "{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrGameDemo", "..\HrGameDemo\HrGameDemo.vcxproj", "{59A4A68B-24AB-45AB-9A61-9D908C2077B2}"
 EndProject
@@ -19,13 +19,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrApplication", "..\HrAppli
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrMain", "..\HrMain\HrMain.vcxproj", "{384AEC92-6324-4505-BFFA-1118D67497C5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRenderDemo", "..\HrRenderSystem\HrRenderDemo\HrRenderDemo.vcxproj", "{EF462F0C-C237-4DBB-BDDA-DA8A672428D3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrRendererDemo", "..\HrRenderSystem\HrRenderDemo\HrRenderDemo.vcxproj", "{EF462F0C-C237-4DBB-BDDA-DA8A672428D3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2013", "..\DirectXTK\DirectXTK_Desktop_2013.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Effects11", "..\DirectXFX11\Effects11_2013.vcxproj", "{DF460EAB-570D-4B50-9089-2E2FC801BF38}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrMath", "..\HrMath\HrMath.vcxproj", "{98F611FF-ADDB-43EF-8443-E7753C858CBF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrUtilTools", "HrUtilTools\HrUtilTools.vcxproj", "{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -224,7 +226,8 @@ Global
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|Win32.Build.0 = Debug|Win32
-		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|x64.ActiveCfg = Debug|Win32
+		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|x64.ActiveCfg = Debug|x64
+		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Debug|x64.Build.0 = Debug|x64
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Profile|Mixed Platforms.Build.0 = Release|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Profile|Win32.ActiveCfg = Release|Win32
@@ -235,6 +238,22 @@ Global
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Release|Win32.ActiveCfg = Release|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Release|Win32.Build.0 = Release|Win32
 		{98F611FF-ADDB-43EF-8443-E7753C858CBF}.Release|x64.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|Win32.Build.0 = Debug|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|x64.ActiveCfg = Debug|x64
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Debug|x64.Build.0 = Debug|x64
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Profile|Mixed Platforms.Build.0 = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Profile|Win32.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Profile|Win32.Build.0 = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Profile|x64.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Release|Win32.ActiveCfg = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Release|Win32.Build.0 = Release|Win32
+		{F0FE23A5-FAD1-4197-AEC2-0423FE5255E0}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,9 +11,11 @@ HrD3D11Render* HrD3D11Render::m_s_pInstance = nullptr;
 
 HrD3D11Render::HrD3D11Render()
 {
-	typedef HrRenderD3D11DemoHrMath DEMOCLASS;
+	typedef HrRenderD3D11DemoTriangle DEMOCLASS;
 
 	m_pRenderDemo = HR_NEW DEMOCLASS();
+
+	m_pImmediateContext = nullptr;
 }
 
 HrD3D11Render::~HrD3D11Render()
@@ -60,3 +62,26 @@ bool HrD3D11Render::StartRender()
 	return true;
 }
 
+void HrD3D11Render::Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout)
+{
+	//1.IASetVertexBuffers
+	//2.Draw & DrawIndexed
+
+	unsigned int stride = 0;//sizeof(VertexPos);
+	unsigned int offset = 0;
+
+	//ID3D11Buffer* pVertexBuffer;
+	//GetImmediateContext()->IASetInputLayout();
+	//GetImmediateContext()->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+	//GetImmediateContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//
+	//GetImmediateContext()->VSSetShader()
+}
+
+//m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
+//m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+//m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//
+//m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
+//m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
+//m_pD3D11ImmediateContext->Draw(3, 0);

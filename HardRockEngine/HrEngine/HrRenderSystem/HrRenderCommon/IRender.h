@@ -42,8 +42,9 @@ namespace Hr
 		//学习测试渲染用
 		virtual bool StartRender() = 0;
 
+
 	public:
-		virtual void Render() = 0;
+		virtual void Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout) = 0;
 
 	};
 }

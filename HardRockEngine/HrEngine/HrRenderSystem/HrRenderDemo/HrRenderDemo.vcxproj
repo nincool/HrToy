@@ -82,7 +82,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_RENDERDEMO_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -173,9 +173,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\DirectXTK\DirectXTK_Desktop_2013.vcxproj">
       <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\HrMath\HrMath.vcxproj">
-      <Project>{98f611ff-addb-43ef-8443-e7753c858cbf}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

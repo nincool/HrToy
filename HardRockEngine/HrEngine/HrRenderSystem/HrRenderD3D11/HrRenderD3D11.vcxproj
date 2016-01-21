@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Include\HrD3D11Device.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
+    <ClInclude Include="Include\HrD3D11RenderLayout.h" />
     <ClInclude Include="Include\HrD3D11RenderPrerequisites.h" />
     <ClInclude Include="Include\HrD3D11Utility.h" />
     <ClInclude Include="Include\HrExport.h" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="Source\HrD3D11Device.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
+    <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />
     <ClCompile Include="Source\HrD3D11Utility.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
   </ItemGroup>
@@ -99,7 +101,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\;..\..\..\;..\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

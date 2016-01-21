@@ -8,9 +8,8 @@
 #endif // HR_MAIN_EXPORT
 
 #include "HrCommon/Include/HrPrerequisites.h"
-#include <algorithm>
 #include "HrMainPreDeclare.h"
-#include "HrRenderSystem/Include/HrRenderPreDeclare.h"
+#include "HrRenderSystem/HrRenderCommon/HrRenderPreDeclare.h"
 
 #endif // !_HR_MAINPREREQUISITERS_H_
 
