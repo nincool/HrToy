@@ -15,7 +15,7 @@
 #define HR_RENDERDEMO_API HR_IMPORT
 #endif // HR_MAIN_EXPORT
 
-#include "../HrCommon/Include/HrPrerequisites.h"
+#include "../HrCommon/Include/HrPrerequisite.h"
 #include "../HrMain/Include/HrLog.h"
 #include <d3d11.h>
 #include <DirectXMath.h>

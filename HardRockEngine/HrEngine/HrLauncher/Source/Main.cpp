@@ -1,12 +1,13 @@
 ﻿#include <windows.h>
 #include <tchar.h>
 #include "HrCommon/Include/HrPlatformConfig.h"
+#include "HrUtilTools/Include/HrModuleLoader.h"
 
-#include "HrMain/Include/HrLog.h"
+//#include "HrMain/Include/HrLog.h"
 
 bool EraseEndStringWithChar(TCHAR* p, TCHAR c)
 {
-	assert(p && "EraseEndStringWhithChar Error, the param is null");
+	//assert(p && "EraseEndStringWhithChar Error, the param is null");
 
 	TCHAR* pFlag = _tcsrchr(p, c);
 	if (pFlag != NULL)
@@ -22,7 +23,6 @@ bool EraseEndStringWithChar(TCHAR* p, TCHAR c)
 inline bool SetMyCurrentDirectory()
 {
 	//设置工作目录
-	TCHAR* pFlag = NULL;
 	TCHAR szModuleDir[512];
 	ZeroMemory(szModuleDir, sizeof(szModuleDir));
 
@@ -45,19 +45,31 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 {
 	SetMyCurrentDirectory();
 
-	Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, _T("-------start-------"));
+	typedef void(*AppInitFunc)();
 
-	HINSTANCE hHandle = nullptr;
-	MODULE_START pFuncStart = HrLoadModule(hHandle, _T("HrApplication"));
-	if (pFuncStart != nullptr)
+	Hr::HrModuleLoader moduleLoaderApp("HrCore", "HrModuleInitialize");
+	if (moduleLoaderApp.HrLoadModule())
 	{
-		pFuncStart();
+		AppInitFunc runFunc = static_cast<AppInitFunc>(moduleLoaderApp.GetProcAddress());
+		if (runFunc)
+		{
+			runFunc();
+		}
 	}
-	HrFreeModule(hHandle);
+	moduleLoaderApp.HrFreeModule();
+	//Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, _T("-------start-------"));
+
+	//HINSTANCE hHandle = nullptr;
+	//MODULE_START pFuncStart = HrLoadModule(hHandle, _T("HrApplication"));
+	//if (pFuncStart != nullptr)
+	//{
+	//	pFuncStart();
+	//}
+	//HrFreeModule(hHandle);
 	
 	system("pause");
 
-	Hr::HrLog::ReleaseInstance();
+	//Hr::HrLog::ReleaseInstance();
 
 	return 0;
 }

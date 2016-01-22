@@ -126,7 +126,7 @@
 #	define HR_CPU HR_CPU_ARM
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 // Compiler Judge
 // Determine compiler: after this, one of the following symbols will
 // be defined: COMPILER_GCC, COMPILER_MSVC.
@@ -135,10 +135,14 @@
 # define COMPILER_GCC
 #elif defined(_MSC_VER)
 # define COMPILER_MSVC
-// i don't care about your debug symbol issues...
-//# pragma warning(disable:4786)
 #else
 # error "Could not determine compiler"
+#endif
+
+#if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
+#include "HrWin32Specific.h"
+#else if(HR_TARGET_PLATFORM == HR_PLATFORM_LINUX || HR_TARGET_PLATFORM == HR_PLATFORM_ANDROID)
+#include "HrLinuxSpecific.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -146,92 +150,10 @@
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32 || HR_TARGET_PLATFORM == HR_PLATFORM_WINRT)
 #define HR_EXPORT __declspec(dllexport)
 #define HR_IMPORT __declspec(dllimport)
-
-#define HR_MODULE_OPEN(a) LoadLibraryEx(a, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
-#define HR_MODULE_GETSYSTEM(a,b) GetProcAddress(a,b)
-#define HR_MODULE_FREE(a) FreeLibrary(a)
-
-#if (HR_DEBUG > 0)
-#define HR_PREFIX _T("")
-#define HR_SUFFIX _T("D.dll")
-#else
-#define HR_PREFIX _T("")
-#define HR_SUFFIX _T(".dll")
-#endif
-#define HR_MODULE_START_FUNC ("HrModuleInitialize")
-#define HR_MUDULE_END_FUNC ("HrModuleUnload")
-
 #else
 #define HR_EXPORT __attribute__ ((visibility("default")))
 #define HR_IMPORT __attribute__ ((visibility("default")))
-
-#define HR_MODULE_OPEN(a) dlopen(a, RTLD_LAZY | RTLD_GLOBAL)
-#define HR_MODULE_GETSYM(a,b) dlsym(a,b)
-#define HR_MODULE_FREE(a) dlclose(a)
-
-#define HR_PREFIX _T("")
-#define HR_SUFFIX _T(".so")
-
 #endif
-
-#if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32 || HR_TARGET_PLATFORM  == HR_PLATFORM_WINRT)
-#include "HrWin32Specific.h"
-#else if(HR_TARGET_PLATFORM == HR_PLATFORM_LINUX || HR_TARGET_PLATFORM == HR_PLATFORM_ANDROID)
-#include "HrLinuxSpecific.h"
-#endif
-
-//////////////////////////////////////////////////////////////////////////
-// Module Init
-
-// start & end func
-typedef void(*MODULE_START)();
-typedef void(*MODULE_END)(void);
-
-// module accessing func
-inline void HrFreeModule(HINSTANCE& hHandle)
-{
-	if (hHandle)
-	{
-		MODULE_END pFunc = (MODULE_END)HR_MODULE_GETSYSTEM(hHandle, HR_MUDULE_END_FUNC);
-		pFunc();
-		HR_MODULE_FREE(hHandle);
-	}
-}
-
-inline MODULE_START HrLoadModule(HINSTANCE& hHandle, const TCHAR* pModuleName)
-{
-	TCHAR finalModuleName[MAX_PATH] = HR_PREFIX;
-	_tcscat(finalModuleName, pModuleName);
-	_tcscat(finalModuleName, HR_SUFFIX);
-
-	hHandle = HR_MODULE_OPEN(finalModuleName);
-	if (hHandle)
-	{
-		MODULE_START pFunc = (MODULE_START)HR_MODULE_GETSYSTEM(hHandle, HR_MODULE_START_FUNC);
-		return pFunc;
-	}
-	else
-	{
-		int winError = GetLastError();
-		return nullptr;
-	}
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-// post configure
-//////////////////////////////////////////////////////////////////////////
-
-// check user set platform
-#if ! HR_TARGET_PLATFORM
-#error  "Cannot recognize the target platform; are you targeting an unsupported platform?"
-#endif 
-
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-//#ifndef __MINGW32__
-//#pragma warning (disable:4127) 
-//#endif 
-//#endif  // _PLATFORM_WIN32
 
 #endif // !_HR_PLATFORMCONFIG_H_
 

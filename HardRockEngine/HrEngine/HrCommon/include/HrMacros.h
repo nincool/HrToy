@@ -4,10 +4,6 @@
 //////////////////////////////////////////////////////////////////////////
 //Macros
 //////////////////////////////////////////////////////////////////////////
-#define HR_INSTANCE(type) public: static type* GetInstance() {	if (m_s_pInstance == nullptr) { m_s_pInstance = HR_NEW type; } return m_s_pInstance; } \
-	static void ReleaseInstance() { SAFE_DELETE(m_s_pInstance); } private: static type* m_s_pInstance;
-#define HR_INSTANCE_DEF(type) type* type::m_s_pInstance = nullptr
-
 #define HR_PROPERTY_READONLY(varType, varName, funName)\
 protected: varType varName;\
 public: virtual varType Get##funName(void) const;
@@ -43,19 +39,6 @@ public: virtual void Set##funName(varType var){ varName = var; }
 protected: varType varName;\
 public: virtual const varType& Get##funName(void) const { return varName; }\
 public: virtual void Set##funName(const varType& var){ varName = var; }
-
-#define HR_SYNTHESIZE_RETAIN(varType, varName, funName)    \
-private: varType varName; \
-public: virtual varType Get##funName(void) const { return varName; } \
-public: virtual void Set##funName(varType var)   \
-{ \
-	if (varName != var) \
-							{ \
-	CC_SAFE_RETAIN(var); \
-	CC_SAFE_RELEASE(varName); \
-	varName = var; \
-							} \
-} 
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)			{ if(p) { (p)->Release();	(p)=NULL; } }

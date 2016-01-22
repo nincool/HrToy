@@ -11,7 +11,7 @@
 #define _I_RENDERER_H_
 
 #include "../../HrCommon/Include/HrPlatformConfig.h"
-#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
@@ -44,7 +44,7 @@ namespace Hr
 
 
 	public:
-		virtual void Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout) = 0;
+		//virtual void Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout) = 0;
 
 	};
 }

@@ -27,16 +27,13 @@
     <ClInclude Include="Include\HrLinuxTchar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrPrerequisites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrStringUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrPrerequisite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

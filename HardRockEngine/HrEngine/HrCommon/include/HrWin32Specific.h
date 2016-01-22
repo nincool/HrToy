@@ -13,8 +13,6 @@
 #include <Windows.h>
 #include <tchar.h>
 
-#   pragma warning( disable: 4996)
-
 //Integer formats of fixed bit width
 typedef unsigned int uint32;
 typedef unsigned short uint16;
@@ -34,6 +32,6 @@ typedef __int64 int64;
 #define HrString std::string
 #endif // UNICODE
 
-
+#pragma warning(disable:4996)
 
 #endif

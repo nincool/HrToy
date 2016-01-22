@@ -19,18 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrD3D11Device.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
-    <ClInclude Include="Include\HrD3D11RenderLayout.h" />
-    <ClInclude Include="Include\HrD3D11RenderPrerequisites.h" />
-    <ClInclude Include="Include\HrD3D11Utility.h" />
+    <ClInclude Include="Include\HrD3D11RenderPrerequisite.h" />
+    <ClInclude Include="Include\HrD3D11RenderWindow.h" />
     <ClInclude Include="Include\HrExport.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrD3D11Device.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
-    <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />
-    <ClCompile Include="Source\HrD3D11Utility.cpp" />
+    <ClCompile Include="Source\HrD3D11RenderWindow.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

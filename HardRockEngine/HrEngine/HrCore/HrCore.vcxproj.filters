@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{8ccf6b1a-e442-4189-be6e-24639e11a783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{a9c92e22-41dd-46bf-8485-1e569c88f7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\AppWin32">
+      <UniqueIdentifier>{5ff74097-8ef4-4d5e-8191-a8458b7f11b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\AppWin32">
+      <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\MemoryAlloc">
+      <UniqueIdentifier>{d8b49213-b008-46f1-9b40-88719c7a61df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\MemoryAlloc">
+      <UniqueIdentifier>{22587f4b-33e0-4a83-9e94-a22a1e9ce78b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\HrExport.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IApplication.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\AppWin32\HrApplication_Win32.h">
+      <Filter>Include\AppWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrCorePreDeclare.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h">
+      <Filter>Include\MemoryAlloc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrCorePrerequisite.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrDirector.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\IDirector.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrLog.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ILog.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\HrExport.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp">
+      <Filter>Source\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp">
+      <Filter>Source\MemoryAlloc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrDirector.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrLog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
