@@ -10,6 +10,9 @@ namespace Hr
 	class HrApplication;
 	typedef std::unique_ptr<HrApplication> HrApplicationPtr;
 
+	class HrDirector;
+	typedef std::unique_ptr<HrDirector> HrDirectorPtr;
+
 	class ILog;
 	class HrLog;
 	typedef std::unique_ptr<HrLog> HrLogPtr;

@@ -25,6 +25,9 @@
     <ClInclude Include="Include\HrD3D11RenderWindow.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrD3D11RenderFactory.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -34,6 +37,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11RenderWindow.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11RenderFactory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

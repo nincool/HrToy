@@ -53,17 +53,16 @@ public: virtual void Set##funName(const varType& var){ varName = var; }
 #endif
 
 #if (HR_DEBUG > 0)
-#define HRLOG(format,...)      Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, format,  ##__VA_ARGS__)
-#define HRWARNING(format,...)  Hr::HrLog::GetInstance()->Log(Hr::ILog::_HWARNING, format,  ##__VA_ARGS__)
-#define HRERROR(format,...)    Hr::HrLog::GetInstance()->Log(Hr::ILog::_HERROR, format,  ##__VA_ARGS__)
+#define HRLOG(format,...)      Hr::HrLog::GetInstance().Log(Hr::ILog::_HALL, format,  ##__VA_ARGS__)
+#define HRWARNING(format,...)  Hr::HrLog::GetInstance().Log(Hr::ILog::_HWARNING, format,  ##__VA_ARGS__)
+#define HRERROR(format,...)    Hr::HrLog::GetInstance().Log(Hr::ILog::_HERROR, format,  ##__VA_ARGS__)
 #else
 #define HRLOG(format,...)      
 #define HRWARNING(format,...)  
 #define HRERROR(format,...)   
 #endif
 
-#include <assert.h>
-#define HRASSERT(a, content, ...)  if (!a) Hr::HrLog::GetInstance()->Log(Hr::ILog::_HERROR, content,  ##__VA_ARGS__); assert(a);
+#define HRASSERT(a, content, ...)  if (!a) Hr::HrLog::GetInstance().Log(Hr::ILog::_HERROR, content,  ##__VA_ARGS__); BOOST_ASSERT(a);
 
 #endif
 

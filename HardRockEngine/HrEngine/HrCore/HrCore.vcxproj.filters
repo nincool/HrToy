@@ -23,6 +23,12 @@
     <Filter Include="Source\MemoryAlloc">
       <UniqueIdentifier>{22587f4b-33e0-4a83-9e94-a22a1e9ce78b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Render">
+      <UniqueIdentifier>{54017f09-aeed-4a4a-ad14-907391c60c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Render">
+      <UniqueIdentifier>{4382e095-8013-42f2-81c7-fae8b5b8dc13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -67,6 +73,15 @@
     <ClInclude Include="Include\ILog.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h">
+      <Filter>Include\AppWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderFactory.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderFactory.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -92,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Source\HrLog.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp">
+      <Filter>Source\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderFactory.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

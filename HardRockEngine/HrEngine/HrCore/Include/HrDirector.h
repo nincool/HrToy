@@ -10,16 +10,21 @@
 #define _HR_DIRECTOR_H_
 
 #include "IDirector.h"
+#include <boost/noncopyable.hpp>
 
 namespace Hr
 {
 	class ITimer;
-	class HrSystemSupporter;
+	class HrModuleLoader;
 
-	class HR_CORE_API HrDirector : public IDirector
+	class HR_CORE_API HrDirector : public IDirector, public boost::noncopyable
 	{
 	public:
+		HrDirector();
 		~HrDirector();
+
+		static HrDirector& GetInstance();
+		static void ReleaseInstance();
 
 		virtual bool Init() override;
 		virtual void StartMainLoop() override;
@@ -28,11 +33,15 @@ namespace Hr
 
 		virtual bool Render() override;
 		
-	protected:
-		HrDirector();
 
 	private:
+		static HrDirectorPtr m_s_pUniqueDirector;
+
+		IRenderPtr m_pShareRender;
+
 		bool m_bEndMainLoop;
+
+		std::unique_ptr<HrModuleLoader> m_pUniqueModuleLoader;
 
 	};
 

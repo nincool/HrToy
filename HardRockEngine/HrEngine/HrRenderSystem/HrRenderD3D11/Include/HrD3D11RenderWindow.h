@@ -16,7 +16,7 @@ namespace Hr
 		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);
 		HR_SYNTHESIZE_READONLY(uint32, m_nHeight, Height);
 
-		HR_SYNTHESIZE_READONLY(HANDLE, m_hWnd, RenderWindowHandle);
+		HR_SYNTHESIZE_READONLY(HWND, m_hWnd, RenderWindowHandle);
 	};
 }
 

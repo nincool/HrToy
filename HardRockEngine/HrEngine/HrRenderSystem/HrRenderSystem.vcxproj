@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="HrRenderCommon\HrRenderPreDeclare.h" />
     <ClInclude Include="HrRenderCommon\IRender.h" />
+    <ClInclude Include="HrRenderCommon\IRenderWindow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19BE21AC-79C4-4DF0-8FBC-B39D3170D6E2}</ProjectGuid>

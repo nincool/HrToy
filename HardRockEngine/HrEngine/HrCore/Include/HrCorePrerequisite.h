@@ -11,6 +11,7 @@
 
 #include "HrCommon/Include/HrPrerequisite.h"
 #include "HrCore/Include/HrCorePreDeclare.h"
+#include "HrRenderSystem/HrRenderCommon/HrRenderPreDeclare.h"
 
 #ifdef HR_CORE_EXPORT
 #define HR_CORE_API HR_EXPORT

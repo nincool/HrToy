@@ -12,6 +12,7 @@ namespace Hr
 		virtual ~HrApplication();
 
 		static HrApplicationPtr& GetInstance();
+		static void ReleaseInstance();
 
 		virtual bool ApplicationDidFinishLaunching() override;
 
@@ -29,7 +30,9 @@ namespace Hr
 		virtual bool Destroy() override;
 
 	private:
-		static HrApplicationPtr m_pUniqueApplication;
+		static HrApplicationPtr m_s_pUniqueApplication;
+
+
 	};
 
 

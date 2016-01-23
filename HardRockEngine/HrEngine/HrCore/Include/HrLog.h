@@ -12,6 +12,7 @@ namespace Hr
 		~HrLog();
 
 		static HrLog& GetInstance();
+		static void ReleaseInstance();
 
 		void Log(ILog::EnumLogType nLevel, const TCHAR* pszFormat, ...);
 

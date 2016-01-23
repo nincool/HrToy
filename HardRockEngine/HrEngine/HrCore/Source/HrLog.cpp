@@ -15,6 +15,14 @@ HrLog& HrLog::GetInstance()
 	return *m_pUniqueLog;
 }
 
+void Hr::HrLog::ReleaseInstance()
+{
+	if (m_pUniqueLog)
+	{
+		m_pUniqueLog.reset();
+	}
+}
+
 HrLog::HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)

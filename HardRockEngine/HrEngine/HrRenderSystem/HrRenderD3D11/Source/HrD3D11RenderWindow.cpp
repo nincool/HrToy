@@ -41,5 +41,7 @@ bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDP
 	ShowWindow(m_hWnd, SW_SHOWNORMAL);
 	SetFocus(m_hWnd);
 	SetForegroundWindow(m_hWnd);
+
+	return true;
 }
 

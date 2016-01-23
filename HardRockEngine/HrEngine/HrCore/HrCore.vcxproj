@@ -123,6 +123,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\AppWin32\HrApplication_Win32.h" />
+    <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrDirector.h" />
@@ -136,9 +137,12 @@
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
+    <ClInclude Include="Include\Render\HrRenderFactory.h" />
+    <ClInclude Include="Include\Render\IRenderFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp" />
+    <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp" />
     <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
@@ -146,6 +150,12 @@
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
+    <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HrUtilTools\HrUtilTools.vcxproj">
+      <Project>{0688b1ee-0e99-4453-8455-da4be372aefc}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

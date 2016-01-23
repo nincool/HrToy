@@ -8,7 +8,7 @@ namespace Hr
 	class IRenderWindow : public RenderSysAllocatedObject
 	{
 	public:
-		~IRenderWindow();
+		~IRenderWindow(){};
 
 		//Create the render window
 		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc) = 0;

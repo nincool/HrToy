@@ -7,8 +7,6 @@
 
 bool EraseEndStringWithChar(TCHAR* p, TCHAR c)
 {
-	//assert(p && "EraseEndStringWhithChar Error, the param is null");
-
 	TCHAR* pFlag = _tcsrchr(p, c);
 	if (pFlag != NULL)
 	{
@@ -57,19 +55,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 	moduleLoaderApp.HrFreeModule();
-	//Hr::HrLog::GetInstance()->Log(Hr::ILog::_HALL, _T("-------start-------"));
-
-	//HINSTANCE hHandle = nullptr;
-	//MODULE_START pFuncStart = HrLoadModule(hHandle, _T("HrApplication"));
-	//if (pFuncStart != nullptr)
-	//{
-	//	pFuncStart();
-	//}
-	//HrFreeModule(hHandle);
-	
-	system("pause");
-
-	//Hr::HrLog::ReleaseInstance();
 
 	return 0;
 }

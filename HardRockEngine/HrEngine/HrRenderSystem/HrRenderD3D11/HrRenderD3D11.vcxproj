@@ -20,14 +20,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrD3D11Render.h" />
+    <ClInclude Include="Include\HrD3D11RenderFactory.h" />
     <ClInclude Include="Include\HrD3D11RenderPrerequisite.h" />
     <ClInclude Include="Include\HrD3D11RenderWindow.h" />
     <ClInclude Include="Include\HrExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrD3D11Render.cpp" />
+    <ClCompile Include="Source\HrD3D11RenderFactory.cpp" />
     <ClCompile Include="Source\HrD3D11RenderWindow.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HrUtilTools\HrUtilTools.vcxproj">
+      <Project>{0688b1ee-0e99-4453-8455-da4be372aefc}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{489A0806-F326-48DB-83DC-1575C3025D14}</ProjectGuid>
@@ -117,7 +124,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;D3DCompiler.lib;HrMainD.lib;HrRenderDemoD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;D3DCompiler.lib;HrCoreD.lib;HrRenderDemoD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

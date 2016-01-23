@@ -13,6 +13,10 @@
 #include "HrRenderSystem/HrRenderCommon/HrRenderPreDeclare.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 
+extern "C" HR_EXPORT void HrModuleInitialize(Hr::IRenderPtr& ptr);
+
+extern "C" HR_EXPORT void HrModuleUnload(void);
+
 #endif
 
 

@@ -1,4 +1,6 @@
 ﻿#include "HrD3D11Render.h"
+#include "HrUtilTools/Include/HrUtil.h"
+#include "HrD3D11RenderWindow.h"
 
 using namespace Hr;
 
@@ -19,6 +21,8 @@ HrD3D11Render::~HrD3D11Render()
 
 bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
 {
+	m_pShareRenderWindow = MakeSharedPtr<HrD3D11RenderWindow>();
+	m_pShareRenderWindow->CreateRenderWindow(nWidth, nHeight, lpfnProc);
 	//HrD3D11Utility::GetInstance()->Init(nWidth, nHeight, lpfnProc);
 
 	//m_pRenderDemo->SetD3DDevice(HrD3D11Device::GetInstance()->GetDevice()
@@ -66,11 +70,6 @@ bool HrD3D11Render::StartRender()
 //	//
 //	//GetImmediateContext()->VSSetShader()
 //}
-
-void HrD3D11Render::CreateRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
-{
-
-}
 
 //m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
 //m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);

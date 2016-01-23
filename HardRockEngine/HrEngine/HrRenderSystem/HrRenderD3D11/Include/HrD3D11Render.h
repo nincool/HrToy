@@ -32,6 +32,8 @@ namespace Hr
 		//IRenderDemo* m_pRenderDemo;
 
 	private:
+		HrD3D11RenderWindowPtr m_pShareRenderWindow;
+
 		//IHRD3D11DeviceContext* GetImmediateContext()
 		//{
 		//	if (m_pImmediateContext == nullptr)
