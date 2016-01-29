@@ -8,7 +8,7 @@
 #include "HrRenderD3D11DemoPipleline.h"
 #include "HrRenderD3D11DemoGeometry.h"
 #include "HrRenderD3D11DemoLight.h"
-#include "HrRenderD3D11DemoHrMath.h"
+//#include "HrRenderD3D11DemoHrMath.h"
 
 
 #endif

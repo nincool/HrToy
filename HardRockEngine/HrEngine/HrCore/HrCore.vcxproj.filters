@@ -29,6 +29,12 @@
     <Filter Include="Source\Render">
       <UniqueIdentifier>{4382e095-8013-42f2-81c7-fae8b5b8dc13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Scene">
+      <UniqueIdentifier>{5e24019f-70c8-4f64-86ae-4c298906ce25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Scene">
+      <UniqueIdentifier>{d9c1fb23-5510-471d-a686-12fbf3d45868}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -76,11 +82,53 @@
     <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h">
       <Filter>Include\AppWin32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrRenderFactory.h">
+    <ClInclude Include="Include\Render\IRender.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrCamera.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrFrustum.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\ICamera.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderLayout.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IGraphicsBuffer.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderable.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderEffect.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\IRenderFactory.h">
       <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderPass.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderTechnique.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IShader.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\ISceneManager.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrSceneManager.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\ISceneNode.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrSceneNode.h">
+      <Filter>Include\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,8 +159,32 @@
     <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp">
       <Filter>Source\AppWin32</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrRenderFactory.cpp">
+    <ClCompile Include="Source\Render\HrCamera.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrFrustom.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\IRenderLayout.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\IRenderable.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderTechnique.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderPass.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\ISceneManager.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrSceneManager.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrSceneNode.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

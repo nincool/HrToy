@@ -27,8 +27,9 @@
 #pragma warning(disable: 4819) // Allow non-ANSI characters. 
 #pragma warning(disable: 4521) // multiple copy constructors specified.
 
-#include <boost/assert.hpp>
 //#define BOOST_DISABLE_ASSERTS
+#include <boost/assert.hpp>
+
 
 #endif //__HR_CONFIG_H__
 

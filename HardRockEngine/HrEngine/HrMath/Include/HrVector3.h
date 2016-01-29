@@ -34,14 +34,14 @@ namespace Hr
 
 		inline REAL operator [] (const size_t i) const
 		{
-			assert(i < 3);
+			BOOST_ASSERT(i < 3);
 
 			return *(&m_x + i);
 		}
 
 		inline REAL& operator [] (const size_t i)
 		{
-			assert(i < 3);
+			BOOST_ASSERT(i < 3);
 
 			return *(&m_x + i);
 		}
@@ -93,7 +93,7 @@ namespace Hr
 
 		inline HrVector3 operator /= (const REAL fScalar)
 		{
-			assert(fScalar != 0.0);
+			BOOST_ASSERT(fScalar != 0.0);
 
 			REAL fInv = 1.0f / fScalar;
 
@@ -167,7 +167,7 @@ namespace Hr
 
 		inline HrVector3 operator / (const REAL fScalar) const
 		{
-			assert(fScalar != 0.0);
+			BOOST_ASSERT(fScalar != 0.0);
 			REAL fInv = 1.0f / fScalar;
 
 			return HrVector3(

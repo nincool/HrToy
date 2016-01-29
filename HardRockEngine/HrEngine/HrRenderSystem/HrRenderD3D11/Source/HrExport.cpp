@@ -1,9 +1,9 @@
 ﻿#include "HrExport.h"
-#include "HrRenderD3D11/Include/HrD3D11Render.h"
+#include "HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 
-extern "C" HR_EXPORT void HrModuleInitialize(Hr::IRenderPtr& ptr)
+extern "C" HR_EXPORT void HrModuleInitialize(Hr::IRenderFactoryPtr& ptr)
 {
-	ptr = std::dynamic_pointer_cast<Hr::IRender>(Hr::MakeSharedPtr<Hr::HrD3D11Render>());
+	ptr = std::dynamic_pointer_cast<Hr::IRenderFactory>(Hr::MakeSharedPtr<Hr::HrD3D11RenderFactory>());
 }
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)

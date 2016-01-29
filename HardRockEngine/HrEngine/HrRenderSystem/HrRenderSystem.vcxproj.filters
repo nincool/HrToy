@@ -18,9 +18,6 @@
     <ClInclude Include="HrRenderCommon\HrRenderPreDeclare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HrRenderCommon\IRender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HrRenderCommon\IRenderWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>

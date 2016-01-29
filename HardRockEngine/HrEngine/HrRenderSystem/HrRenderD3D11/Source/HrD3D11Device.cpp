@@ -1,128 +1,154 @@
 #include "HrD3D11Device.h"
+#include "HrUtilTools/Include/HrUtil.h"
+#include "HrD3D11Adapter.h"
+#include "HrD3D11AdapterList.h"
+#include "HrCore/Include/HrLog.h"
+
 
 using namespace Hr;
 
-HrD3D11Adapter::HrD3D11Adapter(unsigned int nAdapterNumer, IHRDXGIAdapter* pDXGIAdapter)
+HrD3D11DevicePtr HrD3D11Device::m_s_pUniqueDevicePtr;
+
+HrD3D11Device& HrD3D11Device::GetInstance()
 {
-	m_nApdapterNumber = nAdapterNumer;
-	m_pDXGIAdapter = pDXGIAdapter;
-	if (m_pDXGIAdapter != nullptr)
+	if (!m_s_pUniqueDevicePtr)
 	{
-		m_pDXGIAdapter->AddRef();
-		m_pDXGIAdapter->GetDesc1(&m_AdapterIdentifier);
+		m_s_pUniqueDevicePtr = MakeUniquePtr<HrD3D11Device>();
 	}
+	return *m_s_pUniqueDevicePtr;
 }
 
-HrD3D11Adapter::~HrD3D11Adapter()
+void HrD3D11Device::ReleaseInstance()
 {
-	SAFE_RELEASE(m_pDXGIAdapter);
+	m_s_pUniqueDevicePtr.reset();
 }
-
-HrString Hr::HrD3D11Adapter::GetDriverDescription() const
-{
-	size_t size = wcslen(m_AdapterIdentifier.Description);
-	TCHAR * str = new TCHAR[size + 1];
-
-	//wcstombs(str, m_AdapterIdentifier.Description, size);
-	memcpy((void*)str, (void*)(m_AdapterIdentifier.Description), size);
-	str[size] = '\0';
-	HrString driverDescription = str;
-	delete[] str;
-	HrStringUtil::Trim(driverDescription);
-
-	return driverDescription;
-}
-
-void Hr::HrD3D11Adapter::Release()
-{
-	for (auto ite : m_vecEnumOutputInfo)
-	{
-		ite->Release();
-		SAFE_DELETE(ite);
-	}
-	m_vecEnumOutputInfo.clear();
-	SAFE_RELEASE(m_pDXGIAdapter);
-}
-
-/////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////
-
-HR_INSTANCE_DEF(HrD3D11Device);
 
 HrD3D11Device::HrD3D11Device()
 {
 	m_pD3D11DXGIFactory = nullptr;
-	m_pAdapter = nullptr;
-	m_format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	
 	m_pD3D11Device = nullptr;
 	m_pD3D11ImmediateContext = nullptr;
-	m_nHeight = 0;
-	m_nWidth = 0;
 
-	m_pSwapChain = nullptr;
-	m_pRenderTargetView = nullptr;
-	m_pDepthStencil = nullptr;
-	m_pDepthStencilView = nullptr;
-
-	ZeroMemory(&m_swapChainDesc, sizeof(DXGI_HR_SWAP_CHAIN_DESC));
+	m_pAdapterList = new HrD3D11AdapterList();
 }
 
 HrD3D11Device::~HrD3D11Device()
 {
 }
 
-void HrD3D11Device::SetDevice(IHRD3D11Device* pDevice)
+bool HrD3D11Device::CreateD3D11Device()
 {
-	if (m_pD3D11Device != nullptr)
+	CreateD3DDXDevice();
+	CreateD3DDXGIFactory();
+	D3D11EnumerateAdapter();
+
+	return true;
+}
+
+bool HrD3D11Device::CreateD3DDXGIFactory()
+{
+	//if (this->GetDXGIFactory() == nullptr)
+	//{
+	//	IDXGIFactory1* pDXGIFactory = nullptr;
+	//	HRESULT hr = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&pDXGIFactory);
+	//	if (FAILED(hr))
+	//	{
+	//		return false;
+	//	}
+	//	this->SetDXGIFactory(pDXGIFactory);
+	//}
+
+	IDXGIDevice1 * pDXGIDevice;
+	HRESULT hr = m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice1), (void **)&pDXGIDevice);
+
+	IDXGIAdapter * pDXGIAdapter;
+	hr = pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&pDXGIAdapter);
+
+	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&m_pD3D11DXGIFactory);
+
+
+	return true;
+}
+
+bool HrD3D11Device::CreateD3DDXDevice()
+{
+	IDXGIAdapter* pDeviceAdapter = nullptr;
+
+	// determine feature levels
+	D3D_FEATURE_LEVEL requestedLevels[] =
 	{
-		if (m_pD3D11ImmediateContext != nullptr)
-		{
-			m_pD3D11ImmediateContext->Flush();
-		}
-		SAFE_RELEASE(m_pD3D11ImmediateContext);
-		SAFE_RELEASE(m_pD3D11Device);
+#if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
+		D3D_FEATURE_LEVEL_11_1,
+#endif
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3,
+		D3D_FEATURE_LEVEL_9_2,
+		D3D_FEATURE_LEVEL_9_1
+	};
+	D3D_FEATURE_LEVEL* pFirstFL = &requestedLevels[0];
+	D3D_FEATURE_LEVEL* pLastFL = &requestedLevels[1];
+	UINT nFeatureLevels = static_cast<UINT>(pLastFL - pFirstFL + 1);
+
+	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
+
+	UINT deviceFlags = 0;
+	//deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+
+	ID3D11Device* pD3DDevice;
+	ID3D11DeviceContext* m_pImmediateContext;
+	HRESULT hr = D3D11CreateDevice(pDeviceAdapter
+		, driverType
+		, NULL
+		, deviceFlags
+		, pFirstFL
+		, nFeatureLevels
+		, D3D11_SDK_VERSION
+		, &pD3DDevice
+		, NULL
+		, &m_pImmediateContext);
+	if (hr != S_OK)
+	{
+		HRERROR(_T("D3D11CreateDevice Error!"));
+		return false;
 	}
-	m_pD3D11Device = pDevice;
-	m_pD3D11Device->GetImmediateContext(&m_pD3D11ImmediateContext);
-	m_pD3D11ImmediateContext->ClearState();
+	this->SetDevice(pD3DDevice);
+	this->SetImmediateContext(m_pImmediateContext);
+
+	return true;
+}
+
+bool HrD3D11Device::D3D11EnumerateAdapter()
+{
+	for (uint32 nAdapter = 0;; ++nAdapter)
+	{
+		IDXGIAdapter1* pDXGIAdapter = nullptr;
+		HRESULT hr = this->GetDXGIFactory()->EnumAdapters1(nAdapter, &pDXGIAdapter);
+		if (DXGI_ERROR_NOT_FOUND == hr)
+		{
+			hr = S_OK;
+			break;
+		}
+		if (FAILED(hr))
+		{
+			SAFE_DELETE(pDXGIAdapter);
+			return false;
+		}
+
+		HrD3D11Adapter* pAdapter = new HrD3D11Adapter(nAdapter, pDXGIAdapter);
+		pAdapter->EnumerateModeList();
+		this->GetAdapterList()->AddOneAdapter(pAdapter);
+	}
+
+	return true;
 }
 
 void HrD3D11Device::Release()
 {
-	if (m_pD3D11ImmediateContext != nullptr)
-	{
-		m_pD3D11ImmediateContext->Flush();
-	}
-	SAFE_RELEASE(m_pSwapChain);
-	SAFE_RELEASE(m_pRenderTargetView);
-	SAFE_RELEASE(m_pDepthStencil);
-	SAFE_RELEASE(m_pDepthStencilView);
-
+	m_pAdapterList->Release();
+	SAFE_DELETE(m_pAdapterList);
 	SAFE_RELEASE(m_pD3D11ImmediateContext);
 	SAFE_RELEASE(m_pD3D11Device);
 	SAFE_RELEASE(m_pD3D11DXGIFactory);
-
-	for (auto ite : m_vecAdapters)
-	{
-		ite->Release();
-	}
-}
-
-HrD3D11Adapter* Hr::HrD3D11Device::GetCurrentAdapter()
-{
-	if (m_pAdapter == nullptr)
-	{
-		if (m_vecAdapters.size() > 0)
-		{
-			m_pAdapter = m_vecAdapters[0];
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	return m_pAdapter;
 }

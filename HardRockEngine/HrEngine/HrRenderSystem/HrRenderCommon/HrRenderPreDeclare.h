@@ -16,6 +16,11 @@ namespace Hr
 	class HrD3D11RenderWindow;
 	typedef std::shared_ptr<HrD3D11RenderWindow> HrD3D11RenderWindowPtr;
 
+	class HrD3D11Device;
+	typedef std::unique_ptr<HrD3D11Device> HrD3D11DevicePtr;
+	class HrD3D11Utility;
+	typedef std::unique_ptr<HrD3D11Utility> HrD3D11UtilityPtr;
+
 }
 
 #endif

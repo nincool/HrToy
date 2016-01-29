@@ -2,12 +2,14 @@
 #define _HR_D3D11RENDER_H_
 
 #include "HrD3D11RenderPrerequisite.h"
-#include "HrRenderSystem/HrRenderCommon/IRender.h"
+#include "HrCore/Include/Render/IRender.h"
+
+struct ID3D11DeviceContext;
 
 namespace Hr
 {
-	class IDirector;
 	class HrD3D11Device;
+	class IRenderDemo;
 
 	class HrD3D11Render : public IRender
 	{
@@ -20,28 +22,20 @@ namespace Hr
 		virtual void Release() override;
 		virtual bool StartRender() override;
 
-
+		
 	public:
-		//virtual void Render(const HrRenderTechnique* pRenderTechnique, const HrRenderLayout* pRenderLayout) override;
+		virtual void Render(HrRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
 
 	private:
-		void CreateRenderWindow(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc);
-	
+		HR_SYNTHESIZE_READONLY(ID3D11DeviceContext*, m_pD3D11ImmediateContext, D3D11ImmediateContext);
+
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
-		//IRenderDemo* m_pRenderDemo;
+		IRenderDemo* m_pRenderDemo;
 
-	private:
-		HrD3D11RenderWindowPtr m_pShareRenderWindow;
+		HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pShareRenderWindow, RenderWindow);
 
-		//IHRD3D11DeviceContext* GetImmediateContext()
-		//{
-		//	if (m_pImmediateContext == nullptr)
-		//	{
-		//		m_pImmediateContext = HrD3D11Device::GetInstance()->GetImmediateContext();
-		//	}
-		//	return m_pImmediateContext;
-		//}
+
 	};
 }
 

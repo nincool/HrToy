@@ -3,7 +3,7 @@
 #include "DirectXTK/Inc/WICTextureLoader.h"
 #include "DirectXTK/Inc/SpriteBatch.h"
 #include "DirectXFX11/inc/d3dx11effect.h"
-#include "HrMain/Include/Render/HrCamera.h"
+#include "HrCore/Include/Render/HrCamera.h"
 #include "HrMath/Include/HrMath.h"
 
 using namespace Hr;

@@ -2,14 +2,10 @@
 #include "HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
+#include "AppWin32/HrWin32WindowEventUtilities.h"
 
-
-//#include "HrSceneManager.h"
-//#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
-//#include "HrWin32WindowEventUtilities.h"
-//#include "HrSystemSupporter.h"
-//#include "HrLog.h"
-//#include "HrTimer.h"
 
 using namespace Hr;
 
@@ -46,28 +42,28 @@ bool HrDirector::Init()
 {
 	HRLOG(_T("HrDirector Init!"));
 
+	m_pUniqueRenderLoader = MakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
+	m_pUniqueRenderLoader->HrLoadModule();
+	typedef void(*RENDER_INIT_FUNC)(IRenderFactoryPtr& ptr);
+	RENDER_INIT_FUNC func = static_cast<RENDER_INIT_FUNC>(m_pUniqueRenderLoader->GetProcAddress(std::string("HrModuleInitialize")));
+	if (func)
+	{
+		func(m_pShareRenderFactory);
+		if (m_pShareRenderFactory)
+		{
+			m_pShareRender = m_pShareRenderFactory->CreateRender();
+		}
+	}
+	else
+	{
+		HRERROR(_T("RenderInitFunc is null"));
+		return false;
+	}
 
-	//m_pUniqueModuleLoader = MakeUniquePtr<HrModuleLoader>("HrRenderD3D11", "HrModuleInitialize");
-	//m_pUniqueModuleLoader->HrLoadModule();
-	//typedef void(*RenderInitFunc)(IRenderPtr& ptr);
-	//RenderInitFunc func= static_cast<RenderInitFunc>(m_pUniqueModuleLoader->GetProcAddress());
-	//if (func)
-	//{
-	//	func(m_pShareRender);
-	//}
-	//else
-	//{
+	m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc);
 
-	//}
+	this->StartMainLoop();
 
-	//m_pShareSceneManager = make_shared<HrSceneManager>();
-
-	//if (!LoadRenderSystem())
-	//{
-	//	HRERROR(_T("Director Init : LoadRenderSystem Error!"));
-	//	return false;
-	//}
-	
 	return true;
 }
 
@@ -76,10 +72,10 @@ void HrDirector::StartMainLoop()
 	while (!m_bEndMainLoop)
 	{
 #if HR_TARGET_PLATFORM == HR_PLATFORM_WIN32
-		//if (!HrWin32WindowEventUtilities::MessagePump())
-		//{
-		//	break;
-		//}
+		if (!HrWin32WindowEventUtilities::MessagePump())
+		{
+			break;
+		}
 #endif
 		//m_pTimer->Tick();
 		Render();
@@ -93,22 +89,23 @@ void HrDirector::End()
 
 void HrDirector::Release()
 {
-	//m_pShareRenderSystem->Release();
-	//typedef void(*RENDER_END_FUNC)();
-	//if (m_hHandleRender != nullptr)
-	//{
-	//	RENDER_END_FUNC pFuncEnd = (RENDER_END_FUNC)HR_MODULE_GETSYSTEM(m_hHandleRender, HR_MUDULE_END_FUNC);
-	//	if (pFuncEnd != nullptr)
-	//	{
-	//		pFuncEnd();
-	//	}
-	//	m_pShareRenderSystem.reset();
-	//	HR_MODULE_FREE(m_hHandleRender);
-	//}
+	m_pShareRender->Release();
+	m_pShareRender.reset();
+	m_pShareRenderFactory.reset();
+	typedef void(*RENDER_RELEASE_FUNC)();
+	RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pUniqueRenderLoader->GetProcAddress(std::string("HrModuleUnload")));
+	if (releaseFunc)
+	{
+		releaseFunc();
+	}
+	m_pUniqueRenderLoader->HrFreeModule();
+
 }
 
 bool HrDirector::Render()
 {
+	m_pShareRender->StartRender();
+
 	return true;
 }
 

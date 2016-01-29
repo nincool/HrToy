@@ -8,18 +8,17 @@ namespace Hr
 	class HrModuleLoader
 	{
 	public:
-		HrModuleLoader(const std::string& strModule, const std::string& strProName);
+		HrModuleLoader(const std::string& strModule);
 		~HrModuleLoader();
 
 		bool HrLoadModule();
 		void HrFreeModule();
 
-		void* GetProcAddress();
+		void* GetProcAddress(std::string strFuncName);
 	private:
 		void* m_pModuleHandle;
 
 		std::string m_strModule;
-		std::string m_strProcName;
 	};
 }
 

@@ -17,12 +17,11 @@ using namespace Hr;
 
 #endif
 
-HrModuleLoader::HrModuleLoader(const std::string& strModule, const std::string& strProName)
+HrModuleLoader::HrModuleLoader(const std::string& strModule)
 {
 	m_pModuleHandle = nullptr;
 	m_strModule = strModule;
 	m_strModule.append(HR_SUFFIX);
-	m_strProcName = strProName;
 }
 
 HrModuleLoader::~HrModuleLoader()
@@ -52,10 +51,10 @@ void HrModuleLoader::HrFreeModule()
 	}
 }
 
-void* HrModuleLoader::GetProcAddress()
+void* HrModuleLoader::GetProcAddress(std::string strFuncName)
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
-	return reinterpret_cast<void*>(::GetProcAddress(static_cast<HMODULE>(m_pModuleHandle), m_strProcName.c_str()));
+	return reinterpret_cast<void*>(::GetProcAddress(static_cast<HMODULE>(m_pModuleHandle), strFuncName.c_str()));
 #else
 	return nullptr;
 #endif

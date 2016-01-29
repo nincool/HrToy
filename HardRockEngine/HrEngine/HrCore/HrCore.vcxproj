@@ -137,8 +137,22 @@
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
-    <ClInclude Include="Include\Render\HrRenderFactory.h" />
+    <ClInclude Include="Include\Render\HrCamera.h" />
+    <ClInclude Include="Include\Render\HrFrustum.h" />
+    <ClInclude Include="Include\Render\IGraphicsBuffer.h" />
+    <ClInclude Include="Include\Render\IRenderable.h" />
+    <ClInclude Include="Include\Render\ICamera.h" />
+    <ClInclude Include="Include\Render\IRender.h" />
+    <ClInclude Include="Include\Render\HrRenderEffect.h" />
     <ClInclude Include="Include\Render\IRenderFactory.h" />
+    <ClInclude Include="Include\Render\IRenderLayout.h" />
+    <ClInclude Include="Include\Render\HrRenderPass.h" />
+    <ClInclude Include="Include\Render\HrRenderTechnique.h" />
+    <ClInclude Include="Include\Render\IShader.h" />
+    <ClInclude Include="Include\Scene\HrSceneManager.h" />
+    <ClInclude Include="Include\Scene\HrSceneNode.h" />
+    <ClInclude Include="Include\Scene\ISceneManager.h" />
+    <ClInclude Include="Include\Scene\ISceneNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp" />
@@ -150,7 +164,15 @@
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
-    <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
+    <ClCompile Include="Source\Render\HrCamera.cpp" />
+    <ClCompile Include="Source\Render\HrFrustom.cpp" />
+    <ClCompile Include="Source\Render\HrRenderPass.cpp" />
+    <ClCompile Include="Source\Render\IRenderable.cpp" />
+    <ClCompile Include="Source\Render\IRenderLayout.cpp" />
+    <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
+    <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
+    <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
+    <ClCompile Include="Source\Scene\ISceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HrUtilTools\HrUtilTools.vcxproj">

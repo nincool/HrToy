@@ -16,11 +16,10 @@
 #endif // HR_MAIN_EXPORT
 
 #include "../HrCommon/Include/HrPrerequisite.h"
-#include "../HrMain/Include/HrLog.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
-
-
+#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/HrCorePreDeclare.h"
 
 
 #endif

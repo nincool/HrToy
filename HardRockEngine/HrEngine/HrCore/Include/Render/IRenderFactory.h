@@ -12,7 +12,7 @@ namespace Hr
 		virtual ~IRenderFactory(){};
 
 	public:
-		virtual void CreateRender() = 0;
+		virtual IRenderPtr CreateRender() = 0;
 
 	};
 }

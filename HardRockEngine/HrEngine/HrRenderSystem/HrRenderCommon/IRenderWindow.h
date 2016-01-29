@@ -12,6 +12,8 @@ namespace Hr
 
 		//Create the render window
 		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc) = 0;
+		virtual bool CreateSwapChain() = 0;
+		virtual bool CreateD3DView() = 0;
 	};
 }
 

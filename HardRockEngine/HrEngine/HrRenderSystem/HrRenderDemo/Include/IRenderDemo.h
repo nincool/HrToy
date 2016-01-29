@@ -38,7 +38,7 @@ namespace Hr
 			{
 				if (errorBuffer != 0)
 				{
-					char* pMsg = (char*)(errorBuffer->GetBufferPointer());
+					//char* pMsg = (char*)(errorBuffer->GetBufferPointer());
 					HRERROR((LPCWSTR)errorBuffer->GetBufferPointer());
 					errorBuffer->Release();
 				}

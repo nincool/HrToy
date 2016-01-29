@@ -1,6 +1,6 @@
 ﻿#include <windows.h>
 #include <tchar.h>
-#include "HrCommon/Include/HrPlatformConfig.h"
+#include "HrCommon/Include/HrPrerequisite.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 
 //#include "HrMain/Include/HrLog.h"
@@ -43,17 +43,25 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 {
 	SetMyCurrentDirectory();
 
-	typedef void(*AppInitFunc)();
+	typedef void(*APP_INIT_FUNC)();
+	typedef void(*APP_RELEASE_FUNC)();
 
-	Hr::HrModuleLoader moduleLoaderApp("HrCore", "HrModuleInitialize");
+	Hr::HrModuleLoader moduleLoaderApp("HrCore");
 	if (moduleLoaderApp.HrLoadModule())
 	{
-		AppInitFunc runFunc = static_cast<AppInitFunc>(moduleLoaderApp.GetProcAddress());
+		APP_INIT_FUNC runFunc = static_cast<APP_INIT_FUNC>(moduleLoaderApp.GetProcAddress(std::string("HrModuleInitialize")));
 		if (runFunc)
 		{
 			runFunc();
 		}
+
+		APP_RELEASE_FUNC releaseFunc = static_cast<APP_RELEASE_FUNC>(moduleLoaderApp.GetProcAddress(std::string("HrModuleUnload")));
+		if (releaseFunc)
+		{
+			releaseFunc();
+		}
 	}
+
 	moduleLoaderApp.HrFreeModule();
 
 	return 0;

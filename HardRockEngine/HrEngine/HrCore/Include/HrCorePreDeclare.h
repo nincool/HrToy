@@ -16,6 +16,14 @@ namespace Hr
 	class ILog;
 	class HrLog;
 	typedef std::unique_ptr<HrLog> HrLogPtr;
+
+	class IRenderFactory;
+	typedef std::shared_ptr<IRenderFactory> IRenderFactoryPtr;
+	class IRender;
+	typedef std::shared_ptr<IRender> IRenderPtr;
+
+	class HrCamera;
+	typedef std::shared_ptr<HrCamera> HrCameraPtr;
 }
 
 

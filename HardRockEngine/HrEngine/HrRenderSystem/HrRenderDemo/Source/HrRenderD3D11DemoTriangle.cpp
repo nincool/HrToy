@@ -31,7 +31,6 @@ void HrRenderD3D11DemoTriangle::SetD3DDevice(ID3D11Device* pDevice
 	m_pRenderTargetView = pRenderTargetView;
 	m_pDepthStencilView = pDepthStencilView;
 	m_pSwapChain = pSwapChain;
-
 }
 
 bool HrRenderD3D11DemoTriangle::Init()

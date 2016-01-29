@@ -37,11 +37,12 @@ namespace Hr
 	private:
 		static HrDirectorPtr m_s_pUniqueDirector;
 
+		IRenderFactoryPtr m_pShareRenderFactory;
 		IRenderPtr m_pShareRender;
 
 		bool m_bEndMainLoop;
 
-		std::unique_ptr<HrModuleLoader> m_pUniqueModuleLoader;
+		std::unique_ptr<HrModuleLoader> m_pUniqueRenderLoader;
 
 	};
 

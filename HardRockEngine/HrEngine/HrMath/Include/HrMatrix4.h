@@ -106,12 +106,12 @@ namespace Hr
 		
 		inline REAL* operator [] (size_t iRow)
 		{
-			assert(iRow < 4);
+			BOOST_ASSERT(iRow < 4);
 			return m[iRow];
 		}
 		inline const REAL *operator [] (size_t iRow) const
 		{
-			assert(iRow < 4);
+			BOOST_ASSERT(iRow < 4);
 			return m[iRow];
 		}
 

@@ -62,7 +62,7 @@ namespace Hr
 	typedef HrAllocatedObject<SceneObjAllocPolicy> SceneObjAllocatedObject;
 	typedef HrAllocatedObject<ResourceAllocPolicy> ResourceAllocatedObject;
 	typedef HrAllocatedObject<RenderSysAllocPolicy> RenderSysAllocatedObject;
-
+	
 
 #if (HR_DEBUG > 0)
 
