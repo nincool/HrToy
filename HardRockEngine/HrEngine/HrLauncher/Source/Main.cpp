@@ -43,10 +43,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 {
 	SetMyCurrentDirectory();
 
+	//这里应该改为根据配置文件进行读取
 	typedef void(*APP_INIT_FUNC)();
 	typedef void(*APP_RELEASE_FUNC)();
 
-	Hr::HrModuleLoader moduleLoaderApp("HrCore");
+	Hr::HrModuleLoader moduleLoaderApp("HrSampleGeometry");
 	if (moduleLoaderApp.HrLoadModule())
 	{
 		APP_INIT_FUNC runFunc = static_cast<APP_INIT_FUNC>(moduleLoaderApp.GetProcAddress(std::string("HrModuleInitialize")));

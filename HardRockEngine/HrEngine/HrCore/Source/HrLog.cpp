@@ -43,16 +43,16 @@ HrLog::~HrLog()
 #endif
 }
 
-void HrLog::Log(ILog::EnumLogType nLevel, const TCHAR* pszFormat, ...)
+void HrLog::Log(ILog::EnumLogType nLevel, const wchar_t* pszFormat, ...)
 {
-#define HR_MAX_STRING_FORMAT_LENGTH (2560)
+	const int HR_MAX_STRING_FORMAT_LENGTH = 2560;
 
-	HrString rt;
+	std::wstring rt;
 
 	va_list ap;
 	va_start(ap, pszFormat);
 
-	TCHAR szBuffer[HR_MAX_STRING_FORMAT_LENGTH];
+	wchar_t szBuffer[HR_MAX_STRING_FORMAT_LENGTH];
 	memset(szBuffer, 0, HR_MAX_STRING_FORMAT_LENGTH);
 	int nCount = _vstprintf(szBuffer, pszFormat, ap);
 	va_end(ap);
@@ -65,7 +65,7 @@ void HrLog::Log(ILog::EnumLogType nLevel, const TCHAR* pszFormat, ...)
 	LogStringToConsole(nLevel, rt);
 }
 
-void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, HrString& strContent)
+void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::wstring& strContent)
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 	static HANDLE consolehwnd;
@@ -84,14 +84,55 @@ void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, HrString& strContent)
 
 	}
 
-#ifdef UNICODE
 	std::wcout << strContent << std::endl;
-#else
-	std::cout << strContent << std::endl;
-#endif // UNICODE
-
 	
 	SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
 #endif
 }
 
+void HrLog::Log(ILog::EnumLogType nLevel, const char* pFormat, ...)
+{
+	const int HR_MAX_STRING_FORMAT_LENGTH = 2560;
+
+	std::string rt;
+
+	va_list ap;
+	va_start(ap, pFormat);
+
+	char szBuffer[HR_MAX_STRING_FORMAT_LENGTH];
+	memset(szBuffer, 0, HR_MAX_STRING_FORMAT_LENGTH);
+	int nCount = vsprintf(szBuffer, pFormat, ap);
+	va_end(ap);
+	if (nCount == -1 || nCount >= HR_MAX_STRING_FORMAT_LENGTH)
+	{
+		szBuffer[HR_MAX_STRING_FORMAT_LENGTH - 1] = '\0';
+	}
+	rt = szBuffer;
+
+	LogStringToConsole(nLevel, rt);
+}
+
+void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::string& strContent)
+{
+#if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
+	static HANDLE consolehwnd;
+	consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	switch (nLevel)
+	{
+	case ILog::_HALL:
+		break;
+	case ILog::_HWARNING:
+		SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+		break;
+	case ILog::_HERROR:
+		SetConsoleTextAttribute(consolehwnd, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		break;
+
+	}
+
+	std::cout << strContent << std::endl;
+
+	SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
+#endif
+}

@@ -27,6 +27,8 @@ namespace Hr
 		virtual void Release() = 0;
 
 		virtual bool Render() = 0;
+
+		//virtual void RunScene() = 0;
 	};
 }
 

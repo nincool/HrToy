@@ -22,7 +22,7 @@
     <ClInclude Include="Include\HrD3D11Adapter.h" />
     <ClInclude Include="Include\HrD3D11AdapterList.h" />
     <ClInclude Include="Include\HrD3D11Device.h" />
-    <ClInclude Include="Include\HrD3D11GraphicsBuffer.h" />
+    <ClInclude Include="Include\HrD3D11HardwareBuffer.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
     <ClInclude Include="Include\HrD3D11RenderFactory.h" />
     <ClInclude Include="Include\HrD3D11RenderLayout.h" />
@@ -36,7 +36,7 @@
     <ClCompile Include="Source\HrD3D11Adapter.cpp" />
     <ClCompile Include="Source\HrD3D11AdapterList.cpp" />
     <ClCompile Include="Source\HrD3D11Device.cpp" />
-    <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp" />
+    <ClCompile Include="Source\HrD3D11HardwareBuffer.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
     <ClCompile Include="Source\HrD3D11RenderFactory.cpp" />
     <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />

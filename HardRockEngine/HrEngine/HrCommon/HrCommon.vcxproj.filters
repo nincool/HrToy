@@ -36,5 +36,8 @@
     <ClInclude Include="Include\HrPrerequisite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\HrEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
 #ifndef _HR_APPLICATION_WIN32_
 #define _HR_APPLICATION_WIN32_
 
-#include "IApplication.h"
+#include "HrCore/Include/IApplication.h"
 
 namespace Hr
 {
-	class HrApplication : public IApplication
+	class HR_CORE_API HrApplication : public IApplication
 	{
 	public:
 		HrApplication();

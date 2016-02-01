@@ -14,6 +14,7 @@ namespace Hr
 		}
 		virtual ~IGraphicsBuffer(){}
 
+		virtual void CreateHardwareBuffer(const void* pResourceData) = 0;
 	};
 }
 

@@ -35,6 +35,12 @@
     <Filter Include="Source\Scene">
       <UniqueIdentifier>{d9c1fb23-5510-471d-a686-12fbf3d45868}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Asset">
+      <UniqueIdentifier>{ddac4013-6e80-4447-b372-e89cd1b07aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Asset">
+      <UniqueIdentifier>{9fe9127d-ca01-4164-ab7d-fe7874226503}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -130,6 +136,24 @@
     <ClInclude Include="Include\Scene\HrSceneNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrHardwareBuffer.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrAssetLoader.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IAssetLoader.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrGeometryFactory.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderQueue.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderQueue.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -185,6 +209,18 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrSceneNode.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrHardwareBuffer.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrAssetLoader.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderQueue.cpp">
+      <Filter>Include\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

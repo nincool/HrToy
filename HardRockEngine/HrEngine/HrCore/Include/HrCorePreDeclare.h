@@ -24,6 +24,9 @@ namespace Hr
 
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
+
+	class HrGeometryFactory;
+	typedef std::unique_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 }
 
 

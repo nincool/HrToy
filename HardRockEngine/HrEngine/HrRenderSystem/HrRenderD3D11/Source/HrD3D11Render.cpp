@@ -55,7 +55,7 @@ void HrD3D11Render::Release()
 
 bool HrD3D11Render::StartRender()
 {
-	//m_pRenderDemo->Render();
+	m_pRenderDemo->Render();
 	
 
 	return true;

@@ -11,12 +11,12 @@
 #ifndef _HR_IAPPLICATION_H_
 #define _HR_IAPPLICATION_H_
 
-#include "HrCore/Include/HrCorePreDeclare.h"
-//#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class IApplication //: public GeneralAllocatedObject
+	class HR_CORE_API IApplication : public GeneralAllocatedObject
 	{
 	public:
 		IApplication(){};
