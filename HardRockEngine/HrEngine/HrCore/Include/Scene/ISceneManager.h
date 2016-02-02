@@ -10,6 +10,8 @@ namespace Hr
 	{
 	public:
 		virtual ~ISceneManager(){}
+
+		virtual void RunScene(const IScenePtr& pScene) = 0;
 	};
 }
 

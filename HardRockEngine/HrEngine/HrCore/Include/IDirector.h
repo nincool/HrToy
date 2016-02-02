@@ -21,14 +21,17 @@ namespace Hr
 		IDirector(){}
 		virtual ~IDirector(){}
 
+		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init() = 0;
 		virtual void StartMainLoop() = 0;
 		virtual void End() = 0;
 		virtual void Release() = 0;
 
+		/////////////////////////////--- 渲染 ---/////////////////////////////////
 		virtual bool Render() = 0;
 
-		//virtual void RunScene() = 0;
+		/////////////////////////////--- 业务 ---/////////////////////////////////
+		virtual void RunScene(const IScenePtr& pScene ) = 0;
 	};
 }
 

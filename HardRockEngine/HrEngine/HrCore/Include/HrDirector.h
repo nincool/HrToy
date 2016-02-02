@@ -26,22 +26,30 @@ namespace Hr
 		static HrDirector& GetInstance();
 		static void ReleaseInstance();
 
+		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init() override;
 		virtual void StartMainLoop() override;
 		virtual void End() override;
 		virtual void Release() override;
 
+		/////////////////////////////--- 渲染 ---/////////////////////////////////
 		virtual bool Render() override;
-		
+
+		/////////////////////////////--- 业务 ---/////////////////////////////////
+		virtual void RunScene(const IScenePtr& pScene);
 
 	private:
 		static HrDirectorPtr m_s_pUniqueDirector;
-
+		//场景管理器
+		ISceneManagerPtr m_pShareSceneManager;
+		//渲染工厂
 		IRenderFactoryPtr m_pShareRenderFactory;
+		//渲染器
 		IRenderPtr m_pShareRender;
 
 		bool m_bEndMainLoop;
 
+		//渲染模块加载
 		std::unique_ptr<HrModuleLoader> m_pUniqueRenderLoader;
 
 	};

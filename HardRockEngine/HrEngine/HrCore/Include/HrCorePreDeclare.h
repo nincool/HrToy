@@ -27,6 +27,16 @@ namespace Hr
 
 	class HrGeometryFactory;
 	typedef std::unique_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
+
+	class IScene;
+	typedef std::shared_ptr<IScene> IScenePtr;
+	class HrScene;
+	typedef std::shared_ptr<HrScene> HrScenePtr;
+	class ISceneManager;
+	typedef std::shared_ptr<ISceneManager> ISceneManagerPtr;
+	class HrSceneManager;
+	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
+
 }
 
 

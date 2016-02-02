@@ -19,13 +19,11 @@ namespace Hr
 
 		virtual void ApplicationWillEnterForeground() override;
 
-		virtual void Run() override;
-
 		virtual bool Destroy() override;
 
 	private:
-		void OnEnter();
 		void LoadAssets();
+		void CreateScene();
 	private:
 		static HrGeometryAppPtr m_s_pUniqueGeometryApp;
 	};

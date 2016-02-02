@@ -8,7 +8,15 @@ namespace Hr
 	class HrSceneManager : public ISceneManager
 	{
 	public:
+		HrSceneManager();
+		~HrSceneManager();
 
+
+		virtual void RunScene(const IScenePtr& pScene);
+
+
+	private:
+		IScenePtr m_pShareRunningScene;
 	};
 }
 

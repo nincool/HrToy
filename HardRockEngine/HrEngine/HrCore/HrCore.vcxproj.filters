@@ -154,6 +154,15 @@
     <ClInclude Include="Include\Render\HrRenderQueue.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Scene\IScene.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrScene.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IAsset.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -221,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderQueue.cpp">
       <Filter>Include\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrScene.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -53,16 +53,12 @@ void HrApplication::ApplicationWillEnterForeground()
 void HrApplication::Run()
 {
 	HRLOG(_T("Application_win32 run"));
-	HrDirector::GetInstance().Init();
-	//if (!HrDirector::GetInstance()->Init())
-	//{
-	//	HRERROR(_T("HrApplication Run : HrDirector Init Error!"));
-	//	HrDirector::GetInstance()->Release();
-	//	return;
-	//}
-	//HrDirector::GetInstance()->StartMainLoop();
-	//HrDirector::GetInstance()->Release();
+	if (!HrDirector::GetInstance().Init())
+	{
+		HRERROR(_T("Application Run Error!"));
+	}
 
+	ApplicationDidFinishLaunching();
 }
 
 bool HrApplication::Destroy()

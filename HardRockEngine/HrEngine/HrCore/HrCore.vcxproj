@@ -126,6 +126,7 @@
     <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\Asset\HrAssetLoader.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
+    <ClInclude Include="Include\Asset\IAsset.h" />
     <ClInclude Include="Include\Asset\IAssetLoader.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
@@ -155,8 +156,10 @@
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
     <ClInclude Include="Include\Render\IRenderQueue.h" />
     <ClInclude Include="Include\Render\IShader.h" />
+    <ClInclude Include="Include\Scene\HrScene.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
+    <ClInclude Include="Include\Scene\IScene.h" />
     <ClInclude Include="Include\Scene\ISceneManager.h" />
     <ClInclude Include="Include\Scene\ISceneNode.h" />
   </ItemGroup>
@@ -180,6 +183,7 @@
     <ClCompile Include="Source\Render\IRenderable.cpp" />
     <ClCompile Include="Source\Render\IRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
+    <ClCompile Include="Source\Scene\HrScene.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
     <ClCompile Include="Source\Scene\ISceneManager.cpp" />

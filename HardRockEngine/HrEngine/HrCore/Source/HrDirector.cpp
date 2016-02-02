@@ -1,10 +1,11 @@
 ﻿#include "HrDirector.h"
-#include "HrLog.h"
+#include "Scene/HrSceneManager.h"
+#include "AppWin32/HrWin32WindowEventUtilities.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
-#include "AppWin32/HrWin32WindowEventUtilities.h"
+#include "HrLog.h"
 
 
 using namespace Hr;
@@ -32,6 +33,7 @@ void HrDirector::ReleaseInstance()
 HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
+	m_pShareSceneManager = std::dynamic_pointer_cast<ISceneManager>(MakeSharedPtr<HrSceneManager>());
 }
 
 HrDirector::~HrDirector()
@@ -99,7 +101,6 @@ void HrDirector::Release()
 		releaseFunc();
 	}
 	m_pUniqueRenderLoader->HrFreeModule();
-
 }
 
 bool HrDirector::Render()
@@ -109,4 +110,8 @@ bool HrDirector::Render()
 	return true;
 }
 
+void HrDirector::RunScene(const IScenePtr& pScene)
+{
+	m_pShareSceneManager->RunScene(pScene);
+}
 

@@ -14,8 +14,6 @@ HrGeometryApp& Hr::HrGeometryApp::GetInstance()
 	return *m_s_pUniqueGeometryApp;
 }
 
-
-
 HrGeometryApp::HrGeometryApp()
 {
 
@@ -28,6 +26,10 @@ HrGeometryApp::~HrGeometryApp()
 
 bool HrGeometryApp::ApplicationDidFinishLaunching()
 {
+	LoadAssets();
+
+
+
 	return true;
 }
 
@@ -41,19 +43,6 @@ void HrGeometryApp::ApplicationWillEnterForeground()
 
 }
 
-void HrGeometryApp::Run()
-{
-	HRLOG(_T("HrGeometryApp_win32 run"));
-	if (!HrDirector::GetInstance().Init())
-	{
-		HRERROR(_T("HrGeometryApp Run Error!"));
-	}
-
-	ApplicationDidFinishLaunching();
-
-	OnEnter();
-}
-
 bool HrGeometryApp::Destroy()
 {
 	bool bRet = HrApplication::Destroy();
@@ -61,12 +50,12 @@ bool HrGeometryApp::Destroy()
 	return bRet;
 }
 
-void HrGeometryApp::OnEnter()
-{
-	LoadAssets();
-}
-
 void HrGeometryApp::LoadAssets()
 {
 
+}
+
+void HrGeometryApp::CreateScene()
+{
+	
 }
