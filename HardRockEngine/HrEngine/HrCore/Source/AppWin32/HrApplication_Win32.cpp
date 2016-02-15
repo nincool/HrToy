@@ -57,8 +57,14 @@ void HrApplication::Run()
 	{
 		HRERROR(_T("Application Run Error!"));
 	}
+	else
+	{
+		ApplicationDidFinishLaunching();
 
-	ApplicationDidFinishLaunching();
+		HrDirector::GetInstance().StartMainLoop();
+	}
+
+	
 }
 
 bool HrApplication::Destroy()

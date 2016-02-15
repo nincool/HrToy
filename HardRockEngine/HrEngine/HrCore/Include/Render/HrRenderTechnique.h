@@ -1,23 +1,19 @@
 #ifndef _HR_RENDERTECHNIQUE_H_
 #define _HR_RENDERTECHNIQUE_H_
 
-#include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatedObject.h"
+#include "HrCore/Include/Render/IRenderTechnique.h"
 
 namespace Hr
 {
-	class HrRenderPass;
 
-	class HR_CORE_API HrRenderTechnique
+	class HR_CORE_API HrRenderTechnique : public IRenderTechnique
 	{
 	public:
 		HrRenderTechnique();
 		virtual ~HrRenderTechnique(){}
 
-		HrRenderPass* GetRenderPass();
+		virtual HrRenderPass* GetRenderPass() override;
 
-	private:
-		HrRenderPass* m_pRenderPass;
 	};
 
 

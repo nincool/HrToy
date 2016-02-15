@@ -12,6 +12,9 @@ namespace Hr
 		~HrGeometryScene();
 
 		virtual void OnEnter() override;
+
+	private:
+		void CreateSceneElements();
 	};
 }
 

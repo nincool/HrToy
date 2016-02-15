@@ -7,7 +7,7 @@
 namespace Hr
 {
 	class IDirector;
-	class HrRenderTechnique;
+	class IRenderTechnique;
 	class IRenderLayout;
 
 	class IRender : public RenderSysAllocatedObject
@@ -37,7 +37,7 @@ namespace Hr
 		//—ßœ∞≤‚ ‘‰÷»æ”√
 		virtual bool StartRender() = 0;
 	public:
-		virtual void Render(HrRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) = 0;
+		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) = 0;
 
 	};
 }

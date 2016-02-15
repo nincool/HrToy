@@ -64,8 +64,6 @@ bool HrDirector::Init()
 
 	m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc);
 
-	this->StartMainLoop();
-
 	return true;
 }
 

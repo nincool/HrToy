@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrSceneNode 
+	class HrSceneNode : public ISceneNode
 	{
 	public:
 	};

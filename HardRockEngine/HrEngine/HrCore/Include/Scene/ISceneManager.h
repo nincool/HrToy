@@ -11,10 +11,16 @@ namespace Hr
 	public:
 		virtual ~ISceneManager(){}
 
+		virtual const ISceneNodePtr& GetRootNode() = 0;
+
 		virtual void RunScene(const IScenePtr& pScene) = 0;
+
 	};
 }
 
 #endif
+
+
+
 
 

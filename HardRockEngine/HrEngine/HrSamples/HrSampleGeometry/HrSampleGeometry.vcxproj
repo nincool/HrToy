@@ -126,10 +126,12 @@
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrGeometryApp.h" />
+    <ClInclude Include="Include\HrGeometryScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrGeometryApp.cpp" />
+    <ClCompile Include="Source\HrGeometryScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

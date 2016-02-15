@@ -19,12 +19,18 @@
     <ClInclude Include="Include\HrGeometryApp.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrGeometryScene.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrGeometryApp.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrGeometryScene.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

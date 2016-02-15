@@ -100,9 +100,6 @@
     <ClInclude Include="Include\Render\ICamera.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\IRenderLayout.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\IGraphicsBuffer.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -163,6 +160,21 @@
     <ClInclude Include="Include\Asset\IAsset.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrGeometryBox.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderLayout.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderLayout.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderTechnique.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderable.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -210,9 +222,6 @@
     <ClCompile Include="Source\Render\HrRenderPass.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\ISceneManager.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\HrSceneManager.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -233,6 +242,15 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrScene.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGeometryBox.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderLayout.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderable.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

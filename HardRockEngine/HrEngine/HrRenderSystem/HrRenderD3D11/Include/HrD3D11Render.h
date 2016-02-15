@@ -24,7 +24,7 @@ namespace Hr
 
 		
 	public:
-		virtual void Render(HrRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
+		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
 
 	private:
 		HR_SYNTHESIZE_READONLY(ID3D11DeviceContext*, m_pD3D11ImmediateContext, D3D11ImmediateContext);

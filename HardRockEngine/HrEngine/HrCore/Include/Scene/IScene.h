@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class IScene : public SceneObjAllocatedObject
+	class HR_CORE_API IScene : public SceneObjAllocatedObject
 	{
 	public:
 		virtual ~IScene(){};

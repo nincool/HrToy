@@ -1,4 +1,5 @@
 #include "HrGeometryApp.h"
+#include "HrGeometryScene.h"
 
 using namespace Hr;
 
@@ -27,8 +28,7 @@ HrGeometryApp::~HrGeometryApp()
 bool HrGeometryApp::ApplicationDidFinishLaunching()
 {
 	LoadAssets();
-
-
+	CreateScene();
 
 	return true;
 }
@@ -57,5 +57,6 @@ void HrGeometryApp::LoadAssets()
 
 void HrGeometryApp::CreateScene()
 {
-	
+	std::shared_ptr<HrGeometryScene> pGeometryScene = MakeSharedPtr<HrGeometryScene>();
+	HrDirector::GetInstance().RunScene(pGeometryScene);
 }

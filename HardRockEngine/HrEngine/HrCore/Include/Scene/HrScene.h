@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrScene : public IScene
+	class HR_CORE_API HrScene : public IScene
 	{
 	public:
 		HrScene();

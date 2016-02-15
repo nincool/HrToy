@@ -57,7 +57,7 @@ namespace Hr
 
 	//注意多继承会导致回收错误 (delete parent)
 	typedef HrAllocatedObject<GeneralAllocPolicy> GeneralAllocatedObject;
-	typedef HrAllocatedObject<GeometryAllocPolicy> GeometryAllocatedObject;
+	typedef HrAllocatedObject<GeometryAllocPolicy> RenderableAllocatedObject;
 	typedef HrAllocatedObject<AnimationAllocPolicy> AnimationAllocatedObject;
 	typedef HrAllocatedObject<SceneObjAllocPolicy> SceneObjAllocatedObject;
 	typedef HrAllocatedObject<ResourceAllocPolicy> ResourceAllocatedObject;

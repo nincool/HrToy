@@ -61,7 +61,7 @@ bool HrD3D11Render::StartRender()
 	return true;
 }
 
-void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout)
+void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout)
 {
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed

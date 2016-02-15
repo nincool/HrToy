@@ -5,7 +5,7 @@ using namespace Hr;
 
 HrScene::HrScene()
 {
-	m_pShareSceneManager = HrDirector::GetInstance().
+	//m_pShareSceneManager = HrDirector::GetInstance().
 }
 
 HrScene::~HrScene()
