@@ -5,11 +5,18 @@
 
 namespace Hr
 {
-	class HrRenderQueue : IRenderQueue
+	class HrRenderQueue : public IRenderQueue
 	{
 	public:
+		~HrRenderQueue();
 
+		virtual void PrepareRenderQueue() override;
+		virtual void AddRenderable(ISceneNode* pSceneNode) override;
+
+	protected:
+		std::unordered_map<IRenderable*, ISceneNode*> m_mapRenderQueue;
 	};
 }
 
 #endif
+

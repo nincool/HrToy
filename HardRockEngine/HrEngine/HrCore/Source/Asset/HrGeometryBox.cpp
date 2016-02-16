@@ -2,7 +2,7 @@
 
 using namespace Hr;
 
-HrGeometryBox::HrGeometryBox()
+HrGeometryBox::HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 {
 
 }

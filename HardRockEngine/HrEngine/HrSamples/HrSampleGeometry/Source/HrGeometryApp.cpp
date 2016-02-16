@@ -60,3 +60,4 @@ void HrGeometryApp::CreateScene()
 	std::shared_ptr<HrGeometryScene> pGeometryScene = MakeSharedPtr<HrGeometryScene>();
 	HrDirector::GetInstance().RunScene(pGeometryScene);
 }
+

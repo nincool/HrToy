@@ -13,6 +13,11 @@ namespace Hr
 
 		virtual void OnEnter() = 0;
 		virtual void OnEnterDidFinish() = 0;
+
+		virtual void AddChild(ISceneNode* pSceneNode) = 0;
+
+		virtual void Update() = 0;
+		virtual void FillRenderQueue(IRenderQueuePtr& pRenderQueue) = 0;
 	};
 }
 

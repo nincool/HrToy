@@ -10,6 +10,9 @@ namespace Hr
 	{
 	public:
 		virtual ~IRenderQueue(){}
+
+		virtual void PrepareRenderQueue() = 0;
+		virtual void AddRenderable(ISceneNode* pSceneNode) = 0;
 	};
 }
 

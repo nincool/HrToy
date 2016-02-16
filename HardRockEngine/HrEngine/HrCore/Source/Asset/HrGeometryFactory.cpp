@@ -1,5 +1,7 @@
 #include "Asset/HrGeometryFactory.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "Asset/HrGeometryBox.h"
+#include "Scene/HrSceneNode.h"
 
 using namespace Hr;
 
@@ -23,4 +25,12 @@ HrGeometryFactory& HrGeometryFactory::GetInstance()
 	}
 
 	return *m_s_pUniqueFactory;
+}
+
+HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
+{
+	HrGeometryBox* pBox = HR_NEW HrGeometryBox(nLength, nWidth, nHeight);
+	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pBox);
+
+	return pSceneNode;
 }

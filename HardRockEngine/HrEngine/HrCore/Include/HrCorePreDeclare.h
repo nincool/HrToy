@@ -38,9 +38,16 @@ namespace Hr
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
 	class ISceneNode;
 	typedef std::shared_ptr<ISceneNode> ISceneNodePtr;
+	class HrSceneNode;
+	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
 
+	class IRenderable;
+	class IRenderQueue;
+	typedef std::shared_ptr<IRenderQueue> IRenderQueuePtr;
 	class HrRenderLayout;
 	class HrRenderTechnique;
+
+	class HrGeometryBox;
 
 }
 

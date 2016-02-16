@@ -11,12 +11,12 @@ namespace Hr
 		HrSceneManager();
 		~HrSceneManager();
 
-		virtual const ISceneNodePtr& GetRootNode() override;
 		virtual void RunScene(const IScenePtr& pScene) override;
 
+		virtual void UpdateScene() override;
 	private:
-		ISceneNodePtr m_pShareRootNode;
 		IScenePtr m_pShareRunningScene;
+		IRenderQueuePtr m_pShareRenderQueue;
 	};
 }
 

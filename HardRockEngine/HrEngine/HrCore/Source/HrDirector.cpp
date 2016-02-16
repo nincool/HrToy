@@ -33,7 +33,7 @@ void HrDirector::ReleaseInstance()
 HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
-	m_pShareSceneManager = std::dynamic_pointer_cast<ISceneManager>(MakeSharedPtr<HrSceneManager>());
+	m_pShareSceneManager = MakeSharedPtr<HrSceneManager>();
 }
 
 HrDirector::~HrDirector()
@@ -77,9 +77,15 @@ void HrDirector::StartMainLoop()
 			break;
 		}
 #endif
-		//m_pTimer->Tick();
-		Render();
+		Update();
 	}
+}
+
+void HrDirector::Update()
+{
+	Render();
+
+	//m_pShareSceneManager
 }
 
 void HrDirector::End()

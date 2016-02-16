@@ -8,6 +8,20 @@ namespace Hr
 	class HrSceneNode : public ISceneNode
 	{
 	public:
+		HrSceneNode();
+		HrSceneNode(IRenderable* pRenderable);
+		~HrSceneNode();
+
+		virtual ISceneNode* GetParent() override;
+		virtual IRenderable* GetRenderable() override;
+
+		virtual void AddChild(ISceneNode* pSceneNode) override;
+		virtual void FindVisibleRenderable(IRenderQueuePtr& pRenderQueue) override;
+	protected:
+		IRenderable* m_pRenderable;
+
+		ISceneNode* m_pParent;
+		std::vector<ISceneNode*> m_vecChildNode;
 	};
 }
 

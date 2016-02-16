@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrGeometryFactory : public GeneralAllocatedObject
+	class HR_CORE_API HrGeometryFactory : public GeneralAllocatedObject
 	{
 	public:
 		HrGeometryFactory();
@@ -14,6 +14,7 @@ namespace Hr
 
 		static HrGeometryFactory& GetInstance();
 
+		HrSceneNode* CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
 	private:
 		static HrGeometryFactoryPtr m_s_pUniqueFactory;
 	};

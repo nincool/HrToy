@@ -14,8 +14,13 @@ namespace Hr
 		virtual void OnEnter() override;
 		virtual void OnEnterDidFinish() override;
 
+		virtual void AddChild(ISceneNode* pSceneNode) override;
+
+		virtual void Update() override;
+		virtual void FillRenderQueue(IRenderQueuePtr& pRenderQueue) override;
 	private:
-		HrSceneManagerPtr m_pShareSceneManager;
+		ISceneManagerPtr m_pShareSceneManager;
+		ISceneNodePtr m_pShareRootNode;
 	};
 }
 

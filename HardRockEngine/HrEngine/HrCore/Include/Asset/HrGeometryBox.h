@@ -8,7 +8,7 @@ namespace Hr
 	class HrGeometryBox : public IRenderable
 	{
 	public:
-		HrGeometryBox();
+		HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
 		~HrGeometryBox();
 
 

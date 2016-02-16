@@ -1,5 +1,5 @@
-#ifndef _HR_RENDERABLE_H_
-#define _HR_RENDERABLE_H_
+#ifndef _I_RENDERABLE_H_
+#define _I_RENDERABLE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"

@@ -38,6 +38,8 @@ namespace Hr
 		/////////////////////////////--- 业务 ---/////////////////////////////////
 		virtual void RunScene(const IScenePtr& pScene);
 
+	protected:
+		void Update();
 	private:
 		static HrDirectorPtr m_s_pUniqueDirector;
 		//场景管理器

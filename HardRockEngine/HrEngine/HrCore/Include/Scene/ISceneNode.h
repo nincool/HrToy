@@ -6,10 +6,20 @@
 
 namespace Hr
 {
+	class IRenderable;
+
 	class ISceneNode : public SceneObjAllocatedObject
 	{
 	public:
 		virtual ~ISceneNode(){}
+
+		virtual ISceneNode* GetParent() = 0;
+		virtual IRenderable* GetRenderable() = 0;
+
+		virtual void AddChild(ISceneNode* pSceneNode) = 0;
+		virtual void FindVisibleRenderable(IRenderQueuePtr& pRenderQueue) = 0;
+	protected:
+
 	};
 }
 
