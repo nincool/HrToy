@@ -12,8 +12,10 @@ namespace Hr
 		virtual ~ISceneManager(){}
 
 		virtual void RunScene(const IScenePtr& pScene) = 0;
+		virtual void StopScene() = 0;
 
 		virtual void UpdateScene() = 0;
+		virtual void Destroy() = 0;
 	};
 }
 

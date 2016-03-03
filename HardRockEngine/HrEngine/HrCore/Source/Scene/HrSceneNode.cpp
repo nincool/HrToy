@@ -8,6 +8,7 @@ using namespace Hr;
 
 HrSceneNode::HrSceneNode() 
 {
+	m_pRenderable = nullptr;
 	m_pParent = nullptr;
 }
 
@@ -18,7 +19,7 @@ HrSceneNode::HrSceneNode(IRenderable* pRenderable)
 
 HrSceneNode::~HrSceneNode()
 {
-
+	SAFE_DELETE(m_pRenderable);
 }
 
 ISceneNode* HrSceneNode::GetParent()
@@ -43,6 +44,22 @@ void HrSceneNode::AddChild(ISceneNode* pSceneNode)
 
 void HrSceneNode::FindVisibleRenderable(IRenderQueuePtr& pRenderQueue)
 {
+	if (m_pRenderable != nullptr)
+	{
+		pRenderQueue->AddRenderable(this);
+	}
+	for (auto& item : m_vecChildNode)
+	{
+		item->FindVisibleRenderable(pRenderQueue);
+	}
+}
 
+void HrSceneNode::RemoveChildren()
+{
+	for (auto& item : m_vecChildNode)
+	{
+		HR_DELETE item;
+	}
+	m_vecChildNode.clear();
 }
 

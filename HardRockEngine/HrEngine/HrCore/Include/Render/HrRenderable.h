@@ -8,7 +8,11 @@ namespace Hr
 	class HrRenderable : public IRenderable
 	{
 	public:
+		HrRenderable();
+		~HrRenderable();
 
+		
+	
 	};
 }
 

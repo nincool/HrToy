@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrRenderD3D11DemoGeometry.h" />
+    <ClInclude Include="Include\HrRenderD3D11DemoHLSL.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoHrMath.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoLight.h" />
     <ClInclude Include="Include\HrRenderD3D11DemoPipleline.h" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoGeometry.cpp" />
+    <ClCompile Include="Source\HrRenderD3D11DemoHLSL.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoHrMath.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoLight.cpp" />
     <ClCompile Include="Source\HrRenderD3D11DemoPipleline.cpp" />
@@ -176,27 +178,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicDraw.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\Bin_Win\HrShader;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicColor.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\Bin_Win\HrShader;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Bin_Win\HrShader\BasicLight.fx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\Bin_Win\HrShader;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Bin_Win\HrShader\SolidGreenColor.fx">
-      <FileType>Document</FileType>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\Bin_Win\HrShader\TextureMap.fx">
-      <FileType>Document</FileType>
-    </CustomBuild>
+    <Xml Include="..\..\..\Bin_Win\Media\HrShader\BasicEffect.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

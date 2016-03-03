@@ -24,7 +24,17 @@ void HrScene::OnEnterDidFinish()
 {
 }
 
-void HrScene::AddChild(ISceneNode* pSceneNode)
+void HrScene::OnExit()
+{
+	
+}
+
+void HrScene::ClearSceneNode()
+{
+	m_pShareRootNode->RemoveChildren();
+}
+
+void HrScene::AddSceneNode(ISceneNode* pSceneNode)
 {
 	m_pShareRootNode->AddChild(pSceneNode);
 }
@@ -39,4 +49,5 @@ void HrScene::FillRenderQueue(IRenderQueuePtr& pRenderQueue)
 	//²éÕÒ¿ÉÊÓ
 	m_pShareRootNode->FindVisibleRenderable(pRenderQueue);
 }
+
 

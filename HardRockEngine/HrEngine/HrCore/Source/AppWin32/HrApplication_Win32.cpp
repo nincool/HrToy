@@ -3,7 +3,6 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrDirector.h"
 
-
 using namespace Hr;
 
 HrApplicationPtr HrApplication::m_s_pUniqueApplication;

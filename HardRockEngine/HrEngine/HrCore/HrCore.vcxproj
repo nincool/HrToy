@@ -124,11 +124,20 @@
   <ItemGroup>
     <ClInclude Include="Include\AppWin32\HrApplication_Win32.h" />
     <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h" />
-    <ClInclude Include="Include\Asset\HrAssetLoader.h" />
+    <ClInclude Include="Include\Asset\HrRenderEffect.h" />
+    <ClInclude Include="Include\Asset\HrRenderEffectManager.h" />
+    <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrGeometryBox.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
-    <ClInclude Include="Include\Asset\IAsset.h" />
-    <ClInclude Include="Include\Asset\IAssetLoader.h" />
+    <ClInclude Include="Include\Asset\HrGeometryTriangle.h" />
+    <ClInclude Include="Include\Asset\HrResourceManager.h" />
+    <ClInclude Include="Include\Asset\HrResourceManagerFactory.h" />
+    <ClInclude Include="Include\Asset\HrShaderCompiler.h" />
+    <ClInclude Include="Include\Asset\HrStreamData.h" />
+    <ClInclude Include="Include\Asset\IResource.h" />
+    <ClInclude Include="Include\Asset\IResourceLoader.h" />
+    <ClInclude Include="Include\Asset\IResourceManager.h" />
+    <ClInclude Include="Include\Asset\IShaderCompiler.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrDirector.h" />
@@ -147,11 +156,12 @@
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
+    <ClInclude Include="Include\Render\HrShader.h" />
+    <ClInclude Include="Include\Render\HrVertext.h" />
     <ClInclude Include="Include\Render\IGraphicsBuffer.h" />
     <ClInclude Include="Include\Render\IRenderable.h" />
     <ClInclude Include="Include\Render\ICamera.h" />
     <ClInclude Include="Include\Render\IRender.h" />
-    <ClInclude Include="Include\Render\HrRenderEffect.h" />
     <ClInclude Include="Include\Render\IRenderFactory.h" />
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderPass.h" />
@@ -168,11 +178,18 @@
     <ClInclude Include="Include\Scene\ISceneNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp" />
     <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp" />
     <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp" />
-    <ClCompile Include="Source\Asset\HrAssetLoader.cpp" />
+    <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
+    <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
+    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp" />
+    <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
+    <ClCompile Include="Source\Asset\HrResourceManagerFactory.cpp" />
+    <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
+    <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
@@ -183,10 +200,12 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp" />
+    <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderPass.cpp" />
     <ClCompile Include="Source\Render\HrRenderQueue.cpp" />
+    <ClCompile Include="Source\Render\HrVertext.cpp" />
     <ClCompile Include="Source\Render\IRenderable.cpp" />
     <ClCompile Include="Source\Render\IRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />

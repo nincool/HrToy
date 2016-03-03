@@ -14,8 +14,9 @@ HrD3D11Render::HrD3D11Render()
 {
 	m_pD3D11ImmediateContext = nullptr;
 
-	typedef HrRenderD3D11DemoPipleline DEMOCLASS;
+	typedef HrRenderD3D11DemoTriangle DEMOCLASS;
 
+	m_pRenderDemo = nullptr;
 	m_pRenderDemo = HR_NEW DEMOCLASS();
 
 }
@@ -75,9 +76,9 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &nStride, &nOffset);
 	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	pRenderTechnique->GetRenderPass()->BindPass(this);
+	//pRenderTechnique->GetRenderPass()->BindPass(this);
 	m_pD3D11ImmediateContext->Draw(3, 0);
-	pRenderTechnique->GetRenderPass()->UnBindPass(this);
+	//pRenderTechnique->GetRenderPass()->UnBindPass(this);
 
 	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
 }

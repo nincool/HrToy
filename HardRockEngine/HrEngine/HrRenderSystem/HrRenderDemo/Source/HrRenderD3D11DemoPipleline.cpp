@@ -60,7 +60,7 @@ bool HrRenderD3D11DemoPipleline::Init()
 bool HrRenderD3D11DemoPipleline::LoadContent()
 {
 	ID3DBlob* pShaderBuffer(nullptr);
-	bool bCompile = CompileD3DShader(L"HrShader\\BasicDraw.fx", nullptr, "fx_5_0", &pShaderBuffer);
+	bool bCompile = CompileD3DShader(L"Media\\HrShader\\BasicDraw.fx", nullptr, "fx_5_0", &pShaderBuffer);
 	//从编译好的effect中创建effect
 	HRESULT rt = D3DX11CreateEffectFromMemory(pShaderBuffer->GetBufferPointer(), pShaderBuffer->GetBufferSize(), 0, m_pD3D11Device, &m_pEffect);
 	if (FAILED(rt))

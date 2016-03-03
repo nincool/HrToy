@@ -12,13 +12,22 @@ namespace Hr
 	class HR_CORE_API HrRenderPass : public RenderSysAllocatedObject
 	{
 	public:
-		HrRenderPass();
+		HrRenderPass(std::string strPassName);
 		~HrRenderPass();
+
+
+		void SetVSEntryPoint(std::string strVSEntryPoint);
+		void SetPSEntryPoint(std::string stePSEntryPoint);
+		
+		void StreamIn(HrStreamData& streamData);
 
 		void BindPass(IRender* pRender);
 		void UnBindPass(IRender* pRender);
+
 	private:
-		IShader* m_pShader;
+		std::string m_strPassName;
+		IShader* m_pVertexShader;
+
 	};
 }
 

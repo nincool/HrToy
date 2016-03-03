@@ -106,9 +106,6 @@
     <ClInclude Include="Include\Render\IRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrRenderEffect.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\IRenderFactory.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -136,12 +133,6 @@
     <ClInclude Include="Include\Render\HrHardwareBuffer.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrAssetLoader.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\IAssetLoader.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrGeometryFactory.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
@@ -157,13 +148,16 @@
     <ClInclude Include="Include\Scene\HrScene.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\IAsset.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrGeometryBox.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderLayout.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderable.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrVertext.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\IRenderLayout.h">
@@ -172,8 +166,44 @@
     <ClInclude Include="Include\Render\IRenderTechnique.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrRenderable.h">
+    <ClInclude Include="Include\Asset\HrGeometryTriangle.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IResource.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IResourceLoader.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResourceLoader.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IResourceManager.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrRenderEffectManager.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrStreamData.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResourceManager.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrRenderEffect.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResourceManagerFactory.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrShader.h">
       <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrShaderCompiler.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\IShaderCompiler.h">
+      <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,14 +261,8 @@
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrAssetLoader.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
       <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\HrRenderQueue.cpp">
-      <Filter>Include\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\HrScene.cpp">
       <Filter>Source\Scene</Filter>
@@ -251,6 +275,39 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderable.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderQueue.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrVertext.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResourceManager.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResourceLoader.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrStreamData.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrRenderEffect.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResourceManagerFactory.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrShader.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
+      <Filter>Source\Asset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

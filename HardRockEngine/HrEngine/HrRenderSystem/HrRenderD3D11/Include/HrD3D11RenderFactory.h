@@ -14,6 +14,10 @@ namespace Hr
 
 	public:
 		virtual IRenderPtr CreateRender() override;
+		virtual IShaderCompilerPtr CreateShaderCompiler() override;
+
+		virtual IGraphicsBuffer* CreateHardwareBufferWithInstance(IGraphicsBuffer* pInstance) override;
+		virtual IRenderLayout* CreateRenderLayout() override;
 	};
 }
 

@@ -3,7 +3,7 @@
 
 extern "C" HR_EXPORT void HrModuleInitialize(Hr::IRenderFactoryPtr& ptr)
 {
-	ptr = std::dynamic_pointer_cast<Hr::IRenderFactory>(Hr::MakeSharedPtr<Hr::HrD3D11RenderFactory>());
+	ptr = std::static_pointer_cast<Hr::IRenderFactory>(Hr::MakeSharedPtr<Hr::HrD3D11RenderFactory>());
 }
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)

@@ -6,22 +6,14 @@
 
 namespace Hr
 {
-	class HrRenderPass;
-
 	class HR_CORE_API IRenderTechnique : public RenderSysAllocatedObject
 	{
 	public:
-		IRenderTechnique()
-		{
-			m_pRenderPass = nullptr;
-		}
 		virtual ~IRenderTechnique(){}
 
-		virtual HrRenderPass* GetRenderPass() = 0;
-
-	protected:
-		HrRenderPass* m_pRenderPass;
+		virtual HrRenderPass* GetRenderPass(uint32 nIndex) = 0;
 	};
 }
 
 #endif
+

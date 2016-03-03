@@ -41,12 +41,31 @@ namespace Hr
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
 
+	class HrVertext;
+	class IGraphicsBuffer;
+	class HrHardwareBuffer;
 	class IRenderable;
 	class IRenderQueue;
+	class HrRenderPass;
 	typedef std::shared_ptr<IRenderQueue> IRenderQueuePtr;
+	class IRenderLayout;
 	class HrRenderLayout;
+	class IRenderTechnique;
 	class HrRenderTechnique;
+	class HrRenderEffect;
 
+	class HrResourceManagerFactory;
+	typedef std::unique_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;
+	class IResource;
+	class IResourceManager;
+	typedef std::shared_ptr<IResourceManager> IResourceManagerPtr;
+	class HrRenderEffectManager;
+	class HrStreamData;
+	class HrResourceLoader;
+	class IShaderCompiler;
+	typedef std::shared_ptr<IShaderCompiler> IShaderCompilerPtr;
+
+	
 	class HrGeometryBox;
 
 }

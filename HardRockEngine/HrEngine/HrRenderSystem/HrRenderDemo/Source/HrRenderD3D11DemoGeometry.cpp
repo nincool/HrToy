@@ -138,7 +138,7 @@ void HrRenderD3D11DemoGeometry::Release()
 
 bool HrRenderD3D11DemoGeometry::BuildHLSL()
 {
-	ifstream fxFile("HrShader/BasicDraw.fxo", ios::binary);
+	ifstream fxFile("Media/HrShader/BasicDraw.fxo", ios::binary);
 	if (!fxFile)
 	{
 		return false;

@@ -30,6 +30,7 @@ HrLog::HrLog()
 	freopen("CONOUT$", "w+t", stdout);
 	freopen("CONIN$", "r+t", stdin);
 
+	std::wcout.imbue(std::locale("chs"));
 	//::system("chcp 65001");
 #endif
 }

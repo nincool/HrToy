@@ -18,6 +18,7 @@ namespace Hr
 
 		virtual void AddChild(ISceneNode* pSceneNode) = 0;
 		virtual void FindVisibleRenderable(IRenderQueuePtr& pRenderQueue) = 0;
+		virtual void RemoveChildren() = 0;
 	protected:
 
 	};

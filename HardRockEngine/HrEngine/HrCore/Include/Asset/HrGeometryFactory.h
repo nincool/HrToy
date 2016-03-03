@@ -13,6 +13,9 @@ namespace Hr
 		~HrGeometryFactory();
 
 		static HrGeometryFactory& GetInstance();
+		
+		//·ÀÖ¹log´òÓ¡ÄÚ´æÐ¹Â¶
+		static void ReleaseInstance();
 
 		HrSceneNode* CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
 	private:

@@ -10,6 +10,24 @@ HrD3D11HardwareBuffer::HrD3D11HardwareBuffer(ID3D11Device* pD3D11Device, ID3D11D
 	m_pD3D11Buffer = nullptr;
 }
 
+HrD3D11HardwareBuffer::HrD3D11HardwareBuffer(HrD3D11HardwareBuffer& hardwareBuffer)
+{
+	m_nByteWidth = hardwareBuffer.m_nByteWidth;
+	m_pD3D11Device = hardwareBuffer.m_pD3D11Device;
+	m_pImmediateContext = hardwareBuffer.m_pImmediateContext;
+
+	m_pD3D11Buffer = nullptr;
+}
+
+HrD3D11HardwareBuffer::HrD3D11HardwareBuffer(HrD3D11HardwareBuffer&& hardwareBuffer)
+{
+	m_nByteWidth = hardwareBuffer.m_nByteWidth;
+	m_pD3D11Device = hardwareBuffer.m_pD3D11Device;
+	m_pImmediateContext = hardwareBuffer.m_pImmediateContext;
+
+	m_pD3D11Buffer = nullptr;
+}
+
 HrD3D11HardwareBuffer::~HrD3D11HardwareBuffer()
 {
 
@@ -46,7 +64,6 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 	bindFlags = D3D11_BIND_VERTEX_BUFFER;
 	miscFlags = 0;
 }
-
 
 
 

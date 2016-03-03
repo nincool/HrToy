@@ -14,7 +14,6 @@ HrGeometryFactory::HrGeometryFactory()
 
 HrGeometryFactory::~HrGeometryFactory()
 {
-
 }
 
 HrGeometryFactory& HrGeometryFactory::GetInstance()
@@ -27,6 +26,11 @@ HrGeometryFactory& HrGeometryFactory::GetInstance()
 	return *m_s_pUniqueFactory;
 }
 
+void HrGeometryFactory::ReleaseInstance()
+{
+	m_s_pUniqueFactory.reset();
+}
+
 HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 {
 	HrGeometryBox* pBox = HR_NEW HrGeometryBox(nLength, nWidth, nHeight);
@@ -34,3 +38,4 @@ HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 
 
 	return pSceneNode;
 }
+

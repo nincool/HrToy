@@ -51,7 +51,7 @@ bool HrRenderD3D11DemoTexture::LoadContent()
 {
 	ID3DBlob* pVSBuffer = nullptr;
 
-	bool bCompileResult = CompileD3DShader(L"HrShader\\TextureMap.fx", "VS_Main", "vs_5_0", &pVSBuffer);
+	bool bCompileResult = CompileD3DShader(L"Media\\HrShader\\TextureMap.fx", "VS_Main", "vs_5_0", &pVSBuffer);
 	if (!bCompileResult)
 	{
 		HRERROR(_T("Compile VS Shader Error!"));

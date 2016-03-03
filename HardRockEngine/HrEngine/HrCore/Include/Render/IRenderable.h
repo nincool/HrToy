@@ -16,17 +16,17 @@ namespace Hr
 		}
 		virtual ~IRenderable(){}
 
-		HrRenderLayout* GetRenderLayout()
+		IRenderLayout* GetRenderLayout()
 		{
 			return m_pRenderLayout;
 		}
-		HrRenderTechnique* GetRenderTechnique()
+		IRenderTechnique* GetRenderTechnique()
 		{
 			return m_pRenderTechnique;
 		}
-	private:
-		HrRenderLayout* m_pRenderLayout;
-		HrRenderTechnique* m_pRenderTechnique;
+	protected:
+		IRenderLayout* m_pRenderLayout;
+		IRenderTechnique* m_pRenderTechnique;
 		
 	};
 }

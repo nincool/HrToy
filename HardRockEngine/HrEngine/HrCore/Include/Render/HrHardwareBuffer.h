@@ -17,6 +17,7 @@ namespace Hr
 			HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE,
 		};
 	public:
+		HrHardwareBuffer();
 		HrHardwareBuffer(uint32 nByteWidth);
 		virtual void CreateHardwareBuffer(const void* pResourceData) override{}
 

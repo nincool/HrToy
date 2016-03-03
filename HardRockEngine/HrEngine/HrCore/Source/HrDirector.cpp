@@ -5,6 +5,9 @@
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
+#include "Asset/HrGeometryFactory.h"
+#include "Asset/HrResourceManagerFactory.h"
+#include "Asset/HrRenderEffectManager.h"
 #include "HrLog.h"
 
 
@@ -62,7 +65,12 @@ bool HrDirector::Init()
 		return false;
 	}
 
-	m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc);
+	HrResourceManagerFactory::GetInstance().CreateResourceManager();
+
+	if (!m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -85,12 +93,14 @@ void HrDirector::Update()
 {
 	Render();
 
-	//m_pShareSceneManager
+	m_pShareSceneManager->UpdateScene();
 }
 
 void HrDirector::End()
 {
 	m_bEndMainLoop = true;
+
+	m_pShareSceneManager->Destroy();
 }
 
 void HrDirector::Release()
@@ -105,6 +115,8 @@ void HrDirector::Release()
 		releaseFunc();
 	}
 	m_pUniqueRenderLoader->HrFreeModule();
+
+	HrGeometryFactory::ReleaseInstance();
 }
 
 bool HrDirector::Render()

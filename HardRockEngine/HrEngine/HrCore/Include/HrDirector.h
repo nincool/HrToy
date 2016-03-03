@@ -26,6 +26,14 @@ namespace Hr
 		static HrDirector& GetInstance();
 		static void ReleaseInstance();
 
+		IRenderPtr& GetRenderer()
+		{
+			return m_pShareRender;
+		}
+		IRenderFactoryPtr& GetRenderFactory()
+		{
+			return m_pShareRenderFactory;
+		}
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init() override;
 		virtual void StartMainLoop() override;

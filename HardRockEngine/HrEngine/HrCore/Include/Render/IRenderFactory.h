@@ -13,7 +13,11 @@ namespace Hr
 
 	public:
 		virtual IRenderPtr CreateRender() = 0;
+		virtual IShaderCompilerPtr CreateShaderCompiler() = 0;
 
+		virtual IGraphicsBuffer* CreateHardwareBufferWithInstance(IGraphicsBuffer* pInstance) = 0;
+		virtual IRenderLayout* CreateRenderLayout() = 0;
+		
 	};
 }
 

@@ -21,11 +21,12 @@ namespace Hr
 //Staging                     yes                       yes                       yes                        yes
 	public:
 		HrD3D11HardwareBuffer(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pImmediateContext, UINT nByteWidth);
+		HrD3D11HardwareBuffer(HrD3D11HardwareBuffer& hardwareBuffer);
+		HrD3D11HardwareBuffer(HrD3D11HardwareBuffer&& hardwardBuffer);
 		virtual ~HrD3D11HardwareBuffer();
 
 
 		virtual void CreateHardwareBuffer(const void* pResourceData) override;
-
 	private:
 		void GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccessFlags, UINT& bindFlags, UINT& miscFlags);
 	private:

@@ -13,6 +13,8 @@ namespace Hr
 
 		virtual void PrepareRenderQueue() = 0;
 		virtual void AddRenderable(ISceneNode* pSceneNode) = 0;
+
+		virtual std::unordered_map<IRenderable*, ISceneNode*>& GetRenderables() = 0;
 	};
 }
 
