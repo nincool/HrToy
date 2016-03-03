@@ -15,9 +15,8 @@ namespace Hr
 		HrRenderPass(std::string strPassName);
 		~HrRenderPass();
 
-
 		void SetVSEntryPoint(std::string strVSEntryPoint);
-		void SetPSEntryPoint(std::string stePSEntryPoint);
+		void SetPSEntryPoint(std::string strPSEntryPoint);
 		
 		void StreamIn(HrStreamData& streamData);
 
@@ -27,7 +26,7 @@ namespace Hr
 	private:
 		std::string m_strPassName;
 		IShader* m_pVertexShader;
-
+		IShader* m_pPixelShader;
 	};
 }
 

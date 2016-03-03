@@ -16,12 +16,21 @@ void HrStreamData::SetReadDataType(_READ_DATA_TYPE_ readDataType)
 	m_readDataType = readDataType;
 }
 
-void* HrStreamData::ResizeBuffer(uint64 nLength)
+char* HrStreamData::ResizeBuffer(uint64 nLength)
 {
 	m_vecStreamData.clear();
-	m_vecStreamData.resize(nLength + 1);
+	m_vecStreamData.resize(nLength);
 	
-	return &m_vecStreamData[0];
+	return (char*)&m_vecStreamData[0];
 }
 
+char* HrStreamData::GetBufferPoint()
+{
+	return (char*)&m_vecStreamData[0];
+}
+
+uint64 HrStreamData::GetBufferSize()
+{
+	return m_vecStreamData.size();
+}
 

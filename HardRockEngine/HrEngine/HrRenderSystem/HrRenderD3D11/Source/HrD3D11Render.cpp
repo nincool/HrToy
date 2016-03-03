@@ -17,7 +17,7 @@ HrD3D11Render::HrD3D11Render()
 	typedef HrRenderD3D11DemoTriangle DEMOCLASS;
 
 	m_pRenderDemo = nullptr;
-	m_pRenderDemo = HR_NEW DEMOCLASS();
+	//m_pRenderDemo = HR_NEW DEMOCLASS();
 
 }
 
@@ -34,16 +34,19 @@ bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfn
 	m_pShareRenderWindow = MakeSharedPtr<HrD3D11RenderWindow>();
 	m_pShareRenderWindow->CreateRenderWindow(nWidth, nHeight, lpfnProc);
 
-
-	m_pRenderDemo->SetD3DDevice(HrD3D11Device::GetInstance().GetDevice()
-		, HrD3D11Device::GetInstance().GetImmediateContext()
-		, m_pShareRenderWindow->GetRenderTargetView()
-		, m_pShareRenderWindow->GetDepthStencilView()
-		, m_pShareRenderWindow->GetSwapChain());
-	if (!m_pRenderDemo->Init())
+	if (m_pRenderDemo)
 	{
-		return false;
+		m_pRenderDemo->SetD3DDevice(HrD3D11Device::GetInstance().GetDevice()
+			, HrD3D11Device::GetInstance().GetImmediateContext()
+			, m_pShareRenderWindow->GetRenderTargetView()
+			, m_pShareRenderWindow->GetDepthStencilView()
+			, m_pShareRenderWindow->GetSwapChain());
+		if (!m_pRenderDemo->Init())
+		{
+			return false;
+		}
 	}
+
 
 	return true;
 }

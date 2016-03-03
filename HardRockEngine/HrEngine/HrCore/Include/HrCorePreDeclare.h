@@ -53,6 +53,8 @@ namespace Hr
 	class IRenderTechnique;
 	class HrRenderTechnique;
 	class HrRenderEffect;
+	class IShader;
+
 
 	class HrResourceManagerFactory;
 	typedef std::unique_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;

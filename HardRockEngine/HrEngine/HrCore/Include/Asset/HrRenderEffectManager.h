@@ -14,8 +14,14 @@ namespace Hr
 		virtual void InitResourceManager() override;
 
 		virtual IResource* LoadResource(std::string strName, std::string strFilePath) override;
+
+	
 	private:
 		HrRenderEffect* CreateEffect(std::string strName, std::string strFilePath);
+
+
+	private:
+		IShaderCompilerPtr m_pShareShaderCompiler;
 	};
 }
 

@@ -32,8 +32,6 @@ namespace Hr
 		*/
 		virtual void Release() = 0;
 
-
-
 		//—ßœ∞≤‚ ‘‰÷»æ”√
 		virtual bool StartRender() = 0;
 	public:

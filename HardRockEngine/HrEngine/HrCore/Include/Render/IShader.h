@@ -6,11 +6,17 @@
 
 namespace Hr
 {
-	class IShader : public RenderSysAllocatedObject
+	class HR_CORE_API IShader : public RenderSysAllocatedObject
 	{
 	public:
+		enum _SHADER_TYPE_
+		{
+			ST_VERTEX_SHADER,
+			ST_PIXEL_SHADER,
+		};
 		virtual ~IShader(){};
 		
+		virtual void SetShaderType(_SHADER_TYPE_ shaderType) = 0;
 		//入口函数
 		virtual void SetEntryPoint(std::string strEntryPoint) = 0;
 
@@ -18,6 +24,8 @@ namespace Hr
 		virtual void Bind(IRender* pRender) = 0;
 		virtual void UnBind(IRender* pRender) = 0;
 
+		//传入shader代码进行编译
+		virtual void StreamIn(HrStreamData& streamData) = 0;
 
 	};
 }

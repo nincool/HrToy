@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrStreamData : public ResourceAllocPolicy
+	class HR_CORE_API HrStreamData : public ResourceAllocatedObject
 	{
 	public:
 		HrStreamData();
@@ -20,7 +20,9 @@ namespace Hr
 
 		void SetReadDataType(_READ_DATA_TYPE_ readDataType);
 		//开辟对应空间
-		void* ResizeBuffer(uint64 nLength);
+		char* ResizeBuffer(uint64 nLength);
+		char* GetBufferPoint();
+		uint64 GetBufferSize();
 	private:
 		_READ_DATA_TYPE_ m_readDataType;
 		std::vector<uint8> m_vecStreamData;

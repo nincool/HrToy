@@ -10,4 +10,7 @@ HrShaderCompiler::~HrShaderCompiler()
 {
 }
 
+void Hr::HrShaderCompiler::CompileShaderFromCode()
+{
+}
 

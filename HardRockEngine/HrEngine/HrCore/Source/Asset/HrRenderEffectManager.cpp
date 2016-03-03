@@ -1,5 +1,7 @@
 #include "Asset/HrRenderEffectManager.h"
 #include "Asset/HrRenderEffect.h"
+#include "Render/IRenderFactory.h"
+#include "HrDirector.h"
 #include "HrLog.h"
 #include <boost/cast.hpp>
 
@@ -7,7 +9,7 @@ using namespace Hr;
 
 HrRenderEffectManager::HrRenderEffectManager()
 {
-
+	m_pShareShaderCompiler = HrDirector::GetInstance().GetRenderFactory()->CreateShaderCompiler();
 }
 
 HrRenderEffectManager::~HrRenderEffectManager()

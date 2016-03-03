@@ -1,6 +1,9 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrStreamData.h"
 #include "Asset/HrResourceLoader.h"
+#include "Asset/HrResourceManagerFactory.h"
+#include "Asset/HrShaderCompiler.h"
+#include "Asset/HrRenderEffectManager.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderPass.h"
 #include <boost/property_tree/ptree.hpp>
@@ -34,7 +37,10 @@ void HrRenderEffect::Load()
 			m_strEffectFile = rootEffectValue.second.get_value<std::string>();
 
 			//¼ÓÔØShaderÎÄ¼þ
-			HrResourceLoader::LoadFromFile(m_strEffectFile, streamData);
+			if (!HrResourceLoader::LoadFromFile(m_strEffectFile, streamData))
+			{
+				return;
+			}
 		}
 		else if (rootEffectValue.first == "technique")
 		{

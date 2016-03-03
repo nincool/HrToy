@@ -11,7 +11,7 @@ namespace Hr
 		HrShaderCompiler();
 		~HrShaderCompiler();
 
-
+		virtual void CompileShaderFromCode() override;
 	};
 }
 

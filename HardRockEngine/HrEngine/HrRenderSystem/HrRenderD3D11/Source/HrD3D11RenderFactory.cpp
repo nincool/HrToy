@@ -4,6 +4,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -42,5 +43,12 @@ IRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()
 	IRenderLayout* pRenderLayout = HR_NEW HrD3D11RenderLayout();
 
 	return pRenderLayout;
+}
+
+IShader* HrD3D11RenderFactory::CreateShader()
+{
+	IShader* pD3D11Shader = HR_NEW HrD3D11Shader();
+
+	return pD3D11Shader;
 }
 

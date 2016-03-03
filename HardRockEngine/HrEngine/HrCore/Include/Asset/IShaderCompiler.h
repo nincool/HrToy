@@ -10,6 +10,8 @@ namespace Hr
 	{
 	public:
 		virtual ~IShaderCompiler(){}
+
+		virtual void CompileShaderFromCode() = 0;
 	};
 }
 

@@ -74,7 +74,7 @@ bool HrRenderD3D11DemoTriangle::LoadContent()
 {
 	ID3DBlob* vsBuffer = 0;
 
-	bool compileResult = CompileD3DShader(L"Media\\HrShader\\SolidGreenColor.fx", nullptr, "vs_4_0", &vsBuffer);
+	bool compileResult = CompileD3DShader(L"Media\\HrShader\\SolidGreenColor.fx", "VS", "vs_4_0", &vsBuffer);
 	if (compileResult == false)
 	{
 		return false;

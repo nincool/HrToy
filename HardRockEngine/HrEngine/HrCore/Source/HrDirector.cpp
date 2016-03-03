@@ -64,13 +64,12 @@ bool HrDirector::Init()
 		HRERROR(_T("RenderInitFunc is null"));
 		return false;
 	}
-
-	HrResourceManagerFactory::GetInstance().CreateResourceManager();
-
 	if (!m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc))
 	{
 		return false;
 	}
+
+	HrResourceManagerFactory::GetInstance().CreateResourceManager();
 
 	return true;
 }

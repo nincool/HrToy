@@ -17,6 +17,7 @@ namespace Hr
 
 		virtual IGraphicsBuffer* CreateHardwareBufferWithInstance(IGraphicsBuffer* pInstance) = 0;
 		virtual IRenderLayout* CreateRenderLayout() = 0;
+		virtual IShader* CreateShader() = 0;
 		
 	};
 }

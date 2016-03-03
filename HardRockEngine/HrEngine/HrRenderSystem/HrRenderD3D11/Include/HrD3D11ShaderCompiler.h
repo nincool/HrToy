@@ -11,6 +11,8 @@ namespace Hr
 	public:
 		HrD3D11ShaderCompiler();
 		~HrD3D11ShaderCompiler();
+
+		virtual void CompileShaderFromCode() override;
 	};
 }
 

@@ -18,6 +18,9 @@ namespace Hr
 
 		virtual IGraphicsBuffer* CreateHardwareBufferWithInstance(IGraphicsBuffer* pInstance) override;
 		virtual IRenderLayout* CreateRenderLayout() override;
+		virtual IShader* CreateShader() override;
+
+
 	};
 }
 

@@ -5,25 +5,23 @@
 
 namespace Hr
 {
-	class HrShader : public IShader
+	class HR_CORE_API HrShader : public IShader
 	{
 	public:
-		enum _SHADER_TYPE_
-		{
-			ST_VERTEX_SHADER,
-			ST_PIXEL_SHADER,
-		};
-
-		HrShader(_SHADER_TYPE_ shaderType);
+		HrShader();
 		~HrShader();
 
+		virtual void SetShaderType(_SHADER_TYPE_ shaderType) override;
 		//Èë¿Úº¯Êý
 		virtual void SetEntryPoint(std::string strEntryPoint) override;
 
 		virtual void Bind(IRender* pRender) override;
 		virtual void UnBind(IRender* pRender) override;
+
+		virtual void StreamIn(HrStreamData& streamData) override;
 	protected:
-		std::string strEntryPoint;
+		_SHADER_TYPE_ m_shaderType;
+		std::string m_strEntryPoint;
 	};
 }
 

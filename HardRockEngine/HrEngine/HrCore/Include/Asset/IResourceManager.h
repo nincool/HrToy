@@ -12,8 +12,9 @@ namespace Hr
 		virtual ~IResourceManager(){}
 
 		virtual void InitResourceManager() = 0;
-
 		virtual IResource* LoadResource(std::string strName, std::string strFilePath) = 0;
+
+		virtual IShaderCompiler*  GetShareShaderCompiler() = 0;
 	};
 }
 

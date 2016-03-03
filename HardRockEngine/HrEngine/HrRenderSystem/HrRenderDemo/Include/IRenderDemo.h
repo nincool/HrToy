@@ -2,7 +2,7 @@
 #define _I_RENDERDEMO_H_
 
 #include "HrRenderDemoPrerequisites.h"
-#include "HrMain/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include <D3Dcompiler.h>
 
 namespace Hr

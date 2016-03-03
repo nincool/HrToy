@@ -2,12 +2,12 @@
 #define _HR_D3D11SHADER_H_
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
-#include "HrCore/Include/Render/IShader.h"
+#include "HrCore/Include/Render/HrShader.h"
 #include "HrD3D11Device.h"
 
 namespace Hr
 {
-	class HrD3D11Shader : public IShader
+	class HrD3D11Shader : public HrShader
 	{
 	public:
 		HrD3D11Shader();
@@ -16,18 +16,27 @@ namespace Hr
 		virtual void Bind(IRender* pRender) override;
 		virtual void UnBind(IRender* pRender) override;
 
+		virtual void StreamIn(HrStreamData& streamData) override;
+
 		ID3D11VertexShader* GetVSShader()
 		{
-			return m_pVSShader;
+			return m_pVertexShader;
 		}
 		ID3D11PixelShader* GetPSShader()
 		{
-			return m_pPSShader;
+			return m_pPixelShader;
 		}
 
 	private:
-		ID3D11VertexShader* m_pVSShader;
-		ID3D11PixelShader* m_pPSShader;
+		bool CompileShader(HrStreamData& streamData);
+
+		void CreateVertexShader();
+		void CreatePixelShader();
+	private:
+		HrStreamData* m_pShaderBuffer;
+
+		ID3D11VertexShader* m_pVertexShader;
+		ID3D11PixelShader* m_pPixelShader;
 	};
 }
 

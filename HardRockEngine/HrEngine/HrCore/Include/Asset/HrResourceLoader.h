@@ -8,7 +8,7 @@ namespace Hr
 	class HrResourceLoader : public IResourceLoader
 	{
 	public:
-		static void LoadFromFile(std::string strFilePath, HrStreamData& data);
+		static bool LoadFromFile(std::string strFilePath, HrStreamData& data);
 	};
 }
 
