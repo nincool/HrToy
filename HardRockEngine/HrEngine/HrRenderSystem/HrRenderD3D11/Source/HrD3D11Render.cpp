@@ -69,7 +69,24 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 {
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
-	
+	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
+	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pShareRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
+	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
+	unsigned int stride = pD3D11RenderLayout->GetVertextSize();
+	unsigned int offset = 0;
+
+	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
+	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
+	m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
+	m_pD3D11ImmediateContext->Draw(3, 0);
+
+	m_pSwapChain->Present(0, 0);
+
 	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout();
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);

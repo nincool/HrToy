@@ -11,6 +11,7 @@ namespace Hr
 	public:
 		virtual ~IRenderTechnique(){}
 
+		virtual size_t GetHashName() = 0;
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex) = 0;
 	};
 }

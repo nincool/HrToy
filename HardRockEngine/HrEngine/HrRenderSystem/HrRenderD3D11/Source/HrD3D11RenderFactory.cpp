@@ -5,6 +5,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
+#include "HrCore/Include/Render/HrVertext.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -30,12 +31,14 @@ IShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
 	return static_pointer_cast<IShaderCompiler>(MakeSharedPtr<HrD3D11ShaderCompiler>());
 }
 
-IGraphicsBuffer* HrD3D11RenderFactory::CreateHardwareBufferWithInstance(IGraphicsBuffer* pInstance)
+HrVertext* HrD3D11RenderFactory::CreateVertext()
 {
-	HrD3D11HardwareBuffer* pD3D11HardwareBufferInstance = boost::polymorphic_cast<HrD3D11HardwareBuffer*>(pInstance);
-	IGraphicsBuffer* pGraphicsBuffer = HR_NEW HrD3D11HardwareBuffer(*pD3D11HardwareBufferInstance);
+	return HR_NEW HrVertext();
+}
 
-	return pGraphicsBuffer;
+IGraphicsBuffer* HrD3D11RenderFactory::CreatehardwareBuffer()
+{
+	return HR_NEW HrD3D11HardwareBuffer(HrD3D11Device::GetInstance().GetDevice(), HrD3D11Device::GetInstance().GetImmediateContext());
 }
 
 IRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()

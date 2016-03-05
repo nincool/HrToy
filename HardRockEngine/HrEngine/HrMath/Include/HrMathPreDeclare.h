@@ -19,6 +19,9 @@ namespace Hr
 	template <typename T>
 	class Matrix4_T;
 	typedef Hr::Matrix4_T<float> Matrix4;
+
+
+	typedef Vector3 float3;
 }
 
 #endif

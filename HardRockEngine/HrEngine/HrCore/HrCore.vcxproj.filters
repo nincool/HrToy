@@ -205,6 +205,9 @@
     <ClInclude Include="Include\Asset\IShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrPixelFormat.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">

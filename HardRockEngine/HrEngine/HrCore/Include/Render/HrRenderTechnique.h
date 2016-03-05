@@ -11,10 +11,12 @@ namespace Hr
 		HrRenderTechnique(std::string strTechniqueName);
 		virtual ~HrRenderTechnique(){}
 
+		virtual size_t GetHashName() override;
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex) override;
 
 		HrRenderPass* CreatePass(std::string strPassName);
 	protected:
+		size_t m_nHashName;
 		std::string m_strTechniqueName;
 		std::vector<HrRenderPass*> m_vecPass;
 	};

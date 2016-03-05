@@ -11,6 +11,8 @@ namespace Hr
 	public:
 		virtual ~IResource(){}
 
+		virtual size_t HashName() = 0;
+
 		virtual void Load() = 0;
 		virtual void Unload() = 0;
 

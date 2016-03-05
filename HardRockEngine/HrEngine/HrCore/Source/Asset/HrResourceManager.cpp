@@ -21,7 +21,7 @@ IResource* HrResourceManager::LoadResource(std::string strName, std::string strF
 	return nullptr;
 }
 
-IShaderCompiler*  Hr::HrResourceManager::GetShareShaderCompiler()
+IResource* HrResourceManager::GetResource(std::string strName)
 {
 	return nullptr;
 }

@@ -20,13 +20,14 @@ namespace Hr
 //
 //Staging                     yes                       yes                       yes                        yes
 	public:
-		HrD3D11HardwareBuffer(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pImmediateContext, UINT nByteWidth);
+		HrD3D11HardwareBuffer(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pImmediateContext);
 		HrD3D11HardwareBuffer(HrD3D11HardwareBuffer& hardwareBuffer);
 		HrD3D11HardwareBuffer(HrD3D11HardwareBuffer&& hardwardBuffer);
 		virtual ~HrD3D11HardwareBuffer();
 
+		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
 
-		virtual void CreateHardwareBuffer(const void* pResourceData) override;
+		virtual void CreateHardwareBuffer(const void* pResourceData);
 	private:
 		void GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccessFlags, UINT& bindFlags, UINT& miscFlags);
 	private:

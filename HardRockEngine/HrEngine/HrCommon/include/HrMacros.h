@@ -62,6 +62,8 @@ public: virtual void Set##funName(const varType& var){ varName = var; }
 #define HRERROR(format,...)   
 #endif
 
+#define HR_ARRAY_SIZE(arr) (sizeof(arr)/sizeof((arr)[0]))
+
 #define HRASSERT(a, content, ...)  if (!a) Hr::HrLog::GetInstance().Log(Hr::ILog::_HERROR, content,  ##__VA_ARGS__); BOOST_ASSERT(a);
 
 #endif

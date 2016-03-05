@@ -9,12 +9,21 @@ namespace Hr
 	class IGraphicsBuffer : public RenderSysAllocatedObject
 	{
 	public:
+		/// Enums describing buffer usage; not mutually exclusive
+		enum EnumHardwareBufferUsage
+		{
+			HBU_GPUREAD_GPUWRITE,
+			HBU_GPUREAD_CPUWRITE,
+			HBU_GPUREAD_IMMUTABLE,
+			HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE,
+		};
+	public:
 		IGraphicsBuffer()
 		{
 		}
 		virtual ~IGraphicsBuffer(){}
 
-		virtual void CreateHardwareBuffer(const void* pResourceData) = 0;
+		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
 	};
 }
 

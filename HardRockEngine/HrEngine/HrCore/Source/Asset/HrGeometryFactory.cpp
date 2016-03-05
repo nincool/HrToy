@@ -1,6 +1,7 @@
 #include "Asset/HrGeometryFactory.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "Asset/HrGeometryBox.h"
+#include "Asset/HrGeometryTriangle.h"
 #include "Scene/HrSceneNode.h"
 
 using namespace Hr;
@@ -29,6 +30,14 @@ HrGeometryFactory& HrGeometryFactory::GetInstance()
 void HrGeometryFactory::ReleaseInstance()
 {
 	m_s_pUniqueFactory.reset();
+}
+
+HrSceneNode* HrGeometryFactory::Create2DTriangle()
+{
+	HrGeometryTriangle* pTriangle = HR_NEW HrGeometryTriangle();
+	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pTriangle);
+
+	return pSceneNode;
 }
 
 HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight)

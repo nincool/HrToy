@@ -8,8 +8,8 @@ using namespace Hr;
 
 HrRenderLayout::HrRenderLayout()
 {
-	m_pVertextStruct = nullptr;
-	m_pHardwareBuffer = nullptr;
+	m_pVertextStruct = HrDirector::GetInstance().GetRenderFactory()->CreateVertext();
+	m_pHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
 }
@@ -20,19 +20,23 @@ HrRenderLayout::~HrRenderLayout()
 	SAFE_DELETE(m_pHardwareBuffer);
 }
 
-void HrRenderLayout::BindVertextBuffer(IGraphicsBuffer * pGraphicsBuffer, HrVertext* pVertext)
+void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
 {
-	SAFE_DELETE(m_pHardwareBuffer);
-	m_pHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreateHardwareBufferWithInstance(pGraphicsBuffer);
-	
-	if (!m_pVertextStruct)
-	{
-		m_pVertextStruct = HR_NEW HrVertext();
-	}
-	m_pVertextStruct->CopyFrom(pVertext);
+	m_topologyType = topologyType;
+}
+
+void HrRenderLayout::BindVertextBuffer(char* pBuffer
+	, uint32 nBufferSize
+	, IGraphicsBuffer::EnumHardwareBufferUsage usage
+	, HrVertextElement* pVertexElementArr
+	, uint32 nVertexElementLength)
+{
+	m_pHardwareBuffer->BindVertexStream(pBuffer, nBufferSize, usage);
+	m_pVertextStruct->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
 uint32 HrRenderLayout::GetVertextSize()
 {
-	return 0;
+	return m_pVertextStruct->;
 }
+

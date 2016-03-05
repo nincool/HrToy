@@ -154,6 +154,7 @@
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
+    <ClInclude Include="Include\Render\HrPixelFormat.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrShader.h" />

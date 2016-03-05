@@ -8,7 +8,7 @@ namespace Hr
 {
 	class HrResourceManagerFactory : public RenderSysAllocatedObject
 	{
-		enum _RES_FACTORY_TYPE_
+		enum EnumResFactoryType
 		{
 			RFT_EFFECTMANAGER,
 		};
@@ -25,7 +25,7 @@ namespace Hr
 		HrRenderEffectManager* GetEffectManager();
 
 		template <typename T>
-		T* GetResourceManager(_RES_FACTORY_TYPE_ managerType)
+		T* GetResourceManager(EnumResFactoryType managerType)
 		{
 			auto item = m_mapResManager.find(managerType);
 			if (item != m_mapResManager.end())
@@ -39,7 +39,7 @@ namespace Hr
 	private:
 		static HrResourceManagerFactoryPtr m_s_pUniqueResManagerFactory;
 
-		std::unordered_map<_RES_FACTORY_TYPE_, IResourceManager*> m_mapResManager;
+		std::unordered_map<EnumResFactoryType, IResourceManager*> m_mapResManager;
 	};
 }
 

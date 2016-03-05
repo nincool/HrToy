@@ -1,12 +1,18 @@
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
+#include <boost/functional/hash.hpp>
 
 using namespace Hr;
 
 HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName)
 {
 	m_strTechniqueName = strTechniqueName;
-	
+	m_nHashName = boost::hash_range(m_strTechniqueName.begin(), m_strTechniqueName.end());
+}
+
+size_t Hr::HrRenderTechnique::GetHashName()
+{
+	return m_nHashName;
 }
 
 HrRenderPass* HrRenderTechnique::GetRenderPass(uint32 nIndex)

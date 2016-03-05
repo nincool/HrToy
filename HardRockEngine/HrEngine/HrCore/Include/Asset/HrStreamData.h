@@ -12,19 +12,19 @@ namespace Hr
 		HrStreamData();
 		~HrStreamData();
 
-		enum _READ_DATA_TYPE_
+		enum EnumReadDataType
 		{
 			RDT_TXT,
 			RDT_BINARY,
 		};
 
-		void SetReadDataType(_READ_DATA_TYPE_ readDataType);
+		void SetReadDataType(EnumReadDataType readDataType);
 		//开辟对应空间
 		char* ResizeBuffer(uint64 nLength);
 		char* GetBufferPoint();
 		uint64 GetBufferSize();
 	private:
-		_READ_DATA_TYPE_ m_readDataType;
+		EnumReadDataType m_readDataType;
 		std::vector<uint8> m_vecStreamData;
 	};
 }

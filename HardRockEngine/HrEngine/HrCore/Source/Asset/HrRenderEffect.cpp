@@ -8,17 +8,24 @@
 #include "Render/HrRenderPass.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+#include <boost/functional/hash.hpp>
 
 using namespace Hr;
 
 HrRenderEffect::HrRenderEffect(std::string strEffectName, std::string strFilePath)
 	:m_strEffectName(strEffectName), m_strFilePath(strFilePath)
 {
+	m_nHashName = boost::hash_range(m_strEffectName.begin(), m_strEffectName.end());
 }
 
 HrRenderEffect::~HrRenderEffect()
 {
 
+}
+
+size_t HrRenderEffect::HashName()
+{
+	return m_nHashName;
 }
 
 void HrRenderEffect::Load()
@@ -45,9 +52,10 @@ void HrRenderEffect::Load()
 		else if (rootEffectValue.first == "technique")
 		{
 			std::string strTechniqueName = rootEffectValue.second.get<std::string>("<xmlattr>.name");
-		
+			
 			//´´½¨Technique
 			HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(strTechniqueName);
+			m_vecRenderTechnique.push_back(pRenderTechnique);
 
 			for (ptValue& nodeTechniqueValue : rootEffectValue.second)
 			{
@@ -89,4 +97,17 @@ void HrRenderEffect::Unload()
 
 }
 
+HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
+{
+	size_t const nHashName = boost::hash_range(strTechniqueName.begin(), strTechniqueName.end());
+	for (const auto& item : m_vecRenderTechnique)
+	{
+		if (item->GetHashName() == nHashName)
+		{
+			return item;
+		}
+	}
+
+	return nullptr;
+}
 

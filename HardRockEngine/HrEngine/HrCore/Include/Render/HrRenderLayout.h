@@ -8,23 +8,20 @@ namespace Hr
 	class HR_CORE_API HrRenderLayout : public IRenderLayout
 	{
 	public:
-		enum EnumTopologyType
-		{
-			TT_POINTLIST,
-			TT_LINELIST,
-			TT_LINETRIP,
-			TT_TRIANGLELIST,
-			TT_TRIANGLETRIP,
-		};
-	public:
 		HrRenderLayout();
 		~HrRenderLayout();
 
+		virtual void SetTopologyType(EnumTopologyType topologyType) override;
 		virtual uint32 GetVertextSize() override;
-		virtual void BindVertextBuffer(IGraphicsBuffer * pGraphicsBuffer, HrVertext* pVertext) override;
+		virtual void BindVertextBuffer(char* pBuffer
+			, uint32 nBufferSize
+			, IGraphicsBuffer::EnumHardwareBufferUsage usage
+			, HrVertextElement* pVertexElementArr
+			, uint32 nVertexElementLength) override;
 
-		HR_SYNTHESIZE(EnumTopologyType, m_topologyType, TopologyType);
 	protected:
+		EnumTopologyType m_topologyType;
+
 		HrVertext* m_pVertextStruct;
 
 		IGraphicsBuffer* m_pHardwareBuffer;

@@ -16,14 +16,22 @@ void HrVertext::Clear()
 	m_lisVertextElement.clear();
 }
 
-void HrVertext::CopyFrom(HrVertext* pVertext)
+void Hr::HrVertext::AddElementArray(HrVertextElement* pVertexElementArr, uint32 nVertexElementLength)
 {
-	m_lisVertextElement = pVertext->m_lisVertextElement;
+	for (size_t i = 0; i < nVertexElementLength; ++i)
+	{
+		AddElement(pVertexElementArr[i]);
+	}
 }
 
-void HrVertext::AddElement(HrVertextElement::EnumVertextElementUsage usage)
+void HrVertext::AddElement(HrVertextElement& usage)
 {
 	m_lisVertextElement.emplace_back(usage);
+}
+
+uint32 HrVertext::GetVertextSize()
+{
+	return m_nVertexSize;
 }
 
 

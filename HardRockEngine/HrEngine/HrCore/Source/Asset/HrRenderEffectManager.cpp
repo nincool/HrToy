@@ -4,6 +4,7 @@
 #include "HrDirector.h"
 #include "HrLog.h"
 #include <boost/cast.hpp>
+#include <boost/functional/hash.hpp>
 
 using namespace Hr;
 
@@ -33,15 +34,39 @@ IResource* HrRenderEffectManager::LoadResource(std::string strName, std::string 
 
 HrRenderEffect* HrRenderEffectManager::CreateEffect(std::string strName, std::string strFilePath)
 {
-	auto resItem = m_mapResource.find(strName);
+	size_t nHashName = boost::hash_range(strName.begin(), strName.end());
+	auto resItem = m_mapResource.find(nHashName);
 	if (resItem != m_mapResource.end())
 	{
 		HRERROR(_T("HrRenderEffectManager CreateEffect Error! %s"), strName);
 		return boost::polymorphic_downcast<HrRenderEffect*>(resItem->second);
 	}
 	HrRenderEffect* pRenderEffect = HR_NEW HrRenderEffect(strName, strFilePath);
-	m_mapResource.insert(std::make_pair(strName, pRenderEffect));
+	m_mapResource.insert(std::make_pair(nHashName, pRenderEffect));
 	
 	return pRenderEffect;
+}
+
+IResource* HrRenderEffectManager::GetResource(std::string strName)
+{
+	size_t nHashName = boost::hash_range(strName.begin(), strName.end());
+	auto resItem = m_mapResource.find(nHashName);
+	if (resItem == m_mapResource.end())
+	{
+		return nullptr;
+	}
+	return resItem->second;
+}
+
+HrRenderEffect* HrRenderEffectManager::GetRenderEffect(std::string strName)
+{
+	size_t nHashName = boost::hash_range(strName.begin(), strName.end());
+	auto resItem = m_mapResource.find(nHashName);
+	if (resItem == m_mapResource.end())
+	{
+		return nullptr;
+	}
+
+	return boost::polymorphic_downcast<HrRenderEffect*>(resItem->second);
 }
 

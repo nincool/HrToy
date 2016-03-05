@@ -9,25 +9,11 @@ namespace Hr
 	class IRenderable : public RenderableAllocatedObject
 	{
 	public:
-		IRenderable()
-		{
-			m_pRenderLayout = nullptr;
-			m_pRenderTechnique = nullptr;
-		}
 		virtual ~IRenderable(){}
 
-		IRenderLayout* GetRenderLayout()
-		{
-			return m_pRenderLayout;
-		}
-		IRenderTechnique* GetRenderTechnique()
-		{
-			return m_pRenderTechnique;
-		}
-	protected:
-		IRenderLayout* m_pRenderLayout;
-		IRenderTechnique* m_pRenderTechnique;
-		
+		virtual IRenderLayout* GetRenderLayout() = 0;
+		virtual IRenderTechnique* GetRenderTechnique() = 0;
+
 	};
 }
 

@@ -11,7 +11,7 @@ HrStreamData::~HrStreamData()
 {
 }
 
-void HrStreamData::SetReadDataType(_READ_DATA_TYPE_ readDataType)
+void HrStreamData::SetReadDataType(EnumReadDataType readDataType)
 {
 	m_readDataType = readDataType;
 }

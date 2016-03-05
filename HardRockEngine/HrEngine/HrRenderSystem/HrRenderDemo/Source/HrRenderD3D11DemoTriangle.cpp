@@ -74,7 +74,7 @@ bool HrRenderD3D11DemoTriangle::LoadContent()
 {
 	ID3DBlob* vsBuffer = 0;
 
-	bool compileResult = CompileD3DShader(L"Media\\HrShader\\SolidGreenColor.fx", "VS", "vs_4_0", &vsBuffer);
+	bool compileResult = CompileD3DShader(L"Media\\HrShader\\SolidGreenColor.fx", "VS_Main", "vs_4_0", &vsBuffer);
 	if (compileResult == false)
 	{
 		return false;
@@ -132,7 +132,8 @@ bool HrRenderD3D11DemoTriangle::LoadContent()
 
 	D3D11_BUFFER_DESC vertexDesc;
 	ZeroMemory(&vertexDesc, sizeof(vertexDesc));
-	vertexDesc.Usage = D3D11_USAGE_DEFAULT;
+	//vertexDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	vertexDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexDesc.ByteWidth = sizeof(VertexPos) * 3;
 
