@@ -20,7 +20,6 @@ namespace Hr
 		//Èë¿Úº¯Êý
 		virtual void SetEntryPoint(std::string strEntryPoint) = 0;
 
-
 		virtual void Bind(IRender* pRender) = 0;
 		virtual void UnBind(IRender* pRender) = 0;
 

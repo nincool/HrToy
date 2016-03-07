@@ -24,6 +24,7 @@ namespace Hr
 		virtual ~IRenderLayout(){}
 
 		virtual void SetTopologyType(EnumTopologyType topologyType) = 0;
+		virtual EnumTopologyType GetTopologyType() = 0;
 
 		virtual uint32 GetVertextSize() = 0;
 

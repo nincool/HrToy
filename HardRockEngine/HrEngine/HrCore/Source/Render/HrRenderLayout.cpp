@@ -8,7 +8,7 @@ using namespace Hr;
 
 HrRenderLayout::HrRenderLayout()
 {
-	m_pVertextStruct = HrDirector::GetInstance().GetRenderFactory()->CreateVertext();
+	m_pVertext = HrDirector::GetInstance().GetRenderFactory()->CreateVertext();
 	m_pHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
@@ -16,7 +16,7 @@ HrRenderLayout::HrRenderLayout()
 
 HrRenderLayout::~HrRenderLayout()
 {
-	SAFE_DELETE(m_pVertextStruct);
+	SAFE_DELETE(m_pVertext);
 	SAFE_DELETE(m_pHardwareBuffer);
 }
 
@@ -32,11 +32,16 @@ void HrRenderLayout::BindVertextBuffer(char* pBuffer
 	, uint32 nVertexElementLength)
 {
 	m_pHardwareBuffer->BindVertexStream(pBuffer, nBufferSize, usage);
-	m_pVertextStruct->AddElementArray(pVertexElementArr, nVertexElementLength);
+	m_pVertext->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
 uint32 HrRenderLayout::GetVertextSize()
 {
-	return m_pVertextStruct->;
+	return m_pVertext->GetVertextSize();
+}
+
+IRenderLayout::EnumTopologyType HrRenderLayout::GetTopologyType()
+{
+	return m_topologyType;
 }
 

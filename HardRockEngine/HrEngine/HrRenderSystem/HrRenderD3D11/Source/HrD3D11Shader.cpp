@@ -25,8 +25,17 @@ void HrD3D11Shader::Bind(IRender* pRender)
 	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
 	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11ImmediateContext();
 
-	pD3D11ImmediateContext->VSSetShader(m_pVertexShader, nullptr, 0);
-	pD3D11ImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
+	switch (m_shaderType)
+	{
+	case Hr::IShader::ST_VERTEX_SHADER:
+		pD3D11ImmediateContext->VSSetShader(m_pVertexShader, nullptr, 0);
+		break;
+	case Hr::IShader::ST_PIXEL_SHADER:
+		pD3D11ImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
+		break;
+	default:
+		break;
+	}
 }
 
 void HrD3D11Shader::UnBind(IRender* pRender)
@@ -74,7 +83,6 @@ bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 	default:
 		break;
 	}
-	
 
 	HRESULT hr = D3DCompile(
 		pSource,              // [in] Pointer to the shader in memory. 

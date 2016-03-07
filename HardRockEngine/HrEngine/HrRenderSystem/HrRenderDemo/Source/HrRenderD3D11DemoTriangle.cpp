@@ -60,7 +60,6 @@ bool HrRenderD3D11DemoTriangle::Render()
 	return true;
 }
 
-
 void HrRenderD3D11DemoTriangle::Release()
 {
 
