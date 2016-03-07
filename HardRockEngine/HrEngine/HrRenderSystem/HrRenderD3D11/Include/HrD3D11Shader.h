@@ -18,6 +18,11 @@ namespace Hr
 
 		virtual void StreamIn(HrStreamData& streamData) override;
 
+		HrStreamData* GetStream()
+		{
+			return m_pShaderBuffer;
+		}
+
 		ID3D11VertexShader* GetVSShader()
 		{
 			return m_pVertexShader;

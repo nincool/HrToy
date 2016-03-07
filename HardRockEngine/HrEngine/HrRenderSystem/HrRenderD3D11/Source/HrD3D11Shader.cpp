@@ -74,7 +74,6 @@ bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 	default:
 		break;
 	}
-	
 
 	HRESULT hr = D3DCompile(
 		pSource,              // [in] Pointer to the shader in memory. 

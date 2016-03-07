@@ -28,6 +28,8 @@ namespace Hr
 		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
 
 		virtual void CreateHardwareBuffer(const void* pResourceData);
+
+		ID3D11Buffer* GetVertextBuffer();
 	private:
 		void GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccessFlags, UINT& bindFlags, UINT& miscFlags);
 	private:

@@ -30,6 +30,8 @@ void HrGeometryTriangle::InitRenderLayout()
 
 void HrGeometryTriangle::BindVertextStream()
 {
+	m_pRenderTechnique = HrResourceManagerFactory::GetInstance().GetEffectManager()->GetRenderEffect("BasicEffect")->GetTechnique("Basic");
+
 	float3 trianglePoint[] =
 	{
 		float3(0.5f, 0.5f, 0.5f),
@@ -38,7 +40,7 @@ void HrGeometryTriangle::BindVertextStream()
 	};
 
 	HrVertextElement vertexElementArr[] = {
-		HrVertextElement(HrVertextElement::VEU_POSITION, PF_R32G32B32_SINT)
+		HrVertextElement(HrVertextElement::VEU_POSITION, HrVertextElement::VET_FLOAT3),
 	};
 
 	m_pRenderLayout->BindVertextBuffer((char*)trianglePoint
@@ -47,7 +49,6 @@ void HrGeometryTriangle::BindVertextStream()
 		, vertexElementArr
 		, HR_ARRAY_SIZE(vertexElementArr) );
 
-	m_pRenderTechnique = HrResourceManagerFactory::GetInstance().GetEffectManager()->GetRenderEffect("BasicEffect")->GetTechnique("Basic");
 }
 
 

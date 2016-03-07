@@ -33,15 +33,56 @@ namespace Hr
 			// Vertex binormal
 			VEU_BINORMAL = 1 << 8
 		};
-	public:
-		HrVertextElement(HrVertextElement::EnumVertextElementUsage usage, PixelFormat pixelFormat)
+		/// Vertex element type, used to identify the base types of the vertex contents
+		enum EnumVertexElementType
 		{
-			m_vertextUsage = usage;
-			m_pixelFormat = pixelFormat;
+			VET_FLOAT1 = 0,
+			VET_FLOAT2 = 1,
+			VET_FLOAT3 = 2,
+			VET_FLOAT4 = 3,
+			/// alias to more specific colour type - use the current rendersystem's colour packing
+			VET_COLOUR = 4,
+			VET_SHORT1 = 5,
+			VET_SHORT2 = 6,
+			VET_SHORT3 = 7,
+			VET_SHORT4 = 8,
+			VET_UBYTE4 = 9,
+			/// D3D style compact colour
+			VET_COLOUR_ARGB = 10,
+			/// GL style compact colour
+			VET_COLOUR_ABGR = 11,
+			VET_DOUBLE1 = 12,
+			VET_DOUBLE2 = 13,
+			VET_DOUBLE3 = 14,
+			VET_DOUBLE4 = 15,
+			VET_USHORT1 = 16,
+			VET_USHORT2 = 17,
+			VET_USHORT3 = 18,
+			VET_USHORT4 = 19,
+			VET_INT1 = 20,
+			VET_INT2 = 21,
+			VET_INT3 = 22,
+			VET_INT4 = 23,
+			VET_UINT1 = 24,
+			VET_UINT2 = 25,
+			VET_UINT3 = 26,
+			VET_UINT4 = 27
+		};
+
+	public:
+		HrVertextElement(HrVertextElement::EnumVertextElementUsage usage, EnumVertexElementType pixelFormat)
+		{
+			m_elementUsage = usage;
+			m_elementType = pixelFormat;
+			m_nOffset = 0;
 		}
 
-		EnumVertextElementUsage m_vertextUsage;
-		PixelFormat m_pixelFormat;
+		size_t GetTypeSize();
+		static size_t GetTypeSize(EnumVertexElementType elementType);
+		HR_SYNTHESIZE(size_t, m_nOffset, Offset);
+		
+		EnumVertextElementUsage m_elementUsage;
+		EnumVertexElementType m_elementType;
 	};
 
 	class HR_CORE_API HrVertext : public RenderSysAllocatedObject
@@ -53,13 +94,17 @@ namespace Hr
 	public:
 		void Clear();
 		void AddElementArray(HrVertextElement* pVertexElementArr, uint32 nVertexElementLength);
-		void AddElement(HrVertextElement& usage);
 
 		uint32 GetVertextSize();
+		size_t GetVertextElementNum();
+
+		const HrVertextElement& GetVertextElement(uint32 nIndex);
+	private:
+		void AddElement(HrVertextElement& usage);
 	protected:
 		uint32 m_nVertexSize;
 
-		std::list<HrVertextElement> m_lisVertextElement;
+		std::vector<HrVertextElement> m_vecVertextElement;
 	};
 }
 

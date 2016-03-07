@@ -41,9 +41,16 @@ void HrRenderPass::StreamIn(HrStreamData& streamData)
 void HrRenderPass::BindPass(IRender* pRender)
 {
 	m_pVertexShader->Bind(pRender);
+	m_pPixelShader->Bind(pRender);
 }
 
 void HrRenderPass::UnBindPass(IRender* pRender)
 {
 	m_pVertexShader->UnBind(pRender);
+	m_pPixelShader->UnBind(pRender);
+}
+
+IShader* HrRenderPass::GetVertextShader()
+{
+	return m_pVertexShader;
 }
