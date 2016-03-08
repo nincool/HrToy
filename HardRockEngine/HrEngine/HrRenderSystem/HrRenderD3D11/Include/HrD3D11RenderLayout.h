@@ -19,7 +19,7 @@ namespace Hr
 
 		ID3D11InputLayout* GetInputLayout(HrD3D11Shader* pShader);
 		ID3D11Buffer* GetVertexBuffer();
-
+		ID3D11Buffer* GetIndexBuffer();
 	public:
 
 		ID3D11VertexShader* m_pSolidColorVS;

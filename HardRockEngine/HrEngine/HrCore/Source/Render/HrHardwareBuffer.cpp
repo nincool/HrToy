@@ -14,3 +14,8 @@ void HrHardwareBuffer::BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBu
 	m_usage = usage;
 }
 
+uint32 HrHardwareBuffer::GetByteWidth()
+{
+	return m_nByteWidth;
+}
+

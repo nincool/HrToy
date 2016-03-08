@@ -17,7 +17,7 @@ HrD3D11Render::HrD3D11Render()
 	typedef HrRenderD3D11DemoPipleline DEMOCLASS;
 
 	m_pRenderDemo = nullptr;
-	m_pRenderDemo = HR_NEW DEMOCLASS();
+	//m_pRenderDemo = HR_NEW DEMOCLASS();
 
 }
 
@@ -85,13 +85,29 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
+	
 	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
 	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
 	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	pRenderTechnique->GetRenderPass(0)->BindPass(this);
-	m_pD3D11ImmediateContext->Draw(3, 0);
-	pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+	if (pD3D11RenderLayout->UseIndices())
+	{
+		ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
+		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	}
+
+	if (pD3D11RenderLayout->UseIndices())
+	{
+		pRenderTechnique->GetRenderPass(0)->BindPass(this);
+		m_pD3D11ImmediateContext->Draw(3, 0);
+		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+	}
+	else
+	{
+		pRenderTechnique->GetRenderPass(0)->BindPass(this);
+		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+	}
 
 	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
 }

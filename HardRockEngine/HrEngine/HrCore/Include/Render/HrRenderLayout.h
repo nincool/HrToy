@@ -24,6 +24,7 @@ namespace Hr
 			, uint32 nBufferSize
 			, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
 
+		virtual bool UseIndices() override;
 	protected:
 		EnumTopologyType m_topologyType;
 

@@ -24,6 +24,7 @@ namespace Hr
 		virtual ~IGraphicsBuffer(){}
 
 		virtual void BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
+		virtual uint32 GetByteWidth() = 0;
 	};
 }
 

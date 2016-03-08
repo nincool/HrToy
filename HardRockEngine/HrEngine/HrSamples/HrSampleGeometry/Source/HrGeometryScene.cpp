@@ -24,7 +24,10 @@ void HrGeometryScene::OnEnter()
 
 void HrGeometryScene::CreateSceneElements()
 {
-	HrSceneNode* pBox = HrGeometryFactory::GetInstance().Create2DTriangle();
+	//HrSceneNode* pBox = HrGeometryFactory::GetInstance().Create2DTriangle();
+	//AddSceneNode(pBox);
+
+	HrSceneNode* pBox = HrGeometryFactory::GetInstance().CreateBox(10, 10, 10);
 	AddSceneNode(pBox);
 }
 

@@ -36,6 +36,9 @@ namespace Hr
 		virtual void BindIndexBuffer(char* pBuffer
 			, uint32 nBufferSize
 			, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
+
+		//是否使用索引缓存
+		virtual bool UseIndices() = 0;
 	};
 }
 

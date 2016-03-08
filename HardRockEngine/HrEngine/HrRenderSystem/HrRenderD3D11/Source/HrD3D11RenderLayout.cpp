@@ -62,6 +62,12 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 
 ID3D11Buffer* HrD3D11RenderLayout::GetVertexBuffer()
 {
-	return static_cast<HrD3D11HardwareBuffer*>(m_pHDVertexBuffer)->GetVertexBuffer();
+	return static_cast<HrD3D11HardwareBuffer*>(m_pHDVertexBuffer)->GetGraphicsBuffer();
 }
+
+ID3D11Buffer* HrD3D11RenderLayout::GetIndexBuffer()
+{
+	return static_cast<HrD3D11HardwareBuffer*>(m_pHDIndexBuffer)->GetGraphicsBuffer();
+}
+
 

@@ -93,7 +93,7 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 	miscFlags = 0;
 }
 
-ID3D11Buffer* HrD3D11HardwareBuffer::GetVertexBuffer()
+ID3D11Buffer* HrD3D11HardwareBuffer::GetGraphicsBuffer()
 {
 	return m_pD3D11Buffer;
 }

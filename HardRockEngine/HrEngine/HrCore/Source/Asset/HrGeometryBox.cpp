@@ -75,5 +75,7 @@ void HrGeometryBox::BindVertexStream()
 		4, 0, 3, 4, 3, 7
 	};
 	m_pRenderLayout->BindIndexBuffer((char*)indices, sizeof(indices), IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE);
+
+
 }
 

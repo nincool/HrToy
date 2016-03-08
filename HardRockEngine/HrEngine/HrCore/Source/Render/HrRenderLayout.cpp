@@ -52,3 +52,8 @@ IRenderLayout::EnumTopologyType HrRenderLayout::GetTopologyType()
 	return m_topologyType;
 }
 
+bool HrRenderLayout::UseIndices()
+{
+	return m_pHDIndexBuffer->GetByteWidth();
+}
+
