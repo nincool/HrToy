@@ -26,13 +26,16 @@ namespace Hr
 		virtual void SetTopologyType(EnumTopologyType topologyType) = 0;
 		virtual EnumTopologyType GetTopologyType() = 0;
 
-		virtual uint32 GetVertextSize() = 0;
+		virtual uint32 GetVertexSize() = 0;
 
-		virtual void BindVertextBuffer(char* pBuffer
+		virtual void BindVertexBuffer(char* pBuffer
 			, uint32 nBufferSize
 			, IGraphicsBuffer::EnumHardwareBufferUsage usage
-			, HrVertextElement* pVertexElementArr
+			, HrVertexElement* pVertexElementArr
 			, uint32 nVertexElementLength) = 0;
+		virtual void BindIndexBuffer(char* pBuffer
+			, uint32 nBufferSize
+			, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
 	};
 }
 

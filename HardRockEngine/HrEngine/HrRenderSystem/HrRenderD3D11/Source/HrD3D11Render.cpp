@@ -14,10 +14,10 @@ HrD3D11Render::HrD3D11Render()
 {
 	m_pD3D11ImmediateContext = nullptr;
 
-	typedef HrRenderD3D11DemoTriangle DEMOCLASS;
+	typedef HrRenderD3D11DemoPipleline DEMOCLASS;
 
 	m_pRenderDemo = nullptr;
-	//m_pRenderDemo = HR_NEW DEMOCLASS();
+	m_pRenderDemo = HR_NEW DEMOCLASS();
 
 }
 
@@ -68,6 +68,10 @@ bool HrD3D11Render::StartRender()
 
 void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout)
 {
+	if (m_pRenderDemo)
+	{
+		return;
+	}
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
 	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
@@ -75,30 +79,15 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
-	unsigned int stride = pD3D11RenderLayout->GetVertextSize();
+	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
 	unsigned int offset = 0;
 
-	IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertextShader();
+	IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
-	ID3D11Buffer* pVertextBuffer = pD3D11RenderLayout->GetVertexBuffer();
-	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertextBuffer, &stride, &offset);
+	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
+	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
 	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
-	//m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
-	//m_pD3D11ImmediateContext->Draw(3, 0);
-
-	//m_pSwapChain->Present(0, 0);
-
-	//HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
-	//ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout();
-	//m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
-	//ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
-	//unsigned int nStride = 0;//sizeof(VertexPos);
-	//unsigned int nOffset = 0;
-	//m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &nStride, &nOffset);
-	//m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	pRenderTechnique->GetRenderPass(0)->BindPass(this);
 	m_pD3D11ImmediateContext->Draw(3, 0);

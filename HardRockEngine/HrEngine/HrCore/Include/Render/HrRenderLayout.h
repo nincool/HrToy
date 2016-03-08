@@ -13,19 +13,24 @@ namespace Hr
 
 		virtual void SetTopologyType(EnumTopologyType topologyType) override;
 		virtual EnumTopologyType GetTopologyType() override;
-		virtual uint32 GetVertextSize() override;
-		virtual void BindVertextBuffer(char* pBuffer
+		virtual uint32 GetVertexSize() override;
+		virtual void BindVertexBuffer(char* pBuffer
 			, uint32 nBufferSize
 			, IGraphicsBuffer::EnumHardwareBufferUsage usage
-			, HrVertextElement* pVertexElementArr
+			, HrVertexElement* pVertexElementArr
 			, uint32 nVertexElementLength) override;
+
+		virtual void BindIndexBuffer(char* pBuffer
+			, uint32 nBufferSize
+			, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
 
 	protected:
 		EnumTopologyType m_topologyType;
 
-		HrVertext* m_pVertext;
+		HrVertex* m_pVertex;
 
-		IGraphicsBuffer* m_pHardwareBuffer;
+		IGraphicsBuffer* m_pHDVertexBuffer;
+		IGraphicsBuffer* m_pHDIndexBuffer;
 	};
 }
 

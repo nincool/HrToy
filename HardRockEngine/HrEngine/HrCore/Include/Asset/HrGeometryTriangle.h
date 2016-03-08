@@ -13,7 +13,7 @@ namespace Hr
 
 	private:
 		void InitRenderLayout();
-		void BindVertextStream();
+		void BindVertexStream();
 	private:
 	};
 }

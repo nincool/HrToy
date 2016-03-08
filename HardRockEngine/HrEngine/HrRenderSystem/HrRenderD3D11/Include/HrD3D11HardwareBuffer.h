@@ -25,12 +25,11 @@ namespace Hr
 		HrD3D11HardwareBuffer(HrD3D11HardwareBuffer&& hardwardBuffer);
 		virtual ~HrD3D11HardwareBuffer();
 
-		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
-
-		virtual void CreateHardwareBuffer(const void* pResourceData);
-
-		ID3D11Buffer* GetVertextBuffer();
+		virtual void BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
+		
+		ID3D11Buffer* GetVertexBuffer();
 	private:
+		void CreateHardwareBuffer(const void* pResourceData);
 		void GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccessFlags, UINT& bindFlags, UINT& miscFlags);
 	private:
 		ID3D11Device* m_pD3D11Device;

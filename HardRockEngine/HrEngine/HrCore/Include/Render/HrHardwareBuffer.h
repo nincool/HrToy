@@ -10,8 +10,7 @@ namespace Hr
 	public:
 		HrHardwareBuffer();
 
-		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
-
+		virtual void BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) override;
 	protected:
 		uint32 m_nByteWidth;
 		IGraphicsBuffer::EnumHardwareBufferUsage m_usage;

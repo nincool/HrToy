@@ -15,7 +15,7 @@ namespace Hr
 		virtual IRenderPtr CreateRender() = 0;
 		virtual IShaderCompilerPtr CreateShaderCompiler() = 0;
 
-		virtual HrVertext* CreateVertext() = 0;
+		virtual HrVertex* CreateVertex() = 0;
 		virtual IGraphicsBuffer* CreatehardwareBuffer() = 0;
 		virtual IRenderLayout* CreateRenderLayout() = 0;
 		virtual IShader* CreateShader() = 0;

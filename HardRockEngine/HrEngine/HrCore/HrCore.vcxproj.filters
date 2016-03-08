@@ -157,9 +157,6 @@
     <ClInclude Include="Include\Render\HrRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrVertext.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\IRenderLayout.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -206,6 +203,12 @@
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrPixelFormat.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrColor.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrVertex.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
@@ -282,9 +285,6 @@
     <ClCompile Include="Source\Render\HrRenderQueue.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrVertext.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
@@ -311,6 +311,12 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
       <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrColor.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrVertex.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

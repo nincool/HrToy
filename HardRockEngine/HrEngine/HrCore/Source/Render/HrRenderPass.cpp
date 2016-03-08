@@ -50,7 +50,7 @@ void HrRenderPass::UnBindPass(IRender* pRender)
 	m_pPixelShader->UnBind(pRender);
 }
 
-IShader* HrRenderPass::GetVertextShader()
+IShader* HrRenderPass::GetVertexShader()
 {
 	return m_pVertexShader;
 }

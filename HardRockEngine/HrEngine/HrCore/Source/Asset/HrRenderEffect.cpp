@@ -9,6 +9,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/functional/hash.hpp>
+#include "HrLog.h"
 
 using namespace Hr;
 
@@ -46,6 +47,7 @@ void HrRenderEffect::Load()
 			//¼ÓÔØShaderÎÄ¼þ
 			if (!HrResourceLoader::LoadFromFile(m_strEffectFile, streamData))
 			{
+				HRERROR("HrRenderEffect LoadFromFile Error! File[%s]", m_strEffectFile.c_str());
 				return;
 			}
 		}

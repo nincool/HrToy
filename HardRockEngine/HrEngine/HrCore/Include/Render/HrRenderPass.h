@@ -23,7 +23,7 @@ namespace Hr
 		void BindPass(IRender* pRender);
 		void UnBindPass(IRender* pRender);
 
-		IShader* GetVertextShader();
+		IShader* GetVertexShader();
 	private:
 		std::string m_strPassName;
 		IShader* m_pVertexShader;

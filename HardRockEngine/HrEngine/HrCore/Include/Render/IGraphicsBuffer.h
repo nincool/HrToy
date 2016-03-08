@@ -23,7 +23,7 @@ namespace Hr
 		}
 		virtual ~IGraphicsBuffer(){}
 
-		virtual void BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
+		virtual void BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
 	};
 }
 

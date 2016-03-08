@@ -2,7 +2,7 @@
 #define _HR_D3D11MAPPING_H_
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
-#include "HrCore/Include/Render/HrVertext.h"
+#include "HrCore/Include/Render/HrVertex.h"
 #include "HrD3D11Device.h"
 
 namespace Hr
@@ -11,8 +11,8 @@ namespace Hr
 	{
 	public:
 		//InputElement SemanticName×ª»¯
-		static LPCSTR GetInputElementSemanticName(HrVertextElement::EnumVertextElementUsage usage);
-		static DXGI_FORMAT GetInputElementFormat(HrVertextElement::EnumVertexElementType type);
+		static LPCSTR GetInputElementSemanticName(HrVertexElement::EnumVertexElementUsage usage);
+		static DXGI_FORMAT GetInputElementFormat(HrVertexElement::EnumVertexElementType type);
 	};
 }
 

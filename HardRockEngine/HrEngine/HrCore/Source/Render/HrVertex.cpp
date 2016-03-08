@@ -1,18 +1,18 @@
-#include "Render/HrVertext.h"
+#include "Render/HrVertex.h"
 
 using namespace Hr;
 
 
 //////////////////////////////////////////////////////////////////////////////////
-// ElementVertext
+// ElementVertex
 //////////////////////////////////////////////////////////////////////////////////
 
-size_t HrVertextElement::GetTypeSize()
+size_t HrVertexElement::GetTypeSize()
 {
 	return GetTypeSize(m_elementType);
 }
 
-size_t HrVertextElement::GetTypeSize(EnumVertexElementType elementType)
+size_t HrVertexElement::GetTypeSize(EnumVertexElementType elementType)
 {
 	switch (elementType)
 	{
@@ -75,24 +75,24 @@ size_t HrVertextElement::GetTypeSize(EnumVertexElementType elementType)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// HrVertext
+// HrVertex
 //////////////////////////////////////////////////////////////////////////////////
 
-HrVertext::HrVertext()
+HrVertex::HrVertex()
 {
 	m_nVertexSize = 0;
 }
 
-HrVertext::~HrVertext()
+HrVertex::~HrVertex()
 {
 }
 
-void HrVertext::Clear()
+void HrVertex::Clear()
 {
-	m_vecVertextElement.clear();
+	m_vecVertexElement.clear();
 }
 
-void HrVertext::AddElementArray(HrVertextElement* pVertexElementArr, uint32 nVertexElementLength)
+void HrVertex::AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVertexElementLength)
 {
 	size_t nOffset = 0;
 	for (size_t i = 0; i < nVertexElementLength; ++i)
@@ -104,24 +104,24 @@ void HrVertext::AddElementArray(HrVertextElement* pVertexElementArr, uint32 nVer
 	m_nVertexSize = nOffset;
 }
 
-void HrVertext::AddElement(HrVertextElement& usage)
+void HrVertex::AddElement(HrVertexElement& usage)
 {
-	m_vecVertextElement.emplace_back(usage);
+	m_vecVertexElement.emplace_back(usage);
 }
 
-uint32 HrVertext::GetVertextSize()
+uint32 HrVertex::GetVertexSize()
 {
 	return m_nVertexSize;
 }
 
-size_t HrVertext::GetVertextElementNum()
+size_t HrVertex::GetVertexElementNum()
 {
-	return m_vecVertextElement.size();
+	return m_vecVertexElement.size();
 }
 
-const HrVertextElement& HrVertext::GetVertextElement(uint32 nIndex)
+const HrVertexElement& HrVertex::GetVertexElement(uint32 nIndex)
 {
-	BOOST_ASSERT(nIndex < m_vecVertextElement.size());
-	return m_vecVertextElement[nIndex];
+	BOOST_ASSERT(nIndex < m_vecVertexElement.size());
+	return m_vecVertexElement[nIndex];
 }
 

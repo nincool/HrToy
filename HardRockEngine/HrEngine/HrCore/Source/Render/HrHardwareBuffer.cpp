@@ -8,7 +8,7 @@ HrHardwareBuffer::HrHardwareBuffer()
 	m_usage = IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE;
 }
 
-void HrHardwareBuffer::BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
+void HrHardwareBuffer::BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
 {
 	m_nByteWidth = nBufferSize;
 	m_usage = usage;

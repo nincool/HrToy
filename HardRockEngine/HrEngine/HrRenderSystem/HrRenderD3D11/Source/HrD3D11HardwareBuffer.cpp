@@ -1,4 +1,5 @@
 #include "HrD3D11HardwareBuffer.h"
+#include "HrCore/Include/HrLog.h"
 
 using namespace Hr;
 
@@ -33,9 +34,9 @@ HrD3D11HardwareBuffer::~HrD3D11HardwareBuffer()
 
 }
 
-void HrD3D11HardwareBuffer::BindVertexStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
+void HrD3D11HardwareBuffer::BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
 {
-	HrHardwareBuffer::BindVertexStream(pBuffer, nBufferSize, usage);
+	HrHardwareBuffer::BindStream(pBuffer, nBufferSize, usage);
 	CreateHardwareBuffer(pBuffer);
 }
 
@@ -59,7 +60,8 @@ void HrD3D11HardwareBuffer::CreateHardwareBuffer(const void* pResourceData)
 	HRESULT rt = m_pD3D11Device->CreateBuffer(&desc, pSubResourceData, &m_pD3D11Buffer);
 	if (FAILED(rt))
 	{
-
+		HRERROR("HrD3D11HardwareBuffer CreateHardwareBuffer Error!");
+		return;
 	}
 }
 
@@ -91,7 +93,7 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 	miscFlags = 0;
 }
 
-ID3D11Buffer* HrD3D11HardwareBuffer::GetVertextBuffer()
+ID3D11Buffer* HrD3D11HardwareBuffer::GetVertexBuffer()
 {
 	return m_pD3D11Buffer;
 }

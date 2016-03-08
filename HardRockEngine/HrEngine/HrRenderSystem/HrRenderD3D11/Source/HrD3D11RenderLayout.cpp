@@ -4,7 +4,7 @@
 #include "HrD3D11Shader.h"
 #include "HrD3D11HardwareBuffer.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
-#include "HrCore/Include/Render/HrVertext.h"
+#include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/HrLog.h"
 #include <D3Dcompiler.h>
 
@@ -30,24 +30,24 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 {
 	if (m_pInputLayout == nullptr)
 	{
-		size_t nVertextElementNum = m_pVertext->GetVertextElementNum();
-		m_pD3DInputElementDesc = new D3D11_INPUT_ELEMENT_DESC[nVertextElementNum];
+		size_t nVertexElementNum = m_pVertex->GetVertexElementNum();
+		m_pD3DInputElementDesc = new D3D11_INPUT_ELEMENT_DESC[nVertexElementNum];
 		memset(m_pD3DInputElementDesc, 0, sizeof(D3D11_INPUT_ELEMENT_DESC));
-		for (size_t i = 0; i < nVertextElementNum; ++i)
+		for (size_t i = 0; i < nVertexElementNum; ++i)
 		{
-			const HrVertextElement& vertextElement = m_pVertext->GetVertextElement(i);
-			m_pD3DInputElementDesc[i].SemanticName = HrD3D11Mapping::GetInputElementSemanticName(vertextElement.m_elementUsage);
+			const HrVertexElement& VertexElement = m_pVertex->GetVertexElement(i);
+			m_pD3DInputElementDesc[i].SemanticName = HrD3D11Mapping::GetInputElementSemanticName(VertexElement.m_elementUsage);
 			m_pD3DInputElementDesc[i].SemanticIndex = 0;
-			m_pD3DInputElementDesc[i].Format = HrD3D11Mapping::GetInputElementFormat(vertextElement.m_elementType);
+			m_pD3DInputElementDesc[i].Format = HrD3D11Mapping::GetInputElementFormat(VertexElement.m_elementType);
 			m_pD3DInputElementDesc[i].InputSlot = 0;
-			m_pD3DInputElementDesc[i].AlignedByteOffset = vertextElement.GetOffset();
+			m_pD3DInputElementDesc[i].AlignedByteOffset = VertexElement.GetOffset();
 			m_pD3DInputElementDesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 			m_pD3DInputElementDesc[i].InstanceDataStepRate = 0;
 		}
 
 		HRESULT hr = HrD3D11Device::GetInstance().GetDevice()->CreateInputLayout(
 			m_pD3DInputElementDesc,
-			nVertextElementNum,
+			nVertexElementNum,
 			pShader->GetStream()->GetBufferPoint(),
 			pShader->GetStream()->GetBufferSize(),
 			&m_pInputLayout);
@@ -62,32 +62,6 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 
 ID3D11Buffer* HrD3D11RenderLayout::GetVertexBuffer()
 {
-	return static_cast<HrD3D11HardwareBuffer*>(m_pHardwareBuffer)->GetVertextBuffer();
+	return static_cast<HrD3D11HardwareBuffer*>(m_pHDVertexBuffer)->GetVertexBuffer();
 }
 
-bool HrD3D11RenderLayout::CompileD3DShader(LPCWSTR pFilePath, char* pEntry, char* pTarget, ID3DBlob** pBuffer)
-{
-	DWORD shaderFlags = 0;//D3DCOMPILE_ENABLE_STRICTNESS;
-
-	ID3DBlob* errorBuffer = 0;
-	HRESULT result;
-
-	result = D3DCompileFromFile(pFilePath, 0, 0, pEntry, pTarget,
-		shaderFlags, 0, pBuffer, &errorBuffer);
-	if (FAILED(result))
-	{
-		if (errorBuffer != 0)
-		{
-			//char* pMsg = (char*)(errorBuffer->GetBufferPointer());
-			HRERROR((LPCWSTR)errorBuffer->GetBufferPointer());
-			errorBuffer->Release();
-		}
-		HRERROR(_T("CompileD3DShader Error! File[%s]"), pFilePath);
-		return false;
-	}
-
-	if (errorBuffer != 0)
-		errorBuffer->Release();
-
-	return true;
-}

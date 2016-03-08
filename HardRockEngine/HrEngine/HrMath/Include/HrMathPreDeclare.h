@@ -16,12 +16,14 @@ namespace Hr
 	class Vector_T;
 	typedef Hr::Vector_T<float, 2> Vector2;
 	typedef Hr::Vector_T<float, 3> Vector3;
+	typedef Hr::Vector_T<float, 4> Vector4;
 	template <typename T>
 	class Matrix4_T;
 	typedef Hr::Matrix4_T<float> Matrix4;
 
 
 	typedef Vector3 float3;
+	typedef Vector4 float4;
 }
 
 #endif

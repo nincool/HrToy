@@ -25,8 +25,6 @@ namespace Hr
 		ID3D11VertexShader* m_pSolidColorVS;
 		ID3D11PixelShader* m_pSolidColorPS;
 	private:
-		bool CompileD3DShader(LPCWSTR pFilePath, char* pEntry, char* pTarget, ID3DBlob** pBuffer);
-	private:
 		D3D11_INPUT_ELEMENT_DESC* m_pD3DInputElementDesc;
 		ID3D11InputLayout* m_pInputLayout;
 		ID3D11Buffer* m_pVertexBuffer;

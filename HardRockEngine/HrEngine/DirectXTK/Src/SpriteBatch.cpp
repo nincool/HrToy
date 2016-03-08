@@ -19,7 +19,7 @@
 #include "SpriteBatch.h"
 #include "ConstantBuffer.h"
 #include "CommonStates.h"
-#include "VertexTypes.h"
+#include "Vertexypes.h"
 #include "SharedResourcePool.h"
 #include "AlignedNew.h"
 

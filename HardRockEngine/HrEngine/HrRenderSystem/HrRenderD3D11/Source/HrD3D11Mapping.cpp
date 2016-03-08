@@ -2,27 +2,27 @@
 
 using namespace Hr;
 
-LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertextElement::EnumVertextElementUsage usage)
+LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertexElement::EnumVertexElementUsage usage)
 {
 	switch (usage)
 	{
-	case Hr::HrVertextElement::VEU_POSITION:
+	case Hr::HrVertexElement::VEU_POSITION:
 		return "POSITION";
-	case Hr::HrVertextElement::VEU_NORMAL:
+	case Hr::HrVertexElement::VEU_NORMAL:
 		break;
-	case Hr::HrVertextElement::VEU_DIFFUSE:
+	case Hr::HrVertexElement::VEU_DIFFUSE:
 		break;
-	case Hr::HrVertextElement::VEU_SPECULAR:
+	case Hr::HrVertexElement::VEU_SPECULAR:
 		break;
-	case Hr::HrVertextElement::VEU_BLENDWEIGHT:
+	case Hr::HrVertexElement::VEU_BLENDWEIGHT:
 		break;
-	case Hr::HrVertextElement::VEU_BLENDINDEX:
+	case Hr::HrVertexElement::VEU_BLENDINDEX:
 		break;
-	case Hr::HrVertextElement::VEU_TEXTURECOORD:
+	case Hr::HrVertexElement::VEU_TEXTURECOORD:
 		break;
-	case Hr::HrVertextElement::VEU_TANGENT:
+	case Hr::HrVertexElement::VEU_TANGENT:
 		break;
-	case Hr::HrVertextElement::VEU_BINORMAL:
+	case Hr::HrVertexElement::VEU_BINORMAL:
 		break;
 	default:
 		break;
@@ -30,27 +30,27 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertextElement::EnumVertext
 	return "";
 }
 
-DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(HrVertextElement::EnumVertexElementType type)
+DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(HrVertexElement::EnumVertexElementType type)
 {
 	switch (type)
 	{
-	case HrVertextElement::VET_COLOUR:
-	case HrVertextElement::VET_COLOUR_ABGR:
-	case HrVertextElement::VET_COLOUR_ARGB:
+	case HrVertexElement::VET_COLOUR:
+	case HrVertexElement::VET_COLOUR_ABGR:
+	case HrVertexElement::VET_COLOUR_ARGB:
 		return DXGI_FORMAT_R8G8B8A8_UNORM;
-	case HrVertextElement::VET_FLOAT1:
+	case HrVertexElement::VET_FLOAT1:
 		return DXGI_FORMAT_R32_FLOAT;
-	case HrVertextElement::VET_FLOAT2:
+	case HrVertexElement::VET_FLOAT2:
 		return DXGI_FORMAT_R32G32_FLOAT;
-	case HrVertextElement::VET_FLOAT3:
+	case HrVertexElement::VET_FLOAT3:
 		return DXGI_FORMAT_R32G32B32_FLOAT;
-	case HrVertextElement::VET_FLOAT4:
+	case HrVertexElement::VET_FLOAT4:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
-	case HrVertextElement::VET_SHORT2:
+	case HrVertexElement::VET_SHORT2:
 		return DXGI_FORMAT_R16G16_SINT;
-	case HrVertextElement::VET_SHORT4:
+	case HrVertexElement::VET_SHORT4:
 		return DXGI_FORMAT_R16G16B16A16_SINT;
-	case HrVertextElement::VET_UBYTE4:
+	case HrVertexElement::VET_UBYTE4:
 		return DXGI_FORMAT_R8G8B8A8_UINT;
 	}
 	// to keep compiler happy

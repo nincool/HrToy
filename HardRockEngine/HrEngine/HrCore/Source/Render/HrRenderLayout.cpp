@@ -1,5 +1,5 @@
 #include "Render/HrRenderLayout.h"
-#include "Render/HrVertext.h"
+#include "Render/HrVertex.h"
 #include "Render/HrHardwareBuffer.h"
 #include "Render/IRenderFactory.h"
 #include "HrDirector.h"
@@ -8,16 +8,18 @@ using namespace Hr;
 
 HrRenderLayout::HrRenderLayout()
 {
-	m_pVertext = HrDirector::GetInstance().GetRenderFactory()->CreateVertext();
-	m_pHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
+	m_pVertex = HrDirector::GetInstance().GetRenderFactory()->CreateVertex();
+	m_pHDVertexBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
+	m_pHDIndexBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
 }
 
 HrRenderLayout::~HrRenderLayout()
 {
-	SAFE_DELETE(m_pVertext);
-	SAFE_DELETE(m_pHardwareBuffer);
+	SAFE_DELETE(m_pVertex);
+	SAFE_DELETE(m_pHDVertexBuffer);
+	SAFE_DELETE(m_pHDIndexBuffer);
 }
 
 void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
@@ -25,19 +27,24 @@ void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
 	m_topologyType = topologyType;
 }
 
-void HrRenderLayout::BindVertextBuffer(char* pBuffer
+void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	, uint32 nBufferSize
 	, IGraphicsBuffer::EnumHardwareBufferUsage usage
-	, HrVertextElement* pVertexElementArr
+	, HrVertexElement* pVertexElementArr
 	, uint32 nVertexElementLength)
 {
-	m_pHardwareBuffer->BindVertexStream(pBuffer, nBufferSize, usage);
-	m_pVertext->AddElementArray(pVertexElementArr, nVertexElementLength);
+	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage);
+	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
-uint32 HrRenderLayout::GetVertextSize()
+void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
 {
-	return m_pVertext->GetVertextSize();
+	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage);
+}
+
+uint32 HrRenderLayout::GetVertexSize()
+{
+	return m_pVertex->GetVertexSize();
 }
 
 IRenderLayout::EnumTopologyType HrRenderLayout::GetTopologyType()

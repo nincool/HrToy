@@ -5,7 +5,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
-#include "HrCore/Include/Render/HrVertext.h"
+#include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -31,9 +31,9 @@ IShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
 	return static_pointer_cast<IShaderCompiler>(MakeSharedPtr<HrD3D11ShaderCompiler>());
 }
 
-HrVertext* HrD3D11RenderFactory::CreateVertext()
+HrVertex* HrD3D11RenderFactory::CreateVertex()
 {
-	return HR_NEW HrVertext();
+	return HR_NEW HrVertex();
 }
 
 IGraphicsBuffer* HrD3D11RenderFactory::CreatehardwareBuffer()

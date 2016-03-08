@@ -2,7 +2,7 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/IRenderFactory.h"
 #include "HrCore/Include/Render/HrPixelFormat.h"
-#include "HrCore/Include/Render/HrVertext.h"
+#include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Asset/HrResourceManagerFactory.h"
@@ -25,26 +25,26 @@ HrGeometryTriangle::~HrGeometryTriangle()
 void HrGeometryTriangle::InitRenderLayout()
 {
 	m_pRenderLayout->SetTopologyType(HrRenderLayout::TT_TRIANGLELIST);
-	BindVertextStream();
+	BindVertexStream();
 }
 
-void HrGeometryTriangle::BindVertextStream()
+void HrGeometryTriangle::BindVertexStream()
 {
 	m_pRenderTechnique = HrResourceManagerFactory::GetInstance().GetEffectManager()->GetRenderEffect("BasicEffect")->GetTechnique("Basic");
 
-	float3 trianglePoint[] =
+	float3 vertices[] =
 	{
 		float3(0.5f, 0.5f, 0.5f),
 		float3(0.5f, -0.5f, 0.5f),
 		float3(-0.5f, -0.5f, 0.5f)
 	};
 
-	HrVertextElement vertexElementArr[] = {
-		HrVertextElement(HrVertextElement::VEU_POSITION, HrVertextElement::VET_FLOAT3),
+	HrVertexElement vertexElementArr[] = {
+		HrVertexElement(HrVertexElement::VEU_POSITION, HrVertexElement::VET_FLOAT3),
 	};
 
-	m_pRenderLayout->BindVertextBuffer((char*)trianglePoint
-		, sizeof(trianglePoint)
+	m_pRenderLayout->BindVertexBuffer((char*)vertices
+		, sizeof(vertices)
 		, IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 		, vertexElementArr
 		, HR_ARRAY_SIZE(vertexElementArr) );

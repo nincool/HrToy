@@ -41,8 +41,8 @@ namespace Hr
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
 
-	class HrVertextElement;
-	class HrVertext;
+	class HrVertexElement;
+	class HrVertex;
 	class IGraphicsBuffer;
 	class HrHardwareBuffer;
 	class IRenderable;

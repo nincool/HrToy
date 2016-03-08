@@ -1,5 +1,5 @@
-#ifndef _HR_VERTEXT_H_
-#define _HR_VERTEXT_H_
+#ifndef _HR_Vertex_H_
+#define _HR_Vertex_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
@@ -9,10 +9,10 @@
 
 namespace Hr
 {
-	class HrVertextElement : public RenderSysAllocatedObject
+	class HrVertexElement : public RenderSysAllocatedObject
 	{
 	public:
-		enum EnumVertextElementUsage
+		enum EnumVertexElementUsage
 		{
 			// vertex positions
 			VEU_POSITION = 1,
@@ -31,7 +31,9 @@ namespace Hr
 			// Vertex tangent
 			VEU_TANGENT = 1 << 7,
 			// Vertex binormal
-			VEU_BINORMAL = 1 << 8
+			VEU_BINORMAL = 1 << 8,
+			// Vertex -color
+			VEU_COLOR = 1 << 9
 		};
 		/// Vertex element type, used to identify the base types of the vertex contents
 		enum EnumVertexElementType
@@ -70,7 +72,7 @@ namespace Hr
 		};
 
 	public:
-		HrVertextElement(HrVertextElement::EnumVertextElementUsage usage, EnumVertexElementType pixelFormat)
+		HrVertexElement(HrVertexElement::EnumVertexElementUsage usage, EnumVertexElementType pixelFormat)
 		{
 			m_elementUsage = usage;
 			m_elementType = pixelFormat;
@@ -81,30 +83,30 @@ namespace Hr
 		static size_t GetTypeSize(EnumVertexElementType elementType);
 		HR_SYNTHESIZE(size_t, m_nOffset, Offset);
 		
-		EnumVertextElementUsage m_elementUsage;
+		EnumVertexElementUsage m_elementUsage;
 		EnumVertexElementType m_elementType;
 	};
 
-	class HR_CORE_API HrVertext : public RenderSysAllocatedObject
+	class HR_CORE_API HrVertex : public RenderSysAllocatedObject
 	{
 	public:
-		HrVertext();
-		~HrVertext();
+		HrVertex();
+		~HrVertex();
 
 	public:
 		void Clear();
-		void AddElementArray(HrVertextElement* pVertexElementArr, uint32 nVertexElementLength);
+		void AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVertexElementLength);
 
-		uint32 GetVertextSize();
-		size_t GetVertextElementNum();
+		uint32 GetVertexSize();
+		size_t GetVertexElementNum();
 
-		const HrVertextElement& GetVertextElement(uint32 nIndex);
+		const HrVertexElement& GetVertexElement(uint32 nIndex);
 	private:
-		void AddElement(HrVertextElement& usage);
+		void AddElement(HrVertexElement& usage);
 	protected:
 		uint32 m_nVertexSize;
 
-		std::vector<HrVertextElement> m_vecVertextElement;
+		std::vector<HrVertexElement> m_vecVertexElement;
 	};
 }
 

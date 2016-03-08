@@ -124,6 +124,7 @@
   <ItemGroup>
     <ClInclude Include="Include\AppWin32\HrApplication_Win32.h" />
     <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h" />
+    <ClInclude Include="Include\Asset\HrColor.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
     <ClInclude Include="Include\Asset\HrRenderEffectManager.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
@@ -158,7 +159,7 @@
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
-    <ClInclude Include="Include\Render\HrVertext.h" />
+    <ClInclude Include="Include\Render\HrVertex.h" />
     <ClInclude Include="Include\Render\IGraphicsBuffer.h" />
     <ClInclude Include="Include\Render\IRenderable.h" />
     <ClInclude Include="Include\Render\ICamera.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp" />
     <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp" />
     <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp" />
+    <ClCompile Include="Source\Asset\HrColor.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
@@ -206,7 +208,7 @@
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderPass.cpp" />
     <ClCompile Include="Source\Render\HrRenderQueue.cpp" />
-    <ClCompile Include="Source\Render\HrVertext.cpp" />
+    <ClCompile Include="Source\Render\HrVertex.cpp" />
     <ClCompile Include="Source\Render\IRenderable.cpp" />
     <ClCompile Include="Source\Render\IRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
