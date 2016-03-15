@@ -97,13 +97,13 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		m_pD3D11ImmediateContext->Draw(3, 0);
+		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
 		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
 	}
 	else
 	{
 		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+		m_pD3D11ImmediateContext->Draw(3, 0);
 		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
 	}
 
