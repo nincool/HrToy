@@ -33,13 +33,13 @@ void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	, HrVertexElement* pVertexElementArr
 	, uint32 nVertexElementLength)
 {
-	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage);
+	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage, IGraphicsBuffer::HBB_VERTEXT);
 	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
 void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
 {
-	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage);
+	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage, IGraphicsBuffer::HBB_INDEX);
 }
 
 uint32 HrRenderLayout::GetVertexSize()

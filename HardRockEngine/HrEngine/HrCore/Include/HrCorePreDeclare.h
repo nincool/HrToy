@@ -55,6 +55,11 @@ namespace Hr
 	class HrRenderTechnique;
 	class HrRenderEffect;
 	class IShader;
+	class HrShaderParams;
+	class HrRenderConstantBuffer;
+	class HrRenderParameter;
+	class HrRenderFrameParameters;
+	typedef std::unique_ptr<HrRenderFrameParameters> HrRenderFrameParametersPtr;
 
 
 	class HrResourceManagerFactory;

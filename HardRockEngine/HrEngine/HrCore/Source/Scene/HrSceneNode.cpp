@@ -63,3 +63,11 @@ void HrSceneNode::RemoveChildren()
 	m_vecChildNode.clear();
 }
 
+void HrSceneNode::UpdateNode(HrRenderFrameParameters& renderFrameParameters)
+{
+	if (m_pRenderable)
+	{
+		m_pRenderable->Update(renderFrameParameters);
+	}
+}
+

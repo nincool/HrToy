@@ -18,6 +18,8 @@ namespace Hr
 		virtual void AddChild(ISceneNode* pSceneNode) override;
 		virtual void FindVisibleRenderable(IRenderQueuePtr& pRenderQueue) override;
 		virtual void RemoveChildren() override;
+
+		virtual void UpdateNode(HrRenderFrameParameters& renderFrameParameters) override;
 	protected:
 		IRenderable* m_pRenderable;
 

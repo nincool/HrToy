@@ -3,6 +3,7 @@
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 #include "HrCore/Include/Render/HrVertex.h"
+#include "HrCore/Include/Render/HrRenderParameter.h"
 #include "HrD3D11Device.h"
 
 namespace Hr
@@ -13,6 +14,9 @@ namespace Hr
 		//InputElement SemanticName×ª»¯
 		static LPCSTR GetInputElementSemanticName(HrVertexElement::EnumVertexElementUsage usage);
 		static DXGI_FORMAT GetInputElementFormat(HrVertexElement::EnumVertexElementType type);
+
+		static HrRenderParameter::EnumRenderParamType GetRenderParamType(const std::string& strName);
+		static HrRenderParameter::EnumRenderParamDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
 	};
 }
 

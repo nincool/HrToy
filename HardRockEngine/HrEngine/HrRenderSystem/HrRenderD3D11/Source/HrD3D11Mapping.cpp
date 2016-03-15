@@ -57,3 +57,22 @@ DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(HrVertexElement::EnumVertexEle
 	return DXGI_FORMAT_R32G32B32_FLOAT;
 }
 
+HrRenderParameter::EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
+{
+	if ("worldviewproj_matrix" == strName)
+	{
+		return HrRenderParameter::RPT_WORLDVIEWPROJ_MATRIX;
+	}
+}
+
+HrRenderParameter::EnumRenderParamDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType)
+{
+	switch (shaderVariableType)
+	{
+	case D3D_SVT_FLOAT:
+		return HrRenderParameter::RPDT_FLOAT;
+	default:
+		break;
+	}
+}
+

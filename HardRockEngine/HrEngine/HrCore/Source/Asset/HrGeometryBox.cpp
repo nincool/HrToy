@@ -19,6 +19,8 @@ HrGeometryBox::HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 	m_nLength = nLength;
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
+
+	InitRenderLayout();
 }
 
 HrGeometryBox::~HrGeometryBox()

@@ -2,9 +2,12 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Device.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
-#include <boost/cast.hpp>
-#include <d3dcompiler.h>
+#include "HrCore/Include/Render/HrRenderConstantBuffer.h"
 #include "HrCore/Include/HrLog.h"
+#include "HrUtilTools/Include/HrUtil.h"
+#include "HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
+#include "HrRenderD3D11/Include/HrD3D11Mapping.h"
+#include <boost/cast.hpp>
 
 using namespace Hr;
 
@@ -28,11 +31,18 @@ void HrD3D11Shader::Bind(IRender* pRender)
 	switch (m_shaderType)
 	{
 	case Hr::IShader::ST_VERTEX_SHADER:
+	{
+		//更新constant数据
+		ID3D11Buffer* pConstantBuffer = GetConstantBuffer();
+		pD3D11ImmediateContext->VSSetConstantBuffers(0, 1, &pConstantBuffer);
 		pD3D11ImmediateContext->VSSetShader(m_pVertexShader, nullptr, 0);
 		break;
+	}
 	case Hr::IShader::ST_PIXEL_SHADER:
+	{
 		pD3D11ImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
 		break;
+	}
 	default:
 		break;
 	}
@@ -116,7 +126,120 @@ bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 
 	pShaderBuffer->Release();
 
+	uint64 nBufferSize = m_pShaderBuffer->GetBufferSize();
+	ID3D11ShaderReflection* pShaderReflection = nullptr;
+	hr = D3DReflect((void*)m_pShaderBuffer->GetBufferPoint()
+		, nBufferSize
+		, IID_ID3D11ShaderReflection
+		, (void**)&pShaderReflection);
+	if (FAILED(hr))
+	{
+		HRASSERT(nullptr, "CompileD3DShader Error! D3DReflect");
+	}
+	D3D11_SHADER_DESC shaderDesc;
+	hr = pShaderReflection->GetDesc(&shaderDesc);
+	if (FAILED(hr))
+	{
+		HRASSERT(nullptr, "CompileD3DShader Error! GetDesc");
+	}
+
+	//get the input parameters
+	m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
+	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
+	{
+		D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderInputParameters[i];
+		pShaderReflection->GetInputParameterDesc(i, &curParam);
+	}
+	//get the output parameters
+	m_vecD3D11ShaderOutputParamters.resize(shaderDesc.OutputParameters);
+	for (UINT i = 0; i < shaderDesc.OutputParameters; ++i)
+	{
+		D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderOutputParamters[i];
+		pShaderReflection->GetOutputParameterDesc(i, &curParam);
+	}
+
+	m_nConstantBufferNum = shaderDesc.ConstantBuffers;
+	m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
+
+	if (shaderDesc.ConstantBuffers > 0)
+	{
+		for (uint32 nCBIndex = 0; nCBIndex < shaderDesc.ConstantBuffers; ++nCBIndex)
+		{
+			ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
+
+			D3D11_SHADER_BUFFER_DESC constantBufferDesc;
+			hr = pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc);
+			if (FAILED(hr))
+			{
+				HRASSERT(nullptr, "CompileD3DShader Error! ConstBuffer GetDesc");
+			}
+			if (D3D_CT_CBUFFER == constantBufferDesc.Type || D3D_CT_TBUFFER == constantBufferDesc.Type)
+			{
+				D3D11ShaderDesc::ConstantBufferDesc constantDesc;
+				constantDesc.name = constantBufferDesc.Name;
+				constantDesc.name_hash = Hr_Hash_Value(constantBufferDesc.Name);
+				constantDesc.size = constantBufferDesc.Size;
+
+				for (uint32 nCBVarIndex = 0; nCBVarIndex < constantBufferDesc.Variables; ++nCBVarIndex)
+				{
+					ID3D11ShaderReflectionVariable* pVarRef = pShaderReflectionConstantBuffer->GetVariableByIndex(nCBVarIndex);
+					
+					D3D11_SHADER_VARIABLE_DESC varDesc;
+					pVarRef->GetDesc(&varDesc);
+
+					D3D11_SHADER_TYPE_DESC varTypeDesc;
+					ID3D11ShaderReflectionType* pVarType = pVarRef->GetType();
+					pVarType->GetDesc(&varTypeDesc);
+
+					D3D11ShaderDesc::ConstantBufferDesc::VariableDesc constantBufferVariableDesc;
+					constantBufferVariableDesc.name = varDesc.Name;
+					constantBufferVariableDesc.start_offset = varDesc.StartOffset;
+					constantBufferVariableDesc.type = varTypeDesc.Type;
+					constantBufferVariableDesc.rows = varTypeDesc.Rows;
+					constantBufferVariableDesc.columns = varTypeDesc.Columns;
+					constantBufferVariableDesc.elements = varTypeDesc.Elements;
+					
+					constantDesc.var_desc.push_back(constantBufferVariableDesc);
+				}
+				m_shaderDesc.cb_desc.push_back(constantDesc);
+			}
+		}
+
+		int nSamplers = -1;
+		int nSrvs = -1;
+		int nUavs = -1;
+		for (uint32_t i = 0; i < shaderDesc.BoundResources; ++i)
+		{
+			D3D11_SHADER_INPUT_BIND_DESC shaderInputDesc;
+			pShaderReflection->GetResourceBindingDesc(i, &shaderInputDesc);
+
+		}
+	}
+
+	SAFE_RELEASE(pShaderReflection);
+
+	CreateShaderParams();
+
 	return true;
+}
+
+void HrD3D11Shader::CreateShaderParams()
+{
+	for (size_t nConstBufferIndex = 0; nConstBufferIndex < m_shaderDesc.cb_desc.size(); ++nConstBufferIndex)
+	{
+		HrRenderConstantBuffer* pRenderConstantBuffer = HR_NEW HrRenderConstantBuffer();
+		m_vecRenderConstantBuffer.push_back(pRenderConstantBuffer);
+		pRenderConstantBuffer->SetName(m_shaderDesc.cb_desc[nConstBufferIndex].name);
+		pRenderConstantBuffer->SetSize(m_shaderDesc.cb_desc[nConstBufferIndex].size);
+		for (size_t nVariableIndex = 0; nVariableIndex < m_shaderDesc.cb_desc[nConstBufferIndex].var_desc.size(); ++nVariableIndex)
+		{
+			const D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& variableDesc = m_shaderDesc.cb_desc[nConstBufferIndex].var_desc[nVariableIndex];
+			pRenderConstantBuffer->AddParameter(variableDesc.name
+				, HrD3D11Mapping::GetRenderParamType(variableDesc.name)
+				, HrD3D11Mapping::GetRenderParamDataType(static_cast<D3D_SHADER_VARIABLE_TYPE>(variableDesc.type))
+				, variableDesc.start_offset);
+		}
+	}
 }
 
 void HrD3D11Shader::CreateVertexShader()
@@ -141,9 +264,28 @@ void HrD3D11Shader::CreatePixelShader()
 	}
 }
 
+void HrD3D11Shader::UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters)
+{
+	HrRenderConstantBuffer* pRenderConstantBuffer = nullptr;
+	for (auto& item : m_vecRenderConstantBuffer)
+	{
+		pRenderConstantBuffer = item;
+		pRenderConstantBuffer->UpdateAutoParams(renderFrameParameters);
+	}
+}
 
+ID3D11Buffer* HrD3D11Shader::GetConstantBuffer()
+{
+	ID3D11Buffer* pConstantBuffer = nullptr;
+	if (!m_vecRenderConstantBuffer.empty())
+	{
+		IGraphicsBuffer* pGraphicsBuffer = m_vecRenderConstantBuffer[0]->GetConstBuffer();
+		HrD3D11HardwareBuffer* pD3D11HardwareBuffer = static_cast<HrD3D11HardwareBuffer*>(pGraphicsBuffer);
+		pConstantBuffer = pD3D11HardwareBuffer->GetGraphicsBuffer();
+	}
 
-
+	return pConstantBuffer;
+}
 
 
 

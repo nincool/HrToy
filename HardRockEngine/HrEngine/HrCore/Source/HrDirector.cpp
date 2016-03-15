@@ -90,8 +90,6 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::Update()
 {
-	Render();
-
 	m_pShareSceneManager->UpdateScene();
 }
 
@@ -120,8 +118,6 @@ void HrDirector::Release()
 
 bool HrDirector::Render()
 {
-	m_pShareRender->StartRender();
-
 	return true;
 }
 

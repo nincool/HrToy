@@ -13,6 +13,7 @@ namespace Hr
 
 		virtual size_t GetHashName() = 0;
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex) = 0;
+		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters) = 0;
 	};
 }
 

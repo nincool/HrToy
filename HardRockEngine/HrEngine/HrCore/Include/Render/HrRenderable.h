@@ -13,6 +13,8 @@ namespace Hr
 
 		virtual IRenderLayout* GetRenderLayout() override;
 		virtual IRenderTechnique* GetRenderTechnique() override;
+
+		virtual void Update(HrRenderFrameParameters& renderFrameParameters) override;
 	protected:
 		IRenderLayout* m_pRenderLayout;
 		IRenderTechnique* m_pRenderTechnique;

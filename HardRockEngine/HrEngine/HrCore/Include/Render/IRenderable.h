@@ -14,6 +14,7 @@ namespace Hr
 		virtual IRenderLayout* GetRenderLayout() = 0;
 		virtual IRenderTechnique* GetRenderTechnique() = 0;
 
+		virtual void Update(HrRenderFrameParameters& renderFrameParameters) = 0;
 	};
 }
 

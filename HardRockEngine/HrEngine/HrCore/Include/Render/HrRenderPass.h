@@ -24,6 +24,8 @@ namespace Hr
 		void UnBindPass(IRender* pRender);
 
 		IShader* GetVertexShader();
+
+		void UpdateShaderParams(HrRenderFrameParameters& renderFrameParameters);
 	private:
 		std::string m_strPassName;
 		IShader* m_pVertexShader;

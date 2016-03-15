@@ -13,6 +13,7 @@ namespace Hr
 
 		virtual size_t GetHashName() override;
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex) override;
+		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters) override;
 
 		HrRenderPass* CreatePass(std::string strPassName);
 	protected:

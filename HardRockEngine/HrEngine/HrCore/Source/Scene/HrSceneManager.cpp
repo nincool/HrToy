@@ -6,6 +6,7 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
+#include "Render/HrRenderFrameParameters.h"
 #include "HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -17,6 +18,7 @@ HrSceneManager::HrSceneManager()
 	m_bSceneRunning = false;
 
 	m_pShareRenderQueue = MakeSharedPtr<HrRenderQueue>();
+	m_pUniqueRenderParameters = MakeUniquePtr<HrRenderFrameParameters>();
 }
 
 HrSceneManager::~HrSceneManager()
@@ -69,9 +71,18 @@ void HrSceneManager::FlushScene()
 	{
 		return;
 	}
+
+	IRenderable* pRenderable = nullptr;
+	ISceneNode* pSceneNode = nullptr;
 	std::unordered_map<IRenderable*, ISceneNode*>& mapRenderables = m_pShareRenderQueue->GetRenderables();
 	for (auto& itemMapRenderable : mapRenderables)
 	{
+		pRenderable = itemMapRenderable.first;
+		pSceneNode = itemMapRenderable.second;
+
+		m_pUniqueRenderParameters->SetCurrentRenderable(pRenderable);
+		itemMapRenderable.second->UpdateNode(*(m_pUniqueRenderParameters.get()));
+
 		IRenderable* pRenderable = itemMapRenderable.second->GetRenderable();
 		IRenderLayout* pRenderLayout = pRenderable->GetRenderLayout();
 		IRenderTechnique* pRenderTechnique = pRenderable->GetRenderTechnique();

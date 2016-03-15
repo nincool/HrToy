@@ -26,6 +26,7 @@ namespace Hr
 		//传入shader代码进行编译
 		virtual void StreamIn(HrStreamData& streamData) = 0;
 
+		virtual void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters) = 0;
 	};
 }
 

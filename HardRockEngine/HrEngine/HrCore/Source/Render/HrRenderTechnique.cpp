@@ -10,9 +10,14 @@ HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName)
 	m_nHashName = boost::hash_range(m_strTechniqueName.begin(), m_strTechniqueName.end());
 }
 
-size_t Hr::HrRenderTechnique::GetHashName()
+size_t HrRenderTechnique::GetHashName()
 {
 	return m_nHashName;
+}
+
+void HrRenderTechnique::UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters)
+{
+	m_vecPass[0]->UpdateShaderParams(renderFrameParameters);
 }
 
 HrRenderPass* HrRenderTechnique::GetRenderPass(uint32 nIndex)
@@ -29,4 +34,7 @@ HrRenderPass* HrRenderTechnique::CreatePass(std::string strPassName)
 
 	return pRenderPass;
 }
+
+
+
 

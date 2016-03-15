@@ -34,9 +34,17 @@ HrD3D11HardwareBuffer::~HrD3D11HardwareBuffer()
 
 }
 
-void HrD3D11HardwareBuffer::BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
+void HrD3D11HardwareBuffer::BindStream(char* pBuffer
+	, uint32 nBufferSize
+	, IGraphicsBuffer::EnumHardwareBufferUsage usage
+	, IGraphicsBuffer::EnumHardwareBufferBind bindFlag)
 {
-	HrHardwareBuffer::BindStream(pBuffer, nBufferSize, usage);
+	if (m_pD3D11Buffer)
+	{
+		SAFE_RELEASE(m_pD3D11Buffer);
+	}
+
+	HrHardwareBuffer::BindStream(pBuffer, nBufferSize, usage, bindFlag);
 	CreateHardwareBuffer(pBuffer);
 }
 
@@ -89,7 +97,19 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 		break;
 	}
 
-	bindFlags = D3D11_BIND_VERTEX_BUFFER;
+	switch (m_bindFlag)
+	{
+	case IGraphicsBuffer::HBB_VERTEXT:
+		bindFlags = D3D11_BIND_VERTEX_BUFFER;
+		break;
+	case IGraphicsBuffer::HBB_INDEX:
+		bindFlags = D3D11_BIND_INDEX_BUFFER;
+		break;
+	case IGraphicsBuffer::HBB_CONST:
+		bindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		break;
+	}
+	
 	miscFlags = 0;
 }
 

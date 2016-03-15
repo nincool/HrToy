@@ -2,6 +2,7 @@
 #define _HR_UTIL_H_
 
 #include <memory>
+#include <boost/functional/hash.hpp>
 
 namespace Hr
 {
@@ -44,6 +45,13 @@ namespace Hr
 	{
 		//return std::unique_ptr<T>(new T(std::forward<Args>(args)...), std::default_delete<T>());
 		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
+	inline size_t Hr_Hash_Value(const char* str)
+	{
+		static boost::hash<std::string> string_hash;
+
+		return string_hash(str);
 	}
 }
 

@@ -17,13 +17,23 @@ namespace Hr
 			HBU_GPUREAD_IMMUTABLE,
 			HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE,
 		};
+
+		enum EnumHardwareBufferBind
+		{
+			HBB_VERTEXT,
+			HBB_INDEX,
+			HBB_CONST
+		};
 	public:
 		IGraphicsBuffer()
 		{
 		}
 		virtual ~IGraphicsBuffer(){}
 
-		virtual void BindStream(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage) = 0;
+		virtual void BindStream(char* pBuffer
+			, uint32 nBufferSize
+			, IGraphicsBuffer::EnumHardwareBufferUsage usage
+			, IGraphicsBuffer::EnumHardwareBufferBind bindFlag) = 0;
 		virtual uint32 GetByteWidth() = 0;
 	};
 }

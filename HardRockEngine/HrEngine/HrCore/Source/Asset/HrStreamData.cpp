@@ -34,3 +34,15 @@ uint64 HrStreamData::GetBufferSize()
 	return m_vecStreamData.size();
 }
 
+void HrStreamData::ClearBuffer()
+{
+	m_vecStreamData.clear();
+}
+
+void HrStreamData::AddBuffer(char* pData, uint32 nSize)
+{
+	uint32 nOldSize = m_vecStreamData.size();
+	m_vecStreamData.resize(nOldSize + nSize);
+	memcpy((char*)&m_vecStreamData[nOldSize], pData, nSize);
+}
+

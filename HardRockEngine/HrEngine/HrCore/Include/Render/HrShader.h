@@ -19,10 +19,16 @@ namespace Hr
 		virtual void UnBind(IRender* pRender) override;
 
 		virtual void StreamIn(HrStreamData& streamData) override;
+
+		virtual void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters) override;
 	protected:
 		_SHADER_TYPE_ m_shaderType;
 		std::string m_strEntryPoint;
+
+		std::vector<HrRenderConstantBuffer*> m_vecRenderConstantBuffer;
 	};
 }
 
 #endif
+
+

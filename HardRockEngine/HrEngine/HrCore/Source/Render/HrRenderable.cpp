@@ -28,3 +28,8 @@ IRenderTechnique* HrRenderable::GetRenderTechnique()
 	return m_pRenderTechnique;
 }
 
+void HrRenderable::Update(HrRenderFrameParameters& renderFrameParameters)
+{
+	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
+}
+

@@ -23,6 +23,9 @@ namespace Hr
 		char* ResizeBuffer(uint64 nLength);
 		char* GetBufferPoint();
 		uint64 GetBufferSize();
+
+		void ClearBuffer();
+		void AddBuffer(char* pData, uint32 nSize);
 	private:
 		EnumReadDataType m_readDataType;
 		std::vector<uint8> m_vecStreamData;

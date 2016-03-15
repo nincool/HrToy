@@ -60,9 +60,6 @@ void HrD3D11Render::Release()
 
 bool HrD3D11Render::StartRender()
 {
-	if (m_pRenderDemo)
-		m_pRenderDemo->Render();
-
 	return true;
 }
 
@@ -70,6 +67,7 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 {
 	if (m_pRenderDemo)
 	{
+		m_pRenderDemo->Render();
 		return;
 	}
 	//1.IASetVertexBuffers

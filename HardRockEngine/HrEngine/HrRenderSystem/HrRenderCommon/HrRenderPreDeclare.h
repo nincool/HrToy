@@ -22,6 +22,7 @@ namespace Hr
 	typedef std::unique_ptr<HrD3D11Utility> HrD3D11UtilityPtr;
 
 	class HrD3D11Shader;
+	class HrD3D11HardwareBuffer;
 }
 
 #endif

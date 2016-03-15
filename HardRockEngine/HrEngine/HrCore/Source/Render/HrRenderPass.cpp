@@ -3,6 +3,7 @@
 #include "HrCore/Include/Render/IRenderFactory.h"
 #include "HrDirector.h"
 
+
 using namespace Hr;
 
 HrRenderPass::HrRenderPass(std::string strPassName)
@@ -54,3 +55,13 @@ IShader* HrRenderPass::GetVertexShader()
 {
 	return m_pVertexShader;
 }
+
+void HrRenderPass::UpdateShaderParams(HrRenderFrameParameters& renderFrameParameters)
+{
+	if (m_pVertexShader)
+	{
+		m_pVertexShader->UpdateAutoParams(renderFrameParameters);
+	}
+}
+
+

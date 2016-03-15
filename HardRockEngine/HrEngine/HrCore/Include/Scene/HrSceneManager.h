@@ -24,6 +24,8 @@ namespace Hr
 		IRenderQueuePtr m_pShareRenderQueue;
 
 		bool m_bSceneRunning;
+
+		HrRenderFrameParametersPtr m_pUniqueRenderParameters;
 	};
 }
 
