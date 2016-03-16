@@ -9,21 +9,23 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertexElement::EnumVertexEl
 	case Hr::HrVertexElement::VEU_POSITION:
 		return "POSITION";
 	case Hr::HrVertexElement::VEU_NORMAL:
-		break;
+		return "NORMAL";
+	case HrVertexElement::VEU_COLOR:
+		return "COLOR";
 	case Hr::HrVertexElement::VEU_DIFFUSE:
-		break;
+		return "COLOR"; // NB index will differentiat
 	case Hr::HrVertexElement::VEU_SPECULAR:
-		break;
+		return "COLOR"; // NB index will differentiate
 	case Hr::HrVertexElement::VEU_BLENDWEIGHT:
-		break;
+		return "BLENDWEIGHT";
 	case Hr::HrVertexElement::VEU_BLENDINDEX:
-		break;
+		return "BLENDINDICES";
 	case Hr::HrVertexElement::VEU_TEXTURECOORD:
-		break;
+		return "TEXCOORD";
 	case Hr::HrVertexElement::VEU_TANGENT:
-		break;
+		return "TANGENT";
 	case Hr::HrVertexElement::VEU_BINORMAL:
-		break;
+		return "BINORMAL";
 	default:
 		break;
 	}

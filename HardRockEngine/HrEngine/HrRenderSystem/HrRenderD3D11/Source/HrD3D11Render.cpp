@@ -280,43 +280,44 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 
-	//{
-	//	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
-	//	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
-	//	unsigned int offset = 0;
+	{
+		HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
+		unsigned int stride = pD3D11RenderLayout->GetVertexSize();
+		unsigned int offset = 0;
 
-	//	IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
-	//	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
-	//	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
+		IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
+		ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
+		m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
+		//m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
 
-	//	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
-	//	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
-	//	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
+		m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+		m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//	if (pD3D11RenderLayout->UseIndices())
-	//	{
-	//		ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-	//		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-	//	}
-	//}
+		if (pD3D11RenderLayout->UseIndices())
+		{
+			ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
+			m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+		}
+	}
 
 	
-	{
-		//指定输入布局
-		m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
-		struct Vertex
-		{
-			float3 position;
-			float4 color;
-		};
-		uint32 nStride = sizeof(Vertex);
-		uint32 nOffset = 0;
-		m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &nStride, &nOffset);
-		//指定索引缓存
-		m_pD3D11ImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-		//指定图元拓扑类型
-		m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
+	//{
+	//	//指定输入布局
+	//	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
+	//	struct Vertex
+	//	{
+	//		float3 position;
+	//		float4 color;
+	//	};
+	//	uint32 nStride = sizeof(Vertex);
+	//	uint32 nOffset = 0;
+	//	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &nStride, &nOffset);
+	//	//指定索引缓存
+	//	m_pD3D11ImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//	//指定图元拓扑类型
+	//	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//}
 
 
 
