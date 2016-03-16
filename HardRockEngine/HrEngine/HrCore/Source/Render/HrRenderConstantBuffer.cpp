@@ -73,3 +73,6 @@ void HrRenderConstantBuffer::UpdateAutoParams(HrRenderFrameParameters& renderFra
 	m_pRenderHardwareBuffer->BindStream(m_pStreamData->GetBufferPoint(), m_pStreamData->GetBufferSize(), IGraphicsBuffer::HBU_GPUREAD_CPUWRITE, IGraphicsBuffer::HBB_CONST);
 }
 
+
+
+

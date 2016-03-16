@@ -7,6 +7,7 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrCamera.h"
 #include "HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -57,6 +58,7 @@ void HrSceneManager::UpdateScene()
 	{
 		return;
 	}
+
 	m_pShareRunningScene->Update();
 
 	m_pShareRenderQueue->PrepareRenderQueue();

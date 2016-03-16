@@ -186,7 +186,7 @@ bool HrD3D11Render::LoadContent()
 
 	Vertex vertices[8] =
 	{
-		{ float3(-1.0f, -1.0f, -1.0f), HrColor::F4Blue },
+		{ float3(-1.0f, -1.0f, -1.0f),  HrColor::F4Blue },
 		{ float3(-1.0f, 1.0f, -1.0f), HrColor::F4Cyan },
 		{ float3(1.0f, 1.0f, -1.0f), HrColor::F4Red },
 		{ float3(1.0f, -1.0f, -1.0f), HrColor::F4Yellow },
@@ -216,7 +216,7 @@ bool HrD3D11Render::LoadContent()
 	ibDesc.ByteWidth = 36 * sizeof(UINT);
 	ibDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	ibDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	UINT indices[36] =
+	uint32 indices[36] =
 	{
 		0, 1, 2, 0, 2, 3,
 		4, 5, 1, 4, 1, 0,
@@ -321,21 +321,21 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 
 
 
-	//{
-	//	//if (pD3D11RenderLayout->UseIndices())
-	//	if (true)
-	//	{
-	//		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-	//		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
-	//		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
-	//	}
-	//	else
-	//	{
-	//		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-	//		m_pD3D11ImmediateContext->Draw(3, 0);
-	//		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
-	//	}
-	//}
+	{
+		//if (pD3D11RenderLayout->UseIndices())
+		//if (true)
+		//{
+		//	pRenderTechnique->GetRenderPass(0)->BindPass(this);
+		//	m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+		//	pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		//}
+		//else
+		//{
+		//	pRenderTechnique->GetRenderPass(0)->BindPass(this);
+		//	m_pD3D11ImmediateContext->Draw(3, 0);
+		//	pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		//}
+	}
 
 	{
 		//{
@@ -350,16 +350,16 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 		//	}
 		//}
 
-		ID3DX11EffectTechnique* pTech = m_pEffect->GetTechniqueByName("BasicDraw"); 
-		ID3DX11EffectPass* pPass  = pTech->GetPassByIndex(0);
-		D3DX11_PASS_SHADER_DESC passVertexShaderDesc;
-		pPass->GetVertexShaderDesc(&passVertexShaderDesc);
-		ID3D11VertexShader* pVertexShader = nullptr;
-		passVertexShaderDesc.pShaderVariable->GetVertexShader(0, &pVertexShader);
-		D3DX11_PASS_SHADER_DESC passPixShaderDesc;
-		pPass->GetPixelShaderDesc(&passPixShaderDesc);
-		ID3D11PixelShader* pPixShader = nullptr;
-		passPixShaderDesc.pShaderVariable->GetPixelShader(0, &pPixShader);
+		//ID3DX11EffectTechnique* pTech = m_pEffect->GetTechniqueByName("BasicDraw"); 
+		//ID3DX11EffectPass* pPass  = pTech->GetPassByIndex(0);
+		//D3DX11_PASS_SHADER_DESC passVertexShaderDesc;
+		//pPass->GetVertexShaderDesc(&passVertexShaderDesc);
+		//ID3D11VertexShader* pVertexShader = nullptr;
+		//passVertexShaderDesc.pShaderVariable->GetVertexShader(0, &pVertexShader);
+		//D3DX11_PASS_SHADER_DESC passPixShaderDesc;
+		//pPass->GetPixelShaderDesc(&passPixShaderDesc);
+		//ID3D11PixelShader* pPixShader = nullptr;
+		//passPixShaderDesc.pShaderVariable->GetPixelShader(0, &pPixShader);
 
 
 		{
@@ -403,3 +403,4 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 
 	return true;
 }
+

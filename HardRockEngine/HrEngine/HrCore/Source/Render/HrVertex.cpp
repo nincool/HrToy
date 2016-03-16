@@ -97,7 +97,7 @@ void HrVertex::AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVerte
 	size_t nOffset = 0;
 	for (size_t i = 0; i < nVertexElementLength; ++i)
 	{
-		pVertexElementArr->SetOffset(nOffset);
+		pVertexElementArr[i].SetOffset(nOffset);
 		AddElement(pVertexElementArr[i]);
 		nOffset += pVertexElementArr[i].GetTypeSize();
 	}
