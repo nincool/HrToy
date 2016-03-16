@@ -24,8 +24,9 @@ const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix() const
 {
 	m_pShareCamera->ProjectParams(Hr::PI * 0.25f, 600.0f / 480.0f, 1.0f, 1000.0f);
 	mWorldViewProjMatrix = m_pShareCamera->GetProjectMatrix();
+	Matrix4 matView = m_pShareCamera->GetViewMatrix();
 
-	return mWorldViewProjMatrix;
+	return mWorldViewProjMatrix * matView;
 }
 
 

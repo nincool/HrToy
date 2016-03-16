@@ -97,11 +97,11 @@ namespace Hr
 
 		reference operator()(size_t row, size_t col) 
 		{
-			return _m[row * elem_num + col];
+			return _m[row * col_num + col];
 		}
 		const_reference operator()(size_t row, size_t col) const 
 		{
-			return _m[row * elem_num + col];
+			return _m[row * col_num + col];
 		}
 		
 		inline REAL* operator [] (size_t iRow)
@@ -124,25 +124,25 @@ namespace Hr
 		}
 		HrVector3 const & Row(size_t index) const
 		{
-			size_t nStartIndex = index * elem_num;
+			size_t nStartIndex = index * col_num;
 			return HrVector3(_m[nStartIndex], _m[nStartIndex+1], _m[nStartIndex+2]);
 		}
 		void Col(size_t index, HrVector3 const & rhs)
 		{
 			_m[index] = rhs.x();
-			_m[index + elem_num] = rhs.y();
-			_m[index + elem_num * 2] = rhs.z();
+			_m[index + col_num] = rhs.y();
+			_m[index + col_num * 2] = rhs.z();
 		}
 		HrVector3 const Col(size_t index) const
 		{
-			return HrVector3(_m[index], _m[index + elem_num], _m[index + elem_num * 2]);
+			return HrVector3(_m[index], _m[index + col_num], _m[index + col_num * 2]);
 		}
 
 		/** Matrix concatenation using '*'.
 		*/
 		HrMatrix4& operator+=(HrMatrix4 const & rhs)
 		{
-			for (size_t i = 0; i < elem_num * elem_num; ++i)
+			for (size_t i = 0; i < col_num * row_num; ++i)
 			{
 			}
 			return *this;

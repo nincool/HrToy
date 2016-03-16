@@ -4,20 +4,11 @@
 #include "DirectXTK/Inc/SpriteBatch.h"
 #include "DirectXFX11/inc/d3dx11effect.h"
 #include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Asset/HrColor.h"
 #include "HrMath/Include/HrMath.h"
 
 using namespace Hr;
 using namespace DirectX;
-
-const XMFLOAT4 White = { 1.0f, 1.0f, 1.0f, 1.0f };
-const XMFLOAT4 Black = { 0.0f, 0.0f, 0.0f, 1.0f };
-const XMFLOAT4 Red = { 1.0f, 0.0f, 0.0f, 1.0f };
-const XMFLOAT4 Green = { 0.0f, 1.0f, 0.0f, 1.0f };
-const XMFLOAT4 Blue = { 0.0f, 0.0f, 1.0f, 1.0f };
-const XMFLOAT4 Yellow = { 1.0f, 1.0f, 0.0f, 1.0f };
-const XMFLOAT4 Cyan = { 0.0f, 1.0f, 1.0f, 1.0f };
-const XMFLOAT4 Magenta = { 1.0f, 0.0f, 1.0f, 1.0f };
-const XMFLOAT4 Silver = { 0.75f, 0.75f, 0.75f, 1.0f };
 
 HrRenderD3D11DemoPipleline::HrRenderD3D11DemoPipleline()
 {
@@ -85,23 +76,44 @@ bool HrRenderD3D11DemoPipleline::LoadContent()
 		return false;
 	}
 
+	struct Vertex
+	{
+		float3 position;
+		float4 color;
+	};
+
+	Vertex vertices[8] =
+	{
+		{ float3(-1.0f, -1.0f, -1.0f), HrColor::F4Blue },
+		{ float3(-1.0f, 1.0f, -1.0f), HrColor::F4Cyan },
+		{ float3(1.0f, 1.0f, -1.0f), HrColor::F4Red },
+		{ float3(1.0f, -1.0f, -1.0f), HrColor::F4Yellow },
+		{ float3(-1.0f, -1.0f, 1.0f), HrColor::F4Green },
+		{ float3(-1.0f, 1.0f, 1.0f), HrColor::F4Silver },
+		{ float3(1.0f, 1.0f, 1.0f), HrColor::F4Black },
+		{ float3(1.0f, -1.0f, 1.0f), HrColor::F4Magenta }
+	};
+
 	//创建顶点缓存
 	D3D11_BUFFER_DESC vbDesc = { 0 };
 	vbDesc.ByteWidth = 8 * sizeof(Vertex);
 	vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vbDesc.Usage = D3D11_USAGE_DEFAULT;
 	//然后给出数据：立方体的8个顶点
-	Vertex vertices[8] =
-	{
-		{ XMFLOAT3(-1.f, -1.f, -1.f), Blue },
-		{ XMFLOAT3(-1.f, 1.f, -1.f), Cyan },
-		{ XMFLOAT3(1.f, 1.f, -1.f), Red },
-		{ XMFLOAT3(1.f, -1.f, -1.f), Yellow },
-		{ XMFLOAT3(-1.f, -1.f, 1.f), Green },
-		{ XMFLOAT3(-1.f, 1.f, 1.f), Silver },
-		{ XMFLOAT3(1.f, 1.f, 1.f), Black },
-		{ XMFLOAT3(1.f, -1.f, 1.f), Magenta }
-	};
+	//Vertex vertices[8] =
+	//{
+	//	{ XMFLOAT3(-1.f, -1.f, -1.f), Blue },
+	//	{ XMFLOAT3(-1.f, 1.f, -1.f), Cyan },
+	//	{ XMFLOAT3(1.f, 1.f, -1.f), Red },
+	//	{ XMFLOAT3(1.f, -1.f, -1.f), Yellow },
+	//	{ XMFLOAT3(-1.f, -1.f, 1.f), Green },
+	//	{ XMFLOAT3(-1.f, 1.f, 1.f), Silver },
+	//	{ XMFLOAT3(1.f, 1.f, 1.f), Black },
+	//	{ XMFLOAT3(1.f, -1.f, 1.f), Magenta }
+	//};
+
+;
+
 	D3D11_SUBRESOURCE_DATA vbData = { 0 };
 	vbData.pSysMem = vertices;
 	rt = m_pD3D11Device->CreateBuffer(&vbDesc, &vbData, &m_pVertexBuffer);
@@ -151,7 +163,7 @@ bool HrRenderD3D11DemoPipleline::Render()
 	theta += XM_PI * 0.5f * 0.001f;
 
 	XMMATRIX world = XMMatrixIdentity();
-	world = rotation1 * rotation2;
+	//world = rotation1 * rotation2;
 
 	//视变换 把摄像机变换到世界坐标系原点 所有物体都随摄像机变换 
 	XMVECTOR eyePos = XMVectorSet(0.0f, 2.0f, -5.0f, 1.0f);
@@ -175,7 +187,12 @@ bool HrRenderD3D11DemoPipleline::Render()
 
 	 //指定输入布局
 	m_pD3D11ImmediateContext->IASetInputLayout(m_pInputLayout);
-
+	
+	struct Vertex
+	{
+		float3 position;
+		float4 color;
+	};
 	uint32 nStride = sizeof(Vertex);
 	uint32 nOffset = 0;
 	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &nStride, &nOffset);

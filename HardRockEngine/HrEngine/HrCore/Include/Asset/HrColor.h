@@ -7,7 +7,7 @@
 
 namespace Hr
 {
-	class HrColor : public ResourceAllocatedObject
+	class HR_CORE_API HrColor : public ResourceAllocatedObject
 	{
 	public:
 		static const float4 F4Black;

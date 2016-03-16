@@ -35,11 +35,11 @@ namespace Hr
 		HR_SYNTHESIZE(ID3D11RenderTargetView*, m_pRenderTargetView, RenderTargetView);
 		HR_SYNTHESIZE(ID3D11DepthStencilView*, m_pDepthStencilView, DepthStencilView);
 
-		struct Vertex
-		{
-			XMFLOAT3 pos;
-			XMFLOAT4 color;
-		};
+		//struct Vertex
+		//{
+		//	XMFLOAT3 pos;
+		//	XMFLOAT4 color;
+		//};
 
 		ID3DX11Effect* m_pEffect;
 		ID3D11InputLayout* m_pInputLayout;
