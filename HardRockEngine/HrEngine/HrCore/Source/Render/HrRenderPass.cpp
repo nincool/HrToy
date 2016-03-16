@@ -56,6 +56,11 @@ IShader* HrRenderPass::GetVertexShader()
 	return m_pVertexShader;
 }
 
+IShader* HrRenderPass::GetPixelShader()
+{
+	return m_pPixelShader;
+}
+
 void HrRenderPass::UpdateShaderParams(HrRenderFrameParameters& renderFrameParameters)
 {
 	if (m_pVertexShader)

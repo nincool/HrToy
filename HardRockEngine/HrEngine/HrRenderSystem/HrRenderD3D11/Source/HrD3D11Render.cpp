@@ -93,13 +93,13 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
 	
 	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
-	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+		m_pD3D11ImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	}
 
 	if (pD3D11RenderLayout->UseIndices())
@@ -361,6 +361,10 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 		//ID3D11PixelShader* pPixShader = nullptr;
 		//passPixShaderDesc.pShaderVariable->GetPixelShader(0, &pPixShader);
 
+
+		HrD3D11Shader* pHrVertexShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetVertexShader());
+		
+		HrD3D11Shader* pHrPixelShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetPixelShader());
 
 		{
 			ID3D11Buffer* m_pD3D11ConstBuffer = nullptr;

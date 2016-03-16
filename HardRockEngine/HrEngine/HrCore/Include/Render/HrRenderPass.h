@@ -24,6 +24,7 @@ namespace Hr
 		void UnBindPass(IRender* pRender);
 
 		IShader* GetVertexShader();
+		IShader* GetPixelShader();
 
 		void UpdateShaderParams(HrRenderFrameParameters& renderFrameParameters);
 	private:
