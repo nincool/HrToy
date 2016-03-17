@@ -7,11 +7,6 @@
 struct ID3D11DeviceContext;
 struct ID3D11Device;
 
-#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Device.h"
-#include "DirectXFX11/inc/d3dx11effect.h"
-#include "HrCore/Include/HrLog.h"
-#include <D3Dcompiler.h>
-
 struct ID3DX11EffectMatrixVariable;
 
 namespace Hr
@@ -30,9 +25,6 @@ namespace Hr
 		virtual void Release() override;
 		virtual bool StartRender() override;
 
-		//Testing 
-		bool LoadContent();
-		bool TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout);
 	public:
 		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
 
@@ -45,48 +37,6 @@ namespace Hr
 		IRenderDemo* m_pRenderDemo;
 
 		HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pShareRenderWindow, RenderWindow);
-
-
-		//Testing
-		ID3DX11EffectMatrixVariable* m_pFxWorldViewProj;
-
-		//测试摄像机
-		HrCameraPtr m_pShareCamera;
-
-		//Testing
-		ID3DX11Effect* m_pEffect;
-		ID3D11InputLayout* m_pInputLayout;
-		ID3D11Buffer* m_pVertexBuffer;
-		ID3D11Buffer* m_pIndexBuffer;
-
-		ID3D11VertexShader* m_pSolidColorVS;
-		ID3D11PixelShader* m_pSolidColorPS;
-		bool CompileD3DShader(LPCWSTR pFilePath, char* pEntry, char* pTarget, ID3DBlob** pBuffer)
-		{
-			DWORD shaderFlags = 0;//D3DCOMPILE_ENABLE_STRICTNESS;
-
-			ID3DBlob* errorBuffer = 0;
-			HRESULT result;
-
-			result = D3DCompileFromFile(pFilePath, 0, 0, pEntry, pTarget,
-				shaderFlags, 0, pBuffer, &errorBuffer);
-			if (FAILED(result))
-			{
-				if (errorBuffer != 0)
-				{
-					char* pMsg = (char*)(errorBuffer->GetBufferPointer());
-					HRERROR((LPCWSTR)errorBuffer->GetBufferPointer());
-					errorBuffer->Release();
-				}
-				HRERROR(_T("CompileD3DShader Error! File[%s]"), pFilePath);
-				return false;
-			}
-
-			if (errorBuffer != 0)
-				errorBuffer->Release();
-
-			return true;
-		}
 
 	};
 }
