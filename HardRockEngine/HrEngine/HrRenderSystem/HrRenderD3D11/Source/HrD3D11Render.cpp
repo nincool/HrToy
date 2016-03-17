@@ -323,18 +323,18 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 
 	{
 		//if (pD3D11RenderLayout->UseIndices())
-		//if (true)
-		//{
-		//	pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		//	m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
-		//	pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
-		//}
-		//else
-		//{
-		//	pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		//	m_pD3D11ImmediateContext->Draw(3, 0);
-		//	pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
-		//}
+		if (true)
+		{
+			pRenderTechnique->GetRenderPass(0)->BindPass(this);
+			m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+			pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		}
+		else
+		{
+			pRenderTechnique->GetRenderPass(0)->BindPass(this);
+			m_pD3D11ImmediateContext->Draw(3, 0);
+			pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		}
 	}
 
 	{
@@ -362,45 +362,44 @@ bool HrD3D11Render::TestRender(IRenderTechnique* pRenderTechnique, IRenderLayout
 		//passPixShaderDesc.pShaderVariable->GetPixelShader(0, &pPixShader);
 
 
-		HrD3D11Shader* pHrVertexShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetVertexShader());
-		
-		HrD3D11Shader* pHrPixelShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetPixelShader());
+		//HrD3D11Shader* pHrVertexShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetVertexShader());
+		//HrD3D11Shader* pHrPixelShader = static_cast<HrD3D11Shader*>(pRenderTechnique->GetRenderPass(0)->GetPixelShader());
 
-		{
-			ID3D11Buffer* m_pD3D11ConstBuffer = nullptr;
+		//{
+		//	ID3D11Buffer* m_pD3D11ConstBuffer = nullptr;
 
-			D3D11_BUFFER_DESC bd;
-			ZeroMemory(&bd, sizeof(bd));
-			bd.Usage = D3D11_USAGE_DYNAMIC;
-			bd.ByteWidth = sizeof(float) * 16;
-			uint32 nSize = sizeof(worldViewProjMatrix);
-			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			HRESULT rt = m_pD3D11Device->CreateBuffer(&bd, NULL, &m_pD3D11ConstBuffer);
+		//	D3D11_BUFFER_DESC bd;
+		//	ZeroMemory(&bd, sizeof(bd));
+		//	bd.Usage = D3D11_USAGE_DYNAMIC;
+		//	bd.ByteWidth = sizeof(float) * 16;
+		//	uint32 nSize = sizeof(worldViewProjMatrix);
+		//	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		//	HRESULT rt = m_pD3D11Device->CreateBuffer(&bd, NULL, &m_pD3D11ConstBuffer);
 
-			D3D11_MAPPED_SUBRESOURCE mappedResource;
+		//	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
-			struct PerFrame
-			{
-				Matrix4 matrix;
-			};
-			XMMATRIX transposeMatrix = XMMatrixTranspose(worldViewProj);
-			Matrix4 transposMatrix2 = HrMath::Transpose(worldViewProjMatrix);
-			rt = m_pD3D11ImmediateContext->Map(m_pD3D11ConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-			memcpy((char*)mappedResource.pData, (char*)reinterpret_cast<float*>(&transposMatrix2), sizeof(float) * 16);
-			//((PerFrame*)mappedResource.pData)->matrix = HrMath::Transpose(worldViewProjMatrix);
-			//((PerFrame*)mappedResource.pData)->matrix = worldViewProjMatrix;
-			m_pD3D11ImmediateContext->Unmap(m_pD3D11ConstBuffer, 0);
+		//	struct PerFrame
+		//	{
+		//		Matrix4 matrix;
+		//	};
+		//	XMMATRIX transposeMatrix = XMMatrixTranspose(worldViewProj);
+		//	Matrix4 transposMatrix2 = HrMath::Transpose(worldViewProjMatrix);
+		//	rt = m_pD3D11ImmediateContext->Map(m_pD3D11ConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		//	memcpy((char*)mappedResource.pData, (char*)reinterpret_cast<float*>(&transposMatrix2), sizeof(float) * 16);
+		//	//((PerFrame*)mappedResource.pData)->matrix = HrMath::Transpose(worldViewProjMatrix);
+		//	//((PerFrame*)mappedResource.pData)->matrix = worldViewProjMatrix;
+		//	m_pD3D11ImmediateContext->Unmap(m_pD3D11ConstBuffer, 0);
 
-			m_pD3D11ImmediateContext->VSSetConstantBuffers(0, 1, &m_pD3D11ConstBuffer);
-			
-			m_pD3D11ImmediateContext->VSSetShader(m_pSolidColorVS, 0, 0);
-			m_pD3D11ImmediateContext->PSSetShader(m_pSolidColorPS, 0, 0);
+		//	m_pD3D11ImmediateContext->VSSetConstantBuffers(0, 1, &m_pD3D11ConstBuffer);
+		//	
+		//	m_pD3D11ImmediateContext->VSSetShader(pHrVertexShader->GetVSShader(), 0, 0);
+		//	m_pD3D11ImmediateContext->PSSetShader(pHrPixelShader->GetPSShader(), 0, 0);
 
-			m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+		//	m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
 
-			SAFE_RELEASE(m_pD3D11ConstBuffer);
-		}
+		//	SAFE_RELEASE(m_pD3D11ConstBuffer);
+		//}
 	}
 
 	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
