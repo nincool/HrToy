@@ -1,7 +1,7 @@
 #include "HrCore/Include/Asset/HrGeometryBox.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/IRenderFactory.h"
-#include "HrCore/Include/Render/HrPixelFormat.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
@@ -30,7 +30,7 @@ HrGeometryBox::~HrGeometryBox()
 
 void HrGeometryBox::InitRenderLayout()
 {
-	m_pRenderLayout->SetTopologyType(HrRenderLayout::TT_TRIANGLELIST);
+	m_pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
 	BindVertexStream();
 }
 
@@ -57,8 +57,8 @@ void HrGeometryBox::BindVertexStream()
 	};
 	
 	HrVertexElement vertexElementArr[] = {
-		HrVertexElement(HrVertexElement::VEU_POSITION, HrVertexElement::VET_FLOAT3),
-		HrVertexElement(HrVertexElement::VEU_COLOR, HrVertexElement::VET_FLOAT4)
+		HrVertexElement(VEU_POSITION, VET_FLOAT3),
+		HrVertexElement(VEU_COLOR, VET_FLOAT4)
 	};
 
 	m_pRenderLayout->BindVertexBuffer((char*)vertices
@@ -76,7 +76,7 @@ void HrGeometryBox::BindVertexStream()
 		1, 5, 6, 1, 6, 2,
 		4, 0, 3, 4, 3, 7
 	};
-	m_pRenderLayout->BindIndexBuffer((char*)indices, sizeof(indices), IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE);
+	m_pRenderLayout->BindIndexBuffer((char*)indices, sizeof(indices), IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
 
 
 }

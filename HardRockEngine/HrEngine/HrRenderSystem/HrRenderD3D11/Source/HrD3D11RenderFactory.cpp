@@ -5,6 +5,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -24,6 +25,11 @@ HrD3D11RenderFactory::~HrD3D11RenderFactory()
 IRenderPtr HrD3D11RenderFactory::CreateRender()
 {
 	return static_pointer_cast<IRender>(MakeSharedPtr<HrD3D11Render>());
+}
+
+IRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
+{
+	return static_pointer_cast<IRenderTarget>(MakeSharedPtr<HrD3D11RenderWindow>());
 }
 
 IShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()

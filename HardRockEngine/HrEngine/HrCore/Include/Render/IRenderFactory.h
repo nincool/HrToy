@@ -13,6 +13,7 @@ namespace Hr
 
 	public:
 		virtual IRenderPtr CreateRender() = 0;
+		virtual IRenderTargetPtr CreateRenderTarget() = 0;
 		virtual IShaderCompilerPtr CreateShaderCompiler() = 0;
 
 		virtual HrVertex* CreateVertex() = 0;

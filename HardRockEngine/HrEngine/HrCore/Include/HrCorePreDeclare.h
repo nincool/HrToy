@@ -36,8 +36,6 @@ namespace Hr
 	typedef std::shared_ptr<ISceneManager> ISceneManagerPtr;
 	class HrSceneManager;
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
-	class ISceneNode;
-	typedef std::shared_ptr<ISceneNode> ISceneNodePtr;
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
 
@@ -46,9 +44,9 @@ namespace Hr
 	class IGraphicsBuffer;
 	class HrHardwareBuffer;
 	class IRenderable;
-	class IRenderQueue;
+	class HrRenderQueue;
+	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
 	class HrRenderPass;
-	typedef std::shared_ptr<IRenderQueue> IRenderQueuePtr;
 	class IRenderLayout;
 	class HrRenderLayout;
 	class IRenderTechnique;
@@ -60,6 +58,11 @@ namespace Hr
 	class HrRenderParameter;
 	class HrRenderFrameParameters;
 	typedef std::unique_ptr<HrRenderFrameParameters> HrRenderFrameParametersPtr;
+	class HrViewPort;
+	class IRenderTarget;
+	typedef std::shared_ptr<IRenderTarget> IRenderTargetPtr;
+	class HrRenderTarget;
+	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
 
 
 	class HrResourceManagerFactory;

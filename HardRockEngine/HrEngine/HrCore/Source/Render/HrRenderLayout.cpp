@@ -13,6 +13,10 @@ HrRenderLayout::HrRenderLayout()
 	m_pHDIndexBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
+	m_indexBufferType = IT_16BIT;
+
+	m_nVertices = 0;
+	m_nIndices = 0;
 }
 
 HrRenderLayout::~HrRenderLayout()
@@ -37,8 +41,10 @@ void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
-void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage)
+void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage, EnumIndexType indexType)
 {
+	m_indexBufferType = indexType;
+	m_nIndices = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
 	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage, IGraphicsBuffer::HBB_INDEX);
 }
 
@@ -47,7 +53,7 @@ uint32 HrRenderLayout::GetVertexSize()
 	return m_pVertex->GetVertexSize();
 }
 
-IRenderLayout::EnumTopologyType HrRenderLayout::GetTopologyType()
+EnumTopologyType HrRenderLayout::GetTopologyType()
 {
 	return m_topologyType;
 }
@@ -55,5 +61,25 @@ IRenderLayout::EnumTopologyType HrRenderLayout::GetTopologyType()
 bool HrRenderLayout::UseIndices()
 {
 	return m_pHDIndexBuffer->GetByteWidth();
+}
+
+void HrRenderLayout::SetIndexBufferType(EnumIndexType indexType)
+{
+	m_indexBufferType = indexType;
+}
+
+EnumIndexType HrRenderLayout::GetIndexBufferType()
+{
+	return m_indexBufferType;
+}
+
+void HrRenderLayout::SetIndicesNum(uint32 nIndicesNum)
+{
+	m_nIndices = nIndicesNum;
+}
+
+uint32 HrRenderLayout::GetIndicesNum()
+{
+	return m_nIndices;
 }
 

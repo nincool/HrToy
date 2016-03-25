@@ -50,6 +50,8 @@ namespace Hr
 		void Update();
 	private:
 		static HrDirectorPtr m_s_pUniqueDirector;
+		//渲染目标
+		IRenderTargetPtr m_pShareRenderTarget;
 		//场景管理器
 		ISceneManagerPtr m_pShareSceneManager;
 		//渲染工厂

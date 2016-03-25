@@ -2,16 +2,13 @@
 #include "HrD3D11Shader.h"
 #include "HrD3D11RenderWindow.h"
 #include "HrD3D11RenderLayout.h"
+#include "HrD3D11Mapping.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
+#include "HrCore/Include/Render/HrViewPort.h"
 #include "HrRenderDemo/Include/HrRenderDemo.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <boost/cast.hpp>
-
-#include "DirectXFX11/inc/d3dx11effect.h"
-#include "HrMath/Include/HrMath.h"
-#include "HrCore/Include/Asset/HrColor.h"
-#include "HrCore/Include/Render/HrCamera.h"
 
 using namespace Hr;
 
@@ -30,30 +27,45 @@ HrD3D11Render::~HrD3D11Render()
 {
 }
 
-bool HrD3D11Render::Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc)
+bool HrD3D11Render::Init()
 {
 	HrD3D11Device::GetInstance().CreateD3D11Device();
 	
 	m_pD3D11Device = HrD3D11Device::GetInstance().GetDevice();
 	m_pD3D11ImmediateContext = HrD3D11Device::GetInstance().GetImmediateContext();
 
-	m_pShareRenderWindow = MakeSharedPtr<HrD3D11RenderWindow>();
-	m_pShareRenderWindow->CreateRenderWindow(nWidth, nHeight, lpfnProc);
-
-	if (m_pRenderDemo)
-	{
-		m_pRenderDemo->SetD3DDevice(HrD3D11Device::GetInstance().GetDevice()
-			, HrD3D11Device::GetInstance().GetImmediateContext()
-			, m_pShareRenderWindow->GetRenderTargetView()
-			, m_pShareRenderWindow->GetDepthStencilView()
-			, m_pShareRenderWindow->GetSwapChain());
-		if (!m_pRenderDemo->Init())
-		{
-			return false;
-		}
-	}
-
 	return true;
+}
+
+void HrD3D11Render::SetRenderTarget(IRenderTargetPtr& renderTarget)
+{
+	m_pShareRenderWindow = std::dynamic_pointer_cast<HrD3D11RenderWindow>(renderTarget);
+}
+
+void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
+{
+	D3D11_VIEWPORT vp;
+	// Setup the viewport to match the backbuffer
+	ZeroMemory(&vp, sizeof(vp));
+	vp.TopLeftX = pViewPort->GetLeft();
+	vp.TopLeftY = pViewPort->GetTop();
+	vp.Width = static_cast<FLOAT>(pViewPort->GetWidth());
+	vp.Height = static_cast<FLOAT>(pViewPort->GetHeight());
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+
+	HrD3D11Device::GetInstance().GetImmediateContext()->RSSetViewports(1, &vp);
+}
+
+void HrD3D11Render::ClearRenderTargetView()
+{
+	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
+	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pShareRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
+}
+
+void HrD3D11Render::ClearDepthStencilView()
+{
+	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void HrD3D11Render::Release()
@@ -78,9 +90,6 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
-	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pShareRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
-	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
 	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
@@ -92,18 +101,20 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	
 	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
 	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
-	m_pD3D11ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pD3D11ImmediateContext->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
 
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
 	if (pD3D11RenderLayout->UseIndices())
 	{
+		uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
+		
 		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		m_pD3D11ImmediateContext->DrawIndexed(36, 0, 0);
+		m_pD3D11ImmediateContext->DrawIndexed(nNumIndices, 0, 0);
 		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
 	}
 	else
@@ -112,8 +123,10 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 		m_pD3D11ImmediateContext->Draw(3, 0);
 		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
 	}
-
-	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
 }
 
+void HrD3D11Render::SwapChain()
+{
+	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
+}
 

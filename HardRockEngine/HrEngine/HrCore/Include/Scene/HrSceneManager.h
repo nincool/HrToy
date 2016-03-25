@@ -15,13 +15,15 @@ namespace Hr
 		virtual void StopScene() override;
 
 		virtual void UpdateScene() override;
+		virtual void RenderScene(IRenderTargetPtr& renderTarget) override;
 		virtual void Destroy() override;
 	protected:
 		void FlushScene();
 		bool CheckSceneRunning();
 	private:
 		IScenePtr m_pShareRunningScene;
-		IRenderQueuePtr m_pShareRenderQueue;
+		HrRenderQueuePtr m_pShareRenderQueue;
+		HrCamera* m_pCurrentCamera;
 
 		bool m_bSceneRunning;
 

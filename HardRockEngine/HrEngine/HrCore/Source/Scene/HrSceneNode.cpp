@@ -22,7 +22,7 @@ HrSceneNode::~HrSceneNode()
 	SAFE_DELETE(m_pRenderable);
 }
 
-ISceneNode* HrSceneNode::GetParent()
+HrSceneNode* HrSceneNode::GetParent()
 {
 	return m_pParent;
 }
@@ -32,7 +32,7 @@ IRenderable* HrSceneNode::GetRenderable()
 	return m_pRenderable;
 }
 
-void HrSceneNode::AddChild(ISceneNode* pSceneNode)
+void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 {
 	if (pSceneNode->GetParent() != nullptr)
 	{
@@ -42,7 +42,7 @@ void HrSceneNode::AddChild(ISceneNode* pSceneNode)
 	m_vecChildNode.push_back(pSceneNode);
 }
 
-void HrSceneNode::FindVisibleRenderable(IRenderQueuePtr& pRenderQueue)
+void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
 	if (m_pRenderable != nullptr)
 	{

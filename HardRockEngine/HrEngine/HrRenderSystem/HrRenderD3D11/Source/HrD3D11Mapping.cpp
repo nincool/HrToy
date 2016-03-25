@@ -2,29 +2,29 @@
 
 using namespace Hr;
 
-LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertexElement::EnumVertexElementUsage usage)
+LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementUsage usage)
 {
 	switch (usage)
 	{
-	case Hr::HrVertexElement::VEU_POSITION:
+	case VEU_POSITION:
 		return "POSITION";
-	case Hr::HrVertexElement::VEU_NORMAL:
+	case VEU_NORMAL:
 		return "NORMAL";
-	case HrVertexElement::VEU_COLOR:
+	case VEU_COLOR:
 		return "COLOR";
-	case Hr::HrVertexElement::VEU_DIFFUSE:
+	case VEU_DIFFUSE:
 		return "COLOR"; // NB index will differentiat
-	case Hr::HrVertexElement::VEU_SPECULAR:
+	case VEU_SPECULAR:
 		return "COLOR"; // NB index will differentiate
-	case Hr::HrVertexElement::VEU_BLENDWEIGHT:
+	case VEU_BLENDWEIGHT:
 		return "BLENDWEIGHT";
-	case Hr::HrVertexElement::VEU_BLENDINDEX:
+	case VEU_BLENDINDEX:
 		return "BLENDINDICES";
-	case Hr::HrVertexElement::VEU_TEXTURECOORD:
+	case VEU_TEXTURECOORD:
 		return "TEXCOORD";
-	case Hr::HrVertexElement::VEU_TANGENT:
+	case VEU_TANGENT:
 		return "TANGENT";
-	case Hr::HrVertexElement::VEU_BINORMAL:
+	case VEU_BINORMAL:
 		return "BINORMAL";
 	default:
 		break;
@@ -32,31 +32,48 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(HrVertexElement::EnumVertexEl
 	return "";
 }
 
-DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(HrVertexElement::EnumVertexElementType type)
+DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(EnumVertexElementType type)
 {
 	switch (type)
 	{
-	case HrVertexElement::VET_COLOUR:
-	case HrVertexElement::VET_COLOUR_ABGR:
-	case HrVertexElement::VET_COLOUR_ARGB:
+	case VET_COLOUR:
+	case VET_COLOUR_ABGR:
+	case VET_COLOUR_ARGB:
 		return DXGI_FORMAT_R8G8B8A8_UNORM;
-	case HrVertexElement::VET_FLOAT1:
+	case VET_FLOAT1:
 		return DXGI_FORMAT_R32_FLOAT;
-	case HrVertexElement::VET_FLOAT2:
+	case VET_FLOAT2:
 		return DXGI_FORMAT_R32G32_FLOAT;
-	case HrVertexElement::VET_FLOAT3:
+	case VET_FLOAT3:
 		return DXGI_FORMAT_R32G32B32_FLOAT;
-	case HrVertexElement::VET_FLOAT4:
+	case VET_FLOAT4:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
-	case HrVertexElement::VET_SHORT2:
+	case VET_SHORT2:
 		return DXGI_FORMAT_R16G16_SINT;
-	case HrVertexElement::VET_SHORT4:
+	case VET_SHORT4:
 		return DXGI_FORMAT_R16G16B16A16_SINT;
-	case HrVertexElement::VET_UBYTE4:
+	case VET_UBYTE4:
 		return DXGI_FORMAT_R8G8B8A8_UINT;
 	}
 	// to keep compiler happy
 	return DXGI_FORMAT_R32G32B32_FLOAT;
+}
+
+D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topologyType)
+{
+	switch (topologyType)
+	{
+	case TT_LINELIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+	case TT_LINETRIP:
+		return D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
+	case TT_POINTLIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+	case TT_TRIANGLELIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	case TT_TRIANGLETRIP:
+		return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	}
 }
 
 HrRenderParameter::EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
@@ -73,6 +90,19 @@ HrRenderParameter::EnumRenderParamDataType HrD3D11Mapping::GetRenderParamDataTyp
 	{
 	case D3D_SVT_FLOAT:
 		return HrRenderParameter::RPDT_FLOAT;
+	default:
+		break;
+	}
+}
+
+DXGI_FORMAT HrD3D11Mapping::GetIndexBufferFormat(EnumIndexType indexType)
+{
+	switch (indexType)
+	{
+	case IT_16BIT:
+		return DXGI_FORMAT_R16_UINT;
+	case IT_32BIT:
+		return DXGI_FORMAT_R32_UINT;
 	default:
 		break;
 	}

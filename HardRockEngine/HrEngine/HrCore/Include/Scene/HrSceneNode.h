@@ -1,30 +1,32 @@
 #ifndef _HR_SCENENODE_H_
 #define _HR_SCENENODE_H_
 
-#include "ISceneNode.h"
+
+#include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrSceneNode : public ISceneNode
+	class HrSceneNode : public SceneObjAllocatedObject
 	{
 	public:
 		HrSceneNode();
 		HrSceneNode(IRenderable* pRenderable);
 		~HrSceneNode();
 
-		virtual ISceneNode* GetParent() override;
-		virtual IRenderable* GetRenderable() override;
+		HrSceneNode* GetParent();
+		IRenderable* GetRenderable();
 
-		virtual void AddChild(ISceneNode* pSceneNode) override;
-		virtual void FindVisibleRenderable(IRenderQueuePtr& pRenderQueue) override;
-		virtual void RemoveChildren() override;
+		void AddChild(HrSceneNode* pSceneNode);
+		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
+		void RemoveChildren();
 
-		virtual void UpdateNode(HrRenderFrameParameters& renderFrameParameters) override;
+		void UpdateNode(HrRenderFrameParameters& renderFrameParameters);
 	protected:
 		IRenderable* m_pRenderable;
 
-		ISceneNode* m_pParent;
-		std::vector<ISceneNode*> m_vecChildNode;
+		HrSceneNode* m_pParent;
+		std::vector<HrSceneNode*> m_vecChildNode;
 	};
 }
 

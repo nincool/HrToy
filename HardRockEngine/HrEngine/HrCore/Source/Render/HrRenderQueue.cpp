@@ -14,7 +14,7 @@ void HrRenderQueue::PrepareRenderQueue()
 	m_mapRenderQueue.clear();
 }
 
-void HrRenderQueue::AddRenderable(ISceneNode* pSceneNode)
+void HrRenderQueue::AddRenderable(HrSceneNode* pSceneNode)
 {
 	IRenderable* pRenderable = pSceneNode->GetRenderable();
 	if (m_mapRenderQueue.find(pRenderable) == m_mapRenderQueue.end())
@@ -23,7 +23,7 @@ void HrRenderQueue::AddRenderable(ISceneNode* pSceneNode)
 	}
 }
 
-std::unordered_map<IRenderable*, ISceneNode*>& Hr::HrRenderQueue::GetRenderables()
+std::unordered_map<IRenderable*, HrSceneNode*>& Hr::HrRenderQueue::GetRenderables()
 {
 	return m_mapRenderQueue;
 }

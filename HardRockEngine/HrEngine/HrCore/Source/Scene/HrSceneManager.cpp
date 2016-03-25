@@ -7,7 +7,9 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrRenderTarget.h"
 #include "Render/HrCamera.h"
+#include "Render/HrViewPort.h"
 #include "HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -20,6 +22,8 @@ HrSceneManager::HrSceneManager()
 
 	m_pShareRenderQueue = MakeSharedPtr<HrRenderQueue>();
 	m_pUniqueRenderParameters = MakeUniquePtr<HrRenderFrameParameters>();
+
+	m_pCurrentCamera = nullptr;
 }
 
 HrSceneManager::~HrSceneManager()
@@ -58,13 +62,27 @@ void HrSceneManager::UpdateScene()
 	{
 		return;
 	}
-
 	m_pShareRunningScene->Update();
+}
 
-	m_pShareRenderQueue->PrepareRenderQueue();
-	m_pShareRunningScene->FillRenderQueue(m_pShareRenderQueue);
+void HrSceneManager::RenderScene(IRenderTargetPtr& renderTarget)
+{
+	HrDirector::GetInstance().GetRenderer()->ClearRenderTargetView();
+	HrDirector::GetInstance().GetRenderer()->ClearDepthStencilView();
 
-	FlushScene();
+	std::map<int, HrViewPort*>& mapViewPorts = renderTarget->GetViewPorts();
+	for (auto& itemViewPorts : mapViewPorts)
+	{
+		HrViewPort* pViewPort = itemViewPorts.second;
+		m_pCurrentCamera = pViewPort->GetCamera();
+		HrDirector::GetInstance().GetRenderer()->SetCurrentViewPort(pViewPort);
+
+		m_pShareRenderQueue->PrepareRenderQueue();
+		m_pShareRunningScene->FillRenderQueue(m_pShareRenderQueue);
+
+		FlushScene();
+	}
+	HrDirector::GetInstance().GetRenderer()->SwapChain();
 }
 
 void HrSceneManager::FlushScene()
@@ -75,8 +93,9 @@ void HrSceneManager::FlushScene()
 	}
 
 	IRenderable* pRenderable = nullptr;
-	ISceneNode* pSceneNode = nullptr;
-	std::unordered_map<IRenderable*, ISceneNode*>& mapRenderables = m_pShareRenderQueue->GetRenderables();
+	HrSceneNode* pSceneNode = nullptr;
+
+	std::unordered_map<IRenderable*, HrSceneNode*>& mapRenderables = m_pShareRenderQueue->GetRenderables();
 	for (auto& itemMapRenderable : mapRenderables)
 	{
 		pRenderable = itemMapRenderable.first;

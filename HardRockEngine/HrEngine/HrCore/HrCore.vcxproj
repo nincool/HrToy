@@ -155,24 +155,25 @@
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
-    <ClInclude Include="Include\Render\HrPixelFormat.h" />
+    <ClInclude Include="Include\Render\HrDataFormat.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
     <ClInclude Include="Include\Render\HrRenderParameter.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
+    <ClInclude Include="Include\Render\HrRenderTarget.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrVertex.h" />
+    <ClInclude Include="Include\Render\HrViewPort.h" />
     <ClInclude Include="Include\Render\IGraphicsBuffer.h" />
     <ClInclude Include="Include\Render\IRenderable.h" />
-    <ClInclude Include="Include\Render\ICamera.h" />
     <ClInclude Include="Include\Render\IRender.h" />
     <ClInclude Include="Include\Render\IRenderFactory.h" />
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderPass.h" />
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
     <ClInclude Include="Include\Render\IRenderLayout.h" />
-    <ClInclude Include="Include\Render\IRenderQueue.h" />
+    <ClInclude Include="Include\Render\IRenderTarget.h" />
     <ClInclude Include="Include\Render\IRenderTechnique.h" />
     <ClInclude Include="Include\Render\IShader.h" />
     <ClInclude Include="Include\Scene\HrScene.h" />
@@ -180,7 +181,6 @@
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
     <ClInclude Include="Include\Scene\IScene.h" />
     <ClInclude Include="Include\Scene\ISceneManager.h" />
-    <ClInclude Include="Include\Scene\ISceneNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp" />
@@ -209,12 +209,14 @@
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />
+    <ClCompile Include="Source\Render\HrRenderTarget.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderPass.cpp" />
     <ClCompile Include="Source\Render\HrRenderQueue.cpp" />
     <ClCompile Include="Source\Render\HrVertex.cpp" />
+    <ClCompile Include="Source\Render\HrViewPort.cpp" />
     <ClCompile Include="Source\Render\IRenderable.cpp" />
     <ClCompile Include="Source\Render\IRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />

@@ -1,7 +1,7 @@
 #include "HrCore/Include/Asset/HrGeometryTriangle.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/IRenderFactory.h"
-#include "HrCore/Include/Render/HrPixelFormat.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
@@ -24,7 +24,7 @@ HrGeometryTriangle::~HrGeometryTriangle()
 
 void HrGeometryTriangle::InitRenderLayout()
 {
-	m_pRenderLayout->SetTopologyType(HrRenderLayout::TT_TRIANGLELIST);
+	m_pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
 	BindVertexStream();
 }
 
@@ -40,7 +40,7 @@ void HrGeometryTriangle::BindVertexStream()
 	};
 
 	HrVertexElement vertexElementArr[] = {
-		HrVertexElement(HrVertexElement::VEU_POSITION, HrVertexElement::VET_FLOAT3),
+		HrVertexElement(VEU_POSITION, VET_FLOAT3),
 	};
 
 	m_pRenderLayout->BindVertexBuffer((char*)vertices

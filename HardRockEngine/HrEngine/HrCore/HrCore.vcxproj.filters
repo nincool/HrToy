@@ -97,9 +97,6 @@
     <ClInclude Include="Include\Render\HrFrustum.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\ICamera.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\IGraphicsBuffer.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -124,9 +121,6 @@
     <ClInclude Include="Include\Scene\HrSceneManager.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Scene\ISceneNode.h">
-      <Filter>Include\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Scene\HrSceneNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
@@ -135,9 +129,6 @@
     </ClInclude>
     <ClInclude Include="Include\Asset\HrGeometryFactory.h">
       <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IRenderQueue.h">
-      <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderQueue.h">
       <Filter>Include\Render</Filter>
@@ -202,9 +193,6 @@
     <ClInclude Include="Include\Asset\IShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrPixelFormat.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrColor.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
@@ -218,6 +206,18 @@
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrDataFormat.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\IRenderTarget.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderTarget.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrViewPort.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
@@ -334,6 +334,12 @@
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderTarget.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrViewPort.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>

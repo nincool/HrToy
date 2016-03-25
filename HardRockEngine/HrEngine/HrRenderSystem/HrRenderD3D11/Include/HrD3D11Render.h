@@ -21,12 +21,20 @@ namespace Hr
 		~HrD3D11Render();
 
 	public:
-		virtual bool Init(unsigned int nWidth, unsigned int nHeight, WNDPROC lpfnProc) override;
+		virtual bool Init() override;
+		virtual void SetRenderTarget(IRenderTargetPtr& renderTarget) override;
+		virtual void SetCurrentViewPort(HrViewPort* pViewPort) override;
+		
+		virtual void ClearRenderTargetView() override;
+		virtual void ClearDepthStencilView() override;
+
+		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
+		virtual void SwapChain() override;
+
 		virtual void Release() override;
 		virtual bool StartRender() override;
 
-	public:
-		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) override;
+
 
 	private:
 		HR_SYNTHESIZE_READONLY(ID3D11Device*, m_pD3D11Device, D3D11Device);

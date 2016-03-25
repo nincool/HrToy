@@ -15,6 +15,7 @@ namespace Hr
 		virtual void StopScene() = 0;
 
 		virtual void UpdateScene() = 0;
+		virtual void RenderScene(IRenderTargetPtr& renderTarget) = 0;
 		virtual void Destroy() = 0;
 	};
 }

@@ -20,7 +20,6 @@ bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDP
 	CreateD3DView();
 
 	HrD3D11Device::GetInstance().GetImmediateContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
-	HrD3D11Device::GetInstance().GetImmediateContext()->RSSetViewports(1, &m_vp);
 
 	return true;
 }
@@ -151,15 +150,6 @@ bool HrD3D11RenderWindow::CreateD3DView()
 		HRERROR(_T("D3D11CreateDepthStencilView Error!"));
 		return false;
 	}
-
-	// Setup the viewport to match the backbuffer
-	ZeroMemory(&m_vp, sizeof(m_vp));
-	m_vp.TopLeftX = 0.0f;
-	m_vp.TopLeftY = 0.0f;
-	m_vp.Width = static_cast<FLOAT>(depthStencilDesc.Width);
-	m_vp.Height = static_cast<FLOAT>(depthStencilDesc.Height);
-	m_vp.MinDepth = 0.0f;
-	m_vp.MaxDepth = 1.0f;
 
 	return true;
 }

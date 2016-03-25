@@ -8,6 +8,8 @@
 #include "Asset/HrGeometryFactory.h"
 #include "Asset/HrResourceManagerFactory.h"
 #include "Asset/HrRenderEffectManager.h"
+#include "Render/HrRenderTarget.h"
+#include "Render/HrCamera.h"
 #include "HrLog.h"
 
 
@@ -57,6 +59,8 @@ bool HrDirector::Init()
 		if (m_pShareRenderFactory)
 		{
 			m_pShareRender = m_pShareRenderFactory->CreateRender();
+			m_pShareRenderTarget = m_pShareRenderFactory->CreateRenderTarget();
+
 		}
 	}
 	else
@@ -64,10 +68,14 @@ bool HrDirector::Init()
 		HRERROR(_T("RenderInitFunc is null"));
 		return false;
 	}
-	if (!m_pShareRender->Init(640, 480, &HrWin32WindowEventUtilities::WinProc))
+	if (!m_pShareRender->Init())
 	{
 		return false;
 	}
+	m_pShareRenderTarget->CreateRenderWindow(640, 480, &HrWin32WindowEventUtilities::WinProc);
+	m_pShareRenderTarget->AddViewPort(new HrCamera(), 0, 0, 640, 480, 1);
+	//m_pShareRenderTarget->AddViewPort(new HrCamera(), 0, 0, 100, 100, 2);
+	m_pShareRender->SetRenderTarget(m_pShareRenderTarget);
 
 	HrResourceManagerFactory::GetInstance().CreateResourceManager();
 
@@ -91,6 +99,7 @@ void HrDirector::StartMainLoop()
 void HrDirector::Update()
 {
 	m_pShareSceneManager->UpdateScene();
+	m_pShareSceneManager->RenderScene(m_pShareRenderTarget);
 }
 
 void HrDirector::End()

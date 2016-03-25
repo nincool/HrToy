@@ -15,11 +15,11 @@ namespace Hr
 		virtual void OnEnterDidFinish() = 0;
 		virtual void OnExit() = 0;
 
-		virtual void AddSceneNode(ISceneNode* pSceneNode) = 0;
+		virtual void AddSceneNode(HrSceneNode* pSceneNode) = 0;
 		virtual void ClearSceneNode() = 0;
 
 		virtual void Update() = 0;
-		virtual void FillRenderQueue(IRenderQueuePtr& pRenderQueue) = 0;
+		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue) = 0;
 	};
 }
 
