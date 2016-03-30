@@ -10,18 +10,20 @@ using namespace Hr;
 
 HrRenderEffectManager::HrRenderEffectManager()
 {
-	m_pShareShaderCompiler = HrDirector::GetInstance().GetRenderFactory()->CreateShaderCompiler();
 }
 
 HrRenderEffectManager::~HrRenderEffectManager()
 {
-
+	for (auto& itemRes : m_mapResource)
+	{
+		SAFE_DELETE(itemRes.second);
+	}
+	m_mapResource.clear();
 }
 
 void HrRenderEffectManager::InitResourceManager()
 {
-	HrRenderEffect* pRenderEffect = CreateEffect("BasicEffect", "Media\\HrShader\\BasicEffect.xml");
-	pRenderEffect->Load();
+	LoadResource("BasicEffect", "Media\\HrShader\\BasicEffect.xml");
 }
 
 IResource* HrRenderEffectManager::LoadResource(std::string strName, std::string strFilePath)

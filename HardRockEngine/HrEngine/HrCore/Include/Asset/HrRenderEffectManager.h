@@ -18,8 +18,6 @@ namespace Hr
 		HrRenderEffect* GetRenderEffect(std::string strName);
 	private:
 		HrRenderEffect* CreateEffect(std::string strName, std::string strFilePath);
-	private:
-		IShaderCompilerPtr m_pShareShaderCompiler;
 	};
 }
 

@@ -12,6 +12,7 @@ namespace Hr
 		~HrGeometryApp();
 
 		static HrGeometryApp& GetInstance();
+		static void ReleaseInstance();
 
 		virtual bool ApplicationDidFinishLaunching() override;
 

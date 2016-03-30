@@ -6,6 +6,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
 #include "Asset/HrGeometryFactory.h"
+#include "Asset/HrComponentFactory.h"
 #include "Asset/HrResourceManagerFactory.h"
 #include "Asset/HrRenderEffectManager.h"
 #include "Render/HrRenderTarget.h"
@@ -43,6 +44,7 @@ HrDirector::HrDirector()
 
 HrDirector::~HrDirector()
 {
+
 }
 
 bool HrDirector::Init()
@@ -73,8 +75,6 @@ bool HrDirector::Init()
 		return false;
 	}
 	m_pShareRenderTarget->CreateRenderWindow(640, 480, &HrWin32WindowEventUtilities::WinProc);
-	m_pShareRenderTarget->AddViewPort(new HrCamera(), 0, 0, 640, 480, 1);
-	//m_pShareRenderTarget->AddViewPort(new HrCamera(), 0, 0, 100, 100, 2);
 	m_pShareRender->SetRenderTarget(m_pShareRenderTarget);
 
 	HrResourceManagerFactory::GetInstance().CreateResourceManager();
@@ -111,9 +111,18 @@ void HrDirector::End()
 
 void HrDirector::Release()
 {
+	HrGeometryFactory::ReleaseInstance();
+	HrComponentFactory::ReleaseInstance();
+	HrResourceManagerFactory::ReleaseInstance();
+
+	m_pShareRenderTarget.reset();
+	m_pShareSceneManager.reset();
+	
 	m_pShareRender->Release();
 	m_pShareRender.reset();
+	
 	m_pShareRenderFactory.reset();
+
 	typedef void(*RENDER_RELEASE_FUNC)();
 	RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pUniqueRenderLoader->GetProcAddress(std::string("HrModuleUnload")));
 	if (releaseFunc)
@@ -121,8 +130,7 @@ void HrDirector::Release()
 		releaseFunc();
 	}
 	m_pUniqueRenderLoader->HrFreeModule();
-
-	HrGeometryFactory::ReleaseInstance();
+	m_pUniqueRenderLoader.reset();
 }
 
 bool HrDirector::Render()

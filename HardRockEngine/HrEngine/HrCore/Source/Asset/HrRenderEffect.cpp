@@ -21,7 +21,11 @@ HrRenderEffect::HrRenderEffect(std::string strEffectName, std::string strFilePat
 
 HrRenderEffect::~HrRenderEffect()
 {
-
+	for (auto& itemRT : m_vecRenderTechnique)
+	{
+		SAFE_DELETE(itemRT);
+	}
+	m_vecRenderTechnique.clear();
 }
 
 size_t HrRenderEffect::HashName()

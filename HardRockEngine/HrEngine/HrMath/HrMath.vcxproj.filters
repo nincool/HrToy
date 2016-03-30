@@ -49,5 +49,8 @@
     <ClInclude Include="Include\HrMathCom.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrVector4.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

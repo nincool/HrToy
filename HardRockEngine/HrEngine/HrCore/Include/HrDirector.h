@@ -34,6 +34,10 @@ namespace Hr
 		{
 			return m_pShareRenderFactory;
 		}
+		const IRenderTargetPtr& GetRenderTarget()
+		{
+			return m_pShareRenderTarget;
+		}
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init() override;
 		virtual void StartMainLoop() override;

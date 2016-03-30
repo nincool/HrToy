@@ -76,6 +76,7 @@ void HrSceneManager::RenderScene(IRenderTargetPtr& renderTarget)
 		HrViewPort* pViewPort = itemViewPorts.second;
 		m_pCurrentCamera = pViewPort->GetCamera();
 		HrDirector::GetInstance().GetRenderer()->SetCurrentViewPort(pViewPort);
+		m_pUniqueRenderParameters->SetCurrentCamera(m_pCurrentCamera);
 
 		m_pShareRenderQueue->PrepareRenderQueue();
 		m_pShareRunningScene->FillRenderQueue(m_pShareRenderQueue);

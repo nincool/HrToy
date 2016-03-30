@@ -1,7 +1,9 @@
 #include "HrCore/Include/Render/HrShader.h"
 #include "HrCore/Include/Render/IRenderFactory.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
+#include "HrCore/Include/Render/HrRenderConstantBuffer.h"
 #include "HrCore/Include/HrDirector.h"
+
 
 using namespace Hr;
 
@@ -43,5 +45,13 @@ void HrShader::UnBind(IRender* pRender)
 
 void HrShader::StreamIn(HrStreamData& streamData)
 {
+}
+
+HrRenderConstantBuffer* HrShader::AddRenderConstantBuffer()
+{
+	HrRenderConstantBuffer* pRenderConstantBuffer = HR_NEW HrRenderConstantBuffer();
+	m_vecRenderConstantBuffer.push_back(pRenderConstantBuffer);
+
+	return pRenderConstantBuffer;
 }
 

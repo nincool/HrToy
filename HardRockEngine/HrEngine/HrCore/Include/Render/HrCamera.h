@@ -7,7 +7,7 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrCamera 
+	class HR_CORE_API HrCamera : public RenderSysAllocatedObject 
 	{
 	public:
 		HrCamera();

@@ -11,6 +11,8 @@ using namespace Hr;
 
 HrRenderConstantBuffer::HrRenderConstantBuffer()
 {
+	m_pStreamData = nullptr;
+	m_pRenderHardwareBuffer = nullptr;
 	m_pStreamData = HR_NEW HrStreamData();
 	m_pRenderHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
 }

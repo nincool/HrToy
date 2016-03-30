@@ -1,4 +1,5 @@
 #include "HrCore/Include/Render/HrViewPort.h"
+#include "HrCore/Include/Render/HrCamera.h"
 
 using namespace Hr;
 

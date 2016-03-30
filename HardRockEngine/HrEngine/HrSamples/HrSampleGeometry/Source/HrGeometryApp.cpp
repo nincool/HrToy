@@ -15,6 +15,15 @@ HrGeometryApp& Hr::HrGeometryApp::GetInstance()
 	return *m_s_pUniqueGeometryApp;
 }
 
+void HrGeometryApp::ReleaseInstance()
+{
+	if (m_s_pUniqueGeometryApp)
+	{
+		m_s_pUniqueGeometryApp->Destroy();
+	}
+	m_s_pUniqueGeometryApp.reset();
+}
+
 HrGeometryApp::HrGeometryApp()
 {
 

@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrViewPort : public RenderSysAllocatedObject
+	class HrViewPort : public SceneObjAllocatedObject
 	{
 	public:
 		HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, HrCamera* pCamera);
@@ -35,6 +35,12 @@ namespace Hr
 		HrCamera* GetCamera()
 		{
 			return m_pCamera;
+		}
+
+
+		void Release()
+		{
+			delete this;
 		}
 	private:
 		HrCamera* m_pCamera;

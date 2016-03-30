@@ -20,6 +20,8 @@ HrD3D11Shader::HrD3D11Shader()
 
 HrD3D11Shader::~HrD3D11Shader()
 {
+	SAFE_RELEASE(m_pVertexShader);
+	SAFE_RELEASE(m_pPixelShader);
 	SAFE_DELETE(m_pShaderBuffer);
 }
 
@@ -227,8 +229,7 @@ void HrD3D11Shader::CreateShaderParams()
 {
 	for (size_t nConstBufferIndex = 0; nConstBufferIndex < m_shaderDesc.cb_desc.size(); ++nConstBufferIndex)
 	{
-		HrRenderConstantBuffer* pRenderConstantBuffer = HR_NEW HrRenderConstantBuffer();
-		m_vecRenderConstantBuffer.push_back(pRenderConstantBuffer);
+		HrRenderConstantBuffer* pRenderConstantBuffer = AddRenderConstantBuffer();
 		pRenderConstantBuffer->SetName(m_shaderDesc.cb_desc[nConstBufferIndex].name);
 		pRenderConstantBuffer->SetSize(m_shaderDesc.cb_desc[nConstBufferIndex].size);
 		for (size_t nVariableIndex = 0; nVariableIndex < m_shaderDesc.cb_desc[nConstBufferIndex].var_desc.size(); ++nVariableIndex)

@@ -9,7 +9,7 @@ namespace Hr
 	{
 	public:
 		HrShader();
-		~HrShader();
+		virtual ~HrShader();
 
 		virtual void SetShaderType(_SHADER_TYPE_ shaderType) override;
 		//Èë¿Úº¯Êý
@@ -21,6 +21,8 @@ namespace Hr
 		virtual void StreamIn(HrStreamData& streamData) override;
 
 		virtual void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters) override;
+	protected:
+		HrRenderConstantBuffer* AddRenderConstantBuffer();
 	protected:
 		_SHADER_TYPE_ m_shaderType;
 		std::string m_strEntryPoint;

@@ -38,6 +38,7 @@ namespace Hr
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
+	class HrCameraNode;
 
 	class HrVertexElement;
 	class HrVertex;
@@ -63,6 +64,8 @@ namespace Hr
 	typedef std::shared_ptr<IRenderTarget> IRenderTargetPtr;
 	class HrRenderTarget;
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
+	class HrComponentFactory;
+	typedef std::unique_ptr<HrComponentFactory> HrComponentFactoryPtr;
 
 
 	class HrResourceManagerFactory;
@@ -73,8 +76,8 @@ namespace Hr
 	class HrRenderEffectManager;
 	class HrStreamData;
 	class HrResourceLoader;
-	class IShaderCompiler;
-	typedef std::shared_ptr<IShaderCompiler> IShaderCompilerPtr;
+	//class IShaderCompiler;
+	//typedef std::shared_ptr<IShaderCompiler> IShaderCompilerPtr;
 
 	
 	class HrGeometryBox;

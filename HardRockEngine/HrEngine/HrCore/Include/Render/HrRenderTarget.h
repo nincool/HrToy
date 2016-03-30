@@ -12,7 +12,7 @@ namespace Hr
 		~HrRenderTarget();
 
 		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc) override{ return false; };
-		virtual HrViewPort* AddViewPort(HrCamera* pCamera, float fLeft, float fTop, float fWidth, float fHeight, int nZOrder) override;
+		virtual void AddViewPort(HrViewPort* pViewPort) override;
 		virtual std::map<int, HrViewPort*>& GetViewPorts() override;
 	protected:
 		std::map<int, HrViewPort*> m_mapViewPort;

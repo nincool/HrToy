@@ -10,6 +10,15 @@ HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName)
 	m_nHashName = boost::hash_range(m_strTechniqueName.begin(), m_strTechniqueName.end());
 }
 
+HrRenderTechnique::~HrRenderTechnique()
+{
+	for (auto& itemPass : m_vecPass)
+	{
+		SAFE_DELETE(itemPass);
+	}
+	m_vecPass.clear();
+}
+
 size_t HrRenderTechnique::GetHashName()
 {
 	return m_nHashName;

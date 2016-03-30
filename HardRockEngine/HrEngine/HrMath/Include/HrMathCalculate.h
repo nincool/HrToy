@@ -5,6 +5,8 @@
 #include "HrMathCom.h"
 #include "HrMatrix4.h"
 #include "Matrix_T.h"
+#include "HrVector3.h"
+#include "HrVector4.h"
 
 namespace Hr
 {

@@ -12,7 +12,7 @@ namespace Hr
 
 		//Create the render window
 		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc) = 0;
-		virtual HrViewPort* AddViewPort(HrCamera* pCamera, float fLeft, float fTop, float fWidth, float fHeight, int nZOrder) = 0;
+		virtual void AddViewPort(HrViewPort* pViewPort) = 0;
 		virtual std::map<int, HrViewPort*>& GetViewPorts() = 0;
 	};
 }

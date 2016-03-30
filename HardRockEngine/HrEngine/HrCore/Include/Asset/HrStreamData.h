@@ -29,6 +29,8 @@ namespace Hr
 	private:
 		EnumReadDataType m_readDataType;
 		std::vector<uint8> m_vecStreamData;
+		char* m_pStreamData;
+		uint32 m_nStreamLength;
 	};
 }
 

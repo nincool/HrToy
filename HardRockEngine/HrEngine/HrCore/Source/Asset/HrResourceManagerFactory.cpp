@@ -30,7 +30,7 @@ HrResourceManagerFactory::HrResourceManagerFactory()
 
 HrResourceManagerFactory::~HrResourceManagerFactory()
 {
-
+	Release();
 }
 
 void HrResourceManagerFactory::Release()

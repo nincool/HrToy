@@ -1,7 +1,10 @@
 #include "HrGeometryScene.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrGeometryBox.h"
+#include "HrCore/Include/Asset/HrComponentFactory.h"
 #include "HrCore/Include/Scene/HrSceneNode.h"
+#include "HrCore/Include/Scene/HrCameraNode.h"
+
 
 using namespace Hr;
 
@@ -24,8 +27,9 @@ void HrGeometryScene::OnEnter()
 
 void HrGeometryScene::CreateSceneElements()
 {
-	//HrSceneNode* pBox = HrGeometryFactory::GetInstance().Create2DTriangle();
-	//AddSceneNode(pBox);
+	//Ìí¼ÓÉãÏñ»ú
+	HrCameraNode* pCameraNode = HrComponentFactory::GetInstance().CreateCamera(0, 0, 640, 480, 1);
+	AddSceneNode(pCameraNode);
 
 	HrSceneNode* pBox = HrGeometryFactory::GetInstance().CreateBox(10, 10, 10);
 	AddSceneNode(pBox);

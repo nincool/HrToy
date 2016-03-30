@@ -220,6 +220,12 @@
     <ClInclude Include="Include\Render\HrViewPort.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrComponentFactory.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrCameraNode.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -253,12 +259,6 @@
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrFrustom.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\IRenderLayout.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\IRenderable.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp">
@@ -341,6 +341,12 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrViewPort.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrComponentFactory.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrCameraNode.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -32,11 +32,6 @@ IRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
 	return static_pointer_cast<IRenderTarget>(MakeSharedPtr<HrD3D11RenderWindow>());
 }
 
-IShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
-{
-	return static_pointer_cast<IShaderCompiler>(MakeSharedPtr<HrD3D11ShaderCompiler>());
-}
-
 HrVertex* HrD3D11RenderFactory::CreateVertex()
 {
 	return HR_NEW HrVertex();

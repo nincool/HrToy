@@ -9,7 +9,7 @@ namespace Hr
 	{
 	public:
 		HrRenderTechnique(std::string strTechniqueName);
-		virtual ~HrRenderTechnique(){}
+		virtual ~HrRenderTechnique();
 
 		virtual size_t GetHashName() override;
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex) override;
