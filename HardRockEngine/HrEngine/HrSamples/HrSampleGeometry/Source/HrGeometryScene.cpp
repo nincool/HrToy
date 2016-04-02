@@ -30,6 +30,7 @@ void HrGeometryScene::CreateSceneElements()
 	//Ìí¼ÓÉãÏñ»ú
 	HrCameraNode* pCameraNode = HrComponentFactory::GetInstance().CreateCamera(0, 0, 640, 480, 1);
 	AddSceneNode(pCameraNode);
+	pCameraNode->Translate(Vector3(2.0f, 0, 0));
 
 	HrSceneNode* pBox = HrGeometryFactory::GetInstance().CreateBox(10, 10, 10);
 	AddSceneNode(pBox);

@@ -104,6 +104,10 @@ const Vector3& HrSceneNode::GetPosition()
 	return m_v3LocalPosition;
 }
 
+void HrSceneNode::Translate(const Vector3& v3)
+{
+	m_v3LocalPosition += v3;
+}
 
 
 

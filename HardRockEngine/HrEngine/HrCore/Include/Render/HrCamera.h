@@ -12,11 +12,25 @@ namespace Hr
 	public:
 		HrCamera();
 
-		void SetPosition(float x, float y, float z);
-		void Move(const Vector3& v3);
-		const Vector3& GetPosition()
+		const Vector3& GetEyePos() const
 		{
-			return m_v3Position;
+			return m_v3EyePos;
+		}
+		const Vector3& GetForward() const
+		{
+			return m_v3Forward;
+		}
+		const Vector3& GetUp() const
+		{
+			return m_v3Up;
+		}
+		const Vector3& GetLookAt() const
+		{
+			return m_v3LookAt;
+		}
+		float GetLookAtDistance()
+		{
+			return m_fLookAtDistance;
 		}
 
 		float FOV() const
@@ -44,8 +58,13 @@ namespace Hr
 	private:
 		float m_fLookAtDistance;
 
-		Vector3 m_v3Position;
 		Matrix4 m_matView;
+		Matrix4 m_matInverseView;
+
+		Vector3 m_v3EyePos;
+		Vector3 m_v3Forward;
+		Vector3 m_v3Up;
+		Vector3 m_v3LookAt;
 
 		//投影相关
 		float m_fFov;

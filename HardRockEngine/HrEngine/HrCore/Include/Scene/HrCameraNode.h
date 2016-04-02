@@ -11,6 +11,8 @@ namespace Hr
 		HrCameraNode(HrViewPort* pViewPort);
 		~HrCameraNode();
 
+		virtual void Translate(const Vector3& v3) override;
+
 		HrViewPort* GetViewPort();
 	private:
 		HrViewPort* m_pViewPort;

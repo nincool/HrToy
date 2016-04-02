@@ -122,8 +122,9 @@ namespace Hr
 				//_m[i] = rhs[j];
 			}
 		}
-		HrVector3 const & Row(size_t index) const
+		HrVector3 const Row(size_t index) const
 		{
+			BOOST_ASSERT(index < row_num);
 			size_t nStartIndex = index * col_num;
 			return HrVector3(_m[nStartIndex], _m[nStartIndex+1], _m[nStartIndex+2]);
 		}

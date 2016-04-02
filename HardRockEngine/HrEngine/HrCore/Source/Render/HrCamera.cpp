@@ -1,5 +1,6 @@
 #include "Render/HrCamera.h"
 
+
 using namespace Hr;
 
 HrCamera::HrCamera()
@@ -8,20 +9,16 @@ HrCamera::HrCamera()
 	
 }
 
-void HrCamera::SetPosition(float x, float y, float z)
-{
-	m_v3Position = Vector3(x, y, z);
-}
-
-void HrCamera::Move(const Vector3& v3)
-{
-
-}
-
 void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up)
 {
 	m_fLookAtDistance = (v3EvePos - v3LookAt).Length();
 	m_matView = HrMath::LookAtLh(v3EvePos, v3LookAt, v3Up);
+	m_matInverseView = HrMath::Inverse(m_matView);
+
+	m_v3EyePos = m_matInverseView.Row(3);
+	m_v3Forward = m_matInverseView.Row(2);
+	m_v3Up = m_matInverseView.Row(1);
+	m_v3LookAt = m_v3EyePos + m_v3Forward * m_fLookAtDistance;
 }
 
 void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane)

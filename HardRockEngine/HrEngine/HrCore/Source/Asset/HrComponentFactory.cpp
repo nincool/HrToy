@@ -39,7 +39,7 @@ void HrComponentFactory::ReleaseInstance()
 HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
 {
 	HrCamera* pCamera = HR_NEW HrCamera();
-	HrViewPort* pViewPort = HR_NEW HrViewPort(0, 0, 640, 480, 1, pCamera);
+	HrViewPort* pViewPort = HR_NEW HrViewPort(fLeft, fTop, fWidth, fHeight, nZOrder, pCamera);
 	HrCameraNode* pCameraNode = HR_NEW HrCameraNode(pViewPort);
 
 	return pCameraNode;
