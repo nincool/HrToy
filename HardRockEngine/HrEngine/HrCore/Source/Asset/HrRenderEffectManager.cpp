@@ -23,7 +23,7 @@ HrRenderEffectManager::~HrRenderEffectManager()
 
 void HrRenderEffectManager::InitResourceManager()
 {
-	LoadResource("BasicEffect", "Media\\HrShader\\BasicEffect.xml");
+	LoadResource("BasicEffect", "Media\\HrShader\\HrBasicEffect.xml");
 }
 
 IResource* HrRenderEffectManager::LoadResource(std::string strName, std::string strFilePath)

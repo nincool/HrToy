@@ -108,3 +108,6 @@ DXGI_FORMAT HrD3D11Mapping::GetIndexBufferFormat(EnumIndexType indexType)
 	}
 }
 
+
+
+
