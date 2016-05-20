@@ -1,3 +1,16 @@
+/************************************************************************ 
+* 
+*   DocName：HrResourceManagerFactory
+* 
+*   Brief： 资源管理器工厂负责创建资源管理器
+* 
+*   Author: Hr  
+* 
+*   Comment: 
+* 
+*   Date: [5/19/2016 By Hr]
+*
+************************************************************************/
 #ifndef _HR_RESOURCEMANAGERFACTORY_H_
 #define _HR_RESOURCEMANAGERFACTORY_H_
 
@@ -10,6 +23,7 @@ namespace Hr
 	{
 		enum EnumResFactoryType
 		{
+			//SHADER 管理器
 			RFT_EFFECTMANAGER,
 		};
 
@@ -44,3 +58,4 @@ namespace Hr
 }
 
 #endif
+

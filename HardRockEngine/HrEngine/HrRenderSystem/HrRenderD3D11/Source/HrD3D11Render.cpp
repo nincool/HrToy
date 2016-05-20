@@ -16,11 +16,10 @@ HrD3D11Render::HrD3D11Render()
 {
 	m_pD3D11ImmediateContext = nullptr;
 
-	typedef HrRenderD3D11DemoPipleline DEMOCLASS;
+	//typedef HrRenderD3D11DemoPipleline DEMOCLASS;
 
 	m_pRenderDemo = nullptr;
 	//m_pRenderDemo = HR_NEW DEMOCLASS();
-
 }
 
 HrD3D11Render::~HrD3D11Render()
@@ -82,15 +81,8 @@ bool HrD3D11Render::StartRender()
 
 void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout)
 {
-	if (m_pRenderDemo)
-	{
-		m_pRenderDemo->Render();
-		return;
-	}
-
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
-
 	HrD3D11RenderLayout* pD3D11RenderLayout = boost::polymorphic_downcast<HrD3D11RenderLayout*>(pRenderLayout);
 	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
 	unsigned int offset = 0;

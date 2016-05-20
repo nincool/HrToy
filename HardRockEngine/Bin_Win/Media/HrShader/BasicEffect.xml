@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <effect>
-	<effectfile>Media/HrShader/SolidGreenColor.fx</effectfile>
+	<effectfile>Media/HrShader/HrBasicDraw.fx</effectfile>
 	<technique name="Basic">
 		<pass name="p0">
 			<param name="depth_enable" value="false"/>

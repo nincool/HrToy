@@ -1,3 +1,16 @@
+/************************************************************************ 
+* 
+*   DocName£∫HrRenderEffectManager
+* 
+*   Brief£∫ Shaderπ‹¿Ì∆˜
+* 
+*   Author: Hr  
+* 
+*   Comment: 
+* 
+*   Date: [5/19/2016 By Hr]
+*
+************************************************************************/ 
 #ifndef _HR_RENDEREFFECTMANAGER_H_
 #define _HR_RENDEREFFECTMANAGER_H_
 

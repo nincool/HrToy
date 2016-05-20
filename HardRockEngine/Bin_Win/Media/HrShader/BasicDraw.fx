@@ -16,7 +16,7 @@ struct VertexOut
 	float4	color	: COLOR;
 };
 
-VertexOut VS(VertexIn vin)
+VertexOut VS_Main(VertexIn vin)
 {
 	VertexOut vout;
 	vout.posH = mul(float4(vin.pos,1.f),g_worldViewProj);
@@ -25,7 +25,7 @@ VertexOut VS(VertexIn vin)
 	return vout;
 }
 
-float4 PS(VertexOut pin):SV_TARGET
+float4 PS_Main(VertexOut pin):SV_TARGET
 {
 	return pin.color;
 }
