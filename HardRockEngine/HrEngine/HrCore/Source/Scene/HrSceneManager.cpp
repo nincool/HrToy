@@ -103,9 +103,9 @@ void HrSceneManager::FlushScene()
 		pSceneNode = itemMapRenderable.second;
 
 		m_pUniqueRenderParameters->SetCurrentRenderable(pRenderable);
-		itemMapRenderable.second->UpdateNode(*(m_pUniqueRenderParameters.get()));
+		pSceneNode->UpdateNode(*(m_pUniqueRenderParameters.get()));
 
-		IRenderable* pRenderable = itemMapRenderable.second->GetRenderable();
+		IRenderable* pRenderable = pSceneNode->GetRenderable();
 		IRenderLayout* pRenderLayout = pRenderable->GetRenderLayout();
 		IRenderTechnique* pRenderTechnique = pRenderable->GetRenderTechnique();
 

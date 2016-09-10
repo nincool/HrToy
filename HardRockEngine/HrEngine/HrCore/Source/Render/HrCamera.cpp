@@ -6,7 +6,6 @@ using namespace Hr;
 HrCamera::HrCamera()
 	:m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
 {
-	
 }
 
 void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up)
