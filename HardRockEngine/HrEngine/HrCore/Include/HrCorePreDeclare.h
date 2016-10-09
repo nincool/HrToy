@@ -13,14 +13,13 @@ namespace Hr
 	class HrDirector;
 	typedef std::unique_ptr<HrDirector> HrDirectorPtr;
 
-	class ILog;
 	class HrLog;
 	typedef std::unique_ptr<HrLog> HrLogPtr;
 
-	class IRenderFactory;
-	typedef std::shared_ptr<IRenderFactory> IRenderFactoryPtr;
-	class IRender;
-	typedef std::shared_ptr<IRender> IRenderPtr;
+	class HrRenderFactory;
+	typedef std::shared_ptr<HrRenderFactory> HrRenderFactoryPtr;
+	class HrRender;
+	typedef std::shared_ptr<HrRender> HrRenderPtr;
 
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
@@ -28,12 +27,8 @@ namespace Hr
 	class HrGeometryFactory;
 	typedef std::unique_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 
-	class IScene;
-	typedef std::shared_ptr<IScene> IScenePtr;
 	class HrScene;
 	typedef std::shared_ptr<HrScene> HrScenePtr;
-	class ISceneManager;
-	typedef std::shared_ptr<ISceneManager> ISceneManagerPtr;
 	class HrSceneManager;
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
 	class HrSceneNode;

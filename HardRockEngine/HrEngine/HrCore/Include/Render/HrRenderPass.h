@@ -2,14 +2,13 @@
 #define _HR_RENDERPASS_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
 	class IShader;
 	class IRender;
 
-	class HR_CORE_API HrRenderPass : public RenderSysAllocatedObject
+	class HR_CORE_API HrRenderPass 
 	{
 	public:
 		HrRenderPass(std::string strPassName);
@@ -20,8 +19,8 @@ namespace Hr
 		
 		void StreamIn(HrStreamData& streamData);
 
-		void BindPass(IRender* pRender);
-		void UnBindPass(IRender* pRender);
+		void BindPass(HrRender* pRender);
+		void UnBindPass(HrRender* pRender);
 
 		IShader* GetVertexShader();
 		IShader* GetPixelShader();

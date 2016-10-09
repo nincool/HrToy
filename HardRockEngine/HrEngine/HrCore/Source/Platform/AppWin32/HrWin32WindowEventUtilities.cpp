@@ -1,4 +1,4 @@
-﻿#include "AppWin32/HrWin32WindowEventUtilities.h"
+﻿#include "Platform/AppWin32/HrWin32WindowEventUtilities.h"
 #include "HrDirector.h"
 
 using namespace Hr;
@@ -23,7 +23,7 @@ bool Hr::HrWin32WindowEventUtilities::MessagePump()
 		}
 		else
 		{
-			HrDirector::GetInstance().End();
+			HrDirector::Instance()->End();
 			return false;
 		}
 	}

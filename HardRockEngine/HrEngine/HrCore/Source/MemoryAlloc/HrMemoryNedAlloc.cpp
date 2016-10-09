@@ -1,4 +1,6 @@
-﻿#include "MemoryAlloc/HrMemoryNedAlloc.h"
+﻿#if HR_MEMORY_ALLOCATOR_STD != HR_MEMORY_ALLOCATOR_STD
+
+#include "MemoryAlloc/HrMemoryNedAlloc.h"
 
 #if HR_MEMORY_ALLOCATOR == HR_MEMORY_ALLOCATOR_NED
 
@@ -51,4 +53,6 @@ void Hr::HrNedPoolingImpl::DeallocBytesAligned(size_t align, void* ptr)
 	
 	nedalloc::nedfree(ptr);
 }
+#endif
+
 #endif

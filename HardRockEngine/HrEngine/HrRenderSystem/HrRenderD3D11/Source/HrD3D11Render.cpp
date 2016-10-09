@@ -6,7 +6,6 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrViewPort.h"
-#include "HrRenderDemo/Include/HrRenderDemo.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <boost/cast.hpp>
 
@@ -15,11 +14,6 @@ using namespace Hr;
 HrD3D11Render::HrD3D11Render()
 {
 	m_pD3D11ImmediateContext = nullptr;
-
-	//typedef HrRenderD3D11DemoPipleline DEMOCLASS;
-
-	m_pRenderDemo = nullptr;
-	//m_pRenderDemo = HR_NEW DEMOCLASS();
 }
 
 HrD3D11Render::~HrD3D11Render()
@@ -28,10 +22,10 @@ HrD3D11Render::~HrD3D11Render()
 
 bool HrD3D11Render::Init()
 {
-	HrD3D11Device::GetInstance().CreateD3D11Device();
+	HrD3D11Device::Instance()->CreateD3D11Device();
 	
-	m_pD3D11Device = HrD3D11Device::GetInstance().GetDevice();
-	m_pD3D11ImmediateContext = HrD3D11Device::GetInstance().GetImmediateContext();
+	m_pD3D11Device = HrD3D11Device::Instance()->GetDevice();
+	m_pD3D11ImmediateContext = HrD3D11Device::Instance()->GetImmediateContext();
 
 	return true;
 }
@@ -53,7 +47,7 @@ void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 
-	HrD3D11Device::GetInstance().GetImmediateContext()->RSSetViewports(1, &vp);
+	HrD3D11Device::Instance()->GetImmediateContext()->RSSetViewports(1, &vp);
 }
 
 void HrD3D11Render::ClearRenderTargetView()
@@ -69,9 +63,7 @@ void HrD3D11Render::ClearDepthStencilView()
 
 void HrD3D11Render::Release()
 {
-	HrD3D11Device::GetInstance().Release();
-	if (m_pRenderDemo)
-		m_pRenderDemo->Release();
+	HrD3D11Device::Instance()->Release();
 }
 
 bool HrD3D11Render::StartRender()

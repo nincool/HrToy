@@ -2,7 +2,7 @@
 #define _HR_D3D11RENDER_H_
 
 #include "HrD3D11RenderPrerequisite.h"
-#include "HrCore/Include/Render/IRender.h"
+#include "HrCore/Include/Render/HrRender.h"
 
 struct ID3D11DeviceContext;
 struct ID3D11Device;
@@ -14,7 +14,7 @@ namespace Hr
 	class HrD3D11Device;
 	class IRenderDemo;
 
-	class HrD3D11Render : public IRender
+	class HrD3D11Render : public HrRender
 	{
 	public:
 		HrD3D11Render();
@@ -42,8 +42,6 @@ namespace Hr
 
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
-		IRenderDemo* m_pRenderDemo;
-
 		HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pShareRenderWindow, RenderWindow);
 
 	};

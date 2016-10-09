@@ -2,12 +2,11 @@
 #define _HR_RENDERCONSTANTBUFFER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include "HrCore/Include/Render/HrRenderParameter.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrRenderConstantBuffer : public RenderSysAllocatedObject
+	class HR_CORE_API HrRenderConstantBuffer
 	{
 	public:
 		HrRenderConstantBuffer();

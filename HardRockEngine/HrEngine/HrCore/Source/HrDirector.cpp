@@ -1,6 +1,6 @@
 ﻿#include "HrDirector.h"
 #include "Scene/HrSceneManager.h"
-#include "AppWin32/HrWin32WindowEventUtilities.h"
+#include "Platform/AppWin32/HrWin32WindowEventUtilities.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
@@ -11,35 +11,15 @@
 #include "Asset/HrRenderEffectManager.h"
 #include "Render/HrRenderTarget.h"
 #include "Render/HrCamera.h"
+#include "Render/HrRenderFactory.h"
 #include "HrLog.h"
 
-
 using namespace Hr;
-
-HrDirectorPtr HrDirector::m_s_pUniqueDirector;
-
-HrDirector& HrDirector::GetInstance()
-{
-	if (!m_s_pUniqueDirector)
-	{
-		m_s_pUniqueDirector = MakeUniquePtr<HrDirector>();
-	}
-	return *m_s_pUniqueDirector;
-}
-
-void HrDirector::ReleaseInstance()
-{
-	if (m_s_pUniqueDirector)
-	{
-		m_s_pUniqueDirector->Release();
-	}
-	m_s_pUniqueDirector.reset();
-}
 
 HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
-	m_pShareSceneManager = MakeSharedPtr<HrSceneManager>();
+	//m_pShareSceneManager = MakeSharedPtr<HrSceneManager>();
 }
 
 HrDirector::~HrDirector()
@@ -53,16 +33,15 @@ bool HrDirector::Init()
 
 	m_pUniqueRenderLoader = MakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
 	m_pUniqueRenderLoader->HrLoadModule();
-	typedef void(*RENDER_INIT_FUNC)(IRenderFactoryPtr& ptr);
+	typedef void(*RENDER_INIT_FUNC)(HrRenderFactoryPtr& ptr);
 	RENDER_INIT_FUNC func = static_cast<RENDER_INIT_FUNC>(m_pUniqueRenderLoader->GetProcAddress(std::string("HrModuleInitialize")));
 	if (func)
 	{
 		func(m_pShareRenderFactory);
 		if (m_pShareRenderFactory)
 		{
-			m_pShareRender = m_pShareRenderFactory->CreateRender();
-			m_pShareRenderTarget = m_pShareRenderFactory->CreateRenderTarget();
-
+			//m_pShareRender = m_pShareRenderFactory->CreateRender();
+			//m_pShareRenderTarget = m_pShareRenderFactory->CreateRenderTarget();
 		}
 	}
 	else
@@ -70,14 +49,16 @@ bool HrDirector::Init()
 		HRERROR(_T("RenderInitFunc is null"));
 		return false;
 	}
-	if (!m_pShareRender->Init())
-	{
-		return false;
-	}
-	m_pShareRenderTarget->CreateRenderWindow(640, 480, &HrWin32WindowEventUtilities::WinProc);
-	m_pShareRender->SetRenderTarget(m_pShareRenderTarget);
 
-	HrResourceManagerFactory::GetInstance().CreateResourceManager();
+	//if (!m_pShareRender->Init())
+	//{
+	//	return false;
+	//}
+
+	//m_pShareRenderTarget->CreateRenderWindow(640, 480, &HrWin32WindowEventUtilities::WinProc);
+	//m_pShareRender->SetRenderTarget(m_pShareRenderTarget);
+
+	//HrResourceManagerFactory::GetInstance().CreateResourceManager();
 
 	return true;
 }
@@ -98,15 +79,15 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::Update()
 {
-	m_pShareSceneManager->UpdateScene();
-	m_pShareSceneManager->RenderScene(m_pShareRenderTarget);
+	//m_pShareSceneManager->UpdateScene();
+	//m_pShareSceneManager->RenderScene(m_pShareRenderTarget);
 }
 
 void HrDirector::End()
 {
 	m_bEndMainLoop = true;
 
-	m_pShareSceneManager->Destroy();
+	//m_pShareSceneManager->Destroy();
 }
 
 void HrDirector::Release()
@@ -115,11 +96,11 @@ void HrDirector::Release()
 	HrComponentFactory::ReleaseInstance();
 	HrResourceManagerFactory::ReleaseInstance();
 
-	m_pShareRenderTarget.reset();
-	m_pShareSceneManager.reset();
+	//m_pShareRenderTarget.reset();
+	//m_pShareSceneManager.reset();
 	
-	m_pShareRender->Release();
-	m_pShareRender.reset();
+	//m_pShareRender->Release();
+	//m_pShareRender.reset();
 	
 	m_pShareRenderFactory.reset();
 
@@ -138,7 +119,7 @@ bool HrDirector::Render()
 	return true;
 }
 
-void HrDirector::RunScene(const IScenePtr& pScene)
+void HrDirector::RunScene(const HrScenePtr& pScene)
 {
 	m_pShareSceneManager->RunScene(pScene);
 }

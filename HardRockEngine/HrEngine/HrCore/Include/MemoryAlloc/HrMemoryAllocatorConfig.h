@@ -47,6 +47,7 @@ namespace Hr
 	template <MemoryCategory Cat, size_t align = 0> class HrCategorisedAlignAllocPolicy : public HrNedAlignedAllocPolicy < align > {};
 #endif
 
+#if HR_MEMORY_ALLOCATOR != HR_MEMORY_ALLOCATOR_STD
 	// Useful shortcuts
 	typedef HrCategorisedAllocPolicy<Hr::MEMCATEGORY_GENERAL> GeneralAllocPolicy;
 	typedef HrCategorisedAllocPolicy<Hr::MEMCATEGORY_GEOMETRY> GeometryAllocPolicy;
@@ -86,8 +87,10 @@ namespace Hr
 #undef SAFE_DELETE
 #endif // SAFE_DELETE
 #	define SAFE_DELETE(p) (HR_DELETE p; p = nullptr);
-#endif // OGRE_DEBUG_MODE
+#endif // HR_DEBUG
 }
+
+#endif
 
 #endif
 

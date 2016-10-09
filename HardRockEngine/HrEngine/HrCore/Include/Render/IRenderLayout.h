@@ -2,13 +2,12 @@
 #define _I_RENDERLAYOUT_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/IGraphicsBuffer.h"
 
 namespace Hr
 {
-	class IRenderLayout : public RenderSysAllocatedObject
+	class IRenderLayout
 	{
 	public:
 

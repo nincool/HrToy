@@ -11,6 +11,9 @@
     <Filter Include="Source">
       <UniqueIdentifier>{ff2ad37b-538f-466b-82d4-91e6e99338ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\KFL">
+      <UniqueIdentifier>{604eab6c-9875-4518-bc6b-1271faf024af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrMath.h">
@@ -25,22 +28,10 @@
     <ClInclude Include="Include\HrVector3.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Matrix_T.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Plane_T.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Vector_T.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrMathPrerequisites.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrMathConfig.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MathTemplateHelper_T.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrMathCalculate.h">
@@ -51,6 +42,18 @@
     </ClInclude>
     <ClInclude Include="Include\HrVector4.h">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MathTemplateHelper_T.h">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Matrix_T.h">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Plane_T.h">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vector_T.h">
+      <Filter>Include\KFL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

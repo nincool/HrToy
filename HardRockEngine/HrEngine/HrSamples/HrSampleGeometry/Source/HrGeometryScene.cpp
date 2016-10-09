@@ -30,6 +30,7 @@ void HrGeometryScene::CreateSceneElements()
 	//添加摄像机
 	HrCameraNode* pCameraNode = HrComponentFactory::GetInstance().CreateCamera(0, 0, 640, 480, 1);
 	AddSceneNode(pCameraNode);
+	
 	//这句好像不起作用
 	pCameraNode->Translate(Vector3(0, 0, 0));
 

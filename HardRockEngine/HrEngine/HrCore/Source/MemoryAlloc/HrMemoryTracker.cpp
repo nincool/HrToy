@@ -1,3 +1,5 @@
+#if HR_MEMORY_ALLOCATOR_STD != HR_MEMORY_ALLOCATOR_STD
+
 #include "MemoryAlloc/HrMemoryTracker.h"
 #include <assert.h>
 #include <sstream>
@@ -106,5 +108,7 @@ void HrMemoryTracker::ReportLeaks()
 		of.close();
 	}
 }
+
+#endif
 
 

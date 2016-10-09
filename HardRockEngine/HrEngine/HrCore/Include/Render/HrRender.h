@@ -1,15 +1,14 @@
-#ifndef _I_RENDER_H_
-#define _I_RENDER_H_
+#ifndef _HR_RENDER_H_
+#define _HR_RENDER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class IRender : public RenderSysAllocatedObject
+	class HrRender
 	{
 	public:
-		virtual ~IRender(){};
+		virtual ~HrRender(){};
 		/**
 		*	@Brief:  ´´½¨äÖÈ¾Æ÷[10/28/2015 By Hr]
 		*	@Param:

@@ -15,11 +15,10 @@
 #define _HR_RESOURCEMANAGERFACTORY_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrResourceManagerFactory : public RenderSysAllocatedObject
+	class HrResourceManagerFactory
 	{
 		enum EnumResFactoryType
 		{

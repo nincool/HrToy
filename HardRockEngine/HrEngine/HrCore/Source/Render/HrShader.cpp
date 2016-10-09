@@ -1,5 +1,4 @@
 #include "HrCore/Include/Render/HrShader.h"
-#include "HrCore/Include/Render/IRenderFactory.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderConstantBuffer.h"
 #include "HrCore/Include/HrDirector.h"
@@ -21,7 +20,7 @@ HrShader::~HrShader()
 	m_vecRenderConstantBuffer.clear();
 }
 
-void HrShader::SetShaderType(_SHADER_TYPE_ shaderType)
+void HrShader::SetShaderType(EnumShaderType shaderType)
 {
 	m_shaderType = shaderType;
 }
@@ -35,11 +34,11 @@ void HrShader::SetEntryPoint(std::string strEntryPoint)
 	m_strEntryPoint = strEntryPoint;
 }
 
-void HrShader::Bind(IRender* pRender)
+void HrShader::Bind(HrRender* pRender)
 {
 }
 
-void HrShader::UnBind(IRender* pRender)
+void HrShader::UnBind(HrRender* pRender)
 {
 }
 

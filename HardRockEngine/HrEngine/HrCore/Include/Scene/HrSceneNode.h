@@ -2,11 +2,10 @@
 #define _HR_SCENENODE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrSceneNode : public SceneObjAllocatedObject
+	class HrSceneNode 
 	{
 	public:
 		enum EnumNodeType
@@ -33,6 +32,7 @@ namespace Hr
 		void SetPosition(REAL x, REAL y, REAL z);
 		const Vector3& GetPosition();
 		virtual void Translate(const Vector3& v3);
+
 	protected:
 		EnumNodeType m_nodeType;
 		IRenderable* m_pRenderable;

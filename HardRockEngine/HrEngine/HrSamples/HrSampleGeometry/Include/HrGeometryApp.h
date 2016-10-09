@@ -2,17 +2,15 @@
 #define _HR_GEOMETRYAPP_H_
 
 #include "HrSamples/HrSampleCommon/HrSampleCommon.h"
+#include "HrCommon/include/HrSingleton.h"
 
 namespace Hr
 {
-	class HrGeometryApp : public HrApplication
+	class HrGeometryApp : public HrApplicationWin, public HrSingleTon<HrGeometryApp>
 	{
 	public:
 		HrGeometryApp();
 		~HrGeometryApp();
-
-		static HrGeometryApp& GetInstance();
-		static void ReleaseInstance();
 
 		virtual bool ApplicationDidFinishLaunching() override;
 
@@ -25,8 +23,6 @@ namespace Hr
 	private:
 		void LoadAssets();
 		void CreateScene();
-	private:
-		static HrGeometryAppPtr m_s_pUniqueGeometryApp;
 	};
 }
 

@@ -2,11 +2,10 @@
 #define _HR_VIEWPORT_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrViewPort : public SceneObjAllocatedObject
+	class HrViewPort 
 	{
 	public:
 		HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, HrCamera* pCamera);

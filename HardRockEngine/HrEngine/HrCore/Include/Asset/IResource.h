@@ -2,11 +2,10 @@
 #define _I_RESOURCE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class IResource : public ResourceAllocatedObject
+	class IResource
 	{
 	public:
 		virtual ~IResource(){}

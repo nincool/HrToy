@@ -53,7 +53,7 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 	{
 		HrCameraNode* pCameraNode = boost::polymorphic_downcast<HrCameraNode*>(pSceneNode);
 		HrViewPort* pViewPort = pCameraNode->GetViewPort();
-		HrDirector::GetInstance().GetRenderTarget()->AddViewPort(pViewPort);
+		//HrDirector::Instance()->GetRenderTarget()->AddViewPort(pViewPort);
 	}
 
 	m_vecChildNode.push_back(pSceneNode);

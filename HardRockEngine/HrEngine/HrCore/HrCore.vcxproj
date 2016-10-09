@@ -123,8 +123,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\AppWin32\HrApplication_Win32.h" />
-    <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\Asset\HrColor.h" />
     <ClInclude Include="Include\Asset\HrComponentFactory.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
@@ -141,19 +139,20 @@
     <ClInclude Include="Include\Asset\IResourceLoader.h" />
     <ClInclude Include="Include\Asset\IResourceManager.h" />
     <ClInclude Include="Include\Asset\IShaderCompiler.h" />
+    <ClInclude Include="Include\Config\HrContextConfig.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrDirector.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrLog.h" />
-    <ClInclude Include="Include\IApplication.h" />
-    <ClInclude Include="Include\IDirector.h" />
-    <ClInclude Include="Include\ILog.h" />
+    <ClInclude Include="Include\HrApplication.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
+    <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h" />
+    <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
@@ -169,8 +168,8 @@
     <ClInclude Include="Include\Render\HrViewPort.h" />
     <ClInclude Include="Include\Render\IGraphicsBuffer.h" />
     <ClInclude Include="Include\Render\IRenderable.h" />
-    <ClInclude Include="Include\Render\IRender.h" />
-    <ClInclude Include="Include\Render\IRenderFactory.h" />
+    <ClInclude Include="Include\Render\HrRender.h" />
+    <ClInclude Include="Include\Render\HrRenderFactory.h" />
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderPass.h" />
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
@@ -182,13 +181,9 @@
     <ClInclude Include="Include\Scene\HrScene.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
-    <ClInclude Include="Include\Scene\IScene.h" />
-    <ClInclude Include="Include\Scene\ISceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp" />
-    <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp" />
-    <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp" />
     <ClCompile Include="Source\Asset\HrColor.cpp" />
     <ClCompile Include="Source\Asset\HrComponentFactory.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
@@ -200,6 +195,7 @@
     <ClCompile Include="Source\Asset\HrResourceManagerFactory.cpp" />
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
+    <ClCompile Include="Source\Config\HrContextConfig.cpp" />
     <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
@@ -207,6 +203,8 @@
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
+    <ClCompile Include="Source\Platform\AppWin32\HrApplicationWin.cpp" />
+    <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp" />

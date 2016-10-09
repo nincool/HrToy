@@ -2,12 +2,11 @@
 #define _HR_RENDERFRAMEPARAMETERS_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include "HrMath/Include/HrMath.h"
 
 namespace Hr
 {
-	class HrRenderFrameParameters : public RenderSysAllocatedObject
+	class HrRenderFrameParameters
 	{
 	public:
 		HrRenderFrameParameters();

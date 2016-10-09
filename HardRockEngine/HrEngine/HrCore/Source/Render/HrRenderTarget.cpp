@@ -13,6 +13,15 @@ HrRenderTarget::~HrRenderTarget()
 	m_mapViewPort.clear();
 }
 
+bool HrRenderTarget::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc)
+{
+	nWidth = 0;
+	nHeight = 0;
+	lpfnProc = nullptr;
+
+	return false;
+}
+
 void HrRenderTarget::AddViewPort(HrViewPort* pViewPort)
 {
 	m_mapViewPort.insert(std::make_pair(pViewPort->GetZOrder(), pViewPort));

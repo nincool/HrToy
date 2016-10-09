@@ -1,6 +1,6 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/IShader.h"
-#include "HrCore/Include/Render/IRenderFactory.h"
+#include "Render/HrRenderFactory.h"
 #include "HrDirector.h"
 
 
@@ -10,10 +10,10 @@ HrRenderPass::HrRenderPass(std::string strPassName)
 {
 	m_strPassName = strPassName;
 
-	m_pVertexShader = HrDirector::GetInstance().GetRenderFactory()->CreateShader();
+	m_pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
 	m_pVertexShader->SetShaderType(IShader::ST_VERTEX_SHADER);
 	
-	m_pPixelShader = HrDirector::GetInstance().GetRenderFactory()->CreateShader();
+	m_pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
 	m_pPixelShader->SetShaderType(IShader::ST_PIXEL_SHADER);
 }
 
@@ -39,13 +39,13 @@ void HrRenderPass::StreamIn(HrStreamData& streamData)
 	m_pPixelShader->StreamIn(streamData);
 }
 
-void HrRenderPass::BindPass(IRender* pRender)
+void HrRenderPass::BindPass(HrRender* pRender)
 {
 	m_pVertexShader->Bind(pRender);
 	m_pPixelShader->Bind(pRender);
 }
 
-void HrRenderPass::UnBindPass(IRender* pRender)
+void HrRenderPass::UnBindPass(HrRender* pRender)
 {
 	m_pVertexShader->UnBind(pRender);
 	m_pPixelShader->UnBind(pRender);

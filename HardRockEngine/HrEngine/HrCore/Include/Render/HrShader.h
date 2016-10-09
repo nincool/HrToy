@@ -11,12 +11,12 @@ namespace Hr
 		HrShader();
 		virtual ~HrShader();
 
-		virtual void SetShaderType(_SHADER_TYPE_ shaderType) override;
+		virtual void SetShaderType(EnumShaderType shaderType) override;
 		//Èë¿Úº¯Êý
 		virtual void SetEntryPoint(std::string strEntryPoint) override;
 
-		virtual void Bind(IRender* pRender) override;
-		virtual void UnBind(IRender* pRender) override;
+		virtual void Bind(HrRender* pRender) override;
+		virtual void UnBind(HrRender* pRender) override;
 
 		virtual void StreamIn(HrStreamData& streamData) override;
 
@@ -24,7 +24,7 @@ namespace Hr
 	protected:
 		HrRenderConstantBuffer* AddRenderConstantBuffer();
 	protected:
-		_SHADER_TYPE_ m_shaderType;
+		EnumShaderType m_shaderType;
 		std::string m_strEntryPoint;
 
 		std::vector<HrRenderConstantBuffer*> m_vecRenderConstantBuffer;

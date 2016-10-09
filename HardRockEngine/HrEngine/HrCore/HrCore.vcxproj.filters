@@ -11,12 +11,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{a9c92e22-41dd-46bf-8485-1e569c88f7f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\AppWin32">
-      <UniqueIdentifier>{5ff74097-8ef4-4d5e-8191-a8458b7f11b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\AppWin32">
-      <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\MemoryAlloc">
       <UniqueIdentifier>{d8b49213-b008-46f1-9b40-88719c7a61df}</UniqueIdentifier>
     </Filter>
@@ -41,16 +35,28 @@
     <Filter Include="Source\Asset">
       <UniqueIdentifier>{9fe9127d-ca01-4164-ab7d-fe7874226503}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Platform">
+      <UniqueIdentifier>{e6cb38f8-6fd1-42b6-a86b-43392eff2436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Platform\AppWin32">
+      <UniqueIdentifier>{5ff74097-8ef4-4d5e-8191-a8458b7f11b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform">
+      <UniqueIdentifier>{797d551c-36ef-4ea4-b3df-2469f5d41e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform\AppWin32">
+      <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Config">
+      <UniqueIdentifier>{f58ee87a-f881-4788-a17a-7aaccb497729}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Config">
+      <UniqueIdentifier>{407d9a6a-a11f-46aa-829f-94f7a3a387b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
       <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\IApplication.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\AppWin32\HrApplication_Win32.h">
-      <Filter>Include\AppWin32</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrCorePreDeclare.h">
       <Filter>Include</Filter>
@@ -76,20 +82,8 @@
     <ClInclude Include="Include\HrDirector.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\IDirector.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrLog.h">
       <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ILog.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\AppWin32\HrWin32WindowEventUtilities.h">
-      <Filter>Include\AppWin32</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IRender.h">
-      <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrCamera.h">
       <Filter>Include\Render</Filter>
@@ -103,9 +97,6 @@
     <ClInclude Include="Include\Render\IRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\IRenderFactory.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderPass.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -114,9 +105,6 @@
     </ClInclude>
     <ClInclude Include="Include\Render\IShader.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\ISceneManager.h">
-      <Filter>Include\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\HrSceneManager.h">
       <Filter>Include\Scene</Filter>
@@ -132,9 +120,6 @@
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderQueue.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\IScene.h">
-      <Filter>Include\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\HrScene.h">
       <Filter>Include\Scene</Filter>
@@ -226,13 +211,28 @@
     <ClInclude Include="Include\Scene\HrCameraNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h">
+      <Filter>Include\Platform\AppWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h">
+      <Filter>Include\Platform\AppWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrApplication.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderFactory.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRender.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Config\HrContextConfig.h">
+      <Filter>Include\Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\AppWin32\HrApplication_Win32.cpp">
-      <Filter>Source\AppWin32</Filter>
     </ClCompile>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
       <Filter>Source\MemoryAlloc</Filter>
@@ -251,9 +251,6 @@
     </ClCompile>
     <ClCompile Include="Source\HrLog.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\AppWin32\HrWin32WindowEventUtilities.cpp">
-      <Filter>Source\AppWin32</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrCamera.cpp">
       <Filter>Source\Render</Filter>
@@ -347,6 +344,15 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrCameraNode.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp">
+      <Filter>Source\Platform\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin32\HrApplicationWin.cpp">
+      <Filter>Source\Platform\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Config\HrContextConfig.cpp">
+      <Filter>Source\Config</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

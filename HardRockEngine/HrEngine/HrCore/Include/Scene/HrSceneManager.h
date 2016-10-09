@@ -1,27 +1,29 @@
 #ifndef _HR_SCENEMANAGER_H_
 #define _HR_SCENEMANAGER_H_
 
-#include "ISceneManager.h"
+#include "HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class HrSceneManager : public ISceneManager
+	class HrSceneManager 
 	{
 	public:
 		HrSceneManager();
 		~HrSceneManager();
 
-		virtual void RunScene(const IScenePtr& pScene) override;
-		virtual void StopScene() override;
+		virtual void RunScene(const HrScenePtr& pScene);
+		virtual void StopScene();
 
-		virtual void UpdateScene() override;
-		virtual void RenderScene(IRenderTargetPtr& renderTarget) override;
-		virtual void Destroy() override;
+		virtual void UpdateScene();
+		virtual void RenderScene(IRenderTargetPtr& renderTarget);
+		virtual void Destroy();
+	
 	protected:
 		void FlushScene();
 		bool CheckSceneRunning();
+	
 	private:
-		IScenePtr m_pShareRunningScene;
+		HrScenePtr m_pShareRunningScene;
 		HrRenderQueuePtr m_pShareRenderQueue;
 		HrCamera* m_pCurrentCamera;
 

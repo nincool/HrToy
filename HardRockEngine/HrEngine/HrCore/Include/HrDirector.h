@@ -9,65 +9,63 @@
 #ifndef _HR_DIRECTOR_H_
 #define _HR_DIRECTOR_H_
 
-#include "IDirector.h"
-#include <boost/noncopyable.hpp>
+#include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCommon/include/HrSingleton.h"
 
 namespace Hr
 {
 	class ITimer;
 	class HrModuleLoader;
 
-	class HR_CORE_API HrDirector : public IDirector, public boost::noncopyable
+	class HR_CORE_API HrDirector : public HrSingleTon<HrDirector>
 	{
 	public:
 		HrDirector();
 		~HrDirector();
 
-		static HrDirector& GetInstance();
-		static void ReleaseInstance();
-
-		IRenderPtr& GetRenderer()
-		{
-			return m_pShareRender;
-		}
-		IRenderFactoryPtr& GetRenderFactory()
+		//IRenderPtr& GetRenderer()
+		//{
+		//	return m_pShareRender;
+		//}
+		
+		HrRenderFactoryPtr& GetRenderFactory()
 		{
 			return m_pShareRenderFactory;
 		}
-		const IRenderTargetPtr& GetRenderTarget()
-		{
-			return m_pShareRenderTarget;
-		}
+		
+		//const IRenderTargetPtr& GetRenderTarget()
+		//{
+		//	return m_pShareRenderTarget;
+		//}
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
-		virtual bool Init() override;
-		virtual void StartMainLoop() override;
-		virtual void End() override;
-		virtual void Release() override;
+		virtual bool Init();
+		virtual void StartMainLoop();
+		virtual void End();
+		virtual void Release();
 
 		/////////////////////////////--- 渲染 ---/////////////////////////////////
-		virtual bool Render() override;
+		virtual bool Render();
 
 		/////////////////////////////--- 业务 ---/////////////////////////////////
-		virtual void RunScene(const IScenePtr& pScene);
+		virtual void RunScene(const HrScenePtr& pScene);
 
 	protected:
 		void Update();
 	private:
-		static HrDirectorPtr m_s_pUniqueDirector;
 		//渲染目标
-		IRenderTargetPtr m_pShareRenderTarget;
+		//IRenderTargetPtr m_pShareRenderTarget;
 		//场景管理器
-		ISceneManagerPtr m_pShareSceneManager;
+		HrSceneManagerPtr m_pShareSceneManager;
 		//渲染工厂
-		IRenderFactoryPtr m_pShareRenderFactory;
+		HrRenderFactoryPtr m_pShareRenderFactory;
+		
 		//渲染器
-		IRenderPtr m_pShareRender;
+		HrRenderPtr m_pShareRender;
 
 		bool m_bEndMainLoop;
 
 		//渲染模块加载
 		std::unique_ptr<HrModuleLoader> m_pUniqueRenderLoader;
-
 	};
 
 }

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "HrCore/Include/AppWin32/HrApplication_Win32.h"
+#include "HrCore/Include/Platform/AppWin32/HrApplicationWin.h"
 #include "HrEngine.h"
 
 namespace Hr

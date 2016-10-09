@@ -1,8 +1,8 @@
 #include "Render/HrRenderConstantBuffer.h"
-#include "Render/IRenderFactory.h"
 #include "Render/HrHardwareBuffer.h"
 #include "Render/HrRenderParameter.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrRenderFactory.h"
 #include "Asset/HrStreamData.h"
 #include "HrMath/Include/HrMath.h"
 #include "HrDirector.h"
@@ -14,7 +14,7 @@ HrRenderConstantBuffer::HrRenderConstantBuffer()
 	m_pStreamData = nullptr;
 	m_pRenderHardwareBuffer = nullptr;
 	m_pStreamData = HR_NEW HrStreamData();
-	m_pRenderHardwareBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
+	m_pRenderHardwareBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
 }
 
 HrRenderConstantBuffer::~HrRenderConstantBuffer()

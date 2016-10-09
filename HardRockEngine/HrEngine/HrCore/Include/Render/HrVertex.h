@@ -2,14 +2,13 @@
 #define _HR_Vertex_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 
 namespace Hr
 {
-	class HrVertexElement : public RenderSysAllocatedObject
+	class HrVertexElement 
 	{
 	public:
 		HrVertexElement(HrVertexElement::EnumVertexElementUsage usage, EnumVertexElementType pixelFormat)
@@ -27,7 +26,7 @@ namespace Hr
 		EnumVertexElementType m_elementType;
 	};
 
-	class HR_CORE_API HrVertex : public RenderSysAllocatedObject
+	class HR_CORE_API HrVertex 
 	{
 	public:
 		HrVertex();

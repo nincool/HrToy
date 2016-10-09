@@ -3,16 +3,10 @@
 
 #include "HrMathPrerequisites.h"
 #include "HrVector3.h"
-#include <boost/operators.hpp>
 
 namespace Hr
 {
-	class HrMatrix4 : boost::addable < HrMatrix4,
-		boost::subtractable < HrMatrix4,
-		boost::dividable2 < HrMatrix4, REAL,
-		boost::multipliable2 < HrMatrix4, REAL,
-		boost::multipliable < HrMatrix4,
-		boost::equality_comparable<HrMatrix4> >> >> >
+	class HrMatrix4 
 	{
 		typedef REAL				value_type;
 
@@ -95,39 +89,20 @@ namespace Hr
 			return out;
 		}
 
-		reference operator()(size_t row, size_t col) 
-		{
-			return _m[row * col_num + col];
-		}
-		const_reference operator()(size_t row, size_t col) const 
-		{
-			return _m[row * col_num + col];
-		}
-		
-		inline REAL* operator [] (size_t iRow)
-		{
-			BOOST_ASSERT(iRow < 4);
-			return m[iRow];
-		}
-		inline const REAL *operator [] (size_t iRow) const
-		{
-			BOOST_ASSERT(iRow < 4);
-			return m[iRow];
-		}
-
 		void Row(size_t index, HrVector3 const & rhs)
 		{
 			for (size_t i = index * elem_num, j = 0; i < (index + 1) * elem_num; ++i, ++j)
 			{
-				//_m[i] = rhs[j];
+				_m[i] = rhs[j];
 			}
 		}
 		HrVector3 const Row(size_t index) const
 		{
 			BOOST_ASSERT(index < row_num);
 			size_t nStartIndex = index * col_num;
-			return HrVector3(_m[nStartIndex], _m[nStartIndex+1], _m[nStartIndex+2]);
+			return HrVector3(_m[nStartIndex], _m[nStartIndex + 1], _m[nStartIndex + 2]);
 		}
+
 		void Col(size_t index, HrVector3 const & rhs)
 		{
 			_m[index] = rhs.x();
@@ -137,20 +112,6 @@ namespace Hr
 		HrVector3 const Col(size_t index) const
 		{
 			return HrVector3(_m[index], _m[index + col_num], _m[index + col_num * 2]);
-		}
-
-		/** Matrix concatenation using '*'.
-		*/
-		HrMatrix4& operator+=(HrMatrix4 const & rhs)
-		{
-			for (size_t i = 0; i < col_num * row_num; ++i)
-			{
-			}
-			return *this;
-		}
-		HrMatrix4& operator-=(HrMatrix4 const & rhs)
-		{
-			return *this;
 		}
 
 		HrMatrix4 Concatenate(const HrMatrix4 &m2) const
@@ -179,39 +140,24 @@ namespace Hr
 			return r;
 		}
 
-		HrMatrix4& operator*=(HrMatrix4 const & rhs)
+		reference operator()(size_t row, size_t col) 
 		{
-			*this = Concatenate(rhs);
-			return *this;
+			return _m[row * col_num + col];
 		}
-		HrMatrix4& operator*=(REAL rhs)
+		const_reference operator()(size_t row, size_t col) const 
 		{
-			for (size_t i = 0; i < row_num; ++i)
-			{
-				_m[i] *= rhs;
-			}
-			return *this;
+			return _m[row * col_num + col];
 		}
-		HrMatrix4& operator/=(REAL rhs)
+		
+		inline REAL* operator [] (size_t iRow)
 		{
-			return this->operator*=(1 / rhs);
+			BOOST_ASSERT(iRow < 4);
+			return m[iRow];
 		}
-
-		HrMatrix4& operator=(HrMatrix4 const & rhs)
+		inline const REAL *operator [] (size_t iRow) const
 		{
-			if (this != &rhs)
-			{
-				memcpy(_m, rhs._m, sizeof(_m));
-			}
-			return *this;
-		}
-		HrMatrix4& operator=(HrMatrix4&& rhs)
-		{
-			if (this != &rhs)
-			{
-				memcpy(_m, rhs._m, sizeof(_m));
-			}
-			return *this;
+			BOOST_ASSERT(iRow < 4);
+			return m[iRow];
 		}
 
 		/** Matrix addition.
@@ -271,6 +217,48 @@ namespace Hr
 			return r;
 		}
 
+		HrMatrix4 operator* (const HrMatrix4& rhs) const
+		{
+			return this->Concatenate(rhs);
+		}
+
+		HrMatrix4& operator*=(HrMatrix4 const & rhs)
+		{
+			*this = Concatenate(rhs);
+			return *this;
+		}
+
+		HrMatrix4& operator*=(REAL rhs)
+		{
+			for (size_t i = 0; i < row_num; ++i)
+			{
+				_m[i] *= rhs;
+			}
+			return *this;
+		}
+
+		HrMatrix4& operator/=(REAL rhs)
+		{
+			return this->operator*=(1 / rhs);
+		}
+
+		HrMatrix4& operator=(HrMatrix4 const & rhs)
+		{
+			if (this != &rhs)
+			{
+				memcpy(_m, rhs._m, sizeof(_m));
+			}
+			return *this;
+		}
+		HrMatrix4& operator=(HrMatrix4&& rhs)
+		{
+			if (this != &rhs)
+			{
+				memcpy(_m, rhs._m, sizeof(_m));
+			}
+			return *this;
+		}
+
 		inline bool operator == (const HrMatrix4& m2) const
 		{
 			if (
@@ -281,6 +269,24 @@ namespace Hr
 				return false;
 			return true;
 		}
+
+		/** Matrix concatenation using '*'.
+		*/
+		//HrMatrix4& operator+=(HrMatrix4 const & rhs)
+		//{
+		//	for (size_t i = 0; i < col_num * row_num; ++i)
+		//	{
+		//		_m[i] += rhs[i];
+		//	}
+		//	return *this;
+		//}
+
+		//HrMatrix4& operator-=(HrMatrix4 const & rhs)
+		//{
+		//	return *this;
+		//}
+
+
 	protected:
 		/// The matrix entries, indexed by [row][col].
 		union {

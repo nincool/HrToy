@@ -25,7 +25,7 @@ HrD3D11Shader::~HrD3D11Shader()
 	SAFE_DELETE(m_pShaderBuffer);
 }
 
-void HrD3D11Shader::Bind(IRender* pRender)
+void HrD3D11Shader::Bind(HrRender* pRender)
 {
 	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
 	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11ImmediateContext();
@@ -50,7 +50,7 @@ void HrD3D11Shader::Bind(IRender* pRender)
 	}
 }
 
-void HrD3D11Shader::UnBind(IRender* pRender)
+void HrD3D11Shader::UnBind(HrRender* pRender)
 {
 
 }
@@ -245,7 +245,7 @@ void HrD3D11Shader::CreateShaderParams()
 
 void HrD3D11Shader::CreateVertexShader()
 {
-	HRESULT hr = HrD3D11Device::GetInstance().GetDevice()->CreateVertexShader(m_pShaderBuffer->GetBufferPoint()
+	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateVertexShader(m_pShaderBuffer->GetBufferPoint()
 		, m_pShaderBuffer->GetBufferSize(), 0, &m_pVertexShader);
 	if (FAILED(hr))
 	{
@@ -256,7 +256,7 @@ void HrD3D11Shader::CreateVertexShader()
 
 void HrD3D11Shader::CreatePixelShader()
 {
-	HRESULT hr = HrD3D11Device::GetInstance().GetDevice()->CreatePixelShader(m_pShaderBuffer->GetBufferPoint()
+	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreatePixelShader(m_pShaderBuffer->GetBufferPoint()
 		, m_pShaderBuffer->GetBufferSize(), 0, &m_pPixelShader);
 	if (FAILED(hr))
 	{

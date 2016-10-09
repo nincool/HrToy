@@ -1,16 +1,16 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrVertex.h"
 #include "Render/HrHardwareBuffer.h"
-#include "Render/IRenderFactory.h"
+#include "Render/HrRenderFactory.h"
 #include "HrDirector.h"
 
 using namespace Hr;
 
 HrRenderLayout::HrRenderLayout()
 {
-	m_pVertex = HrDirector::GetInstance().GetRenderFactory()->CreateVertex();
-	m_pHDVertexBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
-	m_pHDIndexBuffer = HrDirector::GetInstance().GetRenderFactory()->CreatehardwareBuffer();
+	m_pVertex = HrDirector::Instance()->GetRenderFactory()->CreateVertex();
+	m_pHDVertexBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pHDIndexBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
 	m_indexBufferType = IT_16BIT;

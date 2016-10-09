@@ -7,22 +7,6 @@
 
 using namespace Hr;
 
-HrD3D11DevicePtr HrD3D11Device::m_s_pUniqueDevicePtr;
-
-HrD3D11Device& HrD3D11Device::GetInstance()
-{
-	if (!m_s_pUniqueDevicePtr)
-	{
-		m_s_pUniqueDevicePtr = MakeUniquePtr<HrD3D11Device>();
-	}
-	return *m_s_pUniqueDevicePtr;
-}
-
-void HrD3D11Device::ReleaseInstance()
-{
-	m_s_pUniqueDevicePtr.reset();
-}
-
 HrD3D11Device::HrD3D11Device()
 {
 	m_pD3D11DXGIFactory = nullptr;
@@ -39,7 +23,9 @@ HrD3D11Device::~HrD3D11Device()
 bool HrD3D11Device::CreateD3D11Device()
 {
 	CreateD3DDXDevice();
+	
 	CreateD3DDXGIFactory();
+	
 	D3D11EnumerateAdapter();
 
 	return true;
@@ -77,9 +63,7 @@ bool HrD3D11Device::CreateD3DDXDevice()
 	// determine feature levels
 	D3D_FEATURE_LEVEL requestedLevels[] =
 	{
-#if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
 		D3D_FEATURE_LEVEL_11_1,
-#endif
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0,

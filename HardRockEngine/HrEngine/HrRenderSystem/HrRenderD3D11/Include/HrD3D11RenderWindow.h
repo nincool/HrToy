@@ -26,11 +26,11 @@ namespace Hr
 			return m_pDepthStencilView;
 		}
 
-
 	private:
 		bool CreateD3D11Window(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc);
 		bool CreateSwapChain();
 		bool CreateD3DView();
+
 	private:
 		HWND m_hWnd;
 		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);

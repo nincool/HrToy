@@ -1,6 +1,5 @@
 #include "Asset/HrRenderEffectManager.h"
 #include "Asset/HrRenderEffect.h"
-#include "Render/IRenderFactory.h"
 #include "HrDirector.h"
 #include "HrLog.h"
 #include <boost/cast.hpp>

@@ -1,7 +1,7 @@
 #ifndef _HR_D3D11ADAPTERLIST_H_
 #define _HR_D3D11ADAPTERLIST_H_
 
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
+#include "HrD3D11RenderPrerequisite.h"
 
 namespace Hr
 {

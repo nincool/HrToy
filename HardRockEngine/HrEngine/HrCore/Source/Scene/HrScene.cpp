@@ -3,12 +3,10 @@
 #include "Scene/HrSceneNode.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
-
 using namespace Hr;
 
 HrScene::HrScene()
 {
-	//m_pShareSceneManager = HrDirector::GetInstance().
 	m_pShareRootNode = MakeSharedPtr<HrSceneNode>();
 }
 
@@ -26,7 +24,7 @@ void HrScene::OnEnterDidFinish()
 
 void HrScene::OnExit()
 {
-	
+	ClearSceneNode();
 }
 
 void HrScene::ClearSceneNode()

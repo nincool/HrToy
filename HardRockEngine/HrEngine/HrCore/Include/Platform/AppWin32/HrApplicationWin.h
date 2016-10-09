@@ -1,18 +1,15 @@
 #ifndef _HR_APPLICATION_WIN32_
 #define _HR_APPLICATION_WIN32_
 
-#include "HrCore/Include/IApplication.h"
+#include "HrCore/Include/HrApplication.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrApplication : public IApplication
+	class HR_CORE_API HrApplicationWin : public HrApplication
 	{
 	public:
-		HrApplication();
-		virtual ~HrApplication();
-
-		static HrApplicationPtr& GetInstance();
-		static void ReleaseInstance();
+		HrApplicationWin();
+		virtual ~HrApplicationWin();
 
 		virtual bool ApplicationDidFinishLaunching() override;
 
@@ -22,16 +19,20 @@ namespace Hr
 
 		virtual Platform GetTargetPlatform() override
 		{
-			return IApplication::Platform::OS_WINDOWS;
+			return HrApplication::Platform::OS_WINDOWS;
 		}
 
 		virtual void Run() override;
 
 		virtual bool Destroy() override;
 
-	private:
-		static HrApplicationPtr m_s_pUniqueApplication;
+	protected:
+		bool CreateAppWindow();
 
+	protected:
+		HR_SYNTHESIZE_READONLY(HWND, m_hWnd, Hwnd);
+		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);
+		HR_SYNTHESIZE_READONLY(uint32, m_nHeight, Height);
 
 	};
 

@@ -2,11 +2,10 @@
 #define _HR_RENDERPARAMETER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class HrRenderParameter : public RenderSysAllocatedObject
+	class HrRenderParameter
 	{
 	public:
 		enum EnumRenderParamType

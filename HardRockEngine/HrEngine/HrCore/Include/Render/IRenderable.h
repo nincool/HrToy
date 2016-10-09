@@ -2,11 +2,10 @@
 #define _I_RENDERABLE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
 {
-	class IRenderable : public RenderableAllocatedObject
+	class IRenderable 
 	{
 	public:
 		virtual ~IRenderable(){}

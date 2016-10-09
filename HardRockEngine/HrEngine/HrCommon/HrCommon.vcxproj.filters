@@ -39,5 +39,8 @@
     <ClInclude Include="..\HrEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\HrSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #include "HrCore/Include/Asset/HrGeometryBox.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
-#include "HrCore/Include/Render/IRenderFactory.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"

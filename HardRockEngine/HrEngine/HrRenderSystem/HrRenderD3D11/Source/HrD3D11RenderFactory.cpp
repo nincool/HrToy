@@ -22,9 +22,9 @@ HrD3D11RenderFactory::~HrD3D11RenderFactory()
 
 }
 
-IRenderPtr HrD3D11RenderFactory::CreateRender()
+HrRenderPtr HrD3D11RenderFactory::CreateRender()
 {
-	return static_pointer_cast<IRender>(MakeSharedPtr<HrD3D11Render>());
+	return static_pointer_cast<HrRender>(MakeSharedPtr<HrD3D11Render>());
 }
 
 IRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
@@ -37,9 +37,9 @@ HrVertex* HrD3D11RenderFactory::CreateVertex()
 	return HR_NEW HrVertex();
 }
 
-IGraphicsBuffer* HrD3D11RenderFactory::CreatehardwareBuffer()
+IGraphicsBuffer* HrD3D11RenderFactory::CreateHardwareBuffer()
 {
-	return HR_NEW HrD3D11HardwareBuffer(HrD3D11Device::GetInstance().GetDevice(), HrD3D11Device::GetInstance().GetImmediateContext());
+	return HR_NEW HrD3D11HardwareBuffer(HrD3D11Device::Instance()->GetDevice(), HrD3D11Device::Instance()->GetImmediateContext());
 }
 
 IRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()

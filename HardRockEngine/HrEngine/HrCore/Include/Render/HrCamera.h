@@ -2,12 +2,11 @@
 #define _HR_CAMERA_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/MemoryAlloc/HrMemoryAllocatorConfig.h"
 #include "HrMath/Include/HrMath.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrCamera : public RenderSysAllocatedObject 
+	class HR_CORE_API HrCamera 
 	{
 	public:
 		HrCamera();

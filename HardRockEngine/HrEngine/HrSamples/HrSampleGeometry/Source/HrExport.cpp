@@ -4,11 +4,11 @@
 
 extern "C" HR_EXPORT void HrModuleInitialize()
 {
-	Hr::HrGeometryApp::GetInstance().Run();
+	Hr::HrGeometryApp::Instance()->Run();
 }
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)
 {
-	Hr::HrGeometryApp::GetInstance().ReleaseInstance();
+	Hr::HrGeometryApp::Instance()->Release();
 }
 

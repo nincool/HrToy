@@ -4,25 +4,6 @@
 
 using namespace Hr;
 
-HrLogPtr HrLog::m_pUniqueLog;
-
-HrLog& HrLog::GetInstance()
-{
-	if (!m_pUniqueLog)
-	{
-		m_pUniqueLog = MakeUniquePtr<HrLog>();
-	}
-	return *m_pUniqueLog;
-}
-
-void Hr::HrLog::ReleaseInstance()
-{
-	if (m_pUniqueLog)
-	{
-		m_pUniqueLog.reset();
-	}
-}
-
 HrLog::HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
@@ -44,7 +25,7 @@ HrLog::~HrLog()
 #endif
 }
 
-void HrLog::Log(ILog::EnumLogType nLevel, const wchar_t* pszFormat, ...)
+void HrLog::Log(EnumLogType nLevel, const wchar_t* pszFormat, ...)
 {
 	const int HR_MAX_STRING_FORMAT_LENGTH = 2560;
 
@@ -66,7 +47,7 @@ void HrLog::Log(ILog::EnumLogType nLevel, const wchar_t* pszFormat, ...)
 	LogStringToConsole(nLevel, rt);
 }
 
-void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::wstring& strContent)
+void HrLog::LogStringToConsole(EnumLogType nLevel, std::wstring& strContent)
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 	static HANDLE consolehwnd;
@@ -74,12 +55,12 @@ void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::wstring& strConten
 
 	switch (nLevel)
 	{
-	case ILog::_HALL:
+	case _HALL:
 		break;
-	case ILog::_HWARNING:
+	case _HWARNING:
 		SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		break;
-	case ILog::_HERROR:
+	case _HERROR:
 		SetConsoleTextAttribute(consolehwnd, FOREGROUND_RED | FOREGROUND_INTENSITY);
 		break;
 
@@ -91,7 +72,7 @@ void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::wstring& strConten
 #endif
 }
 
-void HrLog::Log(ILog::EnumLogType nLevel, const char* pFormat, ...)
+void HrLog::Log(EnumLogType nLevel, const char* pFormat, ...)
 {
 	const int HR_MAX_STRING_FORMAT_LENGTH = 2560;
 
@@ -113,7 +94,7 @@ void HrLog::Log(ILog::EnumLogType nLevel, const char* pFormat, ...)
 	LogStringToConsole(nLevel, rt);
 }
 
-void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::string& strContent)
+void HrLog::LogStringToConsole(EnumLogType nLevel, std::string& strContent)
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 	static HANDLE consolehwnd;
@@ -121,12 +102,12 @@ void HrLog::LogStringToConsole(ILog::EnumLogType nLevel, std::string& strContent
 
 	switch (nLevel)
 	{
-	case ILog::_HALL:
+	case _HALL:
 		break;
-	case ILog::_HWARNING:
+	case _HWARNING:
 		SetConsoleTextAttribute(consolehwnd, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		break;
-	case ILog::_HERROR:
+	case _HERROR:
 		SetConsoleTextAttribute(consolehwnd, FOREGROUND_RED | FOREGROUND_INTENSITY);
 		break;
 

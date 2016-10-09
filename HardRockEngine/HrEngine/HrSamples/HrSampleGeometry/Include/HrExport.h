@@ -16,5 +16,3 @@ extern "C" HR_EXPORT void HrModuleUnload();
 
 #endif
 
-
-

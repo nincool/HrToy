@@ -73,8 +73,9 @@ namespace Hr
 		HrD3D11Shader();
 		~HrD3D11Shader();
 
-		virtual void Bind(IRender* pRender) override;
-		virtual void UnBind(IRender* pRender) override;
+		virtual void Bind(HrRender* pRender) override;
+
+		virtual void UnBind(HrRender* pRender) override;
 
 		virtual void StreamIn(HrStreamData& streamData) override;
 

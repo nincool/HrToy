@@ -1,5 +1,7 @@
 //Inspired by Ogre link :http://www.ogre3d.org/
 
+#if HR_MEMORY_ALLOCATOR_STD != HR_MEMORY_ALLOCATOR_STD
+
 #include "MemoryAlloc/HrMemoryAllocatorConfig.h"
 
 namespace Hr
@@ -25,3 +27,4 @@ namespace Hr
 }
 
 
+#endif

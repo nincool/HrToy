@@ -16,10 +16,12 @@ HrD3D11RenderWindow::HrD3D11RenderWindow()
 bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc)
 {
 	CreateD3D11Window(nWidth, nHeight, lpfnProc);
+	
 	CreateSwapChain();
+	
 	CreateD3DView();
 
-	HrD3D11Device::GetInstance().GetImmediateContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+	HrD3D11Device::Instance()->GetImmediateContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 
 	return true;
 }
@@ -84,7 +86,7 @@ bool HrD3D11RenderWindow::CreateSwapChain()
 	swapChainDesc.OutputWindow = m_hWnd;
 	swapChainDesc.Windowed = true;
 
-	HRESULT hr = HrD3D11Device::GetInstance().GetDXGIFactory()->CreateSwapChain(HrD3D11Device::GetInstance().GetDevice(), &swapChainDesc, &m_pSwapChain);
+	HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory()->CreateSwapChain(HrD3D11Device::Instance()->GetDevice(), &swapChainDesc, &m_pSwapChain);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateSwapChain Error!"));
@@ -98,7 +100,7 @@ bool HrD3D11RenderWindow::CreateD3DView()
 {
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-	HRESULT hr = HrD3D11Device::GetInstance().GetDevice()->CreateRenderTargetView(pBackBuffer, 0, &m_pRenderTargetView);
+	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateRenderTargetView(pBackBuffer, 0, &m_pRenderTargetView);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateD3DViews Error!"));
@@ -123,7 +125,7 @@ bool HrD3D11RenderWindow::CreateD3DView()
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	hr = HrD3D11Device::GetInstance().GetDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	hr = HrD3D11Device::Instance()->GetDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateDepthStencil Error!"));
@@ -143,7 +145,7 @@ bool HrD3D11RenderWindow::CreateD3DView()
 		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	}
 	descDSV.Texture2D.MipSlice = 0;
-	hr = HrD3D11Device::GetInstance().GetDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &m_pDepthStencilView);
+	hr = HrD3D11Device::Instance()->GetDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &m_pDepthStencilView);
 	if (FAILED(hr))
 	{
 
