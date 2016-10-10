@@ -1,11 +1,11 @@
 #ifndef _HR_RENDEREFFECT_H_
 #define _HR_RENDEREFFECT_H_
 
-#include "HrCore/Include/Asset/IResource.h"
+#include "HrCore/Include/Asset/HrResource.h"
 
 namespace Hr
 {
-	class HrRenderEffect : public IResource
+	class HrRenderEffect : public HrResource
 	{
 	public:
 		HrRenderEffect(std::string strEffectName, std::string strFilePath);

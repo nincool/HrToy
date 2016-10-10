@@ -5,9 +5,6 @@
 
 namespace Hr
 {
-	class IShader;
-	class IRender;
-
 	class HR_CORE_API HrRenderPass 
 	{
 	public:
@@ -22,14 +19,15 @@ namespace Hr
 		void BindPass(HrRender* pRender);
 		void UnBindPass(HrRender* pRender);
 
-		IShader* GetVertexShader();
-		IShader* GetPixelShader();
+		HrShader* GetVertexShader();
+		HrShader* GetPixelShader();
 
 		void UpdateShaderParams(HrRenderFrameParameters& renderFrameParameters);
 	private:
 		std::string m_strPassName;
-		IShader* m_pVertexShader;
-		IShader* m_pPixelShader;
+
+		HrShader* m_pVertexShader;
+		HrShader* m_pPixelShader;
 	};
 }
 

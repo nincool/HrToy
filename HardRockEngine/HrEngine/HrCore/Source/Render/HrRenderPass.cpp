@@ -1,5 +1,5 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
-#include "HrCore/Include/Render/IShader.h"
+#include "HrCore/Include/Render/HrShader.h"
 #include "Render/HrRenderFactory.h"
 #include "HrDirector.h"
 
@@ -11,10 +11,10 @@ HrRenderPass::HrRenderPass(std::string strPassName)
 	m_strPassName = strPassName;
 
 	m_pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-	m_pVertexShader->SetShaderType(IShader::ST_VERTEX_SHADER);
+	m_pVertexShader->SetShaderType(HrShader::ST_VERTEX_SHADER);
 	
 	m_pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-	m_pPixelShader->SetShaderType(IShader::ST_PIXEL_SHADER);
+	m_pPixelShader->SetShaderType(HrShader::ST_PIXEL_SHADER);
 }
 
 HrRenderPass::~HrRenderPass()
@@ -51,12 +51,12 @@ void HrRenderPass::UnBindPass(HrRender* pRender)
 	m_pPixelShader->UnBind(pRender);
 }
 
-IShader* HrRenderPass::GetVertexShader()
+HrShader* HrRenderPass::GetVertexShader()
 {
 	return m_pVertexShader;
 }
 
-IShader* HrRenderPass::GetPixelShader()
+HrShader* HrRenderPass::GetPixelShader()
 {
 	return m_pPixelShader;
 }

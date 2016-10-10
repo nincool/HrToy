@@ -33,19 +33,19 @@ void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
 
 void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	, uint32 nBufferSize
-	, IGraphicsBuffer::EnumHardwareBufferUsage usage
+	, HrGraphicsBuffer::EnumHardwareBufferUsage usage
 	, HrVertexElement* pVertexElementArr
 	, uint32 nVertexElementLength)
 {
-	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage, IGraphicsBuffer::HBB_VERTEXT);
+	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_VERTEXT);
 	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
-void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, IGraphicsBuffer::EnumHardwareBufferUsage usage, EnumIndexType indexType)
+void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumHardwareBufferUsage usage, EnumIndexType indexType)
 {
 	m_indexBufferType = indexType;
 	m_nIndices = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
-	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage, IGraphicsBuffer::HBB_INDEX);
+	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_INDEX);
 }
 
 uint32 HrRenderLayout::GetVertexSize()

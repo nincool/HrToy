@@ -25,8 +25,8 @@ namespace Hr
 		~HrRenderEffectManager();
 
 		virtual void InitResourceManager() override;
-		virtual IResource* LoadResource(std::string strName, std::string strFilePath) override;
-		virtual IResource* GetResource(std::string strName) override;
+		virtual HrResource* LoadResource(std::string strName, std::string strFilePath) override;
+		virtual HrResource* GetResource(std::string strName) override;
 
 		HrRenderEffect* GetRenderEffect(std::string strName);
 	private:

@@ -32,7 +32,7 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 
 	switch (m_shaderType)
 	{
-	case Hr::IShader::ST_VERTEX_SHADER:
+	case HrShader::ST_VERTEX_SHADER:
 	{
 		//更新constant数据
 		ID3D11Buffer* pConstantBuffer = GetConstantBuffer();
@@ -40,7 +40,7 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 		pD3D11ImmediateContext->VSSetShader(m_pVertexShader, nullptr, 0);
 		break;
 	}
-	case Hr::IShader::ST_PIXEL_SHADER:
+	case HrShader::ST_PIXEL_SHADER:
 	{
 		pD3D11ImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
 		break;
@@ -64,10 +64,10 @@ void HrD3D11Shader::StreamIn(HrStreamData& streamData)
 
 	switch (m_shaderType)
 	{
-	case IShader::ST_VERTEX_SHADER:
+	case HrShader::ST_VERTEX_SHADER:
 		CreateVertexShader();
 		break;
-	case IShader::ST_PIXEL_SHADER:
+	case HrShader::ST_PIXEL_SHADER:
 		CreatePixelShader();
 		break;
 	default:
@@ -86,10 +86,10 @@ bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 	std::string strShaderModel = "";
 	switch (m_shaderType)
 	{
-	case Hr::IShader::ST_VERTEX_SHADER:
+	case HrShader::ST_VERTEX_SHADER:
 		strShaderModel = "vs_5_0";
 		break;
-	case Hr::IShader::ST_PIXEL_SHADER:
+	case HrShader::ST_PIXEL_SHADER:
 		strShaderModel = "ps_5_0";
 		break;
 	default:
@@ -280,7 +280,7 @@ ID3D11Buffer* HrD3D11Shader::GetConstantBuffer()
 	ID3D11Buffer* pConstantBuffer = nullptr;
 	if (!m_vecRenderConstantBuffer.empty())
 	{
-		IGraphicsBuffer* pGraphicsBuffer = m_vecRenderConstantBuffer[0]->GetConstBuffer();
+		HrGraphicsBuffer* pGraphicsBuffer = m_vecRenderConstantBuffer[0]->GetConstBuffer();
 		HrD3D11HardwareBuffer* pD3D11HardwareBuffer = static_cast<HrD3D11HardwareBuffer*>(pGraphicsBuffer);
 		pConstantBuffer = pD3D11HardwareBuffer->GetGraphicsBuffer();
 	}

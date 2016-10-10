@@ -1,14 +1,14 @@
-#ifndef _I_RESOURCE_H_
-#define _I_RESOURCE_H_
+#ifndef _HR_RESOURCE_H_
+#define _HR_RESOURCE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class IResource
+	class HrResource
 	{
 	public:
-		virtual ~IResource(){}
+		virtual ~HrResource(){}
 
 		virtual size_t HashName() = 0;
 

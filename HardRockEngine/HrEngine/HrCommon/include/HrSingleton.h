@@ -39,7 +39,7 @@ void HrSingleTon<T>::Release()
 {
 	if (m_pInstancePtr)
 	{
-		m_pInstancePtr.release();
+		m_pInstancePtr.reset(nullptr);
 	}
 }
 

@@ -52,7 +52,7 @@ namespace Hr
 	private:
 		static HrResourceManagerFactoryPtr m_s_pUniqueResManagerFactory;
 
-		std::unordered_map<EnumResFactoryType, IResourceManager*> m_mapResManager;
+		std::unordered_map<EnumResFactoryType, HrResourceManager*> m_mapResManager;
 	};
 }
 

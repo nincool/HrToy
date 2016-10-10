@@ -51,6 +51,13 @@ namespace Hr
 		static std::hash<std::string> string_hash;
 		return string_hash(str);
 	}
+
+	template <typename T, typename U>
+	inline std::shared_ptr<T> CheckPointerCast(U& u)
+	{
+		BOOST_ASSERT(std::dynamic_pointer_cast<T>(u) == std::static_pointer_cast<T>(u));
+		return std::static_pointer_cast<T>(u);
+	}
 }
 
 #endif

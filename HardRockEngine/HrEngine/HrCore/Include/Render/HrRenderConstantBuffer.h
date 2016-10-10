@@ -30,14 +30,14 @@ namespace Hr
 			, HrRenderParameter::EnumRenderParamDataType rpdt
 			, uint32 nStartOffset);
 
-		IGraphicsBuffer* GetConstBuffer();
+		HrGraphicsBuffer* GetConstBuffer();
 
 		void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters);
 	private:
 		std::string m_strName;
 		HrStreamData* m_pStreamData;
 
-		IGraphicsBuffer* m_pRenderHardwareBuffer;
+		HrGraphicsBuffer* m_pRenderHardwareBuffer;
 		std::vector<HrRenderParameter*> m_vecRenderParameter;
 
 	};

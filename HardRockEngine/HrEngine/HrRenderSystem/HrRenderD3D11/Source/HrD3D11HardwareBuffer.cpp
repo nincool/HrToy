@@ -36,8 +36,8 @@ HrD3D11HardwareBuffer::~HrD3D11HardwareBuffer()
 
 void HrD3D11HardwareBuffer::BindStream(char* pBuffer
 	, uint32 nBufferSize
-	, IGraphicsBuffer::EnumHardwareBufferUsage usage
-	, IGraphicsBuffer::EnumHardwareBufferBind bindFlag)
+	, HrGraphicsBuffer::EnumHardwareBufferUsage usage
+	, HrGraphicsBuffer::EnumHardwareBufferBind bindFlag)
 {
 	if (m_pD3D11Buffer)
 	{
@@ -77,19 +77,19 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 {
 	switch (m_usage)
 	{
-	case IGraphicsBuffer::HBU_GPUREAD_GPUWRITE:
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE:
 		usage = D3D11_USAGE_DEFAULT;
 		cpuAccessFlags = 0;
 		break;
-	case IGraphicsBuffer::HBU_GPUREAD_CPUWRITE:
+	case HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE:
 		usage = D3D11_USAGE_DYNAMIC;
 		cpuAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		break;
-	case IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE:
+	case HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE:
 		usage = D3D11_USAGE_IMMUTABLE;
 		cpuAccessFlags = 0;
 		break;
-	case IGraphicsBuffer::HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE:
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE:
 		usage = D3D11_USAGE_STAGING;
 		cpuAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		break;
@@ -99,13 +99,13 @@ void HrD3D11HardwareBuffer::GetD3DBufferDesc(D3D11_USAGE& usage, UINT& cpuAccess
 
 	switch (m_bindFlag)
 	{
-	case IGraphicsBuffer::HBB_VERTEXT:
+	case HrGraphicsBuffer::HBB_VERTEXT:
 		bindFlags = D3D11_BIND_VERTEX_BUFFER;
 		break;
-	case IGraphicsBuffer::HBB_INDEX:
+	case HrGraphicsBuffer::HBB_INDEX:
 		bindFlags = D3D11_BIND_INDEX_BUFFER;
 		break;
-	case IGraphicsBuffer::HBB_CONST:
+	case HrGraphicsBuffer::HBB_CONST:
 		bindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		break;
 	}

@@ -14,15 +14,15 @@ namespace Hr
 		
 		virtual HrRenderPtr CreateRender() = 0;
 		
-		virtual IRenderTargetPtr CreateRenderTarget() = 0;
+		virtual HrRenderTargetPtr CreateRenderTarget() = 0;
 
 		virtual HrVertex* CreateVertex() = 0;
 		
-		virtual IGraphicsBuffer* CreateHardwareBuffer() = 0;
+		virtual HrGraphicsBuffer* CreateHardwareBuffer() = 0;
 		
-		virtual IRenderLayout* CreateRenderLayout() = 0;
+		virtual HrRenderLayout* CreateRenderLayout() = 0;
 		
-		virtual IShader* CreateShader() = 0;
+		virtual HrShader* CreateShader() = 0;
 		
 	};
 }

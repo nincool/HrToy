@@ -23,20 +23,27 @@ namespace Hr
 		HrDirector();
 		~HrDirector();
 
-		//IRenderPtr& GetRenderer()
-		//{
-		//	return m_pShareRender;
-		//}
-		
+
 		HrRenderFactoryPtr& GetRenderFactory()
 		{
-			return m_pShareRenderFactory;
+			return m_pRenderFactory;
 		}
-		
-		//const IRenderTargetPtr& GetRenderTarget()
-		//{
-		//	return m_pShareRenderTarget;
-		//}
+
+		HrRenderPtr& GetRenderEngine()
+		{
+			return m_pRenderEngine;
+		}
+
+		const HrRenderTargetPtr& GetRenderTarget()
+		{
+			return m_pRenderTarget;
+		}
+
+		HrWindowPtr& GetWindow()
+		{
+			return m_pWindow;
+		}
+
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init();
 		virtual void StartMainLoop();
@@ -50,22 +57,30 @@ namespace Hr
 		virtual void RunScene(const HrScenePtr& pScene);
 
 	protected:
+		bool CreateAppWindow();
+		bool CreateRenderEngine();
+		bool CreateRenderTarget();
+
 		void Update();
 	private:
+		HrWindowPtr m_pWindow;
+
 		//渲染目标
-		//IRenderTargetPtr m_pShareRenderTarget;
+		HrRenderTargetPtr m_pRenderTarget;
+		
 		//场景管理器
-		HrSceneManagerPtr m_pShareSceneManager;
+		HrSceneManagerPtr m_pSceneManager;
+		
 		//渲染工厂
-		HrRenderFactoryPtr m_pShareRenderFactory;
+		HrRenderFactoryPtr m_pRenderFactory;
 		
 		//渲染器
-		HrRenderPtr m_pShareRender;
+		HrRenderPtr m_pRenderEngine;
 
 		bool m_bEndMainLoop;
 
 		//渲染模块加载
-		std::unique_ptr<HrModuleLoader> m_pUniqueRenderLoader;
+		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
 	};
 
 }

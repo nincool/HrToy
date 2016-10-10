@@ -5,12 +5,10 @@ using namespace Hr;
 
 HrGeometryApp::HrGeometryApp()
 {
-
 }
 
 HrGeometryApp::~HrGeometryApp()
 {
-
 }
 
 bool HrGeometryApp::ApplicationDidFinishLaunching()
@@ -24,12 +22,10 @@ bool HrGeometryApp::ApplicationDidFinishLaunching()
 
 void HrGeometryApp::ApplicationDidEnterBackground()
 {
-
 }
 
 void HrGeometryApp::ApplicationWillEnterForeground()
 {
-
 }
 
 bool HrGeometryApp::Destroy()
@@ -41,7 +37,6 @@ bool HrGeometryApp::Destroy()
 
 void HrGeometryApp::LoadAssets()
 {
-
 }
 
 void HrGeometryApp::CreateScene()

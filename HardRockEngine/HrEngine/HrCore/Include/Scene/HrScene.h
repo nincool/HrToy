@@ -22,7 +22,7 @@ namespace Hr
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
 
 	private:
-		HrSceneNodePtr m_pShareRootNode;
+		HrSceneNodePtr m_pRootNode;
 	};
 }
 

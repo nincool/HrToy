@@ -15,12 +15,12 @@ namespace Hr
 		};
 
 		HrSceneNode();
-		HrSceneNode(IRenderable* pRenderable);
+		HrSceneNode(HrRenderable* pRenderable);
 		virtual ~HrSceneNode();
 
 		EnumNodeType GetNodeType();
 		HrSceneNode* GetParent();
-		IRenderable* GetRenderable();
+		HrRenderable* GetRenderable();
 
 		void AddChild(HrSceneNode* pSceneNode);
 		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
@@ -31,11 +31,12 @@ namespace Hr
 		void SetPosition(const Vector3& v3Pos);
 		void SetPosition(REAL x, REAL y, REAL z);
 		const Vector3& GetPosition();
+		
 		virtual void Translate(const Vector3& v3);
 
 	protected:
 		EnumNodeType m_nodeType;
-		IRenderable* m_pRenderable;
+		HrRenderable* m_pRenderable;
 
 		HrSceneNode* m_pParent;
 		std::vector<HrSceneNode*> m_vecChildNode;

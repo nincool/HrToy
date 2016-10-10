@@ -30,9 +30,9 @@ bool HrD3D11Render::Init()
 	return true;
 }
 
-void HrD3D11Render::SetRenderTarget(IRenderTargetPtr& renderTarget)
+void HrD3D11Render::SetRenderTarget(HrRenderTargetPtr& renderTarget)
 {
-	m_pShareRenderWindow = std::dynamic_pointer_cast<HrD3D11RenderWindow>(renderTarget);
+	m_pRenderWindow = std::dynamic_pointer_cast<HrD3D11RenderWindow>(renderTarget);
 }
 
 void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
@@ -53,12 +53,12 @@ void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
 void HrD3D11Render::ClearRenderTargetView()
 {
 	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pShareRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
+	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
 }
 
 void HrD3D11Render::ClearDepthStencilView()
 {
-	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pShareRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void HrD3D11Render::Release()
@@ -71,7 +71,7 @@ bool HrD3D11Render::StartRender()
 	return true;
 }
 
-void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout)
+void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* pRenderLayout)
 {
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
@@ -79,7 +79,7 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
 	unsigned int offset = 0;
 
-	IShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
+	HrShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
 	
@@ -111,6 +111,6 @@ void HrD3D11Render::Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pR
 
 void HrD3D11Render::SwapChain()
 {
-	m_pShareRenderWindow->GetSwapChain()->Present(0, 0);
+	m_pRenderWindow->GetSwapChain()->Present(0, 0);
 }
 

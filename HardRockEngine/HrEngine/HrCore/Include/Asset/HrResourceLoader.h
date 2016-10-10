@@ -1,11 +1,11 @@
 #ifndef _HR_RESOURCELOADER_H_
 #define _HR_RESOURCELOADER_H_
 
-#include "HrCore/Include/Asset/IResourceLoader.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class HrResourceLoader : public IResourceLoader
+	class HrResourceLoader 
 	{
 	public:
 		static bool LoadFromFile(std::string strFilePath, HrStreamData& data);
@@ -13,7 +13,4 @@ namespace Hr
 }
 
 #endif
-
-
-
 

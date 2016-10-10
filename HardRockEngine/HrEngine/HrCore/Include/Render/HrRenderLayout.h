@@ -1,45 +1,50 @@
 #ifndef _HR_RENDERLATOUT_H_
 #define _HR_RENDERLATOUT_H_
 
-#include "HrCore/Include/Render/IRenderLayout.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrGraphicsBuffer.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrRenderLayout : public IRenderLayout
+	class HR_CORE_API HrRenderLayout 
 	{
 	public:
 		HrRenderLayout();
 		~HrRenderLayout();
 
-		virtual void SetTopologyType(EnumTopologyType topologyType) override;
-		virtual EnumTopologyType GetTopologyType() override;
-		virtual void SetIndexBufferType(EnumIndexType indexType) override;
-		virtual EnumIndexType GetIndexBufferType() override;
+		virtual void SetTopologyType(EnumTopologyType topologyType);
+		virtual EnumTopologyType GetTopologyType();
+		
+		virtual void SetIndexBufferType(EnumIndexType indexType);
+		virtual EnumIndexType GetIndexBufferType();
 
-		virtual uint32 GetVertexSize() override;
+		virtual uint32 GetVertexSize();
+		
 		virtual void BindVertexBuffer(char* pBuffer
 			, uint32 nBufferSize
-			, IGraphicsBuffer::EnumHardwareBufferUsage usage
+			, HrGraphicsBuffer::EnumHardwareBufferUsage usage
 			, HrVertexElement* pVertexElementArr
-			, uint32 nVertexElementLength) override;
+			, uint32 nVertexElementLength);
 
 		virtual void BindIndexBuffer(char* pBuffer
 			, uint32 nBufferSize
-			, IGraphicsBuffer::EnumHardwareBufferUsage usage
-			, EnumIndexType indexType) override;
+			, HrGraphicsBuffer::EnumHardwareBufferUsage usage
+			, EnumIndexType indexType);
 
-		virtual bool UseIndices() override;
+		virtual bool UseIndices();
 
-		virtual void SetIndicesNum(uint32 nIndicesNum) override;
-		virtual uint32 GetIndicesNum() override;
+		virtual void SetIndicesNum(uint32 nIndicesNum);
+		virtual uint32 GetIndicesNum();
+
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;
 
 		HrVertex* m_pVertex;
 
-		IGraphicsBuffer* m_pHDVertexBuffer;
-		IGraphicsBuffer* m_pHDIndexBuffer;
+		HrGraphicsBuffer* m_pHDVertexBuffer;
+		HrGraphicsBuffer* m_pHDIndexBuffer;
 
 		uint32 m_nVertices;
 		uint32 m_nIndices;

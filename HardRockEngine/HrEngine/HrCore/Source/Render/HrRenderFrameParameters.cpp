@@ -14,7 +14,7 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 {
 }
 
-void HrRenderFrameParameters::SetCurrentRenderable(const IRenderable* rend)
+void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
 {
 	m_pCurrentRenderable = rend;
 }
@@ -32,7 +32,4 @@ const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix() const
 
 	return mWorldViewProjMatrix;
 }
-
-
-
 

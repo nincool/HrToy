@@ -27,8 +27,8 @@ namespace Hr
 
 		virtual void BindStream(char* pBuffer
 			, uint32 nBufferSize
-			, IGraphicsBuffer::EnumHardwareBufferUsage usage
-			, IGraphicsBuffer::EnumHardwareBufferBind bindFlag) override;
+			, HrGraphicsBuffer::EnumHardwareBufferUsage usage
+			, HrGraphicsBuffer::EnumHardwareBufferBind bindFlag) override;
 		
 		ID3D11Buffer* GetGraphicsBuffer();
 	private:

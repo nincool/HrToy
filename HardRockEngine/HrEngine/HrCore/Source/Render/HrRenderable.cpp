@@ -18,17 +18,17 @@ HrRenderable::~HrRenderable()
 	SAFE_DELETE(m_pRenderLayout);
 }
 
-IRenderLayout* HrRenderable::GetRenderLayout()
+HrRenderLayout* HrRenderable::GetRenderLayout()
 {
 	return m_pRenderLayout;
 }
 
-IRenderTechnique* HrRenderable::GetRenderTechnique()
+HrRenderTechnique* HrRenderable::GetRenderTechnique()
 {
 	return m_pRenderTechnique;
 }
 
-void HrRenderable::Update(HrRenderFrameParameters& renderFrameParameters)
+void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters)
 {
 	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
 }

@@ -51,7 +51,7 @@ void HrRenderConstantBuffer::AddParameter(const std::string& strName
 	m_vecRenderParameter.push_back(pRenderParameter);
 }
 
-IGraphicsBuffer* HrRenderConstantBuffer::GetConstBuffer()
+HrGraphicsBuffer* HrRenderConstantBuffer::GetConstBuffer()
 {
 	return m_pRenderHardwareBuffer;
 }
@@ -73,7 +73,7 @@ void HrRenderConstantBuffer::UpdateAutoParams(HrRenderFrameParameters& renderFra
 			break;
 		}
 	}
-	m_pRenderHardwareBuffer->BindStream(m_pStreamData->GetBufferPoint(), m_pStreamData->GetBufferSize(), IGraphicsBuffer::HBU_GPUREAD_CPUWRITE, IGraphicsBuffer::HBB_CONST);
+	m_pRenderHardwareBuffer->BindStream(m_pStreamData->GetBufferPoint(), m_pStreamData->GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 
 

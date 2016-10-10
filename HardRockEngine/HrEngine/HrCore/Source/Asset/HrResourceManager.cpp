@@ -16,12 +16,12 @@ void HrResourceManager::InitResourceManager()
 {
 }
 
-IResource* HrResourceManager::LoadResource(std::string strName, std::string strFilePath)
+HrResource* HrResourceManager::LoadResource(std::string strName, std::string strFilePath)
 {
 	return nullptr;
 }
 
-IResource* HrResourceManager::GetResource(std::string strName)
+HrResource* HrResourceManager::GetResource(std::string strName)
 {
 	return nullptr;
 }

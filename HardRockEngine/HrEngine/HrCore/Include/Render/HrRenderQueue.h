@@ -13,9 +13,9 @@ namespace Hr
 		void PrepareRenderQueue();
 		void AddRenderable(HrSceneNode* pSceneNode);
 
-		std::unordered_map<IRenderable*, HrSceneNode*>& GetRenderables();
+		std::unordered_map<HrRenderable*, HrSceneNode*>& GetRenderables();
 	protected:
-		std::unordered_map<IRenderable*, HrSceneNode*> m_mapRenderQueue;
+		std::unordered_map<HrRenderable*, HrSceneNode*> m_mapRenderQueue;
 	};
 }
 

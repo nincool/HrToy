@@ -15,13 +15,16 @@ namespace Hr
 		*	@Return:
 		*/
 		virtual bool Init() = 0;
-		virtual void SetRenderTarget(IRenderTargetPtr& renderTarget) = 0;
+		
+		virtual void SetRenderTarget(HrRenderTargetPtr& renderTarget) = 0;
+		
 		virtual void SetCurrentViewPort(HrViewPort* pViewPort) = 0;
 
 		virtual void ClearRenderTargetView() = 0;
+		
 		virtual void ClearDepthStencilView() = 0;
 
-		virtual void Render(IRenderTechnique* pRenderTechnique, IRenderLayout* pRenderLayout) = 0;
+		virtual void Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* pRenderLayout) = 0;
 
 		virtual void SwapChain() = 0;
 		/**

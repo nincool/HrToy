@@ -62,7 +62,7 @@ void HrGeometryBox::BindVertexStream()
 
 	m_pRenderLayout->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
-		, IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 		, vertexElementArr
 		, HR_ARRAY_SIZE(vertexElementArr));
 
@@ -75,8 +75,6 @@ void HrGeometryBox::BindVertexStream()
 		1, 5, 6, 1, 6, 2,
 		4, 0, 3, 4, 3, 7
 	};
-	m_pRenderLayout->BindIndexBuffer((char*)indices, sizeof(indices), IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
-
-
+	m_pRenderLayout->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
 }
 

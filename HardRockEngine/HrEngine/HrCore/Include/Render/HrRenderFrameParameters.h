@@ -13,15 +13,17 @@ namespace Hr
 		~HrRenderFrameParameters();
 
 		void SetCurrentCamera(HrCamera* pCamera);
-		void SetCurrentRenderable(const IRenderable* rend);
+		void SetCurrentRenderable(const HrRenderable* rend);
 
 		const Matrix4& GetWorldViewProjMatrix() const;
+
 	protected:
 		mutable Matrix4 mWorldViewMatrix;
 		mutable Matrix4 mViewProjMatrix;
 		mutable Matrix4 mWorldViewProjMatrix;
+
 	private:
-		const IRenderable* m_pCurrentRenderable;
+		const HrRenderable* m_pCurrentRenderable;
 		HrCamera* m_pCurrentCamera;
 
 	};

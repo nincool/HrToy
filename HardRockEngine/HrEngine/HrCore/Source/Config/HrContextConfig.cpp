@@ -4,8 +4,11 @@ using namespace Hr;
 
 HrContextConfig::HrContextConfig()
 {
-	m_nWindowWidth = 600;
-	m_nWindowHeight = 400;
+	m_nWindowWidth = 1200;
+	m_nWindowHeight = 800;
+
+	m_nRenderTargetViewWidth = 1200;
+	m_nWindowHeight = 800;
 }
 
 HrContextConfig::~HrContextConfig()

@@ -15,7 +15,7 @@ namespace Hr
 		virtual void StopScene();
 
 		virtual void UpdateScene();
-		virtual void RenderScene(IRenderTargetPtr& renderTarget);
+		virtual void RenderScene(HrRenderTargetPtr& renderTarget);
 		virtual void Destroy();
 	
 	protected:
@@ -23,13 +23,13 @@ namespace Hr
 		bool CheckSceneRunning();
 	
 	private:
-		HrScenePtr m_pShareRunningScene;
-		HrRenderQueuePtr m_pShareRenderQueue;
+		HrScenePtr m_pRunningScene;
+		HrRenderQueuePtr m_pRenderQueue;
 		HrCamera* m_pCurrentCamera;
 
 		bool m_bSceneRunning;
 
-		HrRenderFrameParametersPtr m_pUniqueRenderParameters;
+		HrRenderFrameParametersPtr m_pRenderParameters;
 	};
 }
 

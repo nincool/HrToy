@@ -26,14 +26,6 @@ namespace Hr
 
 		virtual bool Destroy() override;
 
-	protected:
-		bool CreateAppWindow();
-
-	protected:
-		HR_SYNTHESIZE_READONLY(HWND, m_hWnd, Hwnd);
-		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);
-		HR_SYNTHESIZE_READONLY(uint32, m_nHeight, Height);
-
 	};
 
 

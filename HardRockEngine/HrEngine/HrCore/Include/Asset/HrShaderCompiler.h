@@ -1,17 +1,17 @@
 #ifndef _HR_SHADERCOMPILER_H_
 #define _HR_SHADERCOMPILER_H_
 
-#include "HrCore/Include/Asset/IShaderCompiler.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrShaderCompiler : public IShaderCompiler
+	class HR_CORE_API HrShaderCompiler
 	{
 	public:
 		HrShaderCompiler();
-		~HrShaderCompiler();
+		virtual ~HrShaderCompiler();
 
-		virtual void CompileShaderFromCode() override;
+		virtual void CompileShaderFromCode();
 	};
 }
 

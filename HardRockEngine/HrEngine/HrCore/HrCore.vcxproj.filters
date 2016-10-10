@@ -91,19 +91,10 @@
     <ClInclude Include="Include\Render\HrFrustum.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\IGraphicsBuffer.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IRenderable.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderPass.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderTechnique.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IShader.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\HrSceneManager.h">
@@ -133,25 +124,10 @@
     <ClInclude Include="Include\Render\HrRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\IRenderLayout.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IRenderTechnique.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrGeometryTriangle.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\IResource.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\IResourceLoader.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrResourceLoader.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\IResourceManager.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrRenderEffectManager.h">
@@ -175,9 +151,6 @@
     <ClInclude Include="Include\Asset\HrShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\IShaderCompiler.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrColor.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
@@ -194,9 +167,6 @@
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrDataFormat.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\IRenderTarget.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderTarget.h">
@@ -228,6 +198,18 @@
     </ClInclude>
     <ClInclude Include="Include\Config\HrContextConfig.h">
       <Filter>Include\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrWindow.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h">
+      <Filter>Include\Platform\AppWin32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrGraphicsBuffer.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResource.h">
+      <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +335,12 @@
     </ClCompile>
     <ClCompile Include="Source\Config\HrContextConfig.cpp">
       <Filter>Source\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrWindow.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp">
+      <Filter>Source\Platform\AppWin32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

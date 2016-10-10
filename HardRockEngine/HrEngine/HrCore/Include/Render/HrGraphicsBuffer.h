@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class IGraphicsBuffer
+	class HrGraphicsBuffer
 	{
 	public:
 		/// Enums describing buffer usage; not mutually exclusive
@@ -24,15 +24,16 @@ namespace Hr
 			HBB_CONST
 		};
 	public:
-		IGraphicsBuffer()
+		HrGraphicsBuffer()
 		{
 		}
-		virtual ~IGraphicsBuffer(){}
+		virtual ~HrGraphicsBuffer(){}
 
 		virtual void BindStream(char* pBuffer
 			, uint32 nBufferSize
-			, IGraphicsBuffer::EnumHardwareBufferUsage usage
-			, IGraphicsBuffer::EnumHardwareBufferBind bindFlag) = 0;
+			, HrGraphicsBuffer::EnumHardwareBufferUsage usage
+			, HrGraphicsBuffer::EnumHardwareBufferBind bindFlag) = 0;
+		
 		virtual uint32 GetByteWidth() = 0;
 	};
 }

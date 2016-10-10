@@ -7,7 +7,7 @@ using namespace Hr;
 
 HrScene::HrScene()
 {
-	m_pShareRootNode = MakeSharedPtr<HrSceneNode>();
+	m_pRootNode = MakeSharedPtr<HrSceneNode>();
 }
 
 HrScene::~HrScene()
@@ -29,12 +29,12 @@ void HrScene::OnExit()
 
 void HrScene::ClearSceneNode()
 {
-	m_pShareRootNode->RemoveChildren();
+	m_pRootNode->RemoveChildren();
 }
 
 void HrScene::AddSceneNode(HrSceneNode* pSceneNode)
 {
-	m_pShareRootNode->AddChild(pSceneNode);
+	m_pRootNode->AddChild(pSceneNode);
 }
 
 void HrScene::Update()
@@ -45,7 +45,7 @@ void HrScene::Update()
 void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)
 {
 	//²éÕÒ¿ÉÊÓ
-	m_pShareRootNode->FindVisibleRenderable(pRenderQueue);
+	m_pRootNode->FindVisibleRenderable(pRenderQueue);
 }
 
 

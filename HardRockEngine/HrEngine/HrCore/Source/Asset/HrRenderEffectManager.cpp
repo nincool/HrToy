@@ -25,7 +25,7 @@ void HrRenderEffectManager::InitResourceManager()
 	LoadResource("BasicEffect", "Media\\HrShader\\HrBasicEffect.xml");
 }
 
-IResource* HrRenderEffectManager::LoadResource(std::string strName, std::string strFilePath)
+HrResource* HrRenderEffectManager::LoadResource(std::string strName, std::string strFilePath)
 {
 	HrRenderEffect* pRenderEffect = CreateEffect(strName, strFilePath);
 	pRenderEffect->Load();
@@ -48,7 +48,7 @@ HrRenderEffect* HrRenderEffectManager::CreateEffect(std::string strName, std::st
 	return pRenderEffect;
 }
 
-IResource* HrRenderEffectManager::GetResource(std::string strName)
+HrResource* HrRenderEffectManager::GetResource(std::string strName)
 {
 	size_t nHashName = boost::hash_range(strName.begin(), strName.end());
 	auto resItem = m_mapResource.find(nHashName);

@@ -5,16 +5,12 @@
 
 namespace Hr
 {
-	class IApplication;
-	typedef std::unique_ptr<IApplication> IApplicationPtr;
 	class HrApplication;
 	typedef std::unique_ptr<HrApplication> HrApplicationPtr;
-
-	class HrDirector;
-	typedef std::unique_ptr<HrDirector> HrDirectorPtr;
-
-	class HrLog;
-	typedef std::unique_ptr<HrLog> HrLogPtr;
+	class HrWindow;
+	typedef std::shared_ptr<HrWindow> HrWindowPtr;
+	class HrWindowWin;
+	typedef std::shared_ptr<HrWindowWin> HrWindowWinPtr;
 
 	class HrRenderFactory;
 	typedef std::shared_ptr<HrRenderFactory> HrRenderFactoryPtr;
@@ -37,26 +33,22 @@ namespace Hr
 
 	class HrVertexElement;
 	class HrVertex;
-	class IGraphicsBuffer;
+	class HrGraphicsBuffer;
 	class HrHardwareBuffer;
-	class IRenderable;
 	class HrRenderQueue;
 	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
+	class HrRenderable;
 	class HrRenderPass;
-	class IRenderLayout;
 	class HrRenderLayout;
-	class IRenderTechnique;
 	class HrRenderTechnique;
 	class HrRenderEffect;
-	class IShader;
+	class HrShader;
 	class HrShaderParams;
 	class HrRenderConstantBuffer;
 	class HrRenderParameter;
 	class HrRenderFrameParameters;
 	typedef std::unique_ptr<HrRenderFrameParameters> HrRenderFrameParametersPtr;
 	class HrViewPort;
-	class IRenderTarget;
-	typedef std::shared_ptr<IRenderTarget> IRenderTargetPtr;
 	class HrRenderTarget;
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
 	class HrComponentFactory;
@@ -65,9 +57,9 @@ namespace Hr
 
 	class HrResourceManagerFactory;
 	typedef std::unique_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;
-	class IResource;
-	class IResourceManager;
-	typedef std::shared_ptr<IResourceManager> IResourceManagerPtr;
+	class HrResource;
+	class HrResourceManager;
+	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
 	class HrRenderEffectManager;
 	class HrStreamData;
 	class HrResourceLoader;

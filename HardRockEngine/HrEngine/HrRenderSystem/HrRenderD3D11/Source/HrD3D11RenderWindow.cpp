@@ -1,5 +1,9 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
 #include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Config/HrContextConfig.h"
+#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/Platform/AppWin32/HrWindowWin.h"
+#include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
 
@@ -13,51 +17,13 @@ HrD3D11RenderWindow::HrD3D11RenderWindow()
 	m_pDepthStencilView = nullptr;
 }
 
-bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc)
+bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight)
 {
-	CreateD3D11Window(nWidth, nHeight, lpfnProc);
-	
 	CreateSwapChain();
 	
 	CreateD3DView();
 
 	HrD3D11Device::Instance()->GetImmediateContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
-
-	return true;
-}
-
-bool HrD3D11RenderWindow::CreateD3D11Window(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc)
-{
-	m_nWidth = nWidth;
-	m_nHeight = nHeight;
-
-	HINSTANCE hInst = NULL;
-	static const TCHAR staticVar;
-	GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, &staticVar, &hInst);
-
-	WNDCLASS wc;
-	memset(&wc, 0, sizeof(wc));
-	wc.style = CS_DBLCLKS;
-	wc.lpfnWndProc = lpfnProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInst;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = _T("HrD3D11WindowClass");
-
-	if (!RegisterClass(&wc))
-	{
-		DWORD dwError = GetLastError();
-		if (dwError != ERROR_CLASS_ALREADY_EXISTS)
-			OutputDebugString((_T("Cannot Register Window Class.")));
-		return false;
-	}
-	m_hWnd = CreateWindow(_T("HrD3D11WindowClass"), _T("HrEngine"), WS_OVERLAPPEDWINDOW, 10, 10, nWidth, nHeight, NULL, NULL, hInst, 0);
-	ShowWindow(m_hWnd, SW_SHOWNORMAL);
-	SetFocus(m_hWnd);
-	SetForegroundWindow(m_hWnd);
 
 	return true;
 }
@@ -83,7 +49,8 @@ bool HrD3D11RenderWindow::CreateSwapChain()
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = m_hWnd;
+	HrWindowWinPtr pWindow = CheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+	swapChainDesc.OutputWindow = pWindow->GetHwnd();
 	swapChainDesc.Windowed = true;
 
 	HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory()->CreateSwapChain(HrD3D11Device::Instance()->GetDevice(), &swapChainDesc, &m_pSwapChain);
@@ -148,7 +115,6 @@ bool HrD3D11RenderWindow::CreateD3DView()
 	hr = HrD3D11Device::Instance()->GetDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &m_pDepthStencilView);
 	if (FAILED(hr))
 	{
-
 		HRERROR(_T("D3D11CreateDepthStencilView Error!"));
 		return false;
 	}

@@ -1,23 +1,23 @@
 #ifndef _HR_RENDERABLE_H_
 #define _HR_RENDERABLE_H_
 
-#include "HrCore/Include/Render/IRenderable.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class HrRenderable : public IRenderable
+	class HrRenderable
 	{
 	public:
 		HrRenderable();
 		~HrRenderable();
 
-		virtual IRenderLayout* GetRenderLayout() override;
-		virtual IRenderTechnique* GetRenderTechnique() override;
+		virtual HrRenderLayout* GetRenderLayout();
+		virtual HrRenderTechnique* GetRenderTechnique();
 
-		virtual void Update(HrRenderFrameParameters& renderFrameParameters) override;
+		virtual void UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters);
 	protected:
-		IRenderLayout* m_pRenderLayout;
-		IRenderTechnique* m_pRenderTechnique;
+		HrRenderLayout* m_pRenderLayout;
+		HrRenderTechnique* m_pRenderTechnique;
 	};
 }
 

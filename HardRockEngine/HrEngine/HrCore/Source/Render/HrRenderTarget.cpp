@@ -13,11 +13,10 @@ HrRenderTarget::~HrRenderTarget()
 	m_mapViewPort.clear();
 }
 
-bool HrRenderTarget::CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc)
+bool HrRenderTarget::CreateRenderWindow(uint32 nWidth, uint32 nHeight)
 {
 	nWidth = 0;
 	nHeight = 0;
-	lpfnProc = nullptr;
 
 	return false;
 }

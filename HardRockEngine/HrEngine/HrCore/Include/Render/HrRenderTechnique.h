@@ -1,19 +1,19 @@
 #ifndef _HR_RENDERTECHNIQUE_H_
 #define _HR_RENDERTECHNIQUE_H_
 
-#include "HrCore/Include/Render/IRenderTechnique.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrRenderTechnique : public IRenderTechnique
+	class HR_CORE_API HrRenderTechnique
 	{
 	public:
 		HrRenderTechnique(std::string strTechniqueName);
 		virtual ~HrRenderTechnique();
 
-		virtual size_t GetHashName() override;
-		virtual HrRenderPass* GetRenderPass(uint32 nIndex) override;
-		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters) override;
+		virtual size_t GetHashName();
+		virtual HrRenderPass* GetRenderPass(uint32 nIndex);
+		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters);
 
 		HrRenderPass* CreatePass(std::string strPassName);
 	protected:

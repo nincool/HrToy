@@ -17,7 +17,7 @@ HrSceneNode::HrSceneNode()
 	m_pParent = nullptr;
 }
 
-HrSceneNode::HrSceneNode(IRenderable* pRenderable) 
+HrSceneNode::HrSceneNode(HrRenderable* pRenderable) 
 {
 	m_pRenderable = pRenderable;
 }
@@ -37,7 +37,7 @@ HrSceneNode* HrSceneNode::GetParent()
 	return m_pParent;
 }
 
-IRenderable* HrSceneNode::GetRenderable()
+HrRenderable* HrSceneNode::GetRenderable()
 {
 	return m_pRenderable;
 }
@@ -53,7 +53,7 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 	{
 		HrCameraNode* pCameraNode = boost::polymorphic_downcast<HrCameraNode*>(pSceneNode);
 		HrViewPort* pViewPort = pCameraNode->GetViewPort();
-		//HrDirector::Instance()->GetRenderTarget()->AddViewPort(pViewPort);
+		HrDirector::Instance()->GetRenderTarget()->AddViewPort(pViewPort);
 	}
 
 	m_vecChildNode.push_back(pSceneNode);
@@ -84,7 +84,7 @@ void HrSceneNode::UpdateNode(HrRenderFrameParameters& renderFrameParameters)
 {
 	if (m_pRenderable)
 	{
-		m_pRenderable->Update(renderFrameParameters);
+		m_pRenderable->UpdateRenderFrameParameters(renderFrameParameters);
 	}
 }
 

@@ -15,15 +15,15 @@ namespace Hr
 	public:
 		virtual HrRenderPtr CreateRender() override;
 		
-		virtual IRenderTargetPtr CreateRenderTarget() override;
+		virtual HrRenderTargetPtr CreateRenderTarget() override;
 
 		virtual HrVertex* CreateVertex() override;
 		
-		virtual IGraphicsBuffer* CreateHardwareBuffer() override;
+		virtual HrGraphicsBuffer* CreateHardwareBuffer() override;
 		
-		virtual IRenderLayout* CreateRenderLayout() override;
+		virtual HrRenderLayout* CreateRenderLayout() override;
 		
-		virtual IShader* CreateShader() override;
+		virtual HrShader* CreateShader() override;
 	};
 }
 

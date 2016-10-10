@@ -44,7 +44,7 @@ void HrGeometryTriangle::BindVertexStream()
 
 	m_pRenderLayout->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
-		, IGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 		, vertexElementArr
 		, HR_ARRAY_SIZE(vertexElementArr) );
 

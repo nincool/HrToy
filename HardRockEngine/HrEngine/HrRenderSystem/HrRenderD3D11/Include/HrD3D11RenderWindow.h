@@ -11,7 +11,7 @@ namespace Hr
 	public:
 		HrD3D11RenderWindow();
 
-		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc) override;
+		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight) override;
 
 		IDXGISwapChain* GetSwapChain()
 		{
@@ -27,7 +27,6 @@ namespace Hr
 		}
 
 	private:
-		bool CreateD3D11Window(uint32 nWidth, uint32 nHeight, WNDPROC lpfnProc);
 		bool CreateSwapChain();
 		bool CreateD3DView();
 

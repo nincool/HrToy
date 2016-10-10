@@ -8,8 +8,8 @@ HrLog::HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 	AllocConsole();
-	freopen("CONOUT$", "w+t", stdout);
-	freopen("CONIN$", "r+t", stdin);
+	//freopen("CONOUT$", "w+t", stdout);
+	//freopen("CONIN$", "r+t", stdin);
 
 	std::wcout.imbue(std::locale("chs"));
 	//::system("chcp 65001");
@@ -19,8 +19,6 @@ HrLog::HrLog()
 HrLog::~HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
-	fclose(stdout);
-	fclose(stdin);
 	FreeConsole();
 #endif
 }
