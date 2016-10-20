@@ -92,6 +92,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>HrOISD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,22 +127,27 @@
   <ItemGroup>
     <ClInclude Include="Include\Asset\HrColor.h" />
     <ClInclude Include="Include\Asset\HrComponentFactory.h" />
-    <ClInclude Include="Include\Asset\HrRenderEffect.h" />
-    <ClInclude Include="Include\Asset\HrRenderEffectManager.h" />
-    <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrGeometryBox.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryTriangle.h" />
+    <ClInclude Include="Include\Asset\HrRenderEffect.h" />
+    <ClInclude Include="Include\Asset\HrRenderEffectManager.h" />
+    <ClInclude Include="Include\Asset\HrResource.h" />
+    <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
-    <ClInclude Include="Include\Asset\HrResourceManagerFactory.h" />
     <ClInclude Include="Include\Asset\HrShaderCompiler.h" />
     <ClInclude Include="Include\Asset\HrStreamData.h" />
-    <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Config\HrContextConfig.h" />
+    <ClInclude Include="Include\Event\HrEvent.h" />
+    <ClInclude Include="Include\Event\HrEventDispatcher.h" />
+    <ClInclude Include="Include\Event\HrEventKeyboard.h" />
+    <ClInclude Include="Include\Event\HrEventListener.h" />
+    <ClInclude Include="Include\Event\HrEventListenerKeyboard.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrDirector.h" />
     <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\HrInputManager.h" />
     <ClInclude Include="Include\HrLog.h" />
     <ClInclude Include="Include\HrApplication.h" />
     <ClInclude Include="Include\HrWindow.h" />
@@ -177,21 +184,26 @@
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp" />
     <ClCompile Include="Source\Asset\HrColor.cpp" />
     <ClCompile Include="Source\Asset\HrComponentFactory.cpp" />
-    <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
-    <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
+    <ClCompile Include="Source\Asset\HrGeometryTriangle.cpp" />
+    <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp" />
+    <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
-    <ClCompile Include="Source\Asset\HrResourceManagerFactory.cpp" />
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
+    <ClCompile Include="Source\Event\HrEvent.cpp" />
+    <ClCompile Include="Source\Event\HrEventDispatcher.cpp" />
+    <ClCompile Include="Source\Event\HrEventKeyboard.cpp" />
+    <ClCompile Include="Source\Event\HrEventListener.cpp" />
+    <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp" />
     <ClCompile Include="Source\HrDirector.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\HrInputManager.cpp" />
     <ClCompile Include="Source\HrLog.cpp" />
     <ClCompile Include="Source\HrWindow.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />

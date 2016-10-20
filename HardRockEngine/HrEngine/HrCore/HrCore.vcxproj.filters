@@ -53,6 +53,12 @@
     <Filter Include="Source\Config">
       <UniqueIdentifier>{407d9a6a-a11f-46aa-829f-94f7a3a387b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Event">
+      <UniqueIdentifier>{a6e92993-5a6b-4ac5-8d76-1d5ae7792aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Event">
+      <UniqueIdentifier>{3968093c-6757-40d2-a7a1-ddc6a46914e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -106,17 +112,11 @@
     <ClInclude Include="Include\Render\HrHardwareBuffer.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryFactory.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderQueue.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\HrScene.h">
       <Filter>Include\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryBox.h">
-      <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrRenderLayout.h">
       <Filter>Include\Render</Filter>
@@ -124,32 +124,11 @@
     <ClInclude Include="Include\Render\HrRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryTriangle.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrResourceLoader.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrRenderEffectManager.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrStreamData.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrResourceManager.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrRenderEffect.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrResourceManagerFactory.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrShader.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrShaderCompiler.h">
-      <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrColor.h">
       <Filter>Include\Asset</Filter>
@@ -174,9 +153,6 @@
     </ClInclude>
     <ClInclude Include="Include\Render\HrViewPort.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrComponentFactory.h">
-      <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\HrCameraNode.h">
       <Filter>Include\Scene</Filter>
@@ -208,8 +184,53 @@
     <ClInclude Include="Include\Render\HrGraphicsBuffer.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrShaderCompiler.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrComponentFactory.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrRenderEffect.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrRenderEffectManager.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Asset\HrResource.h">
       <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResourceLoader.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrResourceManager.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrGeometryBox.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrGeometryFactory.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrGeometryTriangle.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEvent.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventDispatcher.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventListener.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventListenerKeyboard.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventKeyboard.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrInputManager.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -255,14 +276,8 @@
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\HrScene.cpp">
       <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrGeometryBox.cpp">
-      <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderLayout.cpp">
       <Filter>Source\Render</Filter>
@@ -273,25 +288,7 @@
     <ClCompile Include="Source\Render\HrRenderQueue.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Include\Asset\HrGeometryTriangle.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrResourceManager.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrResourceLoader.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\HrStreamData.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrRenderEffect.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrResourceManagerFactory.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrShader.cpp">
@@ -321,9 +318,6 @@
     <ClCompile Include="Source\Render\HrViewPort.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrComponentFactory.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\HrCameraNode.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -341,6 +335,48 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp">
       <Filter>Source\Platform\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrComponentFactory.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrRenderEffect.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResourceLoader.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResourceManager.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGeometryBox.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGeometryTriangle.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEvent.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventDispatcher.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventListener.cpp">
+      <Filter>Include\Platform\AppWin32</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventKeyboard.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrInputManager.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,20 +5,25 @@
 
 namespace Hr
 {
+	class HrModuleLoader;
+
 	class HR_CORE_API HrComponentFactory
 	{
 	public:
 		HrComponentFactory();
 		~HrComponentFactory();
 
-		static HrComponentFactory& GetInstance();
-		static void ReleaseInstance();
+		HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
+		HrSceneNode* CreateBox();
 
-		static HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
 	private:
-		static HrComponentFactoryPtr m_s_pUniqueFactory;
+		//资源模块加载
+		std::unique_ptr<HrModuleLoader> m_pAssetModuleLoader;
+		HrAssetSystemFactoryPtr m_pAssetSystemFactory;
+		HrGeometryFactoryPtr m_pGeometryFactory;
 	};
 }
+
 
 #endif
 

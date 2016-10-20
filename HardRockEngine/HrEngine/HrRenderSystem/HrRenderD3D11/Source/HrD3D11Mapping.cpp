@@ -74,6 +74,7 @@ D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topology
 	case TT_TRIANGLETRIP:
 		return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 	}
+	return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
 HrRenderParameter::EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)

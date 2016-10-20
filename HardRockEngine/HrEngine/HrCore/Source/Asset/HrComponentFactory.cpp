@@ -1,40 +1,23 @@
-#include "Asset/HrComponentFactory.h"
-#include "Render/HrCamera.h"
-#include "Render/HrViewPort.h"
-#include "Scene/HrCameraNode.h"
+#include "HrCore/Include/Asset/HrComponentFactory.h"
+#include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Render/HrViewPort.h"
+#include "HrCore/Include/Scene/HrCameraNode.h"
+#include "HrCore/Include/Asset/HrGeometryFactory.h"
+#include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
 
-HrComponentFactoryPtr HrComponentFactory::m_s_pUniqueFactory;
 
 HrComponentFactory::HrComponentFactory()
 {
-
+	m_pGeometryFactory = MakeSharedPtr<HrGeometryFactory>();
 }
 
 HrComponentFactory::~HrComponentFactory()
 {
-
 }
 
-HrComponentFactory& HrComponentFactory::GetInstance()
-{
-	if (!m_s_pUniqueFactory)
-	{
-		m_s_pUniqueFactory = MakeUniquePtr<HrComponentFactory>();
-	}
-
-	return *m_s_pUniqueFactory;
-}
-
-void HrComponentFactory::ReleaseInstance()
-{
-	if (m_s_pUniqueFactory)
-	{
-		m_s_pUniqueFactory.reset();
-	}
-}
 
 HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
 {
@@ -43,5 +26,10 @@ HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fW
 	HrCameraNode* pCameraNode = HR_NEW HrCameraNode(pViewPort);
 
 	return pCameraNode;
+}
+
+HrSceneNode* HrComponentFactory::CreateBox()
+{
+	return m_pGeometryFactory->CreateBox(10, 10, 10);
 }
 

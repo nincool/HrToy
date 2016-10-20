@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrCameraNode : public HrSceneNode
+	class HR_CORE_API HrCameraNode : public HrSceneNode
 	{
 	public:
 		HrCameraNode(HrViewPort* pViewPort);

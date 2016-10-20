@@ -20,8 +20,6 @@ namespace Hr
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
 
-	class HrGeometryFactory;
-	typedef std::unique_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 
 	class HrScene;
 	typedef std::shared_ptr<HrScene> HrScenePtr;
@@ -51,24 +49,32 @@ namespace Hr
 	class HrViewPort;
 	class HrRenderTarget;
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
-	class HrComponentFactory;
-	typedef std::unique_ptr<HrComponentFactory> HrComponentFactoryPtr;
 
-
+	class HrStreamData;
 	class HrResourceManagerFactory;
-	typedef std::unique_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;
+	typedef std::shared_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;
 	class HrResource;
 	class HrResourceManager;
-	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
 	class HrRenderEffectManager;
-	class HrStreamData;
-	class HrResourceLoader;
-	//class IShaderCompiler;
-	//typedef std::shared_ptr<IShaderCompiler> IShaderCompilerPtr;
-
+	typedef std::shared_ptr<HrRenderEffectManager> HrRenderEffectManagerPtr;
+	class HrRenderEffect;
+	class HrComponentFactory;
+	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
+	class HrAssetSystemFactory;
+	typedef std::shared_ptr<HrAssetSystemFactory> HrAssetSystemFactoryPtr;
+	class HrGeometryFactory;
+	typedef std::shared_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 	
 	class HrGeometryBox;
 
+	class HrEvent;
+	class HrEventListenerKeyboard;
+	typedef std::shared_ptr<HrEventListenerKeyboard> HrEventListenerKeyboardPtr;
+	class HrEventListener;
+	typedef std::shared_ptr<HrEventListener> HrEventListenerPtr;
+	class HrEventDispatcher;
+	typedef std::shared_ptr<HrEventDispatcher> HrEventDispatcherPtr;
+	
 }
 
 

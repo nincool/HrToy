@@ -9,14 +9,15 @@ namespace Hr
 	{
 	public:
 		HrResourceManager();
-		~HrResourceManager();
+		virtual ~HrResourceManager();
 
 		virtual void InitResourceManager();
+		
 		virtual HrResource* LoadResource(std::string strName, std::string strFilePath);
+		
 		virtual HrResource* GetResource(std::string strName);
 
 	protected:
-		//std::unordered_map<std::string, IResource*> m_mapResource;
 		std::unordered_map<size_t, HrResource*> m_mapResource;
 	};
 }

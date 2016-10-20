@@ -34,20 +34,6 @@ LRESULT CALLBACK Hr::HrWin32WindowEventUtilities::WinProc(HWND hWnd, UINT messag
 {
 	switch (message)
 	{
-		case WM_KEYDOWN://击键消息
-		{
-			switch (wParam)
-			{
-			case VK_F1:
-				MessageBox(hWnd, _T("我按下了F1"), _T("TestMessage"), MB_OK);
-				break;
-			case VK_ESCAPE:
-				MessageBox(hWnd, _T("ESC键按下了!"), _T("Keyboard"), MB_OK);
-				DestroyWindow(hWnd);
-				break;
-			}
-			break;
-		}
 		case WM_CLOSE:
 		{
 			HrDirector::Instance()->End();

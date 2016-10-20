@@ -103,7 +103,7 @@ void HrSceneManager::FlushScene()
 		m_pRenderParameters->SetCurrentRenderable(pRenderable);
 		pSceneNode->UpdateNode(*(m_pRenderParameters.get()));
 
-		HrRenderable* pRenderable = pSceneNode->GetRenderable();
+		pRenderable = pSceneNode->GetRenderable();
 		HrRenderLayout* pRenderLayout = pRenderable->GetRenderLayout();
 		HrRenderTechnique* pRenderTechnique = pRenderable->GetRenderTechnique();
 

@@ -6,7 +6,8 @@
 
 namespace Hr
 {
-	class HrGeometryApp : public HrApplicationWin, public HrSingleTon<HrGeometryApp>
+	class HrGeometryApp : public HrApplicationWin, 
+		public HrSingleTon<HrGeometryApp>
 	{
 	public:
 		HrGeometryApp();
@@ -23,6 +24,8 @@ namespace Hr
 	private:
 		void LoadAssets();
 		void CreateScene();
+		void CreateInputEvent();
+
 	};
 }
 

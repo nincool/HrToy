@@ -179,7 +179,7 @@ bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 			{
 				D3D11ShaderDesc::ConstantBufferDesc constantDesc;
 				constantDesc.name = constantBufferDesc.Name;
-				constantDesc.name_hash = Hr_Hash_Value(constantBufferDesc.Name);
+				constantDesc.name_hash = HrHashValue(constantBufferDesc.Name);
 				constantDesc.size = constantBufferDesc.Size;
 
 				for (uint32 nCBVarIndex = 0; nCBVarIndex < constantBufferDesc.Variables; ++nCBVarIndex)

@@ -19,6 +19,9 @@ HrD3D11RenderWindow::HrD3D11RenderWindow()
 
 bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight)
 {
+	m_nWidth = nWidth;
+	m_nHeight = nHeight;
+
 	CreateSwapChain();
 	
 	CreateD3DView();

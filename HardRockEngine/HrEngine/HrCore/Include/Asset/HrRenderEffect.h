@@ -1,7 +1,7 @@
 #ifndef _HR_RENDEREFFECT_H_
 #define _HR_RENDEREFFECT_H_
 
-#include "HrCore/Include/Asset/HrResource.h"
+#include "HrResource.h"
 
 namespace Hr
 {
@@ -16,8 +16,10 @@ namespace Hr
 		virtual void Unload() override;
 
 		HrRenderTechnique* GetTechnique(std::string strTechniqueName);
+
 	private:
 		size_t m_nHashName;
+
 		std::string m_strEffectName;
 		std::string m_strFilePath;
 		std::string m_strEffectFile;
@@ -28,6 +30,4 @@ namespace Hr
 }
 
 #endif
-
-
 

@@ -8,7 +8,7 @@ HrContextConfig::HrContextConfig()
 	m_nWindowHeight = 800;
 
 	m_nRenderTargetViewWidth = 1200;
-	m_nWindowHeight = 800;
+	m_nRenderTargetViewHeight = 800;
 }
 
 HrContextConfig::~HrContextConfig()

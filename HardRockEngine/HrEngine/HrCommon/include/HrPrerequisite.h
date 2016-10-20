@@ -9,6 +9,10 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <sstream>
 
 #endif
 

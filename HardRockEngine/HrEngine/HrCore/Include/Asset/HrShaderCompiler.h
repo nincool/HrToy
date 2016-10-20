@@ -9,7 +9,7 @@ namespace Hr
 	{
 	public:
 		HrShaderCompiler();
-		virtual ~HrShaderCompiler();
+		~HrShaderCompiler();
 
 		virtual void CompileShaderFromCode();
 	};

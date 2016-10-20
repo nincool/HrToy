@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrViewPort 
+	class HR_CORE_API HrViewPort 
 	{
 	public:
 		HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, HrCamera* pCamera);

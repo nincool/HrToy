@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrRenderable
+	class HR_CORE_API HrRenderable
 	{
 	public:
 		HrRenderable();

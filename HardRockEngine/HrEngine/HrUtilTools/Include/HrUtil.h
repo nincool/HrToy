@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <boost/functional/hash.hpp>
+#include <boost/cast.hpp>
+
 
 namespace Hr
 {
@@ -45,9 +47,16 @@ namespace Hr
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 
-	inline size_t Hr_Hash_Value(const char* str)
+	inline size_t HrHashValue(const char* str)
 	{
 		//static boost::hash<std::string> string_hash;
+		static std::hash<std::string> string_hash;
+		return string_hash(str);
+	}
+
+	inline size_t HrHashValue(const std::string str)
+	{
+		//static boost::hash_range(str.begin(), str.end());
 		static std::hash<std::string> string_hash;
 		return string_hash(str);
 	}
@@ -57,6 +66,24 @@ namespace Hr
 	{
 		BOOST_ASSERT(std::dynamic_pointer_cast<T>(u) == std::static_pointer_cast<T>(u));
 		return std::static_pointer_cast<T>(u);
+	}
+
+	template <typename T, typename U>
+	inline std::shared_ptr<T> StaticPointerCast(U& u)
+	{
+		return std::static_pointer_cast<T>(u);
+	}
+
+	template <typename T, typename U>
+	inline T* CheckPointerCast(U* p)
+	{
+		return boost::polymorphic_downcast<T*>(p);
+	}
+
+	template <typename T, typename U>
+	inline T* StaticPointerCast(U* p)
+	{
+		return static_cast<T*>(p);
 	}
 }
 

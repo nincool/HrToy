@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrSceneNode 
+	class HR_CORE_API HrSceneNode 
 	{
 	public:
 		enum EnumNodeType

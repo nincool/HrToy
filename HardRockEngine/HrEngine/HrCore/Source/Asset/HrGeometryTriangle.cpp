@@ -4,9 +4,6 @@
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
-#include "HrCore/Include/Asset/HrResourceManagerFactory.h"
-#include "HrCore/Include/Asset/HrRenderEffectManager.h"
-#include "HrCore/Include/Asset/HrRenderEffect.h"
 #include "HrCore/Include/HrDirector.h"
 #include "HrMath/Include/HrMath.h"
 
@@ -29,7 +26,7 @@ void HrGeometryTriangle::InitRenderLayout()
 
 void HrGeometryTriangle::BindVertexStream()
 {
-	m_pRenderTechnique = HrResourceManagerFactory::GetInstance().GetEffectManager()->GetRenderEffect("BasicEffect")->GetTechnique("Basic");
+	//m_pRenderTechnique = HrResourceManagerFactory::GetInstance().GetEffectManager()->GetRenderEffect("BasicEffect")->GetTechnique("Basic");
 
 	float3 vertices[] =
 	{

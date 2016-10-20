@@ -1,4 +1,4 @@
-#include "HrCore/Include/Asset/HrResourceLoader.h"
+#include "Asset/HrResourceLoader.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include <fstream>
 

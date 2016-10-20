@@ -52,6 +52,13 @@ public:  void Set##funName(const varType& var){ varName = var; }
 #define SAFE_DELETE_ARRAY(p)	{ if(p) { delete [] (p);		(p)=NULL; } }
 #endif
 
+#define HR_CALLBACK_0(__selector__,__target__, ...) std::bind(&__selector__,__target__, ##__VA_ARGS__)
+#define HR_CALLBACK_1(__selector__,__target__, ...) std::bind(&__selector__,__target__, std::placeholders::_1, ##__VA_ARGS__)
+#define HR_CALLBACK_2(__selector__,__target__, ...) std::bind(&__selector__,__target__, std::placeholders::_1, std::placeholders::_2, ##__VA_ARGS__)
+#define HR_CALLBACK_3(__selector__,__target__, ...) std::bind(&__selector__,__target__, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, ##__VA_ARGS__)
+
+
+
 #if (HR_DEBUG > 0)
 #define HRLOG(format,...)      Hr::HrLog::Instance()->Log(Hr::HrLog::_HALL, format,  ##__VA_ARGS__)
 #define HRWARNING(format,...)  Hr::HrLog::Instance()->Log(Hr::HrLog::_HWARNING, format,  ##__VA_ARGS__)

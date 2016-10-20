@@ -14,7 +14,7 @@
 #ifndef _HR_RENDEREFFECTMANAGER_H_
 #define _HR_RENDEREFFECTMANAGER_H_
 
-#include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrResourceManager.h"
 
 namespace Hr
 {
@@ -29,6 +29,7 @@ namespace Hr
 		virtual HrResource* GetResource(std::string strName) override;
 
 		HrRenderEffect* GetRenderEffect(std::string strName);
+
 	private:
 		HrRenderEffect* CreateEffect(std::string strName, std::string strFilePath);
 	};

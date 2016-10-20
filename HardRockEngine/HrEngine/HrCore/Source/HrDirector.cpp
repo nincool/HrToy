@@ -5,14 +5,13 @@
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
-#include "Asset/HrGeometryFactory.h"
-#include "Asset/HrComponentFactory.h"
-#include "Asset/HrResourceManagerFactory.h"
-#include "Asset/HrRenderEffectManager.h"
 #include "Render/HrRenderTarget.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFactory.h"
+#include "Asset/HrComponentFactory.h"
+#include "Asset/HrRenderEffectManager.h"
 #include "Config/HrContextConfig.h"
+#include "HrInputManager.h"
 #include "HrLog.h"
 
 using namespace Hr;
@@ -47,7 +46,16 @@ bool HrDirector::Init()
 		return false;
 	}
 
-	HrResourceManagerFactory::GetInstance().CreateResourceManager();
+	if (!CreateResourceManager())
+	{
+		return false;
+	}
+
+	if (!CreateInputManager())
+	{
+		return false;
+	}
+
 
 	return true;
 }
@@ -57,6 +65,11 @@ bool HrDirector::CreateAppWindow()
 	m_pWindow = MakeSharedPtr<HrWindowWin>();
 
 	return true;
+}
+
+void HrDirector::ReleaseAppWindow()
+{
+
 }
 
 bool HrDirector::CreateRenderEngine()
@@ -88,6 +101,21 @@ bool HrDirector::CreateRenderEngine()
 	return true;
 }
 
+void HrDirector::ReleaseRenderEngine()
+{
+	m_pRenderFactory.reset();
+
+	typedef void(*RENDER_RELEASE_FUNC)();
+	RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleUnload")));
+	if (releaseFunc)
+	{
+		releaseFunc();
+	}
+	m_pRenderModuleLoader->HrFreeModule();
+	m_pRenderModuleLoader.reset();
+
+}
+
 bool HrDirector::CreateRenderTarget()
 {
 	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
@@ -95,6 +123,37 @@ bool HrDirector::CreateRenderTarget()
 	m_pRenderEngine->SetRenderTarget(m_pRenderTarget);
 
 	return true;
+}
+
+void HrDirector::ReleaseRenderTarget()
+{
+
+}
+
+bool HrDirector::CreateResourceManager()
+{
+	m_pRenderEffectManager = MakeSharedPtr<HrRenderEffectManager>();
+	m_pRenderEffectManager->InitResourceManager();
+	m_pComponentFactory = MakeSharedPtr<HrComponentFactory>();
+
+	return true;
+}
+
+void HrDirector::ReleaseResourceManager()
+{
+
+}
+
+bool HrDirector::CreateInputManager()
+{
+	HrInputManager::Instance()->CreateInputSystem();
+
+	return true;
+}
+
+void HrDirector::ReleaseInputManager()
+{
+	
 }
 
 void HrDirector::StartMainLoop()
@@ -109,6 +168,8 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::Update()
 {
+	HrInputManager::Instance()->Capture();
+
 	m_pSceneManager->UpdateScene();
 	m_pSceneManager->RenderScene(m_pRenderTarget);
 }
@@ -127,26 +188,7 @@ void HrDirector::End()
 
 void HrDirector::Release()
 {
-	HrGeometryFactory::ReleaseInstance();
-	HrComponentFactory::ReleaseInstance();
-	HrResourceManagerFactory::ReleaseInstance();
-
-	//m_pShareRenderTarget.reset();
-	//m_pShareSceneManager.reset();
-	
-	//m_pShareRender->Release();
-	//m_pShareRender.reset();
-	
-	m_pRenderFactory.reset();
-
-	typedef void(*RENDER_RELEASE_FUNC)();
-	RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleUnload")));
-	if (releaseFunc)
-	{
-		releaseFunc();
-	}
-	m_pRenderModuleLoader->HrFreeModule();
-	m_pRenderModuleLoader.reset();
+	ReleaseRenderEngine();
 }
 
 bool HrDirector::Render()
@@ -158,4 +200,3 @@ void HrDirector::RunScene(const HrScenePtr& pScene)
 {
 	m_pSceneManager->RunScene(pScene);
 }
-

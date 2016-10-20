@@ -1,22 +1,20 @@
 #include "Asset/HrRenderEffect.h"
-#include "Asset/HrStreamData.h"
 #include "Asset/HrResourceLoader.h"
-#include "Asset/HrResourceManagerFactory.h"
-#include "Asset/HrShaderCompiler.h"
-#include "Asset/HrRenderEffectManager.h"
-#include "Render/HrRenderTechnique.h"
-#include "Render/HrRenderPass.h"
+#include "HrCore/Include/Render/HrRenderTechnique.h"
+#include "HrCore/Include/Render/HrRenderPass.h"
+#include "HrCore/Include/Asset/HrStreamData.h"
+#include "HrCore/Include/HrLog.h"
+#include "HrUtilTools/Include/HrUtil.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-#include <boost/functional/hash.hpp>
-#include "HrLog.h"
+
 
 using namespace Hr;
 
 HrRenderEffect::HrRenderEffect(std::string strEffectName, std::string strFilePath)
 	:m_strEffectName(strEffectName), m_strFilePath(strFilePath)
 {
-	m_nHashName = boost::hash_range(m_strEffectName.begin(), m_strEffectName.end());
+	m_nHashName = HrHashValue(m_strEffectName);
 }
 
 HrRenderEffect::~HrRenderEffect()

@@ -1,7 +1,9 @@
 #include "Asset/HrRenderEffectManager.h"
 #include "Asset/HrRenderEffect.h"
-#include "HrDirector.h"
-#include "HrLog.h"
+#include "Asset/HrResource.h"
+#include "Asset/HrResourceManager.h"
+#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/HrLog.h"
 #include <boost/cast.hpp>
 #include <boost/functional/hash.hpp>
 

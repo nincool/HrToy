@@ -1,12 +1,11 @@
-#include "Asset/HrGeometryFactory.h"
+#include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrUtilTools/Include/HrUtil.h"
-#include "Asset/HrGeometryBox.h"
-#include "Asset/HrGeometryTriangle.h"
-#include "Scene/HrSceneNode.h"
+#include "HrCore/Include/Asset/HrGeometryBox.h"
+#include "HrCore/Include/Asset/HrGeometryTriangle.h"
+#include "HrCore/Include/Scene/HrSceneNode.h"
 
 using namespace Hr;
 
-HrGeometryFactoryPtr HrGeometryFactory::m_s_pUniqueFactory;
 
 HrGeometryFactory::HrGeometryFactory()
 {
@@ -15,21 +14,6 @@ HrGeometryFactory::HrGeometryFactory()
 
 HrGeometryFactory::~HrGeometryFactory()
 {
-}
-
-HrGeometryFactory& HrGeometryFactory::GetInstance()
-{
-	if (!m_s_pUniqueFactory)
-	{
-		m_s_pUniqueFactory = MakeUniquePtr<HrGeometryFactory>();
-	}
-
-	return *m_s_pUniqueFactory;
-}
-
-void HrGeometryFactory::ReleaseInstance()
-{
-	m_s_pUniqueFactory.reset();
 }
 
 HrSceneNode* HrGeometryFactory::Create2DTriangle()

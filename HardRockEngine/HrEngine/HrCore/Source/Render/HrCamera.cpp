@@ -39,3 +39,5 @@ Matrix4 const& HrCamera::GetProjectMatrix() const
 {
 	return m_matProject;
 }
+
+
