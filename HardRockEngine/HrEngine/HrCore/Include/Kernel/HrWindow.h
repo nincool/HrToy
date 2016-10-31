@@ -1,7 +1,7 @@
 #ifndef _HR_WINDOW_H_
 #define _HR_WINDOW_H_
 
-#include "HrCorePrerequisite.h"
+#include "HrCore/Include/HrCorePrerequisite.h"
 
 namespace Hr
 {

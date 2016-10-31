@@ -1,5 +1,5 @@
 ﻿#include "Platform/AppWin32/HrWin32WindowEventUtilities.h"
-#include "HrDirector.h"
+#include "Kernel/HrDirector.h"
 
 using namespace Hr;
 

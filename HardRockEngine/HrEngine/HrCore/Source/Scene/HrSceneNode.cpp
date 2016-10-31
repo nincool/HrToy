@@ -4,8 +4,8 @@
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderTarget.h"
 #include "Scene/HrCameraNode.h"
-#include "HrDirector.h"
-#include "HrLog.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrLog.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -25,6 +25,16 @@ HrSceneNode::HrSceneNode(HrRenderable* pRenderable)
 HrSceneNode::~HrSceneNode()
 {
 	SAFE_DELETE(m_pRenderable);
+}
+
+void HrSceneNode::SetNodeName(std::string& strName)
+{
+
+}
+
+size_t HrSceneNode::GetNodeHashID()
+{
+	return m_nNodeHashID;
 }
 
 HrSceneNode::EnumNodeType HrSceneNode::GetNodeType()
@@ -108,6 +118,3 @@ void HrSceneNode::Translate(const Vector3& v3)
 {
 	m_v3LocalPosition += v3;
 }
-
-
-

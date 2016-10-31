@@ -3,7 +3,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Device.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Render/HrRenderConstantBuffer.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
 #include "HrRenderD3D11/Include/HrD3D11Mapping.h"

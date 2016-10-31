@@ -102,11 +102,6 @@ namespace Hr
 				0,        0,         0,        1);
 		}
 
-		//template <typename T>
-		//Matrix4 Rotation(T const& angle, Vector3 const& axis)
-		//{
-
-		//}
 		inline Matrix4 Inverse(Matrix4 m) 
 		{
 			REAL m00 = m[0][0], m01 = m[0][1], m02 = m[0][2], m03 = m[0][3];
@@ -169,7 +164,7 @@ namespace Hr
 				d30, d31, d32, d33);
 		}
 
-		//矩阵 
+		//矩阵 视变换矩阵 包含位移和旋转 
 		inline Matrix4 LookAtLh(Vector3 const& v3Eye, Vector3 const& v3At, Vector3 const& v3Up)
 		{
 			Vector3 zAxis(Normalize(v3At - v3Eye));

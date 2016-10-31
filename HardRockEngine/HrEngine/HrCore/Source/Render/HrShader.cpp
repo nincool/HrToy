@@ -1,7 +1,7 @@
 #include "HrCore/Include/Render/HrShader.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderConstantBuffer.h"
-#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 
 
 using namespace Hr;

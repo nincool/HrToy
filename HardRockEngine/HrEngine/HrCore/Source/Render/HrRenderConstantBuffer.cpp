@@ -5,7 +5,7 @@
 #include "Render/HrRenderFactory.h"
 #include "Asset/HrStreamData.h"
 #include "HrMath/Include/HrMath.h"
-#include "HrDirector.h"
+#include "Kernel/HrDirector.h"
 
 using namespace Hr;
 

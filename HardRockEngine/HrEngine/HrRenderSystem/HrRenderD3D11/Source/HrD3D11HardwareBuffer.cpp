@@ -1,5 +1,5 @@
 #include "HrD3D11HardwareBuffer.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 
 using namespace Hr;
 

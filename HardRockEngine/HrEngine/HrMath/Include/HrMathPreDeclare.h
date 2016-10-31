@@ -28,6 +28,9 @@ namespace Hr
 
 	typedef Vector3 float3;
 	typedef Vector4 float4;
+
+	class Radian;
+	class Degree;
 }
 
 #endif

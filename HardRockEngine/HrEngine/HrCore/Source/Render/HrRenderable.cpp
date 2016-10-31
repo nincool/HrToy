@@ -2,7 +2,7 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
-#include "HrDirector.h"
+#include "Kernel/HrDirector.h"
 
 
 using namespace Hr;

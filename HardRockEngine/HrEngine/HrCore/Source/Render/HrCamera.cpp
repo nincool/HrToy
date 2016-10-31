@@ -27,7 +27,7 @@ void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float 
 	m_fNearPlane = fNearPlane;
 	m_fFarPlane = fFarPlane;
 
-	m_matProject = Hr::HrMath::PerspectiveFovLh(fFov, fAspect, fNearPlane, fFarPlane);
+	m_matProject = HrMath::PerspectiveFovLh(fFov, fAspect, fNearPlane, fFarPlane);
 }
 
 Matrix4 const& HrCamera::GetViewMatrix() const

@@ -59,14 +59,14 @@
     <Filter Include="Source\Event">
       <UniqueIdentifier>{3968093c-6757-40d2-a7a1-ddc6a46914e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Kernel">
+      <UniqueIdentifier>{c1668f14-cb2d-4b3b-b0c3-504d70349bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Kernel">
+      <UniqueIdentifier>{c86b751b-641f-4c19-a0d4-0eb021ad4999}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\HrExport.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrCorePreDeclare.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
       <Filter>Include\MemoryAlloc</Filter>
     </ClInclude>
@@ -81,15 +81,6 @@
     </ClInclude>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h">
       <Filter>Include\MemoryAlloc</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrCorePrerequisite.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrDirector.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrLog.h">
-      <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrCamera.h">
       <Filter>Include\Render</Filter>
@@ -163,9 +154,6 @@
     <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h">
       <Filter>Include\Platform\AppWin32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrApplication.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderFactory.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -174,9 +162,6 @@
     </ClInclude>
     <ClInclude Include="Include\Config\HrContextConfig.h">
       <Filter>Include\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrWindow.h">
-      <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h">
       <Filter>Include\Platform\AppWin32</Filter>
@@ -229,14 +214,35 @@
     <ClInclude Include="Include\Event\HrEventKeyboard.h">
       <Filter>Include\Event</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrInputManager.h">
+    <ClInclude Include="Include\HrCorePreDeclare.h">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrCorePrerequisite.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrExport.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrApplication.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrDirector.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrInputManager.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrLog.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrScheduler.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrWindow.h">
+      <Filter>Include\Kernel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrExport.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
       <Filter>Source\MemoryAlloc</Filter>
     </ClCompile>
@@ -248,12 +254,6 @@
     </ClCompile>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp">
       <Filter>Source\MemoryAlloc</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrDirector.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HrLog.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrCamera.cpp">
       <Filter>Source\Render</Filter>
@@ -330,9 +330,6 @@
     <ClCompile Include="Source\Config\HrContextConfig.cpp">
       <Filter>Source\Config</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrWindow.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp">
       <Filter>Source\Platform\AppWin32</Filter>
     </ClCompile>
@@ -375,8 +372,23 @@
     <ClCompile Include="Source\Event\HrEventKeyboard.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrInputManager.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Source\Kernel\HrDirector.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrExport.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrInputManager.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrLog.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrWindow.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrScheduler.cpp">
+      <Filter>Source\Kernel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

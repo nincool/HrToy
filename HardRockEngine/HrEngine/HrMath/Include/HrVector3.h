@@ -17,10 +17,12 @@ namespace Hr
 		{
 			m_x = fX; m_y = fY; m_z = fZ;
 		}
+
 		HrVector3(HrVector3& v)
 		{
 			m_x = v.m_x; m_y = v.m_y; m_z = v.m_z;
 		}
+
 		HrVector3(HrVector3&& v)
 		{
 			m_x = v.m_x; m_y = v.m_y; m_z = v.m_z;
@@ -251,10 +253,14 @@ namespace Hr
 		REAL y() const { return m_y; }
 		REAL z() const { return m_z; } 
 
-		protected:
-			REAL m_x;
-			REAL m_y;
-			REAL m_z;
+		void x(REAL x) { m_x = x; }
+		void y(REAL y) { m_y = y; }
+		void z(REAL z) { m_z = z; }
+
+	protected:
+		REAL m_x;
+		REAL m_y;
+		REAL m_z;
 	};
 }
 

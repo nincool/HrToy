@@ -13,6 +13,7 @@ namespace Hr
 		HrComponentFactory();
 		~HrComponentFactory();
 
+		HrCameraNode* CreateCamera();
 		HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
 		HrSceneNode* CreateBox();
 

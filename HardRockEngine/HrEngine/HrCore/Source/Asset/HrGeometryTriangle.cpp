@@ -4,7 +4,7 @@
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
-#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrMath/Include/HrMath.h"
 
 using namespace Hr;

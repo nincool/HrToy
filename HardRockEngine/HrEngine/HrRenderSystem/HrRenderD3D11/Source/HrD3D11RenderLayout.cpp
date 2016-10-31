@@ -5,7 +5,7 @@
 #include "HrD3D11HardwareBuffer.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Render/HrVertex.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include <D3Dcompiler.h>
 
 using namespace Hr;

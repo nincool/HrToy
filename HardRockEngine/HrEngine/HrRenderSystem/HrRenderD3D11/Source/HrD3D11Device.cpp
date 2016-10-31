@@ -2,7 +2,7 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrD3D11Adapter.h"
 #include "HrD3D11AdapterList.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 
 
 using namespace Hr;

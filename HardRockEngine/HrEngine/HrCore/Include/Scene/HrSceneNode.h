@@ -18,6 +18,9 @@ namespace Hr
 		HrSceneNode(HrRenderable* pRenderable);
 		virtual ~HrSceneNode();
 
+		void SetNodeName(std::string& strName);
+		size_t GetNodeHashID();
+
 		EnumNodeType GetNodeType();
 		HrSceneNode* GetParent();
 		HrRenderable* GetRenderable();
@@ -35,6 +38,9 @@ namespace Hr
 		virtual void Translate(const Vector3& v3);
 
 	protected:
+		std::string m_strNodeName;
+		size_t m_nNodeHashID;
+
 		EnumNodeType m_nodeType;
 		HrRenderable* m_pRenderable;
 

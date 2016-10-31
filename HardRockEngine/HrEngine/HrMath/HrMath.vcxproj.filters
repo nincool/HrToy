@@ -55,5 +55,16 @@
     <ClInclude Include="Include\Vector_T.h">
       <Filter>Include\KFL</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrQuaternion.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrAngle.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\HrQuaternion.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

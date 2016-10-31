@@ -10,7 +10,7 @@
 #include "Render/HrRenderTarget.h"
 #include "Render/HrCamera.h"
 #include "Render/HrViewPort.h"
-#include "HrDirector.h"
+#include "Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 

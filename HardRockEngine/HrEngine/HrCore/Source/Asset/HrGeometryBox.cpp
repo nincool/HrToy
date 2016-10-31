@@ -7,7 +7,7 @@
 #include "HrCore/Include/Asset/HrColor.h"
 #include "HrCore/Include/Asset/HrRenderEffectManager.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
-#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrMath/Include/HrMath.h"
 
 using namespace Hr;
@@ -44,14 +44,14 @@ void HrGeometryBox::BindVertexStream()
 
 	Vertex vertices[8] = 
 	{
-		{ float3(-1.0f, -1.0f, -1.0f),  HrColor::F4Blue },
-		{ float3(-1.0f, 1.0f, -1.0f), HrColor::F4Cyan },
-		{ float3(1.0f, 1.0f, -1.0f), HrColor::F4Red },
-		{ float3(1.0f, -1.0f, -1.0f), HrColor::F4Yellow },
-		{ float3(-1.0f, -1.0f, 1.0f), HrColor::F4Green },
-		{ float3(-1.0f, 1.0f, 1.0f), HrColor::F4Silver },
-		{ float3(1.0f, 1.0f, 1.0f), HrColor::F4Black },
-		{ float3(1.0f, -1.0f, 1.0f), HrColor::F4Magenta }
+		{ float3(-1.0f, -1.0f, 4.0f),  HrColor::F4Blue },
+		{ float3(-1.0f, 1.0f, 4.0f), HrColor::F4Cyan },
+		{ float3(1.0f, 1.0f, 4.0f), HrColor::F4Red },
+		{ float3(1.0f, -1.0f, 4.0f), HrColor::F4Yellow },
+		{ float3(-1.0f, -1.0f, 5.0f), HrColor::F4Green },
+		{ float3(-1.0f, 1.0f, 5.0f), HrColor::F4Silver },
+		{ float3(1.0f, 1.0f, 5.0f), HrColor::F4Black },
+		{ float3(1.0f, -1.0f, 5.0f), HrColor::F4Magenta }
 	};
 	
 	HrVertexElement vertexElementArr[] = {

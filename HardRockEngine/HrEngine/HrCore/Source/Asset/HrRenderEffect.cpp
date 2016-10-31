@@ -3,7 +3,7 @@
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>

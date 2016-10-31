@@ -3,6 +3,7 @@
 
 #include "HrCommon/Include/HrPrerequisite.h"
 #include "HrMathConfig.h"
+#include "HrMathPreDeclare.h"
 
 typedef float REAL;
 

@@ -1,5 +1,5 @@
 #include "Scene/HrScene.h"
-#include "HrDirector.h"
+#include "Kernel/HrDirector.h"
 #include "Scene/HrSceneNode.h"
 #include "HrUtilTools/Include/HrUtil.h"
 

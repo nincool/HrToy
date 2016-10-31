@@ -75,6 +75,8 @@ namespace Hr
 	class HrEventDispatcher;
 	typedef std::shared_ptr<HrEventDispatcher> HrEventDispatcherPtr;
 	
+	class HrScheduler;
+	typedef std::shared_ptr<HrScheduler> HrSchedulerPtr;
 }
 
 

@@ -24,7 +24,6 @@ namespace Hr
 	private:
 		void LoadAssets();
 		void CreateScene();
-		void CreateInputEvent();
 
 	};
 }

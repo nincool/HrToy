@@ -1,7 +1,7 @@
 #ifndef _HR_APPLICATION_WIN32_
 #define _HR_APPLICATION_WIN32_
 
-#include "HrCore/Include/HrApplication.h"
+#include "HrCore/Include/Kernel/HrApplication.h"
 
 namespace Hr
 {

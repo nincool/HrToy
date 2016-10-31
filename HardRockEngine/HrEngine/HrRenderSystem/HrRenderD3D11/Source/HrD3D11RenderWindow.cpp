@@ -1,7 +1,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
-#include "HrCore/Include/HrDirector.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrCore/Include/Platform/AppWin32/HrWindowWin.h"
 #include "HrUtilTools/Include/HrUtil.h"
 

@@ -59,6 +59,7 @@ public:  void Set##funName(const varType& var){ varName = var; }
 
 
 
+
 #if (HR_DEBUG > 0)
 #define HRLOG(format,...)      Hr::HrLog::Instance()->Log(Hr::HrLog::_HALL, format,  ##__VA_ARGS__)
 #define HRWARNING(format,...)  Hr::HrLog::Instance()->Log(Hr::HrLog::_HWARNING, format,  ##__VA_ARGS__)

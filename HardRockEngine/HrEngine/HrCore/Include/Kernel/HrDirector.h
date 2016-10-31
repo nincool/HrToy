@@ -11,6 +11,7 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCommon/include/HrSingleton.h"
+#include <chrono>
 
 namespace Hr
 {
@@ -51,6 +52,11 @@ namespace Hr
 		const HrRenderEffectManagerPtr& GetRenderEffectManager()
 		{
 			return m_pRenderEffectManager;
+		}
+
+		const HrSchedulerPtr& GetScheduler()
+		{
+			return m_pScheduler;
 		}
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
@@ -101,7 +107,14 @@ namespace Hr
 
 		HrComponentFactoryPtr m_pComponentFactory;
 
+		HrSchedulerPtr m_pScheduler;
+
 		bool m_bEndMainLoop;
+
+		/* delta time since last tick to main loop */
+		float m_fDeltaTime;
+		/* last time the main loop was updated */
+		std::chrono::steady_clock::time_point m_lastUpdate;
 
 	};
 

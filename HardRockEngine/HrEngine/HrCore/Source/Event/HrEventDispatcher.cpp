@@ -2,7 +2,7 @@
 #include "Event/HrEventListener.h"
 #include "Event/HrEvent.h"
 #include "Event/HrEventListenerKeyboard.h"
-#include "HrCore/Include/HrLog.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include <algorithm> 
 
 using namespace Hr;

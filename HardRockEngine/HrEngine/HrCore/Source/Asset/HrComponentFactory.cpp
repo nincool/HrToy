@@ -3,6 +3,7 @@
 #include "HrCore/Include/Render/HrViewPort.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
+#include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -18,6 +19,10 @@ HrComponentFactory::~HrComponentFactory()
 {
 }
 
+HrCameraNode* HrComponentFactory::CreateCamera()
+{
+	return CreateCamera(0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
+}
 
 HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
 {
@@ -27,6 +32,7 @@ HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fW
 
 	return pCameraNode;
 }
+
 
 HrSceneNode* HrComponentFactory::CreateBox()
 {

@@ -1,7 +1,7 @@
 #include "Platform/AppWin32/HrApplicationWin.h"
 #include "HrUtilTools/Include/HrUtil.h"
-#include "HrDirector.h"
-#include "HrLog.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrLog.h"
 
 using namespace Hr;
 

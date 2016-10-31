@@ -14,6 +14,11 @@ namespace Hr
 		virtual void Translate(const Vector3& v3) override;
 
 		HrViewPort* GetViewPort();
+
+	private:
+		//Camera's friendly functions
+		void Move(const Vector3& v3);
+
 	private:
 		HrViewPort* m_pViewPort;
 	};

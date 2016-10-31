@@ -1,4 +1,7 @@
-﻿#include "HrDirector.h"
+﻿#include "Kernel/HrDirector.h"
+#include "Kernel/HrInputManager.h"
+#include "Kernel/HrLog.h"
+#include "Kernel/HrScheduler.h"
 #include "Platform/AppWin32/HrWindowWin.h"
 #include "Scene/HrSceneManager.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -11,8 +14,6 @@
 #include "Asset/HrComponentFactory.h"
 #include "Asset/HrRenderEffectManager.h"
 #include "Config/HrContextConfig.h"
-#include "HrInputManager.h"
-#include "HrLog.h"
 
 using namespace Hr;
 
@@ -20,6 +21,7 @@ HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
 	m_pSceneManager = MakeSharedPtr<HrSceneManager>();
+	m_pScheduler = MakeSharedPtr<HrScheduler>();
 }
 
 HrDirector::~HrDirector()
@@ -56,6 +58,8 @@ bool HrDirector::Init()
 		return false;
 	}
 
+	m_fDeltaTime = 0;
+	m_lastUpdate = std::chrono::steady_clock::now();
 
 	return true;
 }
@@ -169,6 +173,13 @@ void HrDirector::StartMainLoop()
 void HrDirector::Update()
 {
 	HrInputManager::Instance()->Capture();
+
+	std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
+	m_fDeltaTime = std::chrono::duration_cast<std::chrono::microseconds>(nowTime - m_lastUpdate).count() / 1000000.0f;
+	m_fDeltaTime = (std::max)(0.0f, m_fDeltaTime);
+	m_lastUpdate = nowTime;
+
+	m_pScheduler->Update(m_fDeltaTime);
 
 	m_pSceneManager->UpdateScene();
 	m_pSceneManager->RenderScene(m_pRenderTarget);
