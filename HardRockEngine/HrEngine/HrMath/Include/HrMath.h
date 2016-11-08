@@ -3,8 +3,7 @@
 
 #include "HrMathPrerequisites.h"
 #include "HrMathCom.h"
-#include "HrMathCalculate.h"
-
+#include "HrMath/Include/KFL/KFL.hpp"
 
 #endif
 

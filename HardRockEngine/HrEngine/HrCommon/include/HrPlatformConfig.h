@@ -10,6 +10,9 @@
 #ifndef _HR_PLATFORMCONFIG_H_
 #define _HR_PLATFORMCONFIG_H_
 
+
+
+#pragma region PLATFORM
 // define supported target platform macro
 #define HR_PLATFORM_UNKNOWN            0
 #define HR_PLATFORM_IOS                1
@@ -114,9 +117,13 @@
 #define HR_TARGET_PLATFORM			HR_PLATFORM_WP8
 #endif
 
+
+#pragma endregion
+
+#pragma region CPU
+
 #define HR_CPU_X86        0
 #define HR_CPU_ARM        1
-
 /* Find CPU type
 */
 #if (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))) || \
@@ -126,6 +133,9 @@
 #	define HR_CPU HR_CPU_ARM
 #endif
 
+#pragma endregion
+
+#pragma region COMPILER
 ////////////////////////////////////////////////////////////////////////////
 // Compiler Judge
 // Determine compiler: after this, one of the following symbols will
@@ -138,6 +148,24 @@
 #else
 # error "Could not determine compiler"
 #endif
+#pragma endregion
+
+
+#define HR_RESTRICT_ALIASING 1
+
+#if HR_RESTRICT_ALIASING != 0
+	#ifdef COMPILER_MSVC
+		#define RESTRICT_ALIAS __restrict   //MSVC
+		#define RESTRICT_ALIAS_RETURN __restrict
+	#else
+		#define RESTRICT_ALIAS __restrict__ //GCC... and others?
+		#define RESTRICT_ALIAS_RETURN
+	#endif
+#else
+	#define RESTRICT_ALIAS
+	#define RESTRICT_ALIAS_RETURN
+#endif
+
 
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
 #include "HrWin32Specific.h"

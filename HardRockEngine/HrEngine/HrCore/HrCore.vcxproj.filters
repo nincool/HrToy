@@ -241,6 +241,12 @@
     <ClInclude Include="Include\Kernel\HrWindow.h">
       <Filter>Include\Kernel</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Kernel\HrIDObject.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrTransform.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -389,6 +395,9 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrScheduler.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrTransform.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

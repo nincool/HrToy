@@ -30,6 +30,7 @@ namespace Hr
 		bool m_bSceneRunning;
 
 		HrRenderFrameParametersPtr m_pRenderParameters;
+
 	};
 }
 

@@ -1,5 +1,5 @@
 #include "Render/HrCamera.h"
-
+#include "Scene/HrCameraNode.h"
 
 using namespace Hr;
 
@@ -8,9 +8,14 @@ HrCamera::HrCamera()
 {
 }
 
+void HrCamera::AttachCameraNode(HrCameraNode* pCameraNode)
+{
+	m_pAttachCameraNode = pCameraNode;
+}
+
 void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up)
 {
-	m_fLookAtDistance = (v3EvePos - v3LookAt).Length();
+	m_fLookAtDistance = HrMath::Length(v3EvePos - v3LookAt);
 	m_matView = HrMath::LookAtLh(v3EvePos, v3LookAt, v3Up);
 	m_matInverseView = HrMath::Inverse(m_matView);
 
@@ -39,5 +44,3 @@ Matrix4 const& HrCamera::GetProjectMatrix() const
 {
 	return m_matProject;
 }
-
-

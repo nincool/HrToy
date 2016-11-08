@@ -12,7 +12,19 @@
       <UniqueIdentifier>{ff2ad37b-538f-466b-82d4-91e6e99338ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Include\KFL">
-      <UniqueIdentifier>{604eab6c-9875-4518-bc6b-1271faf024af}</UniqueIdentifier>
+      <UniqueIdentifier>{dbbb5fcb-4c0d-4047-879f-5b7b17917842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\KFL">
+      <UniqueIdentifier>{cec5e744-4aac-4333-a54a-c01707501786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\KFL\Detail">
+      <UniqueIdentifier>{9b05bfbd-c252-4c9c-bcc4-8ab32c6be022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\KFL\Kernel">
+      <UniqueIdentifier>{e2c72e00-5f47-4635-9789-7581df9eff75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\KFL\Math">
+      <UniqueIdentifier>{9569af3d-8d1e-4aba-8d13-c54b1f4f3fb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,49 +34,205 @@
     <ClInclude Include="Include\HrMathPreDeclare.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrMatrix4.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrVector3.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrMathPrerequisites.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrMathConfig.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrMathCalculate.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrMathCom.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrVector4.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MathTemplateHelper_T.h">
-      <Filter>Include\KFL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Matrix_T.h">
-      <Filter>Include\KFL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Plane_T.h">
-      <Filter>Include\KFL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Vector_T.h">
-      <Filter>Include\KFL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\HrQuaternion.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrAngle.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\KFL\AABBox.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\AlignedAllocator.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Bound.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Color.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\COMPtr.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Config.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\CpuInfo.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\CustomizedStreamBuf.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\CXX11.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\DllLoader.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Frustum.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Half.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\KFL.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Log.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Math.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Matrix.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Noise.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\OBBox.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Plane.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\PreDeclare.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Quaternion.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Rect.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\ResIdentifier.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\SIMDMath.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\SIMDMatrix.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\SIMDVector.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Size.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Sphere.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Thread.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\ThrowErr.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Timer.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Trace.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Types.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Util.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Vector.hpp">
+      <Filter>Include\KFL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Detail\AutoLink.hpp">
+      <Filter>Include\KFL\Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KFL\Detail\MathHelper.hpp">
+      <Filter>Include\KFL\Detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\HrQuaternion.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Source\KFL\Kernel\CpuInfo.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\CustomizedStreamBuf.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\DllLoader.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\KFL.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\Log.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\Thread.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\ThrowErr.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\Timer.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Kernel\Util.cpp">
+      <Filter>Source\KFL\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\AABBox.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Color.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Frustum.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Half.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Math.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Matrix.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Noise.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\OBBox.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Plane.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Quaternion.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Rect.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\SIMDMath.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\SIMDMatrix.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\SIMDVector.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Size.cpp">
+      <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KFL\Math\Sphere.cpp">
+      <Filter>Source\KFL\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

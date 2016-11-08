@@ -11,16 +11,15 @@ namespace Hr
 		HrCameraNode(HrViewPort* pViewPort);
 		~HrCameraNode();
 
-		virtual void Translate(const Vector3& v3) override;
-
 		HrViewPort* GetViewPort();
 
+		virtual void UpdateNode() override;
 	private:
-		//Camera's friendly functions
-		void Move(const Vector3& v3);
+		void RecalcCameraView();
 
 	private:
 		HrViewPort* m_pViewPort;
+		HrCamera* m_pCamera;
 	};
 }
 

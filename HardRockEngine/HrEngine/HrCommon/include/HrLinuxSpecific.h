@@ -9,12 +9,13 @@
 
 #ifndef _HR_LINUXSPECIFIC_H_ 
 #define _HR_LINUXSPECIFIC_H_
+#include <cstdint>
 
 #define DEPRICATED 
 
-typedef signed char         int8;
-typedef signed short        int16;
-typedef signed int			int32;
+typedef std::int8_t        int8;
+typedef std::int16_t        int16;
+typedef std::int32_t			int32;
 typedef signed long long		int64;
 typedef signed long long		INT64;
 typedef unsigned char				uint8;

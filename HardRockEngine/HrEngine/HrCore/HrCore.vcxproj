@@ -92,7 +92,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>HrOISD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>HrOISD.lib;HrMathD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -148,6 +148,7 @@
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\Kernel\HrApplication.h" />
     <ClInclude Include="Include\Kernel\HrDirector.h" />
+    <ClInclude Include="Include\Kernel\HrIDObject.h" />
     <ClInclude Include="Include\Kernel\HrInputManager.h" />
     <ClInclude Include="Include\Kernel\HrLog.h" />
     <ClInclude Include="Include\Kernel\HrScheduler.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Include\Scene\HrScene.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
+    <ClInclude Include="Include\Scene\HrTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Asset\HrColor.cpp" />
@@ -234,6 +236,7 @@
     <ClCompile Include="Source\Scene\HrScene.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
+    <ClCompile Include="Source\Scene\HrTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HrUtilTools\HrUtilTools.vcxproj">

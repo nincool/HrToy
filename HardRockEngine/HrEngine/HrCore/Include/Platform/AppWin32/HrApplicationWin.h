@@ -27,8 +27,6 @@ namespace Hr
 		virtual bool Destroy() override;
 
 	};
-
-
 }
 
 #endif

@@ -1,8 +1,8 @@
 #include "HrGeometryScene.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrGeometryBox.h"
-#include "HrCore/Include/Scene/HrSceneNode.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
+#include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Asset/HrComponentFactory.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrCore/Include/Kernel/HrScheduler.h"
@@ -35,7 +35,7 @@ void HrGeometryScene::OnEnter()
 	
 	CreateInputEvent();
 
-	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrGeometryScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 10, 0);
+	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrGeometryScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
 void HrGeometryScene::CreateSceneElements()
@@ -104,19 +104,19 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	std::cout << "MouseUpdate" << std::endl;
 	if (m_bKeyAPressed)
 	{
-		m_pSceneMainCamera->Translate(Vector3(-0.1, 0, 0));
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(-0.1, 0, 0));
 	}
 	else if (m_bKeyWPressed)
 	{
-		m_pSceneMainCamera->Translate(Vector3(0.0, 0.1, 0));
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0, 0.1, 0));
 	}
 	else if (m_bKeySPressed)
 	{
-		m_pSceneMainCamera->Translate(Vector3(0.0f, -0.1f, 0));
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0f, -0.1f, 0));
 	}
 	else if (m_bKeyDPressed)
 	{
-		m_pSceneMainCamera->Translate(Vector3(0.1f, 0.0f, 0.0f));
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.1f, 0.0f, 0.0f));
 	}
 }
 

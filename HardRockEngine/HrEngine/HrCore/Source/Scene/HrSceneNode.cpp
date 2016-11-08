@@ -4,20 +4,25 @@
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderTarget.h"
 #include "Scene/HrCameraNode.h"
+#include "Scene/HrTransform.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
 
-HrSceneNode::HrSceneNode() 
+HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_nodeType = NT_NORMAL;
 	m_pRenderable = nullptr;
 	m_pParent = nullptr;
+
+	m_pTransform = HR_NEW HrTransform(this);
+
+	m_bDirtyView = false;
 }
 
-HrSceneNode::HrSceneNode(HrRenderable* pRenderable) 
+HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_pRenderable = pRenderable;
 }
@@ -25,31 +30,7 @@ HrSceneNode::HrSceneNode(HrRenderable* pRenderable)
 HrSceneNode::~HrSceneNode()
 {
 	SAFE_DELETE(m_pRenderable);
-}
-
-void HrSceneNode::SetNodeName(std::string& strName)
-{
-
-}
-
-size_t HrSceneNode::GetNodeHashID()
-{
-	return m_nNodeHashID;
-}
-
-HrSceneNode::EnumNodeType HrSceneNode::GetNodeType()
-{
-	return m_nodeType;
-}
-
-HrSceneNode* HrSceneNode::GetParent()
-{
-	return m_pParent;
-}
-
-HrRenderable* HrSceneNode::GetRenderable()
-{
-	return m_pRenderable;
+	SAFE_DELETE(m_pTransform);
 }
 
 void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
@@ -90,7 +71,12 @@ void HrSceneNode::RemoveChildren()
 	m_vecChildNode.clear();
 }
 
-void HrSceneNode::UpdateNode(HrRenderFrameParameters& renderFrameParameters)
+void HrSceneNode::UpdateNode()
+{
+
+}
+
+void HrSceneNode::UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters)
 {
 	if (m_pRenderable)
 	{
@@ -98,23 +84,8 @@ void HrSceneNode::UpdateNode(HrRenderFrameParameters& renderFrameParameters)
 	}
 }
 
-void HrSceneNode::SetPosition(const Vector3& v3Pos)
+void HrSceneNode::DirtyTransform()
 {
-	m_v3LocalPosition = v3Pos;
+	m_bDirtyView = true;
 }
 
-void HrSceneNode::SetPosition(REAL x, REAL y, REAL z)
-{
-	Vector3 v(x, y, z);
-	SetPosition(v);
-}
-
-const Vector3& HrSceneNode::GetPosition()
-{
-	return m_v3LocalPosition;
-}
-
-void HrSceneNode::Translate(const Vector3& v3)
-{
-	m_v3LocalPosition += v3;
-}

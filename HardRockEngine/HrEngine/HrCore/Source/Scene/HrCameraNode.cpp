@@ -1,6 +1,7 @@
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Render/HrViewPort.h"
 #include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Scene/HrTransform.h"
 
 using namespace Hr;
 
@@ -8,7 +9,10 @@ HrCameraNode::HrCameraNode(HrViewPort* pViewPort)
 {
 	m_nodeType = HrSceneNode::NT_CAMERA;
 	m_pViewPort = pViewPort;
-	m_v3LocalPosition = m_pViewPort->GetCamera()->GetEyePos();
+	m_pCamera = m_pViewPort->GetCamera();
+	m_pCamera->AttachCameraNode(this);
+
+	m_pTransform->SetWordPosition(m_pViewPort->GetCamera()->GetEyePos());
 }
 
 HrCameraNode::~HrCameraNode()
@@ -21,18 +25,20 @@ HrViewPort* HrCameraNode::GetViewPort()
 	return m_pViewPort;
 }
 
-void HrCameraNode::Translate(const Vector3& v3)
+void HrCameraNode::UpdateNode()
 {
-	Move(v3);
+	HrSceneNode::UpdateNode();
+	
+	RecalcCameraView();
 }
 
-void HrCameraNode::Move(const Vector3& v3)
+void HrCameraNode::RecalcCameraView()
 {
-	m_v3LocalPosition += v3;
-
-	HrCamera* pCamera = m_pViewPort->GetCamera();
-	HrVector3 vNewEyePos = m_v3LocalPosition;
-	pCamera->ViewParams(vNewEyePos, vNewEyePos + pCamera->GetForward()*pCamera->GetLookAtDistance(), pCamera->GetUp());
+	if (m_bDirtyView)
+	{
+		m_pCamera->ViewParams(m_pTransform->GetWordPosition()
+			, m_pTransform->GetWordPosition() + m_pCamera->GetForward() * m_pCamera->GetLookAtDistance()
+			, m_pCamera->GetUp());
+	}
 }
-
 

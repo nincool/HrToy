@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrCamera 
+	class HR_CORE_API HrCamera
 	{
 	public:
 		HrCamera();
@@ -54,6 +54,9 @@ namespace Hr
 
 		Matrix4 const& GetViewMatrix() const;
 		Matrix4 const& GetProjectMatrix() const;
+
+		void AttachCameraNode(HrCameraNode* pCameraNode);
+		HrCameraNode* GetAttachCameraNode() { return m_pAttachCameraNode; }
 	private:
 		float m_fLookAtDistance;
 
@@ -72,6 +75,8 @@ namespace Hr
 		float m_fFarPlane;
 
 		Matrix4 m_matProject;
+
+		HrCameraNode* m_pAttachCameraNode;
 	};
 }
 

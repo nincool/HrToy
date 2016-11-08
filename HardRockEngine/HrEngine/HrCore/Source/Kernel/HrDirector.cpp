@@ -166,6 +166,11 @@ void HrDirector::StartMainLoop()
 	{
 		m_pWindow->Update();
 
+		if (m_bEndMainLoop)
+		{
+			break;
+		}
+
 		Update();
 	}
 }

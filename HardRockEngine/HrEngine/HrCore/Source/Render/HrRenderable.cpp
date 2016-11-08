@@ -2,6 +2,7 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
+#include "Render/HrRenderFrameParameters.h"
 #include "Kernel/HrDirector.h"
 
 
@@ -30,6 +31,7 @@ HrRenderTechnique* HrRenderable::GetRenderTechnique()
 
 void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters)
 {
+	renderFrameParameters.SetCurrentRenderable(this);
 	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
 }
 

@@ -30,7 +30,6 @@
 //#define BOOST_DISABLE_ASSERTS
 #include <boost/assert.hpp>
 
-
 #endif //__HR_CONFIG_H__
 
 

@@ -37,6 +37,7 @@ LRESULT CALLBACK Hr::HrWin32WindowEventUtilities::WinProc(HWND hWnd, UINT messag
 		case WM_CLOSE:
 		{
 			HrDirector::Instance()->End();
+
 			break;
 		}
 		case WM_RBUTTONDOWN://鼠标消息

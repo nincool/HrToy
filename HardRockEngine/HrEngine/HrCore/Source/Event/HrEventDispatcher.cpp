@@ -63,7 +63,7 @@ void HrEventDispatcher::DispatcherEvent(HrEvent* pEvent)
 void HrEventDispatcher::DispatcherKeyBoardEvent(HrEvent* pEvent)
 {
 	size_t nEventListenerID = HrEventListenerKeyboard::m_s_nEventListenerKeyboardHashID;
-	auto& listListenersItem = m_mapEventListener.find(nEventListenerID);
+	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
 	if (listListenersItem != m_mapEventListener.end())
 	{
 		for (auto& listItem : listListenersItem->second)

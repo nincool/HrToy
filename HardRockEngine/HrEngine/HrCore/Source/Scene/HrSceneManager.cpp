@@ -1,6 +1,6 @@
 #include "Scene/HrSceneManager.h"
 #include "Scene/HrScene.h"
-#include "Scene/HrSceneNode.h"
+#include "Scene/HrCameraNode.h"
 #include "Render/HrRender.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrRenderable.h"
@@ -12,7 +12,6 @@
 #include "Render/HrViewPort.h"
 #include "Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
-
 
 using namespace Hr;
 
@@ -72,9 +71,11 @@ void HrSceneManager::RenderScene(HrRenderTargetPtr& renderTarget)
 	for (auto& itemViewPorts : mapViewPorts)
 	{
 		HrViewPort* pViewPort = itemViewPorts.second;
-		m_pCurrentCamera = pViewPort->GetCamera();
 		HrDirector::Instance()->GetRenderEngine()->SetCurrentViewPort(pViewPort);
-		m_pRenderParameters->SetCurrentCamera(m_pCurrentCamera);
+
+		//transfrom current camera
+		pViewPort->GetCamera()->GetAttachCameraNode()->UpdateNode();
+		m_pRenderParameters->SetCurrentCamera(pViewPort->GetCamera());
 
 		m_pRenderQueue->PrepareRenderQueue();
 		m_pRunningScene->FillRenderQueue(m_pRenderQueue);
@@ -100,10 +101,9 @@ void HrSceneManager::FlushScene()
 		pRenderable = itemMapRenderable.first;
 		pSceneNode = itemMapRenderable.second;
 
-		m_pRenderParameters->SetCurrentRenderable(pRenderable);
-		pSceneNode->UpdateNode(*(m_pRenderParameters.get()));
+		pSceneNode->UpdateNode();
+		pSceneNode->UpdateRenderParamData(*(m_pRenderParameters.get()));
 
-		pRenderable = pSceneNode->GetRenderable();
 		HrRenderLayout* pRenderLayout = pRenderable->GetRenderLayout();
 		HrRenderTechnique* pRenderTechnique = pRenderable->GetRenderTechnique();
 

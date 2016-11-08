@@ -77,6 +77,9 @@ namespace Hr
 	
 	class HrScheduler;
 	typedef std::shared_ptr<HrScheduler> HrSchedulerPtr;
+
+	class HrTransform;
+	typedef std::shared_ptr<HrTransform> HrTransformPtr;
 }
 
 
