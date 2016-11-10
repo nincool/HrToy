@@ -16,7 +16,7 @@ namespace Hr
 
 		virtual void UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters);
 	protected:
-		HrRenderLayout* m_pRenderLayout;
+		HrMesh* m_pMesh;
 		HrRenderTechnique* m_pRenderTechnique;
 	};
 }

@@ -10,18 +10,19 @@ using namespace Hr;
 
 HrRenderable::HrRenderable()
 {	
-	m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
+	//m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
 	m_pRenderTechnique = nullptr;
 }
 
 HrRenderable::~HrRenderable()
 {
-	SAFE_DELETE(m_pRenderLayout);
+	//SAFE_DELETE(m_pRenderLayout);
 }
 
 HrRenderLayout* HrRenderable::GetRenderLayout()
 {
-	return m_pRenderLayout;
+	//return m_pRenderLayout;
+	 
 }
 
 HrRenderTechnique* HrRenderable::GetRenderTechnique()

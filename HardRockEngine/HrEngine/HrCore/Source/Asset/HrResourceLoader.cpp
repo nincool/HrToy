@@ -4,19 +4,19 @@
 
 using namespace Hr;
 
-bool HrResourceLoader::LoadFromFile(std::string strFilePath, HrStreamData& data)
+HrResourceLoader::HrResourceLoader()
 {
-	std::fstream fileData(strFilePath.c_str(), std::ios::ate | std::ios::in);
-	int64 nDataLength = fileData.tellg();
-	if (nDataLength == -1)
-	{
-		return false;
-	}
-	fileData.seekg(std::ios::beg);
-	void* pBuffer = data.ResizeBuffer(nDataLength);
 
-	fileData.read((char*)pBuffer, nDataLength);
-	fileData.close();
-
-	return true;
 }
+
+HrResourceLoader::~HrResourceLoader()
+{
+
+}
+
+void HrResourceLoader::SyncLoad(HrResource* pRes)
+{
+
+}
+
+

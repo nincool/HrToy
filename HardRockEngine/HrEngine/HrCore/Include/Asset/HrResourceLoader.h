@@ -2,13 +2,22 @@
 #define _HR_RESOURCELOADER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCommon/include/HrSingleton.h"
+
 
 namespace Hr
 {
-	class HrResourceLoader 
+	class HrResourceLoader : public HrSingleTon<HrResourceLoader>
 	{
 	public:
-		static bool LoadFromFile(std::string strFilePath, HrStreamData& data);
+		HrResourceLoader();
+		~HrResourceLoader();
+
+		void SyncLoad(HrResource* pRes);
+
+	private:
+
+
 	};
 }
 

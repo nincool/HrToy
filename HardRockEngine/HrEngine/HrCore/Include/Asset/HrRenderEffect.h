@@ -12,6 +12,7 @@ namespace Hr
 		virtual ~HrRenderEffect();
 
 		virtual size_t HashName() override;
+
 		virtual void Load() override;
 		virtual void Unload() override;
 

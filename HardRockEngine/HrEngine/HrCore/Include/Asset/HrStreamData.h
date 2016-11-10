@@ -18,9 +18,10 @@ namespace Hr
 		};
 
 		void SetReadDataType(EnumReadDataType readDataType);
-		//开辟对应空间
+
 		char* ResizeBuffer(uint64 nLength);
 		char* GetBufferPoint();
+		
 		uint64 GetBufferSize();
 
 		void ClearBuffer();

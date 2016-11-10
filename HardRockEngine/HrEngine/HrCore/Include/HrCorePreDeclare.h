@@ -36,6 +36,7 @@ namespace Hr
 	class HrRenderQueue;
 	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
 	class HrRenderable;
+	class HrMesh;
 	class HrRenderPass;
 	class HrRenderLayout;
 	class HrRenderTechnique;
@@ -80,6 +81,7 @@ namespace Hr
 
 	class HrTransform;
 	typedef std::shared_ptr<HrTransform> HrTransformPtr;
+
 }
 
 

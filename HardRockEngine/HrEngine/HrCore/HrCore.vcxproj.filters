@@ -247,6 +247,12 @@
     <ClInclude Include="Include\Scene\HrTransform.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrMesh.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrFileUtils.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -398,6 +404,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrTransform.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrMesh.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrFileUtils.cpp">
+      <Filter>Source\Kernel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

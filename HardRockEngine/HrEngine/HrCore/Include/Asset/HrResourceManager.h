@@ -2,23 +2,26 @@
 #define _HR_RESOURCEMANAGER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCommon/include/HrSingleton.h"
 
 namespace Hr
 {
-	class HrResourceManager 
+	class HrResourceManager : public HrSingleTon<HrResourceManager>
 	{
 	public:
 		HrResourceManager();
-		virtual ~HrResourceManager();
+		~HrResourceManager();
 
-		virtual void InitResourceManager();
+		void InitResourceManager();
 		
-		virtual HrResource* LoadResource(std::string strName, std::string strFilePath);
+		HrResource* LoadResource(std::string& strFile);
 		
-		virtual HrResource* GetResource(std::string strName);
+		HrResource* GetResource(std::string& strName);
 
 	protected:
-		std::unordered_map<size_t, HrResource*> m_mapResource;
+		HrResource* AddFBXResource(std::string& strFile);
+	protected:
+		std::unordered_map<size_t, HrResource*> m_mapPrefebModels;
 	};
 }
 

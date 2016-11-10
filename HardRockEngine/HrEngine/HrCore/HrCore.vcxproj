@@ -148,6 +148,7 @@
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\Kernel\HrApplication.h" />
     <ClInclude Include="Include\Kernel\HrDirector.h" />
+    <ClInclude Include="Include\Kernel\HrFileUtils.h" />
     <ClInclude Include="Include\Kernel\HrIDObject.h" />
     <ClInclude Include="Include\Kernel\HrInputManager.h" />
     <ClInclude Include="Include\Kernel\HrLog.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
+    <ClInclude Include="Include\Render\HrMesh.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
@@ -206,6 +208,7 @@
     <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
     <ClCompile Include="Source\Kernel\HrExport.cpp" />
+    <ClCompile Include="Source\Kernel\HrFileUtils.cpp" />
     <ClCompile Include="Source\Kernel\HrInputManager.cpp" />
     <ClCompile Include="Source\Kernel\HrLog.cpp" />
     <ClCompile Include="Source\Kernel\HrScheduler.cpp" />
@@ -220,6 +223,7 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp" />
+    <ClCompile Include="Source\Render\HrMesh.cpp" />
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />
