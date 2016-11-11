@@ -65,6 +65,12 @@
     <Filter Include="Source\Kernel">
       <UniqueIdentifier>{c86b751b-641f-4c19-a0d4-0eb021ad4999}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Asset\Loader">
+      <UniqueIdentifier>{e3b15fa4-ff98-4551-a4f2-bcbbccfc575c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Asset\Loader">
+      <UniqueIdentifier>{62c45853-a533-4c0f-b0f5-59425a6b8cf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
@@ -253,6 +259,15 @@
     <ClInclude Include="Include\Kernel\HrFileUtils.h">
       <Filter>Include\Kernel</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrPrefebModel.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\Loader\HrModelLoader.h">
+      <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h">
+      <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -410,6 +425,15 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrPrefebModel.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp">
+      <Filter>Source\Asset\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp">
+      <Filter>Source\Asset\Loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
