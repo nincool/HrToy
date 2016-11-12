@@ -7,6 +7,19 @@ namespace Hr
 {
 	typedef uint32 IDType;
 	
+	class HrRef
+	{
+	public:
+		HrRef() { m_nReferenceCount = 1; }
+		
+		void Retain() { ++m_nReferenceCount; }
+		void Release() { --m_nReferenceCount; }
+
+		uint32 GetReferenceCount() const { return m_nReferenceCount; }
+	protected:
+		uint32 m_nReferenceCount;
+	};
+
 	class HrID
 	{
 	public:
@@ -17,7 +30,7 @@ namespace Hr
 		}
 	};
 
-	class HrIDObject
+	class HrIDObject : public HrRef
 	{
 	public:
 		HrIDObject(IDType id) : m_nID(id){}

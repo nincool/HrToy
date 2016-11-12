@@ -52,12 +52,12 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
 
 	class HrStreamData;
-	class HrResourceManagerFactory;
-	typedef std::shared_ptr<HrResourceManagerFactory> HrResourceManagerFactoryPtr;
+	typedef std::shared_ptr<HrStreamData> HrStreamDataPtr;
 	class HrResource;
 	class HrResourceManager;
-	class HrRenderEffectManager;
-	typedef std::shared_ptr<HrRenderEffectManager> HrRenderEffectManagerPtr;
+	class HrModelLoader;
+	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
+
 	class HrRenderEffect;
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
@@ -65,6 +65,7 @@ namespace Hr
 	typedef std::shared_ptr<HrAssetSystemFactory> HrAssetSystemFactoryPtr;
 	class HrGeometryFactory;
 	typedef std::shared_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
+
 	
 	class HrGeometryBox;
 

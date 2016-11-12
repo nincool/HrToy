@@ -3,26 +3,25 @@
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Asset/HrMesh.h"
 #include "Kernel/HrDirector.h"
-
 
 using namespace Hr;
 
 HrRenderable::HrRenderable()
 {	
-	//m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
+	m_pMesh = nullptr;
+	m_pRenderEffect = nullptr;
 	m_pRenderTechnique = nullptr;
 }
 
 HrRenderable::~HrRenderable()
 {
-	//SAFE_DELETE(m_pRenderLayout);
 }
 
 HrRenderLayout* HrRenderable::GetRenderLayout()
 {
-	//return m_pRenderLayout;
-	 
+	return m_pMesh->GetRenderLayout();
 }
 
 HrRenderTechnique* HrRenderable::GetRenderTechnique()

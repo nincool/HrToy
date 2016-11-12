@@ -5,6 +5,20 @@
 
 namespace Hr
 {
+	/*
+	@brief	先临时弄出来一个Vertex结构，先跑起来再说 [11/11/2016 By Hr]
+	*/
+	class Vertex
+	{
+		Vertex(float3 p, float4 c)
+		{
+			position = p;
+			color = c;
+		}
+		float3 position;
+		float4 color;
+	};
+
 	class HrModelLoader
 	{
 	public:
@@ -12,12 +26,14 @@ namespace Hr
 		virtual ~HrModelLoader();
 
 	public:
-		virtual void Load(std::string& strFile) = 0;
-		
+		void Load(std::string& strFile);
+
+	public:
+		std::vector<Vertex> m_vecVertexBuffer;
+		std::vector<uint32> m_vecIndexBuffer;
 
 	};
 }
-
 
 #endif
 

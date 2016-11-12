@@ -25,7 +25,7 @@ namespace Hr
 
 		std::string GetAppPath() const;
 
-		std::shared_ptr<HrStreamData> GetFileData(const std::string& strFileName);
+		HrStreamDataPtr GetFileData(const std::string& strFileName);
 
 		void AddSearchPath(std::string& strPath);
 	private:

@@ -1,4 +1,4 @@
-#include "HrCore/Include/Asset/HrComponentFactory.h"
+#include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Render/HrCamera.h"
 #include "HrCore/Include/Render/HrViewPort.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
@@ -10,21 +10,21 @@
 using namespace Hr;
 
 
-HrComponentFactory::HrComponentFactory()
+HrSceneObjectFactory::HrSceneObjectFactory()
 {
 	m_pGeometryFactory = MakeSharedPtr<HrGeometryFactory>();
 }
 
-HrComponentFactory::~HrComponentFactory()
+HrSceneObjectFactory::~HrSceneObjectFactory()
 {
 }
 
-HrCameraNode* HrComponentFactory::CreateCamera()
+HrCameraNode* HrSceneObjectFactory::CreateCamera()
 {
 	return CreateCamera(0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
 }
 
-HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
+HrCameraNode* HrSceneObjectFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
 {
 	HrCamera* pCamera = HR_NEW HrCamera();
 	HrViewPort* pViewPort = HR_NEW HrViewPort(fLeft, fTop, fWidth, fHeight, nZOrder, pCamera);
@@ -34,7 +34,7 @@ HrCameraNode* HrComponentFactory::CreateCamera(float fLeft, float fTop, float fW
 }
 
 
-HrSceneNode* HrComponentFactory::CreateBox()
+HrSceneNode* HrSceneObjectFactory::CreateBox()
 {
 	return m_pGeometryFactory->CreateBox(10, 10, 10);
 }

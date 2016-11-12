@@ -178,13 +178,7 @@
     <ClInclude Include="Include\Asset\HrShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrComponentFactory.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrRenderEffect.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrRenderEffectManager.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrResource.h">
@@ -253,9 +247,6 @@
     <ClInclude Include="Include\Scene\HrTransform.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrMesh.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Kernel\HrFileUtils.h">
       <Filter>Include\Kernel</Filter>
     </ClInclude>
@@ -267,6 +258,12 @@
     </ClInclude>
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h">
       <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrMesh.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrSceneObjectFactory.h">
+      <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -360,13 +357,7 @@
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp">
       <Filter>Source\Platform\AppWin32</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrComponentFactory.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp">
@@ -420,9 +411,6 @@
     <ClCompile Include="Source\Scene\HrTransform.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrMesh.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp">
       <Filter>Source\Kernel</Filter>
     </ClCompile>
@@ -434,6 +422,12 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp">
       <Filter>Source\Asset\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrMesh.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp">
+      <Filter>Source\Asset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ namespace Hr
 		{
 			RT_TEXTURE,
 			RT_MESH,
-			RT_SHADER,
+			RT_EFFECT,
 			RT_MATERIAL,
 			RT_MODEL,
 		};
@@ -20,7 +20,7 @@ namespace Hr
 		HrResource() { m_bLoaded = false; };
 		virtual ~HrResource() {};
 
-		virtual void DeclareResource(std::string& strFilePath, std::string& strFileName) = 0;
+		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) = 0;
 
 		std::string& GetFilePath() { return m_strFilePath; }
 		std::string& GetFileName() { return m_strFileName; }

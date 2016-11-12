@@ -3,7 +3,8 @@
 #include "HrCore/Include/Asset/HrGeometryBox.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
-#include "HrCore/Include/Asset/HrComponentFactory.h"
+#include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrCore/Include/Kernel/HrScheduler.h"
 
@@ -41,10 +42,10 @@ void HrGeometryScene::OnEnter()
 void HrGeometryScene::CreateSceneElements()
 {
 	//Ìí¼ÓÉãÏñ»ú
-	m_pSceneMainCamera = HrDirector::Instance()->GetComponentFactory()->CreateCamera();
+	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
 
-	HrSceneNode* pBox = HrDirector::Instance()->GetComponentFactory()->CreateBox();
+	HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
 	AddSceneNode(pBox);
 }
 

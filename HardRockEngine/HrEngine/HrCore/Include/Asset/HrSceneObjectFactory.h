@@ -1,17 +1,18 @@
-#ifndef _HR_COMPONENTFACTORY_H_
-#define _HR_COMPONENTFACTORY_H_
+#ifndef _HR_SCENEOBJECTFACTORY_H_
+#define _HR_SCENEOBJECTFACTORY_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCommon/include/HrSingleton.h"
 
 namespace Hr
 {
 	class HrModuleLoader;
 
-	class HR_CORE_API HrComponentFactory
+	class HR_CORE_API HrSceneObjectFactory : public HrSingleTon<HrSceneObjectFactory>
 	{
 	public:
-		HrComponentFactory();
-		~HrComponentFactory();
+		HrSceneObjectFactory();
+		~HrSceneObjectFactory();
 
 		HrCameraNode* CreateCamera();
 		HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
@@ -19,8 +20,6 @@ namespace Hr
 
 	private:
 		//资源模块加载
-		std::unique_ptr<HrModuleLoader> m_pAssetModuleLoader;
-		HrAssetSystemFactoryPtr m_pAssetSystemFactory;
 		HrGeometryFactoryPtr m_pGeometryFactory;
 	};
 }

@@ -5,16 +5,15 @@
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "Kernel/HrFileUtils.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
 
 using namespace Hr;
 
-HrRenderEffect::HrRenderEffect(std::string strEffectName, std::string strFilePath)
-	:m_strEffectName(strEffectName), m_strFilePath(strFilePath)
+HrRenderEffect::HrRenderEffect()
 {
-	m_nHashName = HrHashValue(m_strEffectName);
 }
 
 HrRenderEffect::~HrRenderEffect()
@@ -26,15 +25,18 @@ HrRenderEffect::~HrRenderEffect()
 	m_vecRenderTechnique.clear();
 }
 
-size_t HrRenderEffect::HashName()
+void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
-	return m_nHashName;
+	m_strFilePath = strFilePath;
+	m_strFileName = strFileName;
+	m_resType = HrResource::RT_EFFECT;
+
+	m_nHashID = HrHashValue(m_strFilePath);
 }
 
 void HrRenderEffect::Load()
 {
-	HrStreamData streamData;
-	streamData.SetReadDataType(HrStreamData::RDT_TXT);
+	HrStreamDataPtr pSteamData;
 
 	typedef boost::property_tree::ptree::value_type ptValue;
 	boost::property_tree::ptree pt;
@@ -47,11 +49,7 @@ void HrRenderEffect::Load()
 			m_strEffectFile = rootEffectValue.second.get_value<std::string>();
 
 			//加载Shader文件
-			if (!HrResourceLoader::LoadFromFile(m_strEffectFile, streamData))
-			{
-				HRERROR("HrRenderEffect LoadFromFile Error! File[%s]", m_strEffectFile.c_str());
-				return;
-			}
+			pSteamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
 		}
 		else if (rootEffectValue.first == "technique")
 		{
@@ -88,7 +86,7 @@ void HrRenderEffect::Load()
 						}
 					}
 					//创建shader
-					pRenderPass->StreamIn(streamData);
+					pRenderPass->StreamIn(*pSteamData.get());
 				}
 			}
 		}
@@ -103,7 +101,7 @@ void HrRenderEffect::Unload()
 
 HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
 {
-	size_t const nHashName = boost::hash_range(strTechniqueName.begin(), strTechniqueName.end());
+	size_t const nHashName = HrHashValue(strTechniqueName);
 	for (const auto& item : m_vecRenderTechnique)
 	{
 		if (item->GetHashName() == nHashName)

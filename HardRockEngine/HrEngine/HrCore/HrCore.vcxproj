@@ -89,11 +89,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_CORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>HrOISD.lib;HrMathD.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir);..\ThirdParty</AdditionalLibraryDirectories>
+      <AdditionalDependencies>HrOISD.lib;HrMathD.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);..\ThirdParty\FBXSDK\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,13 +127,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\Asset\HrColor.h" />
-    <ClInclude Include="Include\Asset\HrComponentFactory.h" />
+    <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryBox.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryTriangle.h" />
+    <ClInclude Include="Include\Asset\HrMesh.h" />
     <ClInclude Include="Include\Asset\HrPrefebModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
-    <ClInclude Include="Include\Asset\HrRenderEffectManager.h" />
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
@@ -169,7 +170,6 @@
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
-    <ClInclude Include="Include\Render\HrMesh.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
@@ -193,13 +193,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Asset\HrColor.cpp" />
-    <ClCompile Include="Source\Asset\HrComponentFactory.cpp" />
+    <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryTriangle.cpp" />
+    <ClCompile Include="Source\Asset\HrMesh.cpp" />
     <ClCompile Include="Source\Asset\HrPrefebModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
-    <ClCompile Include="Source\Asset\HrRenderEffectManager.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
@@ -229,7 +229,6 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrHardwareBuffer.cpp" />
-    <ClCompile Include="Source\Render\HrMesh.cpp" />
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />

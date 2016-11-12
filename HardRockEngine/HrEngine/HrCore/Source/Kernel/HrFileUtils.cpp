@@ -11,8 +11,12 @@ HrFileUtils::HrFileUtils()
 	char cBuf[MAX_PATH];
 	::GetModuleFileNameA(nullptr, cBuf, sizeof(cBuf));
 	m_strAppPath = cBuf;
-	m_strAppPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\"));
+	m_strAppPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\") + 1);
 	AddSearchPath(m_strAppPath);
+	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\") + 1);
+	AddSearchPath(strAssetPath);
+	strAssetPath = strAssetPath + "\\Media\\";
+	AddSearchPath(strAssetPath);
 }
 
 bool HrFileUtils::IsFileExist(const std::string& strFile) const
@@ -71,9 +75,9 @@ std::string HrFileUtils::GetAppPath() const
 	return m_strAppPath;
 }
 
-std::shared_ptr<HrStreamData> HrFileUtils::GetFileData(const std::string& strFileName)
+HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFileName)
 {
-	std::shared_ptr<HrStreamData> pFileStream = std::make_shared<HrStreamData>();
+	HrStreamDataPtr pFileStream = std::make_shared<HrStreamData>();
 
 	std::string strFullPath = GetFullPathForFileName(strFileName);
 	if (strFullPath.empty())

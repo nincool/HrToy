@@ -8,16 +8,15 @@ namespace Hr
 	class HrRenderEffect : public HrResource
 	{
 	public:
-		HrRenderEffect(std::string strEffectName, std::string strFilePath);
+		HrRenderEffect();
 		virtual ~HrRenderEffect();
 
-		virtual size_t HashName() override;
+		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		virtual void Load() override;
 		virtual void Unload() override;
 
 		HrRenderTechnique* GetTechnique(std::string strTechniqueName);
-
 	private:
 		size_t m_nHashName;
 

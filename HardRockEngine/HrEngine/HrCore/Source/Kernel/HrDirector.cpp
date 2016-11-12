@@ -11,8 +11,7 @@
 #include "Render/HrRenderTarget.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFactory.h"
-#include "Asset/HrComponentFactory.h"
-#include "Asset/HrRenderEffectManager.h"
+#include "Asset/HrResourceManager.h"
 #include "Config/HrContextConfig.h"
 
 using namespace Hr;
@@ -136,9 +135,7 @@ void HrDirector::ReleaseRenderTarget()
 
 bool HrDirector::CreateResourceManager()
 {
-	m_pRenderEffectManager = MakeSharedPtr<HrRenderEffectManager>();
-	m_pRenderEffectManager->InitResourceManager();
-	m_pComponentFactory = MakeSharedPtr<HrComponentFactory>();
+	HrResourceManager::Instance()->InitResourceManager();
 
 	return true;
 }

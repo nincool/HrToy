@@ -44,16 +44,6 @@ namespace Hr
 			return m_pWindow;
 		}
 
-		const HrComponentFactoryPtr& GetComponentFactory()
-		{
-			return m_pComponentFactory;
-		}
-
-		const HrRenderEffectManagerPtr& GetRenderEffectManager()
-		{
-			return m_pRenderEffectManager;
-		}
-
 		const HrSchedulerPtr& GetScheduler()
 		{
 			return m_pScheduler;
@@ -99,13 +89,8 @@ namespace Hr
 		HrRenderPtr m_pRenderEngine;
 		//渲染目标
 		HrRenderTargetPtr m_pRenderTarget;		
-		
-		HrRenderEffectManagerPtr m_pRenderEffectManager;
-
 		//场景管理器
 		HrSceneManagerPtr m_pSceneManager;
-
-		HrComponentFactoryPtr m_pComponentFactory;
 
 		HrSchedulerPtr m_pScheduler;
 

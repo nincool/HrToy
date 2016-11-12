@@ -1,24 +1,31 @@
-#ifndef _HR_PREFEBMODEL_H_
-#define _HR_PREFEBMODEL_H_
+#ifndef _HR_MESH_H_
+#define _HR_MESH_H_
 
 #include "HrCore/Include/Asset/HrResource.h"
 
 namespace Hr
 {
-	class HrPrefebModel : public HrResource
+	class HrMesh : public HrResource
 	{
 	public:
-		HrPrefebModel();
-		~HrPrefebModel();
-	
+		HrMesh();
+		virtual ~HrMesh();
+
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		virtual void Load() override;
 		virtual void Unload() override;
+
+		HrRenderLayout* GetRenderLayout();
 	protected:
-		HrMesh* m_pMesh;
+		HrRenderLayout* m_pRenderLayout;
+
+
 	};
 }
 
+
 #endif
+
+
 
