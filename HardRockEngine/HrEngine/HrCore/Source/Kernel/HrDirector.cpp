@@ -106,6 +106,9 @@ bool HrDirector::CreateRenderEngine()
 
 void HrDirector::ReleaseRenderEngine()
 {
+	m_pRenderTarget.reset();
+	m_pRenderEngine.reset();
+	
 	m_pRenderFactory.reset();
 
 	typedef void(*RENDER_RELEASE_FUNC)();

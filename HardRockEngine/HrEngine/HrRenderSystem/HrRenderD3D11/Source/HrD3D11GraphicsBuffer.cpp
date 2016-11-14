@@ -44,6 +44,7 @@ void HrD3D11GraphicsBuffer::BindStream(char* pBuffer
 	BOOST_ASSERT(m_pD3D11Buffer == nullptr);
 
 	HrGraphicsBuffer::BindStream(pBuffer, nBufferSize, usage, bindFlag);
+	CreateHardwareBuffer(pBuffer);
 }
 
 void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
@@ -56,7 +57,7 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 
 	D3D11_SUBRESOURCE_DATA subResourceData = { 0 };
 	D3D11_SUBRESOURCE_DATA* pSubResourceData = nullptr;
-
+	if (pResourceData != nullptr)
 	{
 		subResourceData.pSysMem = pResourceData;
 		subResourceData.SysMemPitch = 0;
