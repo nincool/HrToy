@@ -2,7 +2,6 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/HrVertex.h"
-#include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrMath/Include/HrMath.h"

@@ -25,7 +25,6 @@ namespace Hr
 	private:
 		const HrRenderable* m_pCurrentRenderable;
 		HrCamera* m_pCurrentCamera;
-
 	};
 }
 

@@ -36,8 +36,8 @@ namespace Hr
 		void ReadMesh(fbxsdk::FbxNode* pNode, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
 
 	private:
-		std::vector<Vector3> m_vecVertexPosition;
-		std::vector<uint32> m_vecIndexBuffer;
+		//std::vector<Vector3> m_vecVertexPosition;
+		//std::vector<uint32> m_vecIndexBuffer;
 	};
 }
 

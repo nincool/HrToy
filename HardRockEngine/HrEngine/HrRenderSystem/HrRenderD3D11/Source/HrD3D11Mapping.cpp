@@ -1,4 +1,5 @@
 #include "HrD3D11Mapping.h"
+#include <boost/assert.hpp>
 
 using namespace Hr;
 
@@ -109,6 +110,90 @@ DXGI_FORMAT HrD3D11Mapping::GetIndexBufferFormat(EnumIndexType indexType)
 	}
 }
 
+D3D11_USAGE HrD3D11Mapping::GetGraphicsUsage(HrGraphicsBuffer::EnumGraphicsBufferUsage usage)
+{
+	switch (usage)
+	{
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE:
+		return D3D11_USAGE_DEFAULT;
+	case HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE:
+		return D3D11_USAGE_DYNAMIC;
+	case HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE:
+		return D3D11_USAGE_IMMUTABLE;
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE:
+		return D3D11_USAGE_STAGING;
+		break;
+	default:
+		BOOST_ASSERT(nullptr);
+	}
+	return D3D11_USAGE_DEFAULT;
+}
 
+UINT HrD3D11Mapping::GetCPUAccessFlag(HrGraphicsBuffer::EnumGraphicsBufferUsage usage)
+{
+	switch (usage)
+	{
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE:
+		return 0;
+	case HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE:
+		return D3D11_CPU_ACCESS_WRITE;
+	case HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE:
+		return 0;
+	case HrGraphicsBuffer::HBU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE:
+		return (D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ);
+	default:
+		return 0;
+	}
 
+}
+
+D3D11_BIND_FLAG HrD3D11Mapping::GetGraphicsBindFlag(HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag)
+{
+	switch (bindFlag)
+	{
+	case HrGraphicsBuffer::HBB_VERTEXT:
+		return D3D11_BIND_VERTEX_BUFFER;
+	case HrGraphicsBuffer::HBB_INDEX:
+		return D3D11_BIND_INDEX_BUFFER;
+	case HrGraphicsBuffer::HBB_CONST:
+		return D3D11_BIND_CONSTANT_BUFFER;
+	default:
+		BOOST_ASSERT(nullptr);
+	}
+	return D3D11_BIND_VERTEX_BUFFER;
+}
+
+D3D11_MAP HrD3D11Mapping::GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag)
+{
+	D3D11_USAGE d3d11BufferUsage = GetGraphicsUsage(usage);
+	BOOST_ASSERT(d3d11BufferUsage != D3D11_USAGE_DEFAULT && d3d11BufferUsage != D3D11_USAGE_IMMUTABLE);
+	UINT d3dCPUAccessFlag = GetCPUAccessFlag(usage);
+	BOOST_ASSERT(d3dCPUAccessFlag > 0);
+
+	switch (accessFlag)
+	{
+	case HrGraphicsBuffer::HBA_READ_ONLY:
+		BOOST_ASSERT(d3dCPUAccessFlag & D3D11_CPU_ACCESS_READ);
+		return D3D11_MAP_READ;
+	case HrGraphicsBuffer::HBA_WRITE_ONLY:
+		BOOST_ASSERT(d3dCPUAccessFlag & D3D11_CPU_ACCESS_WRITE);
+		if (d3d11BufferUsage == D3D11_USAGE_DYNAMIC)
+		{
+			return D3D11_MAP_WRITE_DISCARD;
+		}
+		else
+		{
+			return D3D11_MAP_WRITE;
+		}
+	case HrGraphicsBuffer::HBA_READ_WRITE:
+		BOOST_ASSERT(d3dCPUAccessFlag & D3D11_CPU_ACCESS_READ && d3dCPUAccessFlag & D3D11_CPU_ACCESS_WRITE);
+		return D3D11_MAP_READ_WRITE;
+	case HrGraphicsBuffer::HBA_WRITE_NO_OVEWRITE:
+		BOOST_ASSERT(d3dCPUAccessFlag & D3D11_CPU_ACCESS_WRITE);
+		return D3D11_MAP_WRITE_NO_OVERWRITE; // This flag is only valid on vertex and index buffers
+	default:
+		BOOST_ASSERT(nullptr);
+		return D3D11_MAP_READ;
+	}
+}
 

@@ -10,13 +10,16 @@ HrFileUtils::HrFileUtils()
 {
 	char cBuf[MAX_PATH];
 	::GetModuleFileNameA(nullptr, cBuf, sizeof(cBuf));
-	m_strAppPath = cBuf;
-	m_strAppPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\") + 1);
-	AddSearchPath(m_strAppPath);
-	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\") + 1);
-	AddSearchPath(strAssetPath);
-	strAssetPath = strAssetPath + "\\Media\\";
-	AddSearchPath(strAssetPath);
+	std::string strAppPath = cBuf;
+
+	m_strAppPath = strAppPath.substr(0, strAppPath.rfind("\\"));
+	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\"));
+
+	AddSearchPath(m_strAppPath += "\\");
+	AddSearchPath(strAssetPath + "\\");
+	AddSearchPath(strAssetPath + "\\Media\\");
+	AddSearchPath(strAssetPath + "\\Media\\HrShader\\");
+	AddSearchPath(strAssetPath + "\\Media\\Model\\");
 }
 
 bool HrFileUtils::IsFileExist(const std::string& strFile) const
@@ -98,7 +101,7 @@ HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFileName)
 	return pFileStream;
 }
 
-void HrFileUtils::AddSearchPath(std::string& strPath)
+void HrFileUtils::AddSearchPath(const std::string& strPath)
 {
 	m_vecSearchPaths.emplace_back(filesystem::path(strPath));
 }

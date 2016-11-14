@@ -46,13 +46,13 @@
     <ClInclude Include="Include\HrD3D11Shader.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\HrD3D11HardwareBuffer.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrD3D11Mapping.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\HrD3D11ShaderCompiler.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrD3D11GraphicsBuffer.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,13 +87,13 @@
     <ClCompile Include="Source\HrD3D11Shader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HrD3D11HardwareBuffer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\HrD3D11Mapping.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11ShaderCompiler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

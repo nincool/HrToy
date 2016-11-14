@@ -22,7 +22,6 @@ namespace Hr
 			return m_strName;
 		}
 
-		void SetSize(uint64 nSize);
 		uint64 GetSize();
 
 		void AddParameter(const std::string& strName
@@ -30,14 +29,16 @@ namespace Hr
 			, HrRenderParameter::EnumRenderParamDataType rpdt
 			, uint32 nStartOffset);
 
+		void MakeConstBuffer(uint32 nSize);
+
 		HrGraphicsBuffer* GetConstBuffer();
 
-		void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters);
+		void UpdateParams(HrRenderFrameParameters& renderFrameParameters);
 	private:
 		std::string m_strName;
 		HrStreamData* m_pStreamData;
 
-		HrGraphicsBuffer* m_pRenderHardwareBuffer;
+		HrGraphicsBuffer* m_pRenderBuffer;
 		std::vector<HrRenderParameter*> m_vecRenderParameter;
 
 	};

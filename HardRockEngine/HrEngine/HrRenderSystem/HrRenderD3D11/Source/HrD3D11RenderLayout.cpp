@@ -2,7 +2,7 @@
 #include "HrD3D11Device.h"
 #include "HrD3D11Mapping.h"
 #include "HrD3D11Shader.h"
-#include "HrD3D11HardwareBuffer.h"
+#include "HrD3D11GraphicsBuffer.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Kernel/HrLog.h"
@@ -62,12 +62,12 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 
 ID3D11Buffer* HrD3D11RenderLayout::GetVertexBuffer()
 {
-	return static_cast<HrD3D11HardwareBuffer*>(m_pHDVertexBuffer)->GetGraphicsBuffer();
+	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDVertexBuffer)->GetGraphicsBuffer();
 }
 
 ID3D11Buffer* HrD3D11RenderLayout::GetIndexBuffer()
 {
-	return static_cast<HrD3D11HardwareBuffer*>(m_pHDIndexBuffer)->GetGraphicsBuffer();
+	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDIndexBuffer)->GetGraphicsBuffer();
 }
 
 

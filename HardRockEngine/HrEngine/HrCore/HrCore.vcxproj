@@ -137,7 +137,6 @@
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
-    <ClInclude Include="Include\Asset\HrShaderCompiler.h" />
     <ClInclude Include="Include\Asset\HrStreamData.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
@@ -168,7 +167,6 @@
     <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
-    <ClInclude Include="Include\Render\HrHardwareBuffer.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
@@ -202,7 +200,6 @@
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
-    <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
@@ -228,7 +225,7 @@
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
-    <ClCompile Include="Source\Render\HrHardwareBuffer.cpp" />
+    <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />

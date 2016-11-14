@@ -1,12 +1,15 @@
 #include "Asset/HrMesh.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
+#include "HrCore/Include/Render/HrRenderFactory.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
 
 HrMesh::HrMesh()
 {
-	m_pRenderLayout = new HrRenderLayout();
+	//for test
+	m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
 }
 
 HrMesh::~HrMesh()

@@ -61,11 +61,8 @@ namespace Hr
 	class HrRenderEffect;
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
-	class HrAssetSystemFactory;
-	typedef std::shared_ptr<HrAssetSystemFactory> HrAssetSystemFactoryPtr;
 	class HrGeometryFactory;
 	typedef std::shared_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
-
 	
 	class HrGeometryBox;
 

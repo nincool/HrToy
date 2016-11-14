@@ -2,7 +2,7 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
-#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11HardwareBuffer.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11GraphicsBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
@@ -38,7 +38,7 @@ HrVertex* HrD3D11RenderFactory::CreateVertex()
 
 HrGraphicsBuffer* HrD3D11RenderFactory::CreateHardwareBuffer()
 {
-	return HR_NEW HrD3D11HardwareBuffer(HrD3D11Device::Instance()->GetDevice(), HrD3D11Device::Instance()->GetImmediateContext());
+	return HR_NEW HrD3D11GraphicsBuffer(HrD3D11Device::Instance()->GetDevice(), HrD3D11Device::Instance()->GetImmediateContext());
 }
 
 HrRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()

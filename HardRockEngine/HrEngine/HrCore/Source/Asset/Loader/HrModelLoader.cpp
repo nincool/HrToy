@@ -23,5 +23,7 @@ void HrModelLoader::Load(std::string& strFile)
 		std::shared_ptr<HrFBXLoader> pFBXLoader = MakeSharedPtr<HrFBXLoader>();
 		pFBXLoader->Load(strFile, m_vecVertexBuffer, m_vecIndexBuffer);
 	}
+
+	
 }
 

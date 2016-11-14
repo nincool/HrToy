@@ -4,6 +4,7 @@
 #include "HrConfig.h"
 #include "HrPlatformConfig.h"
 #include "HrMacros.h"
+#include "HrThrowException.h"
 
 #include <string>
 #include <vector>

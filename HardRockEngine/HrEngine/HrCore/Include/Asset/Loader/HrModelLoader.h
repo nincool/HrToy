@@ -10,6 +10,7 @@ namespace Hr
 	*/
 	class Vertex
 	{
+	public:
 		Vertex(float3 p, float4 c)
 		{
 			position = p;
@@ -28,6 +29,7 @@ namespace Hr
 	public:
 		void Load(std::string& strFile);
 
+		
 	public:
 		std::vector<Vertex> m_vecVertexBuffer;
 		std::vector<uint32> m_vecIndexBuffer;

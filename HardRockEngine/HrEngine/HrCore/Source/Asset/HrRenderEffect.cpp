@@ -27,7 +27,8 @@ HrRenderEffect::~HrRenderEffect()
 
 void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
-	m_strFilePath = strFilePath;
+	m_strFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFilePath);
+	HRASSERT(!m_strFilePath.empty(), "HrRenderEffect::DeclareResource");
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_EFFECT;
 

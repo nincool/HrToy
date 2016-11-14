@@ -146,6 +146,7 @@
     <ClInclude Include="include\HrPlatformConfig.h" />
     <ClInclude Include="Include\HrPrerequisite.h" />
     <ClInclude Include="include\HrSingleton.h" />
+    <ClInclude Include="include\HrThrowException.h" />
     <ClInclude Include="include\HrWin32Specific.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

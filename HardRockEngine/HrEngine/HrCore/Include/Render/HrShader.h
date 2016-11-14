@@ -26,7 +26,7 @@ namespace Hr
 
 		virtual void StreamIn(HrStreamData& streamData);
 
-		virtual void UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters);
+		virtual void UpdateParams(HrRenderFrameParameters& renderFrameParameters);
 
 	protected:
 		HrRenderConstantBuffer* AddRenderConstantBuffer();

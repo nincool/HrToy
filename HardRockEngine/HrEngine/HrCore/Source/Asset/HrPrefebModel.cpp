@@ -1,8 +1,8 @@
 #include "Asset/HrPrefebModel.h"
+#include "Asset/Loader/HrModelLoader.h"
 #include "Asset/Loader/HrFBXLoader.h"
 #include "Kernel/HrFileUtils.h"
 #include "HrUtilTools/Include/HrUtil.h"
-#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 
 
 using namespace Hr;
@@ -29,6 +29,8 @@ void HrPrefebModel::DeclareResource(const std::string& strFileName, const std::s
 
 void HrPrefebModel::Load()
 {
+	HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
+	pModelLoader->Load(m_strFilePath);
 }
 
 void HrPrefebModel::Unload()

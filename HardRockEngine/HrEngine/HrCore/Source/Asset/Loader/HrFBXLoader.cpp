@@ -1,5 +1,6 @@
 #include "HrCore/Include/Asset/Loader/HrFBXLoader.h"
-
+#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
+#include "HrCore/Include/Asset/HrColor.h"
 #include "fbxsdk.h"
 
 using namespace Hr;
@@ -240,14 +241,16 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, std::vector<Vertex>& vecVertex, std::
 		float y = static_cast<float>(pControlPoints[i][1]);
 		float z = static_cast<float>(pControlPoints[i][2]);
 
-		m_vecVertexPosition.push_back(Vector3(x, y, z));
+		//m_vecVertexPosition.push_back(Vector3(x, y, z));
+		vecVertex.push_back(Vertex(Vector3(x, y, z), HrColor::F4Black));
 	}
 
 	int nIndexCount = pMesh->GetPolygonVertexCount();
 	int* pIndexContent = pMesh->GetPolygonVertices();
 	for (int i = 0; i < nIndexCount; ++i)
 	{
-		m_vecIndexBuffer.push_back(pIndexContent[i]);
+		//m_vecIndexBuffer.push_back(pIndexContent[i]);
+		vecIndexBuffer.push_back(pIndexContent[i]);
 	}
 
 }

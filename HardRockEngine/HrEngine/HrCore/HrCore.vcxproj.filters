@@ -106,9 +106,6 @@
     <ClInclude Include="Include\Scene\HrSceneNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrHardwareBuffer.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderQueue.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -174,9 +171,6 @@
     </ClInclude>
     <ClInclude Include="Include\Render\HrGraphicsBuffer.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrShaderCompiler.h">
-      <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrRenderEffect.h">
       <Filter>Include\Asset</Filter>
@@ -297,9 +291,6 @@
     <ClCompile Include="Source\Scene\HrSceneNode.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrHardwareBuffer.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\HrScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -317,9 +308,6 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrShader.cpp">
       <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
-      <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrColor.cpp">
       <Filter>Source\Asset</Filter>
@@ -428,6 +416,9 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp">
       <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

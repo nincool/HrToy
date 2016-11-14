@@ -1,5 +1,4 @@
 #include "HrCore/Include/Render/HrShader.h"
-#include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderConstantBuffer.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
 
@@ -25,7 +24,7 @@ void HrShader::SetShaderType(EnumShaderType shaderType)
 	m_shaderType = shaderType;
 }
 
-void HrShader::UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters)
+void HrShader::UpdateParams(HrRenderFrameParameters& renderFrameParameters)
 {
 }
 

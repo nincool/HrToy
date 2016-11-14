@@ -65,7 +65,7 @@ void HrRenderPass::UpdateShaderParams(HrRenderFrameParameters& renderFrameParame
 {
 	if (m_pVertexShader)
 	{
-		m_pVertexShader->UpdateAutoParams(renderFrameParameters);
+		m_pVertexShader->UpdateParams(renderFrameParameters);
 	}
 }
 

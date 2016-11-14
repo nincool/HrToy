@@ -2,7 +2,6 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
 #include "HrCore/Include/Render/HrVertex.h"
-#include "HrCore/Include/Render/HrHardwareBuffer.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Asset/HrColor.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
@@ -40,7 +39,7 @@ void HrGeometryBox::InitRenderLayout()
 
 void HrGeometryBox::BindVertexStream()
 {
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("BasicEffect.hxml", HrResource::RT_EFFECT));
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("HrBasicEffect.effectxml", HrResource::RT_EFFECT));
 	m_pRenderTechnique = pRenderEffect->GetTechnique("Basic");
 	
 	struct Vertex

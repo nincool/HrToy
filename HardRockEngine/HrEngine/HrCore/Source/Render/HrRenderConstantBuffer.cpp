@@ -1,8 +1,8 @@
 #include "Render/HrRenderConstantBuffer.h"
-#include "Render/HrHardwareBuffer.h"
 #include "Render/HrRenderParameter.h"
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderFactory.h"
+#include "Render/HrGraphicsBuffer.h"
 #include "Asset/HrStreamData.h"
 #include "HrMath/Include/HrMath.h"
 #include "Kernel/HrDirector.h"
@@ -12,15 +12,15 @@ using namespace Hr;
 HrRenderConstantBuffer::HrRenderConstantBuffer()
 {
 	m_pStreamData = nullptr;
-	m_pRenderHardwareBuffer = nullptr;
+	m_pRenderBuffer = nullptr;
 	m_pStreamData = HR_NEW HrStreamData();
-	m_pRenderHardwareBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pRenderBuffer = nullptr;//HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
 }
 
 HrRenderConstantBuffer::~HrRenderConstantBuffer()
 {
 	SAFE_DELETE(m_pStreamData);
-	SAFE_DELETE(m_pRenderHardwareBuffer);
+	SAFE_DELETE(m_pRenderBuffer);
 	for (auto& item : m_vecRenderParameter)
 	{
 		SAFE_DELETE(item);
@@ -31,11 +31,6 @@ HrRenderConstantBuffer::~HrRenderConstantBuffer()
 uint64 HrRenderConstantBuffer::GetSize()
 {
 	return m_pStreamData->GetBufferSize();
-}
-
-void HrRenderConstantBuffer::SetSize(uint64 nSize)
-{
-
 }
 
 void HrRenderConstantBuffer::AddParameter(const std::string& strName
@@ -51,12 +46,19 @@ void HrRenderConstantBuffer::AddParameter(const std::string& strName
 	m_vecRenderParameter.push_back(pRenderParameter);
 }
 
-HrGraphicsBuffer* HrRenderConstantBuffer::GetConstBuffer()
+void HrRenderConstantBuffer::MakeConstBuffer(uint32 nSize)
 {
-	return m_pRenderHardwareBuffer;
+	BOOST_ASSERT(!m_pRenderBuffer);
+	m_pRenderBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pRenderBuffer->BindStream(nullptr, nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 
-void HrRenderConstantBuffer::UpdateAutoParams(HrRenderFrameParameters& renderFrameParameters)
+HrGraphicsBuffer* HrRenderConstantBuffer::GetConstBuffer()
+{
+	return m_pRenderBuffer;
+}
+
+void HrRenderConstantBuffer::UpdateParams(HrRenderFrameParameters& renderFrameParameters)
 {
 	m_pStreamData->ClearBuffer();
 
@@ -73,7 +75,10 @@ void HrRenderConstantBuffer::UpdateAutoParams(HrRenderFrameParameters& renderFra
 			break;
 		}
 	}
-	m_pRenderHardwareBuffer->BindStream(m_pStreamData->GetBufferPoint(), m_pStreamData->GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
+	{
+		HrGraphicsBuffer::Mapper mapper(*m_pRenderBuffer, HrGraphicsBuffer::HBA_WRITE_ONLY);
+		std::memcpy(mapper.Pointer<uint8>(), m_pStreamData->GetBufferPoint(), m_pStreamData->GetBufferSize());
+	}
 }
 
 

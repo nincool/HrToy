@@ -45,6 +45,8 @@ void HrGeometryScene::CreateSceneElements()
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
 
+	//HrResourceManager::Instance()->LoadResource("box.fbx");
+
 	HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
 	AddSceneNode(pBox);
 }

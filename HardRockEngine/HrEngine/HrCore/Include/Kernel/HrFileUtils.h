@@ -27,7 +27,7 @@ namespace Hr
 
 		HrStreamDataPtr GetFileData(const std::string& strFileName);
 
-		void AddSearchPath(std::string& strPath);
+		void AddSearchPath(const std::string& strPath);
 	private:
 		std::string m_strAppPath;
 		std::vector<std::experimental::filesystem::path> m_vecSearchPaths;

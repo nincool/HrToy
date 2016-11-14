@@ -28,16 +28,18 @@ void HrResourceManager::InitResourceManager()
 
 HrResource* HrResourceManager::LoadResource(const std::string& strFile)
 {
-	if (HrFileUtils::Instance()->IsFileExist(strFile))
+	std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	if (!strFullFilePath.empty())
 	{
 		std::string strfileSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
 		if (strfileSuffix == "fbx")
 		{
-			HrResource* pRes = AddFBXResource(strFile);
+			HrResource* pRes = AddFBXResource(strFullFilePath);
+			pRes->Load();
 		}
 		else if (strfileSuffix == "hxml")
 		{
-			HrResource* pRes = AddEffectResource(strFile);
+			HrResource* pRes = AddEffectResource(strFullFilePath);
 		}
 	}
 
@@ -82,7 +84,7 @@ HrResource* HrResourceManager::CreateMeshManual(const std::string& strName, std:
 
 HrResource* HrResourceManager::AddFBXResource(const std::string& strFile)
 {
-	std::string strFileName = strFile.substr(strFile.rfind("/") + 1, strFile.size());
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
 	HrResource* pRes = HR_NEW HrPrefebModel();
 	pRes->DeclareResource(strFileName, strFile);
 
@@ -117,7 +119,7 @@ void HrResourceManager::CreateBuildInEffects()
 {
 	std::string strEffectFile;
 
-	strEffectFile = "Media/HrShader/HrBasicEffect.hxml";
+	strEffectFile = "Media/HrShader/HrBasicEffect.effectxml";
 	HrResource* pRes = AddEffectResource(strEffectFile);
 	pRes->Load();
 }

@@ -8,7 +8,7 @@
 
 namespace Hr
 {
-	class HrResourceManager : public HrSingleTon<HrResourceManager>
+	class HR_CORE_API HrResourceManager : public HrSingleTon<HrResourceManager>
 	{
 	public:
 		HrResourceManager();

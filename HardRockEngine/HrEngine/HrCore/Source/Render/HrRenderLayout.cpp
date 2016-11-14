@@ -1,6 +1,5 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrVertex.h"
-#include "Render/HrHardwareBuffer.h"
 #include "Render/HrRenderFactory.h"
 #include "Kernel/HrDirector.h"
 
@@ -33,7 +32,7 @@ void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
 
 void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	, uint32 nBufferSize
-	, HrGraphicsBuffer::EnumHardwareBufferUsage usage
+	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 	, HrVertexElement* pVertexElementArr
 	, uint32 nVertexElementLength)
 {
@@ -41,7 +40,7 @@ void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
-void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumHardwareBufferUsage usage, EnumIndexType indexType)
+void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
 {
 	m_indexBufferType = indexType;
 	m_nIndices = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
