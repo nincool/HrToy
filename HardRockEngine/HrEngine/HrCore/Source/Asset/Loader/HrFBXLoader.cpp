@@ -53,8 +53,8 @@ void HrFBXLoader::InitializeSDKObjects(FbxManager*& pManager, FbxScene*& pScene)
 	pManager->SetIOSettings(ios);
 
 	//Load plugins from the executable directory (optional)
-	FbxString lPath = FbxGetApplicationDirectory();
-	pManager->LoadPluginsDirectory(lPath.Buffer());
+	//FbxString lPath = FbxGetApplicationDirectory();
+	//pManager->LoadPluginsDirectory(lPath.Buffer());
 
 	//Create an FBX scene. This object holds most objects imported/exported from/to files.
 	pScene = FbxScene::Create(pManager, "My Scene");
