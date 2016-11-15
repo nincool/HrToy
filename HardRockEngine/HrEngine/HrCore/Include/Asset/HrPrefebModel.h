@@ -15,6 +15,12 @@ namespace Hr
 
 		virtual void Load() override;
 		virtual void Unload() override;
+
+		//这里这么写其实是不对的 一个Model可以有多个Mesh 一个Mesh可以有多个SubMesh
+		HrMesh* GetMesh()
+		{
+			return m_pMesh;
+		}
 	protected:
 		HrMesh* m_pMesh;
 	};

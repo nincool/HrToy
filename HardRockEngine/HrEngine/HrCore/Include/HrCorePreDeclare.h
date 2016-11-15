@@ -36,7 +36,6 @@ namespace Hr
 	class HrRenderQueue;
 	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
 	class HrRenderable;
-	class HrMesh;
 	class HrRenderPass;
 	class HrRenderLayout;
 	class HrRenderTechnique;
@@ -57,6 +56,8 @@ namespace Hr
 	class HrResourceManager;
 	class HrModelLoader;
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
+	class HrMesh;
+	class HrPrefebModel;
 
 	class HrRenderEffect;
 	class HrComponentFactory;

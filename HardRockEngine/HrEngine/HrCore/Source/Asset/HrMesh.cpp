@@ -23,7 +23,7 @@ void HrMesh::DeclareResource(const std::string& strFileName, const std::string& 
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_MESH;
 
-	m_nHashID = HrHashValue(m_strFilePath + strFileName + "Hr_Mesh");
+	m_nHashID = HrHashValue(m_strFilePath + strFileName + ".Hr_Mesh");
 }
 
 void HrMesh::Load()

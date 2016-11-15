@@ -5,6 +5,11 @@
 
 namespace Hr
 {
+	class HrSubMesh
+	{
+		HrRenderLayout* m_pRenderLayout;
+	};
+
 	class HrMesh : public HrResource
 	{
 	public:

@@ -130,7 +130,6 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryBox.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
-    <ClInclude Include="Include\Asset\HrGeometryTriangle.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
     <ClInclude Include="Include\Asset\HrPrefebModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
@@ -171,6 +170,7 @@
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
+    <ClInclude Include="Include\Render\HrRenderModel.h" />
     <ClInclude Include="Include\Render\HrRenderParameter.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrRenderTarget.h" />
@@ -194,7 +194,6 @@
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
-    <ClCompile Include="Source\Asset\HrGeometryTriangle.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
     <ClCompile Include="Source\Asset\HrPrefebModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
@@ -228,6 +227,7 @@
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
+    <ClCompile Include="Source\Render\HrRenderModel.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />
     <ClCompile Include="Source\Render\HrRenderTarget.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />

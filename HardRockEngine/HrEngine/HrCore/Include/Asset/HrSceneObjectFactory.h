@@ -18,6 +18,8 @@ namespace Hr
 		HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
 		HrSceneNode* CreateBox();
 
+		HrSceneNode* CreateModel(const std::string& strName);
+
 	private:
 		//资源模块加载
 		HrGeometryFactoryPtr m_pGeometryFactory;

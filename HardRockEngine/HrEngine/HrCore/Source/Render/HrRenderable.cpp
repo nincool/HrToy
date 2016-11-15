@@ -10,18 +10,12 @@ using namespace Hr;
 
 HrRenderable::HrRenderable()
 {	
-	m_pMesh = nullptr;
 	m_pRenderEffect = nullptr;
 	m_pRenderTechnique = nullptr;
 }
 
 HrRenderable::~HrRenderable()
 {
-}
-
-HrRenderLayout* HrRenderable::GetRenderLayout()
-{
-	return m_pMesh->GetRenderLayout();
 }
 
 HrRenderTechnique* HrRenderable::GetRenderTechnique()

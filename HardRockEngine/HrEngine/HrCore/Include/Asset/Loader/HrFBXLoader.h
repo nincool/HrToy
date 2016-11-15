@@ -22,7 +22,9 @@ namespace Hr
 		HrFBXLoader();
 		~HrFBXLoader();
 
-		void Load(std::string& strFile, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void Load(std::string& strFile
+			, std::string& strMeshName
+			, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
 
 	private:
 		void InitializeSDKObjects(fbxsdk::FbxManager*& pManager, fbxsdk::FbxScene*& pScene);
@@ -30,10 +32,10 @@ namespace Hr
 
 		bool LoadScene(fbxsdk::FbxManager* pManager, fbxsdk::FbxDocument* pScene, const char* pFilename);
 
-		void ParseFBXSdkScene(fbxsdk::FbxScene* pScene, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
-		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void ParseFBXSdkScene(fbxsdk::FbxScene* pScene, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
 
-		void ReadMesh(fbxsdk::FbxNode* pNode, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void ReadMesh(fbxsdk::FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
 
 	private:
 		//std::vector<Vector3> m_vecVertexPosition;

@@ -78,17 +78,17 @@ std::string HrFileUtils::GetAppPath() const
 	return m_strAppPath;
 }
 
-HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFileName)
+HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 {
 	HrStreamDataPtr pFileStream = std::make_shared<HrStreamData>();
 
-	std::string strFullPath = GetFullPathForFileName(strFileName);
+	std::string strFullPath = GetFullPathForFileName(strFile);
 	if (strFullPath.empty())
 	{
 		return pFileStream;
 	}
 
-	std::fstream fileStream(strFileName.c_str(), std::ios::in);
+	std::fstream fileStream(strFile.c_str(), std::ios::in);
 	fileStream.seekg(0, std::ios::end);
 	std::uint64_t nFileLength = fileStream.tellg();
 	fileStream.seekg(0, std::ios::beg);
@@ -106,15 +106,25 @@ void HrFileUtils::AddSearchPath(const std::string& strPath)
 	m_vecSearchPaths.emplace_back(filesystem::path(strPath));
 }
 
-std::string HrFileUtils::GetFileSuffix(const std::string& strFileName) const
+std::string HrFileUtils::GetFileSuffix(const std::string& strFile) const
 {
-	size_t nFildPos = strFileName.rfind(".");
+	size_t nFildPos = strFile.rfind(".");
 	if (nFildPos == std::string::npos)
 	{
 		return "";
 	}
 
-	std::string strfileSuffix = strFileName.substr(strFileName.rfind(".") + 1, strFileName.size());
+	std::string strfileSuffix = strFile.substr(strFile.rfind(".") + 1, strFile.size());
 	return strfileSuffix;
+}
+
+std::string HrFileUtils::ReplaceFileName(const std::string& strFile, const std::string& strName) const
+{
+	size_t nFildPos = strFile.rfind(".");
+	if (nFildPos == std::string::npos)
+	{
+		return std::string(strFile + "\\" + strName);
+	}
+	return std::string(strFile.substr(0, nFildPos) + "\\" + strName);
 }
 

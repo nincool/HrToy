@@ -26,6 +26,9 @@ void HrGeometryScene::ResetKeyFlag()
 	m_bKeyWPressed = false;
 	m_bKeySPressed = false;
 	m_bKeyDPressed = false;
+
+	m_bKey0Pressed = false;
+	m_bKey1Pressed = false;
 }
 
 void HrGeometryScene::OnEnter()
@@ -45,10 +48,11 @@ void HrGeometryScene::CreateSceneElements()
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
 
-	//HrResourceManager::Instance()->LoadResource("box.fbx");
+	HrSceneNode* pTestModel = HrSceneObjectFactory::Instance()->CreateModel("box.fbx");
+	AddSceneNode(pTestModel);
 
-	HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
-	AddSceneNode(pBox);
+	//HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
+	//AddSceneNode(pBox);
 }
 
 void HrGeometryScene::CreateInputEvent()
@@ -76,6 +80,12 @@ void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent
 	case Hr::HrEventKeyboard::EnumKeyCode::KEY_S:
 		m_bKeySPressed = true;
 		break;
+	case Hr::HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = true;
+		break;
+	case Hr::HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = true;
+		break;
 	default:
 		break;
 	}
@@ -96,6 +106,12 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEven
 		break;
 	case HrEventKeyboard::EnumKeyCode::KEY_S:
 		m_bKeySPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = false;
 		break;
 	default:
 		break;
@@ -120,6 +136,14 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	else if (m_bKeyDPressed)
 	{
 		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.1f, 0.0f, 0.0f));
+	}
+	else if (m_bKey0Pressed)
+	{
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0f, 0.0f, -0.1f));
+	}
+	else if (m_bKey1Pressed)
+	{
+		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0f, 0.0f, 0.1f));
 	}
 }
 

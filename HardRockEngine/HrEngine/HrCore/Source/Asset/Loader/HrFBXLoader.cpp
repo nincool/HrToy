@@ -20,7 +20,9 @@ HrFBXLoader::~HrFBXLoader()
 	
 }
 
-void HrFBXLoader::Load(std::string& strFile, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::Load(std::string& strFile
+	, std::string& strMeshName
+	, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
 {
 	FbxManager* pSdkManager = nullptr;
 	FbxScene* pScene = nullptr;
@@ -29,7 +31,7 @@ void HrFBXLoader::Load(std::string& strFile, std::vector<Vertex>& vecVertex, std
 	InitializeSDKObjects(pSdkManager, pScene);
 	if (LoadScene(pSdkManager, pScene, fbxFilePath.Buffer()))
 	{
-		ParseFBXSdkScene(pScene, vecVertex, vecIndexBuffer);
+		ParseFBXSdkScene(pScene, strMeshName, vecVertex, vecIndexBuffer);
 	}
 
 	DestroySdkObjects(pSdkManager, true);
@@ -183,19 +185,19 @@ void HrFBXLoader::DestroySdkObjects(FbxManager* pManager, bool pExitStatus)
 	if (pExitStatus) FBXSDK_printf("Program Success!\n");
 }
 
-void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
 {
 	FbxNode* pNode = pScene->GetRootNode();
 	if (pNode)
 	{
 		for (int i = 0; i < pNode->GetChildCount(); ++i)
 		{
-			ParseFBXSdkNode(pNode->GetChild(i), vecVertex, vecIndexBuffer);
+			ParseFBXSdkNode(pNode->GetChild(i), strMeshName, vecVertex, vecIndexBuffer);
 		}
 	}
 }
 
-void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
 {
 	if (pNode->GetNodeAttribute() == nullptr)
 	{
@@ -211,7 +213,7 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::vector<Vertex>& vecVertex
 		case FbxNodeAttribute::eSkeleton:
 			break;
 		case FbxNodeAttribute::eMesh:
-			ReadMesh(pNode, vecVertex, vecIndexBuffer);
+			ReadMesh(pNode, strMeshName, vecVertex, vecIndexBuffer);
 			break;
 		case FbxNodeAttribute::eNurbs:
 			break;
@@ -229,9 +231,10 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::vector<Vertex>& vecVertex
 	}
 }
 
-void HrFBXLoader::ReadMesh(FbxNode* pNode, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ReadMesh(FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
 {
 	FbxMesh* pMesh = (FbxMesh*)pNode->GetNodeAttribute();
+	strMeshName = pMesh->GetName();
 
 	int nControlPoints = pMesh->GetControlPointsCount();
 	FbxVector4* pControlPoints = pMesh->GetControlPoints();
@@ -241,7 +244,6 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, std::vector<Vertex>& vecVertex, std::
 		float y = static_cast<float>(pControlPoints[i][1]);
 		float z = static_cast<float>(pControlPoints[i][2]);
 
-		//m_vecVertexPosition.push_back(Vector3(x, y, z));
 		vecVertex.push_back(Vertex(Vector3(x, y, z), HrColor::F4Black));
 	}
 
@@ -249,7 +251,6 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, std::vector<Vertex>& vecVertex, std::
 	int* pIndexContent = pMesh->GetPolygonVertices();
 	for (int i = 0; i < nIndexCount; ++i)
 	{
-		//m_vecIndexBuffer.push_back(pIndexContent[i]);
 		vecIndexBuffer.push_back(pIndexContent[i]);
 	}
 

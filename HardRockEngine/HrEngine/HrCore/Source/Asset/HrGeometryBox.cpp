@@ -20,7 +20,6 @@ HrGeometryBox::HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
 
-	HRASSERT((m_pMesh == nullptr), "HrGemetryBox Construct");
 	m_pMesh = HR_NEW HrMesh();
 
 	InitRenderLayout();
@@ -29,6 +28,11 @@ HrGeometryBox::HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 HrGeometryBox::~HrGeometryBox()
 {
 	SAFE_DELETE(m_pMesh);
+}
+
+HrRenderLayout* Hr::HrGeometryBox::GetRenderLayout()
+{
+	return m_pMesh->GetRenderLayout();
 }
 
 void HrGeometryBox::InitRenderLayout()

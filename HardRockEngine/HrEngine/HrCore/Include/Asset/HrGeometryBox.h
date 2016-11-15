@@ -11,10 +11,13 @@ namespace Hr
 		HrGeometryBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
 		~HrGeometryBox();
 
+		virtual HrRenderLayout* GetRenderLayout() override;
 	private:
 		void InitRenderLayout();
 		void BindVertexStream();
 	private:
+		HrMesh* m_pMesh;
+
 		uint32 m_nLength;
 		uint32 m_nWidth;
 		uint32 m_nHeight;

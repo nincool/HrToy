@@ -1,8 +1,11 @@
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Render/HrCamera.h"
 #include "HrCore/Include/Render/HrViewPort.h"
+#include "HrCore/Include/Render/HrRenderModel.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
+#include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrCore/Include/Asset/HrPrefebModel.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -37,5 +40,14 @@ HrCameraNode* HrSceneObjectFactory::CreateCamera(float fLeft, float fTop, float 
 HrSceneNode* HrSceneObjectFactory::CreateBox()
 {
 	return m_pGeometryFactory->CreateBox(10, 10, 10);
+}
+
+HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
+{
+	HrResource* pRes = HrResourceManager::Instance()->GetOrLoadResource(strName, HrResource::RT_MODEL);
+	HrRenderModel* pRenderModel = HR_NEW HrRenderModel(static_cast<HrPrefebModel*>(pRes));
+	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pRenderModel);
+
+	return pSceneNode;
 }
 

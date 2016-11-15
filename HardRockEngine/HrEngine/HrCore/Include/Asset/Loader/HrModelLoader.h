@@ -31,6 +31,9 @@ namespace Hr
 
 		
 	public:
+		HrMesh* m_pMesh;
+
+		std::string m_strMeshName;
 		std::vector<Vertex> m_vecVertexBuffer;
 		std::vector<uint32> m_vecIndexBuffer;
 

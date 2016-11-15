@@ -11,6 +11,8 @@
 
 using namespace Hr;
 
+#define DEFAULT_EFFECT  "Media/HrShader/HrBasicEffect.effectxml"
+
 HrResourceManager::HrResourceManager()
 {
 
@@ -26,24 +28,35 @@ void HrResourceManager::InitResourceManager()
 	CreateBuildInEffects();
 }
 
+void HrResourceManager::CreateBuildInEffects()
+{
+	std::string strEffectFile;
+
+	strEffectFile = DEFAULT_EFFECT;
+	HrResource* pRes = LoadResource(strEffectFile);
+}
+
 HrResource* HrResourceManager::LoadResource(const std::string& strFile)
 {
+	HrResource* pReturnRes = nullptr;
+
 	std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	if (!strFullFilePath.empty())
 	{
 		std::string strfileSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
 		if (strfileSuffix == "fbx")
 		{
-			HrResource* pRes = AddFBXResource(strFullFilePath);
-			pRes->Load();
+			pReturnRes = AddFBXResource(strFullFilePath);
+			pReturnRes->Load();
 		}
-		else if (strfileSuffix == "hxml")
+		else if (strfileSuffix == "effectxml")
 		{
-			HrResource* pRes = AddEffectResource(strFullFilePath);
+			pReturnRes = AddEffectResource(strFullFilePath);
+			pReturnRes->Load();
 		}
 	}
 
-	return nullptr;
+	return pReturnRes;
 }
 
 HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResource::EnumResourceType resType)
@@ -53,7 +66,7 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	case HrResource::RT_TEXTURE:
 		break;
 	case HrResource::RT_MESH:
-		break;
+		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
 		return GetEffect(strFile);
 		break;
@@ -68,24 +81,32 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	return nullptr;
 }
 
-HrResource* HrResourceManager::CreateMeshManual(const std::string& strName, std::string& strFile)
+HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
-	HrResource* pMesh = HR_NEW HrMesh();
-	pMesh->DeclareResource(strName, strFile);
-	size_t nMeshHashID = pMesh->GetHashID();
-	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
+	HrResource* pRes = GetResource(strFile, resType);
+	if (pRes != nullptr)
 	{
-		return nullptr;
+		return pRes;
 	}
-	m_mapMesh.insert(std::make_pair(nMeshHashID, pMesh));
+	else
+	{
+		return LoadResource(strFile);
+	}
+}
 
-	return pMesh;
+HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
+{
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource(DEFAULT_EFFECT, HrResource::RT_EFFECT));
+	BOOST_ASSERT(pRenderEffect);
+
+	return pRenderEffect;
 }
 
 HrResource* HrResourceManager::AddFBXResource(const std::string& strFile)
 {
 	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	HrResource* pRes = HR_NEW HrPrefebModel();
+	
+	HrPrefebModel* pRes = HR_NEW HrPrefebModel();
 	pRes->DeclareResource(strFileName, strFile);
 
 	if (m_mapPrefebModels.find(pRes->GetHashID()) != m_mapPrefebModels.end())
@@ -115,13 +136,25 @@ HrResource* HrResourceManager::AddEffectResource(const std::string& strFile)
 	return pRes;
 }
 
-void HrResourceManager::CreateBuildInEffects()
+HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 {
-	std::string strEffectFile;
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
 
-	strEffectFile = "Media/HrShader/HrBasicEffect.effectxml";
-	HrResource* pRes = AddEffectResource(strEffectFile);
-	pRes->Load();
+	HrResource* pMesh = HR_NEW HrMesh();
+	pMesh->DeclareResource(strFileName, strFile);
+	size_t nMeshHashID = pMesh->GetHashID();
+	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
+	{
+		return nullptr;
+	}
+	m_mapMesh.insert(std::make_pair(nMeshHashID, pMesh));
+
+	return pMesh;
+}
+
+HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
+{
+	return nullptr;
 }
 
 HrResource* HrResourceManager::GetEffect(const std::string& strEffectName)

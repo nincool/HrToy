@@ -11,7 +11,6 @@ namespace Hr
 		HrGeometryFactory();
 		~HrGeometryFactory();
 
-		HrSceneNode* Create2DTriangle();
 		HrSceneNode* CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
 	};
 }

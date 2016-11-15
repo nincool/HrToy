@@ -190,9 +190,6 @@
     <ClInclude Include="Include\Asset\HrGeometryFactory.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryTriangle.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Event\HrEvent.h">
       <Filter>Include\Event</Filter>
     </ClInclude>
@@ -258,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h">
       <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderModel.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -360,9 +360,6 @@
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrGeometryTriangle.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Event\HrEvent.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
@@ -418,6 +415,9 @@
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderModel.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>

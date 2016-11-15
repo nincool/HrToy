@@ -19,13 +19,15 @@ namespace Hr
 
 		std::string GetFullPathForFileName(const std::string& strFileName) const;
 
-		std::string GetFileSuffix(const std::string& strFileName) const;
+		std::string GetFileSuffix(const std::string& strFile) const;
 
 		std::string GetWritablePath() const;
 
 		std::string GetAppPath() const;
 
-		HrStreamDataPtr GetFileData(const std::string& strFileName);
+		std::string ReplaceFileName(const std::string& strFile, const std::string& strName) const;
+
+		HrStreamDataPtr GetFileData(const std::string& strFile);
 
 		void AddSearchPath(const std::string& strPath);
 	private:
