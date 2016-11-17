@@ -13,10 +13,11 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		virtual void Load() override;
-		virtual void Unload() override;
-
 		HrRenderTechnique* GetTechnique(std::string strTechniqueName);
+
+	protected:
+		virtual bool LoadImpl() override;
+		virtual bool UnloadImpl() override;
 	private:
 		size_t m_nHashName;
 

@@ -1,4 +1,4 @@
-#include "HrCore/Include/Render/HrRenderModel.h"
+#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
@@ -8,7 +8,7 @@
 
 using namespace Hr;
 
-HrRenderModel::HrRenderModel()
+HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
 {
 	m_pPrefebModel = nullptr;
 
@@ -16,7 +16,7 @@ HrRenderModel::HrRenderModel()
 	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
 }
 
-HrRenderModel::HrRenderModel(HrPrefebModel* pPrefebModel)
+HrSkinnedMeshRenderable::HrSkinnedMeshRenderable(HrPrefebModel* pPrefebModel)
 {
 	m_pPrefebModel = pPrefebModel;
 
@@ -24,18 +24,18 @@ HrRenderModel::HrRenderModel(HrPrefebModel* pPrefebModel)
 	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
 }
 
-HrRenderModel::~HrRenderModel()
+HrSkinnedMeshRenderable::~HrSkinnedMeshRenderable()
 {
 }
 
-HrRenderLayout* HrRenderModel::GetRenderLayout()
+HrRenderLayout* HrSkinnedMeshRenderable::GetRenderLayout()
 {
 	BOOST_ASSERT(m_pPrefebModel);
 
 	return m_pPrefebModel->GetMesh()->GetRenderLayout();
 }
 
-void HrRenderModel::AttachPrefebModel(HrPrefebModel* pPrefebModel)
+void HrSkinnedMeshRenderable::AttachPrefebModel(HrPrefebModel* pPrefebModel)
 {
 	m_pPrefebModel = pPrefebModel;
 }

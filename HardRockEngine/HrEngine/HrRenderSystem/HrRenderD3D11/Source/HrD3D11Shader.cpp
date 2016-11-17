@@ -149,4 +149,3 @@ ID3D11Buffer* HrD3D11Shader::GetConstantBuffer()
 }
 
 
-

@@ -35,7 +35,21 @@ void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::
 	m_nHashID = HrHashValue(m_strFilePath);
 }
 
-void HrRenderEffect::Load()
+HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
+{
+	size_t const nHashName = HrHashValue(strTechniqueName);
+	for (const auto& item : m_vecRenderTechnique)
+	{
+		if (item->GetHashName() == nHashName)
+		{
+			return item;
+		}
+	}
+
+	return nullptr;
+}
+
+bool HrRenderEffect::LoadImpl()
 {
 	HrStreamDataPtr pSteamData;
 
@@ -55,7 +69,7 @@ void HrRenderEffect::Load()
 		else if (rootEffectValue.first == "technique")
 		{
 			std::string strTechniqueName = rootEffectValue.second.get<std::string>("<xmlattr>.name");
-			
+
 			//´´½¨Technique
 			HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(strTechniqueName);
 			m_vecRenderTechnique.push_back(pRenderTechnique);
@@ -91,26 +105,12 @@ void HrRenderEffect::Load()
 				}
 			}
 		}
-
 	}
+	return true;
 }
 
-void HrRenderEffect::Unload()
+bool HrRenderEffect::UnloadImpl()
 {
-
-}
-
-HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
-{
-	size_t const nHashName = HrHashValue(strTechniqueName);
-	for (const auto& item : m_vecRenderTechnique)
-	{
-		if (item->GetHashName() == nHashName)
-		{
-			return item;
-		}
-	}
-
-	return nullptr;
+	return true;
 }
 

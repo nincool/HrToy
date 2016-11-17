@@ -1,7 +1,7 @@
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Render/HrCamera.h"
 #include "HrCore/Include/Render/HrViewPort.h"
-#include "HrCore/Include/Render/HrRenderModel.h"
+#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
@@ -45,7 +45,7 @@ HrSceneNode* HrSceneObjectFactory::CreateBox()
 HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
 {
 	HrResource* pRes = HrResourceManager::Instance()->GetOrLoadResource(strName, HrResource::RT_MODEL);
-	HrRenderModel* pRenderModel = HR_NEW HrRenderModel(static_cast<HrPrefebModel*>(pRes));
+	HrSkinnedMeshRenderable* pRenderModel = HR_NEW HrSkinnedMeshRenderable(static_cast<HrPrefebModel*>(pRes));
 	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pRenderModel);
 
 	return pSceneNode;

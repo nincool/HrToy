@@ -13,6 +13,7 @@ namespace Hr
 			RT_TEXTURE,
 			RT_MESH,
 			RT_EFFECT,
+			RT_SHADER,
 			RT_MATERIAL,
 			RT_MODEL,
 		};
@@ -26,10 +27,35 @@ namespace Hr
 		std::string& GetFileName() { return m_strFileName; }
 		size_t GetHashID() { return m_nHashID; }
 
-		void FinishedLoading() { m_bLoaded = true; }
+		bool IsLoaded() { return m_bLoaded; }
 
-		virtual void Load() = 0;
-		virtual void Unload() = 0;
+		virtual bool Load()
+		{
+			if (m_bLoaded)
+			{
+				return true;
+			}
+			if (!LoadImpl())
+			{
+				return false;
+			}
+			m_bLoaded = true;
+			return true;
+		}
+
+		virtual bool Unload()
+		{
+			if (!m_bLoaded)
+			{
+				return true;
+			}
+			UnloadImpl();
+			m_bLoaded = false;
+			return true;
+		}
+	protected:
+		virtual bool LoadImpl() = 0;
+		virtual bool UnloadImpl() = 0;
 	protected:
 		std::string m_strFilePath;
 		std::string m_strFileName;

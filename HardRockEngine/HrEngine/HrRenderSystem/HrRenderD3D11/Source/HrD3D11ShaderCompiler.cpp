@@ -24,9 +24,6 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(HrStreamData& streamData
 	char* pSource = streamData.GetBufferPoint();
 	uint64 nSize = streamData.GetBufferSize();
 
-	ID3DBlob* pD3DShaderBuffer = nullptr;
-	ID3DBlob* pErrorBuffer = nullptr;
-
 	std::string strShaderModel = "";
 	switch (shaderType)
 	{
@@ -39,6 +36,14 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(HrStreamData& streamData
 	default:
 		break;
 	}
+
+	UINT compileFlags = 0;
+	compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+	compileFlags |= D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR; //Directs the compiler to pack matrices in column-major order on input and output from the shader. This type of packing is generally more efficient because a series of dot-products can then perform vector-matrix multiplication.
+
+
+	ID3DBlob* pD3DShaderBuffer = nullptr;
+	ID3DBlob* pErrorBuffer = nullptr;
 
 	HRESULT hr = D3DCompile(
 		pSource,              // [in] Pointer to the shader in memory. 
@@ -163,6 +168,51 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(HrStreamData& streamData
 	}
 
 	SAFE_RELEASE(pShaderReflection);
+
+}
+
+void HrD3D11ShaderCompiler::GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrD3D11Shader::EnumShaderType shaderType)
+{
+	//Add D3D11 define to all program, compiled with D3D11 RenderSystem
+	D3D_SHADER_MACRO macro = { "D3D11","1" };
+	defines.push_back(macro);
+
+	// Using different texture sampling instructions, tex2D for D3D9 and SampleXxx for D3D11,
+	// declaring type of BLENDINDICES as float4 for D3D9 but as uint4 for D3D11 -  all those
+	// small but annoying differences that otherwise would require declaring separate programs.
+	macro.Name = "SHADER_MODEL_5";
+	defines.push_back(macro);
+
+	switch (shaderType)
+	{
+	case HrShader::ST_VERTEX_SHADER:
+		macro.Name = "HR_VERTEX_SAHDER";
+		break;
+	case HrShader::ST_PIXEL_SHADER:
+		macro.Name = "HR_PIXEL_SHADER";
+		break;
+	case HrShader::ST_GEOMETRY_SHADER:
+		macro.Name = "HR_GEOMETRY_SHADER";
+		break;
+	case HrShader::ST_DOMAIN_SHADER:
+		macro.Name = "HR_DOMAIN_SHADER";
+		break;
+	case HrShader::ST_HULL_SHADER:
+		macro.Name = "HR_HULL_SHADER";
+		break;
+	case HrShader::ST_COMPUTE_SHADER:
+		macro.Name = "HR_COMPUTE_SHADER";
+		break;
+	default:
+		BOOST_ASSERT(false);
+		break;
+	}
+	defines.push_back(macro);
+
+	// Add NULL terminator
+	macro.Name = 0;
+	macro.Definition = 0;
+	defines.push_back(macro);
 
 }
 

@@ -30,7 +30,7 @@ void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
 	m_topologyType = topologyType;
 }
 
-void HrRenderLayout::BindVertexBuffer(char* pBuffer
+void HrRenderLayout::BindVertexBuffer(const char* pBuffer
 	, uint32 nBufferSize
 	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 	, HrVertexElement* pVertexElementArr
@@ -40,7 +40,7 @@ void HrRenderLayout::BindVertexBuffer(char* pBuffer
 	m_pVertex->AddElementArray(pVertexElementArr, nVertexElementLength);
 }
 
-void HrRenderLayout::BindIndexBuffer(char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
+void HrRenderLayout::BindIndexBuffer(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
 {
 	m_indexBufferType = indexType;
 	m_nIndices = nBufferSize / (indexType == IT_16BIT ? 2 : 4);

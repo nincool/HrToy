@@ -13,14 +13,15 @@ namespace Hr
 	
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		virtual void Load() override;
-		virtual void Unload() override;
-
 		//这里这么写其实是不对的 一个Model可以有多个Mesh 一个Mesh可以有多个SubMesh
 		HrMesh* GetMesh()
 		{
 			return m_pMesh;
 		}
+
+	protected:
+		virtual bool LoadImpl() override;
+		virtual bool UnloadImpl() override;
 	protected:
 		HrMesh* m_pMesh;
 	};

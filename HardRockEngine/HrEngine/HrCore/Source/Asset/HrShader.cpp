@@ -1,4 +1,4 @@
-#include "HrCore/Include/Render/HrShader.h"
+#include "HrCore/Include/Asset/HrShader.h"
 #include "HrCore/Include/Render/HrRenderConstantBuffer.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
 
@@ -51,5 +51,15 @@ HrRenderConstantBuffer* HrShader::AddRenderConstantBuffer()
 	m_vecRenderConstantBuffer.push_back(pRenderConstantBuffer);
 
 	return pRenderConstantBuffer;
+}
+
+bool HrShader::LoadImpl()
+{
+	return true;
+}
+
+bool HrShader::UnloadImpl()
+{
+	return true;
 }
 

@@ -127,8 +127,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\Asset\HrColor.h" />
+    <ClInclude Include="Include\Asset\HrMaterial.h" />
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
-    <ClInclude Include="Include\Asset\HrGeometryBox.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
     <ClInclude Include="Include\Asset\HrPrefebModel.h" />
@@ -136,6 +136,7 @@
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
+    <ClInclude Include="Include\Asset\HrShader.h" />
     <ClInclude Include="Include\Asset\HrStreamData.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
@@ -170,11 +171,11 @@
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
-    <ClInclude Include="Include\Render\HrRenderModel.h" />
+    <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderParameter.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrRenderTarget.h" />
-    <ClInclude Include="Include\Render\HrShader.h" />
+    <ClInclude Include="Include\Render\HrStaticMeshRenderable.h" />
     <ClInclude Include="Include\Render\HrVertex.h" />
     <ClInclude Include="Include\Render\HrViewPort.h" />
     <ClInclude Include="Include\Render\HrGraphicsBuffer.h" />
@@ -191,14 +192,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Asset\HrColor.cpp" />
+    <ClCompile Include="Source\Asset\HrMaterial.cpp" />
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
-    <ClCompile Include="Source\Asset\HrGeometryBox.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
     <ClCompile Include="Source\Asset\HrPrefebModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
+    <ClCompile Include="Source\Asset\HrShader.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
@@ -227,14 +229,14 @@
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
-    <ClCompile Include="Source\Render\HrRenderModel.cpp" />
+    <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderParameter.cpp" />
     <ClCompile Include="Source\Render\HrRenderTarget.cpp" />
-    <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderPass.cpp" />
     <ClCompile Include="Source\Render\HrRenderQueue.cpp" />
+    <ClCompile Include="Source\Render\HrStaticMeshRenderable.cpp" />
     <ClCompile Include="Source\Render\HrVertex.cpp" />
     <ClCompile Include="Source\Render\HrViewPort.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />

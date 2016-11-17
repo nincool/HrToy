@@ -25,7 +25,7 @@ namespace Hr
 		HrD3D11GraphicsBuffer(HrD3D11GraphicsBuffer&& hardwardBuffer);
 		virtual ~HrD3D11GraphicsBuffer();
 
-		virtual void BindStream(char* pBuffer
+		virtual void BindStream(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag) override;

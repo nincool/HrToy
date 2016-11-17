@@ -27,14 +27,15 @@ void HrPrefebModel::DeclareResource(const std::string& strFileName, const std::s
 	m_nHashID = HrHashValue(m_strFilePath);
 }
 
-void HrPrefebModel::Load()
+bool HrPrefebModel::LoadImpl()
 {
 	HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
 	pModelLoader->Load(m_strFilePath);
 	m_pMesh = pModelLoader->m_pMesh;
+	return true;
 }
 
-void HrPrefebModel::Unload()
+bool HrPrefebModel::UnloadImpl()
 {
-
+	return false;
 }

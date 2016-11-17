@@ -21,13 +21,13 @@ namespace Hr
 
 		virtual uint32 GetVertexSize();
 		
-		virtual void BindVertexBuffer(char* pBuffer
+		virtual void BindVertexBuffer(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrVertexElement* pVertexElementArr
 			, uint32 nVertexElementLength);
 
-		virtual void BindIndexBuffer(char* pBuffer
+		virtual void BindIndexBuffer(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, EnumIndexType indexType);

@@ -79,6 +79,10 @@ namespace Hr
 			, HrStreamData* pShaderBuffer);
 
 		D3D11ShaderDesc& GetShaderDesc() { return m_shaderDesc; }
+
+	private:
+		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrD3D11Shader::EnumShaderType shaderType);
+
 	protected:
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;

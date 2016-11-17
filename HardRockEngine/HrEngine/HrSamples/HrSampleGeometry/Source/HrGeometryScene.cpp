@@ -1,6 +1,5 @@
 #include "HrGeometryScene.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
-#include "HrCore/Include/Asset/HrGeometryBox.h"
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
@@ -49,11 +48,11 @@ void HrGeometryScene::CreateSceneElements()
 	AddSceneNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0f, 0.0f, -5.0f));
 
-	HrSceneNode* pTestModel = HrSceneObjectFactory::Instance()->CreateModel("box.fbx");
-	AddSceneNode(pTestModel);
+	//HrSceneNode* pTestModel = HrSceneObjectFactory::Instance()->CreateModel("box.fbx");
+	//AddSceneNode(pTestModel);
 
-	//HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
-	//AddSceneNode(pBox);
+	HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
+	AddSceneNode(pBox);
 }
 
 void HrGeometryScene::CreateInputEvent()

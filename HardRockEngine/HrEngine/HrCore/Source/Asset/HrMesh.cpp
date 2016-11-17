@@ -26,18 +26,33 @@ void HrMesh::DeclareResource(const std::string& strFileName, const std::string& 
 	m_nHashID = HrHashValue(m_strFilePath + strFileName + ".Hr_Mesh");
 }
 
-void HrMesh::Load()
-{
-
-}
-
-void HrMesh::Unload()
-{
-
-}
-
 HrRenderLayout* HrMesh::GetRenderLayout()
 {
 	return m_pRenderLayout;
+}
+
+void HrMesh::AddVertexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrVertexElement* pVertexElementArr, uint32 nVertexElementLength)
+{
+	m_pRenderLayout->BindVertexBuffer(pBuffer, nBufferSize, usage, pVertexElementArr, nVertexElementLength);
+}
+
+void HrMesh::AddIndexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
+{
+	m_pRenderLayout->BindIndexBuffer(pBuffer, nBufferSize, usage, indexType);
+}
+
+bool HrMesh::LoadImpl()
+{
+	return true;
+}
+
+bool HrMesh::UnloadImpl()
+{
+	return true;
+}
+
+void HrMesh::FinishedBuildMesh()
+{
+	m_bLoaded = true;
 }
 

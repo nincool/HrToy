@@ -2,6 +2,8 @@
 #define _HR_GRAPHICSBUFFER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
+
 #include <boost/noncopyable.hpp>
 
 namespace Hr
@@ -68,7 +70,7 @@ namespace Hr
 	
 		virtual ~HrGraphicsBuffer();
 
-		virtual void BindStream(char* pBuffer
+		virtual void BindStream(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag);

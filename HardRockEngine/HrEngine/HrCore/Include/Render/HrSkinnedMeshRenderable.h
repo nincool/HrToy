@@ -6,12 +6,12 @@
 
 namespace Hr
 {
-	class HrRenderModel : public HrRenderable
+	class HrSkinnedMeshRenderable : public HrRenderable
 	{
 	public:
-		HrRenderModel();
-		HrRenderModel(HrPrefebModel* pPrefebModel);
-		~HrRenderModel();
+		HrSkinnedMeshRenderable();
+		HrSkinnedMeshRenderable(HrPrefebModel* pPrefebModel);
+		~HrSkinnedMeshRenderable();
 
 		virtual HrRenderLayout* GetRenderLayout() override;
 

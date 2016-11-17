@@ -121,9 +121,6 @@
     <ClInclude Include="Include\Asset\HrStreamData.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrShader.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrColor.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
@@ -182,9 +179,6 @@
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrResourceManager.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryBox.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Include\Asset\HrGeometryFactory.h">
@@ -256,8 +250,17 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrRenderModel.h">
+    <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h">
       <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrStaticMeshRenderable.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrMaterial.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrShader.h">
+      <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +309,6 @@
     <ClCompile Include="Source\Asset\HrStreamData.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrShader.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\HrColor.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
@@ -352,9 +352,6 @@
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrResourceManager.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrGeometryBox.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
@@ -417,8 +414,17 @@
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrRenderModel.cpp">
+    <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrStaticMeshRenderable.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrMaterial.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrShader.cpp">
+      <Filter>Source\Asset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 #define _HR_D3D11SHADER_H_
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
-#include "HrCore/Include/Render/HrShader.h"
+#include "HrCore/Include/Asset/HrShader.h"
 #include "HrD3D11Device.h"
 #include <d3dcompiler.h>
 
