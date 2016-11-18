@@ -25,6 +25,9 @@ namespace Hr
 		std::string m_strFilePath;
 		std::string m_strEffectFile;
 		
+		std::vector<HrShader*> m_vecVertexShaders;
+		std::vector<HrShader*> m_vecPixelShaders;
+
 		std::vector<HrRenderTechnique*> m_vecRenderTechnique;
 		
 	};

@@ -3,6 +3,8 @@
 
 #include "HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 #include "HrRenderD3D11/Include/HrD3D11Shader.h"
+#include "HrCore/Include/Kernel/HrFileUtils.h"
+#include "HrCore/Include/Asset/HrStreamData.h"
 #include <d3dcompiler.h>
 
 namespace Hr
@@ -66,6 +68,43 @@ namespace Hr
 		std::vector<BoundResourceDesc> res_desc;
 	};
 
+	class HrD3D11IncludeShaderHandler : public ID3DInclude
+	{
+	public:
+		HrD3D11IncludeShaderHandler(std::string& strFile)
+			: m_strFile(strFile) {}
+		~HrD3D11IncludeShaderHandler() {}
+
+		STDMETHOD(Open)(D3D_INCLUDE_TYPE IncludeType,
+			LPCSTR pFileName,
+			LPCVOID pParentData,
+			LPCVOID *ppData,
+			UINT *pByteLen
+			)
+		{
+			// find & load source code
+			HrStreamDataPtr pStreamData = HrFileUtils::Instance()->GetFileData(pFileName);
+			// copy into separate c-string
+			// Note - must NOT copy the null terminator, otherwise this will terminate
+			// the entire program string!
+			*pByteLen = static_cast<UINT>(pStreamData->GetBufferSizeWithoutNULLTerminator());
+			char* pChar = new char[*pByteLen];
+			memcpy(pChar, pStreamData->GetBufferPoint(), *pByteLen);
+			*ppData = pChar;
+
+			return S_OK;
+		}
+
+		STDMETHOD(Close)(LPCVOID pData)
+		{
+			char* pChar = (char*)pData;
+			delete[] pChar;
+			return S_OK;
+		}
+	protected:
+		std::string m_strFile;
+
+	};
 
 	class HrD3D11ShaderCompiler 
 	{
@@ -73,13 +112,14 @@ namespace Hr
 		HrD3D11ShaderCompiler();
 		~HrD3D11ShaderCompiler();
 
-		bool CompileShaderFromCode(HrStreamData& streamData
+		bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
 			, HrD3D11Shader::EnumShaderType shaderType
 			, std::string& strEntryPoint
 			, HrStreamData* pShaderBuffer);
 
 		D3D11ShaderDesc& GetShaderDesc() { return m_shaderDesc; }
 
+		bool RelfectEffectParameters(HrStreamData* pShaderBuffer);
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrD3D11Shader::EnumShaderType shaderType);
 

@@ -88,7 +88,9 @@ HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 		return pFileStream;
 	}
 
-	std::fstream fileStream(strFile.c_str(), std::ios::in);
+	std::fstream fileStream(strFullPath.c_str(), std::ios::in);
+	BOOST_ASSERT(fileStream.is_open());
+
 	fileStream.seekg(0, std::ios::end);
 	std::uint64_t nFileLength = fileStream.tellg();
 	fileStream.seekg(0, std::ios::beg);

@@ -16,6 +16,9 @@ namespace Hr
 		virtual HrRenderLayout* GetRenderLayout() override;
 
 		void  AttachPrefebModel(HrPrefebModel* pPrefebModel);
+
+	protected:
+		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override {}
 	private:
 		HrPrefebModel* m_pPrefebModel;
 

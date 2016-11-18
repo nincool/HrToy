@@ -63,6 +63,21 @@ uint64 HrStreamData::GetBufferSize()
 #endif // VECTOR_ALLOC
 }
 
+uint64 HrStreamData::GetBufferSizeWithoutNULLTerminator()
+{
+#ifdef VECTOR_ALLOC
+	size_t nNull = 0;
+
+	while (m_vecStreamData[m_vecStreamData.size() - 1 - nNull] == '\0')
+	{
+		++nNull;
+	}
+	return m_vecStreamData.size() - nNull;
+#else
+	return m_nStreamLength;
+#endif // VECTOR_ALLOC	
+}
+
 void HrStreamData::ClearBuffer()
 {
 #ifdef VECTOR_ALLOC

@@ -2,7 +2,7 @@
 #define _HR_D3D11SHADER_H_
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
-#include "HrCore/Include/Asset/HrShader.h"
+#include "HrCore/Include/Render/HrShader.h"
 #include "HrD3D11Device.h"
 #include <d3dcompiler.h>
 
@@ -19,7 +19,7 @@ namespace Hr
 
 		virtual void UnBind(HrRender* pRender) override;
 
-		virtual void StreamIn(HrStreamData& streamData) override;
+		virtual void StreamIn(HrStreamData& streamData, std::string& strFile, const std::string& strEntryPoint, EnumShaderType shaderType) override;
 
 		virtual void UpdateParams(HrRenderFrameParameters& renderFrameParameters) override;
 
@@ -46,6 +46,8 @@ namespace Hr
 		ID3D11Buffer* GetConstantBuffer();
 
 	private:
+		std::string m_strFilePath;
+
 		HrStreamData* m_pShaderBuffer;
 
 		ID3D11VertexShader* m_pVertexShader;

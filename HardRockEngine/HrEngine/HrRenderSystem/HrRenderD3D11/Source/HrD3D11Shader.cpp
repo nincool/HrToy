@@ -56,8 +56,12 @@ void HrD3D11Shader::UnBind(HrRender* pRender)
 
 }
 
-void HrD3D11Shader::StreamIn(HrStreamData& streamData)
+void HrD3D11Shader::StreamIn(HrStreamData& streamData, std::string& strFile, const std::string& strEntryPoint, EnumShaderType shaderType)
 {
+	m_shaderType = shaderType;
+	m_strEntryPoint = strEntryPoint;
+	m_strFilePath = strFile;
+
 	if (!CompileShader(streamData))
 	{
 		return;
@@ -79,7 +83,7 @@ void HrD3D11Shader::StreamIn(HrStreamData& streamData)
 bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
 {
 	std::shared_ptr<HrD3D11ShaderCompiler> pShaderCompiler = std::make_shared<HrD3D11ShaderCompiler>();
-	if (pShaderCompiler->CompileShaderFromCode(streamData, m_shaderType, m_strEntryPoint, m_pShaderBuffer))
+	if (pShaderCompiler->CompileShaderFromCode(m_strFilePath, streamData, m_shaderType, m_strEntryPoint, m_pShaderBuffer))
 	{
 		D3D11ShaderDesc shaderDesc = pShaderCompiler->GetShaderDesc();
 		for (size_t nConstBufferIndex = 0; nConstBufferIndex < shaderDesc.cb_desc.size(); ++nConstBufferIndex)

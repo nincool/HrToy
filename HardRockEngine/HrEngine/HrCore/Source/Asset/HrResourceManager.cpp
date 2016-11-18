@@ -4,11 +4,11 @@
 #include "Asset/HrPrefebModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
-#include "Asset/HrShader.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrFileUtils.h"
+#include "Render/HrShader.h"
 #include "Render/HrRenderFactory.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -23,7 +23,20 @@ HrResourceManager::HrResourceManager()
 
 HrResourceManager::~HrResourceManager()
 {
+	//todo release assets
+	ReleaseResourceCache(m_mapPrefebModels);
+	ReleaseResourceCache(m_mapMesh);
+	ReleaseResourceCache(m_mapRenderEffects);
+	//ReleaseResourceCache(m_mapShaders);
+}
 
+void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes)
+{
+	for (auto it = mapRes.begin(); it != mapRes.end(); ++it)
+	{
+		SAFE_DELETE(it->second);
+	}
+	mapRes.clear();
 }
 
 void HrResourceManager::InitResourceManager()
@@ -37,8 +50,9 @@ void HrResourceManager::CreateBuildInEffects()
 	std::string strEffectFile;
 
 	strEffectFile = DEFAULT_EFFECT;
+
 	LoadResource(strEffectFile);
-	LoadResource("Media/HrShader/HrTestLighting.effectxml");
+	//LoadResource("Media/HrShader/HrTestLighting.effectxml");
 }
 
 void HrResourceManager::CreateBuildInGeometry()
@@ -79,7 +93,6 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
 		return GetEffect(strFile);
-		break;
 	case HrResource::RT_MATERIAL:
 		break;
 	case HrResource::RT_MODEL:
@@ -162,21 +175,22 @@ HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 	return pMesh;
 }
 
-HrResource* HrResourceManager::AddShaderResource(const std::string& strFile)
-{
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-
-	HrShader* pShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-	pShader->DeclareResource(strFileName, strFile);
-	size_t nMeshHashID = pShader->GetHashID();
-	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
-	{
-		return pShader;
-	}
-	m_mapShaders.insert(std::make_pair(nMeshHashID, pShader));
-
-	return pShader;
-}
+//HrResource* HrResourceManager::AddShaderResource(const std::string& strFile, HrShader::EnumShaderType shaderType)
+//{
+//	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
+//
+//	HrShader* pShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+//	pShader->SetShaderType(shaderType);
+//	pShader->DeclareResource(strFileName, strFile);
+//	size_t nMeshHashID = pShader->GetHashID();
+//	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
+//	{
+//		return pShader;
+//	}
+//	m_mapShaders.insert(std::make_pair(nMeshHashID, pShader));
+//
+//	return pShader;
+//}
 
 HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
 {

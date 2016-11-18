@@ -1,11 +1,14 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrResourceLoader.h"
+#include "Asset/HrResourceManager.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
+#include "HrCore/Include/Render/HrRenderFactory.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "Kernel/HrFileUtils.h"
+#include "Kernel/HrDirector.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
@@ -61,8 +64,8 @@ bool HrRenderEffect::LoadImpl()
 	{
 		if (rootEffectValue.first == "effectfile")
 		{
-			m_strEffectFile = rootEffectValue.second.get_value<std::string>();
-
+			m_strEffectFile = HrFileUtils::Instance()->GetFullPathForFileName(rootEffectValue.second.get_value<std::string>());
+			
 			//加载Shader文件
 			pSteamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
 		}
@@ -81,7 +84,7 @@ bool HrRenderEffect::LoadImpl()
 					std::string strPassName = nodeTechniqueValue.second.get<std::string>("<xmlattr>.name");
 
 					//创建Pass
-					HrRenderPass* pRenderPass = pRenderTechnique->CreatePass(strPassName);
+					HrRenderPass* pRenderPass = pRenderTechnique->AddPass(strPassName);
 					for (ptValue& nodePassValue : nodeTechniqueValue.second)
 					{
 						if (nodePassValue.first == "param")
@@ -90,18 +93,22 @@ bool HrRenderEffect::LoadImpl()
 							std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
 							if (strParamName == "vertex_shader")
 							{
-								std::string strVSEntryPoint = strParamValue;
-								pRenderPass->SetVSEntryPoint(strVSEntryPoint);
+								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								pVertexShader->StreamIn(*pSteamData.get(), m_strEffectFile, strParamValue, HrShader::ST_VERTEX_SHADER);
+
+								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+								m_vecVertexShaders.push_back(pVertexShader);
 							}
 							else if (strParamName == "pixel_shader")
 							{
-								std::string strPSEntryPoint = strParamValue;
-								pRenderPass->SetPSEntryPoint(strPSEntryPoint);
+								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								pPixelShader->StreamIn(*pSteamData.get(), m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
+
+								pRenderPass->SetShader(pPixelShader, HrShader::ST_VERTEX_SHADER);
+								m_vecVertexShaders.push_back(pPixelShader);
 							}
 						}
 					}
-					//创建shader
-					pRenderPass->StreamIn(*pSteamData.get());
 				}
 			}
 		}

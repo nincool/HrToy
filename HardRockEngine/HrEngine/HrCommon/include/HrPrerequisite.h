@@ -15,6 +15,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <boost/noncopyable.hpp>
 
 #endif
 

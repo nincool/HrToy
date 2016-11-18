@@ -79,7 +79,7 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
 	unsigned int offset = 0;
 
-	HrShader* pShader = pRenderTechnique->GetRenderPass(0)->GetVertexShader();
+	HrShader* pShader = nullptr;//pRenderTechnique->GetRenderPass(0)->GetVertexShader();
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
 	

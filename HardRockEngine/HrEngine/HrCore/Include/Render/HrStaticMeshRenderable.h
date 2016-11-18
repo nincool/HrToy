@@ -15,6 +15,9 @@ namespace Hr
 		virtual HrRenderLayout* GetRenderLayout() override;
 
 		void SetMesh(HrMesh* pMesh) { m_pMesh = pMesh; }
+
+	protected:
+		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override;
 	protected:
 		HrMesh* m_pMesh;
 

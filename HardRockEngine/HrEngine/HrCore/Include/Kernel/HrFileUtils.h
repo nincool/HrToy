@@ -7,7 +7,7 @@
 
 namespace Hr
 {
-	class HrFileUtils : public HrSingleTon<HrFileUtils>
+	class HR_CORE_API HrFileUtils : public HrSingleTon<HrFileUtils>
 	{
 	public:
 		HrFileUtils();

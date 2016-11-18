@@ -15,6 +15,9 @@ namespace Hr
 		virtual HrRenderTechnique* GetRenderTechnique();
 
 		virtual void UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters);
+
+	protected:
+		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) = 0;
 	protected:
 		HrRenderEffect* m_pRenderEffect;
 		HrRenderTechnique* m_pRenderTechnique;

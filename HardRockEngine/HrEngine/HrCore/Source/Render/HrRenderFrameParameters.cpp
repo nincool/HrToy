@@ -26,8 +26,8 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 
 const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix() const
 {
-	Matrix4 matProj = m_pCurrentCamera->GetProjectMatrix();
-	Matrix4 matView = m_pCurrentCamera->GetViewMatrix();
+	const Matrix4& matProj = m_pCurrentCamera->GetProjectMatrix();
+	const Matrix4& matView = m_pCurrentCamera->GetViewMatrix();
 	mWorldViewProjMatrix = matView * matProj;
 
 	return mWorldViewProjMatrix;

@@ -24,5 +24,9 @@ HrRenderLayout* HrStaticMeshRenderable::GetRenderLayout()
 	return m_pMesh->GetRenderLayout();
 }
 
+void HrStaticMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters)
+{
+
+}
 
 

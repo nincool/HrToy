@@ -259,7 +259,10 @@
     <ClInclude Include="Include\Asset\HrMaterial.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrShader.h">
+    <ClInclude Include="Include\Render\HrShader.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrRenderEffectConstntBuffer.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
@@ -423,7 +426,10 @@
     <ClCompile Include="Source\Asset\HrMaterial.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrShader.cpp">
+    <ClCompile Include="Source\Render\HrShader.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrRenderEffectConstntBuffer.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
   </ItemGroup>

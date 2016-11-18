@@ -36,7 +36,7 @@ HrRenderPass* HrRenderTechnique::GetRenderPass(uint32 nIndex)
 	return m_vecPass[nIndex];
 }
 
-HrRenderPass* HrRenderTechnique::CreatePass(std::string strPassName)
+HrRenderPass* HrRenderTechnique::AddPass(std::string strPassName)
 {
 	HrRenderPass* pRenderPass = HR_NEW HrRenderPass(strPassName);
 	m_vecPass.push_back(pRenderPass);

@@ -15,7 +15,7 @@ namespace Hr
 		virtual HrRenderPass* GetRenderPass(uint32 nIndex);
 		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters);
 
-		HrRenderPass* CreatePass(std::string strPassName);
+		HrRenderPass* AddPass(std::string strPassName);
 	protected:
 		size_t m_nHashName;
 		std::string m_strTechniqueName;

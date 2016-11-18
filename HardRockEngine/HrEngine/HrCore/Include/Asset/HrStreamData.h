@@ -23,6 +23,7 @@ namespace Hr
 		char* GetBufferPoint();
 		
 		uint64 GetBufferSize();
+		uint64 GetBufferSizeWithoutNULLTerminator();
 
 		void ClearBuffer();
 		void AddBuffer(char* pData, uint32 nSize);
