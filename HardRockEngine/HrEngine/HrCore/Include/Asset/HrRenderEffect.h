@@ -18,6 +18,9 @@ namespace Hr
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
+
+		bool CreateEffectParameters();
+		bool CreateEffectConstParameters();
 	private:
 		size_t m_nHashName;
 
@@ -30,6 +33,7 @@ namespace Hr
 
 		std::vector<HrRenderTechnique*> m_vecRenderTechnique;
 		
+		HrStreamDataPtr m_pEffectStreamBuffer;
 	};
 }
 

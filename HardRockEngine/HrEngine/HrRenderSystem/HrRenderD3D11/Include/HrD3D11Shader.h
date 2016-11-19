@@ -19,7 +19,7 @@ namespace Hr
 
 		virtual void UnBind(HrRender* pRender) override;
 
-		virtual void StreamIn(HrStreamData& streamData, std::string& strFile, const std::string& strEntryPoint, EnumShaderType shaderType) override;
+		virtual void StreamIn(HrStreamData& streamBuffer, std::string& strFile, EnumShaderType shaderType) override;
 
 		virtual void UpdateParams(HrRenderFrameParameters& renderFrameParameters) override;
 
@@ -38,10 +38,10 @@ namespace Hr
 		}
 
 	private:
-		bool CompileShader(HrStreamData& streamData);
+		//bool CompileShader(HrStreamData& streamData);
 
-		void CreateVertexShader();
-		void CreatePixelShader();
+		void CreateVertexShader(HrStreamData& streamBuffer);
+		void CreatePixelShader(HrStreamData& streamBuffer);
 
 		ID3D11Buffer* GetConstantBuffer();
 

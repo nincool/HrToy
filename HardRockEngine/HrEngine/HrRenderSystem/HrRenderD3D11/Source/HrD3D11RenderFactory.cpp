@@ -6,6 +6,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -53,5 +54,12 @@ HrShader* HrD3D11RenderFactory::CreateShader()
 	HrShader* pD3D11Shader = HR_NEW HrD3D11Shader();
 
 	return pD3D11Shader;
+}
+
+HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
+{
+	HrShaderCompilerPtr pShaderCompiler = MakeSharedPtr<HrD3D11ShaderCompiler>();
+
+	return pShaderCompiler;
 }
 

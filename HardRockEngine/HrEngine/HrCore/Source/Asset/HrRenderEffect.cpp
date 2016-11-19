@@ -1,6 +1,7 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrResourceLoader.h"
 #include "Asset/HrResourceManager.h"
+#include "Asset/HrShaderCompiler.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderFactory.h"
@@ -17,6 +18,7 @@ using namespace Hr;
 
 HrRenderEffect::HrRenderEffect()
 {
+	m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
 }
 
 HrRenderEffect::~HrRenderEffect()
@@ -54,7 +56,8 @@ HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
 
 bool HrRenderEffect::LoadImpl()
 {
-	HrStreamDataPtr pSteamData;
+	HrStreamDataPtr pStreamData;
+	HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
 
 	typedef boost::property_tree::ptree::value_type ptValue;
 	boost::property_tree::ptree pt;
@@ -67,7 +70,7 @@ bool HrRenderEffect::LoadImpl()
 			m_strEffectFile = HrFileUtils::Instance()->GetFullPathForFileName(rootEffectValue.second.get_value<std::string>());
 			
 			//¼ÓÔØShaderÎÄ¼þ
-			pSteamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
+			pStreamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
 		}
 		else if (rootEffectValue.first == "technique")
 		{
@@ -93,19 +96,22 @@ bool HrRenderEffect::LoadImpl()
 							std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
 							if (strParamName == "vertex_shader")
 							{
+								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, *m_pEffectStreamBuffer.get());
+								
+
 								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								pVertexShader->StreamIn(*pSteamData.get(), m_strEffectFile, strParamValue, HrShader::ST_VERTEX_SHADER);
+								pVertexShader->StreamIn(*m_pEffectStreamBuffer.get(), m_strEffectFile, HrShader::ST_VERTEX_SHADER);
 
 								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
 								m_vecVertexShaders.push_back(pVertexShader);
 							}
 							else if (strParamName == "pixel_shader")
 							{
-								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								pPixelShader->StreamIn(*pSteamData.get(), m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
+								//HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								//pPixelShader->StreamIn(*pStreamData.get(), m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
 
-								pRenderPass->SetShader(pPixelShader, HrShader::ST_VERTEX_SHADER);
-								m_vecVertexShaders.push_back(pPixelShader);
+								//pRenderPass->SetShader(pPixelShader, HrShader::ST_VERTEX_SHADER);
+								//m_vecVertexShaders.push_back(pPixelShader);
 							}
 						}
 					}
@@ -117,6 +123,16 @@ bool HrRenderEffect::LoadImpl()
 }
 
 bool HrRenderEffect::UnloadImpl()
+{
+	return true;
+}
+
+bool HrRenderEffect::CreateEffectParameters()
+{
+	return true;
+}
+
+bool HrRenderEffect::CreateEffectConstParameters()
 {
 	return true;
 }

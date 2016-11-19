@@ -56,61 +56,55 @@ void HrD3D11Shader::UnBind(HrRender* pRender)
 
 }
 
-void HrD3D11Shader::StreamIn(HrStreamData& streamData, std::string& strFile, const std::string& strEntryPoint, EnumShaderType shaderType)
+void HrD3D11Shader::StreamIn(HrStreamData& streamBuffer, std::string& strFile, EnumShaderType shaderType)
 {
 	m_shaderType = shaderType;
-	m_strEntryPoint = strEntryPoint;
 	m_strFilePath = strFile;
-
-	if (!CompileShader(streamData))
-	{
-		return;
-	}
 
 	switch (m_shaderType)
 	{
 	case HrShader::ST_VERTEX_SHADER:
-		CreateVertexShader();
+		CreateVertexShader(streamBuffer);
 		break;
 	case HrShader::ST_PIXEL_SHADER:
-		CreatePixelShader();
+		CreatePixelShader(streamBuffer);
 		break;
 	default:
 		break;
 	}
 }
 
-bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
-{
-	std::shared_ptr<HrD3D11ShaderCompiler> pShaderCompiler = std::make_shared<HrD3D11ShaderCompiler>();
-	if (pShaderCompiler->CompileShaderFromCode(m_strFilePath, streamData, m_shaderType, m_strEntryPoint, m_pShaderBuffer))
-	{
-		D3D11ShaderDesc shaderDesc = pShaderCompiler->GetShaderDesc();
-		for (size_t nConstBufferIndex = 0; nConstBufferIndex < shaderDesc.cb_desc.size(); ++nConstBufferIndex)
-		{
-			HrRenderConstantBuffer* pRenderConstantBuffer = AddRenderConstantBuffer();
-			pRenderConstantBuffer->SetName(shaderDesc.cb_desc[nConstBufferIndex].name);
-			//pRenderConstantBuffer->SetSize(shaderDesc.cb_desc[nConstBufferIndex].size);
-			for (size_t nVariableIndex = 0; nVariableIndex < shaderDesc.cb_desc[nConstBufferIndex].var_desc.size(); ++nVariableIndex)
-			{
-				const D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& variableDesc = shaderDesc.cb_desc[nConstBufferIndex].var_desc[nVariableIndex];
-				pRenderConstantBuffer->AddParameter(variableDesc.name
-					, HrD3D11Mapping::GetRenderParamType(variableDesc.name)
-					, HrD3D11Mapping::GetRenderParamDataType(static_cast<D3D_SHADER_VARIABLE_TYPE>(variableDesc.type))
-					, variableDesc.start_offset);
-			}
-			pRenderConstantBuffer->MakeConstBuffer(shaderDesc.cb_desc[nConstBufferIndex].size);
-		}
-		return true;
-	}
+//bool HrD3D11Shader::CompileShader(HrStreamData& streamData)
+//{
+//	std::shared_ptr<HrD3D11ShaderCompiler> pShaderCompiler = std::make_shared<HrD3D11ShaderCompiler>();
+//	if (pShaderCompiler->CompileShaderFromCode(m_strFilePath, streamData, m_shaderType, m_strEntryPoint, m_pShaderBuffer))
+//	{
+//		D3D11ShaderDesc shaderDesc = pShaderCompiler->GetShaderDesc();
+//		for (size_t nConstBufferIndex = 0; nConstBufferIndex < shaderDesc.cb_desc.size(); ++nConstBufferIndex)
+//		{
+//			HrRenderConstantBuffer* pRenderConstantBuffer = AddRenderConstantBuffer();
+//			pRenderConstantBuffer->SetName(shaderDesc.cb_desc[nConstBufferIndex].name);
+//			//pRenderConstantBuffer->SetSize(shaderDesc.cb_desc[nConstBufferIndex].size);
+//			for (size_t nVariableIndex = 0; nVariableIndex < shaderDesc.cb_desc[nConstBufferIndex].var_desc.size(); ++nVariableIndex)
+//			{
+//				const D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& variableDesc = shaderDesc.cb_desc[nConstBufferIndex].var_desc[nVariableIndex];
+//				pRenderConstantBuffer->AddParameter(variableDesc.name
+//					, HrD3D11Mapping::GetRenderParamType(variableDesc.name)
+//					, HrD3D11Mapping::GetRenderParamDataType(static_cast<D3D_SHADER_VARIABLE_TYPE>(variableDesc.type))
+//					, variableDesc.start_offset);
+//			}
+//			pRenderConstantBuffer->MakeConstBuffer(shaderDesc.cb_desc[nConstBufferIndex].size);
+//		}
+//		return true;
+//	}
+//
+//	return false;
+//}
 
-	return false;
-}
-
-void HrD3D11Shader::CreateVertexShader()
+void HrD3D11Shader::CreateVertexShader(HrStreamData& streamBuffer)
 {
-	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateVertexShader(m_pShaderBuffer->GetBufferPoint()
-		, m_pShaderBuffer->GetBufferSize(), 0, &m_pVertexShader);
+	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateVertexShader(streamBuffer.GetBufferPoint()
+		, streamBuffer.GetBufferSize(), 0, &m_pVertexShader);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("CompileD3DShader Error! CreateVertexShader!"));
@@ -118,10 +112,10 @@ void HrD3D11Shader::CreateVertexShader()
 	}
 }
 
-void HrD3D11Shader::CreatePixelShader()
+void HrD3D11Shader::CreatePixelShader(HrStreamData& streamBuffer)
 {
-	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreatePixelShader(m_pShaderBuffer->GetBufferPoint()
-		, m_pShaderBuffer->GetBufferSize(), 0, &m_pPixelShader);
+	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreatePixelShader(streamBuffer.GetBufferPoint()
+		, streamBuffer.GetBufferSize(), 0, &m_pPixelShader);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("CompileD3DShader Error! CreatePixelShader!"));

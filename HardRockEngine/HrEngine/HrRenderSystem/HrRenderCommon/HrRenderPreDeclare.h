@@ -23,6 +23,9 @@ namespace Hr
 
 	class HrD3D11Shader;
 	class HrD3D11GraphicsBuffer;
+
+	class HrD3D11ShaderCompiler;
+	typedef std::shared_ptr<HrD3D11ShaderCompiler> HrD3D11ShaderCompilerPtr;
 }
 
 #endif

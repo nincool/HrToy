@@ -8,6 +8,7 @@ HrStreamData::HrStreamData()
 {
 	m_readDataType = RDT_TXT;
 	m_pStreamData = nullptr;
+	m_nStreamLength = 0;
 }
 
 HrStreamData::~HrStreamData()

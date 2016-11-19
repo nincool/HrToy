@@ -128,7 +128,7 @@
   <ItemGroup>
     <ClInclude Include="Include\Asset\HrColor.h" />
     <ClInclude Include="Include\Asset\HrMaterial.h" />
-    <ClInclude Include="Include\Asset\HrRenderEffectConstntBuffer.h" />
+    <ClInclude Include="Include\Asset\HrRenderEffectParameter.h" />
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
@@ -137,6 +137,7 @@
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
+    <ClInclude Include="Include\Asset\HrShaderCompiler.h" />
     <ClInclude Include="Include\Asset\HrStreamData.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
@@ -194,7 +195,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Asset\HrColor.cpp" />
     <ClCompile Include="Source\Asset\HrMaterial.cpp" />
-    <ClCompile Include="Source\Asset\HrRenderEffectConstntBuffer.cpp" />
+    <ClCompile Include="Source\Asset\HrRenderEffectParameter.cpp" />
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
+    <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />

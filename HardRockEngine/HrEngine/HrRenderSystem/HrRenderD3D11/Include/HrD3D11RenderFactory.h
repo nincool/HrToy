@@ -24,6 +24,8 @@ namespace Hr
 		virtual HrRenderLayout* CreateRenderLayout() override;
 		
 		virtual HrShader* CreateShader() override;
+
+		virtual HrShaderCompilerPtr CreateShaderCompiler() override;
 	};
 }
 

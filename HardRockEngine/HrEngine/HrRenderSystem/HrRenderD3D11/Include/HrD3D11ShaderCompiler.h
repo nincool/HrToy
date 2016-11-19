@@ -2,7 +2,7 @@
 #define _HR_D3D11SHADERCOMPILER_H_
 
 #include "HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
-#include "HrRenderD3D11/Include/HrD3D11Shader.h"
+#include "HrCore/Include/Asset/HrShaderCompiler.h"
 #include "HrCore/Include/Kernel/HrFileUtils.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include <d3dcompiler.h>
@@ -106,22 +106,22 @@ namespace Hr
 
 	};
 
-	class HrD3D11ShaderCompiler 
+	class HrD3D11ShaderCompiler : public HrShaderCompiler
 	{
 	public:
 		HrD3D11ShaderCompiler();
 		~HrD3D11ShaderCompiler();
 
-		bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
-			, HrD3D11Shader::EnumShaderType shaderType
+		virtual bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
+			, HrShader::EnumShaderType shaderType
 			, std::string& strEntryPoint
-			, HrStreamData* pShaderBuffer);
+			, HrStreamData& shaderBuffer) override;
 
 		D3D11ShaderDesc& GetShaderDesc() { return m_shaderDesc; }
 
 		bool RelfectEffectParameters(HrStreamData* pShaderBuffer);
 	private:
-		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrD3D11Shader::EnumShaderType shaderType);
+		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
 	protected:
 		UINT m_nConstantBufferSize = 0;

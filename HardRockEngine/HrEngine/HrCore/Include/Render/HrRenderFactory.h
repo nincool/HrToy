@@ -24,6 +24,7 @@ namespace Hr
 		
 		virtual HrShader* CreateShader() = 0;
 		
+		virtual HrShaderCompilerPtr CreateShaderCompiler() = 0;
 	};
 }
 
