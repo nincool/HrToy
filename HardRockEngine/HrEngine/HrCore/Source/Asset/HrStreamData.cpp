@@ -55,6 +55,15 @@ char* HrStreamData::GetBufferPoint()
 #endif // VECTOR_ALLOC
 }
 
+const char* HrStreamData::GetBufferPoint() const
+{
+#ifdef VECTOR_ALLOC
+	return (char*)&m_vecStreamData[0];
+#else
+	return m_pStreamData;
+#endif // VECTOR_ALLOC
+}
+
 uint64 HrStreamData::GetBufferSize()
 {
 #ifdef VECTOR_ALLOC

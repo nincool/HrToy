@@ -1,8 +1,10 @@
 #include "HrD3D11ShaderCompiler.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
+#include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <D3DCompiler.h>
+#include <algorithm>
 
 using namespace Hr;
 
@@ -18,7 +20,7 @@ HrD3D11ShaderCompiler::~HrD3D11ShaderCompiler()
 
 bool HrD3D11ShaderCompiler::CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
 	, HrShader::EnumShaderType shaderType
-	, std::string& strEntryPoint
+	, const std::string& strEntryPoint
 	, HrStreamData& shaderBuffer)
 {
 	HrD3D11IncludeShaderHandler includeHandler(strShaderFileName);
@@ -224,11 +226,11 @@ void HrD3D11ShaderCompiler::GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defin
 
 }
 
-bool HrD3D11ShaderCompiler::RelfectEffectParameters(HrStreamData* pShaderBuffer)
+bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, HrShader::EnumShaderType shaderType)
 {
-	uint64 nBufferSize = pShaderBuffer->GetBufferSize();
+	uint64 nBufferSize = shaderBuffer.GetBufferSize();
 	ID3D11ShaderReflection* pShaderReflection = nullptr;
-	HRESULT hr = D3DReflect((void*)pShaderBuffer->GetBufferPoint()
+	HRESULT hr = D3DReflect((void*)shaderBuffer.GetBufferPoint()
 		, nBufferSize
 		, IID_ID3D11ShaderReflection
 		, (void**)&pShaderReflection);
@@ -243,6 +245,118 @@ bool HrD3D11ShaderCompiler::RelfectEffectParameters(HrStreamData* pShaderBuffer)
 		HRASSERT(nullptr, "CompileD3DShader Error! GetDesc");
 	}
 
+	m_nConstantBufferNum = shaderDesc.ConstantBuffers;
+	m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
+
+	for (uint32 nCBIndex = 0; nCBIndex < shaderDesc.ConstantBuffers; ++nCBIndex)
+	{
+		ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
+
+		D3D11_SHADER_BUFFER_DESC constantBufferDesc;
+		hr = pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc);
+		if (FAILED(hr))
+		{
+			HRASSERT(nullptr, "CompileD3DShader Error! ConstBuffer GetDesc");
+		}
+		D3D_CBUFFER_TYPE bufferType = constantBufferDesc.Type;
+
+		switch (bufferType)
+		{
+		case D3D_CT_CBUFFER:
+		case D3D_CT_TBUFFER:
+		{
+			D3D11ShaderDesc::ConstantBufferDesc cbDesc;
+			cbDesc.name = constantBufferDesc.Name;
+			cbDesc.name_hash = HrHashValue(cbDesc.name);
+			cbDesc.size = constantBufferDesc.Size;
+
+			for (uint32 nCBVarIndex = 0; nCBVarIndex < constantBufferDesc.Variables; ++nCBVarIndex)
+			{
+				ID3D11ShaderReflectionVariable* pVarRef = pShaderReflectionConstantBuffer->GetVariableByIndex(nCBVarIndex);
+
+				D3D11_SHADER_VARIABLE_DESC varDesc;
+				TIF(pVarRef->GetDesc(&varDesc));
+
+				ID3D11ShaderReflectionType* pVarRefType = pVarRef->GetType();
+				D3D11_SHADER_TYPE_DESC varRefTypeDesc;
+				TIF(pVarRefType->GetDesc(&varRefTypeDesc));
+
+				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc constantVariableDesc;
+				constantVariableDesc.name = varDesc.Name;
+				constantVariableDesc.start_offset = varDesc.StartOffset;
+
+
+				constantVariableDesc.varClass = static_cast<uint32>(varRefTypeDesc.Class);
+				constantVariableDesc.type = static_cast<uint8>(varRefTypeDesc.Type);//D3D_SHADER_VARIABLE_TYPE https://msdn.microsoft.com/en-us/library/windows/desktop/ff728735(v=vs.85).aspx
+				constantVariableDesc.rows = static_cast<uint8>(varRefTypeDesc.Rows);
+				constantVariableDesc.columns = static_cast<uint8>(varRefTypeDesc.Columns);
+				constantVariableDesc.elements = static_cast<uint16>(varRefTypeDesc.Elements);
+				constantVariableDesc.bUsed = varDesc.uFlags & D3D_SVF_USED;
+
+				size_t nSeed = HrHashValue(varDesc.Name);
+				boost::hash_combine(nSeed, constantVariableDesc.varClass);
+				boost::hash_combine(nSeed, constantVariableDesc.type);
+				boost::hash_combine(nSeed, constantVariableDesc.rows);
+				boost::hash_combine(nSeed, constantVariableDesc.columns);
+				boost::hash_combine(nSeed, constantVariableDesc.elements);
+				constantVariableDesc.name_hash = nSeed;
+
+				cbDesc.var_desc.push_back(constantVariableDesc);
+
+			}
+			m_arrShaderDesc[shaderType].cb_desc.push_back(cbDesc);
+
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	int nSamplers = -1;
+	int nSrvs = -1;
+	int nUavs = -1;
+	for (uint32 i = 0; i < shaderDesc.BoundResources; ++i)
+	{
+		D3D11_SHADER_INPUT_BIND_DESC shaderInputDesc;
+		pShaderReflection->GetResourceBindingDesc(i, &shaderInputDesc);
+
+		switch (shaderInputDesc.Type)
+		{
+		case D3D_SIT_SAMPLER:
+			nSamplers = (std::max)(nSamplers, static_cast<int>(shaderInputDesc.BindPoint));
+			break;
+
+		case D3D_SIT_TEXTURE:
+		case D3D_SIT_STRUCTURED:
+		case D3D_SIT_BYTEADDRESS:
+			nSrvs = (std::max)(nSrvs, static_cast<int>(shaderInputDesc.BindPoint));
+			break;
+
+		case D3D_SIT_UAV_RWTYPED:
+		case D3D_SIT_UAV_RWSTRUCTURED:
+		case D3D_SIT_UAV_RWBYTEADDRESS:
+		case D3D_SIT_UAV_APPEND_STRUCTURED:
+		case D3D_SIT_UAV_CONSUME_STRUCTURED:
+		case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+			nUavs = (std::max)(nUavs, static_cast<int>(shaderInputDesc.BindPoint));
+			break;
+
+		default:
+			D3D11ShaderDesc::BoundResourceDesc bindResourceDesc;
+			bindResourceDesc.name = shaderInputDesc.Name;
+			bindResourceDesc.type = static_cast<uint8>(shaderInputDesc.Type);
+			bindResourceDesc.bind_point = static_cast<uint16>(shaderInputDesc.BindPoint);
+			bindResourceDesc.dimension = static_cast<uint8>(shaderInputDesc.Dimension);
+			m_arrShaderDesc[shaderType].res_desc.push_back(bindResourceDesc);
+
+			break;
+		}
+	}
+	m_arrShaderDesc[shaderType].num_samplers = static_cast<uint16>(nSamplers + 1);
+	m_arrShaderDesc[shaderType].num_srvs = static_cast<uint16>(nSrvs + 1);
+	m_arrShaderDesc[shaderType].num_uavs = static_cast<uint16>(nUavs + 1);
+
 	//get the input parameters
 	m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
 	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
@@ -250,6 +364,7 @@ bool HrD3D11ShaderCompiler::RelfectEffectParameters(HrStreamData* pShaderBuffer)
 		D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderInputParameters[i];
 		pShaderReflection->GetInputParameterDesc(i, &curParam);
 	}
+
 	//get the output parameters
 	m_vecD3D11ShaderOutputParamters.resize(shaderDesc.OutputParameters);
 	for (UINT i = 0; i < shaderDesc.OutputParameters; ++i)
@@ -258,66 +373,124 @@ bool HrD3D11ShaderCompiler::RelfectEffectParameters(HrStreamData* pShaderBuffer)
 		pShaderReflection->GetOutputParameterDesc(i, &curParam);
 	}
 
-	m_nConstantBufferNum = shaderDesc.ConstantBuffers;
-	m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
-
-	if (shaderDesc.ConstantBuffers > 0)
-	{
-		for (uint32 nCBIndex = 0; nCBIndex < shaderDesc.ConstantBuffers; ++nCBIndex)
-		{
-			ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
-
-			D3D11_SHADER_BUFFER_DESC constantBufferDesc;
-			hr = pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc);
-			if (FAILED(hr))
-			{
-				HRASSERT(nullptr, "CompileD3DShader Error! ConstBuffer GetDesc");
-			}
-			if (D3D_CT_CBUFFER == constantBufferDesc.Type || D3D_CT_TBUFFER == constantBufferDesc.Type)
-			{
-				D3D11ShaderDesc::ConstantBufferDesc constantDesc;
-				constantDesc.name = constantBufferDesc.Name;
-				constantDesc.name_hash = HrHashValue(constantBufferDesc.Name);
-				constantDesc.size = constantBufferDesc.Size;
-
-				for (uint32 nCBVarIndex = 0; nCBVarIndex < constantBufferDesc.Variables; ++nCBVarIndex)
-				{
-					ID3D11ShaderReflectionVariable* pVarRef = pShaderReflectionConstantBuffer->GetVariableByIndex(nCBVarIndex);
-
-					D3D11_SHADER_VARIABLE_DESC varDesc;
-					pVarRef->GetDesc(&varDesc);
-
-					D3D11_SHADER_TYPE_DESC varTypeDesc;
-					ID3D11ShaderReflectionType* pVarType = pVarRef->GetType();
-					pVarType->GetDesc(&varTypeDesc);
-
-					D3D11ShaderDesc::ConstantBufferDesc::VariableDesc constantBufferVariableDesc;
-					constantBufferVariableDesc.name = varDesc.Name;
-					constantBufferVariableDesc.start_offset = varDesc.StartOffset;
-					constantBufferVariableDesc.type = varTypeDesc.Type; //D3D_SHADER_VARIABLE_TYPE https://msdn.microsoft.com/en-us/library/windows/desktop/ff728735(v=vs.85).aspx
-					constantBufferVariableDesc.rows = varTypeDesc.Rows;
-					constantBufferVariableDesc.columns = varTypeDesc.Columns;
-					constantBufferVariableDesc.elements = varTypeDesc.Elements;
-
-					constantDesc.var_desc.push_back(constantBufferVariableDesc);
-				}
-				m_shaderDesc.cb_desc.push_back(constantDesc);
-			}
-		}
-
-		int nSamplers = -1;
-		int nSrvs = -1;
-		int nUavs = -1;
-		for (uint32_t i = 0; i < shaderDesc.BoundResources; ++i)
-		{
-			D3D11_SHADER_INPUT_BIND_DESC shaderInputDesc;
-			pShaderReflection->GetResourceBindingDesc(i, &shaderInputDesc);
-
-		}
-	}
-
 	SAFE_RELEASE(pShaderReflection);
 
 	return true;
 }
 
+bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
+{
+	ID3DBlob* pStrippedBlob = nullptr;
+	HRESULT hr = D3DStripShader(shaderBuffer.GetBufferPoint(), shaderBuffer.GetBufferSize(),0,  &pStrippedBlob);
+	shaderBuffer.ClearBuffer();
+	shaderBuffer.AddBuffer(static_cast<char*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
+	SAFE_RELEASE(pStrippedBlob);
+
+	return true;
+}
+
+void HrD3D11ShaderCompiler::CreateEffectParameters()
+{
+	std::vector<std::unique_ptr<HrRenderEffectParameter>> m_vecParameter;
+	std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>> m_vecConstantBuffer;
+	for (uint32 nShaderDescIndex = 0; nShaderDescIndex < m_arrShaderDesc.size(); ++nShaderDescIndex)
+	{
+		uint32 nConstBuffer = m_arrShaderDesc[nShaderDescIndex].cb_desc.size();
+		for (uint32 nCBIndex = 0; nCBIndex < nConstBuffer; ++nCBIndex)
+		{
+			if (IsConstantBufferExisted(m_vecConstantBuffer, m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name_hash))
+			{
+				continue;
+			}
+			std::unique_ptr<HrRenderEffectConstantBuffer> pConstBuffer = MakeUniquePtr<HrRenderEffectConstantBuffer>(m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name
+				, m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name_hash);
+			m_vecConstantBuffer.push_back(std::move(pConstBuffer));
+
+			uint32 nVarNum = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc.size();
+			for (uint32 nVarIndex = 0; nVarIndex < nVarNum; ++nVarIndex)
+			{
+				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc[nVarIndex];
+				if (IsParameterExisted(m_vecParameter, varDesc.name_hash))
+				{
+					continue;
+				}
+				std::unique_ptr<HrRenderEffectParameter> pParameter = MakeUniquePtr<HrRenderEffectParameter>(varDesc.name, varDesc.name_hash);
+				
+			}
+		}
+	}
+}
+
+bool HrD3D11ShaderCompiler::IsConstantBufferExisted(std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>>& renderEffectConstBuffer, size_t nHashName)
+{
+	for (uint32 nRECBIndex = 0; nRECBIndex < renderEffectConstBuffer.size(); ++nRECBIndex)
+	{
+		if (renderEffectConstBuffer[nRECBIndex]->HashName() == nHashName)
+		{
+			return true;;
+		}
+	}
+
+	return false;
+}
+
+bool HrD3D11ShaderCompiler::IsParameterExisted(std::vector<std::unique_ptr<HrRenderEffectParameter>>& renderEffectParameter, size_t nHashName)
+{
+	for (uint32 nREPIndex = 0; nREPIndex < renderEffectParameter.size(); ++nREPIndex)
+	{
+		if (renderEffectParameter[nREPIndex]->HashName() == nHashName)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//
+//struct D3D11ShaderDesc
+//{
+//	D3D11ShaderDesc()
+//		: num_samplers(0), num_srvs(0), num_uavs(0)
+//	{
+//	}
+//
+//	struct ConstantBufferDesc
+//	{
+//		ConstantBufferDesc()
+//			: size(0)
+//		{
+//		}
+//
+//		struct VariableDesc
+//		{
+//			std::string name;
+//			uint32 start_offset;
+//			uint32 varClass;
+//			uint32 type;
+//			uint32 rows;
+//			uint32 columns;
+//			uint32 elements;
+//			bool bUsed;
+//		};
+//		std::vector<VariableDesc> var_desc;
+//
+//		std::string name;
+//		size_t name_hash;
+//		uint32_t size;
+//	};
+//	std::vector<ConstantBufferDesc> cb_desc;
+//
+//	uint16_t num_samplers;
+//	uint16_t num_srvs;
+//	uint16_t num_uavs;
+//
+//	struct BoundResourceDesc
+//	{
+//		std::string name;
+//		uint8_t type;
+//		uint8_t dimension;
+//		uint16_t bind_point;
+//	};
+//	std::vector<BoundResourceDesc> res_desc;
+//};

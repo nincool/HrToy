@@ -64,25 +64,166 @@ namespace Hr
 
 	};
 
-	class HrRenderEffectParameter : public boost::noncopyable
+	//from ogre
+	enum EnumRenderParamType
 	{
-	public:
-		HrRenderEffectParameter();
-		~HrRenderEffectParameter();
 
-	private:
-
+		RPT_UNKNOWN = 999
 	};
 
-	class HrRenderEffectConstantBuffer : public boost::noncopyable
+	enum EnumRenderSemantic
+	{
+		RS_UNKNOW = 0,
+		RS_POSITION = 1,
+		RS_NORMAL = 2,
+		RS_COLOR = 3,
+	};
+
+
+	//template<typename T>
+	class HR_CORE_API HrRenderVariable
 	{
 	public:
-		HrRenderEffectConstantBuffer();
+
+		virtual std::unique_ptr<RenderVariable> Clone() = 0;
+
+		virtual RenderVariable& operator=(bool const & value);
+		virtual RenderVariable& operator=(uint32_t const & value);
+		virtual RenderVariable& operator=(int32_t const & value);
+		virtual RenderVariable& operator=(float const & value);
+		virtual RenderVariable& operator=(uint2 const & value);
+		virtual RenderVariable& operator=(uint3 const & value);
+		virtual RenderVariable& operator=(uint4 const & value);
+		virtual RenderVariable& operator=(int2 const & value);
+		virtual RenderVariable& operator=(int3 const & value);
+		virtual RenderVariable& operator=(int4 const & value);
+		virtual RenderVariable& operator=(float2 const & value);
+		virtual RenderVariable& operator=(float3 const & value);
+		virtual RenderVariable& operator=(float4 const & value);
+		virtual RenderVariable& operator=(float4x4 const & value);
+		virtual RenderVariable& operator=(TexturePtr const & value);
+		virtual RenderVariable& operator=(TextureSubresource const & value);
+		virtual RenderVariable& operator=(SamplerStateObjectPtr const & value);
+		virtual RenderVariable& operator=(GraphicsBufferPtr const & value);
+		virtual RenderVariable& operator=(std::string const & value);
+		virtual RenderVariable& operator=(ShaderDesc const & value);
+		virtual RenderVariable& operator=(std::vector<bool> const & value);
+		virtual RenderVariable& operator=(std::vector<uint32_t> const & value);
+		virtual RenderVariable& operator=(std::vector<int32_t> const & value);
+		virtual RenderVariable& operator=(std::vector<float> const & value);
+		virtual RenderVariable& operator=(std::vector<uint2> const & value);
+		virtual RenderVariable& operator=(std::vector<uint3> const & value);
+		virtual RenderVariable& operator=(std::vector<uint4> const & value);
+		virtual RenderVariable& operator=(std::vector<int2> const & value);
+		virtual RenderVariable& operator=(std::vector<int3> const & value);
+		virtual RenderVariable& operator=(std::vector<int4> const & value);
+		virtual RenderVariable& operator=(std::vector<float2> const & value);
+		virtual RenderVariable& operator=(std::vector<float3> const & value);
+		virtual RenderVariable& operator=(std::vector<float4> const & value);
+		virtual RenderVariable& operator=(std::vector<float4x4> const & value);
+
+		virtual void Value(bool& val) const;
+		virtual void Value(uint32_t& val) const;
+		virtual void Value(int32_t& val) const;
+		virtual void Value(float& val) const;
+		virtual void Value(uint2& val) const;
+		virtual void Value(uint3& val) const;
+		virtual void Value(uint4& val) const;
+		virtual void Value(int2& val) const;
+		virtual void Value(int3& val) const;
+		virtual void Value(int4& val) const;
+		virtual void Value(float2& val) const;
+		virtual void Value(float3& val) const;
+		virtual void Value(float4& val) const;
+		virtual void Value(float4x4& val) const;
+		virtual void Value(TexturePtr& val) const;
+		virtual void Value(TextureSubresource& val) const;
+		virtual void Value(SamplerStateObjectPtr& val) const;
+		virtual void Value(GraphicsBufferPtr& value) const;
+		virtual void Value(std::string& val) const;
+		virtual void Value(ShaderDesc& val) const;
+		virtual void Value(std::vector<bool>& val) const;
+		virtual void Value(std::vector<uint32_t>& val) const;
+		virtual void Value(std::vector<int32_t>& val) const;
+		virtual void Value(std::vector<float>& val) const;
+		virtual void Value(std::vector<uint2>& val) const;
+		virtual void Value(std::vector<uint3>& val) const;
+		virtual void Value(std::vector<uint4>& val) const;
+		virtual void Value(std::vector<int2>& val) const;
+		virtual void Value(std::vector<int3>& val) const;
+		virtual void Value(std::vector<int4>& val) const;
+		virtual void Value(std::vector<float2>& val) const;
+		virtual void Value(std::vector<float3>& val) const;
+		virtual void Value(std::vector<float4>& val) const;
+		virtual void Value(std::vector<float4x4>& val) const;
+
+		virtual void BindToCBuffer(RenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride);
+		virtual void RebindToCBuffer(RenderEffectConstantBuffer& cbuff);
+		virtual bool InCBuffer() const
+		{
+			return false;
+		}
+		virtual uint32_t CBufferOffset() const
+		{
+			return 0;
+		}
+		virtual uint32_t Stride() const
+		{
+			return 0;
+		}
+
+	protected:
+		//T& RetriveT()
+		//{
+		//	union Raw2T
+		//	{
+		//		uint8* raw;
+		//		T* t;
+		//	}R2T;
+		//	R2T.raw = &m_data[0];
+		//	return *R2T.t;
+		//}
+		EnumRenderEffectDataType m_dataType;
+		EnumRenderSemantic m_semantic;
+
+		uint32 m_nInBufferOffset;
+		uint32 m_nSize;
+
+		//uint8 m_data[sizeof(T)];
+	};
+
+	class HR_CORE_API HrRenderEffectParameter : public boost::noncopyable
+	{
+	public:
+		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName);
+		~HrRenderEffectParameter();
+
+		size_t HashName() const { return m_nHashName; }
+		const std::string& Name() const { return m_strName; } 
+	private:
+		EnumRenderEffectDataType m_paramType;
+
+		std::string m_strName;
+		size_t m_nHashName;
+
+		HrRenderEffectConstantBuffer* m_pAttachConstBuffer;
+	};
+
+	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable
+	{
+	public:
+		HrRenderEffectConstantBuffer(const std::string& strConstBufferName, size_t nHashName);
 		~HrRenderEffectConstantBuffer();
 
-		
+		size_t HashName() const { return m_nHashName; }
+		const std::string& Name() const { return m_strConstBufferName; }
+
+
 	private:
 		HrGraphicsBuffer* m_pConstantBuffer;
+
+		std::string m_strConstBufferName;
+		size_t m_nHashName;
 	};
 }
 

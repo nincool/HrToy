@@ -18,7 +18,7 @@ using namespace Hr;
 
 HrRenderEffect::HrRenderEffect()
 {
-	m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
+	//m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
 }
 
 HrRenderEffect::~HrRenderEffect()
@@ -96,22 +96,29 @@ bool HrRenderEffect::LoadImpl()
 							std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
 							if (strParamName == "vertex_shader")
 							{
-								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, *m_pEffectStreamBuffer.get());
+								HrStreamData effectStreamBuffer;
+								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, effectStreamBuffer);
+								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, HrShader::ST_VERTEX_SHADER);
+								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
 								
-
 								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								pVertexShader->StreamIn(*m_pEffectStreamBuffer.get(), m_strEffectFile, HrShader::ST_VERTEX_SHADER);
+								pVertexShader->StreamIn(effectStreamBuffer, m_strEffectFile, HrShader::ST_VERTEX_SHADER);
 
 								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
 								m_vecVertexShaders.push_back(pVertexShader);
 							}
 							else if (strParamName == "pixel_shader")
 							{
-								//HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								//pPixelShader->StreamIn(*pStreamData.get(), m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
+								HrStreamData effectStreamBuffer;
+								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_PIXEL_SHADER, strParamValue, effectStreamBuffer);
+								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, HrShader::ST_PIXEL_SHADER);
+								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
 
-								//pRenderPass->SetShader(pPixelShader, HrShader::ST_VERTEX_SHADER);
-								//m_vecVertexShaders.push_back(pPixelShader);
+								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								pPixelShader->StreamIn(*pStreamData.get(), m_strEffectFile, HrShader::ST_PIXEL_SHADER);
+
+								pRenderPass->SetShader(pPixelShader, HrShader::ST_VERTEX_SHADER);
+								m_vecPixelShaders.push_back(pPixelShader);
 							}
 						}
 					}
@@ -119,6 +126,9 @@ bool HrRenderEffect::LoadImpl()
 			}
 		}
 	}
+
+	CreateEffectParameters(pShaderCompiler);
+
 	return true;
 }
 
@@ -127,8 +137,10 @@ bool HrRenderEffect::UnloadImpl()
 	return true;
 }
 
-bool HrRenderEffect::CreateEffectParameters()
+bool HrRenderEffect::CreateEffectParameters(HrShaderCompilerPtr& pShaderCompiler)
 {
+	pShaderCompiler->CreateEffectParameters();
+
 	return true;
 }
 
@@ -137,3 +149,7 @@ bool HrRenderEffect::CreateEffectConstParameters()
 	return true;
 }
 
+//std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
+//std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
+//
+//std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;

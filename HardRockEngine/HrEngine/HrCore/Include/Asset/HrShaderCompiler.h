@@ -14,8 +14,14 @@ namespace Hr
 
 		virtual bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
 			, HrShader::EnumShaderType shaderType
-			, std::string& strEntryPoint
+			, const std::string& strEntryPoint
 			, HrStreamData& shaderBuffer) = 0;
+
+		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, HrShader::EnumShaderType shaderType) = 0;
+
+		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) = 0;
+
+		virtual void CreateEffectParameters() = 0;
 	};
 }
 

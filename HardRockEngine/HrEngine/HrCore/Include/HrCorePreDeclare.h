@@ -40,6 +40,8 @@ namespace Hr
 	class HrRenderLayout;
 	class HrRenderTechnique;
 	class HrRenderEffect;
+	class HrRenderEffectParameter;
+	class HrRenderEffectConstantBuffer;
 	class HrShader;
 	class HrRenderConstantBuffer;
 	class HrRenderParameter;
@@ -60,7 +62,6 @@ namespace Hr
 
 	class HrShaderCompiler;
 	typedef std::shared_ptr<HrShaderCompiler> HrShaderCompilerPtr;
-	class HrRenderEffect;
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
 	class HrGeometryFactory;

@@ -3,6 +3,7 @@
 
 #include "HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 #include "HrCore/Include/Asset/HrShaderCompiler.h"
+#include "HrCore/Include/Render/HrShader.h"
 #include "HrCore/Include/Kernel/HrFileUtils.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include <d3dcompiler.h>
@@ -40,11 +41,14 @@ namespace Hr
 			struct VariableDesc
 			{
 				std::string name;
+				size_t name_hash;
 				uint32 start_offset;
+				uint32 varClass;
 				uint32 type;
 				uint32 rows;
 				uint32 columns;
 				uint32 elements;
+				bool bUsed;
 			};
 			std::vector<VariableDesc> var_desc;
 
@@ -114,15 +118,20 @@ namespace Hr
 
 		virtual bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
 			, HrShader::EnumShaderType shaderType
-			, std::string& strEntryPoint
+			, const std::string& strEntryPoint
 			, HrStreamData& shaderBuffer) override;
 
-		D3D11ShaderDesc& GetShaderDesc() { return m_shaderDesc; }
 
-		bool RelfectEffectParameters(HrStreamData* pShaderBuffer);
+		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, HrShader::EnumShaderType shaderType) override;
+
+		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) override;
+
+		virtual void CreateEffectParameters() override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
+		bool IsConstantBufferExisted(std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>>& renderEffectConstBuffer, size_t nHashName);
+		bool IsParameterExisted(std::vector<std::unique_ptr<HrRenderEffectParameter>>& renderEffectParameter, size_t nHashName);
 	protected:
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;
@@ -131,9 +140,9 @@ namespace Hr
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
 
-		D3D11ShaderDesc m_shaderDesc;
-
+		std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;
 	};
 }
 
 #endif
+

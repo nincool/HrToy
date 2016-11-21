@@ -86,12 +86,12 @@ HrRenderParameter::EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const 
 	}
 }
 
-HrRenderParameter::EnumRenderParamDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType)
+EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType)
 {
 	switch (shaderVariableType)
 	{
 	case D3D_SVT_FLOAT:
-		return HrRenderParameter::RPDT_FLOAT;
+		return RPDT_FLOAT;
 	default:
 		break;
 	}

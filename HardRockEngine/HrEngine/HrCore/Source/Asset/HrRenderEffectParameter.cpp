@@ -2,9 +2,10 @@
 
 using namespace Hr;
 
-HrRenderEffectParameter::HrRenderEffectParameter()
+HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName)
 {
-
+	m_paramType = REDT_FLOAT1;
+	m_pAttachConstBuffer = nullptr;
 }
 
 HrRenderEffectParameter::~HrRenderEffectParameter()
@@ -17,9 +18,10 @@ HrRenderEffectParameter::~HrRenderEffectParameter()
 //
 ///////////////////////////////////////////
 
-HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer()
+HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& strConstBufferName, size_t nHashName)
 {
-
+	m_strConstBufferName = strConstBufferName;
+	m_nHashName = nHashName;
 }
 
 HrRenderEffectConstantBuffer::~HrRenderEffectConstantBuffer()

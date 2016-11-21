@@ -21,6 +21,7 @@ namespace Hr
 
 		char* ResizeBuffer(uint64 nLength);
 		char* GetBufferPoint();
+		const char* GetBufferPoint() const;
 		
 		uint64 GetBufferSize();
 		uint64 GetBufferSizeWithoutNULLTerminator();
