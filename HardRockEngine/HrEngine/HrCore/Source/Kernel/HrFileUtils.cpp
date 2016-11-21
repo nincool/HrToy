@@ -97,7 +97,7 @@ HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 
 	size_t nLength = static_cast<size_t>(nFileLength);
 	pFileStream->ResizeBuffer(nLength);
-	fileStream.read(pFileStream->GetBufferPoint(), nLength);
+	fileStream.read(reinterpret_cast<char*>(pFileStream->GetBufferPoint()), nLength);
 	fileStream.close();
 
 	return pFileStream;

@@ -19,19 +19,19 @@ namespace Hr
 
 		void SetReadDataType(EnumReadDataType readDataType);
 
-		char* ResizeBuffer(uint64 nLength);
-		char* GetBufferPoint();
-		const char* GetBufferPoint() const;
+		byte_t* ResizeBuffer(uint64 nLength);
+		byte_t* GetBufferPoint();
+		const byte_t* GetBufferPoint() const;
 		
 		uint64 GetBufferSize();
 		uint64 GetBufferSizeWithoutNULLTerminator();
 
 		void ClearBuffer();
-		void AddBuffer(char* pData, uint32 nSize);
+		void AddBuffer(uint8* pData, uint32 nSize);
 	private:
 		EnumReadDataType m_readDataType;
-		std::vector<uint8> m_vecStreamData;
-		char* m_pStreamData;
+		std::vector<byte_t> m_vecStreamData;
+		uint8* m_pStreamData;
 		uint32 m_nStreamLength;
 	};
 }

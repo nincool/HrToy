@@ -80,47 +80,49 @@ namespace Hr
 	};
 
 
-	//template<typename T>
+	//from klayge 
 	class HR_CORE_API HrRenderVariable
 	{
 	public:
+		HrRenderVariable();
+		virtual ~HrRenderVariable();
 
-		virtual std::unique_ptr<RenderVariable> Clone() = 0;
+		virtual std::unique_ptr<HrRenderVariable> Clone() = 0;
 
-		virtual RenderVariable& operator=(bool const & value);
-		virtual RenderVariable& operator=(uint32_t const & value);
-		virtual RenderVariable& operator=(int32_t const & value);
-		virtual RenderVariable& operator=(float const & value);
-		virtual RenderVariable& operator=(uint2 const & value);
-		virtual RenderVariable& operator=(uint3 const & value);
-		virtual RenderVariable& operator=(uint4 const & value);
-		virtual RenderVariable& operator=(int2 const & value);
-		virtual RenderVariable& operator=(int3 const & value);
-		virtual RenderVariable& operator=(int4 const & value);
-		virtual RenderVariable& operator=(float2 const & value);
-		virtual RenderVariable& operator=(float3 const & value);
-		virtual RenderVariable& operator=(float4 const & value);
-		virtual RenderVariable& operator=(float4x4 const & value);
-		virtual RenderVariable& operator=(TexturePtr const & value);
-		virtual RenderVariable& operator=(TextureSubresource const & value);
-		virtual RenderVariable& operator=(SamplerStateObjectPtr const & value);
-		virtual RenderVariable& operator=(GraphicsBufferPtr const & value);
-		virtual RenderVariable& operator=(std::string const & value);
-		virtual RenderVariable& operator=(ShaderDesc const & value);
-		virtual RenderVariable& operator=(std::vector<bool> const & value);
-		virtual RenderVariable& operator=(std::vector<uint32_t> const & value);
-		virtual RenderVariable& operator=(std::vector<int32_t> const & value);
-		virtual RenderVariable& operator=(std::vector<float> const & value);
-		virtual RenderVariable& operator=(std::vector<uint2> const & value);
-		virtual RenderVariable& operator=(std::vector<uint3> const & value);
-		virtual RenderVariable& operator=(std::vector<uint4> const & value);
-		virtual RenderVariable& operator=(std::vector<int2> const & value);
-		virtual RenderVariable& operator=(std::vector<int3> const & value);
-		virtual RenderVariable& operator=(std::vector<int4> const & value);
-		virtual RenderVariable& operator=(std::vector<float2> const & value);
-		virtual RenderVariable& operator=(std::vector<float3> const & value);
-		virtual RenderVariable& operator=(std::vector<float4> const & value);
-		virtual RenderVariable& operator=(std::vector<float4x4> const & value);
+		virtual HrRenderVariable& operator=(bool const & value);
+		virtual HrRenderVariable& operator=(uint32_t const & value);
+		virtual HrRenderVariable& operator=(int32_t const & value);
+		virtual HrRenderVariable& operator=(float const & value);
+		virtual HrRenderVariable& operator=(uint2 const & value);
+		virtual HrRenderVariable& operator=(uint3 const & value);
+		virtual HrRenderVariable& operator=(uint4 const & value);
+		virtual HrRenderVariable& operator=(int2 const & value);
+		virtual HrRenderVariable& operator=(int3 const & value);
+		virtual HrRenderVariable& operator=(int4 const & value);
+		virtual HrRenderVariable& operator=(float2 const & value);
+		virtual HrRenderVariable& operator=(float3 const & value);
+		virtual HrRenderVariable& operator=(float4 const & value);
+		virtual HrRenderVariable& operator=(float4x4 const & value);
+		//virtual HrRenderVariable& operator=(TexturePtr const & value);
+		//virtual HrRenderVariable& operator=(TextureSubresource const & value);
+		//virtual HrRenderVariable& operator=(SamplerStateObjectPtr const & value);
+		//virtual HrRenderVariable& operator=(GraphicsBufferPtr const & value);
+		virtual HrRenderVariable& operator=(std::string const & value);
+		//virtual HrRenderVariable& operator=(ShaderDesc const & value);
+		virtual HrRenderVariable& operator=(std::vector<bool> const & value);
+		virtual HrRenderVariable& operator=(std::vector<uint32_t> const & value);
+		virtual HrRenderVariable& operator=(std::vector<int32_t> const & value);
+		virtual HrRenderVariable& operator=(std::vector<float> const & value);
+		virtual HrRenderVariable& operator=(std::vector<uint2> const & value);
+		virtual HrRenderVariable& operator=(std::vector<uint3> const & value);
+		virtual HrRenderVariable& operator=(std::vector<uint4> const & value);
+		virtual HrRenderVariable& operator=(std::vector<int2> const & value);
+		virtual HrRenderVariable& operator=(std::vector<int3> const & value);
+		virtual HrRenderVariable& operator=(std::vector<int4> const & value);
+		virtual HrRenderVariable& operator=(std::vector<float2> const & value);
+		virtual HrRenderVariable& operator=(std::vector<float3> const & value);
+		virtual HrRenderVariable& operator=(std::vector<float4> const & value);
+		virtual HrRenderVariable& operator=(std::vector<float4x4> const & value);
 
 		virtual void Value(bool& val) const;
 		virtual void Value(uint32_t& val) const;
@@ -136,12 +138,12 @@ namespace Hr
 		virtual void Value(float3& val) const;
 		virtual void Value(float4& val) const;
 		virtual void Value(float4x4& val) const;
-		virtual void Value(TexturePtr& val) const;
-		virtual void Value(TextureSubresource& val) const;
-		virtual void Value(SamplerStateObjectPtr& val) const;
-		virtual void Value(GraphicsBufferPtr& value) const;
+		//virtual void Value(TexturePtr& val) const;
+		//virtual void Value(TextureSubresource& val) const;
+		//virtual void Value(SamplerStateObjectPtr& val) const;
+		//virtual void Value(GraphicsBufferPtr& value) const;
 		virtual void Value(std::string& val) const;
-		virtual void Value(ShaderDesc& val) const;
+		//virtual void Value(ShaderDesc& val) const;
 		virtual void Value(std::vector<bool>& val) const;
 		virtual void Value(std::vector<uint32_t>& val) const;
 		virtual void Value(std::vector<int32_t>& val) const;
@@ -157,39 +159,83 @@ namespace Hr
 		virtual void Value(std::vector<float4>& val) const;
 		virtual void Value(std::vector<float4x4>& val) const;
 
-		virtual void BindToCBuffer(RenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride);
-		virtual void RebindToCBuffer(RenderEffectConstantBuffer& cbuff);
-		virtual bool InCBuffer() const
-		{
-			return false;
-		}
+		virtual void BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride);
+		virtual void RebindToCBuffer(HrRenderEffectConstantBuffer& cbuff);
+		//virtual bool InCBuffer() const
+		//{
+		//	return false;
+		//}
 		virtual uint32_t CBufferOffset() const
 		{
-			return 0;
+			return m_nInBufferOffset;
 		}
 		virtual uint32_t Stride() const
 		{
-			return 0;
+			return m_nStride;
 		}
 
 	protected:
-		//T& RetriveT()
-		//{
-		//	union Raw2T
-		//	{
-		//		uint8* raw;
-		//		T* t;
-		//	}R2T;
-		//	R2T.raw = &m_data[0];
-		//	return *R2T.t;
-		//}
 		EnumRenderEffectDataType m_dataType;
 		EnumRenderSemantic m_semantic;
 
 		uint32 m_nInBufferOffset;
-		uint32 m_nSize;
+		uint32 m_nStride;
+	};
 
-		//uint8 m_data[sizeof(T)];
+	template <typename T>
+	class HrRenderVariableConcrete : public HrRenderVariable
+	{
+	public:
+		HrRenderVariableConcrete()
+		{
+		}
+		virtual ~HrRenderVariableConcrete()
+		{
+		}
+
+		std::unique_ptr<HrRenderVariable> Clone() override
+		{
+			auto pRet = MakeUniquePtr < HrRenderVariableConcrete<T>>();
+			
+			return pRet;
+		}
+
+		virtual HrRenderVariable& operator=(T const & value) override
+		{
+		}
+		
+		virtual void Value(T& val) const override
+		{
+
+		}
+
+		virtual void BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride) override
+		{
+
+		}
+	protected:
+		T& RetriveT()
+		{
+			union  RAW2T
+			{
+				byte_t* pRaw;
+				T* t;
+			}R2T;
+			R2T.pRaw = m_pData;
+			return *R2T.t;
+		}
+		T const & RetriveT() const
+		{
+			union  RAW2T
+			{
+				byte_t* pRaw;
+				T* t;
+			}R2T;
+			R2T.pRaw = m_pData;
+			return *R2T.t;
+		}
+	protected:
+		byte_t* m_pData;
 	};
 
 	class HR_CORE_API HrRenderEffectParameter : public boost::noncopyable
@@ -218,8 +264,10 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strConstBufferName; }
 
-
+		
 	private:
+		HrStreamData* m_pConstantBufferData;
+
 		HrGraphicsBuffer* m_pConstantBuffer;
 
 		std::string m_strConstBufferName;

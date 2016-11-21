@@ -25,7 +25,7 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(std::string& strShaderFileName
 {
 	HrD3D11IncludeShaderHandler includeHandler(strShaderFileName);
 
-	char* pSource = streamData.GetBufferPoint();
+	uint8* pSource = streamData.GetBufferPoint();
 	uint64 nSize = streamData.GetBufferSize();
 
 	std::vector<D3D_SHADER_MACRO> vecDefines;
@@ -253,11 +253,8 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 		ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
 
 		D3D11_SHADER_BUFFER_DESC constantBufferDesc;
-		hr = pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc);
-		if (FAILED(hr))
-		{
-			HRASSERT(nullptr, "CompileD3DShader Error! ConstBuffer GetDesc");
-		}
+		TIF(pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc));
+
 		D3D_CBUFFER_TYPE bufferType = constantBufferDesc.Type;
 
 		switch (bufferType)
@@ -383,7 +380,7 @@ bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 	ID3DBlob* pStrippedBlob = nullptr;
 	HRESULT hr = D3DStripShader(shaderBuffer.GetBufferPoint(), shaderBuffer.GetBufferSize(),0,  &pStrippedBlob);
 	shaderBuffer.ClearBuffer();
-	shaderBuffer.AddBuffer(static_cast<char*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
+	shaderBuffer.AddBuffer(static_cast<uint8*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
 	SAFE_RELEASE(pStrippedBlob);
 
 	return true;

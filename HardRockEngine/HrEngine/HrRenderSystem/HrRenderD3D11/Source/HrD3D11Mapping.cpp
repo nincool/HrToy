@@ -91,7 +91,7 @@ EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIA
 	switch (shaderVariableType)
 	{
 	case D3D_SVT_FLOAT:
-		return RPDT_FLOAT;
+		return REDT_FLOAT1;
 	default:
 		break;
 	}

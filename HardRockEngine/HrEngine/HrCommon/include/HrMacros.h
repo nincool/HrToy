@@ -98,7 +98,7 @@ public:  void Set##funName(const varType& var){ varName = var; }
 #	define SAFE_DELETE(p) (HR_DELETE p; p = nullptr);
 #endif // HR_DEBUG
 
-#define HR_UNUSED(a) void(a)
+#define HR_UNUSED(a) (void)(a)
 
 #endif
 

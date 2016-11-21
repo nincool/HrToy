@@ -71,7 +71,7 @@ void HrRenderConstantBuffer::UpdateParams(HrRenderFrameParameters& renderFramePa
 		case HrRenderParameter::RPT_WORLDVIEWPROJ_MATRIX:
 			const Matrix4& worldViewProjMatrix = renderFrameParameters.GetWorldViewProjMatrix();
 			Matrix4 transposeWorldVewProjMatrix = HrMath::Transpose(worldViewProjMatrix);
-			m_pStreamData->AddBuffer((char*)&transposeWorldVewProjMatrix(0, 0), transposeWorldVewProjMatrix.size() * sizeof(REAL));
+			m_pStreamData->AddBuffer((uint8*)&transposeWorldVewProjMatrix(0, 0), transposeWorldVewProjMatrix.size() * sizeof(REAL));
 			break;
 		}
 	}
