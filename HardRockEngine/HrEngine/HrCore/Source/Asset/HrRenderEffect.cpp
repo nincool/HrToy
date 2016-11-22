@@ -156,8 +156,3 @@ bool HrRenderEffect::CreateEffectParameters(HrShaderCompilerPtr& pShaderCompiler
 	return true;
 }
 
-bool HrRenderEffect::CreateEffectConstParameters()
-{
-	return true;
-}
-

@@ -176,8 +176,8 @@ namespace Hr
 		virtual void Value(std::vector<float4>& val) const;
 		virtual void Value(std::vector<float4x4>& val) const;
 
-		virtual void BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride);
-		virtual void RebindToCBuffer(HrRenderEffectConstantBuffer& cbuff);
+		virtual void BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride);
+		virtual void RebindToCBuffer(HrRenderEffectConstantBuffer* cbuff);
 		//virtual bool InCBuffer() const
 		//{
 		//	return false;
@@ -235,11 +235,11 @@ namespace Hr
 			val = RetriveT();
 		}
 
-		virtual void BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride) override
+		virtual void BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride) override
 		{
 			m_nBufferOffset = offset;
 			m_nStride = stride;
-			m_pData = cbuff.GetStreamDataPoint() + m_nBufferOffset;
+			m_pData = cbuff->GetStreamDataPoint() + m_nBufferOffset;
 		}
 	protected:
 		T& RetriveT()
@@ -337,9 +337,12 @@ namespace Hr
 		EnumRenderParamType ParamType() { return m_paramType; }
 		EnumRenderEffectDataType DataType() { return m_dataType; }
 		uint32 Elements() { return m_nElements; }
+
+		void BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset);
 	private:
 		EnumRenderParamType m_paramType;
 		EnumRenderEffectDataType m_dataType;
+		uint32 m_nStride;
 		uint32 m_nElements;
 
 		std::string m_strName;
@@ -347,7 +350,7 @@ namespace Hr
 
 		HrRenderVariable* m_pRenderVariable;
 
-		HrRenderEffectConstantBuffer* m_pAttachConstBuffer;
+		HrRenderEffectConstantBuffer* m_pBindConstBuffer;
 	};
 
 	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable
@@ -367,8 +370,6 @@ namespace Hr
 	private:
 		HrStreamData* m_pConstantBufferData;
 		HrGraphicsBuffer* m_pConstantBuffer;
-
-		HrRenderVariable* m_pRenderVariable;
 
 		std::string m_strConstBufferName;
 		size_t m_nHashName;

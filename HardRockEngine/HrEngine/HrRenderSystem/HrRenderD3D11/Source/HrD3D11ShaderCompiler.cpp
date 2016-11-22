@@ -416,11 +416,16 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 					if (pRenderParamDefine != nullptr)
 					{
 						pEffectParameter->ParamInfo(pRenderParamDefine->paramType, pRenderParamDefine->dataType, varDesc.elements);
+						pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
 					}
+					vecParameter.push_back(pEffectParameter);
 				}
-			
-				std::unique_ptr<HrRenderEffectParameter> pParameter = MakeUniquePtr<HrRenderEffectParameter>(varDesc.name, varDesc.name_hash);
+				else
+				{
+					continue;
+				}
 			}
+
 		}
 	}
 }

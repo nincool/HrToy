@@ -20,7 +20,6 @@ namespace Hr
 		virtual bool UnloadImpl() override;
 
 		bool CreateEffectParameters(HrShaderCompilerPtr& pShaderCompiler);
-		bool CreateEffectConstParameters();
 	private:
 		size_t m_nHashName;
 

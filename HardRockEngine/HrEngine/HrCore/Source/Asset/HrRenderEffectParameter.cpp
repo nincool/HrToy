@@ -398,7 +398,7 @@ void HrRenderVariable::Value(std::vector<float4x4>& /*value*/) const
 	BOOST_ASSERT(false);
 }
 
-void HrRenderVariable::BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride)
+void HrRenderVariable::BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride)
 {
 	HR_UNUSED(cbuff);
 	HR_UNUSED(offset);
@@ -407,7 +407,7 @@ void HrRenderVariable::BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32
 	BOOST_ASSERT(false);
 }
 
-void HrRenderVariable::RebindToCBuffer(HrRenderEffectConstantBuffer& cbuff)
+void HrRenderVariable::RebindToCBuffer(HrRenderEffectConstantBuffer* cbuff)
 {
 	HR_UNUSED(cbuff);
 
@@ -437,7 +437,8 @@ HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, 
 {
 	m_paramType = RPT_UNKNOWN;
 	m_pRenderVariable = nullptr;
-	m_pAttachConstBuffer = nullptr;
+	m_pBindConstBuffer = nullptr;
+	m_nStride = 0;
 	m_nElements = 0;
 }
 
@@ -450,6 +451,118 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 {
 	m_paramType = paramType;
 	m_dataType = dataType;
+	switch (dataType)
+	{
+	case REDT_FLOAT1:
+		break;
+	case REDT_FLOAT2:
+		break;
+	case REDT_FLOAT3:
+		break;
+	case REDT_FLOAT4:
+		break;
+	case REDT_SAMPLER1D:
+		break;
+	case REDT_SAMPLER2D:
+		break;
+	case REDT_SAMPLER3D:
+		break;
+	case REDT_SAMPLERCUBE:
+		break;
+	case REDT_SAMPLERRECT:
+		break;
+	case REDT_SAMPLER1DSHADOW:
+		break;
+	case REDT_SAMPLER2DSHADOW:
+		break;
+	case REDT_SAMPLER2DARRAY:
+		break;
+	case REDT_MATRIX_2X2:
+		break;
+	case REDT_MATRIX_2X3:
+		break;
+	case REDT_MATRIX_2X4:
+		break;
+	case REDT_MATRIX_3X2:
+		break;
+	case REDT_MATRIX_3X3:
+		break;
+	case REDT_MATRIX_3X4:
+		break;
+	case REDT_MATRIX_4X2:
+		break;
+	case REDT_MATRIX_4X3:
+		break;
+	case REDT_MATRIX_4X4:
+		m_nStride = 16;
+		break;
+	case REDT_INT1:
+		break;
+	case REDT_INT2:
+		break;
+	case REDT_INT3:
+		break;
+	case REDT_INT4:
+		break;
+	case REDT_SUBROUTINE:
+		break;
+	case REDT_DOUBLE1:
+		break;
+	case REDT_DOUBLE2:
+		break;
+	case REDT_DOUBLE3:
+		break;
+	case REDT_DOUBLE4:
+		break;
+	case REDT_MATRIX_DOUBLE_2X2:
+		break;
+	case REDT_MATRIX_DOUBLE_2X3:
+		break;
+	case REDT_MATRIX_DOUBLE_2X4:
+		break;
+	case REDT_MATRIX_DOUBLE_3X2:
+		break;
+	case REDT_MATRIX_DOUBLE_3X3:
+		break;
+	case REDT_MATRIX_DOUBLE_3X4:
+		break;
+	case REDT_MATRIX_DOUBLE_4X2:
+		break;
+	case REDT_MATRIX_DOUBLE_4X3:
+		break;
+	case REDT_MATRIX_DOUBLE_4X4:
+		break;
+	case REDT_UINT1:
+		break;
+	case REDT_UINT2:
+		break;
+	case REDT_UINT3:
+		break;
+	case REDT_UINT4:
+		break;
+	case REDT_BOOL1:
+		break;
+	case REDT_BOOL2:
+		break;
+	case REDT_BOOL3:
+		break;
+	case REDT_BOOL4:
+		break;
+	case REDT_SAMPLER_WRAPPER1D:
+		break;
+	case REDT_SAMPLER_WRAPPER2D:
+		break;
+	case REDT_SAMPLER_WRAPPER3D:
+		break;
+	case REDT_SAMPLER_WRAPPERCUBE:
+		break;
+	case REDT_SAMPLER_STATE:
+		break;
+	case REDT_UNKNOWN:
+		break;
+	default:
+		break;
+	}
 	m_nElements = nElements <= 0 ? 1 : nElements;
 	if (m_pRenderVariable != nullptr)
 	{
@@ -459,12 +572,18 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	{
 	case RPT_WORLDVIEWPROJ_MATRIX:
 	{
-		BOOST_ASSERT(m_dataType == REDT_FLOAT1 && m_nElements == 1);
+		BOOST_ASSERT(m_dataType == REDT_MATRIX_4X4 && m_nElements == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
 		break;
 	}
 	}
 
+}
+
+void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset)
+{
+	BOOST_ASSERT(m_pRenderVariable);
+	m_pRenderVariable->BindToCBuffer(pConstantBuffer, nOffset, m_nStride);
 }
 
 ////////////////////////////////////////////
