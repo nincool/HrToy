@@ -40,8 +40,10 @@ namespace Hr
 	class HrRenderLayout;
 	class HrRenderTechnique;
 	class HrRenderEffect;
+	class HrRenderParamDefine;
 	class HrRenderEffectParameter;
 	class HrRenderEffectConstantBuffer;
+	
 	class HrShader;
 	class HrRenderConstantBuffer;
 	class HrRenderParameter;

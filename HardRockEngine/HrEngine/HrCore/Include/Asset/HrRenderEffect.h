@@ -32,8 +32,9 @@ namespace Hr
 		std::vector<HrShader*> m_vecPixelShaders;
 
 		std::vector<HrRenderTechnique*> m_vecRenderTechnique;
-		
-		//HrStreamDataPtr m_pEffectStreamBuffer;
+
+		std::vector<HrRenderEffectParameter*> m_vecRenderEffectParameter;
+		std::vector<HrRenderEffectConstantBuffer*> m_vecRenderConstantBuffer;
 	};
 }
 

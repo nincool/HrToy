@@ -9,6 +9,7 @@ namespace Hr
 	{
 	public:
 		HrStreamData();
+		HrStreamData(uint32 nStreamLength);
 		~HrStreamData();
 
 		enum EnumReadDataType
@@ -19,9 +20,9 @@ namespace Hr
 
 		void SetReadDataType(EnumReadDataType readDataType);
 
-		byte_t* ResizeBuffer(uint64 nLength);
-		byte_t* GetBufferPoint();
-		const byte_t* GetBufferPoint() const;
+		Byte* ResizeBuffer(uint64 nLength);
+		Byte* GetBufferPoint();
+		const Byte* GetBufferPoint() const;
 		
 		uint64 GetBufferSize();
 		uint64 GetBufferSizeWithoutNULLTerminator();
@@ -30,7 +31,7 @@ namespace Hr
 		void AddBuffer(uint8* pData, uint32 nSize);
 	private:
 		EnumReadDataType m_readDataType;
-		std::vector<byte_t> m_vecStreamData;
+		std::vector<Byte> m_vecStreamData;
 		uint8* m_pStreamData;
 		uint32 m_nStreamLength;
 	};

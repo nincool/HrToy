@@ -2,6 +2,7 @@
 #define _HR_RENDEREFFECTCONSTANTBUFFER_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrUtilTools/Include/HrUtil.h"
 
 namespace Hr
 {
@@ -61,15 +62,8 @@ namespace Hr
 		REDT_SAMPLER_WRAPPERCUBE = 51,
 		REDT_SAMPLER_STATE = 52, //only for hlsl 4.0
 		REDT_UNKNOWN = 99
-
 	};
 
-	//from ogre
-	enum EnumRenderParamType
-	{
-
-		RPT_UNKNOWN = 999
-	};
 
 	enum EnumRenderSemantic
 	{
@@ -79,6 +73,29 @@ namespace Hr
 		RS_COLOR = 3,
 	};
 
+	//from ogre
+	enum EnumRenderParamType
+	{
+		RPT_WORLDVIEWPROJ_MATRIX,
+
+		RPT_UNKNOWN = 999
+	};
+
+	class HR_CORE_API HrRenderParamDefine
+	{
+	public:
+		HrRenderParamDefine(EnumRenderParamType _paramType, const std::string& _strName, EnumRenderEffectDataType _dataType, uint32 _nSize)
+			:paramType(_paramType), strName(_strName), dataType(_dataType), nSize(_nSize)
+		{
+		}
+
+		EnumRenderParamType paramType;
+		std::string strName;
+		EnumRenderEffectDataType dataType;
+		uint32 nSize;
+
+		static std::vector<HrRenderParamDefine> m_s_vecRenderParamDefine;
+	};
 
 	//from klayge 
 	class HR_CORE_API HrRenderVariable
@@ -167,7 +184,7 @@ namespace Hr
 		//}
 		virtual uint32_t CBufferOffset() const
 		{
-			return m_nInBufferOffset;
+			return m_nBufferOffset;
 		}
 		virtual uint32_t Stride() const
 		{
@@ -178,8 +195,10 @@ namespace Hr
 		EnumRenderEffectDataType m_dataType;
 		EnumRenderSemantic m_semantic;
 
-		uint32 m_nInBufferOffset;
+		uint32 m_nBufferOffset;
 		uint32 m_nStride;
+		Byte* m_pData;
+
 	};
 
 	template <typename T>
@@ -195,30 +214,39 @@ namespace Hr
 
 		std::unique_ptr<HrRenderVariable> Clone() override
 		{
-			auto pRet = MakeUniquePtr < HrRenderVariableConcrete<T>>();
-			
+			auto pRet = MakeUniquePtr< HrRenderVariableConcrete<T> >();
+			pRet->m_dataType = this->m_dataType;
+			pRet->m_semantic = this->m_semantic;
+			pRet->m_nBufferOffset = this->m_nBufferOffset;
+			pRet->m_nStride = this->m_nStride;
+			pRet->m_pData = this->m_pData;
 			return pRet;
 		}
 
 		virtual HrRenderVariable& operator=(T const & value) override
 		{
+			BOOST_ASSERT(m_pData);
+			this->RetriveT() = value;
+			return *this;
 		}
 		
 		virtual void Value(T& val) const override
 		{
-
+			val = RetriveT();
 		}
 
 		virtual void BindToCBuffer(HrRenderEffectConstantBuffer& cbuff, uint32_t offset, uint32_t stride) override
 		{
-
+			m_nBufferOffset = offset;
+			m_nStride = stride;
+			m_pData = cbuff.GetStreamDataPoint() + m_nBufferOffset;
 		}
 	protected:
 		T& RetriveT()
 		{
 			union  RAW2T
 			{
-				byte_t* pRaw;
+				Byte* pRaw;
 				T* t;
 			}R2T;
 			R2T.pRaw = m_pData;
@@ -228,15 +256,72 @@ namespace Hr
 		{
 			union  RAW2T
 			{
-				byte_t* pRaw;
+				Byte* pRaw;
 				T* t;
 			}R2T;
 			R2T.pRaw = m_pData;
 			return *R2T.t;
 		}
-	protected:
-		byte_t* m_pData;
 	};
+
+	template <typename T>
+	class HrRenderVariableArray : public HrRenderVariableConcrete<std::vector<T>>
+	{
+	public:
+		virtual HrRenderVariable& operator=(std::vector<T> const& value) override
+		{
+			for (size_t i = 0; i < value.size(); ++i)
+			{
+				memcpy(m_pData + i * m_nStride, &value[0], sizeof(value[i]));
+			}
+			return *this;
+		}
+		virtual void Value(std::vector<T>& val) const override
+		{
+			val.resize(m_nSize);
+			for (size_t i = 0; i < m_nSize; ++i)
+			{
+				memcpy(&val[0], m_pData + i * m_nStride, sizeof(val[i]));
+			}
+		}
+	private:
+		uint32 m_nSize;
+	};
+
+	class HrRenderVariableFloat4x4 : public HrRenderVariableConcrete<float4x4>
+	{
+	public:
+		virtual HrRenderVariable& operator=(const float4x4& value) override;
+		virtual void Value(float4x4& val) const override;
+	};
+
+	typedef HrRenderVariableConcrete<bool> RenderVariableBool;
+	typedef HrRenderVariableConcrete<uint32_t> RenderVariableUInt;
+	typedef HrRenderVariableConcrete<int32_t> RenderVariableInt;
+	typedef HrRenderVariableConcrete<float> RenderVariableFloat;
+	typedef HrRenderVariableConcrete<uint2> RenderVariableUInt2;
+	typedef HrRenderVariableConcrete<uint3> RenderVariableUInt3;
+	typedef HrRenderVariableConcrete<uint4> RenderVariableUInt4;
+	typedef HrRenderVariableConcrete<int2> RenderVariableInt2;
+	typedef HrRenderVariableConcrete<int3> RenderVariableInt3;
+	typedef HrRenderVariableConcrete<int4> RenderVariableInt4;
+	typedef HrRenderVariableConcrete<float2> RenderVariableFloat2;
+	typedef HrRenderVariableConcrete<float3> RenderVariableFloat3;
+	typedef HrRenderVariableConcrete<float4> RenderVariableFloat4;
+	//typedef HrRenderVariableConcrete<SamplerStateObjectPtr> RenderVariableSampler;
+	typedef HrRenderVariableConcrete<std::string> RenderVariableString;
+	//typedef HrRenderVariableConcrete<ShaderDesc> RenderVariableShader;
+	typedef HrRenderVariableArray<bool> RenderVariableBoolArray;
+	typedef HrRenderVariableArray<uint32_t> RenderVariableUIntArray;
+	typedef HrRenderVariableArray<int32_t> RenderVariableIntArray;
+	typedef HrRenderVariableArray<float> RenderVariableFloatArray;
+	typedef HrRenderVariableArray<int2> RenderVariableInt2Array;
+	typedef HrRenderVariableArray<int3> RenderVariableInt3Array;
+	typedef HrRenderVariableArray<int4> RenderVariableInt4Array;
+	typedef HrRenderVariableArray<float2> RenderVariableFloat2Array;
+	typedef HrRenderVariableArray<float3> RenderVariableFloat3Array;
+	typedef HrRenderVariableArray<float4> RenderVariableFloat4Array;
+
 
 	class HR_CORE_API HrRenderEffectParameter : public boost::noncopyable
 	{
@@ -246,11 +331,21 @@ namespace Hr
 
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
+
+		void ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nElements);
+
+		EnumRenderParamType ParamType() { return m_paramType; }
+		EnumRenderEffectDataType DataType() { return m_dataType; }
+		uint32 Elements() { return m_nElements; }
 	private:
-		EnumRenderEffectDataType m_paramType;
+		EnumRenderParamType m_paramType;
+		EnumRenderEffectDataType m_dataType;
+		uint32 m_nElements;
 
 		std::string m_strName;
 		size_t m_nHashName;
+
+		HrRenderVariable* m_pRenderVariable;
 
 		HrRenderEffectConstantBuffer* m_pAttachConstBuffer;
 	};
@@ -258,20 +353,26 @@ namespace Hr
 	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable
 	{
 	public:
-		HrRenderEffectConstantBuffer(const std::string& strConstBufferName, size_t nHashName);
+		HrRenderEffectConstantBuffer(const std::string& strConstBufferName
+			, size_t nHashName, size_t nSize);
 		~HrRenderEffectConstantBuffer();
 
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strConstBufferName; }
 
-		
+		Byte* GetStreamOffsetPoint(uint32 nOffset);
+		const Byte* GetStreamOffsetPoint(uint32 nOffset) const;
+		Byte* GetStreamDataPoint();
+		const Byte* GetStreamDataPoint() const;
 	private:
 		HrStreamData* m_pConstantBufferData;
-
 		HrGraphicsBuffer* m_pConstantBuffer;
+
+		HrRenderVariable* m_pRenderVariable;
 
 		std::string m_strConstBufferName;
 		size_t m_nHashName;
+		size_t m_nSize;
 	};
 }
 

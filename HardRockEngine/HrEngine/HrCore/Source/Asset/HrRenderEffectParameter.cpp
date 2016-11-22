@@ -1,16 +1,29 @@
 #include "Asset/HrRenderEffectParameter.h"
 #include "Asset/HrStreamData.h"
+#include "Kernel/HrDirector.h"
+#include "Render/HrRenderFactory.h"
+#include "Render/HrGraphicsBuffer.h"
 
 using namespace Hr;
 
+std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
+{
+	HrRenderParamDefine(RPT_WORLDVIEWPROJ_MATRIX, "worldviewproj_matrix", REDT_MATRIX_4X4, 16)
+};
+
+//////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////
 
 HrRenderVariable::HrRenderVariable()
+	:m_pData(nullptr), m_dataType(REDT_FLOAT1), m_semantic(RS_UNKNOW), m_nBufferOffset(0), m_nStride(0)
 {
 }
 
 HrRenderVariable::~HrRenderVariable()
 {
 }
+
 HrRenderVariable& HrRenderVariable::operator=(bool const & /*value*/)
 {
 	BOOST_ASSERT(false);
@@ -401,6 +414,20 @@ void HrRenderVariable::RebindToCBuffer(HrRenderEffectConstantBuffer& cbuff)
 	BOOST_ASSERT(false);
 }
 
+
+/////////////////////////////////= HrRenderVariableFloat4x4 =/////////////////////////////////////
+
+HrRenderVariable& HrRenderVariableFloat4x4::operator=(const float4x4& value)
+{
+	return HrRenderVariableConcrete<float4x4>::operator=(HrMath::Transpose(value));
+}
+
+void HrRenderVariableFloat4x4::Value(float4x4& val) const
+{
+	HrRenderVariableConcrete<float4x4>::Value(val);
+	val = HrMath::Transpose(val);
+}
+
 ///////////////////////////////////////////
 //
 //
@@ -408,12 +435,35 @@ void HrRenderVariable::RebindToCBuffer(HrRenderEffectConstantBuffer& cbuff)
 
 HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName)
 {
-	m_paramType = REDT_FLOAT1;
+	m_paramType = RPT_UNKNOWN;
+	m_pRenderVariable = nullptr;
 	m_pAttachConstBuffer = nullptr;
+	m_nElements = 0;
 }
 
 HrRenderEffectParameter::~HrRenderEffectParameter()
 {
+	SAFE_DELETE(m_pRenderVariable);
+}
+
+void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nElements)
+{
+	m_paramType = paramType;
+	m_dataType = dataType;
+	m_nElements = nElements <= 0 ? 1 : nElements;
+	if (m_pRenderVariable != nullptr)
+	{
+		SAFE_DELETE(m_pRenderVariable);
+	}
+	switch (paramType)
+	{
+	case RPT_WORLDVIEWPROJ_MATRIX:
+	{
+		BOOST_ASSERT(m_dataType == REDT_FLOAT1 && m_nElements == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
+		break;
+	}
+	}
 
 }
 
@@ -422,18 +472,43 @@ HrRenderEffectParameter::~HrRenderEffectParameter()
 //
 ///////////////////////////////////////////
 
-HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& strConstBufferName, size_t nHashName)
+HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& strConstBufferName
+	, size_t nHashName, size_t nSize)
 {
-	m_pConstantBufferData = HR_NEW HrStreamData();
 	m_strConstBufferName = strConstBufferName;
 	m_nHashName = nHashName;
+	m_nSize = nSize;
+
+	m_pConstantBufferData = HR_NEW HrStreamData(m_nSize);
+	m_pConstantBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pConstantBuffer->BindStream(nullptr, m_nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 
 HrRenderEffectConstantBuffer::~HrRenderEffectConstantBuffer()
 {
 	SAFE_DELETE(m_pConstantBufferData);
+	SAFE_DELETE(m_pConstantBuffer);
 }
 
+Byte* HrRenderEffectConstantBuffer::GetStreamOffsetPoint(uint32 nOffset)
+{
+	BOOST_ASSERT(nOffset < m_pConstantBufferData->GetBufferSize());
+	return m_pConstantBufferData->GetBufferPoint() + nOffset;
+}
 
+const Byte* HrRenderEffectConstantBuffer::GetStreamOffsetPoint(uint32 nOffset) const
+{
+	BOOST_ASSERT(nOffset < m_pConstantBufferData->GetBufferSize());
+	return m_pConstantBufferData->GetBufferPoint() + nOffset;
+}
 
+Byte* HrRenderEffectConstantBuffer::GetStreamDataPoint()
+{
+	return m_pConstantBufferData->GetBufferPoint();
+}
+
+const Byte* HrRenderEffectConstantBuffer::GetStreamDataPoint() const
+{
+	return m_pConstantBufferData->GetBufferPoint();
+}
 

@@ -28,6 +28,18 @@ HrRenderEffect::~HrRenderEffect()
 		SAFE_DELETE(itemRT);
 	}
 	m_vecRenderTechnique.clear();
+
+	for (auto item : m_vecRenderEffectParameter)
+	{
+		SAFE_DELETE(item);
+	}
+	m_vecRenderEffectParameter.clear();
+
+	for (auto item : m_vecRenderConstantBuffer)
+	{
+		SAFE_DELETE(item);
+	}
+	m_vecRenderConstantBuffer.clear();
 }
 
 void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
@@ -139,7 +151,7 @@ bool HrRenderEffect::UnloadImpl()
 
 bool HrRenderEffect::CreateEffectParameters(HrShaderCompilerPtr& pShaderCompiler)
 {
-	pShaderCompiler->CreateEffectParameters();
+	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderConstantBuffer);
 
 	return true;
 }
@@ -149,7 +161,3 @@ bool HrRenderEffect::CreateEffectConstParameters()
 	return true;
 }
 
-//std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
-//std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
-//
-//std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;

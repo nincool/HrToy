@@ -11,6 +11,15 @@ HrStreamData::HrStreamData()
 	m_nStreamLength = 0;
 }
 
+HrStreamData::HrStreamData(uint32 nStreamLength)
+{
+	m_readDataType = RDT_TXT;
+	m_pStreamData = nullptr;
+	m_nStreamLength = nStreamLength;
+
+	ResizeBuffer(m_nStreamLength);
+}
+
 HrStreamData::~HrStreamData()
 {
 	SAFE_DELETE(m_pStreamData);
@@ -21,13 +30,13 @@ void HrStreamData::SetReadDataType(EnumReadDataType readDataType)
 	m_readDataType = readDataType;
 }
 
-byte_t* HrStreamData::ResizeBuffer(uint64 nLength)
+Byte* HrStreamData::ResizeBuffer(uint64 nLength)
 {
 #ifdef VECTOR_ALLOC
 	m_vecStreamData.clear();
 	m_vecStreamData.resize(nLength);
 
-	return static_cast<byte_t*>(&m_vecStreamData[0]);
+	return static_cast<Byte*>(&m_vecStreamData[0]);
 #else
 	if (m_nStreamLength >= nLength)
 	{
@@ -46,19 +55,19 @@ byte_t* HrStreamData::ResizeBuffer(uint64 nLength)
 #endif // VECTOR_ALLOC
 }
 
-byte_t* HrStreamData::GetBufferPoint()
+Byte* HrStreamData::GetBufferPoint()
 {
 #ifdef VECTOR_ALLOC
-	return static_cast<byte_t*>(&m_vecStreamData[0]);
+	return static_cast<Byte*>(&m_vecStreamData[0]);
 #else
 	return m_pStreamData;
 #endif // VECTOR_ALLOC
 }
 
-const byte_t* HrStreamData::GetBufferPoint() const
+const Byte* HrStreamData::GetBufferPoint() const
 {
 #ifdef VECTOR_ALLOC
-	return static_cast<const byte_t*>(&m_vecStreamData[0]);
+	return static_cast<const Byte*>(&m_vecStreamData[0]);
 #else
 	return m_pStreamData;
 #endif // VECTOR_ALLOC
@@ -103,9 +112,9 @@ void HrStreamData::AddBuffer(uint8* pData, uint32 nSize)
 #ifdef VECTOR_ALLOC
 	uint32 nOldSize = m_vecStreamData.size();
 	m_vecStreamData.resize(nOldSize + nSize);
-	memcpy((byte_t*)&m_vecStreamData[nOldSize], pData, nSize);
+	memcpy((Byte*)&m_vecStreamData[nOldSize], pData, nSize);
 #else
-	byte_t* pNewStream = new char[m_nStreamLength + nSize];
+	Byte* pNewStream = new char[m_nStreamLength + nSize];
 	memset(pNewStream, 0, nSize);
 	if (m_pStreamData != nullptr)
 	{

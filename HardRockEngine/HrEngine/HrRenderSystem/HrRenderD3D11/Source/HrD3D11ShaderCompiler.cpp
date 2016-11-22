@@ -386,62 +386,83 @@ bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 	return true;
 }
 
-void HrD3D11ShaderCompiler::CreateEffectParameters()
+void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer)
 {
-	std::vector<std::unique_ptr<HrRenderEffectParameter>> m_vecParameter;
-	std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>> m_vecConstantBuffer;
 	for (uint32 nShaderDescIndex = 0; nShaderDescIndex < m_arrShaderDesc.size(); ++nShaderDescIndex)
 	{
 		uint32 nConstBuffer = m_arrShaderDesc[nShaderDescIndex].cb_desc.size();
 		for (uint32 nCBIndex = 0; nCBIndex < nConstBuffer; ++nCBIndex)
 		{
-			if (IsConstantBufferExisted(m_vecConstantBuffer, m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name_hash))
-			{
-				continue;
-			}
-			std::unique_ptr<HrRenderEffectConstantBuffer> pConstBuffer = MakeUniquePtr<HrRenderEffectConstantBuffer>(m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name
-				, m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].name_hash);
-			m_vecConstantBuffer.push_back(std::move(pConstBuffer));
+			D3D11ShaderDesc::ConstantBufferDesc& cbDesc = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex];
 
+			HrRenderEffectConstantBuffer* pConstBuffer = GetConstantBuffer(vecConstantBuffer, cbDesc.name_hash);
+			if (pConstBuffer == nullptr)
+			{
+				pConstBuffer = HR_NEW HrRenderEffectConstantBuffer(cbDesc.name
+					, cbDesc.name_hash, cbDesc.size);
+				vecConstantBuffer.push_back(pConstBuffer);
+			}
+			
 			uint32 nVarNum = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc.size();
 			for (uint32 nVarIndex = 0; nVarIndex < nVarNum; ++nVarIndex)
 			{
 				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc[nVarIndex];
-				if (IsParameterExisted(m_vecParameter, varDesc.name_hash))
+				HrRenderEffectParameter* pEffectParameter = GetEffectParameter(vecParameter, varDesc.name_hash);
+				if (pEffectParameter == nullptr)
 				{
-					continue;
+					//if it is worldviewprojmatrix , the class is D3D_SVC_MATRIX_COLUMNS, need to transpose the matrix
+					pEffectParameter = HR_NEW HrRenderEffectParameter(varDesc.name, varDesc.name_hash);
+					HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varDesc.name);
+					if (pRenderParamDefine != nullptr)
+					{
+						pEffectParameter->ParamInfo(pRenderParamDefine->paramType, pRenderParamDefine->dataType, varDesc.elements);
+					}
 				}
+			
 				std::unique_ptr<HrRenderEffectParameter> pParameter = MakeUniquePtr<HrRenderEffectParameter>(varDesc.name, varDesc.name_hash);
-				
 			}
 		}
 	}
 }
 
-bool HrD3D11ShaderCompiler::IsConstantBufferExisted(std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>>& renderEffectConstBuffer, size_t nHashName)
+HrRenderEffectConstantBuffer* HrD3D11ShaderCompiler::GetConstantBuffer(std::vector<HrRenderEffectConstantBuffer*>& renderEffectConstBuffer, size_t nHashName)
 {
 	for (uint32 nRECBIndex = 0; nRECBIndex < renderEffectConstBuffer.size(); ++nRECBIndex)
 	{
 		if (renderEffectConstBuffer[nRECBIndex]->HashName() == nHashName)
 		{
-			return true;;
+			return renderEffectConstBuffer[nRECBIndex];
 		}
 	}
 
-	return false;
+	return nullptr;
 }
 
-bool HrD3D11ShaderCompiler::IsParameterExisted(std::vector<std::unique_ptr<HrRenderEffectParameter>>& renderEffectParameter, size_t nHashName)
+HrRenderEffectParameter* HrD3D11ShaderCompiler::GetEffectParameter(std::vector<HrRenderEffectParameter*>& renderEffectParameter, size_t nHashName)
 {
 	for (uint32 nREPIndex = 0; nREPIndex < renderEffectParameter.size(); ++nREPIndex)
 	{
 		if (renderEffectParameter[nREPIndex]->HashName() == nHashName)
 		{
-			return true;
+			return renderEffectParameter[nREPIndex];
 		}
 	}
 
-	return false;
+	return nullptr;
+}
+
+HrRenderParamDefine* HrD3D11ShaderCompiler::GetRenderParamDefine(const std::string& strParamName)
+{
+	uint32 nDefineParamSize = HrRenderParamDefine::m_s_vecRenderParamDefine.size();
+	for (uint32 i = 0; i < nDefineParamSize; ++i)
+	{
+		if (strParamName == HrRenderParamDefine::m_s_vecRenderParamDefine[i].strName)
+		{
+			return &HrRenderParamDefine::m_s_vecRenderParamDefine[i];
+		}
+	}
+
+	return nullptr;
 }
 
 //

@@ -126,12 +126,13 @@ namespace Hr
 
 		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) override;
 
-		virtual void CreateEffectParameters() override;
+		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
-		bool IsConstantBufferExisted(std::vector<std::unique_ptr<HrRenderEffectConstantBuffer>>& renderEffectConstBuffer, size_t nHashName);
-		bool IsParameterExisted(std::vector<std::unique_ptr<HrRenderEffectParameter>>& renderEffectParameter, size_t nHashName);
+		HrRenderEffectConstantBuffer* GetConstantBuffer(std::vector<HrRenderEffectConstantBuffer*>& renderEffectConstBuffer, size_t nHashName);
+		HrRenderEffectParameter* GetEffectParameter(std::vector<HrRenderEffectParameter*>& renderEffectParameter, size_t nHashName);
+		HrRenderParamDefine* GetRenderParamDefine(const std::string& strParamName);
 	protected:
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;

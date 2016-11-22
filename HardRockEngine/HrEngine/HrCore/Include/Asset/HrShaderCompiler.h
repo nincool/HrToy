@@ -21,7 +21,7 @@ namespace Hr
 
 		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) = 0;
 
-		virtual void CreateEffectParameters() = 0;
+		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) = 0;
 	};
 }
 
