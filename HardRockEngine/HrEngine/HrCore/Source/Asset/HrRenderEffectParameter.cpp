@@ -637,9 +637,11 @@ const Byte* HrRenderEffectConstantBuffer::GetStreamDataPoint() const
 
 void HrRenderEffectConstantBuffer::UpdateConstantBuffer()
 {
+	if (m_bDirty)
 	{
 		HrGraphicsBuffer::Mapper mapper(*m_pConstantBuffer, HrGraphicsBuffer::HBA_WRITE_ONLY);
 		std::memcpy(mapper.Pointer<Byte>(), m_pConstantBufferData->GetBufferPoint(), m_pConstantBufferData->GetBufferSize());
+		m_bDirty = false;
 	}
 }
 

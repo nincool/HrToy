@@ -227,6 +227,7 @@ namespace Hr
 		{
 			BOOST_ASSERT(m_pData);
 			this->RetriveT() = value;
+			
 			return *this;
 		}
 		
@@ -330,9 +331,23 @@ namespace Hr
 		~HrRenderEffectParameter();
 
 		template <typename T>
+		bool operator==(const T& value)
+		{
+			T val;
+			m_pRenderVariable->Value(val);
+			bool bvalue = (val == value);
+			return val == value;
+		}
+
+		template <typename T>
 		HrRenderEffectParameter& operator=(const T& value)
 		{
-			m_pRenderVariable->operator=(value);
+			if (!(this->operator==(value)))
+			{
+				m_pRenderVariable->operator=(value);
+				m_pBindConstBuffer->Dirty(true);
+			}
+			 
 			return *this;
 		}
 
@@ -382,6 +397,9 @@ namespace Hr
 		Byte* GetStreamDataPoint();
 		const Byte* GetStreamDataPoint() const;
 
+		void Dirty(bool bDirty) { m_bDirty = bDirty; };
+		bool Dirty() { return m_bDirty; };
+
 		HrGraphicsBuffer* GetGraphicsBuffer() { return m_pConstantBuffer; }
 
 		void UpdateConstantBuffer();
@@ -392,6 +410,8 @@ namespace Hr
 		std::string m_strConstBufferName;
 		size_t m_nHashName;
 		size_t m_nSize;
+
+		bool m_bDirty;
 	};
 }
 
