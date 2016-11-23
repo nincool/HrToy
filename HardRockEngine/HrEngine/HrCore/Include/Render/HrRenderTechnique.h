@@ -9,21 +9,27 @@ namespace Hr
 	{
 	public:
 		HrRenderTechnique(std::string strTechniqueName);
-		virtual ~HrRenderTechnique();
+		~HrRenderTechnique();
 
-		virtual size_t GetHashName();
-		virtual HrRenderPass* GetRenderPass(uint32 nIndex);
-		virtual void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters);
+		size_t GetHashName();
+		
+		uint32 GetRenderPassNum() { return m_vecPass.size(); }
+		HrRenderPass* GetRenderPass(uint32 nIndex);
+
+		void CollectShaderParameters();
+		
+		void UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters);
 
 		HrRenderPass* AddPass(std::string strPassName);
 	protected:
 		size_t m_nHashName;
 		std::string m_strTechniqueName;
 		std::vector<HrRenderPass*> m_vecPass;
+
+		//technique中需要的paramer 链接着effect的parameter
+		std::vector<HrRenderEffectParameter*> m_vecTechNeedParameter;
+		std::vector<HrRenderEffectConstantBuffer*> m_vecTechNeedConstBuffer;
 	};
-
-
-
 }
 
 #endif

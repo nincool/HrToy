@@ -79,8 +79,8 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
 	unsigned int offset = 0;
 
-	HrShader* pShader = nullptr;//pRenderTechnique->GetRenderPass(0)->GetVertexShader();
-	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pShader));
+	HrShader* pVertexShader = pRenderTechnique->GetRenderPass(0)->GetShader(HrShader::ST_VERTEX_SHADER);
+	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pVertexShader));
 	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
 	
 	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
@@ -97,15 +97,23 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 	{
 		uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
 		
-		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		m_pD3D11ImmediateContext->DrawIndexed(nNumIndices, 0, 0);
-		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
+		for (uint32 i = 0; i < nPassNum; ++i)
+		{
+			pRenderTechnique->GetRenderPass(i)->BindPass(this);
+			m_pD3D11ImmediateContext->DrawIndexed(nNumIndices, 0, 0);
+			pRenderTechnique->GetRenderPass(i)->UnBindPass(this);
+		}
 	}
 	else
 	{
-		pRenderTechnique->GetRenderPass(0)->BindPass(this);
-		m_pD3D11ImmediateContext->Draw(3, 0);
-		pRenderTechnique->GetRenderPass(0)->UnBindPass(this);
+		const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
+		for (uint32 i = 0; i < nPassNum; ++i)
+		{
+			pRenderTechnique->GetRenderPass(i)->BindPass(this);
+			m_pD3D11ImmediateContext->Draw(3, 0);
+			pRenderTechnique->GetRenderPass(i)->UnBindPass(this);
+		}
 	}
 }
 

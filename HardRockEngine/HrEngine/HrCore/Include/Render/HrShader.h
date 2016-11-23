@@ -26,15 +26,24 @@ namespace Hr
 		virtual void Bind(HrRender* pRender) = 0;
 		virtual void UnBind(HrRender* pRender) = 0;
 
-		virtual void StreamIn(HrStreamData& streamBuffer, std::string& strFile, EnumShaderType shaderType) = 0;
+		virtual void StreamIn(HrStreamData& streamBuffer, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) = 0;
 
-		virtual void UpdateParams(HrRenderFrameParameters& renderFrameParameters) {};
+		EnumShaderType ShaderType() { return m_shaderType; }
+		std::string& Name() { return m_strName; }
+		size_t HashName() { return m_nHashName; }
+
+		virtual void BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameters, std::vector<HrRenderEffectConstantBuffer*>& vecRenderConstBuffers);
+		void GetBindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameters);
 	protected:
-		HrRenderConstantBuffer* AddRenderConstantBuffer();
+		virtual void BindRenderParameterImpl() = 0;
+
 	protected:
 		EnumShaderType m_shaderType;
+		std::string m_strName;
+		size_t m_nHashName;
 
-		std::vector<HrRenderConstantBuffer*> m_vecRenderConstantBuffer;
+		std::vector<HrRenderEffectParameter*> m_vecBindRenderParameters;
+		std::vector<HrRenderEffectConstantBuffer*> m_vecBindRenderConstantBuffers;
 	};
 }
 

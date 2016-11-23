@@ -26,6 +26,7 @@ HrRenderTechnique* HrRenderable::GetRenderTechnique()
 void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters)
 {
 	renderFrameParameters.SetCurrentRenderable(this);
+
 	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
 }
 

@@ -14,12 +14,10 @@ namespace Hr
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		HrRenderTechnique* GetTechnique(std::string strTechniqueName);
-
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 
-		bool CreateEffectParameters(HrShaderCompilerPtr& pShaderCompiler);
 	private:
 		size_t m_nHashName;
 

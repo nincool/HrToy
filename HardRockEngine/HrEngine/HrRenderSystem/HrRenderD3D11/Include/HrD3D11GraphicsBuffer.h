@@ -30,7 +30,7 @@ namespace Hr
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag) override;
 		
-		ID3D11Buffer* GetGraphicsBuffer();
+		ID3D11Buffer* GetD3DGraphicsBuffer();
 
 	private:
 		virtual void* Map(HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag) override;

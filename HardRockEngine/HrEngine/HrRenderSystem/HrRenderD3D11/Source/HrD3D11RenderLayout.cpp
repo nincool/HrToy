@@ -26,7 +26,7 @@ Hr::HrD3D11RenderLayout::~HrD3D11RenderLayout()
 	SAFE_DELETE_ARRAY(m_pD3DInputElementDesc);
 }
 
-ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
+ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pVertexShader)
 {
 	if (m_pInputLayout == nullptr)
 	{
@@ -48,8 +48,8 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 		HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateInputLayout(
 			m_pD3DInputElementDesc,
 			nVertexElementNum,
-			pShader->GetStream()->GetBufferPoint(),
-			pShader->GetStream()->GetBufferSize(),
+			pVertexShader->GetCodeData()->GetBufferPoint(),
+			pVertexShader->GetCodeData()->GetBufferSize(),
 			&m_pInputLayout);
 		if (FAILED(hr))
 		{
@@ -62,12 +62,12 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pShader)
 
 ID3D11Buffer* HrD3D11RenderLayout::GetVertexBuffer()
 {
-	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDVertexBuffer)->GetGraphicsBuffer();
+	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDVertexBuffer)->GetD3DGraphicsBuffer();
 }
 
 ID3D11Buffer* HrD3D11RenderLayout::GetIndexBuffer()
 {
-	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDIndexBuffer)->GetGraphicsBuffer();
+	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDIndexBuffer)->GetD3DGraphicsBuffer();
 }
 
 

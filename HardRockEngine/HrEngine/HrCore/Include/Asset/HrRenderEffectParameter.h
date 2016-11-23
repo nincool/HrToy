@@ -329,6 +329,19 @@ namespace Hr
 		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName);
 		~HrRenderEffectParameter();
 
+		template <typename T>
+		HrRenderEffectParameter& operator=(const T& value)
+		{
+			m_pRenderVariable->operator=(value);
+			return *this;
+		}
+
+		template <typename T>
+		void Value(T& val) const
+		{
+			m_pRenderVariable->Value(val);
+		}
+
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
 
@@ -339,6 +352,7 @@ namespace Hr
 		uint32 Elements() { return m_nElements; }
 
 		void BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset);
+		HrRenderEffectConstantBuffer* GetBindConstantBuffer() const { return m_pBindConstBuffer; }
 	private:
 		EnumRenderParamType m_paramType;
 		EnumRenderEffectDataType m_dataType;
@@ -367,6 +381,10 @@ namespace Hr
 		const Byte* GetStreamOffsetPoint(uint32 nOffset) const;
 		Byte* GetStreamDataPoint();
 		const Byte* GetStreamDataPoint() const;
+
+		HrGraphicsBuffer* GetGraphicsBuffer() { return m_pConstantBuffer; }
+
+		void UpdateConstantBuffer();
 	private:
 		HrStreamData* m_pConstantBufferData;
 		HrGraphicsBuffer* m_pConstantBuffer;

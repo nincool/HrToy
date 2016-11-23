@@ -24,7 +24,7 @@ typedef std::int8_t int8;
 typedef std::uint64_t uint64;
 typedef std::int64_t int64;
 
-typedef unsigned char Byte;
+typedef char Byte;
 typedef Byte* pbyte;
 
 #define DEPRICATED __declspec(deprecated)

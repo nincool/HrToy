@@ -27,7 +27,7 @@ namespace Hr
 	struct D3D11ShaderDesc
 	{
 		D3D11ShaderDesc()
-			: num_samplers(0), num_srvs(0), num_uavs(0)
+			: num_samplers(0), num_srvs(0), num_uavs(0), shaderType(HrShader::ST_VERTEX_SHADER)
 		{
 		}
 
@@ -70,6 +70,8 @@ namespace Hr
 			uint16_t bind_point;
 		};
 		std::vector<BoundResourceDesc> res_desc;
+
+		HrShader::EnumShaderType shaderType;
 	};
 
 	class HrD3D11IncludeShaderHandler : public ID3DInclude
@@ -122,11 +124,15 @@ namespace Hr
 			, HrStreamData& shaderBuffer) override;
 
 
-		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, HrShader::EnumShaderType shaderType) override;
+		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, const std::string& strShaderEntryPoint, HrShader::EnumShaderType shaderType) override;
 
 		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) override;
 
 		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
+
+		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
+			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
+			, std::vector<HrShader*>& vecShader) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
@@ -141,7 +147,8 @@ namespace Hr
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
 
-		std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;
+		std::unordered_map<size_t, D3D11ShaderDesc> m_mapShaderDesc;
+		//std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;
 	};
 }
 

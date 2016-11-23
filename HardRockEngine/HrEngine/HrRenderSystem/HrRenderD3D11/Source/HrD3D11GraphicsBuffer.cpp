@@ -74,7 +74,7 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 	}
 }
 
-ID3D11Buffer* HrD3D11GraphicsBuffer::GetGraphicsBuffer()
+ID3D11Buffer* HrD3D11GraphicsBuffer::GetD3DGraphicsBuffer()
 {
 	return m_pD3D11Buffer;
 }

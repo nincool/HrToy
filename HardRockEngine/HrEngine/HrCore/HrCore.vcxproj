@@ -170,7 +170,6 @@
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
-    <ClInclude Include="Include\Render\HrRenderConstantBuffer.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h" />
@@ -230,7 +229,6 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
-    <ClCompile Include="Source\Render\HrRenderConstantBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp" />

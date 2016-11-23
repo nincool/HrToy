@@ -440,6 +440,9 @@ HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, 
 	m_pBindConstBuffer = nullptr;
 	m_nStride = 0;
 	m_nElements = 0;
+
+	m_strName = strVarName;
+	m_nHashName = nHashName;
 }
 
 HrRenderEffectParameter::~HrRenderEffectParameter()
@@ -583,6 +586,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset)
 {
 	BOOST_ASSERT(m_pRenderVariable);
+	m_pBindConstBuffer = pConstantBuffer;
 	m_pRenderVariable->BindToCBuffer(pConstantBuffer, nOffset, m_nStride);
 }
 
@@ -629,5 +633,13 @@ Byte* HrRenderEffectConstantBuffer::GetStreamDataPoint()
 const Byte* HrRenderEffectConstantBuffer::GetStreamDataPoint() const
 {
 	return m_pConstantBufferData->GetBufferPoint();
+}
+
+void HrRenderEffectConstantBuffer::UpdateConstantBuffer()
+{
+	{
+		HrGraphicsBuffer::Mapper mapper(*m_pConstantBuffer, HrGraphicsBuffer::HBA_WRITE_ONLY);
+		std::memcpy(mapper.Pointer<Byte>(), m_pConstantBufferData->GetBufferPoint(), m_pConstantBufferData->GetBufferSize());
+	}
 }
 

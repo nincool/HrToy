@@ -1,5 +1,7 @@
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
+#include "HrCore/Include/Render/HrRenderFrameParameters.h"
+#include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
@@ -24,9 +26,49 @@ size_t HrRenderTechnique::GetHashName()
 	return m_nHashName;
 }
 
+void HrRenderTechnique::CollectShaderParameters()
+{
+	for (auto itemPass : m_vecPass)
+	{
+		itemPass->CollectShaderParameters(m_vecTechNeedParameter);
+	}
+	for (auto itemParameter : m_vecTechNeedParameter)
+	{
+		auto posItem = std::find_if(m_vecTechNeedConstBuffer.begin(), m_vecTechNeedConstBuffer.end(), [&](HrRenderEffectConstantBuffer* pConstBuffer)
+		{
+			if (pConstBuffer->HashName() == itemParameter->GetBindConstantBuffer()->HashName())
+			{
+				return true;
+			}
+			return false;
+		});
+		if (posItem == m_vecTechNeedConstBuffer.end())
+		{
+			m_vecTechNeedConstBuffer.push_back(itemParameter->GetBindConstantBuffer());
+		}
+	}
+}
+
 void HrRenderTechnique::UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters)
 {
-	m_vecPass[0]->UpdateShaderParams(renderFrameParameters);
+	for (auto& item : m_vecTechNeedParameter)
+	{
+		switch (item->ParamType())
+		{
+		case RPT_WORLDVIEWPROJ_MATRIX:
+		{
+			*item = renderFrameParameters.GetWorldViewProjMatrix();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	for (auto& item : m_vecTechNeedConstBuffer)
+	{
+		item->UpdateConstantBuffer();
+	}
 }
 
 HrRenderPass* HrRenderTechnique::GetRenderPass(uint32 nIndex)
@@ -43,7 +85,4 @@ HrRenderPass* HrRenderTechnique::AddPass(std::string strPassName)
 
 	return pRenderPass;
 }
-
-
-
 

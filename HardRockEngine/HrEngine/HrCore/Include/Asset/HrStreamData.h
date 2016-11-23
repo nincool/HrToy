@@ -12,13 +12,9 @@ namespace Hr
 		HrStreamData(uint32 nStreamLength);
 		~HrStreamData();
 
-		enum EnumReadDataType
-		{
-			RDT_TXT,
-			RDT_BINARY,
-		};
-
-		void SetReadDataType(EnumReadDataType readDataType);
+		HrStreamData& operator=(HrStreamData& streamData);
+		
+		void CopyFrom(HrStreamData& streamData);
 
 		Byte* ResizeBuffer(uint64 nLength);
 		Byte* GetBufferPoint();
@@ -30,10 +26,7 @@ namespace Hr
 		void ClearBuffer();
 		void AddBuffer(uint8* pData, uint32 nSize);
 	private:
-		EnumReadDataType m_readDataType;
 		std::vector<Byte> m_vecStreamData;
-		uint8* m_pStreamData;
-		uint32 m_nStreamLength;
 	};
 }
 

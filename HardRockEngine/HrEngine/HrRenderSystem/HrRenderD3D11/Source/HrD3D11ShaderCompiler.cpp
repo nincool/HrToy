@@ -25,7 +25,7 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(std::string& strShaderFileName
 {
 	HrD3D11IncludeShaderHandler includeHandler(strShaderFileName);
 
-	uint8* pSource = streamData.GetBufferPoint();
+	Byte* pSource = streamData.GetBufferPoint();
 	uint64 nSize = streamData.GetBufferSize();
 
 	std::vector<D3D_SHADER_MACRO> vecDefines;
@@ -85,100 +85,6 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(std::string& strShaderFileName
 	memcpy(shaderBuffer.GetBufferPoint(), pD3DShaderBuffer->GetBufferPointer(), pD3DShaderBuffer->GetBufferSize());
 
 	pD3DShaderBuffer->Release();
-
-	//uint64 nBufferSize = pShaderBuffer->GetBufferSize();
-	//ID3D11ShaderReflection* pShaderReflection = nullptr;
-	//hr = D3DReflect((void*)pShaderBuffer->GetBufferPoint()
-	//	, nBufferSize
-	//	, IID_ID3D11ShaderReflection
-	//	, (void**)&pShaderReflection);
-	//if (FAILED(hr))
-	//{
-	//	HRASSERT(nullptr, "CompileD3DShader Error! D3DReflect");
-	//}
-	//D3D11_SHADER_DESC shaderDesc;
-	//hr = pShaderReflection->GetDesc(&shaderDesc);
-	//if (FAILED(hr))
-	//{
-	//	HRASSERT(nullptr, "CompileD3DShader Error! GetDesc");
-	//}
-
-	////get the input parameters
-	//m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
-	//for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
-	//{
-	//	D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderInputParameters[i];
-	//	pShaderReflection->GetInputParameterDesc(i, &curParam);
-	//}
-	////get the output parameters
-	//m_vecD3D11ShaderOutputParamters.resize(shaderDesc.OutputParameters);
-	//for (UINT i = 0; i < shaderDesc.OutputParameters; ++i)
-	//{
-	//	D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderOutputParamters[i];
-	//	pShaderReflection->GetOutputParameterDesc(i, &curParam);
-	//}
-
-	////ConstBuffer
-	//m_nConstantBufferNum = shaderDesc.ConstantBuffers;
-	//m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
-
-	//if (shaderDesc.ConstantBuffers > 0)
-	//{
-	//	for (uint32 nCBIndex = 0; nCBIndex < shaderDesc.ConstantBuffers; ++nCBIndex)
-	//	{
-	//		ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
-
-	//		D3D11_SHADER_BUFFER_DESC constantBufferDesc;
-	//		hr = pShaderReflectionConstantBuffer->GetDesc(&constantBufferDesc);
-	//		if (FAILED(hr))
-	//		{
-	//			HRASSERT(nullptr, "CompileD3DShader Error! ConstBuffer GetDesc");
-	//		}
-	//		if (D3D_CT_CBUFFER == constantBufferDesc.Type || D3D_CT_TBUFFER == constantBufferDesc.Type)
-	//		{
-	//			D3D11ShaderDesc::ConstantBufferDesc constantDesc;
-	//			constantDesc.name = constantBufferDesc.Name;
-	//			constantDesc.name_hash = HrHashValue(constantBufferDesc.Name);
-	//			constantDesc.size = constantBufferDesc.Size;
-
-	//			for (uint32 nCBVarIndex = 0; nCBVarIndex < constantBufferDesc.Variables; ++nCBVarIndex)
-	//			{
-	//				ID3D11ShaderReflectionVariable* pVarRef = pShaderReflectionConstantBuffer->GetVariableByIndex(nCBVarIndex);
-
-	//				D3D11_SHADER_VARIABLE_DESC varDesc;
-	//				pVarRef->GetDesc(&varDesc);
-
-	//				D3D11_SHADER_TYPE_DESC varTypeDesc;
-	//				ID3D11ShaderReflectionType* pVarType = pVarRef->GetType();
-	//				pVarType->GetDesc(&varTypeDesc);
-
-	//				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc constantBufferVariableDesc;
-	//				constantBufferVariableDesc.name = varDesc.Name;
-	//				constantBufferVariableDesc.start_offset = varDesc.StartOffset;
-	//				constantBufferVariableDesc.type = varTypeDesc.Type; //D3D_SHADER_VARIABLE_TYPE https://msdn.microsoft.com/en-us/library/windows/desktop/ff728735(v=vs.85).aspx
-	//				constantBufferVariableDesc.rows = varTypeDesc.Rows;
-	//				constantBufferVariableDesc.columns = varTypeDesc.Columns;
-	//				constantBufferVariableDesc.elements = varTypeDesc.Elements;
-
-	//				constantDesc.var_desc.push_back(constantBufferVariableDesc);
-	//			}
-	//			m_shaderDesc.cb_desc.push_back(constantDesc);
-	//		}
-	//	}
-
-	//	int nSamplers = -1;
-	//	int nSrvs = -1;
-	//	int nUavs = -1;
-	//	for (uint32_t i = 0; i < shaderDesc.BoundResources; ++i)
-	//	{
-	//		D3D11_SHADER_INPUT_BIND_DESC shaderInputDesc;
-	//		pShaderReflection->GetResourceBindingDesc(i, &shaderInputDesc);
-
-	//	}
-	//}
-
-	//SAFE_RELEASE(pShaderReflection);
-
 }
 
 void HrD3D11ShaderCompiler::GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType)
@@ -226,28 +132,25 @@ void HrD3D11ShaderCompiler::GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defin
 
 }
 
-bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, HrShader::EnumShaderType shaderType)
+bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, const std::string& strShaderEntryPoint, HrShader::EnumShaderType shaderType)
 {
 	uint64 nBufferSize = shaderBuffer.GetBufferSize();
 	ID3D11ShaderReflection* pShaderReflection = nullptr;
-	HRESULT hr = D3DReflect((void*)shaderBuffer.GetBufferPoint()
+	TIF(D3DReflect((void*)shaderBuffer.GetBufferPoint()
 		, nBufferSize
 		, IID_ID3D11ShaderReflection
-		, (void**)&pShaderReflection);
-	if (FAILED(hr))
-	{
-		HRASSERT(nullptr, "CompileD3DShader Error! D3DReflect");
-	}
+		, (void**)&pShaderReflection));
+	
 	D3D11_SHADER_DESC shaderDesc;
-	hr = pShaderReflection->GetDesc(&shaderDesc);
-	if (FAILED(hr))
-	{
-		HRASSERT(nullptr, "CompileD3DShader Error! GetDesc");
-	}
+	TIF(pShaderReflection->GetDesc(&shaderDesc));
 
 	m_nConstantBufferNum = shaderDesc.ConstantBuffers;
 	m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
 
+	size_t nEntryHashName = HrHashValue(strShaderEntryPoint);
+	m_mapShaderDesc.insert(std::make_pair(nEntryHashName, D3D11ShaderDesc()));
+	auto& desc = m_mapShaderDesc.find(nEntryHashName)->second;
+	desc.shaderType = shaderType;
 	for (uint32 nCBIndex = 0; nCBIndex < shaderDesc.ConstantBuffers; ++nCBIndex)
 	{
 		ID3D11ShaderReflectionConstantBuffer* pShaderReflectionConstantBuffer = pShaderReflection->GetConstantBufferByIndex(nCBIndex);;
@@ -282,7 +185,6 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 				constantVariableDesc.name = varDesc.Name;
 				constantVariableDesc.start_offset = varDesc.StartOffset;
 
-
 				constantVariableDesc.varClass = static_cast<uint32>(varRefTypeDesc.Class);
 				constantVariableDesc.type = static_cast<uint8>(varRefTypeDesc.Type);//D3D_SHADER_VARIABLE_TYPE https://msdn.microsoft.com/en-us/library/windows/desktop/ff728735(v=vs.85).aspx
 				constantVariableDesc.rows = static_cast<uint8>(varRefTypeDesc.Rows);
@@ -299,9 +201,8 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 				constantVariableDesc.name_hash = nSeed;
 
 				cbDesc.var_desc.push_back(constantVariableDesc);
-
 			}
-			m_arrShaderDesc[shaderType].cb_desc.push_back(cbDesc);
+			desc.cb_desc.push_back(cbDesc);
 
 			break;
 		}
@@ -345,14 +246,14 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 			bindResourceDesc.type = static_cast<uint8>(shaderInputDesc.Type);
 			bindResourceDesc.bind_point = static_cast<uint16>(shaderInputDesc.BindPoint);
 			bindResourceDesc.dimension = static_cast<uint8>(shaderInputDesc.Dimension);
-			m_arrShaderDesc[shaderType].res_desc.push_back(bindResourceDesc);
+			desc.res_desc.push_back(bindResourceDesc);
 
 			break;
 		}
 	}
-	m_arrShaderDesc[shaderType].num_samplers = static_cast<uint16>(nSamplers + 1);
-	m_arrShaderDesc[shaderType].num_srvs = static_cast<uint16>(nSrvs + 1);
-	m_arrShaderDesc[shaderType].num_uavs = static_cast<uint16>(nUavs + 1);
+	desc.num_samplers = static_cast<uint16>(nSamplers + 1);
+	desc.num_srvs = static_cast<uint16>(nSrvs + 1);
+	desc.num_uavs = static_cast<uint16>(nUavs + 1);
 
 	//get the input parameters
 	m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
@@ -378,7 +279,8 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 {
 	ID3DBlob* pStrippedBlob = nullptr;
-	HRESULT hr = D3DStripShader(shaderBuffer.GetBufferPoint(), shaderBuffer.GetBufferSize(),0,  &pStrippedBlob);
+	HRESULT hr = D3DStripShader(shaderBuffer.GetBufferPoint(), shaderBuffer.GetBufferSize(), D3DCOMPILER_STRIP_REFLECTION_DATA | D3DCOMPILER_STRIP_DEBUG_INFO
+		| D3DCOMPILER_STRIP_TEST_BLOBS | D3DCOMPILER_STRIP_PRIVATE_DATA, &pStrippedBlob);
 	shaderBuffer.ClearBuffer();
 	shaderBuffer.AddBuffer(static_cast<uint8*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
 	SAFE_RELEASE(pStrippedBlob);
@@ -388,12 +290,13 @@ bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 
 void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer)
 {
-	for (uint32 nShaderDescIndex = 0; nShaderDescIndex < m_arrShaderDesc.size(); ++nShaderDescIndex)
+	for (auto shaderDescItem : m_mapShaderDesc)
 	{
-		uint32 nConstBuffer = m_arrShaderDesc[nShaderDescIndex].cb_desc.size();
+		D3D11ShaderDesc& shaderDesc = shaderDescItem.second;
+		uint32 nConstBuffer = shaderDesc.cb_desc.size();
 		for (uint32 nCBIndex = 0; nCBIndex < nConstBuffer; ++nCBIndex)
 		{
-			D3D11ShaderDesc::ConstantBufferDesc& cbDesc = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex];
+			D3D11ShaderDesc::ConstantBufferDesc& cbDesc = shaderDesc.cb_desc[nCBIndex];
 
 			HrRenderEffectConstantBuffer* pConstBuffer = GetConstantBuffer(vecConstantBuffer, cbDesc.name_hash);
 			if (pConstBuffer == nullptr)
@@ -402,11 +305,11 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 					, cbDesc.name_hash, cbDesc.size);
 				vecConstantBuffer.push_back(pConstBuffer);
 			}
-			
-			uint32 nVarNum = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc.size();
+
+			uint32 nVarNum = shaderDesc.cb_desc[nCBIndex].var_desc.size();
 			for (uint32 nVarIndex = 0; nVarIndex < nVarNum; ++nVarIndex)
 			{
-				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = m_arrShaderDesc[nShaderDescIndex].cb_desc[nCBIndex].var_desc[nVarIndex];
+				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = shaderDesc.cb_desc[nCBIndex].var_desc[nVarIndex];
 				HrRenderEffectParameter* pEffectParameter = GetEffectParameter(vecParameter, varDesc.name_hash);
 				if (pEffectParameter == nullptr)
 				{
@@ -427,6 +330,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 			}
 
 		}
+
 	}
 }
 
@@ -468,6 +372,40 @@ HrRenderParamDefine* HrD3D11ShaderCompiler::GetRenderParamDefine(const std::stri
 	}
 
 	return nullptr;
+}
+
+void HrD3D11ShaderCompiler::BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
+	, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
+	, std::vector<HrShader*>& vecShader)
+{
+	std::vector<HrRenderEffectParameter*> vecShaderBindParameters;
+	std::vector<HrRenderEffectConstantBuffer*> vecShaderBindConstantBuffers;
+	for (auto itemShader : vecShader)
+	{
+		for (auto itemDesc : m_mapShaderDesc)
+		{
+			if (itemShader->HashName() == itemDesc.first)
+			{
+				D3D11ShaderDesc& desc = itemDesc.second;
+				for (size_t nCBIndex = 0; nCBIndex < desc.cb_desc.size(); ++nCBIndex)
+				{
+					HrRenderEffectConstantBuffer* pConstBuffer = GetConstantBuffer(vecConstantBuffer, desc.cb_desc[nCBIndex].name_hash);
+					BOOST_ASSERT(pConstBuffer);
+					vecShaderBindConstantBuffers.push_back(pConstBuffer);
+					
+					for (size_t nVarIndex = 0; nVarIndex < desc.cb_desc[nCBIndex].var_desc.size(); ++nVarIndex)
+					{
+						HrRenderEffectParameter* pParameter = GetEffectParameter(vecParameter, desc.cb_desc[nCBIndex].var_desc[nVarIndex].name_hash);
+						BOOST_ASSERT(pParameter);
+						vecShaderBindParameters.push_back(pParameter);
+					}
+				}
+
+				break;
+			}
+		}
+		itemShader->BindRenderParameter(vecShaderBindParameters, vecShaderBindConstantBuffers);
+	}
 }
 
 //

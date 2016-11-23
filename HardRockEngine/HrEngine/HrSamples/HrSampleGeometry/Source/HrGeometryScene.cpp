@@ -120,7 +120,6 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEven
 
 void HrGeometryScene::MouseUpdate(float fDelta)
 {
-	std::cout << "MouseUpdate" << std::endl;
 	if (m_bKeyAPressed)
 	{
 		m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(-0.1, 0, 0));
