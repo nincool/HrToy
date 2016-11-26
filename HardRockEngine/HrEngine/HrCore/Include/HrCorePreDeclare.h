@@ -61,6 +61,7 @@ namespace Hr
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
 	class HrMesh;
 	class HrPrefebModel;
+	class HrMaterial;
 
 	class HrShaderCompiler;
 	typedef std::shared_ptr<HrShaderCompiler> HrShaderCompilerPtr;

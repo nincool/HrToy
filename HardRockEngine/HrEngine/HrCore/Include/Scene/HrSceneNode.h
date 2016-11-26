@@ -48,7 +48,7 @@ namespace Hr
 
 		HrTransform* m_pTransform;
 
-		bool m_bDirtyView;
+		bool m_bDirtyTransform;
 	};
 }
 

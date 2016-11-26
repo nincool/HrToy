@@ -4,6 +4,7 @@
 #include "Asset/HrPrefebModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
+#include "Asset/HrMaterial.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
@@ -13,8 +14,6 @@
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
-
-#define DEFAULT_EFFECT  "Media/HrShader/HrBasicEffect.effectxml"
 
 HrResourceManager::HrResourceManager()
 {
@@ -27,7 +26,6 @@ HrResourceManager::~HrResourceManager()
 	ReleaseResourceCache(m_mapPrefebModels);
 	ReleaseResourceCache(m_mapMesh);
 	ReleaseResourceCache(m_mapRenderEffects);
-	//ReleaseResourceCache(m_mapShaders);
 }
 
 void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes)
@@ -42,22 +40,20 @@ void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResour
 void HrResourceManager::InitResourceManager()
 {
 	CreateBuildInEffects();
-	CreateBuildInGeometry();
+	CreateBuildInMaterial();
 }
 
 void HrResourceManager::CreateBuildInEffects()
 {
-	std::string strEffectFile;
-
-	strEffectFile = DEFAULT_EFFECT;
-
-	LoadResource(strEffectFile);
+	LoadResource("Media/HrShader/HrLambert.effectxml");
+	//LoadResource("Media/HrShader/HrBasicEffect.effectxml");
 	//LoadResource("Media/HrShader/HrTestLighting.effectxml");
 }
 
-void HrResourceManager::CreateBuildInGeometry()
+void HrResourceManager::CreateBuildInMaterial()
 {
-
+	HrMaterial* pMaterial = static_cast<HrMaterial*>(this->AddMaterialResource(std::string(HR_BUILDIN_RES_PATH) + "DEFAULTMATERIAL"));
+	pMaterial->BuildToDefultMaterial();
 }
 
 HrResource* HrResourceManager::LoadResource(const std::string& strFile)
@@ -119,7 +115,7 @@ HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrR
 
 HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
 {
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource(DEFAULT_EFFECT, HrResource::RT_EFFECT));
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.effectxml", HrResource::RT_EFFECT));
 	BOOST_ASSERT(pRenderEffect);
 
 	return pRenderEffect;
@@ -175,22 +171,21 @@ HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 	return pMesh;
 }
 
-//HrResource* HrResourceManager::AddShaderResource(const std::string& strFile, HrShader::EnumShaderType shaderType)
-//{
-//	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-//
-//	HrShader* pShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-//	pShader->SetShaderType(shaderType);
-//	pShader->DeclareResource(strFileName, strFile);
-//	size_t nMeshHashID = pShader->GetHashID();
-//	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
-//	{
-//		return pShader;
-//	}
-//	m_mapShaders.insert(std::make_pair(nMeshHashID, pShader));
-//
-//	return pShader;
-//}
+HrResource* HrResourceManager::AddMaterialResource(const std::string& strFile)
+{
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
+
+	HrMaterial* pMaterial = HR_NEW HrMaterial();
+	pMaterial->DeclareResource(strFileName, strFile);
+	size_t nMaterialID = pMaterial->GetHashID();
+	if (m_mapMaterials.find(nMaterialID) != m_mapMaterials.end())
+	{
+		return pMaterial;
+	}
+	m_mapMesh.insert(std::make_pair(nMaterialID, pMaterial));
+
+	return pMaterial;
+}
 
 HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
 {

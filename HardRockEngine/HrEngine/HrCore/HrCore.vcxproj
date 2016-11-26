@@ -253,6 +253,17 @@
       <Project>{0688b1ee-0e99-4453-8455-da4be372aefc}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLightingCommon.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.effectxml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

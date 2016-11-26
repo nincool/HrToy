@@ -342,11 +342,8 @@ namespace Hr
 		template <typename T>
 		HrRenderEffectParameter& operator=(const T& value)
 		{
-			if (!(this->operator==(value)))
-			{
-				m_pRenderVariable->operator=(value);
-				m_pBindConstBuffer->Dirty(true);
-			}
+			m_pRenderVariable->operator=(value);
+			m_pBindConstBuffer->Dirty(true);
 			 
 			return *this;
 		}
@@ -380,6 +377,24 @@ namespace Hr
 		HrRenderVariable* m_pRenderVariable;
 
 		HrRenderEffectConstantBuffer* m_pBindConstBuffer;
+	};
+
+	class HR_CORE_API HrRenderStructParameter : public boost::noncopyable
+	{
+	public:
+		HrRenderStructParameter(const std::string& strVarName, size_t nHashName);
+		~HrRenderStructParameter();
+
+		size_t HashName() const { return m_nHashName; }
+		const std::string& Name() const { return m_strName; }
+
+	private:
+		std::string m_strName;
+		size_t m_nHashName;
+
+		uint32 m_nStride;
+
+		std::vector<HrRenderEffectParameter*> m_vecRenderEffectParameter;
 	};
 
 	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable

@@ -6,6 +6,7 @@ using namespace Hr;
 HrCamera::HrCamera()
 	:m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
 {
+	m_bViewProjDirty = false;
 }
 
 void HrCamera::AttachCameraNode(HrCameraNode* pCameraNode)
@@ -23,6 +24,8 @@ void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vec
 	m_v3Forward = m_matInverseView.Row(2);
 	m_v3Up = m_matInverseView.Row(1);
 	m_v3LookAt = m_v3EyePos + m_v3Forward * m_fLookAtDistance;
+
+	m_bViewProjDirty = true;
 }
 
 void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane)
@@ -33,6 +36,8 @@ void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float 
 	m_fFarPlane = fFarPlane;
 
 	m_matProject = HrMath::PerspectiveFovLh(fFov, fAspect, fNearPlane, fFarPlane);
+
+	m_bViewProjDirty = true;
 }
 
 Matrix4 const& HrCamera::GetViewMatrix() const
@@ -43,4 +48,15 @@ Matrix4 const& HrCamera::GetViewMatrix() const
 Matrix4 const& HrCamera::GetProjectMatrix() const
 {
 	return m_matProject;
+}
+
+Matrix4 const& HrCamera::GetViewProjMatrix() 
+{
+	if (m_bViewProjDirty)
+	{
+		m_matViewProj = (m_matView * m_matProject);
+		m_bViewProjDirty = false;
+	}
+
+	return m_matViewProj;
 }

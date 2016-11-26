@@ -593,7 +593,24 @@ void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* p
 ////////////////////////////////////////////
 //
 //
-///////////////////////////////////////////
+////////////////////////////////////////////
+
+HrRenderStructParameter::HrRenderStructParameter(const std::string& strVarName, size_t nHashName)
+{
+	m_strName = strVarName;
+	m_nHashName = nHashName;
+}
+
+HrRenderStructParameter::~HrRenderStructParameter()
+{
+
+}
+
+
+////////////////////////////////////////////
+//
+//
+////////////////////////////////////////////
 
 HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& strConstBufferName
 	, size_t nHashName, size_t nSize)
@@ -644,4 +661,3 @@ void HrRenderEffectConstantBuffer::UpdateConstantBuffer()
 		m_bDirty = false;
 	}
 }
-

@@ -11,6 +11,7 @@ HrCameraNode::HrCameraNode(HrViewPort* pViewPort)
 	m_pViewPort = pViewPort;
 	m_pCamera = m_pViewPort->GetCamera();
 	m_pCamera->AttachCameraNode(this);
+	m_bDirtyTransform = false;
 
 	m_pTransform->SetWordPosition(m_pViewPort->GetCamera()->GetEyePos());
 }
@@ -34,11 +35,12 @@ void HrCameraNode::UpdateNode()
 
 void HrCameraNode::RecalcCameraView()
 {
-	if (m_bDirtyView)
+	if (m_bDirtyTransform)
 	{
 		m_pCamera->ViewParams(m_pTransform->GetWordPosition()
 			, m_pTransform->GetWordPosition() + m_pCamera->GetForward() * m_pCamera->GetLookAtDistance()
 			, m_pCamera->GetUp());
+		m_bDirtyTransform = false;
 	}
 }
 

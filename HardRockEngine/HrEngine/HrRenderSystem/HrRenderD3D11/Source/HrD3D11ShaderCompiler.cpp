@@ -74,7 +74,7 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(std::string& strShaderFileName
 			HRERROR(pMsg);
 			pErrorBuffer->Release();
 		}
-		HRERROR(_T("CompileD3DShader Error! File"));
+		BOOST_ASSERT(nullptr);
 		return false;
 	}
 
@@ -174,33 +174,71 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 			{
 				ID3D11ShaderReflectionVariable* pVarRef = pShaderReflectionConstantBuffer->GetVariableByIndex(nCBVarIndex);
 
-				D3D11_SHADER_VARIABLE_DESC varDesc;
-				TIF(pVarRef->GetDesc(&varDesc));
+				D3D11_SHADER_VARIABLE_DESC constVarDesc;
+				TIF(pVarRef->GetDesc(&constVarDesc));
 
 				ID3D11ShaderReflectionType* pVarRefType = pVarRef->GetType();
 				D3D11_SHADER_TYPE_DESC varRefTypeDesc;
 				TIF(pVarRefType->GetDesc(&varRefTypeDesc));
 
 				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc constantVariableDesc;
-				constantVariableDesc.name = varDesc.Name;
-				constantVariableDesc.start_offset = varDesc.StartOffset;
+				constantVariableDesc.name = constVarDesc.Name;
+				constantVariableDesc.start_offset = constVarDesc.StartOffset;
+				constantVariableDesc.size = static_cast<uint32>(constVarDesc.Size);
 
 				constantVariableDesc.varClass = static_cast<uint32>(varRefTypeDesc.Class);
 				constantVariableDesc.type = static_cast<uint8>(varRefTypeDesc.Type);//D3D_SHADER_VARIABLE_TYPE https://msdn.microsoft.com/en-us/library/windows/desktop/ff728735(v=vs.85).aspx
 				constantVariableDesc.rows = static_cast<uint8>(varRefTypeDesc.Rows);
 				constantVariableDesc.columns = static_cast<uint8>(varRefTypeDesc.Columns);
 				constantVariableDesc.elements = static_cast<uint16>(varRefTypeDesc.Elements);
-				constantVariableDesc.bUsed = varDesc.uFlags & D3D_SVF_USED;
+				constantVariableDesc.bUsed = constVarDesc.uFlags & D3D_SVF_USED;
 
-				size_t nSeed = HrHashValue(varDesc.Name);
-				boost::hash_combine(nSeed, constantVariableDesc.varClass);
-				boost::hash_combine(nSeed, constantVariableDesc.type);
-				boost::hash_combine(nSeed, constantVariableDesc.rows);
-				boost::hash_combine(nSeed, constantVariableDesc.columns);
-				boost::hash_combine(nSeed, constantVariableDesc.elements);
-				constantVariableDesc.name_hash = nSeed;
+				{
+					size_t nSeed = HrHashValue(constVarDesc.Name);
+					boost::hash_combine(nSeed, constantVariableDesc.varClass);
+					boost::hash_combine(nSeed, constantVariableDesc.type);
+					boost::hash_combine(nSeed, constantVariableDesc.rows);
+					boost::hash_combine(nSeed, constantVariableDesc.columns);
+					boost::hash_combine(nSeed, constantVariableDesc.elements);
+					constantVariableDesc.name_hash = nSeed;
+				}
+
+				if (constantVariableDesc.varClass == D3D_SVC_STRUCT)
+				{
+					const UINT nParentOffset = constVarDesc.StartOffset;
+					for (uint32 nStructVarIndex = 0; nStructVarIndex < varRefTypeDesc.Members; ++nStructVarIndex)
+					{
+						D3D11_SHADER_TYPE_DESC memberTypeDesc;
+						ID3D11ShaderReflectionType* pMemberType = pVarRefType->GetMemberTypeByIndex(nStructVarIndex);
+
+						pMemberType->GetDesc(&memberTypeDesc);
+						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc structVariableDesc;
+						structVariableDesc.name = pVarRefType->GetMemberTypeName(nStructVarIndex);
+						structVariableDesc.start_offset = memberTypeDesc.Offset + nParentOffset;
+						structVariableDesc.varClass = static_cast<uint32>(memberTypeDesc.Class);
+						structVariableDesc.type = static_cast<uint8>(memberTypeDesc.Type);
+						structVariableDesc.rows = static_cast<uint8>(memberTypeDesc.Rows);
+						structVariableDesc.columns = static_cast<uint8>(memberTypeDesc.Columns);
+						structVariableDesc.elements = static_cast<uint16>(memberTypeDesc.Elements);
+						structVariableDesc.bUsed = constantVariableDesc.bUsed;
+
+						{
+							size_t nSeed = HrHashValue(structVariableDesc.name);
+							boost::hash_combine(nSeed, constVarDesc.Name);
+							boost::hash_combine(nSeed, structVariableDesc.varClass);
+							boost::hash_combine(nSeed, structVariableDesc.type);
+							boost::hash_combine(nSeed, structVariableDesc.rows);
+							boost::hash_combine(nSeed, structVariableDesc.columns);
+							boost::hash_combine(nSeed, structVariableDesc.elements);
+							structVariableDesc.name_hash = nSeed;						
+						}
+
+						constantVariableDesc.struct_desc.push_back(structVariableDesc);
+					}
+				}
 
 				cbDesc.var_desc.push_back(constantVariableDesc);
+
 			}
 			desc.cb_desc.push_back(cbDesc);
 
@@ -310,22 +348,37 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 			for (uint32 nVarIndex = 0; nVarIndex < nVarNum; ++nVarIndex)
 			{
 				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = shaderDesc.cb_desc[nCBIndex].var_desc[nVarIndex];
-				HrRenderEffectParameter* pEffectParameter = GetEffectParameter(vecParameter, varDesc.name_hash);
-				if (pEffectParameter == nullptr)
+				if (varDesc.varClass == D3D_SVC_STRUCT)
+				{
+					uint32 nStructSize = 0;
+					for (uint32 nStructMemIndex = 0; nStructMemIndex < varDesc.struct_desc.size(); ++nStructMemIndex)
+					{
+						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varStructMen = varDesc.struct_desc[nStructMemIndex];
+						HrRenderEffectParameter* pEffectParameter = HR_NEW HrRenderEffectParameter(varStructMen.name, varStructMen.name_hash);
+						HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varStructMen.name);
+						if (pRenderParamDefine != nullptr)
+						{
+							pEffectParameter->ParamInfo(pRenderParamDefine->paramType, pRenderParamDefine->dataType, varDesc.elements);
+							size_t nParamSize = pRenderParamDefine->nSize;
+							nStructSize += nParamSize;
+							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
+						}
+					}
+					BOOST_ASSERT(nStructSize == varDesc.size);
+				}
+				else
 				{
 					//if it is worldviewprojmatrix , the class is D3D_SVC_MATRIX_COLUMNS, need to transpose the matrix
-					pEffectParameter = HR_NEW HrRenderEffectParameter(varDesc.name, varDesc.name_hash);
+					HrRenderEffectParameter* pEffectParameter = HR_NEW HrRenderEffectParameter(varDesc.name, varDesc.name_hash);
 					HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varDesc.name);
 					if (pRenderParamDefine != nullptr)
 					{
 						pEffectParameter->ParamInfo(pRenderParamDefine->paramType, pRenderParamDefine->dataType, varDesc.elements);
 						pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
 					}
+
 					vecParameter.push_back(pEffectParameter);
-				}
-				else
-				{
-					continue;
+
 				}
 			}
 

@@ -54,14 +54,20 @@ namespace Hr
 
 		Matrix4 const& GetViewMatrix() const;
 		Matrix4 const& GetProjectMatrix() const;
+		bool ViewProjDirty() { return m_bViewProjDirty; }
+		Matrix4 const& GetViewProjMatrix();
 
 		void AttachCameraNode(HrCameraNode* pCameraNode);
 		HrCameraNode* GetAttachCameraNode() { return m_pAttachCameraNode; }
 	private:
 		float m_fLookAtDistance;
 
-		Matrix4 m_matView;
-		Matrix4 m_matInverseView;
+		mutable Matrix4 m_matView;
+		mutable Matrix4 m_matInverseView;
+		mutable Matrix4 m_matProject;
+		mutable Matrix4 m_matViewProj;
+		
+		bool m_bViewProjDirty;
 
 		Vector3 m_v3EyePos;
 		Vector3 m_v3Forward;
@@ -74,7 +80,6 @@ namespace Hr
 		float m_fNearPlane;
 		float m_fFarPlane;
 
-		Matrix4 m_matProject;
 
 		HrCameraNode* m_pAttachCameraNode;
 	};

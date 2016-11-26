@@ -19,7 +19,7 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 
 	m_pTransform = HR_NEW HrTransform(this);
 
-	m_bDirtyView = false;
+	m_bDirtyTransform = false;
 }
 
 HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
@@ -86,6 +86,6 @@ void HrSceneNode::UpdateRenderParamData(HrRenderFrameParameters& renderFramePara
 
 void HrSceneNode::DirtyTransform()
 {
-	m_bDirtyView = true;
+	m_bDirtyTransform = true;
 }
 

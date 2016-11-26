@@ -71,6 +71,9 @@
     <Filter Include="Source\Asset\Loader">
       <UniqueIdentifier>{62c45853-a533-4c0f-b0f5-59425a6b8cf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effects">
+      <UniqueIdentifier>{b6270a9c-91e1-4339-8719-3711011a75ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
@@ -432,5 +435,16 @@
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.effectxml">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.fx">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrLightingCommon.fx">
+      <Filter>Effects</Filter>
+    </None>
   </ItemGroup>
 </Project>

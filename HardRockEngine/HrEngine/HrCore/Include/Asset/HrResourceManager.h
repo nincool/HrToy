@@ -33,11 +33,12 @@ namespace Hr
 		HrResource* AddFBXResource(const std::string& strFile);
 		HrResource* AddEffectResource(const std::string& strFile);
 		HrResource* AddMeshResource(const std::string& strFile);
-		//HrResource* AddShaderResource(const std::string& strFile, HrShader::EnumShaderType shaderType);
+		HrResource* AddMaterialResource(const std::string& strFile);
 	protected:
 
 		void CreateBuildInEffects();
-		void CreateBuildInGeometry();
+		void CreateBuildInMaterial();
+
 
 		HrResource* GetMesh(const std::string& strMeshName);
 		HrResource* GetEffect(const std::string& strEffectName);
@@ -46,9 +47,9 @@ namespace Hr
 	protected:
 		std::unordered_map<size_t, HrResource*> m_mapPrefebModels;
 		std::unordered_map<size_t, HrResource*> m_mapMesh;
+		std::unordered_map<size_t, HrResource*> m_mapMaterials;
 		
 		std::unordered_map<size_t, HrResource*> m_mapRenderEffects;
-		//std::unordered_map<size_t, HrResource*> m_mapShaders;
 	};
 }
 

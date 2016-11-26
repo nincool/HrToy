@@ -8,9 +8,10 @@ HrStaticMeshRenderable::HrStaticMeshRenderable()
 
 }
 
-HrStaticMeshRenderable::HrStaticMeshRenderable(HrMesh* pMesh)
+HrStaticMeshRenderable::HrStaticMeshRenderable(HrMesh* pMesh, HrMaterial* pMaterial)
 {
 	m_pMesh = pMesh;
+	m_pMaterial = pMaterial;
 }
 
 HrStaticMeshRenderable::~HrStaticMeshRenderable()

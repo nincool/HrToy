@@ -57,7 +57,8 @@ void HrRenderTechnique::UpdateEffectParams(HrRenderFrameParameters& renderFrameP
 		{
 		case RPT_WORLDVIEWPROJ_MATRIX:
 		{
-			*item = renderFrameParameters.GetWorldViewProjMatrix();
+			if (renderFrameParameters.WorldViewProjMatrixDirty())
+				*item = renderFrameParameters.GetWorldViewProjMatrix();
 			break;
 		}
 		default:

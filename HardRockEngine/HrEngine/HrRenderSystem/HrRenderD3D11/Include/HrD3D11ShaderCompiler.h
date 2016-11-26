@@ -42,6 +42,8 @@ namespace Hr
 			{
 				std::string name;
 				size_t name_hash;
+				uint32 size;
+
 				uint32 start_offset;
 				uint32 varClass;
 				uint32 type;
@@ -49,6 +51,8 @@ namespace Hr
 				uint32 columns;
 				uint32 elements;
 				bool bUsed;
+
+				std::vector<VariableDesc> struct_desc;
 			};
 			std::vector<VariableDesc> var_desc;
 
