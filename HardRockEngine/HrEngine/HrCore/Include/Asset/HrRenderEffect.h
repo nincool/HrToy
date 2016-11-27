@@ -31,6 +31,7 @@ namespace Hr
 		std::vector<HrRenderTechnique*> m_vecRenderTechnique;
 
 		std::vector<HrRenderEffectParameter*> m_vecRenderEffectParameter;
+		std::vector<HrRenderEffectStructParameter*> m_vecRenderEffectStruct;
 		std::vector<HrRenderEffectConstantBuffer*> m_vecRenderConstantBuffer;
 	};
 }

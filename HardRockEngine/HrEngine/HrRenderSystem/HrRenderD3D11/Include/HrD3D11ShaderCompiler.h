@@ -132,7 +132,9 @@ namespace Hr
 
 		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) override;
 
-		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
+		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
 
 		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
 			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer

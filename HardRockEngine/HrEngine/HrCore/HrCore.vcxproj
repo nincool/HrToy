@@ -173,7 +173,6 @@
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h" />
-    <ClInclude Include="Include\Render\HrRenderParameter.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrRenderTarget.h" />
     <ClInclude Include="Include\Render\HrStaticMeshRenderable.h" />
@@ -232,7 +231,6 @@
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp" />
-    <ClCompile Include="Source\Render\HrRenderParameter.cpp" />
     <ClCompile Include="Source\Render\HrRenderTarget.cpp" />
     <ClCompile Include="Source\Render\HrRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />

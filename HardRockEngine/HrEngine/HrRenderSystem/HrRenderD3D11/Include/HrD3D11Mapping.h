@@ -4,7 +4,6 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11GraphicsBuffer.h"
 #include "HrCore/Include/Render/HrVertex.h"
-#include "HrCore/Include/Render/HrRenderParameter.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrD3D11Device.h"
 
@@ -22,7 +21,7 @@ namespace Hr
 		//Ë÷Òý»º´æ¸ñÊ½
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
-		static HrRenderParameter::EnumRenderParamType GetRenderParamType(const std::string& strName);
+		static EnumRenderParamType GetRenderParamType(const std::string& strName);
 		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
 
 		static D3D11_USAGE GetGraphicsUsage(HrGraphicsBuffer::EnumGraphicsBufferUsage usage);

@@ -42,11 +42,10 @@ namespace Hr
 	class HrRenderEffect;
 	class HrRenderParamDefine;
 	class HrRenderEffectParameter;
+	class HrRenderEffectStructParameter;
 	class HrRenderEffectConstantBuffer;
 	
 	class HrShader;
-	class HrRenderConstantBuffer;
-	class HrRenderParameter;
 	class HrRenderFrameParameters;
 	typedef std::unique_ptr<HrRenderFrameParameters> HrRenderFrameParametersPtr;
 	class HrViewPort;

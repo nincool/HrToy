@@ -326,7 +326,9 @@ bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 	return true;
 }
 
-void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer)
+void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter
+	, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
+	, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer)
 {
 	for (auto shaderDescItem : m_mapShaderDesc)
 	{
@@ -351,6 +353,8 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 				if (varDesc.varClass == D3D_SVC_STRUCT)
 				{
 					uint32 nStructSize = 0;
+
+					HrRenderEffectStructParameter* pEffectStruct = HR_NEW HrRenderEffectStructParameter(varDesc.name, varDesc.name_hash);
 					for (uint32 nStructMemIndex = 0; nStructMemIndex < varDesc.struct_desc.size(); ++nStructMemIndex)
 					{
 						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varStructMen = varDesc.struct_desc[nStructMemIndex];
@@ -363,7 +367,10 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 							nStructSize += nParamSize;
 							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
 						}
+						pEffectStruct->AddRenderEffectParameter(pEffectParameter);
 					}
+					vecRenderEffectStruct.push_back(pEffectStruct);
+
 					BOOST_ASSERT(nStructSize == varDesc.size);
 				}
 				else
@@ -378,7 +385,6 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 					}
 
 					vecParameter.push_back(pEffectParameter);
-
 				}
 			}
 

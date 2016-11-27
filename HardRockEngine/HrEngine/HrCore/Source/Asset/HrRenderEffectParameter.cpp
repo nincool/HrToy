@@ -595,17 +595,24 @@ void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* p
 //
 ////////////////////////////////////////////
 
-HrRenderStructParameter::HrRenderStructParameter(const std::string& strVarName, size_t nHashName)
+HrRenderEffectStructParameter::HrRenderEffectStructParameter(const std::string& strVarName, size_t nHashName)
 {
 	m_strName = strVarName;
 	m_nHashName = nHashName;
 }
 
-HrRenderStructParameter::~HrRenderStructParameter()
+HrRenderEffectStructParameter::~HrRenderEffectStructParameter()
 {
-
+	for (auto item : m_vecRenderEffectParameter)
+	{
+		SAFE_DELETE(item);
+	}
 }
 
+void HrRenderEffectStructParameter::AddRenderEffectParameter(HrRenderEffectParameter* pRenderParameter)
+{
+	m_vecRenderEffectParameter.push_back(pRenderParameter);
+}
 
 ////////////////////////////////////////////
 //

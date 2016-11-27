@@ -379,15 +379,16 @@ namespace Hr
 		HrRenderEffectConstantBuffer* m_pBindConstBuffer;
 	};
 
-	class HR_CORE_API HrRenderStructParameter : public boost::noncopyable
+	class HR_CORE_API HrRenderEffectStructParameter : public boost::noncopyable
 	{
 	public:
-		HrRenderStructParameter(const std::string& strVarName, size_t nHashName);
-		~HrRenderStructParameter();
+		HrRenderEffectStructParameter(const std::string& strVarName, size_t nHashName);
+		~HrRenderEffectStructParameter();
 
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; }
 
+		void AddRenderEffectParameter(HrRenderEffectParameter* pRenderParameter);
 	private:
 		std::string m_strName;
 		size_t m_nHashName;

@@ -78,11 +78,11 @@ D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topology
 	return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
-HrRenderParameter::EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
+EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
 {
 	if ("worldviewproj_matrix" == strName)
 	{
-		return HrRenderParameter::RPT_WORLDVIEWPROJ_MATRIX;
+		return RPT_WORLDVIEWPROJ_MATRIX;
 	}
 }
 

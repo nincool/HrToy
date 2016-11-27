@@ -30,6 +30,12 @@ HrRenderEffect::~HrRenderEffect()
 	}
 	m_vecRenderTechnique.clear();
 
+	for (auto& item : m_vecRenderEffectStruct)
+	{
+		SAFE_DELETE(item);
+	}
+	m_vecRenderEffectStruct.clear();
+
 	for (auto item : m_vecRenderEffectParameter)
 	{
 		SAFE_DELETE(item);
@@ -140,7 +146,7 @@ bool HrRenderEffect::LoadImpl()
 		}
 	}
 
-	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderConstantBuffer);
+	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
 	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderConstantBuffer, m_vecVertexShaders);
 	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderConstantBuffer, m_vecPixelShaders);
 
