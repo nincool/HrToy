@@ -28,14 +28,14 @@ namespace Hr
 
 	protected:
 		mutable Matrix4 m_worldMatrix;
-		bool m_bWorldMatrixDirty;
+		bool m_bWorldMatrixDirty = true;
 		mutable Matrix4 m_inverseWorldMatrix;
-		bool m_bInverseWorldMatrixDirty;
+		bool m_bInverseWorldMatrixDirty = true;
 
 		mutable Matrix4 m_inverseTransposeWorldMatrix;
-		bool m_bInverseTransposeWorldMatrix;
+		bool m_bInverseTransposeWorldMatrix = true;
 		mutable Matrix4 m_worldViewProjMatrix;
-		bool m_bWorldViewProjMatrixDirty;
+		bool m_bWorldViewProjMatrixDirty = true;
 
 	private:
 		const HrRenderable* m_pCurrentRenderable;

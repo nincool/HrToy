@@ -18,7 +18,7 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
 {
 	m_pCurrentRenderable = rend;
-	//m_bWorldViewProjMatrixDirty = true;
+	m_bWorldViewProjMatrixDirty = true;
 }
 
 void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)

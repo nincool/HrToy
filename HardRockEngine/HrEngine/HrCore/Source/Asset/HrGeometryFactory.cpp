@@ -37,14 +37,8 @@ void HrGeometryBox::GetBuildInBoxMesh()
 
 void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 {
-	m_pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("HrBasicEffect.effectxml", HrResource::RT_EFFECT));
+	m_pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("HrLambert.effectxml", HrResource::RT_EFFECT));
 	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
-
-	struct Vertex
-	{
-		float3 position;
-		float4 color;
-	};
 
 	Vertex vertices[8] =
 	{
@@ -58,17 +52,6 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 		{ float3(1.0f, -1.0f, 5.0f), HrColor::F4Magenta }
 	};
 
-	HrVertexElement vertexElementArr[] = {
-		HrVertexElement(VEU_POSITION, VET_FLOAT3),
-		HrVertexElement(VEU_COLOR, VET_FLOAT4)
-	};
-
-	pMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vertexElementArr
-		, HR_ARRAY_SIZE(vertexElementArr));
-
 	uint16 indices[] =
 	{
 		0, 1, 2, 0, 2, 3,
@@ -78,8 +61,31 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 		1, 5, 6, 1, 6, 2,
 		4, 0, 3, 4, 3, 7
 	};
-	pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
 
+
+
+	HrVertexElement vertexElementArr[] = {
+		HrVertexElement(VEU_POSITION, VET_FLOAT3),
+		HrVertexElement(VEU_NORMAL, VET_FLOAT3)
+	};
+
+	pMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
+		, sizeof(vertices)
+		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+		, vertexElementArr
+		, HR_ARRAY_SIZE(vertexElementArr));
+
+
+	pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+}
+
+void HrGeometryBox::ComputeNormal(Vertex* pVertex, uint16* pIndex, size_t nSize)
+{
+	for (size_t i = 0; i < nSize; ++i)
+	{
+		uint16 nIndex = pIndex[i];
+
+	}
 }
 
 ///////////////////////////////////////////////////

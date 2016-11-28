@@ -8,12 +8,20 @@ namespace Hr
 	class HrGeometryBox : public HrStaticMeshRenderable
 	{
 	public:
+		struct Vertex
+		{
+			float3 position;
+			float3 normal;
+		};
+
 		HrGeometryBox();
 		~HrGeometryBox();
 
 	private:
 		void GetBuildInBoxMesh();
 		void CreateBoxStaticMesh(HrMesh* pMesh);
+
+		void ComputeNormal(Vertex* pVertex, uint16* pIndex, size_t nSize);
 	};
 
 	class HrGeometryFactory
