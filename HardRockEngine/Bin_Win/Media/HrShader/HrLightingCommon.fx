@@ -2,36 +2,19 @@
 
 struct DirectionLight
 {
-    float4 fAmbient;
-    float4 fDiffuse;
-    float4 fSpecular;
-    float3 fDirection;
+    float4 ambient_light_color;
+    float4 diffuse_light_color;
+    float4 specular_light_color;
+    float3 light_direction;
 };
 
 struct Material
 {
-    float4 fAmbient;
-    float4 fDiffuse;
-    float4 fSpecular;
-    float4 fReflect;
+    float4 ambient_material_color;
+    float4 diffuse_material_color;
+    float4 specular_material_color;
+    float4 reflect_material_color;
 };
-
-
-void ComputeDirectionLight(Material mat, DirectionLight directLight, float3 normal, float3 toEye, out float4 fAmbient, out float4 fDiffuse, out float4 fSpec)
-{
-    fAmbient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    fDiffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    fSpec = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
-
-    float3 fLightVec = -directLight.fDirection;
-    
-    fAmbient = mat.fAmbient * directLight.fAmbient;
-
-    float fDiffuseFactor = dot(fLightVec, normal);
-
-    fDiffuse = fDiffuseFactor * mat.fDiffuse * directLight.fDiffuse;
-}
 
 
 

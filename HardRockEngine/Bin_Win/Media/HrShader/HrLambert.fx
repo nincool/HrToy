@@ -8,8 +8,8 @@ cbuffer cbPerFrame
 
 cbuffer cbPerObject
 {
-    float4x4 worldInvTranspose_matrix;
-    float4x4 worldviewproj_matrix;
+    float4x4 world_view_proj_matrix;
+    float4x4 inverse_transpose_world_matrix;
     Material mat;
 };
 
@@ -28,18 +28,18 @@ struct VertexOut
 VertexOut VS_Main(VertexIn v)
 {
     VertexOut o;
-    float3 normalDirection = normalize(mul(float4(v.normal, 0.0f), worldInvTranspose_matrix).xyz);
+    float3 normalDirection = normalize(mul(float4(v.normal, 0.0f), inverse_transpose_world_matrix).xyz);
 
-    float3 reflectLightDir = normalize(-directLight.fDirection);
+    float3 reflectLightDir = normalize(-directLight.light_direction);
     float fDiffuseFactor = dot(reflectLightDir, normalDirection);
 
-    float4 fAmbient = mat.fAmbient * directLight.fAmbient;
+    float4 fAmbient = mat.ambient_material_color * directLight.ambient_light_color;
 
-    float4 fDiffuse = fDiffuseFactor * mat.fDiffuse * directLight.fDiffuse;
+    float4 fDiffuse = fDiffuseFactor * mat.diffuse_material_color * directLight.diffuse_light_color;
 
-    o.posVextexOut = mul(float4(v.posVertexIn, 1.0f), worldviewproj_matrix);
+    o.posVextexOut = mul(float4(v.posVertexIn, 1.0f), world_view_proj_matrix);
     o.col = fAmbient + fDiffuse;
-    o.col.a = mat.fDiffuse.a;
+    o.col.a = mat.diffuse_material_color.a;
 
 
     return o;
