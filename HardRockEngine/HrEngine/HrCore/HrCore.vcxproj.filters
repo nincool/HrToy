@@ -130,9 +130,6 @@
     <ClInclude Include="Include\Render\HrVertex.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrRenderParameter.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -319,9 +316,6 @@
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrVertex.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\HrRenderParameter.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp">
