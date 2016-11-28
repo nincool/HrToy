@@ -21,8 +21,9 @@ namespace Hr
 		//Ë÷Òý»º´æ¸ñÊ½
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
-		static EnumRenderParamType GetRenderParamType(const std::string& strName);
+		//static EnumRenderParamType GetRenderParamType(const std::string& strName);
 		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
+		static uint32 GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType);
 
 		static D3D11_USAGE GetGraphicsUsage(HrGraphicsBuffer::EnumGraphicsBufferUsage usage);
 		static UINT GetCPUAccessFlag(HrGraphicsBuffer::EnumGraphicsBufferUsage usage);

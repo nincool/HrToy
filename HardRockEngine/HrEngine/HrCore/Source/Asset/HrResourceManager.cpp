@@ -45,8 +45,8 @@ void HrResourceManager::InitResourceManager()
 
 void HrResourceManager::CreateBuildInEffects()
 {
-	LoadResource("Media/HrShader/HrLambert.effectxml");
-	//LoadResource("Media/HrShader/HrBasicEffect.effectxml");
+	//LoadResource("Media/HrShader/HrLambert.effectxml");
+	LoadResource("Media/HrShader/HrBasicEffect.effectxml");
 	//LoadResource("Media/HrShader/HrTestLighting.effectxml");
 }
 

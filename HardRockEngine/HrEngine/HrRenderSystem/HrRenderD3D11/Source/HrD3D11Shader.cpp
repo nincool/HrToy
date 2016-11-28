@@ -103,9 +103,9 @@ void HrD3D11Shader::CreatePixelShader(HrStreamData& streamBuffer)
 
 void HrD3D11Shader::BindRenderParameterImpl()
 {
-	for (size_t i = 0; i < m_vecBindRenderConstantBuffers.size(); ++i)
+	for (size_t i = 0; i < m_vecBindRenderConstantBuffer.size(); ++i)
 	{
-		HrD3D11GraphicsBuffer* pGraphicsBuffer = CheckPointerCast<HrD3D11GraphicsBuffer>(m_vecBindRenderConstantBuffers[i]->GetGraphicsBuffer());
+		HrD3D11GraphicsBuffer* pGraphicsBuffer = CheckPointerCast<HrD3D11GraphicsBuffer>(m_vecBindRenderConstantBuffer[i]->GetGraphicsBuffer());
 		m_vecD3D11ConstBuffer.push_back(pGraphicsBuffer->GetD3DGraphicsBuffer());
 	}
 }

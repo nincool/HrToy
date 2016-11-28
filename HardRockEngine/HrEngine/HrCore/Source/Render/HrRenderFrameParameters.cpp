@@ -34,6 +34,20 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 	}
 }
 
+const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
+{
+	if (m_bWorldMatrixDirty)
+	{
+		
+	}
+	return Matrix4::Identity();
+}
+
+const Matrix4& HrRenderFrameParameters::GetInverseWroldMatrix()
+{
+	return HrMath::Inverse(GetWorldMatrix());
+}
+
 const Matrix4& HrRenderFrameParameters::GetViewProjMatrix() const
 {
 	return m_pCurrentCamera->GetViewProjMatrix();
@@ -49,3 +63,13 @@ const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix()
 	
 	return m_worldViewProjMatrix;
 }
+
+const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
+{
+	if (m_bInverseTransposeWorldMatrix)
+	{
+		//m_inverseTransposeWorldMatrix = 
+	}
+	return HrMath::Transpose(GetInverseWroldMatrix());
+}
+

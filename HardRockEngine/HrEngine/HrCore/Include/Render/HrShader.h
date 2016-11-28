@@ -32,8 +32,10 @@ namespace Hr
 		std::string& Name() { return m_strName; }
 		size_t HashName() { return m_nHashName; }
 
-		virtual void BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameters, std::vector<HrRenderEffectConstantBuffer*>& vecRenderConstBuffers);
-		void GetBindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameters);
+		virtual void BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecRenderStructParameter
+			, std::vector<HrRenderEffectConstantBuffer*>& vecRenderConstBuffer);
+		void GetBindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderStruct);
 	protected:
 		virtual void BindRenderParameterImpl() = 0;
 
@@ -42,8 +44,9 @@ namespace Hr
 		std::string m_strName;
 		size_t m_nHashName;
 
-		std::vector<HrRenderEffectParameter*> m_vecBindRenderParameters;
-		std::vector<HrRenderEffectConstantBuffer*> m_vecBindRenderConstantBuffers;
+		std::vector<HrRenderEffectParameter*> m_vecBindRenderParameter;
+		std::vector<HrRenderEffectStructParameter*> m_vecBindRenderStructParameter;
+		std::vector<HrRenderEffectConstantBuffer*> m_vecBindRenderConstantBuffer;
 	};
 }
 

@@ -2,6 +2,7 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
+#include "HrCore/Include/Asset/HrColor.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
@@ -30,7 +31,7 @@ void HrRenderTechnique::CollectShaderParameters()
 {
 	for (auto itemPass : m_vecPass)
 	{
-		itemPass->CollectShaderParameters(m_vecTechNeedParameter);
+		itemPass->CollectShaderParameters(m_vecTechNeedParameter, m_vecTecnNeedStruct);
 	}
 	for (auto itemParameter : m_vecTechNeedParameter)
 	{
@@ -51,24 +52,94 @@ void HrRenderTechnique::CollectShaderParameters()
 
 void HrRenderTechnique::UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters)
 {
+	for (auto& item : m_vecTecnNeedStruct)
+	{
+		for (uint32 nIndex = 0; nIndex < item->ElementNum(); ++nIndex)
+		{
+			UpdateOneEffectParameter(*(item->ParameterByIndex(nIndex)), renderFrameParameters);
+		}
+	}
 	for (auto& item : m_vecTechNeedParameter)
 	{
-		switch (item->ParamType())
-		{
-		case RPT_WORLDVIEWPROJ_MATRIX:
-		{
-			if (renderFrameParameters.WorldViewProjMatrixDirty())
-				*item = renderFrameParameters.GetWorldViewProjMatrix();
-			break;
-		}
-		default:
-			break;
-		}
+		UpdateOneEffectParameter(*item, renderFrameParameters);
 	}
 
 	for (auto& item : m_vecTechNeedConstBuffer)
 	{
 		item->UpdateConstantBuffer();
+	}
+}
+
+void HrRenderTechnique::UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters)
+{
+	switch (renderEffectParameter.ParamType())
+	{
+	case RPT_WORLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_INVERSE_WROLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_TRANSPOSE_WORLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
+	{
+		if (renderFrameParameters.InverseTransposeWorldMatrixDirty())
+			renderEffectParameter = renderFrameParameters.GetInverseTransposeWorldMatrix();
+		break;
+	}
+	case RPT_WORLD_VIEW_PROJ_MATRIX:
+	{
+		if (renderFrameParameters.WorldViewProjMatrixDirty())
+			renderEffectParameter = renderFrameParameters.GetWorldViewProjMatrix();
+		break;
+	}
+	case RPT_AMBIENT_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_DIFFUSE_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_SPECULAR_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_LIGHT_DIRECTION:
+	{
+		renderEffectParameter = float3(0, 10, -5);
+		break;
+	}
+	case RPT_AMBIENT_MATERIAL_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_DIFFUSE_MATERIAL_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_SPECULAR_MATERIAL_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	case RPT_REFLECT_MATERIAL_COLOR:
+	{
+		renderEffectParameter = HrColor::F4Blue;
+		break;
+	}
+	default:
+		break;
 	}
 }
 

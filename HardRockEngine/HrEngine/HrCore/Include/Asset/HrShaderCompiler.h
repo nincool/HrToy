@@ -26,6 +26,7 @@ namespace Hr
 			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) = 0;
 
 		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
 			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
 			, std::vector<HrShader*>& vecShader) = 0;
 	};

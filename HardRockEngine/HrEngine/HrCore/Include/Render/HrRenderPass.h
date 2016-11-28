@@ -15,12 +15,15 @@ namespace Hr
 		void BindPass(HrRender* pRender);
 		void UnBindPass(HrRender* pRender);
 
-		void CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter);
+		void CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct);
 
 		HrShader* GetShader(HrShader::EnumShaderType shaderType);
 		void SetShader(HrShader* pShader, HrShader::EnumShaderType shaderType);
 	private:
-		void StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter);
+		void StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecShaderBindStruct);
 	private:
 		std::string m_strPassName;
 

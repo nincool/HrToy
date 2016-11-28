@@ -77,22 +77,26 @@ void HrRenderPass::SetShader(HrShader* pShader, HrShader::EnumShaderType shaderT
 	}
 }
 
-void HrRenderPass::CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter)
+void HrRenderPass::CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct)
 {
 	std::vector<HrRenderEffectParameter*> vecShaderBindParameter;
+	std::vector<HrRenderEffectStructParameter*> vecShaderBindStruct;
 	if (m_pVertexShader)
 	{
-		m_pVertexShader->GetBindRenderParameter(vecShaderBindParameter);
-		this->StorageShaderParameter(vecRenderEffectParameter, vecShaderBindParameter);
+		m_pVertexShader->GetBindRenderParameter(vecShaderBindParameter, vecShaderBindStruct);
+		this->StorageShaderParameter(vecRenderEffectParameter, vecRenderEffectStruct, vecShaderBindParameter, vecShaderBindStruct);
 	}
 	if (m_pPixelShader)
 	{
-		m_pPixelShader->GetBindRenderParameter(vecShaderBindParameter);
-		this->StorageShaderParameter(vecRenderEffectParameter, vecShaderBindParameter);
+		m_pPixelShader->GetBindRenderParameter(vecShaderBindParameter, vecShaderBindStruct);
+		this->StorageShaderParameter(vecRenderEffectParameter, vecRenderEffectStruct, vecShaderBindParameter, vecShaderBindStruct);
 	}
 }
 
-void HrRenderPass::StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter)
+void HrRenderPass::StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
+	, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
+	, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter
+	, std::vector<HrRenderEffectStructParameter*>& vecShaderBindStruct)
 {
 	for (auto itemBind : vecShaderBindParameter)
 	{
@@ -107,6 +111,21 @@ void HrRenderPass::StorageShaderParameter(std::vector<HrRenderEffectParameter*>&
 		if (posItem == vecRenderEffectParameter.end())
 		{
 			vecRenderEffectParameter.push_back(itemBind);
+		}
+	}
+	for (auto itemBind : vecShaderBindStruct)
+	{
+		auto posItem = std::find_if(vecRenderEffectStruct.begin(), vecRenderEffectStruct.end(), [&](HrRenderEffectStructParameter* pParam)
+		{
+			if (pParam->HashName() == itemBind->HashName())
+			{
+				return true;
+			}
+			return false;
+		});
+		if (posItem == vecRenderEffectStruct.end())
+		{
+			vecRenderEffectStruct.push_back(itemBind);
 		}
 	}
 }

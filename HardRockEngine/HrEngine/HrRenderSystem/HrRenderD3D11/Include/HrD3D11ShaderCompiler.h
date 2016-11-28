@@ -44,6 +44,7 @@ namespace Hr
 				size_t name_hash;
 				uint32 size;
 
+				std::string typeName;
 				uint32 start_offset;
 				uint32 varClass;
 				uint32 type;
@@ -137,14 +138,17 @@ namespace Hr
 			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
 
 		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
+			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
 			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
 			, std::vector<HrShader*>& vecShader) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
 		HrRenderEffectConstantBuffer* GetConstantBuffer(std::vector<HrRenderEffectConstantBuffer*>& renderEffectConstBuffer, size_t nHashName);
+		HrRenderEffectStructParameter* GetEffectStruct(std::vector<HrRenderEffectStructParameter*>& renderEffectStruct, size_t nHashName);
 		HrRenderEffectParameter* GetEffectParameter(std::vector<HrRenderEffectParameter*>& renderEffectParameter, size_t nHashName);
 		HrRenderParamDefine* GetRenderParamDefine(const std::string& strParamName);
+
 	protected:
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;

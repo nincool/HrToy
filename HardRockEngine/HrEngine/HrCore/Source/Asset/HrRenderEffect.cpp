@@ -147,8 +147,8 @@ bool HrRenderEffect::LoadImpl()
 	}
 
 	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
-	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderConstantBuffer, m_vecVertexShaders);
-	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderConstantBuffer, m_vecPixelShaders);
+	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecVertexShaders);
+	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
 
 	for (auto itemTech : m_vecRenderTechnique)
 	{

@@ -78,14 +78,14 @@ D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topology
 	return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
-EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
-{
-	if ("worldviewproj_matrix" == strName)
-	{
-		return RPT_WORLDVIEWPROJ_MATRIX;
-	}
-}
-
+//EnumRenderParamType HrD3D11Mapping::GetRenderParamType(const std::string& strName)
+//{
+//	if ("world_view_proj_matrix" == strName)
+//	{
+//		return RPT_WORLDVIEWPROJ_MATRIX;
+//	}
+//}
+//
 EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType)
 {
 	switch (shaderVariableType)
@@ -95,6 +95,123 @@ EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIA
 	default:
 		break;
 	}
+}
+
+uint32 HrD3D11Mapping::GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType)
+{
+	switch (shaderVariableType)
+	{
+	case REDT_FLOAT1:
+		return 4;
+	case REDT_FLOAT2:
+		break;
+	case REDT_FLOAT3:
+		break;
+	case REDT_FLOAT4:
+		break;
+	case REDT_SAMPLER1D:
+		break;
+	case REDT_SAMPLER2D:
+		break;
+	case REDT_SAMPLER3D:
+		break;
+	case REDT_SAMPLERCUBE:
+		break;
+	case REDT_SAMPLERRECT:
+		break;
+	case REDT_SAMPLER1DSHADOW:
+		break;
+	case REDT_SAMPLER2DSHADOW:
+		break;
+	case REDT_SAMPLER2DARRAY:
+		break;
+	case REDT_MATRIX_2X2:
+		break;
+	case REDT_MATRIX_2X3:
+		break;
+	case REDT_MATRIX_2X4:
+		break;
+	case REDT_MATRIX_3X2:
+		break;
+	case REDT_MATRIX_3X3:
+		break;
+	case REDT_MATRIX_3X4:
+		break;
+	case REDT_MATRIX_4X2:
+		break;
+	case REDT_MATRIX_4X3:
+		break;
+	case REDT_MATRIX_4X4:
+		break;
+	case REDT_INT1:
+		break;
+	case REDT_INT2:
+		break;
+	case REDT_INT3:
+		break;
+	case REDT_INT4:
+		break;
+	case REDT_SUBROUTINE:
+		break;
+	case REDT_DOUBLE1:
+		break;
+	case REDT_DOUBLE2:
+		break;
+	case REDT_DOUBLE3:
+		break;
+	case REDT_DOUBLE4:
+		break;
+	case REDT_MATRIX_DOUBLE_2X2:
+		break;
+	case REDT_MATRIX_DOUBLE_2X3:
+		break;
+	case REDT_MATRIX_DOUBLE_2X4:
+		break;
+	case REDT_MATRIX_DOUBLE_3X2:
+		break;
+	case REDT_MATRIX_DOUBLE_3X3:
+		break;
+	case REDT_MATRIX_DOUBLE_3X4:
+		break;
+	case REDT_MATRIX_DOUBLE_4X2:
+		break;
+	case REDT_MATRIX_DOUBLE_4X3:
+		break;
+	case REDT_MATRIX_DOUBLE_4X4:
+		break;
+	case REDT_UINT1:
+		break;
+	case REDT_UINT2:
+		break;
+	case REDT_UINT3:
+		break;
+	case REDT_UINT4:
+		break;
+	case REDT_BOOL1:
+		break;
+	case REDT_BOOL2:
+		break;
+	case REDT_BOOL3:
+		break;
+	case REDT_BOOL4:
+		break;
+	case REDT_SAMPLER_WRAPPER1D:
+		break;
+	case REDT_SAMPLER_WRAPPER2D:
+		break;
+	case REDT_SAMPLER_WRAPPER3D:
+		break;
+	case REDT_SAMPLER_WRAPPERCUBE:
+		break;
+	case REDT_SAMPLER_STATE:
+		break;
+	case REDT_UNKNOWN:
+		break;
+	default:
+		break;
+	}
+
+	return 0;
 }
 
 DXGI_FORMAT HrD3D11Mapping::GetIndexBufferFormat(EnumIndexType indexType)

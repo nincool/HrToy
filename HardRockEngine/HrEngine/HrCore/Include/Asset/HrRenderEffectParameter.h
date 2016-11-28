@@ -76,7 +76,25 @@ namespace Hr
 	//from ogre
 	enum EnumRenderParamType
 	{
-		RPT_WORLDVIEWPROJ_MATRIX,
+		RPT_WORLD_MATRIX,
+		RPT_INVERSE_WROLD_MATRIX,
+		RPT_TRANSPOSE_WORLD_MATRIX,
+		RPT_INVERSE_TRANSPOSE_WORLD_MATRIX,
+		RPT_WORLD_VIEW_PROJ_MATRIX,
+
+		//灯光属性
+		RPT_AMBIENT_LIGHT_COLOR,
+		RPT_DIFFUSE_LIGHT_COLOR,
+		RPT_SPECULAR_LIGHT_COLOR,
+		//灯的方向
+		RPT_LIGHT_DIRECTION,
+
+		//材质属性
+		RPT_AMBIENT_MATERIAL_COLOR,
+		RPT_DIFFUSE_MATERIAL_COLOR,
+		RPT_SPECULAR_MATERIAL_COLOR,
+		RPT_REFLECT_MATERIAL_COLOR,
+		
 
 		RPT_UNKNOWN = 999
 	};
@@ -84,15 +102,16 @@ namespace Hr
 	class HR_CORE_API HrRenderParamDefine
 	{
 	public:
-		HrRenderParamDefine(EnumRenderParamType _paramType, const std::string& _strName, EnumRenderEffectDataType _dataType, uint32 _nSize)
-			:paramType(_paramType), strName(_strName), dataType(_dataType), nSize(_nSize)
+		HrRenderParamDefine(EnumRenderParamType _paramType, const std::string& _strName, EnumRenderEffectDataType _dataType, uint32 _nElementCount, uint32 _nStride)
+			:paramType(_paramType), strName(_strName), dataType(_dataType), nElementCount(_nElementCount), nStride(_nStride)
 		{
 		}
 
 		EnumRenderParamType paramType;
 		std::string strName;
 		EnumRenderEffectDataType dataType;
-		uint32 nSize;
+		uint32 nElementCount;
+		uint32 nStride;
 
 		static std::vector<HrRenderParamDefine> m_s_vecRenderParamDefine;
 	};
@@ -307,8 +326,8 @@ namespace Hr
 	typedef HrRenderVariableConcrete<int3> RenderVariableInt3;
 	typedef HrRenderVariableConcrete<int4> RenderVariableInt4;
 	typedef HrRenderVariableConcrete<float2> RenderVariableFloat2;
-	typedef HrRenderVariableConcrete<float3> RenderVariableFloat3;
-	typedef HrRenderVariableConcrete<float4> RenderVariableFloat4;
+	typedef HrRenderVariableConcrete<float3> HrRenderVariableFloat3;
+	typedef HrRenderVariableConcrete<float4> HrRenderVariableFloat4;
 	//typedef HrRenderVariableConcrete<SamplerStateObjectPtr> RenderVariableSampler;
 	typedef HrRenderVariableConcrete<std::string> RenderVariableString;
 	//typedef HrRenderVariableConcrete<ShaderDesc> RenderVariableShader;
@@ -357,11 +376,11 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
 
-		void ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nElements);
+		void ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nStride, uint32 nArraySize);
 
 		EnumRenderParamType ParamType() { return m_paramType; }
 		EnumRenderEffectDataType DataType() { return m_dataType; }
-		uint32 Elements() { return m_nElements; }
+		uint32 ArraySize() { return m_nArraySize; }
 
 		void BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset);
 		HrRenderEffectConstantBuffer* GetBindConstantBuffer() const { return m_pBindConstBuffer; }
@@ -369,7 +388,7 @@ namespace Hr
 		EnumRenderParamType m_paramType;
 		EnumRenderEffectDataType m_dataType;
 		uint32 m_nStride;
-		uint32 m_nElements;
+		uint32 m_nArraySize;
 
 		std::string m_strName;
 		size_t m_nHashName;
@@ -382,14 +401,19 @@ namespace Hr
 	class HR_CORE_API HrRenderEffectStructParameter : public boost::noncopyable
 	{
 	public:
-		HrRenderEffectStructParameter(const std::string& strVarName, size_t nHashName);
+		HrRenderEffectStructParameter(const std::string& strTypeName, const std::string& strVarName, size_t nHashName);
 		~HrRenderEffectStructParameter();
 
+		const std::string& TypeName() { return m_strTypeName; }
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; }
 
 		void AddRenderEffectParameter(HrRenderEffectParameter* pRenderParameter);
+
+		uint32 ElementNum() { return m_vecRenderEffectParameter.size(); }
+		HrRenderEffectParameter* ParameterByIndex(uint32 nIndex) { BOOST_ASSERT(nIndex < m_vecRenderEffectParameter.size()); return m_vecRenderEffectParameter[nIndex]; };
 	private:
+		std::string m_strTypeName;
 		std::string m_strName;
 		size_t m_nHashName;
 

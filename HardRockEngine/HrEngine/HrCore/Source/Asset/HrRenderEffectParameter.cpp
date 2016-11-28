@@ -8,7 +8,22 @@ using namespace Hr;
 
 std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 {
-	HrRenderParamDefine(RPT_WORLDVIEWPROJ_MATRIX, "worldviewproj_matrix", REDT_MATRIX_4X4, 16)
+	HrRenderParamDefine(RPT_WORLD_MATRIX, "world_matrix", REDT_MATRIX_4X4, 16, 64),
+	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 16, 64),
+	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 16, 64),
+	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 16, 64),
+	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 16, 64),
+
+	HrRenderParamDefine(RPT_AMBIENT_LIGHT_COLOR, "ambient_light_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_DIFFUSE_LIGHT_COLOR, "diffuse_light_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_SPECULAR_LIGHT_COLOR, "specular_light_color", REDT_FLOAT4, 4, 16),
+
+	HrRenderParamDefine(RPT_LIGHT_DIRECTION, "light_direction", REDT_FLOAT3, 3, 12),
+
+	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 4, 16),
 };
 
 //////////////////////////////////////////////////////////
@@ -439,7 +454,7 @@ HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, 
 	m_pRenderVariable = nullptr;
 	m_pBindConstBuffer = nullptr;
 	m_nStride = 0;
-	m_nElements = 0;
+	m_nArraySize = 0;
 
 	m_strName = strVarName;
 	m_nHashName = nHashName;
@@ -450,137 +465,46 @@ HrRenderEffectParameter::~HrRenderEffectParameter()
 	SAFE_DELETE(m_pRenderVariable);
 }
 
-void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nElements)
+void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nStride, uint32 nArraySize)
 {
 	m_paramType = paramType;
 	m_dataType = dataType;
-	switch (dataType)
-	{
-	case REDT_FLOAT1:
-		break;
-	case REDT_FLOAT2:
-		break;
-	case REDT_FLOAT3:
-		break;
-	case REDT_FLOAT4:
-		break;
-	case REDT_SAMPLER1D:
-		break;
-	case REDT_SAMPLER2D:
-		break;
-	case REDT_SAMPLER3D:
-		break;
-	case REDT_SAMPLERCUBE:
-		break;
-	case REDT_SAMPLERRECT:
-		break;
-	case REDT_SAMPLER1DSHADOW:
-		break;
-	case REDT_SAMPLER2DSHADOW:
-		break;
-	case REDT_SAMPLER2DARRAY:
-		break;
-	case REDT_MATRIX_2X2:
-		break;
-	case REDT_MATRIX_2X3:
-		break;
-	case REDT_MATRIX_2X4:
-		break;
-	case REDT_MATRIX_3X2:
-		break;
-	case REDT_MATRIX_3X3:
-		break;
-	case REDT_MATRIX_3X4:
-		break;
-	case REDT_MATRIX_4X2:
-		break;
-	case REDT_MATRIX_4X3:
-		break;
-	case REDT_MATRIX_4X4:
-		m_nStride = 16;
-		break;
-	case REDT_INT1:
-		break;
-	case REDT_INT2:
-		break;
-	case REDT_INT3:
-		break;
-	case REDT_INT4:
-		break;
-	case REDT_SUBROUTINE:
-		break;
-	case REDT_DOUBLE1:
-		break;
-	case REDT_DOUBLE2:
-		break;
-	case REDT_DOUBLE3:
-		break;
-	case REDT_DOUBLE4:
-		break;
-	case REDT_MATRIX_DOUBLE_2X2:
-		break;
-	case REDT_MATRIX_DOUBLE_2X3:
-		break;
-	case REDT_MATRIX_DOUBLE_2X4:
-		break;
-	case REDT_MATRIX_DOUBLE_3X2:
-		break;
-	case REDT_MATRIX_DOUBLE_3X3:
-		break;
-	case REDT_MATRIX_DOUBLE_3X4:
-		break;
-	case REDT_MATRIX_DOUBLE_4X2:
-		break;
-	case REDT_MATRIX_DOUBLE_4X3:
-		break;
-	case REDT_MATRIX_DOUBLE_4X4:
-		break;
-	case REDT_UINT1:
-		break;
-	case REDT_UINT2:
-		break;
-	case REDT_UINT3:
-		break;
-	case REDT_UINT4:
-		break;
-	case REDT_BOOL1:
-		break;
-	case REDT_BOOL2:
-		break;
-	case REDT_BOOL3:
-		break;
-	case REDT_BOOL4:
-		break;
-	case REDT_SAMPLER_WRAPPER1D:
-		break;
-	case REDT_SAMPLER_WRAPPER2D:
-		break;
-	case REDT_SAMPLER_WRAPPER3D:
-		break;
-	case REDT_SAMPLER_WRAPPERCUBE:
-		break;
-	case REDT_SAMPLER_STATE:
-		break;
-	case REDT_UNKNOWN:
-		break;
-	default:
-		break;
-	}
-	m_nElements = nElements <= 0 ? 1 : nElements;
+	
+	m_nArraySize = m_nArraySize <= 0 ? 1 : m_nArraySize;
 	if (m_pRenderVariable != nullptr)
 	{
 		SAFE_DELETE(m_pRenderVariable);
 	}
 	switch (paramType)
 	{
-	case RPT_WORLDVIEWPROJ_MATRIX:
+	case RPT_WORLD_VIEW_PROJ_MATRIX:
+	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
 	{
-		BOOST_ASSERT(m_dataType == REDT_MATRIX_4X4 && m_nElements == 1);
+		BOOST_ASSERT(m_dataType == REDT_MATRIX_4X4 && m_nArraySize == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
 		break;
 	}
+	case RPT_AMBIENT_LIGHT_COLOR:
+	case RPT_DIFFUSE_LIGHT_COLOR:
+	case RPT_SPECULAR_LIGHT_COLOR:
+	case RPT_AMBIENT_MATERIAL_COLOR:
+	case RPT_DIFFUSE_MATERIAL_COLOR:
+	case RPT_SPECULAR_MATERIAL_COLOR:
+	case RPT_REFLECT_MATERIAL_COLOR:
+	{
+		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat4();
+		break;
 	}
-
+	case RPT_LIGHT_DIRECTION:
+	{
+		BOOST_ASSERT(m_dataType == REDT_FLOAT3 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat3();
+		break;
+	}
+	default:
+		BOOST_ASSERT(nullptr);
+	}
 }
 
 void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset)
@@ -595,8 +519,9 @@ void HrRenderEffectParameter::BindConstantBuffer(HrRenderEffectConstantBuffer* p
 //
 ////////////////////////////////////////////
 
-HrRenderEffectStructParameter::HrRenderEffectStructParameter(const std::string& strVarName, size_t nHashName)
+HrRenderEffectStructParameter::HrRenderEffectStructParameter(const std::string& strTypeName, const std::string& strVarName, size_t nHashName)
 {
+	m_strTypeName = strTypeName;
 	m_strName = strVarName;
 	m_nHashName = nHashName;
 }
