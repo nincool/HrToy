@@ -21,7 +21,7 @@ namespace Hr
 		void GetBuildInBoxMesh();
 		void CreateBoxStaticMesh(HrMesh* pMesh);
 
-		void ComputeNormal(Vertex* pVertex, uint16* pIndex, size_t nSize);
+		void ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum);
 	};
 
 	class HrGeometryFactory

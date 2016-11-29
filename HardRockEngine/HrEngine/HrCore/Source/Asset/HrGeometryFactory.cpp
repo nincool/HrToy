@@ -42,14 +42,14 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 
 	Vertex vertices[8] =
 	{
-		{ float3(-1.0f, -1.0f, 4.0f),  HrColor::F4Blue },
-		{ float3(-1.0f, 1.0f, 4.0f), HrColor::F4Cyan },
-		{ float3(1.0f, 1.0f, 4.0f), HrColor::F4Red },
-		{ float3(1.0f, -1.0f, 4.0f), HrColor::F4Yellow },
-		{ float3(-1.0f, -1.0f, 5.0f), HrColor::F4Green },
-		{ float3(-1.0f, 1.0f, 5.0f), HrColor::F4Silver },
-		{ float3(1.0f, 1.0f, 5.0f), HrColor::F4Black },
-		{ float3(1.0f, -1.0f, 5.0f), HrColor::F4Magenta }
+		{ float3(-1.0f, -1.0f, 4.0f),  float3::Zero() },
+		{ float3(-1.0f, 1.0f, 4.0f), float3::Zero() },
+		{ float3(1.0f, 1.0f, 4.0f), float3::Zero() },
+		{ float3(1.0f, -1.0f, 4.0f), float3::Zero() },
+		{ float3(-1.0f, -1.0f, 5.0f), float3::Zero() },
+		{ float3(-1.0f, 1.0f, 5.0f), float3::Zero() },
+		{ float3(1.0f, 1.0f, 5.0f), float3::Zero() },
+		{ float3(1.0f, -1.0f, 5.0f), float3::Zero() }
 	};
 
 	uint16 indices[] =
@@ -62,6 +62,7 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 		4, 0, 3, 4, 3, 7
 	};
 
+	ComputeNormal(vertices, HR_ARRAY_SIZE(vertices), indices, HR_ARRAY_SIZE(indices));
 
 
 	HrVertexElement vertexElementArr[] = {
@@ -79,12 +80,33 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 	pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
 }
 
-void HrGeometryBox::ComputeNormal(Vertex* pVertex, uint16* pIndex, size_t nSize)
+void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)
 {
-	for (size_t i = 0; i < nSize; ++i)
+	std::vector<Vector3> vecVertexNormal(nVertexNum);
+	for (auto& item : vecVertexNormal)
 	{
-		uint16 nIndex = pIndex[i];
+		item = Vector3::Zero();
+	}
+	for (size_t i = 0; i < nIndexNum; i+=3)
+	{
+		uint16 nIndex1 = pIndex[i];
+		uint16 nIndex2 = pIndex[i + 1];
+		uint16 nIndex3 = pIndex[i + 2];
 
+		Vector3 vAB = pVertex[nIndex2].position - pVertex[nIndex1].position;
+		Vector3 vAC = pVertex[nIndex3].position - pVertex[nIndex1].position;
+
+		Vector3 vNormal = HrMath::Cross(vAB, vAC);
+
+		vecVertexNormal[nIndex1] += vNormal;
+		vecVertexNormal[nIndex2] += vNormal;
+		vecVertexNormal[nIndex3] += vNormal;
+	}
+	
+	for (size_t i = 0; i < vecVertexNormal.size(); ++i)
+	{
+		Vector3 normal = HrMath::Normalize(vecVertexNormal[i]);
+		pVertex[i].normal = normal;
 	}
 }
 

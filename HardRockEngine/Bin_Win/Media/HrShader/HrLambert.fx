@@ -61,7 +61,7 @@ cbuffer PerFrame
 struct VertexIn
 {
 	float3	pos 	: POSITION;
-	float4	color 	: COLOR;
+	float3	normal 	: NORMAL;
 };
 
 struct VertexOut
@@ -74,7 +74,7 @@ VertexOut VS_Main(VertexIn vin)
 {
 	VertexOut vout;
 	vout.posH = mul(float4(vin.pos, 1.f), world_view_proj_matrix);
-	vout.color = float4(1.0, 0.0, 0.0, 1.0);
+	vout.color = float4(vin.normal, 1.0);
 
 	return vout;
 }

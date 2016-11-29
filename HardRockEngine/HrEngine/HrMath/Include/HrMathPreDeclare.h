@@ -8,9 +8,11 @@ namespace Hr
 {
 #ifdef HR_MATH_SIMD
 	//选定基本类型
+	typedef KlayGE::float2 Vector2;
 	typedef KlayGE::float3 Vector3;
 	typedef KlayGE::float4 Vector4;
 
+	typedef Vector2 float2;
 	typedef Vector3 float3;
 	typedef Vector4 float4;
 
