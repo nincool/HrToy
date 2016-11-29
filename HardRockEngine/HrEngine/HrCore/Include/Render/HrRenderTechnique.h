@@ -13,7 +13,7 @@ namespace Hr
 
 		size_t GetHashName();
 		
-		uint32 GetRenderPassNum() { return m_vecPass.size(); }
+		size_t GetRenderPassNum() { return m_vecPass.size(); }
 		HrRenderPass* GetRenderPass(uint32 nIndex);
 
 		void CollectShaderParameters();
@@ -31,7 +31,7 @@ namespace Hr
 
 		//technique中需要的paramer 链接着effect的parameter
 		std::vector<HrRenderEffectParameter*> m_vecTechNeedParameter;
-		std::vector<HrRenderEffectStructParameter*> m_vecTecnNeedStruct;
+		std::vector<HrRenderEffectStructParameter*> m_vecTechNeedStruct;
 		std::vector<HrRenderEffectConstantBuffer*> m_vecTechNeedConstBuffer;
 	};
 }

@@ -53,35 +53,51 @@
 //}
 //
 
-cbuffer PerFrame
+cbuffer cbPerFrame
 {
-	float4x4	world_view_proj_matrix;
+    DirectionLight directLight;
+};
+
+cbuffer cbPerObject
+{
+    float4x4 world_view_proj_matrix;
+    float4x4 inverse_transpose_world_matrix;
+    Material mat;
 };
 
 struct VertexIn
 {
-	float3	pos 	: POSITION;
-	float3	normal 	: NORMAL;
+    float3	pos 	: POSITION;
+    float3	normal 	: NORMAL;
 };
 
 struct VertexOut
 {
-	float4	posH	: SV_POSITION;
-	float4	color	: COLOR;
+    float4	posH	: SV_POSITION;
+    float4	color	: COLOR;
 };
 
-VertexOut VS_Main(VertexIn vin)
+VertexOut VS_Main(VertexIn v)
 {
-	VertexOut vout;
-	vout.posH = mul(float4(vin.pos, 1.f), world_view_proj_matrix);
-	vout.color = float4(vin.normal, 1.0);
+    VertexOut vout;
+    
+    float3 normalDirection = normalize(mul(float4(v.normal, 0.0f), inverse_transpose_world_matrix).xyz);
+    float3 reflectLightDir = normalize(-directLight.light_direction);
+	float fDiffuseFactor = dot(reflectLightDir, normalDirection);
+	float4 fAmbient = mat.ambient_material_color * directLight.ambient_light_color;
+	float4 fDiffuse = fDiffuseFactor * mat.diffuse_material_color * directLight.diffuse_light_color;
 
-	return vout;
+    vout.posH = mul(float4(v.pos, 1.f), world_view_proj_matrix);
+    vout.color = fAmbient + fDiffuse;
+	//vout.color = fDiffuseFactor;
+	//vout.color = float4(1.0, fDiffuseFactor, 0.0, 1.0);
+
+    return vout;
 }
 
 float4 PS_Main(VertexOut pin) :SV_TARGET
 {
-	return pin.color;
+    return pin.color;
 }
 
 

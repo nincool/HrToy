@@ -31,9 +31,9 @@ void HrRenderTechnique::CollectShaderParameters()
 {
 	for (auto itemPass : m_vecPass)
 	{
-		itemPass->CollectShaderParameters(m_vecTechNeedParameter, m_vecTecnNeedStruct);
+		itemPass->CollectShaderParameters(m_vecTechNeedParameter, m_vecTechNeedStruct);
 	}
-	for (auto itemParameter : m_vecTechNeedParameter)
+	for (auto& itemParameter : m_vecTechNeedParameter)
 	{
 		auto posItem = std::find_if(m_vecTechNeedConstBuffer.begin(), m_vecTechNeedConstBuffer.end(), [&](HrRenderEffectConstantBuffer* pConstBuffer)
 		{
@@ -48,11 +48,29 @@ void HrRenderTechnique::CollectShaderParameters()
 			m_vecTechNeedConstBuffer.push_back(itemParameter->GetBindConstantBuffer());
 		}
 	}
+	for (auto& itemStruct : m_vecTechNeedStruct)
+	{
+		for (uint32 nIndex = 0; nIndex < itemStruct->ElementNum(); ++nIndex)
+		{
+			auto posItem = std::find_if(m_vecTechNeedConstBuffer.begin(), m_vecTechNeedConstBuffer.end(), [&](HrRenderEffectConstantBuffer* pConstBuffer)
+			{
+				if (pConstBuffer->HashName() == itemStruct->ParameterByIndex(nIndex)->GetBindConstantBuffer()->HashName())
+				{
+					return true;
+				}
+				return false;
+			});
+			if (posItem == m_vecTechNeedConstBuffer.end())
+			{
+				m_vecTechNeedConstBuffer.push_back(itemStruct->ParameterByIndex(nIndex)->GetBindConstantBuffer());
+			}
+		}
+	}
 }
 
 void HrRenderTechnique::UpdateEffectParams(HrRenderFrameParameters& renderFrameParameters)
 {
-	for (auto& item : m_vecTecnNeedStruct)
+	for (auto& item : m_vecTechNeedStruct)
 	{
 		for (uint32 nIndex = 0; nIndex < item->ElementNum(); ++nIndex)
 		{
@@ -105,37 +123,37 @@ void HrRenderTechnique::UpdateOneEffectParameter(HrRenderEffectParameter& render
 	}
 	case RPT_DIFFUSE_LIGHT_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	case RPT_SPECULAR_LIGHT_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	case RPT_LIGHT_DIRECTION:
 	{
-		renderEffectParameter = float3(0, -10, 5);
+		renderEffectParameter = float3(-1.0, -1.0, 1.0);
 		break;
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	case RPT_SPECULAR_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	case RPT_REFLECT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::F4White;
 		break;
 	}
 	default:

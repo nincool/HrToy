@@ -21,5 +21,3 @@ struct Material
 
 
 
-
-
