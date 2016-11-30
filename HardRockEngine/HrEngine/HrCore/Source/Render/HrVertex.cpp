@@ -92,6 +92,18 @@ void HrVertex::Clear()
 	m_vecVertexElement.clear();
 }
 
+void HrVertex::AddElementArray(std::vector<HrVertexElement>& vecVertexElement)
+{
+	size_t nOffset = 0;
+	for (size_t i = 0; i < vecVertexElement.size(); ++i)
+	{
+		vecVertexElement[i].SetOffset(nOffset);
+		AddElement(vecVertexElement[i]);
+		nOffset += vecVertexElement[i].GetTypeSize();
+	}
+	m_nVertexSize = nOffset;
+}
+
 void HrVertex::AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVertexElementLength)
 {
 	size_t nOffset = 0;

@@ -48,11 +48,11 @@ void HrGeometryScene::CreateSceneElements()
 	AddSceneNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransfrom()->Translate(Vector3(0.0f, 0.0f, -5.0f));
 
-	//HrSceneNode* pTestModel = HrSceneObjectFactory::Instance()->CreateModel("box.fbx");
-	//AddSceneNode(pTestModel);
+	HrSceneNode* pTestModel = HrSceneObjectFactory::Instance()->CreateModel("box.fbx");
+	AddSceneNode(pTestModel);
 
-	HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
-	AddSceneNode(pBox);
+	//HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
+	//AddSceneNode(pBox);
 }
 
 void HrGeometryScene::CreateInputEvent()

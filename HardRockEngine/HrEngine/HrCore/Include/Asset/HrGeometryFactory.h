@@ -24,6 +24,8 @@ namespace Hr
 		void ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum);
 	};
 
+
+
 	class HrGeometryFactory
 	{
 	public:

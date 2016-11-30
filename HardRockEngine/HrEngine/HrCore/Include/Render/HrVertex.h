@@ -34,6 +34,8 @@ namespace Hr
 
 	public:
 		void Clear();
+
+		void AddElementArray(std::vector<HrVertexElement>& vecVertexElement);
 		void AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVertexElementLength);
 
 		uint32 GetVertexSize();

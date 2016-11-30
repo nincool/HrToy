@@ -96,7 +96,7 @@ void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pI
 		Vector3 vAB = pVertex[nIndex2].position - pVertex[nIndex1].position;
 		Vector3 vAC = pVertex[nIndex3].position - pVertex[nIndex1].position;
 
-		Vector3 vNormal = HrMath::Cross(vAB, vAC);
+		Vector3 vNormal = HrMath::Cross(vAC, vAB);
 
 		vecVertexNormal[nIndex1] += vNormal;
 		vecVertexNormal[nIndex2] += vNormal;
@@ -109,6 +109,10 @@ void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pI
 		pVertex[i].normal = normal;
 	}
 }
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////
 //
@@ -130,4 +134,3 @@ HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 
 
 	return pSceneNode;
 }
-

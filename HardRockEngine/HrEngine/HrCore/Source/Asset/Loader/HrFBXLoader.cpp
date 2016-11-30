@@ -22,7 +22,10 @@ HrFBXLoader::~HrFBXLoader()
 
 void HrFBXLoader::Load(std::string& strFile
 	, std::string& strMeshName
-	, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+	, std::vector<Vector3>& vecPrimaryPos
+	, std::vector<Vector3>& vecVertexPos
+	, std::vector<uint32>& vecIndice
+	, std::vector<Vector3>& vecNormal)
 {
 	FbxManager* pSdkManager = nullptr;
 	FbxScene* pScene = nullptr;
@@ -31,7 +34,7 @@ void HrFBXLoader::Load(std::string& strFile
 	InitializeSDKObjects(pSdkManager, pScene);
 	if (LoadScene(pSdkManager, pScene, fbxFilePath.Buffer()))
 	{
-		ParseFBXSdkScene(pScene, strMeshName, vecVertex, vecIndexBuffer);
+		ParseFBXSdkScene(pScene, strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
 	}
 
 	DestroySdkObjects(pSdkManager, true);
@@ -185,19 +188,29 @@ void HrFBXLoader::DestroySdkObjects(FbxManager* pManager, bool pExitStatus)
 	if (pExitStatus) FBXSDK_printf("Program Success!\n");
 }
 
-void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene
+	, std::string& strMeshName
+	, std::vector<Vector3>& vecPrimaryPos
+	, std::vector<Vector3>& vecVertexPos
+	, std::vector<uint32>& vecIndice
+	, std::vector<Vector3>& vecNormal)
 {
 	FbxNode* pNode = pScene->GetRootNode();
 	if (pNode)
 	{
 		for (int i = 0; i < pNode->GetChildCount(); ++i)
 		{
-			ParseFBXSdkNode(pNode->GetChild(i), strMeshName, vecVertex, vecIndexBuffer);
+			ParseFBXSdkNode(pNode->GetChild(i), strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
 		}
 	}
 }
 
-void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode
+	, std::string& strMeshName
+	, std::vector<Vector3>& vecPrimaryPos
+	, std::vector<Vector3>& vecVertexPos
+	, std::vector<uint32>& vecIndice
+	, std::vector<Vector3>& vecNormal)
 {
 	if (pNode->GetNodeAttribute() == nullptr)
 	{
@@ -213,7 +226,7 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::string& strMeshName, std:
 		case FbxNodeAttribute::eSkeleton:
 			break;
 		case FbxNodeAttribute::eMesh:
-			ReadMesh(pNode, strMeshName, vecVertex, vecIndexBuffer);
+			ReadMesh(pNode, strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
 			break;
 		case FbxNodeAttribute::eNurbs:
 			break;
@@ -231,28 +244,167 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, std::string& strMeshName, std:
 	}
 }
 
-void HrFBXLoader::ReadMesh(FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer)
+void HrFBXLoader::ReadMesh(FbxNode* pNode, std::string& strMeshName
+	, std::vector<Vector3>& vecPrimaryPos
+	, std::vector<Vector3>& vecVertexPos
+	, std::vector<uint32>& vecIndice
+	, std::vector<Vector3>& vecNormal)
 {
-	FbxMesh* pMesh = (FbxMesh*)pNode->GetNodeAttribute();
+	fbxsdk::FbxMesh* pMesh = (fbxsdk::FbxMesh*)pNode->GetNodeAttribute();
 	strMeshName = pMesh->GetName();
 
-	int nControlPoints = pMesh->GetControlPointsCount();
-	FbxVector4* pControlPoints = pMesh->GetControlPoints();
-	for (int i = 0; i < nControlPoints; ++i)
-	{
-		float x = static_cast<float>(pControlPoints[i][0]);
-		float y = static_cast<float>(pControlPoints[i][1]);
-		float z = static_cast<float>(pControlPoints[i][2]);
-
-		vecVertex.push_back(Vertex(Vector3(x, y, z), HrColor::F4Black));
-	}
-
-	int nIndexCount = pMesh->GetPolygonVertexCount();
-	int* pIndexContent = pMesh->GetPolygonVertices();
-	for (int i = 0; i < nIndexCount; ++i)
-	{
-		vecIndexBuffer.push_back(pIndexContent[i]);
-	}
-
+	ReadVertexPos(pMesh, vecPrimaryPos, vecVertexPos);
+	ReadIndice(pMesh, vecIndice);
+	ReadVertexNormal(pMesh, vecNormal);
 }
 
+void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition)
+{
+	FbxVector4* pControlPoints = pMesh->GetControlPoints();
+	for (int nCtrlPointIndex = 0; nCtrlPointIndex < pMesh->GetControlPointsCount(); ++nCtrlPointIndex)
+	{
+		float x = static_cast<float>(pControlPoints[nCtrlPointIndex][0]);
+		float y = static_cast<float>(pControlPoints[nCtrlPointIndex][1]);
+		float z = static_cast<float>(pControlPoints[nCtrlPointIndex][2]);
+
+		vecPrimaryPosition.emplace_back(Vector3(x, y, z));
+	}
+
+	for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+	{
+		for (int nSizeIndex = 0; nSizeIndex < pMesh->GetPolygonSize(nPolygonIndex); ++nSizeIndex)
+		{
+			int nCtrlPointIndex = pMesh->GetPolygonVertex(nPolygonIndex, nSizeIndex);
+			float x = static_cast<float>(pControlPoints[nCtrlPointIndex][0]);
+			float y = static_cast<float>(pControlPoints[nCtrlPointIndex][1]);
+			float z = static_cast<float>(pControlPoints[nCtrlPointIndex][2]);
+
+			vecVertexPosition.emplace_back(Vector3(x, y, z));
+		}
+	}
+}
+
+void HrFBXLoader::ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint32>& vecIndices)
+{
+	int* pIndiceContent = pMesh->GetPolygonVertices();
+	for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+	{
+		int nIndiceIndexStart = pMesh->GetPolygonVertexIndex(nPolygonIndex);
+		for (int nSizeIndex = 0; nSizeIndex < pMesh->GetPolygonSize(nPolygonIndex); ++nSizeIndex)
+		{
+			vecIndices.push_back(*(pIndiceContent + nIndiceIndexStart + nSizeIndex));
+		}
+	}
+}
+
+void HrFBXLoader::ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecVertexNormal)
+{
+	if (pMesh->GetElementNormalCount() < 1)
+	{
+		return;
+	}
+
+	FbxGeometryElementNormal* pNormalElement = pMesh->GetElementNormal();
+	switch (pNormalElement->GetMappingMode())
+	{
+	case FbxGeometryElement::eNone:
+		break;
+	case FbxGeometryElement::eByControlPoint:
+	{
+		switch (pNormalElement->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			for (int nVertexIndex = 0; nVertexIndex < pMesh->GetControlPointsCount(); ++nVertexIndex)
+			{
+				float x = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexIndex)[0]);
+				float y = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexIndex)[1]);
+				float z = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexIndex)[2]);
+				vecVertexNormal.emplace_back(Vector3(x, y, z));
+			}
+			break;
+		}
+		case FbxGeometryElement::eIndex:
+		{
+			break;
+		}
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			for (int nVertexIndex = 0; nVertexIndex < pMesh->GetControlPointsCount(); ++nVertexIndex)
+			{
+				int nVertexNormalIndex = pNormalElement->GetIndexArray().GetAt(nVertexIndex);
+
+				float x = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[0]);
+				float y = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[1]);
+				float z = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[2]);
+				vecVertexNormal.emplace_back(Vector3(x, y, z));
+			}
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case FbxGeometryElement::eByPolygonVertex:
+	{
+		switch (pNormalElement->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			int nIndexByPolygonVertex = 0;
+			for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+			{
+				int nPolygonSize = pMesh->GetPolygonSize(nPolygonIndex);
+				for (int nSizeIndex = 0; nSizeIndex < nPolygonSize; ++nSizeIndex)
+				{
+					float x = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nIndexByPolygonVertex)[0]);
+					float y = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nIndexByPolygonVertex)[1]);
+					float z = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nIndexByPolygonVertex)[2]);
+					vecVertexNormal.emplace_back(Vector3(x, y, z));
+
+					++nIndexByPolygonVertex;
+				}
+			}
+			break;
+		}
+		case FbxGeometryElement::eIndex:
+		{
+			break;
+		}
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int nIndexByPolygonVertex = 0;
+			for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+			{
+				int nPolygonSize = pMesh->GetPolygonSize(nPolygonIndex);
+				for (int nSizeIndex = 0; nSizeIndex < nPolygonSize; ++nSizeIndex)
+				{
+					int nVertexNormalIndex = pNormalElement->GetIndexArray().GetAt(nIndexByPolygonVertex);
+
+					float x = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[0]);
+					float y = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[1]);
+					float z = static_cast<float>(pNormalElement->GetDirectArray().GetAt(nVertexNormalIndex)[2]);
+					vecVertexNormal.emplace_back(Vector3(x, y, z));
+
+					++nIndexByPolygonVertex;
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
+
+		break;
+	}
+	case FbxGeometryElement::eByPolygon:
+		break;
+	case FbxGeometryElement::eByEdge:
+		break;
+	case FbxGeometryElement::eAllSame:
+		break;
+	default:
+		break;
+	}
+}

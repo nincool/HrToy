@@ -3,7 +3,6 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrMath/Include/HrMath.h"
-
 #include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 
 namespace fbxsdk
@@ -12,6 +11,7 @@ namespace fbxsdk
 	class FbxScene;
 	class FbxDocument;
 	class FbxNode;
+	class FbxMesh;
 }
 
 namespace Hr
@@ -24,7 +24,10 @@ namespace Hr
 
 		void Load(std::string& strFile
 			, std::string& strMeshName
-			, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+			, std::vector<Vector3>& vecPrimaryPos
+			, std::vector<Vector3>& vecVertexPos
+			, std::vector<uint32>& vecIndice
+			, std::vector<Vector3>& vecNormal);
 
 	private:
 		void InitializeSDKObjects(fbxsdk::FbxManager*& pManager, fbxsdk::FbxScene*& pScene);
@@ -32,14 +35,30 @@ namespace Hr
 
 		bool LoadScene(fbxsdk::FbxManager* pManager, fbxsdk::FbxDocument* pScene, const char* pFilename);
 
-		void ParseFBXSdkScene(fbxsdk::FbxScene* pScene, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
-		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void ParseFBXSdkScene(fbxsdk::FbxScene* pScene
+			, std::string& strMeshName
+			, std::vector<Vector3>& vecPrimaryPos
+			, std::vector<Vector3>& vecVertexPos
+			, std::vector<uint32>& vecIndice
+			, std::vector<Vector3>& vecNormal);
+		
+		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode
+			, std::string& strMeshName
+			, std::vector<Vector3>& vecPrimaryPos
+			, std::vector<Vector3>& vecVertexPos
+			, std::vector<uint32>& vecIndice
+			, std::vector<Vector3>& vecNormal);
 
-		void ReadMesh(fbxsdk::FbxNode* pNode, std::string& strMeshName, std::vector<Vertex>& vecVertex, std::vector<uint32>& vecIndexBuffer);
+		void ReadMesh(fbxsdk::FbxNode* pNode, std::string& strMeshName
+			, std::vector<Vector3>& vecPrimaryPos
+			, std::vector<Vector3>& vecVertexPos
+			, std::vector<uint32>& vecIndice
+			, std::vector<Vector3>& vecNormal);
 
+		void ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition);
+		void ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint32>& vecIndices);
+		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecVertexNormal);
 	private:
-		//std::vector<Vector3> m_vecVertexPosition;
-		//std::vector<uint32> m_vecIndexBuffer;
 	};
 }
 

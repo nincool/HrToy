@@ -5,24 +5,16 @@
 
 namespace Hr
 {
-	/*
-	@brief	先临时弄出来一个Vertex结构，先跑起来再说 [11/11/2016 By Hr]
-	*/
-	class Vertex
-	{
-	public:
-		Vertex(float3 p, float4 c)
-		{
-			position = p;
-			color = c;
-		}
-		float3 position;
-		float4 color;
-	};
-
 	class HrModelLoader
 	{
 	public:
+		enum EnumModelTopologyVertexCount
+		{
+			MTVC_POINT = 1,
+			MTVC_LINE = 2,
+			MTVC_TRIANGLE = 3,
+		};
+
 		HrModelLoader();
 		virtual ~HrModelLoader();
 
@@ -34,8 +26,10 @@ namespace Hr
 		HrMesh* m_pMesh;
 
 		std::string m_strMeshName;
-		std::vector<Vertex> m_vecVertexBuffer;
-		std::vector<uint32> m_vecIndexBuffer;
+		std::vector<Vector3> m_vecPrimaryPos;
+		std::vector<Vector3> m_vecVertexPos;
+		std::vector<uint32> m_vecIndice;
+		std::vector<Vector3> m_vecNormal;
 
 	};
 }
