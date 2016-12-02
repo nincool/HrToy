@@ -18,11 +18,16 @@ namespace Hr
 		HrModelLoader();
 		virtual ~HrModelLoader();
 
+		HrMesh* GetMesh() { return m_pMesh; }
 	public:
 		void Load(std::string& strFile);
 
 		
-	public:
+	private:
+		void FillEmptyModelInfo();
+		void MakeVertexStream(HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
+
+	protected:
 		HrMesh* m_pMesh;
 
 		std::string m_strMeshName;
@@ -30,6 +35,7 @@ namespace Hr
 		std::vector<Vector3> m_vecVertexPos;
 		std::vector<uint32> m_vecIndice;
 		std::vector<Vector3> m_vecNormal;
+		std::vector<float4> m_vecColor;
 
 	};
 }

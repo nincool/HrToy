@@ -115,7 +115,7 @@ HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrR
 
 HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
 {
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.effectxml", HrResource::RT_EFFECT));
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrLambert.effectxml", HrResource::RT_EFFECT));
 	BOOST_ASSERT(pRenderEffect);
 
 	return pRenderEffect;

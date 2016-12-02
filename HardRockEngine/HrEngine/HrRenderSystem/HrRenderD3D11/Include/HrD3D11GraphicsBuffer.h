@@ -26,7 +26,7 @@ namespace Hr
 		virtual ~HrD3D11GraphicsBuffer();
 
 		virtual void BindStream(const char* pBuffer
-			, uint32 nBufferSize
+			, uint64 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag) override;
 		

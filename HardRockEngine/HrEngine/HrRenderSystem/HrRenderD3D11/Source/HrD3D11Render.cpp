@@ -93,11 +93,10 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
+	const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
-		
-		const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
 		for (uint32 i = 0; i < nPassNum; ++i)
 		{
 			pRenderTechnique->GetRenderPass(i)->BindPass(this);
@@ -107,11 +106,11 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 	}
 	else
 	{
-		const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
+		uint32 nNumVertices = pD3D11RenderLayout->GetVerticesNum();
 		for (uint32 i = 0; i < nPassNum; ++i)
 		{
 			pRenderTechnique->GetRenderPass(i)->BindPass(this);
-			m_pD3D11ImmediateContext->Draw(3, 0);
+			m_pD3D11ImmediateContext->Draw(nNumVertices, 0);
 			pRenderTechnique->GetRenderPass(i)->UnBindPass(this);
 		}
 	}

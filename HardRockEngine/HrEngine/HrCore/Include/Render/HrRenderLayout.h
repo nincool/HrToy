@@ -11,32 +11,30 @@ namespace Hr
 	{
 	public:
 		HrRenderLayout();
-		~HrRenderLayout();
+		virtual ~HrRenderLayout();
 
-		virtual void SetTopologyType(EnumTopologyType topologyType);
-		virtual EnumTopologyType GetTopologyType();
+		void SetTopologyType(EnumTopologyType topologyType);
+		EnumTopologyType GetTopologyType();
 		
-		virtual void SetIndexBufferType(EnumIndexType indexType);
-		virtual EnumIndexType GetIndexBufferType();
+		void SetIndexBufferType(EnumIndexType indexType);
+		 EnumIndexType GetIndexBufferType();
 
-		virtual uint32 GetVertexSize();
+		uint32 GetVertexSize();
 		
-		virtual void BindVertexBuffer(const char* pBuffer
-			, uint32 nBufferSize
+		void BindVertexBuffer(const char* pBuffer
+			, uint64 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-			, HrVertexElement* pVertexElementArr
-			, uint32 nVertexElementLength);
+			, std::vector<HrVertexElement>& vecVertexElement);
 
-		virtual void BindIndexBuffer(const char* pBuffer
+		 void BindIndexBuffer(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, EnumIndexType indexType);
 
-		virtual bool UseIndices();
+		bool UseIndices();
 
-		virtual void SetIndicesNum(uint32 nIndicesNum);
-		virtual uint32 GetIndicesNum();
-
+		uint32 GetIndicesNum() const;
+		uint32 GetVerticesNum() const;
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;

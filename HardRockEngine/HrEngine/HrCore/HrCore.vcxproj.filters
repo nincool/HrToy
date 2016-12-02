@@ -124,9 +124,6 @@
     <ClInclude Include="Include\Asset\HrStreamData.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrColor.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrVertex.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -310,9 +307,6 @@
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrStreamData.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrColor.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrVertex.cpp">

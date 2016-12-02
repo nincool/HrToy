@@ -220,10 +220,8 @@ namespace Hr
 		VEU_POSITION = 1,
 		// vertex normals included (for lighting)
 		VEU_NORMAL = 1 << 1,
-		// Vertex colors - diffuse
-		VEU_DIFFUSE = 1 << 2,
-		// Vertex colors - specular
-		VEU_SPECULAR = 1 << 3,
+		// Vertex -color
+		VEU_COLOR = 1 << 9,
 		// Vertex blend weights
 		VEU_BLENDWEIGHT = 1 << 4,
 		// Vertex blend indices
@@ -234,8 +232,6 @@ namespace Hr
 		VEU_TANGENT = 1 << 7,
 		// Vertex binormal
 		VEU_BINORMAL = 1 << 8,
-		// Vertex -color
-		VEU_COLOR = 1 << 9
 	};
 
 	/// Vertex element type, used to identify the base types of the vertex contents

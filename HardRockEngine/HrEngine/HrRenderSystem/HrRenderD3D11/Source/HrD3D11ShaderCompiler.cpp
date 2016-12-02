@@ -322,7 +322,7 @@ bool HrD3D11ShaderCompiler::StripCompiledCode(HrStreamData& shaderBuffer)
 	HRESULT hr = D3DStripShader(shaderBuffer.GetBufferPoint(), shaderBuffer.GetBufferSize(), D3DCOMPILER_STRIP_REFLECTION_DATA | D3DCOMPILER_STRIP_DEBUG_INFO
 		| D3DCOMPILER_STRIP_TEST_BLOBS | D3DCOMPILER_STRIP_PRIVATE_DATA, &pStrippedBlob);
 	shaderBuffer.ClearBuffer();
-	shaderBuffer.AddBuffer(static_cast<uint8*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
+	shaderBuffer.AddBuffer(static_cast<Byte*>(pStrippedBlob->GetBufferPointer()), pStrippedBlob->GetBufferSize());
 	SAFE_RELEASE(pStrippedBlob);
 
 	return true;

@@ -13,10 +13,10 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementUsage usage)
 		return "NORMAL";
 	case VEU_COLOR:
 		return "COLOR";
-	case VEU_DIFFUSE:
-		return "COLOR"; // NB index will differentiat
-	case VEU_SPECULAR:
-		return "COLOR"; // NB index will differentiate
+	//case VEU_DIFFUSE:
+		//return "COLOR"; // NB index will differentiat
+	//case VEU_SPECULAR:
+		//return "COLOR"; // NB index will differentiate
 	case VEU_BLENDWEIGHT:
 		return "BLENDWEIGHT";
 	case VEU_BLENDINDEX:

@@ -54,7 +54,7 @@ void HrStreamData::ClearBuffer()
 	m_vecStreamData.clear();
 }
 
-void HrStreamData::AddBuffer(uint8* pData, uint32 nSize)
+void HrStreamData::AddBuffer(Byte* pData, uint32 nSize)
 {
 	uint32 nOldSize = m_vecStreamData.size();
 	m_vecStreamData.resize(nOldSize + nSize);

@@ -126,7 +126,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Asset\HrColor.h" />
     <ClInclude Include="Include\Asset\HrMaterial.h" />
     <ClInclude Include="Include\Asset\HrRenderEffectParameter.h" />
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
@@ -191,7 +190,6 @@
     <ClInclude Include="Include\Scene\HrTransform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Asset\HrColor.cpp" />
     <ClCompile Include="Source\Asset\HrMaterial.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffectParameter.cpp" />
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />

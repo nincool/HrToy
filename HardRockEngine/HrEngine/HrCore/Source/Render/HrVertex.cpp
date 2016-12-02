@@ -7,12 +7,12 @@ using namespace Hr;
 // ElementVertex
 //////////////////////////////////////////////////////////////////////////////////
 
-size_t HrVertexElement::GetTypeSize()
+uint32 HrVertexElement::GetTypeSize() const
 {
 	return GetTypeSize(m_elementType);
 }
 
-size_t HrVertexElement::GetTypeSize(EnumVertexElementType elementType)
+uint32 HrVertexElement::GetTypeSize(EnumVertexElementType elementType)
 {
 	switch (elementType)
 	{

@@ -2,7 +2,6 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
-#include "HrCore/Include/Asset/HrColor.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
@@ -118,17 +117,17 @@ void HrRenderTechnique::UpdateOneEffectParameter(HrRenderEffectParameter& render
 	}
 	case RPT_AMBIENT_LIGHT_COLOR:
 	{
-		renderEffectParameter = HrColor::F4Blue;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_DIFFUSE_LIGHT_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_SPECULAR_LIGHT_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_LIGHT_DIRECTION:
@@ -138,22 +137,22 @@ void HrRenderTechnique::UpdateOneEffectParameter(HrRenderEffectParameter& render
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_SPECULAR_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	case RPT_REFLECT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = HrColor::F4White;
+		renderEffectParameter = HrColor::White.Value();
 		break;
 	}
 	default:

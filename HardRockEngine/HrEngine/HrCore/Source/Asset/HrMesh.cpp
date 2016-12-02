@@ -31,15 +31,15 @@ HrRenderLayout* HrMesh::GetRenderLayout()
 	return m_pRenderLayout;
 }
 
-void HrMesh::AddVertexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrVertexElement* pVertexElementArr, uint32 nVertexElementLength)
-{
-	m_pRenderLayout->BindVertexBuffer(pBuffer, nBufferSize, usage, pVertexElementArr, nVertexElementLength);
-}
-
-void HrMesh::AddIndexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
-{
-	m_pRenderLayout->BindIndexBuffer(pBuffer, nBufferSize, usage, indexType);
-}
+//void HrMesh::AddVertexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrVertexElement* pVertexElementArr, uint32 nVertexElementLength)
+//{
+//	m_pRenderLayout->BindVertexBuffer(pBuffer, nBufferSize, usage, pVertexElementArr, nVertexElementLength);
+//}
+//
+//void HrMesh::AddIndexStream(const char* pBuffer, uint32 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, EnumIndexType indexType)
+//{
+//	m_pRenderLayout->BindIndexBuffer(pBuffer, nBufferSize, usage, indexType);
+//}
 
 bool HrMesh::LoadImpl()
 {

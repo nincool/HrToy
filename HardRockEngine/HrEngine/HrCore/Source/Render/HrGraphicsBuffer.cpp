@@ -15,7 +15,7 @@ HrGraphicsBuffer::~HrGraphicsBuffer()
 }
 
 void HrGraphicsBuffer::BindStream(const char* pBuffer
-	, uint32 nBufferSize
+	, uint64 nBufferSize
 	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 	, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag)
 {

@@ -37,7 +37,7 @@ HrD3D11GraphicsBuffer::~HrD3D11GraphicsBuffer()
 }
 
 void HrD3D11GraphicsBuffer::BindStream(const char* pBuffer
-	, uint32 nBufferSize
+	, uint64 nBufferSize
 	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 	, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag)
 {

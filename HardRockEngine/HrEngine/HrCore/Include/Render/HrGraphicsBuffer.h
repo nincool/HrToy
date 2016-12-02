@@ -71,7 +71,7 @@ namespace Hr
 		virtual ~HrGraphicsBuffer();
 
 		virtual void BindStream(const char* pBuffer
-			, uint32 nBufferSize
+			, uint64 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag);
 		

@@ -21,15 +21,15 @@ namespace Hr
 
 		HrRenderLayout* GetRenderLayout();
 
-		void AddVertexStream(const char* pBuffer
-			, uint32 nBufferSize
-			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-			, HrVertexElement* pVertexElementArr
-			, uint32 nVertexElementLength);
-		void AddIndexStream(const char* pBuffer
-			, uint32 nBufferSize
-			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-			, EnumIndexType indexType);
+		//void AddVertexStream(const char* pBuffer
+		//	, uint32 nBufferSize
+		//	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
+		//	, HrVertexElement* pVertexElementArr
+		//	, uint32 nVertexElementLength);
+		//void AddIndexStream(const char* pBuffer
+		//	, uint32 nBufferSize
+		//	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
+		//	, EnumIndexType indexType);
 
 		void FinishedBuildMesh();
 	protected:

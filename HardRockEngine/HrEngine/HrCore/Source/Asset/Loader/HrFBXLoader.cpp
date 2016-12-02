@@ -1,6 +1,5 @@
 #include "HrCore/Include/Asset/Loader/HrFBXLoader.h"
 #include "HrCore/Include/Asset/Loader/HrModelLoader.h"
-#include "HrCore/Include/Asset/HrColor.h"
 #include "fbxsdk.h"
 
 using namespace Hr;

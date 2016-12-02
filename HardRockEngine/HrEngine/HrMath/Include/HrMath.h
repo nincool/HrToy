@@ -4,6 +4,7 @@
 #include "HrMathPrerequisites.h"
 #include "HrMathCom.h"
 #include "HrMath/Include/KFL/KFL.hpp"
+#include "HrColor.h"
 
 #endif
 

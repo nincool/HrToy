@@ -157,6 +157,9 @@
     <ClInclude Include="Include\KFL\Detail\MathHelper.hpp">
       <Filter>Include\KFL\Detail</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrColor.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\KFL\Kernel\CpuInfo.cpp">
@@ -233,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="Source\KFL\Math\Sphere.cpp">
       <Filter>Source\KFL\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrColor.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

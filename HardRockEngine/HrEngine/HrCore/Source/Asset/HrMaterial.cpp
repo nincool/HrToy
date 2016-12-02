@@ -1,5 +1,4 @@
 #include "Asset/HrMaterial.h"
-#include "Asset/HrColor.h"
 
 using namespace Hr;
 
@@ -30,10 +29,10 @@ bool HrMaterial::UnloadImpl()
 
 void HrMaterial::BuildToDefultMaterial()
 {
-	m_ambient = HrColor::F4Black;
-	m_diffuse = HrColor::F4Black;
-	m_specular = HrColor::F4Black;
-	m_emissive = HrColor::F4Magenta;
+	//m_ambient = HrColor::F4Black;
+	//m_diffuse = HrColor::F4Black;
+	//m_specular = HrColor::F4Black;
+	//m_emissive = HrColor::F4Magenta;
 
 	m_fOpacity = 1.0f;
 }

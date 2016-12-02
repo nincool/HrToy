@@ -157,6 +157,18 @@ namespace Hr
 		{
 			return KlayGE::MathLib::transpose(rhs);
 		}
+
+		// Color
+		///////////////////////////////////////////////////////////////////////////////
+		//inline Color Black() {static Color color(0.0f, 0.0f, 0.0f, 1.0f); return color;}
+		//inline Color White() { static Color color(1.0f, 1.0f, 1.0f, 1.0f); return color; }
+		//inline Color Red() { static Color color(1.0f, 0.0f, 0.0f, 1.0f); return color;}
+		//inline Color Green() {static Color color(1.0f, 1.0f, 0.0f, 1.0f); return color;}
+		//inline Color Blue() {static Color color(0.0f, 0.0f, 1.0f, 1.0f); return color;}
+		//inline Color Yellow() {static Color color(1.0f, 1.0f, 0.0f, 1.0f); return color;}
+		//inline Color Cyan() {static Color color(0.0f, 1.0f, 1.0f, 1.0f); return color;}
+		//inline Color Magenta() {static Color color(1.0f, 0.0f, 1.0f, 1.0f); return color;}
+		//inline Color Silver() {static Color color(0.75f, 0.75f, 0.75f, 1.0f); return color;}
 	}
 }
 

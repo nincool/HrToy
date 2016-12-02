@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrAngle.h" />
+    <ClInclude Include="Include\HrColor.h" />
     <ClInclude Include="Include\HrMath.h" />
     <ClInclude Include="Include\HrMathCom.h" />
     <ClInclude Include="Include\HrMathConfig.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Include\KFL\Vector.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\HrColor.cpp" />
     <ClCompile Include="Source\KFL\Kernel\CpuInfo.cpp" />
     <ClCompile Include="Source\KFL\Kernel\CustomizedStreamBuf.cpp" />
     <ClCompile Include="Source\KFL\Kernel\DllLoader.cpp" />

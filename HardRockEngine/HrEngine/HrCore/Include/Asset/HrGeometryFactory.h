@@ -12,6 +12,7 @@ namespace Hr
 		{
 			float3 position;
 			float3 normal;
+			float4 color;
 		};
 
 		HrGeometryBox();

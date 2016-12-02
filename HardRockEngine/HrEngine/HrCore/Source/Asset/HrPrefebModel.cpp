@@ -31,7 +31,7 @@ bool HrPrefebModel::LoadImpl()
 {
 	HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
 	pModelLoader->Load(m_strFilePath);
-	m_pMesh = pModelLoader->m_pMesh;
+	m_pMesh = pModelLoader->GetMesh();
 	return true;
 }
 

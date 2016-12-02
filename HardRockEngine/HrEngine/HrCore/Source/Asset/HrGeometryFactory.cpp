@@ -1,7 +1,6 @@
 #include "Asset/HrGeometryFactory.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrResourceManager.h"
-#include "Asset/HrColor.h"
 #include "Asset/HrRenderEffect.h"
 #include "Render/HrVertex.h"
 #include "Render/HrGraphicsBuffer.h"
@@ -67,17 +66,18 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 
 	HrVertexElement vertexElementArr[] = {
 		HrVertexElement(VEU_POSITION, VET_FLOAT3),
-		HrVertexElement(VEU_NORMAL, VET_FLOAT3)
+		HrVertexElement(VEU_NORMAL, VET_FLOAT3),
+		HrVertexElement(VEU_COLOR, VET_FLOAT4)
 	};
 
-	pMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vertexElementArr
-		, HR_ARRAY_SIZE(vertexElementArr));
+	//pMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vertexElementArr
+	//	, HR_ARRAY_SIZE(vertexElementArr));
 
 
-	pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+	//pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
 }
 
 void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)

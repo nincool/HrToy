@@ -21,6 +21,8 @@ namespace Hr
 
 	typedef KlayGE::Quaternion Quaternion;
 
+	typedef KlayGE::Color Color;
+
 	typedef KlayGE::int1 int1;
 	typedef KlayGE::int2 int2;
 	typedef KlayGE::int3 int3;
