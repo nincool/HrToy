@@ -8,6 +8,12 @@ HrRenderFrameParameters::HrRenderFrameParameters()
 {
 	m_pCurrentRenderable = nullptr;
 	m_pCurrentCamera = nullptr;
+
+	m_bWorldMatrixDirty = true;
+	m_bInverseWorldMatrixDirty = true;
+	m_bInverseTransposeWorldMatrix = true;
+	m_bWorldViewProjMatrixDirty = true;
+
 	m_worldMatrix = Matrix4::Identity();
 }
 
@@ -45,7 +51,11 @@ const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 
 const Matrix4& HrRenderFrameParameters::GetInverseWroldMatrix()
 {
-	return HrMath::Inverse(GetWorldMatrix());
+	if (m_bInverseWorldMatrixDirty)
+	{
+		m_inverseWorldMatrix = HrMath::Inverse(GetWorldMatrix());
+	}
+	return m_inverseWorldMatrix;
 }
 
 const Matrix4& HrRenderFrameParameters::GetViewProjMatrix() const
@@ -68,8 +78,8 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 {
 	if (m_bInverseTransposeWorldMatrix)
 	{
-		//m_inverseTransposeWorldMatrix = 
+		m_inverseTransposeWorldMatrix = HrMath::Transpose(GetInverseWroldMatrix());
 	}
-	return HrMath::Transpose(GetInverseWroldMatrix());
+	return m_inverseTransposeWorldMatrix;
 }
 

@@ -12,11 +12,19 @@ namespace Hr
 		inline float PI2() { return KlayGE::PIdiv2; }
 		inline float DEG90() { return KlayGE::DEG90; }
 
+		inline float DEG2RAD() {
+			return KlayGE::DEG2RAD;
+		}
+		inline float RAD2DEG() {
+			return KlayGE::RAD2DEG;
+		}
+
+		//求绝对值
 		inline float Abs(float value)
 		{
 			return std::fabs(value);
 		}
-
+		//开方
 		inline float Sqrt(float x)
 		{
 			return std::sqrt(x);
@@ -26,12 +34,12 @@ namespace Hr
 		{
 			return KlayGE::MathLib::recip_sqrt(number);
 		}
-
+		//平方
 		inline float Pow(float x, float y)
 		{
 			return std::pow(x, y);
 		}
-
+		//e x
 		inline float Exp(float x)
 		{
 			return std::exp(x);
@@ -45,6 +53,17 @@ namespace Hr
 		inline float Log10(float x)
 		{
 			return std::log10(x);
+		}
+
+		// 取小于等于x的最大整数
+		inline int Floor(float const & x)
+		{
+			return static_cast<int>(x > 0 ? x : (x - 1));
+		}
+		// 取整
+		inline int Trunc(float const & x)
+		{
+			return static_cast<int>(x);
 		}
 
 		inline float Sin(float x)
@@ -109,11 +128,6 @@ namespace Hr
 			return std::isnan(x);
 		}
 
-		inline float Length(Vector3 const& rhs)
-		{
-			return KlayGE::MathLib::length(rhs);
-		}
-		
 		// 2D 向量
 		///////////////////////////////////////////////////////////////////////////////
 		inline float Cross(Vector2 const& lhs, Vector2 const& rhs)
@@ -123,6 +137,11 @@ namespace Hr
 
 		// 3D 向量
 		///////////////////////////////////////////////////////////////////////////////
+		inline float Length(Vector3 const& rhs)
+		{
+			return KlayGE::MathLib::length(rhs);
+		}
+
 		inline Vector3 Cross(Vector3 const& lhs, Vector3 const& rhs)
 		{
 			return KlayGE::MathLib::cross(lhs, rhs);
@@ -160,15 +179,10 @@ namespace Hr
 
 		// Color
 		///////////////////////////////////////////////////////////////////////////////
-		//inline Color Black() {static Color color(0.0f, 0.0f, 0.0f, 1.0f); return color;}
-		//inline Color White() { static Color color(1.0f, 1.0f, 1.0f, 1.0f); return color; }
-		//inline Color Red() { static Color color(1.0f, 0.0f, 0.0f, 1.0f); return color;}
-		//inline Color Green() {static Color color(1.0f, 1.0f, 0.0f, 1.0f); return color;}
-		//inline Color Blue() {static Color color(0.0f, 0.0f, 1.0f, 1.0f); return color;}
-		//inline Color Yellow() {static Color color(1.0f, 1.0f, 0.0f, 1.0f); return color;}
-		//inline Color Cyan() {static Color color(0.0f, 1.0f, 1.0f, 1.0f); return color;}
-		//inline Color Magenta() {static Color color(1.0f, 0.0f, 1.0f, 1.0f); return color;}
-		//inline Color Silver() {static Color color(0.75f, 0.75f, 0.75f, 1.0f); return color;}
+		inline HrColor MakeColor(uint8 r, uint8 g, uint8 b, uint8 a)
+		{
+			return HrColor(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+		}
 	}
 }
 

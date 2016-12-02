@@ -29,10 +29,10 @@ bool HrMaterial::UnloadImpl()
 
 void HrMaterial::BuildToDefultMaterial()
 {
-	//m_ambient = HrColor::F4Black;
-	//m_diffuse = HrColor::F4Black;
-	//m_specular = HrColor::F4Black;
-	//m_emissive = HrColor::F4Magenta;
+	m_ambient = HrMath::MakeColor(255, 244, 214, 255).Value();
+	m_diffuse = HrMath::MakeColor(255, 244, 214, 255).Value();
+	m_specular = HrMath::MakeColor(255, 244, 214, 255).Value();
+	m_emissive = HrMath::MakeColor(255, 244, 214, 255).Value();
 
 	m_fOpacity = 1.0f;
 }

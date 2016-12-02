@@ -40,3 +40,4 @@ float4 HrColor::Value()
 {
 	return float4(r(), g(), b(), a());
 }
+

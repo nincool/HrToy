@@ -29,7 +29,7 @@ namespace Hr
 		Radian& operator = (const Radian& r) { mRad = r.mRad; return *this; }
 		Radian& operator = (const Degree& d);
 
-		REAL valueDegrees() const { return mRad * RAD2DEG; }; // see bottom of this file
+		REAL valueDegrees() const { return mRad * HrMath::RAD2DEG(); }; // see bottom of this file
 		REAL valueRadians() const { return mRad; }
 
 		const Radian& operator + () const { return *this; }
@@ -73,7 +73,7 @@ namespace Hr
 		Degree& operator = (const Radian& r) { mDeg = r.valueDegrees(); return *this; }
 
 		REAL valueDegrees() const { return mDeg; }
-		REAL valueRadians() const {	return mDeg * DEG2RAD;}; // see bottom of this file
+		REAL valueRadians() const {	return mDeg * HrMath::DEG2RAD();}; // see bottom of this file
 
 		const Degree& operator + () const { return *this; }
 		Degree operator + (const Degree& d) const { return Degree(mDeg + d.mDeg); }

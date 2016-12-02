@@ -4,6 +4,8 @@
 #include "HrCommon/Include/HrPrerequisite.h"
 #include "HrMath/Include/KFL/KFL.hpp"
 #include "HrMathPreDeclare.h"
+#include "HrColor.h"
+
 
 typedef float REAL;
 
