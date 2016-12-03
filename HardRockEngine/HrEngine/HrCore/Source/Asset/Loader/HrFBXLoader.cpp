@@ -19,12 +19,7 @@ HrFBXLoader::~HrFBXLoader()
 	
 }
 
-void HrFBXLoader::Load(std::string& strFile
-	, std::string& strMeshName
-	, std::vector<Vector3>& vecPrimaryPos
-	, std::vector<Vector3>& vecVertexPos
-	, std::vector<uint32>& vecIndice
-	, std::vector<Vector3>& vecNormal)
+void HrFBXLoader::Load(std::string& strFile, HrModelDescInfo& modelDesc)
 {
 	FbxManager* pSdkManager = nullptr;
 	FbxScene* pScene = nullptr;
@@ -33,7 +28,7 @@ void HrFBXLoader::Load(std::string& strFile
 	InitializeSDKObjects(pSdkManager, pScene);
 	if (LoadScene(pSdkManager, pScene, fbxFilePath.Buffer()))
 	{
-		ParseFBXSdkScene(pScene, strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
+		ParseFBXSdkScene(pScene, modelDesc);
 	}
 
 	DestroySdkObjects(pSdkManager, true);
@@ -93,7 +88,7 @@ bool HrFBXLoader::LoadScene(FbxManager* pManager, FbxDocument* pScene, const cha
 		FBXSDK_printf("Call to FbxImporter::Initialize() failed.\n");
 		FBXSDK_printf("Error returned: %s\n\n", error.Buffer());
 
-		if (lImporter->GetStatus().GetCode() == FbxStatus::eInvalidFileVersion)
+		if (lImporter->GetStatus().GetCode() == fbxsdk::FbxStatus::eInvalidFileVersion)
 		{
 			FBXSDK_printf("FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
 			FBXSDK_printf("FBX file format version for file '%s' is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
@@ -151,7 +146,7 @@ bool HrFBXLoader::LoadScene(FbxManager* pManager, FbxDocument* pScene, const cha
 	// Import the scene.
 	lStatus = lImporter->Import(pScene);
 
-	if (lStatus == false && lImporter->GetStatus().GetCode() == FbxStatus::ePasswordError)
+	if (lStatus == false && lImporter->GetStatus().GetCode() == fbxsdk::FbxStatus::ePasswordError)
 	{
 		FBXSDK_printf("Please enter password: ");
 
@@ -168,7 +163,7 @@ bool HrFBXLoader::LoadScene(FbxManager* pManager, FbxDocument* pScene, const cha
 
 		lStatus = lImporter->Import(pScene);
 
-		if (lStatus == false && lImporter->GetStatus().GetCode() == FbxStatus::ePasswordError)
+		if (lStatus == false && lImporter->GetStatus().GetCode() == fbxsdk::FbxStatus::ePasswordError)
 		{
 			FBXSDK_printf("\nPassword is wrong, import aborted.\n");
 		}
@@ -187,29 +182,19 @@ void HrFBXLoader::DestroySdkObjects(FbxManager* pManager, bool pExitStatus)
 	if (pExitStatus) FBXSDK_printf("Program Success!\n");
 }
 
-void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene
-	, std::string& strMeshName
-	, std::vector<Vector3>& vecPrimaryPos
-	, std::vector<Vector3>& vecVertexPos
-	, std::vector<uint32>& vecIndice
-	, std::vector<Vector3>& vecNormal)
+void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, HrModelDescInfo& modelDesc)
 {
 	FbxNode* pNode = pScene->GetRootNode();
 	if (pNode)
 	{
 		for (int i = 0; i < pNode->GetChildCount(); ++i)
 		{
-			ParseFBXSdkNode(pNode->GetChild(i), strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
+			ParseFBXSdkNode(pNode->GetChild(i), modelDesc);
 		}
 	}
 }
 
-void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode
-	, std::string& strMeshName
-	, std::vector<Vector3>& vecPrimaryPos
-	, std::vector<Vector3>& vecVertexPos
-	, std::vector<uint32>& vecIndice
-	, std::vector<Vector3>& vecNormal)
+void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, HrModelDescInfo& modelDesc)
 {
 	if (pNode->GetNodeAttribute() == nullptr)
 	{
@@ -225,7 +210,7 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode
 		case FbxNodeAttribute::eSkeleton:
 			break;
 		case FbxNodeAttribute::eMesh:
-			ReadMesh(pNode, strMeshName, vecPrimaryPos, vecVertexPos, vecIndice, vecNormal);
+			ReadMesh(pNode, modelDesc);
 			break;
 		case FbxNodeAttribute::eNurbs:
 			break;
@@ -241,20 +226,22 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode
 			break;
 		}
 	}
+
+	for (int i = 0; i < pNode->GetChildCount(); ++i)
+	{
+		ParseFBXSdkNode(pNode->GetChild(i), modelDesc);
+	}
 }
 
-void HrFBXLoader::ReadMesh(FbxNode* pNode, std::string& strMeshName
-	, std::vector<Vector3>& vecPrimaryPos
-	, std::vector<Vector3>& vecVertexPos
-	, std::vector<uint32>& vecIndice
-	, std::vector<Vector3>& vecNormal)
+void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 {
 	fbxsdk::FbxMesh* pMesh = (fbxsdk::FbxMesh*)pNode->GetNodeAttribute();
-	strMeshName = pMesh->GetName();
+	modelDesc.m_strMeshName = pMesh->GetName();
 
-	ReadVertexPos(pMesh, vecPrimaryPos, vecVertexPos);
-	ReadIndice(pMesh, vecIndice);
-	ReadVertexNormal(pMesh, vecNormal);
+	ReadVertexPos(pMesh, modelDesc.m_vecPrimaryPos, modelDesc.m_vecVertexPos);
+	ReadIndice(pMesh, modelDesc.m_vecIndice);
+	ReadVertexNormal(pMesh, modelDesc.m_vecNormal);
+	ReadColor(pMesh, modelDesc.m_vecColor);
 }
 
 void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition)
@@ -406,4 +393,120 @@ void HrFBXLoader::ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>&
 	default:
 		break;
 	}
+}
+
+void HrFBXLoader::ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColor)
+{
+	if (pMesh->GetElementVertexColorCount() < 1)
+	{
+		return;
+	}
+
+	FbxGeometryElementVertexColor* pVertexColor = pMesh->GetElementVertexColor();
+	switch (pVertexColor->GetMappingMode())
+	{
+	case FbxGeometryElement::eNone:
+		break;
+	case FbxGeometryElement::eByControlPoint:
+	{
+		switch (pVertexColor->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			for (int nVertexIndex = 0; nVertexIndex < pMesh->GetControlPointsCount(); ++nVertexIndex)
+			{
+				float x = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexIndex).mRed);
+				float y = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexIndex).mGreen);
+				float z = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexIndex).mBlue);
+				float w = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexIndex).mAlpha);
+				vecColor.emplace_back(float4(x, y, z, w));
+			}
+			break;
+		}
+		case FbxGeometryElement::eIndex:
+		{
+			break;
+		}
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			for (int nVertexIndex = 0; nVertexIndex < pMesh->GetControlPointsCount(); ++nVertexIndex)
+			{
+				int nVertexNormalIndex = pVertexColor->GetIndexArray().GetAt(nVertexIndex);
+
+				float x = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mRed);
+				float y = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mGreen);
+				float z = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mBlue);
+				float w = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mAlpha);
+				vecColor.emplace_back(float4(x, y, z, w));
+			}
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case FbxGeometryElement::eByPolygonVertex:
+	{
+		switch (pVertexColor->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			int nIndexByPolygonVertex = 0;
+			for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+			{
+				int nPolygonSize = pMesh->GetPolygonSize(nPolygonIndex);
+				for (int nSizeIndex = 0; nSizeIndex < nPolygonSize; ++nSizeIndex)
+				{
+					float x = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nIndexByPolygonVertex).mRed);
+					float y = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nIndexByPolygonVertex).mGreen);
+					float z = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nIndexByPolygonVertex).mBlue);
+					float w = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nIndexByPolygonVertex).mAlpha);
+					vecColor.emplace_back(float4(x, y, z, w));
+
+					++nIndexByPolygonVertex;
+				}
+			}
+			break;
+		}
+		case FbxGeometryElement::eIndex:
+		{
+			break;
+		}
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int nIndexByPolygonVertex = 0;
+			for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+			{
+				int nPolygonSize = pMesh->GetPolygonSize(nPolygonIndex);
+				for (int nSizeIndex = 0; nSizeIndex < nPolygonSize; ++nSizeIndex)
+				{
+					int nVertexNormalIndex = pVertexColor->GetIndexArray().GetAt(nIndexByPolygonVertex);
+					float x = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mRed);
+					float y = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mGreen);
+					float z = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mBlue);
+					float w = static_cast<float>(pVertexColor->GetDirectArray().GetAt(nVertexNormalIndex).mAlpha);
+					vecColor.emplace_back(float4(x, y, z, w));
+
+					++nIndexByPolygonVertex;
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
+
+		break;
+	}
+	case FbxGeometryElement::eByPolygon:
+		break;
+	case FbxGeometryElement::eByEdge:
+		break;
+	case FbxGeometryElement::eAllSame:
+		break;
+	default:
+		break;
+	}
+
 }

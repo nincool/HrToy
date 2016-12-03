@@ -27,8 +27,8 @@ void HrModelLoader::Load(std::string& strFile)
 	if (strSuffix == "fbx")
 	{
 		std::shared_ptr<HrFBXLoader> pFBXLoader = MakeSharedPtr<HrFBXLoader>();
-		pFBXLoader->Load(strFile, m_strMeshName, m_vecPrimaryPos, m_vecVertexPos, m_vecIndice, m_vecNormal);
-		BOOST_ASSERT(m_vecVertexPos.size() == m_vecNormal.size());
+		pFBXLoader->Load(strFile, m_modelDesc);
+		BOOST_ASSERT(m_modelDesc.m_vecVertexPos.size() == m_modelDesc.m_vecNormal.size());
 	}
 
 	FillEmptyModelInfo();
@@ -37,12 +37,11 @@ void HrModelLoader::Load(std::string& strFile)
 	std::vector<HrVertexElement> vecVertexElement;
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	vecVertexElement.push_back(HrVertexElement(VEU_COLOR, VET_FLOAT4));
 
 	HrStreamData streamVertexBuffer;
 	MakeVertexStream(streamVertexBuffer, vecVertexElement);
 
-	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(HrFileUtils::Instance()->ReplaceFileName(strFile, m_strMeshName)));
+	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(HrFileUtils::Instance()->ReplaceFileName(strFile, m_modelDesc.m_strMeshName)));
 	HrRenderLayout* pRenderLayout = m_pMesh->GetRenderLayout();
 	pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 	pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
@@ -66,13 +65,13 @@ void HrModelLoader::Load(std::string& strFile)
 
 void HrModelLoader::FillEmptyModelInfo()
 {
-	BOOST_ASSERT(!m_vecPrimaryPos.empty());
-	BOOST_ASSERT(!m_vecVertexPos.empty());
-	if (m_vecColor.empty())
+	BOOST_ASSERT(!m_modelDesc.m_vecPrimaryPos.empty());
+	BOOST_ASSERT(!m_modelDesc.m_vecVertexPos.empty());
+	if (m_modelDesc.m_vecColor.empty())
 	{
-		for (size_t i = 0; i < m_vecVertexPos.size(); ++i)
+		for (size_t i = 0; i < m_modelDesc.m_vecVertexPos.size(); ++i)
 		{
-			m_vecColor.push_back(HrColor::White.Value());
+			m_modelDesc.m_vecColor.push_back(HrColor::White.Value());
 		}
 	}
 }
@@ -80,7 +79,7 @@ void HrModelLoader::FillEmptyModelInfo()
 void HrModelLoader::MakeVertexStream(HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement)
 {
 	//[POSITION,NORMAL,COLOR]
-	for (size_t nIndex = 0; nIndex < m_vecVertexPos.size(); ++nIndex)
+	for (size_t nIndex = 0; nIndex < m_modelDesc.m_vecVertexPos.size(); ++nIndex)
 	{		
 		for (size_t nEleIndex = 0; nEleIndex < vecVertexElement.size(); ++nEleIndex)
 		{
@@ -88,17 +87,17 @@ void HrModelLoader::MakeVertexStream(HrStreamData& streamData, const std::vector
 			{
 			case VEU_POSITION:
 			{
-				streamData.AddBuffer((Byte*)(&m_vecVertexPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)(&m_modelDesc.m_vecVertexPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_NORMAL:
 			{
-				streamData.AddBuffer((Byte*)&(m_vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(m_modelDesc.m_vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_COLOR:
 			{
-				streamData.AddBuffer((Byte*)&(m_vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(m_modelDesc.m_vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			}

@@ -5,6 +5,17 @@
 
 namespace Hr
 {
+	class HrModelDescInfo
+	{
+	public:
+		std::string m_strMeshName;
+		std::vector<Vector3> m_vecPrimaryPos;
+		std::vector<Vector3> m_vecVertexPos;
+		std::vector<uint32> m_vecIndice;
+		std::vector<Vector3> m_vecNormal;
+		std::vector<float4> m_vecColor;
+	};
+
 	class HrModelLoader
 	{
 	public:
@@ -30,12 +41,7 @@ namespace Hr
 	protected:
 		HrMesh* m_pMesh;
 
-		std::string m_strMeshName;
-		std::vector<Vector3> m_vecPrimaryPos;
-		std::vector<Vector3> m_vecVertexPos;
-		std::vector<uint32> m_vecIndice;
-		std::vector<Vector3> m_vecNormal;
-		std::vector<float4> m_vecColor;
+		HrModelDescInfo m_modelDesc;
 
 	};
 }
