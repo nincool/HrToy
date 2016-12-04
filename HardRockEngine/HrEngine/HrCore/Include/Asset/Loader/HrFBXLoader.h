@@ -37,7 +37,7 @@ namespace Hr
 		void ReadMesh(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
 
 		void ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition);
-		void ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint32>& vecIndices);
+		void ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint16>& vecIndices);
 		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecVertexNormal);
 		void ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColor);
 	private:

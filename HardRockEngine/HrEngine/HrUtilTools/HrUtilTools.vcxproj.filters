@@ -19,6 +19,9 @@
     <ClInclude Include="Include\HrUtil.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrStringUtil.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrModuleLoader.cpp">

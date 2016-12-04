@@ -270,7 +270,7 @@ void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& ve
 	}
 }
 
-void HrFBXLoader::ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint32>& vecIndices)
+void HrFBXLoader::ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint16>& vecIndices)
 {
 	int* pIndiceContent = pMesh->GetPolygonVertices();
 	for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)

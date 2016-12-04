@@ -12,6 +12,7 @@
 #include "Render/HrShader.h"
 #include "Render/HrRenderFactory.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "HrUtilTools/Include/HrStringUtil.h"
 
 using namespace Hr;
 
@@ -64,6 +65,7 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile)
 	if (!strFullFilePath.empty())
 	{
 		std::string strfileSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
+		HrStringUtil::ToLowerCase(strfileSuffix);
 		if (strfileSuffix == "fbx")
 		{
 			pReturnRes = AddFBXResource(strFullFilePath);

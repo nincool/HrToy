@@ -11,7 +11,7 @@ namespace Hr
 		std::string m_strMeshName;
 		std::vector<Vector3> m_vecPrimaryPos;
 		std::vector<Vector3> m_vecVertexPos;
-		std::vector<uint32> m_vecIndice;
+		std::vector<uint16> m_vecIndice;
 		std::vector<Vector3> m_vecNormal;
 		std::vector<float4> m_vecColor;
 	};
@@ -38,6 +38,7 @@ namespace Hr
 		void FillEmptyModelInfo();
 		void MakeVertexStream(HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
 
+		void CalculateAverageNormals();
 	protected:
 		HrMesh* m_pMesh;
 

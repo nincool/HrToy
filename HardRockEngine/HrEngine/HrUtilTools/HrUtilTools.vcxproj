@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrModuleLoader.h" />
+    <ClInclude Include="Include\HrStringUtil.h" />
     <ClInclude Include="Include\HrUtil.h" />
   </ItemGroup>
   <ItemGroup>
