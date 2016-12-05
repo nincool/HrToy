@@ -8,7 +8,14 @@ namespace Hr
 {
 	class HrSubMesh
 	{
+	public:
+		HrSubMesh();
+		~HrSubMesh();
+
+		
+	protected:
 		HrRenderLayout* m_pRenderLayout;
+		HrMaterial* m_pMaterial;
 	};
 
 	class HrMesh : public HrResource
@@ -19,26 +26,15 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrRenderLayout* GetRenderLayout();
-
-		//void AddVertexStream(const char* pBuffer
-		//	, uint32 nBufferSize
-		//	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-		//	, HrVertexElement* pVertexElementArr
-		//	, uint32 nVertexElementLength);
-		//void AddIndexStream(const char* pBuffer
-		//	, uint32 nBufferSize
-		//	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-		//	, EnumIndexType indexType);
+		uint32 GetSubMeshNum();
+		HrSubMesh* GetSubMesh(uint32 nIndex);
 
 		void FinishedBuildMesh();
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 	protected:
-		HrRenderLayout* m_pRenderLayout;
-
-
+		std::vector<HrSubMesh*> m_vecSubMesh;
 	};
 }
 

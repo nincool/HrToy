@@ -36,3 +36,12 @@ void HrMaterial::BuildToDefultMaterial()
 
 	m_fOpacity = 1.0f;
 }
+
+void HrMaterial::FillMaterialInfo(const float3& ambient, const float3& diffuse, const float3& specular, const float3& emissive, float fOpacity)
+{
+	m_ambient = ambient;
+	m_diffuse = diffuse;
+	m_specular = specular;
+	m_emissive = emissive;
+	m_fOpacity = fOpacity;
+}

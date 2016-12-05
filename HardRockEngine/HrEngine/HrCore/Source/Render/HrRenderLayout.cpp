@@ -16,6 +16,9 @@ HrRenderLayout::HrRenderLayout()
 
 	m_nVertices = 0;
 	m_nIndices = 0;
+
+	m_nIndexStartLocation = 0;
+	m_nVertexStartLocation = 0;
 }
 
 HrRenderLayout::~HrRenderLayout()
@@ -82,5 +85,23 @@ uint32 HrRenderLayout::GetVerticesNum() const
 	return m_nVertices;
 }
 
+void HrRenderLayout::SetStartVertexLocaltion(uint32 nStartLocation)
+{
+	m_nVertexStartLocation = nStartLocation;
+}
 
+uint32 HrRenderLayout::GetStartVertexLocaltion() const
+{
+	return m_nVertexStartLocation;
+}
+
+void HrRenderLayout::SetStartIndexLocation(uint32 nStartLocation)
+{
+	m_nIndexStartLocation = nStartLocation;
+}
+
+uint32 HrRenderLayout::GetStartIndexLocation() const
+{
+	return m_nIndexStartLocation;
+}
 

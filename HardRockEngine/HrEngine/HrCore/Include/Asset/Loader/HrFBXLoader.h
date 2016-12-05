@@ -40,6 +40,9 @@ namespace Hr
 		void ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint16>& vecIndices);
 		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecVertexNormal);
 		void ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColor);
+		void ReadMaterialMapping(fbxsdk::FbxMesh* pMesh);
+		void ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescInfo::HrMaterialInfo>& vecMaterialInfo);
+		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, std::vector< std::vector<uint32> >& vecMaterialConnectInfo);
 	private:
 	};
 }

@@ -35,6 +35,12 @@ namespace Hr
 
 		uint32 GetIndicesNum() const;
 		uint32 GetVerticesNum() const;
+
+		void SetStartVertexLocaltion(uint32 nStartLocation);
+		uint32 GetStartVertexLocaltion() const;
+
+		void SetStartIndexLocation(uint32 nStartLocation);
+		uint32 GetStartIndexLocation() const;
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;
@@ -46,6 +52,9 @@ namespace Hr
 
 		uint32 m_nVertices;
 		uint32 m_nIndices;
+
+		uint32 m_nIndexStartLocation;
+		uint32 m_nVertexStartLocation;
 	};
 }
 

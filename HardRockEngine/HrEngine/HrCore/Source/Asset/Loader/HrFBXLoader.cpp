@@ -187,6 +187,11 @@ void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, HrModelDescInfo& modelDesc)
 	FbxNode* pNode = pScene->GetRootNode();
 	if (pNode)
 	{
+		std::string strNodeName = pNode->GetName();
+		FbxVector4 vTranslate = pNode->LclTranslation.Get();
+		FbxVector4 vRotation = pNode->LclRotation.Get();
+		FbxVector4 vScaling = pNode->LclScaling.Get();
+		bool bVisible = pNode->GetVisibility();
 		for (int i = 0; i < pNode->GetChildCount(); ++i)
 		{
 			ParseFBXSdkNode(pNode->GetChild(i), modelDesc);
@@ -196,6 +201,10 @@ void HrFBXLoader::ParseFBXSdkScene(FbxScene* pScene, HrModelDescInfo& modelDesc)
 
 void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, HrModelDescInfo& modelDesc)
 {
+	std::string strNodeName = pNode->GetName();
+	FbxVector4 vTranslate = pNode->LclTranslation.Get();
+	FbxVector4 vRotation = pNode->LclRotation.Get();
+	FbxVector4 vScaling = pNode->LclScaling.Get();
 	if (pNode->GetNodeAttribute() == nullptr)
 	{
 		//error
@@ -235,13 +244,22 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, HrModelDescInfo& modelDesc)
 
 void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 {
-	fbxsdk::FbxMesh* pMesh = (fbxsdk::FbxMesh*)pNode->GetNodeAttribute();
-	modelDesc.m_strMeshName = pMesh->GetName();
+	modelDesc.m_vecMeshInfo.emplace_back(HrModelDescInfo::HrMeshInfo());
+	HrModelDescInfo::HrMeshInfo& meshInfo = modelDesc.m_vecMeshInfo.back();
 
-	ReadVertexPos(pMesh, modelDesc.m_vecPrimaryPos, modelDesc.m_vecVertexPos);
-	ReadIndice(pMesh, modelDesc.m_vecIndice);
-	ReadVertexNormal(pMesh, modelDesc.m_vecNormal);
-	ReadColor(pMesh, modelDesc.m_vecColor);
+	fbxsdk::FbxMesh* pMesh = (fbxsdk::FbxMesh*)pNode->GetNodeAttribute();
+	//modelDesc.m_strMeshName = pMesh->GetName();
+	meshInfo.strMeshName = pNode->GetName();
+
+	ReadVertexPos(pMesh, meshInfo.m_vecPrimaryPos, meshInfo.m_vecVertexPos);
+	ReadIndice(pMesh, meshInfo.m_vecIndice);
+	ReadVertexNormal(pMesh, meshInfo.m_vecNormal);
+	ReadColor(pMesh, meshInfo.m_vecColor);
+	ReadMaterialMapping(pMesh);
+	ReadMaterial(pMesh, meshInfo.m_vecMaterialInfo);
+	ReadMaterialConnections(pMesh, meshInfo.m_vecMaterialConnectInfo);
+
+	
 }
 
 void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition)
@@ -508,5 +526,212 @@ void HrFBXLoader::ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColo
 	default:
 		break;
 	}
+}
 
+void HrFBXLoader::ReadMaterialMapping(fbxsdk::FbxMesh* pMesh)
+{
+	int nMaterialCount = 0;
+	FbxNode* pNode = pMesh->GetNode();
+	if (pNode)
+	{
+		nMaterialCount = pNode->GetMaterialCount();
+	}
+	for (int nMaterialIndex = 0; nMaterialIndex < pMesh->GetElementMaterialCount(); ++nMaterialIndex)
+	{
+		FbxGeometryElementMaterial* pMaterial = pMesh->GetElementMaterial(nMaterialIndex);
+		if (pMaterial)
+		{
+			if (pMaterial->GetReferenceMode() == FbxGeometryElement::eDirect || pMaterial->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
+			{
+
+			}
+			else
+			{
+
+			}
+		}
+	}
+}
+
+void HrFBXLoader::ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescInfo::HrMaterialInfo>& vecMaterialInfo)
+{
+	int nMaterialCount = 0;
+	FbxNode* pNode = pMesh->GetNode();
+	if (pNode)
+	{
+		nMaterialCount = pNode->GetMaterialCount();
+	}
+	if (nMaterialCount > 0)
+	{
+		FbxPropertyT<FbxDouble3> lKFbxDouble3;
+		FbxPropertyT<FbxDouble> lKFbxDouble1;
+		FbxColor theColor;
+
+		for (int nMaterialIndex = 0; nMaterialIndex < nMaterialCount; ++nMaterialIndex)
+		{
+			HrModelDescInfo::HrMaterialInfo materialInfo;
+
+			fbxsdk::FbxSurfaceMaterial* pSurfaceMaterial = pNode->GetMaterial(nMaterialIndex);
+			materialInfo.strMaterialName = pSurfaceMaterial->GetName();
+
+			if (pSurfaceMaterial->GetClassId().Is(fbxsdk::FbxSurfacePhong::ClassId))
+			{
+				// Ambient Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Ambient;
+				materialInfo.v3Ambient.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Ambient.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Ambient.z() = lKFbxDouble3.Get()[2];
+
+				// Diffuse Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Diffuse;
+				materialInfo.v3Diffuse.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Diffuse.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Diffuse.z() = lKFbxDouble3.Get()[2];
+
+				// Specular Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Specular;
+				materialInfo.v3Specular.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Specular.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Specular.z() = lKFbxDouble3.Get()[2];
+
+				// Emissive Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Emissive;
+				materialInfo.v3Emissive.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Emissive.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Emissive.z() = lKFbxDouble3.Get()[2];
+
+				// Opacity
+				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->TransparencyFactor;
+				materialInfo.fOpacity = lKFbxDouble1.Get();
+
+				// Shininess
+				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->Shininess;
+				materialInfo.fShininess = lKFbxDouble1.Get();
+
+				// Reflectivity
+				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->ReflectionFactor;
+				materialInfo.fReflectivity = lKFbxDouble1.Get();
+
+				vecMaterialInfo.push_back(materialInfo);
+			}
+			else if (pSurfaceMaterial->GetClassId().Is(FbxSurfaceLambert::ClassId))
+			{
+				// Ambient Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Ambient;
+				materialInfo.v3Ambient.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Ambient.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Ambient.z() = lKFbxDouble3.Get()[2];
+
+				// Diffuse Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Diffuse;
+				materialInfo.v3Diffuse.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Diffuse.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Diffuse.z() = lKFbxDouble3.Get()[2];
+				// Emissive Color
+				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Emissive;
+				materialInfo.v3Emissive.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v3Emissive.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v3Emissive.z() = lKFbxDouble3.Get()[2];
+
+				// Opacity
+				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->TransparencyFactor;
+				materialInfo.fOpacity = lKFbxDouble1.Get();
+
+				vecMaterialInfo.push_back(materialInfo);
+			}
+
+			FbxProperty property;
+			//for (int nTextureLayerIndex = 0; nTextureLayerIndex < FbxLayerElement::LAYERELEMENT_TYPE_TEXTURE_COUNT)
+			if (pSurfaceMaterial)
+			{
+				int nTextureIndex;
+				FBXSDK_FOR_EACH_TEXTURE(nTextureIndex)
+				{
+					property = pSurfaceMaterial->FindProperty(FbxLayerElement::sTextureChannelNames[nTextureIndex]);
+					if (property.IsValid())
+					{
+						std::string strName = property.GetName();
+						int nTextureCount = property.GetSrcObjectCount<FbxTexture>();
+						for (int j = 0; j < nTextureCount; ++j)
+						{
+							//Here we have to check if it's layeredtextures, or just textures:
+							FbxLayeredTexture *lLayeredTexture = property.GetSrcObject<FbxLayeredTexture>(j);
+							if (lLayeredTexture)
+							{
+								int lNbTextures = lLayeredTexture->GetSrcObjectCount<FbxTexture>();
+								for (int k = 0; k < lNbTextures; ++k)
+								{
+									FbxTexture* lTexture = lLayeredTexture->GetSrcObject<FbxTexture>(k);
+									if (lTexture)
+									{
+										//if (pDisplayHeader) {
+										//	DisplayInt("    Textures connected to Material ", pMaterialIndex);
+										//	pDisplayHeader = false;
+										//}
+									}
+								}
+							}
+							else
+							{
+								//no layered texture simply get on the property
+								FbxTexture* lTexture = property.GetSrcObject<FbxTexture>(j);
+								if (lTexture)
+								{
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void HrFBXLoader::ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, std::vector< std::vector<uint32> >& vecMaterialConnectInfo)
+{
+	//check whether the material maps with only one mesh
+	bool lIsAllSame = true;
+	for (int l = 0; l < pMesh->GetElementMaterialCount(); l++)
+	{
+		FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(l);
+		if (lMaterialElement->GetMappingMode() == FbxGeometryElement::eByPolygon)
+		{
+			lIsAllSame = false;
+			break;
+		}
+	}
+	//For eAllSame mapping type, just out the material and texture mapping info once
+	if (lIsAllSame)
+	{
+		for (int l = 0; l < pMesh->GetElementMaterialCount(); l++)
+		{
+			FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(l);
+			if (lMaterialElement->GetMappingMode() == FbxGeometryElement::eAllSame)
+			{
+				FbxSurfaceMaterial* lMaterial = pMesh->GetNode()->GetMaterial(lMaterialElement->GetIndexArray().GetAt(0));
+				int lMatId = lMaterialElement->GetIndexArray().GetAt(0);
+				if (lMatId >= 0)
+				{
+				}
+			}
+		}
+	}
+	//For eByPolygon mapping type, just out the material and texture mapping info once
+	else
+	{
+		int lPolygonCount = pMesh->GetPolygonCount();
+		int nElementMaterialCount = pMesh->GetElementMaterialCount();
+		for (int nMaterialEleIndex = 0; nMaterialEleIndex < nElementMaterialCount; ++nMaterialEleIndex)
+		{
+			FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(nMaterialEleIndex);
+			std::vector<uint32> vecPolygonIndex;
+			for (int nPolygonIndex = 0; nPolygonIndex < lPolygonCount; ++nPolygonIndex)
+			{
+				FbxSurfaceMaterial* lMaterial = pMesh->GetNode()->GetMaterial(lMaterialElement->GetIndexArray().GetAt(nPolygonIndex));
+				int lMatID = lMaterialElement->GetIndexArray().GetAt(nPolygonIndex);
+				vecPolygonIndex.push_back(lMatID);
+			}
+			vecMaterialConnectInfo.push_back(vecPolygonIndex);
+		}
+	}
 }
