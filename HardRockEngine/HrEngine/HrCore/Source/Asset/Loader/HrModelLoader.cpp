@@ -38,38 +38,38 @@ void HrModelLoader::Load(std::string& strFile)
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 
-	for (size_t i = 0; i < m_modelDesc.m_vecMeshInfo.size(); ++i)
+	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.m_vecMeshInfo.size(); ++nMeshInfoIndex)
 	{
-		HrModelDescInfo::HrMeshInfo& meshInfo = m_modelDesc.m_vecMeshInfo[i];
+		HrModelDescInfo::HrMeshInfo& meshInfo = m_modelDesc.m_vecMeshInfo[nMeshInfoIndex];
 
 		FillEmptyModelInfo(meshInfo);
 
 		//Add Material Res
 		MakeMaterialResource(meshInfo);
 
-		HrStreamData streamVertexBuffer;
-		MakeVertexStream(meshInfo, streamVertexBuffer, vecVertexElement);
-
 		HrMesh* pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(HrFileUtils::Instance()->ReplaceFileName(strFile, meshInfo.strMeshName)));
 		m_vecMesh.push_back(pMesh);
-		
-		HrSubMesh* pSubMesh = pMesh->AddSubMesh();
-		HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
-		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
-		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
-		if (meshInfo.m_vecIndice.size() > 0)
+		for (size_t i = 0; i < meshInfo.m_vecSubMeshInfo.size(); ++i)
 		{
-			pRenderLayout->BindIndexBuffer((const char*)(&meshInfo.m_vecIndice[0]), meshInfo.m_vecIndice.size() * sizeof(meshInfo.m_vecIndice[0]), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+			HrStreamData streamVertexBuffer;
+			MakeVertexStream(meshInfo.m_vecSubMeshInfo[i], streamVertexBuffer, vecVertexElement);
+
+			HrSubMesh* pSubMesh = pMesh->AddSubMesh();
+			HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
+			pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
+			pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
+			if (meshInfo.m_vecSubMeshInfo[i].m_vecIndice.size() > 0)
+			{
+				pRenderLayout->BindIndexBuffer((const char*)(&meshInfo.m_vecSubMeshInfo[i].m_vecIndice[0]), meshInfo.m_vecSubMeshInfo[i].m_vecIndice.size() * sizeof(meshInfo.m_vecSubMeshInfo[i].m_vecIndice[0]), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+			}
+			pSubMesh->SetMaterial(m_vecMaterial[meshInfo.m_vecSubMeshInfo[i].nMaterialIndex]);
 		}
-		ConnectMaterial();
 	}
 }
 
 void HrModelLoader::FillEmptyModelInfo(HrModelDescInfo::HrMeshInfo& meshInfo)
 {
-	BOOST_ASSERT(!meshInfo.m_vecPrimaryPos.empty());
-	BOOST_ASSERT(!meshInfo.m_vecVertexPos.empty());
-	CalculateAverageNormals(meshInfo);
+	HR_UNUSED(meshInfo);
 }
 
 void HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMeshInfo& meshInfo)
@@ -83,10 +83,10 @@ void HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMeshInfo& meshInfo)
 	}
 }
 
-void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrMeshInfo& meshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement)
+void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement)
 {
 	//[POSITION,NORMAL,COLOR]
-	for (size_t nIndex = 0; nIndex < meshInfo.m_vecPrimaryPos.size(); ++nIndex)
+	for (size_t nIndex = 0; nIndex < subMeshInfo.m_vecPrimaryPos.size(); ++nIndex)
 	{
 		for (size_t nEleIndex = 0; nEleIndex < vecVertexElement.size(); ++nEleIndex)
 		{
@@ -94,17 +94,17 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrMeshInfo& meshInfo, HrSt
 			{
 			case VEU_POSITION:
 			{
-				streamData.AddBuffer((Byte*)(&meshInfo.m_vecPrimaryPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)(&subMeshInfo.m_vecPrimaryPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_NORMAL:
 			{
-				streamData.AddBuffer((Byte*)&(meshInfo.m_vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(subMeshInfo.m_vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_COLOR:
 			{
-				streamData.AddBuffer((Byte*)&(meshInfo.m_vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(subMeshInfo.m_vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			}
@@ -112,43 +112,3 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrMeshInfo& meshInfo, HrSt
 		}
 	}
 }
-
-void HrModelLoader::CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo)
-{
-	if (meshInfo.m_vecVertexPos.size() > 0 && meshInfo.m_vecNormal.empty())
-	{
-		meshInfo.m_vecNormal.reserve(meshInfo.m_vecPrimaryPos.size());
-		for (size_t i = 0; i < meshInfo.m_vecPrimaryPos.size(); ++i)
-		{
-			meshInfo.m_vecNormal.push_back(Vector3::Zero());
-		}
-		for (size_t i = 0; i < meshInfo.m_vecIndice.size(); i += 3)
-		{
-			uint16 nIndex1 = meshInfo.m_vecIndice[i];
-			uint16 nIndex2 = meshInfo.m_vecIndice[i + 1];
-			uint16 nIndex3 = meshInfo.m_vecIndice[i + 2];
-
-			Vector3 vAB = meshInfo.m_vecPrimaryPos[nIndex2] - meshInfo.m_vecPrimaryPos[nIndex1];
-			Vector3 vAC = meshInfo.m_vecPrimaryPos[nIndex3] - meshInfo.m_vecPrimaryPos[nIndex1];
-
-			Vector3 vNormal = HrMath::Cross(vAC, vAB);
-
-			meshInfo.m_vecNormal[nIndex1] += vNormal;
-			meshInfo.m_vecNormal[nIndex2] += vNormal;
-			meshInfo.m_vecNormal[nIndex3] += vNormal;
-		}
-		for (size_t i = 0; i < meshInfo.m_vecNormal.size(); ++i)
-		{
-			meshInfo.m_vecNormal[i] = HrMath::Normalize(meshInfo.m_vecNormal[i]);
-		}
-	}
-}
-
-void HrModelLoader::ConnectMaterial()
-{
-	//for (size_t i = 0; i < m_modelDesc.m_vecMaterialConnectInfo.size(); ++i)
-	//{
-
-	//}
-}
-

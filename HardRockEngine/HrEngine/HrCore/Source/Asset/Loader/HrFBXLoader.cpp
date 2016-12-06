@@ -254,11 +254,14 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 	ReadVertexPos(pMesh, meshInfo.m_vecPrimaryPos, meshInfo.m_vecVertexPos);
 	ReadIndice(pMesh, meshInfo.m_vecIndice);
 	ReadVertexNormal(pMesh, meshInfo.m_vecNormal);
-	ReadColor(pMesh, meshInfo.m_vecColor);
-	ReadMaterialMapping(pMesh);
-	ReadMaterial(pMesh, meshInfo.m_vecMaterialInfo);
-	ReadMaterialConnections(pMesh, meshInfo.m_vecMaterialConnectInfo);
+	CalculateAverageNormals(meshInfo);
 
+	ReadColor(pMesh, meshInfo.m_vecColor);
+	ReadMaterial(pMesh, meshInfo.m_vecMaterialInfo);
+	ReadMaterialConnections(pMesh, meshInfo.m_mapMateialIndexMapIndiceInfo, meshInfo.m_vecSubMeshInfo);
+
+
+	BuildSubMeshInfo(meshInfo);
 	
 }
 
@@ -274,18 +277,18 @@ void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& ve
 		vecPrimaryPosition.emplace_back(Vector3(x, y, z));
 	}
 
-	for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
-	{
-		for (int nSizeIndex = 0; nSizeIndex < pMesh->GetPolygonSize(nPolygonIndex); ++nSizeIndex)
-		{
-			int nCtrlPointIndex = pMesh->GetPolygonVertex(nPolygonIndex, nSizeIndex);
-			float x = static_cast<float>(pControlPoints[nCtrlPointIndex][0]);
-			float y = static_cast<float>(pControlPoints[nCtrlPointIndex][1]);
-			float z = static_cast<float>(pControlPoints[nCtrlPointIndex][2]);
+	//for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+	//{
+	//	for (int nSizeIndex = 0; nSizeIndex < pMesh->GetPolygonSize(nPolygonIndex); ++nSizeIndex)
+	//	{
+	//		int nCtrlPointIndex = pMesh->GetPolygonVertex(nPolygonIndex, nSizeIndex);
+	//		float x = static_cast<float>(pControlPoints[nCtrlPointIndex][0]);
+	//		float y = static_cast<float>(pControlPoints[nCtrlPointIndex][1]);
+	//		float z = static_cast<float>(pControlPoints[nCtrlPointIndex][2]);
 
-			vecVertexPosition.emplace_back(Vector3(x, y, z));
-		}
-	}
+	//		vecVertexPosition.emplace_back(Vector3(x, y, z));
+	//	}
+	//}
 }
 
 void HrFBXLoader::ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint16>& vecIndices)
@@ -528,31 +531,6 @@ void HrFBXLoader::ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColo
 	}
 }
 
-void HrFBXLoader::ReadMaterialMapping(fbxsdk::FbxMesh* pMesh)
-{
-	int nMaterialCount = 0;
-	FbxNode* pNode = pMesh->GetNode();
-	if (pNode)
-	{
-		nMaterialCount = pNode->GetMaterialCount();
-	}
-	for (int nMaterialIndex = 0; nMaterialIndex < pMesh->GetElementMaterialCount(); ++nMaterialIndex)
-	{
-		FbxGeometryElementMaterial* pMaterial = pMesh->GetElementMaterial(nMaterialIndex);
-		if (pMaterial)
-		{
-			if (pMaterial->GetReferenceMode() == FbxGeometryElement::eDirect || pMaterial->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-			{
-
-			}
-			else
-			{
-
-			}
-		}
-	}
-}
-
 void HrFBXLoader::ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescInfo::HrMaterialInfo>& vecMaterialInfo)
 {
 	int nMaterialCount = 0;
@@ -687,51 +665,144 @@ void HrFBXLoader::ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescIn
 	}
 }
 
-void HrFBXLoader::ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, std::vector< std::vector<uint32> >& vecMaterialConnectInfo)
+void HrFBXLoader::ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, std::map<int, std::vector<int> >& mapMateialIndexMapIndiceInfo, std::vector<HrModelDescInfo::HrSubMeshInfo>& vecSubMeshInfo)
 {
 	//check whether the material maps with only one mesh
-	bool lIsAllSame = true;
-	for (int l = 0; l < pMesh->GetElementMaterialCount(); l++)
+	int nElementMaterialCount = pMesh->GetElementMaterialCount();
+	if (nElementMaterialCount > 1)
 	{
-		FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(l);
-		if (lMaterialElement->GetMappingMode() == FbxGeometryElement::eByPolygon)
+		nElementMaterialCount = 1;
+	}
+
+	
+	FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial();
+	FbxLayerElementArrayTemplate<int>* pMaterialIndices = &pMesh->GetElementMaterial()->GetIndexArray();
+
+	switch (lMaterialElement->GetMappingMode())
+	{
+	case FbxGeometryElement::eByPolygon:
+	{
+		int nIndexByPolygonVertex = 0;
+		BOOST_ASSERT(pMesh->GetPolygonCount() == pMaterialIndices->GetCount());
+		for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
 		{
-			lIsAllSame = false;
-			break;
+			int nMaterialIndex = pMaterialIndices->GetAt(nPolygonIndex);
+			int nPolygonSize = pMesh->GetPolygonSize(nPolygonIndex);
+			for (int nSizeIndex = 0; nSizeIndex < nPolygonSize; ++nSizeIndex)
+			{
+				auto item = mapMateialIndexMapIndiceInfo.find(nMaterialIndex);
+				if (item == mapMateialIndexMapIndiceInfo.end())
+				{
+					mapMateialIndexMapIndiceInfo.emplace(std::pair<int, std::vector<int>>(nMaterialIndex, std::vector<int>()));
+					item = mapMateialIndexMapIndiceInfo.find(nMaterialIndex);
+				}
+				item->second.push_back(nIndexByPolygonVertex);
+
+				++nIndexByPolygonVertex;
+			}
+		}
+		break;
+	}
+	case FbxGeometryElement::eAllSame:
+	{
+		int nMaterialIndex = pMaterialIndices->GetAt(0);
+		int* pIndiceContent = pMesh->GetPolygonVertices();
+		mapMateialIndexMapIndiceInfo.emplace(std::pair<int, std::vector<int>>(nMaterialIndex, std::vector<int>()));
+
+		int nIndexByPolygonVertex = 0;
+		for (int nPolygonIndex = 0; nPolygonIndex < pMesh->GetPolygonCount(); ++nPolygonIndex)
+		{
+			int nIndiceIndexStart = pMesh->GetPolygonVertexIndex(nPolygonIndex);
+			for (int nSizeIndex = 0; nSizeIndex < pMesh->GetPolygonSize(nPolygonIndex); ++nSizeIndex)
+			{
+				mapMateialIndexMapIndiceInfo[nMaterialIndex].push_back(nIndexByPolygonVertex++);
+			}
+		}
+		break;
+	}
+	}
+}
+
+void HrFBXLoader::CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo)
+{
+	if (meshInfo.m_vecNormal.empty())
+	{
+		meshInfo.m_vecNormal.reserve(meshInfo.m_vecPrimaryPos.size());
+		for (size_t i = 0; i < meshInfo.m_vecPrimaryPos.size(); ++i)
+		{
+			meshInfo.m_vecNormal.push_back(Vector3::Zero());
+		}
+		for (size_t i = 0; i < meshInfo.m_vecIndice.size(); i += 3)
+		{
+			uint16 nIndex1 = meshInfo.m_vecIndice[i];
+			uint16 nIndex2 = meshInfo.m_vecIndice[i + 1];
+			uint16 nIndex3 = meshInfo.m_vecIndice[i + 2];
+
+			Vector3 vAB = meshInfo.m_vecPrimaryPos[nIndex2] - meshInfo.m_vecPrimaryPos[nIndex1];
+			Vector3 vAC = meshInfo.m_vecPrimaryPos[nIndex3] - meshInfo.m_vecPrimaryPos[nIndex1];
+
+			Vector3 vNormal = HrMath::Cross(vAC, vAB);
+
+			meshInfo.m_vecNormal[nIndex1] += vNormal;
+			meshInfo.m_vecNormal[nIndex2] += vNormal;
+			meshInfo.m_vecNormal[nIndex3] += vNormal;
+		}
+		for (size_t i = 0; i < meshInfo.m_vecNormal.size(); ++i)
+		{
+			meshInfo.m_vecNormal[i] = HrMath::Normalize(meshInfo.m_vecNormal[i]);
 		}
 	}
-	//For eAllSame mapping type, just out the material and texture mapping info once
-	if (lIsAllSame)
+}
+
+
+void HrFBXLoader::BuildSubMeshInfo(HrModelDescInfo::HrMeshInfo& modelDesc)
+{
+	//暂时先通过Material来拆分Submesh 这里不确定
+	if (modelDesc.m_mapMateialIndexMapIndiceInfo.size() == 1)
 	{
-		for (int l = 0; l < pMesh->GetElementMaterialCount(); l++)
+		modelDesc.m_vecSubMeshInfo.emplace_back(HrModelDescInfo::HrSubMeshInfo());
+		auto& subMeshInfo = modelDesc.m_vecSubMeshInfo.back();
+
+		subMeshInfo.nStartIndex = 0;
+		subMeshInfo.nIndexSize = modelDesc.m_vecIndice.size();
+		subMeshInfo.nMaterialIndex = modelDesc.m_mapMateialIndexMapIndiceInfo.begin()->first;
+		subMeshInfo.m_vecPrimaryPos.swap(modelDesc.m_vecPrimaryPos);
+		subMeshInfo.m_vecIndice.swap(modelDesc.m_vecIndice);
+		subMeshInfo.m_vecNormal.swap(modelDesc.m_vecNormal);
+		subMeshInfo.m_vecColor.swap(modelDesc.m_vecColor);
+
+		return;
+	}
+	for (auto item : modelDesc.m_mapMateialIndexMapIndiceInfo)
+	{
+		if (item.second.size() > 0)
 		{
-			FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(l);
-			if (lMaterialElement->GetMappingMode() == FbxGeometryElement::eAllSame)
+			modelDesc.m_vecSubMeshInfo.emplace_back(HrModelDescInfo::HrSubMeshInfo());
+			auto& subMeshInfo = modelDesc.m_vecSubMeshInfo.back();
+
+			subMeshInfo.nStartIndex = item.second[0];
+			subMeshInfo.nIndexSize = item.second.size();
+
+			std::unordered_map<uint32, uint32> mapPrimaryPos;
+			for (int i = subMeshInfo.nStartIndex; i < subMeshInfo.nIndexSize; ++i)
 			{
-				FbxSurfaceMaterial* lMaterial = pMesh->GetNode()->GetMaterial(lMaterialElement->GetIndexArray().GetAt(0));
-				int lMatId = lMaterialElement->GetIndexArray().GetAt(0);
-				if (lMatId >= 0)
+				int nVertexIndex = modelDesc.m_vecIndice[i];
+				auto item = mapPrimaryPos.find(nVertexIndex);
+				if (item != mapPrimaryPos.end())
 				{
+					subMeshInfo.m_vecIndice.push_back(item->second);
+				}
+				else
+				{
+					subMeshInfo.m_vecPrimaryPos.push_back(modelDesc.m_vecPrimaryPos[nVertexIndex]);
+					subMeshInfo.m_vecNormal.push_back(modelDesc.m_vecNormal[nVertexIndex]);
+					if (!modelDesc.m_vecColor.empty())
+						subMeshInfo.m_vecColor.push_back(modelDesc.m_vecColor[nVertexIndex]);
+
+					mapPrimaryPos[nVertexIndex] = subMeshInfo.m_vecPrimaryPos.size() - 1;
+					subMeshInfo.m_vecIndice.push_back(subMeshInfo.m_vecPrimaryPos.size() - 1);
 				}
 			}
-		}
-	}
-	//For eByPolygon mapping type, just out the material and texture mapping info once
-	else
-	{
-		int lPolygonCount = pMesh->GetPolygonCount();
-		int nElementMaterialCount = pMesh->GetElementMaterialCount();
-		for (int nMaterialEleIndex = 0; nMaterialEleIndex < nElementMaterialCount; ++nMaterialEleIndex)
-		{
-			FbxGeometryElementMaterial* lMaterialElement = pMesh->GetElementMaterial(nMaterialEleIndex);
-			std::vector<uint32> vecPolygonIndex;
-			for (int nPolygonIndex = 0; nPolygonIndex < lPolygonCount; ++nPolygonIndex)
-			{
-				FbxSurfaceMaterial* lMaterial = pMesh->GetNode()->GetMaterial(lMaterialElement->GetIndexArray().GetAt(nPolygonIndex));
-				int lMatID = lMaterialElement->GetIndexArray().GetAt(nPolygonIndex);
-				vecPolygonIndex.push_back(lMatID);
-			}
-			vecMaterialConnectInfo.push_back(vecPolygonIndex);
 		}
 	}
 }

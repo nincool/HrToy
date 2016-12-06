@@ -13,6 +13,7 @@ namespace Hr
 		~HrSubMesh();
 
 		HrRenderLayout* GetRenderLayout() const;
+		void SetMaterial(HrMaterial* pMaterial);
 	protected:
 		HrRenderLayout* m_pRenderLayout;
 		HrMaterial* m_pMaterial;

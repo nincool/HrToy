@@ -12,6 +12,7 @@ namespace Hr
 		{
 			HrMaterialInfo()
 				: strMaterialName("")
+				, nMaterialIndex(0)
 				, v3Emissive(Vector3::Zero())
 				, v3Ambient(Vector3::Zero())
 				, v3Diffuse(Vector3::Zero())
@@ -20,6 +21,7 @@ namespace Hr
 				, fShininess(1.0f)
 				, fReflectivity(1.0f)
 			{}
+			int nMaterialIndex;
 			std::string strMaterialName;
 			Vector3 v3Emissive;
 			Vector3 v3Ambient;
@@ -28,6 +30,18 @@ namespace Hr
 			float fOpacity;
 			float fShininess;
 			float fReflectivity;
+		};
+
+		struct HrSubMeshInfo
+		{
+			std::vector<Vector3> m_vecPrimaryPos;
+			std::vector<uint16> m_vecIndice;
+			std::vector<Vector3> m_vecNormal;
+			std::vector<float4> m_vecColor;
+
+			int nStartIndex;
+			int nIndexSize;
+			int nMaterialIndex;
 		};
 
 		struct HrMeshInfo
@@ -40,7 +54,9 @@ namespace Hr
 			std::vector<float4> m_vecColor;
 
 			std::vector<HrMaterialInfo> m_vecMaterialInfo;
-			std::vector< std::vector<uint32> > m_vecMaterialConnectInfo;
+			std::map<int, std::vector<int> > m_mapMateialIndexMapIndiceInfo;
+
+			std::vector<HrSubMeshInfo> m_vecSubMeshInfo;
 		};
 	public:
 		std::vector<HrMeshInfo> m_vecMeshInfo;
@@ -66,10 +82,8 @@ namespace Hr
 	private:
 		void FillEmptyModelInfo(HrModelDescInfo::HrMeshInfo& meshInfo);
 		void MakeMaterialResource(HrModelDescInfo::HrMeshInfo& meshInfo);
-		void MakeVertexStream(HrModelDescInfo::HrMeshInfo& meshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
-		void ConnectMaterial();
+		void MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
 
-		void CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo);
 	protected:
 		std::string m_strFileName;
 		std::vector<HrMesh*> m_vecMesh;

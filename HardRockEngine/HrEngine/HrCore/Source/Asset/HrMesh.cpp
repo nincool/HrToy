@@ -1,4 +1,5 @@
 #include "Asset/HrMesh.h"
+#include "Asset/HrMaterial.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFactory.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
@@ -20,6 +21,11 @@ HrSubMesh::~HrSubMesh()
 HrRenderLayout* HrSubMesh::GetRenderLayout() const
 {
 	return m_pRenderLayout;
+}
+
+void HrSubMesh::SetMaterial(HrMaterial* pMaterial)
+{
+	m_pMaterial = pMaterial;
 }
 
 ///////////////////////////////////////////////////
