@@ -52,7 +52,9 @@ void HrModelLoader::Load(std::string& strFile)
 
 		HrMesh* pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(HrFileUtils::Instance()->ReplaceFileName(strFile, meshInfo.strMeshName)));
 		m_vecMesh.push_back(pMesh);
-		HrRenderLayout* pRenderLayout = pMesh->GetRenderLayout();
+		
+		HrSubMesh* pSubMesh = pMesh->AddSubMesh();
+		HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
 		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
 		if (meshInfo.m_vecIndice.size() > 0)

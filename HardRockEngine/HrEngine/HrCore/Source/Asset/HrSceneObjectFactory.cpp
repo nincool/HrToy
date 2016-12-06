@@ -6,6 +6,7 @@
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrPrefebModel.h"
+#include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -45,8 +46,23 @@ HrSceneNode* HrSceneObjectFactory::CreateBox()
 HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
 {
 	HrResource* pRes = HrResourceManager::Instance()->GetOrLoadResource(strName, HrResource::RT_MODEL);
-	HrSkinnedMeshRenderable* pRenderModel = HR_NEW HrSkinnedMeshRenderable(static_cast<HrPrefebModel*>(pRes));
-	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pRenderModel);
+	HrPrefebModel* pPrefabModel = static_cast<HrPrefebModel*>(pRes);
+
+	if (pPrefabModel == nullptr)
+	{
+		BOOST_ASSERT(false);
+		return nullptr;
+	}
+
+	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
+	for (size_t i = 0; i < pPrefabModel->GetMesh()->GetSubMeshNum(); ++i)
+	{
+		HrSkinnedMeshRenderable* pSkinRenderable = HR_NEW HrSkinnedMeshRenderable();
+		pSkinRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
+		HrSceneNode* pChildNode = HR_NEW HrSceneNode();
+		pSceneNode->AddChild(pChildNode);
+		pChildNode->AttachRenderable(pSkinRenderable);
+	}
 
 	return pSceneNode;
 }

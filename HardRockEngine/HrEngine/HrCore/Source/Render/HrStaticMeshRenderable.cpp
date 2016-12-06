@@ -22,7 +22,7 @@ HrStaticMeshRenderable::~HrStaticMeshRenderable()
 HrRenderLayout* HrStaticMeshRenderable::GetRenderLayout()
 {
 	BOOST_ASSERT(m_pMesh);
-	return m_pMesh->GetRenderLayout();
+	return nullptr;
 }
 
 void HrStaticMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters)

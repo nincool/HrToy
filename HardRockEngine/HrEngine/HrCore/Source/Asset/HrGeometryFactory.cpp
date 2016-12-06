@@ -130,7 +130,8 @@ HrGeometryFactory::~HrGeometryFactory()
 HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
 {
 	HrGeometryBox* pBox = HR_NEW HrGeometryBox();
-	HrSceneNode* pSceneNode = HR_NEW HrSceneNode(pBox);
+	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
+	pSceneNode->AttachRenderable(pBox);
 
 	return pSceneNode;
 }

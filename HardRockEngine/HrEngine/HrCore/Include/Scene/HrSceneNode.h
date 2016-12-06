@@ -21,21 +21,20 @@ namespace Hr
 		virtual ~HrSceneNode();
 
 		EnumNodeType GetNodeType() { return m_nodeType; }
+
+		void AttachRenderable(HrRenderable* pRenderable);
 		
 		HrSceneNode* GetParent() { return m_pParent; }
-
 		HrRenderable* GetRenderable() { return m_pRenderable; }
-
 		HrTransform* GetTransfrom() { return m_pTransform; }
 
 		void AddChild(HrSceneNode* pSceneNode);
-		
-		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
-		
 		void RemoveChildren();
 
-		virtual void UpdateNode();
+		//查找可渲染物件并且加入到渲染队列
+		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
 		
+		virtual void UpdateNode();
 		void UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters);
 
 		void DirtyTransform();

@@ -11,14 +11,7 @@ using namespace Hr;
 HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
 {
 	m_pPrefebModel = nullptr;
-
-	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
-}
-
-HrSkinnedMeshRenderable::HrSkinnedMeshRenderable(HrPrefebModel* pPrefebModel)
-{
-	m_pPrefebModel = pPrefebModel;
+	m_pSubMesh = nullptr;
 
 	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
 	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
@@ -26,21 +19,40 @@ HrSkinnedMeshRenderable::HrSkinnedMeshRenderable(HrPrefebModel* pPrefebModel)
 
 HrSkinnedMeshRenderable::~HrSkinnedMeshRenderable()
 {
+	m_pPrefebModel = nullptr;
+	m_pSubMesh = nullptr;
 }
 
 HrRenderLayout* HrSkinnedMeshRenderable::GetRenderLayout()
 {
-	BOOST_ASSERT(m_pPrefebModel);
-
-	return m_pPrefebModel->GetMesh()->GetRenderLayout();
+	if (m_pSubMesh != nullptr)
+	{
+		return m_pSubMesh->GetRenderLayout();
+	}
+	return nullptr;
 }
 
 void HrSkinnedMeshRenderable::AttachPrefebModel(HrPrefebModel* pPrefebModel)
 {
 	m_pPrefebModel = pPrefebModel;
+
+	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
+	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
 }
 
+void HrSkinnedMeshRenderable::AttachSubMesh(HrSubMesh* pSubMesh)
+{
+	m_pSubMesh = pSubMesh;
+}
 
+bool HrSkinnedMeshRenderable::CanRender()
+{
+	if (m_pSubMesh == nullptr)
+	{
+		return false;
+	}
+	return true;
+}
 
 
 

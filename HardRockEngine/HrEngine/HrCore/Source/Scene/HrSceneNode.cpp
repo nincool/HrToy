@@ -24,13 +24,24 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 
 HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
-	m_pRenderable = pRenderable;
+	AttachRenderable(pRenderable);
 }
 
 HrSceneNode::~HrSceneNode()
 {
-	SAFE_DELETE(m_pRenderable);
+	for (size_t i = 0; i < m_vecChildNode.size(); ++i)
+	{
+		SAFE_DELETE(m_vecChildNode[i]);
+	}
+	m_vecChildNode.clear();
+
 	SAFE_DELETE(m_pTransform);
+	SAFE_DELETE(m_pRenderable);
+}
+
+void HrSceneNode::AttachRenderable(HrRenderable* pRenderable)
+{
+	m_pRenderable = pRenderable;
 }
 
 void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
@@ -52,7 +63,7 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 
 void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
-	if (m_pRenderable != nullptr)
+	if (m_pRenderable != nullptr && m_pRenderable->CanRender())
 	{
 		pRenderQueue->AddRenderable(this);
 	}
@@ -64,9 +75,9 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 
 void HrSceneNode::RemoveChildren()
 {
-	for (auto& item : m_vecChildNode)
+	for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 	{
-		HR_DELETE item;
+		SAFE_DELETE(m_vecChildNode[i]);
 	}
 	m_vecChildNode.clear();
 }

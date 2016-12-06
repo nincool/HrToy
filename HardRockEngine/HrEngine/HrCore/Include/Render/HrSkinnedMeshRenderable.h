@@ -10,18 +10,21 @@ namespace Hr
 	{
 	public:
 		HrSkinnedMeshRenderable();
-		HrSkinnedMeshRenderable(HrPrefebModel* pPrefebModel);
 		~HrSkinnedMeshRenderable();
+
+		void AttachPrefebModel(HrPrefebModel* pPrefebModel);
+		void AttachSubMesh(HrSubMesh* pSubMesh);
 
 		virtual HrRenderLayout* GetRenderLayout() override;
 
-		void  AttachPrefebModel(HrPrefebModel* pPrefebModel);
-
+		virtual bool CanRender() override;
 	protected:
-		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override {}
+		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override { HR_UNUSED(renderFrameParameters); }
 	private:
+		//模型资源
 		HrPrefebModel* m_pPrefebModel;
-
+		//持有的SubMesh
+		HrSubMesh* m_pSubMesh;
 	};
 }
 

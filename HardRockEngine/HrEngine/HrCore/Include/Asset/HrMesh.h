@@ -12,7 +12,7 @@ namespace Hr
 		HrSubMesh();
 		~HrSubMesh();
 
-		
+		HrRenderLayout* GetRenderLayout() const;
 	protected:
 		HrRenderLayout* m_pRenderLayout;
 		HrMaterial* m_pMaterial;
@@ -26,6 +26,7 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
+		HrSubMesh* AddSubMesh();
 		uint32 GetSubMeshNum();
 		HrSubMesh* GetSubMesh(uint32 nIndex);
 

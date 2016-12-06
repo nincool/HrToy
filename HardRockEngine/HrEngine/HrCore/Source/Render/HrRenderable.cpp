@@ -16,6 +16,11 @@ HrRenderable::HrRenderable()
 
 HrRenderable::~HrRenderable()
 {
+	for (size_t i = 0; i < m_vecSubRenderable.size(); ++i)
+	{
+		SAFE_DELETE(m_vecSubRenderable[i]);
+	}
+	m_vecSubRenderable.clear();
 }
 
 HrRenderTechnique* HrRenderable::GetRenderTechnique()
@@ -30,3 +35,17 @@ void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFr
 	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
 }
 
+uint32 HrRenderable::GetSubRenderableNum() const
+{
+	return m_vecSubRenderable.size();
+}
+
+HrRenderable* HrRenderable::GetSubRenderable(uint32 nIndex) const
+{
+	return m_vecSubRenderable[nIndex];
+}
+
+bool HrRenderable::CanRender()
+{
+	return true;
+}

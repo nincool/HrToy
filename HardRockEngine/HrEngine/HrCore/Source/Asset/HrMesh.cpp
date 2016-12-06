@@ -17,6 +17,11 @@ HrSubMesh::~HrSubMesh()
 	SAFE_DELETE(m_pRenderLayout);
 }
 
+HrRenderLayout* HrSubMesh::GetRenderLayout() const
+{
+	return m_pRenderLayout;
+}
+
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////
@@ -29,6 +34,10 @@ HrMesh::HrMesh()
 
 HrMesh::~HrMesh()
 {
+	for (auto& item : m_vecSubMesh)
+	{
+		SAFE_DELETE(item);
+	}
 }
 
 void HrMesh::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
@@ -48,6 +57,13 @@ bool HrMesh::LoadImpl()
 bool HrMesh::UnloadImpl()
 {
 	return true;
+}
+
+HrSubMesh* HrMesh::AddSubMesh()
+{
+	HrSubMesh* pSubMesh = HR_NEW HrSubMesh();
+	m_vecSubMesh.push_back(pSubMesh);
+	return pSubMesh;
 }
 
 uint32 HrMesh::GetSubMeshNum()

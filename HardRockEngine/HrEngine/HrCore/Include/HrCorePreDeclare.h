@@ -59,6 +59,7 @@ namespace Hr
 	class HrModelLoader;
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
 	class HrMesh;
+	class HrSubMesh;
 	class HrPrefebModel;
 	class HrMaterial;
 
