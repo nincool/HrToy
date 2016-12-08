@@ -14,6 +14,7 @@ namespace Hr
 
 		void SetCurrentCamera(HrCamera* pCamera);
 		void SetCurrentRenderable(const HrRenderable* rend);
+		void SetCurrentMaterial(const HrMaterial* pMaterial);
 
 		const Matrix4& GetViewProjMatrix() const;
 
@@ -39,7 +40,9 @@ namespace Hr
 
 	private:
 		const HrRenderable* m_pCurrentRenderable;
+		const HrMaterial* m_pCurrentMaterial;
 		HrCamera* m_pCurrentCamera;
+	
 	};
 }
 

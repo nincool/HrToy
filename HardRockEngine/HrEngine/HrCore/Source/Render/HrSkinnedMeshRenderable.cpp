@@ -54,6 +54,15 @@ bool HrSkinnedMeshRenderable::CanRender()
 	return true;
 }
 
+void HrSkinnedMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters)
+{
+	if (m_pSubMesh != nullptr)
+	{
+		HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
+		if (pMaterial != nullptr)
+		{
 
-
+		}
+	}
+}
 

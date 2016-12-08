@@ -7,6 +7,7 @@ using namespace Hr;
 HrRenderFrameParameters::HrRenderFrameParameters()
 {
 	m_pCurrentRenderable = nullptr;
+	m_pCurrentMaterial = nullptr;
 	m_pCurrentCamera = nullptr;
 
 	m_bWorldMatrixDirty = true;
@@ -38,6 +39,11 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 	{
 		m_bWorldViewProjMatrixDirty = true;
 	}
+}
+
+void HrRenderFrameParameters::SetCurrentMaterial(const HrMaterial* pMaterial)
+{
+	m_pCurrentMaterial = pMaterial;
 }
 
 const Matrix4& HrRenderFrameParameters::GetWorldMatrix()

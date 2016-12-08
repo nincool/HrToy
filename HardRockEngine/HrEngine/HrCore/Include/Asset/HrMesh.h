@@ -14,6 +14,7 @@ namespace Hr
 
 		HrRenderLayout* GetRenderLayout() const;
 		void SetMaterial(HrMaterial* pMaterial);
+		HrMaterial* GetMaterial() const;
 	protected:
 		HrRenderLayout* m_pRenderLayout;
 		HrMaterial* m_pMaterial;

@@ -28,6 +28,11 @@ void HrSubMesh::SetMaterial(HrMaterial* pMaterial)
 	m_pMaterial = pMaterial;
 }
 
+HrMaterial* HrSubMesh::GetMaterial() const
+{
+	return m_pMaterial;
+}
+
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////
