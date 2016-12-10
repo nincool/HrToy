@@ -556,27 +556,31 @@ void HrFBXLoader::ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescIn
 			{
 				// Ambient Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Ambient;
-				materialInfo.v3Ambient.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Ambient.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Ambient.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Ambient.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Ambient.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Ambient.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Ambient.w() = 1.0f;
 
 				// Diffuse Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Diffuse;
-				materialInfo.v3Diffuse.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Diffuse.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Diffuse.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Diffuse.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Diffuse.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Diffuse.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Diffuse.w() = 1.0f;
 
 				// Specular Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Specular;
-				materialInfo.v3Specular.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Specular.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Specular.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Specular.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Specular.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Specular.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Specular.w() = 1.0f;
 
 				// Emissive Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Emissive;
-				materialInfo.v3Emissive.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Emissive.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Emissive.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Emissive.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Emissive.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Emissive.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Emissive.w() = 1.0f;
 
 				// Opacity
 				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->TransparencyFactor;
@@ -596,20 +600,24 @@ void HrFBXLoader::ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescIn
 			{
 				// Ambient Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Ambient;
-				materialInfo.v3Ambient.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Ambient.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Ambient.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Ambient.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Ambient.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Ambient.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Ambient.w() = 1.0f;
 
 				// Diffuse Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Diffuse;
-				materialInfo.v3Diffuse.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Diffuse.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Diffuse.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Diffuse.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Diffuse.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Diffuse.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Diffuse.w() = 1.0f;
+
 				// Emissive Color
 				lKFbxDouble3 = ((FbxSurfacePhong*)pSurfaceMaterial)->Emissive;
-				materialInfo.v3Emissive.x() = lKFbxDouble3.Get()[0];
-				materialInfo.v3Emissive.y() = lKFbxDouble3.Get()[1];
-				materialInfo.v3Emissive.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Emissive.x() = lKFbxDouble3.Get()[0];
+				materialInfo.v4Emissive.y() = lKFbxDouble3.Get()[1];
+				materialInfo.v4Emissive.z() = lKFbxDouble3.Get()[2];
+				materialInfo.v4Emissive.w() = 1.0f;
 
 				// Opacity
 				lKFbxDouble1 = ((FbxSurfacePhong*)pSurfaceMaterial)->TransparencyFactor;

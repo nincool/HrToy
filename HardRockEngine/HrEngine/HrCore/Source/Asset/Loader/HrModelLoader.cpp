@@ -78,7 +78,7 @@ void HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMeshInfo& meshInfo)
 	{
 		HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(HrFileUtils::Instance()->ReplaceFileName(m_strFileName, meshInfo.m_vecMaterialInfo[i].strMaterialName)));
 		HrModelDescInfo::HrMaterialInfo&  matInfo = meshInfo.m_vecMaterialInfo[i];
-		pMaterial->FillMaterialInfo(matInfo.v3Ambient, matInfo.v3Diffuse, matInfo.v3Specular, matInfo.v3Emissive, matInfo.fOpacity);
+		pMaterial->FillMaterialInfo(matInfo.v4Ambient, matInfo.v4Diffuse, matInfo.v4Specular, matInfo.v4Emissive, matInfo.fOpacity);
 		m_vecMaterial.push_back(pMaterial);
 	}
 }

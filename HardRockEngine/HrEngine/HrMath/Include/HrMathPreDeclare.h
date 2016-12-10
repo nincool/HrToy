@@ -13,7 +13,7 @@ namespace Hr
 	typedef KlayGE::float4 Vector4;
 
 	typedef Vector2 float2;
-	typedef Vector3 float3;
+	typedef Vector3 float4float3;
 	typedef Vector4 float4;
 
 	typedef KlayGE::float4x4 Matrix4;

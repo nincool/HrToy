@@ -21,9 +21,9 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_LIGHT_DIRECTION, "light_direction", REDT_FLOAT3, 3, 12),
 
 	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 4, 16),
 };
 
 //////////////////////////////////////////////////////////

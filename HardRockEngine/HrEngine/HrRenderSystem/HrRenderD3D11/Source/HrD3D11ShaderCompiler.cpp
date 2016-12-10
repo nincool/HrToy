@@ -382,7 +382,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 					}
 					vecRenderEffectStruct.push_back(pEffectStruct);
 
-					BOOST_ASSERT(nStructSize == varDesc.size);
+					BOOST_ASSERT(nStructSize <= varDesc.size);
 				}
 				else
 				{

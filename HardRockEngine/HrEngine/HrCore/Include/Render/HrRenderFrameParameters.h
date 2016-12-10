@@ -27,6 +27,12 @@ namespace Hr
 		bool WorldViewProjMatrixDirty() const { return m_bWorldViewProjMatrixDirty; }
 		const Matrix4& GetWorldViewProjMatrix();
 
+		//获取材质信息
+		float4 GetMaterialAmbient() const;
+		float4 GetMaterialDiffuse() const;
+		float4 GetMaterialSpecualr() const;
+		float4 GetMaterialEmissive() const;
+		float GetMaterialOpacity() const;
 	protected:
 		mutable Matrix4 m_worldMatrix;
 		bool m_bWorldMatrixDirty = true;
@@ -37,6 +43,7 @@ namespace Hr
 		bool m_bInverseTransposeWorldMatrix = true;
 		mutable Matrix4 m_worldViewProjMatrix;
 		bool m_bWorldViewProjMatrixDirty = true;
+
 
 	private:
 		const HrRenderable* m_pCurrentRenderable;

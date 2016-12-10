@@ -15,20 +15,26 @@ namespace Hr
 
 		void BuildToDefultMaterial();
 
-		void FillMaterialInfo(const float3& ambient, const float3& diffuse, const float3& specular, const float3& emissive, float fOpacity);
+		void FillMaterialInfo(const float4& ambient, const float4& diffuse, const float4& specular, const float4& emissive, float fOpacity);
+
+		const float4& GetAmbient() const;
+		const float4& GetDiffuse() const;
+		const float4& GetSpecular() const;
+		const float4& GetEmissive() const;
+		float GetOpacity() const;
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 
 	private:
 		//the amount of ambient light the surface reflects and absorbs
-		float3 m_ambient;
+		float4 m_ambient;
 		//the amount of diffuse light the surface reflects and absorbs
-		float3 m_diffuse;
+		float4 m_diffuse;
 		//the amount of specular light the surface reflects and absorbs
-		float3 m_specular;
+		float4 m_specular;
 		//The colour of light emitted from the object
-		float3 m_emissive;
+		float4 m_emissive;
 
 		float m_fOpacity;
 	};

@@ -1,6 +1,7 @@
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrCamera.h"
+#include "Asset/HrMaterial.h"
 
 using namespace Hr;
 
@@ -44,6 +45,7 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 void HrRenderFrameParameters::SetCurrentMaterial(const HrMaterial* pMaterial)
 {
 	m_pCurrentMaterial = pMaterial;
+	BOOST_ASSERT(m_pCurrentMaterial);
 }
 
 const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
@@ -87,5 +89,35 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 		m_inverseTransposeWorldMatrix = HrMath::Transpose(GetInverseWroldMatrix());
 	}
 	return m_inverseTransposeWorldMatrix;
+}
+
+float4 HrRenderFrameParameters::GetMaterialAmbient() const
+{
+	BOOST_ASSERT(m_pCurrentMaterial);
+	return m_pCurrentMaterial->GetAmbient();
+}
+
+float4 HrRenderFrameParameters::GetMaterialDiffuse() const
+{
+	BOOST_ASSERT(m_pCurrentMaterial);
+	return m_pCurrentMaterial->GetDiffuse();
+}
+
+float4 HrRenderFrameParameters::GetMaterialSpecualr() const
+{
+	BOOST_ASSERT(m_pCurrentMaterial);
+	return m_pCurrentMaterial->GetSpecular();
+}
+
+float4 HrRenderFrameParameters::GetMaterialEmissive() const
+{
+	BOOST_ASSERT(m_pCurrentMaterial);
+	return m_pCurrentMaterial->GetEmissive();
+}
+
+float HrRenderFrameParameters::GetMaterialOpacity() const
+{
+	BOOST_ASSERT(m_pCurrentMaterial);
+	return m_pCurrentMaterial->GetOpacity();
 }
 

@@ -6,18 +6,18 @@
 
 struct DirectionalLight
 {
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
+	float3 Ambient;
+	float3 Diffuse;
+	float3 Specular;
 	float3 Direction;
 	float pad;
 };
 
 struct PointLight
 { 
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
+	float3 Ambient;
+	float3 Diffuse;
+	float3 Specular;
 
 	float3 Position;
 	float Range;
@@ -28,9 +28,9 @@ struct PointLight
 
 struct SpotLight
 {
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
+	float3 Ambient;
+	float3 Diffuse;
+	float3 Specular;
 
 	float3 Position;
 	float Range;
@@ -44,10 +44,10 @@ struct SpotLight
 
 struct Material
 {
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular; // w = SpecPower
-	float4 Reflect;
+	float3 Ambient;
+	float3 Diffuse;
+	float3 Specular; // w = SpecPower
+	float3 Reflect;
 };
 
 //---------------------------------------------------------------------------------------

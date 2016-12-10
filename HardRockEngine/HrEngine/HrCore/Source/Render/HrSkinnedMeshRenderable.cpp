@@ -1,6 +1,7 @@
 #include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
+#include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
 #include "HrCore/Include/Asset/HrPrefebModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
@@ -61,7 +62,7 @@ void HrSkinnedMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParam
 		HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
 		if (pMaterial != nullptr)
 		{
-
+			renderFrameParameters.SetCurrentMaterial(pMaterial);
 		}
 	}
 }

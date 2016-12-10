@@ -13,20 +13,20 @@ namespace Hr
 			HrMaterialInfo()
 				: strMaterialName("")
 				, nMaterialIndex(0)
-				, v3Emissive(Vector3::Zero())
-				, v3Ambient(Vector3::Zero())
-				, v3Diffuse(Vector3::Zero())
-				, v3Specular(Vector3::Zero())
+				, v4Emissive(Vector4::Zero())
+				, v4Ambient(Vector4::Zero())
+				, v4Diffuse(Vector4::Zero())
+				, v4Specular(Vector4::Zero())
 				, fOpacity(1.0f)
 				, fShininess(1.0f)
 				, fReflectivity(1.0f)
 			{}
 			int nMaterialIndex;
 			std::string strMaterialName;
-			Vector3 v3Emissive;
-			Vector3 v3Ambient;
-			Vector3 v3Diffuse;
-			Vector3 v3Specular;
+			Vector4 v4Emissive;
+			Vector4 v4Ambient;
+			Vector4 v4Diffuse;
+			Vector4 v4Specular;
 			float fOpacity;
 			float fShininess;
 			float fReflectivity;

@@ -1,5 +1,4 @@
 
-
 struct DirectionLight
 {
     float4 ambient_light_color;

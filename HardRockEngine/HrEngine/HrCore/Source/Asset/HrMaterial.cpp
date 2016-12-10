@@ -37,11 +37,36 @@ void HrMaterial::BuildToDefultMaterial()
 	m_fOpacity = 1.0f;
 }
 
-void HrMaterial::FillMaterialInfo(const float3& ambient, const float3& diffuse, const float3& specular, const float3& emissive, float fOpacity)
+void HrMaterial::FillMaterialInfo(const float4& ambient, const float4& diffuse, const float4& specular, const float4& emissive, float fOpacity)
 {
 	m_ambient = ambient;
 	m_diffuse = diffuse;
 	m_specular = specular;
 	m_emissive = emissive;
 	m_fOpacity = fOpacity;
+}
+
+const float4& HrMaterial::GetAmbient() const
+{
+	return m_ambient;
+}
+
+const float4& HrMaterial::GetDiffuse() const
+{
+	return m_diffuse;
+}
+
+const float4& HrMaterial::GetSpecular() const
+{
+	return m_specular;
+}
+
+const float4& HrMaterial::GetEmissive() const
+{
+	return m_emissive;
+}
+
+float HrMaterial::GetOpacity() const
+{
+	return m_fOpacity;
 }
