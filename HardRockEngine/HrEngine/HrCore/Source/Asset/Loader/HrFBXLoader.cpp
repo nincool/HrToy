@@ -749,7 +749,7 @@ void HrFBXLoader::CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo)
 			Vector3 vAB = meshInfo.m_vecPrimaryPos[nIndex2] - meshInfo.m_vecPrimaryPos[nIndex1];
 			Vector3 vAC = meshInfo.m_vecPrimaryPos[nIndex3] - meshInfo.m_vecPrimaryPos[nIndex1];
 
-			Vector3 vNormal = HrMath::Cross(vAC, vAB);
+			Vector3 vNormal = HrMath::Cross(vAB, vAC);
 
 			meshInfo.m_vecNormal[nIndex1] += vNormal;
 			meshInfo.m_vecNormal[nIndex2] += vNormal;

@@ -132,7 +132,7 @@ void HrRenderTechnique::UpdateOneEffectParameter(HrRenderEffectParameter& render
 	}
 	case RPT_LIGHT_DIRECTION:
 	{
-		renderEffectParameter = float3(-1.0, -1.0, -1.0);
+		renderEffectParameter = float3(1.0, -1.0, 1.0);
 		break;
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:

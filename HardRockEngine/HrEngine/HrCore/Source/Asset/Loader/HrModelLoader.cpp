@@ -108,7 +108,6 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo
 				break;
 			}
 			}
-
 		}
 	}
 }
