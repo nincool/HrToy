@@ -13,8 +13,8 @@ namespace Hr
 			RT_TEXTURE,
 			RT_MESH,
 			RT_EFFECT,
-			RT_SHADER,
 			RT_MATERIAL,
+			RT_TEXTURE,
 			RT_MODEL,
 		};
 	public:

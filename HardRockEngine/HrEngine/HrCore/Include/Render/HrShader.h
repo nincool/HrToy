@@ -45,6 +45,7 @@ namespace Hr
 		size_t m_nHashName;
 
 		std::vector<HrRenderEffectParameter*> m_vecBindRenderParameter;
+		//这里有问题，应该根据不同的shader绑定的不同的ConstantBuffer来区分
 		std::vector<HrRenderEffectStructParameter*> m_vecBindRenderStructParameter;
 		std::vector<HrRenderEffectConstantBuffer*> m_vecBindRenderConstantBuffer;
 	};

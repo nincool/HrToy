@@ -39,6 +39,7 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 
 		if (!m_vecD3D11ConstBuffer.empty())
 		{
+			//todo£º if the rende has binded the buffer, then continue
 			pD3D11ImmediateContext->VSSetConstantBuffers(0, m_vecD3D11ConstBuffer.size(), &m_vecD3D11ConstBuffer[0]);
 		}
 		break;
