@@ -24,7 +24,8 @@ namespace Hr
 		{
 			HBB_VERTEXT,
 			HBB_INDEX,
-			HBB_CONST
+			HBB_CONST,
+			HBB_SHADER_RESOURCE,
 		};
 
 		enum EnumGraphicsBufferAccess

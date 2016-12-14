@@ -14,7 +14,6 @@ namespace Hr
 			RT_MESH,
 			RT_EFFECT,
 			RT_MATERIAL,
-			RT_TEXTURE,
 			RT_MODEL,
 		};
 	public:

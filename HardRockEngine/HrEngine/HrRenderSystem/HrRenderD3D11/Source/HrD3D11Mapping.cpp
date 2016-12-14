@@ -274,6 +274,8 @@ D3D11_BIND_FLAG HrD3D11Mapping::GetGraphicsBindFlag(HrGraphicsBuffer::EnumGraphi
 		return D3D11_BIND_INDEX_BUFFER;
 	case HrGraphicsBuffer::HBB_CONST:
 		return D3D11_BIND_CONSTANT_BUFFER;
+	case HrGraphicsBuffer::HBB_SHADER_RESOURCE:
+		return D3D11_BIND_SHADER_RESOURCE;
 	default:
 		BOOST_ASSERT(nullptr);
 	}
@@ -312,5 +314,52 @@ D3D11_MAP HrD3D11Mapping::GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage
 		BOOST_ASSERT(nullptr);
 		return D3D11_MAP_READ;
 	}
+}
+
+DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelType)
+{
+	switch (pixelType)
+	{
+	case PF_L8:             return DXGI_FORMAT_R8_UNORM;
+	case PF_L16:            return DXGI_FORMAT_R16_UNORM;
+	case PF_A8:             return DXGI_FORMAT_A8_UNORM;
+	case PF_A4L4:           return DXGI_FORMAT_UNKNOWN;
+	case PF_BYTE_LA:        return DXGI_FORMAT_UNKNOWN;
+	case PF_R3G3B2:         return DXGI_FORMAT_UNKNOWN;
+	case PF_A1R5G5B5:       return DXGI_FORMAT_UNKNOWN;
+	case PF_R5G6B5:         return DXGI_FORMAT_UNKNOWN;
+	case PF_A4R4G4B4:       return DXGI_FORMAT_UNKNOWN;
+	case PF_R8G8B8:         return DXGI_FORMAT_UNKNOWN;
+	case PF_A8R8G8B8:       return DXGI_FORMAT_B8G8R8A8_UNORM;
+	case PF_A8B8G8R8:       return DXGI_FORMAT_R8G8B8A8_UNORM;
+	case PF_X8R8G8B8:       return DXGI_FORMAT_B8G8R8X8_UNORM;
+	case PF_X8B8G8R8:       return DXGI_FORMAT_UNKNOWN;
+	case PF_A2B10G10R10:    return DXGI_FORMAT_R10G10B10A2_TYPELESS;
+	case PF_A2R10G10B10:    return DXGI_FORMAT_UNKNOWN;
+	case PF_FLOAT16_R:      return DXGI_FORMAT_R16_FLOAT;
+	case PF_FLOAT16_GR:     return DXGI_FORMAT_R16G16_FLOAT;
+	case PF_FLOAT16_RGBA:   return DXGI_FORMAT_R16G16B16A16_FLOAT;
+	case PF_FLOAT32_R:      return DXGI_FORMAT_R32_FLOAT;
+	case PF_FLOAT32_RGBA:   return DXGI_FORMAT_R32G32B32A32_FLOAT;
+	case PF_SHORT_RGBA:     return DXGI_FORMAT_R16G16B16A16_UNORM;
+	case PF_DXT1:           return DXGI_FORMAT_BC1_UNORM;
+	case PF_DXT2:           return DXGI_FORMAT_BC1_UNORM;
+	case PF_DXT3:           return DXGI_FORMAT_BC2_UNORM;
+	case PF_DXT4:           return DXGI_FORMAT_BC2_UNORM;
+	case PF_DXT5:           return DXGI_FORMAT_BC3_UNORM;
+	case PF_BC4_SNORM:      return DXGI_FORMAT_BC4_SNORM;
+	case PF_BC4_UNORM:      return DXGI_FORMAT_BC4_UNORM;
+	case PF_BC5_SNORM:      return DXGI_FORMAT_BC5_SNORM;
+	case PF_BC5_UNORM:      return DXGI_FORMAT_BC5_UNORM;
+	case PF_BC6H_UF16:      return DXGI_FORMAT_BC6H_UF16;
+	case PF_BC6H_SF16:      return DXGI_FORMAT_BC6H_SF16;
+	case PF_BC7_UNORM:      return DXGI_FORMAT_BC7_UNORM;
+	case PF_BC7_UNORM_SRGB: return DXGI_FORMAT_BC7_UNORM_SRGB;
+	case PF_R16G16_SINT:    return DXGI_FORMAT_R16G16_SINT;
+	case PF_FLOAT32_GR:     return DXGI_FORMAT_R32G32_FLOAT;
+	case PF_UNKNOWN:
+	default:                return DXGI_FORMAT_UNKNOWN;
+	}
+
 }
 

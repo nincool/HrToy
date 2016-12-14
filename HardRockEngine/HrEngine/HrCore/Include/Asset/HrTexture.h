@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrTexture : public HrResource
+	class HR_CORE_API HrTexture : public HrResource
 	{
 	public:
 		enum EnumTextureType
@@ -25,7 +25,7 @@ namespace Hr
 			TEX_TYPE_2D_RECT = 6
 		};
 	public:
-		HrTexture();
+		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality);
 		virtual ~HrTexture();
 
 		/** Returns the height of the texture.
@@ -45,7 +45,9 @@ namespace Hr
 		uint32 m_nDepth;
 
 		EnumTextureType m_textureType;
-		PixelFormat m_format;
+		uint32 m_nSampleCount;
+		uint32 m_nSampleQuality;
+		EnumPixelFormat m_format;
 
 	};
 }

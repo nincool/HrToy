@@ -262,6 +262,9 @@
     <ClInclude Include="Include\Asset\HrShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrTexture.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -421,6 +424,9 @@
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrTexture.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
   </ItemGroup>

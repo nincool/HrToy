@@ -43,6 +43,7 @@ namespace Hr
 		ID3D11DeviceContext* m_pImmediateContext;
 
 		ID3D11Buffer* m_pD3D11Buffer;
+		ID3D11ShaderResourceView* m_pSRV;
 	};
 }
 

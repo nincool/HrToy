@@ -262,39 +262,53 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 		switch (shaderInputDesc.Type)
 		{
 		case D3D_SIT_SAMPLER:
+		{
 			nSamplers = (std::max)(nSamplers, static_cast<int>(shaderInputDesc.BindPoint));
-			break;
-
-		case D3D_SIT_TEXTURE:
-		case D3D_SIT_STRUCTURED:
-		case D3D_SIT_BYTEADDRESS:
-			nSrvs = (std::max)(nSrvs, static_cast<int>(shaderInputDesc.BindPoint));
-			break;
-
-		case D3D_SIT_UAV_RWTYPED:
-		case D3D_SIT_UAV_RWSTRUCTURED:
-		case D3D_SIT_UAV_RWBYTEADDRESS:
-		case D3D_SIT_UAV_APPEND_STRUCTURED:
-		case D3D_SIT_UAV_CONSUME_STRUCTURED:
-		case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
-			nUavs = (std::max)(nUavs, static_cast<int>(shaderInputDesc.BindPoint));
-			break;
-
-		default:
 			D3D11ShaderDesc::BoundResourceDesc bindResourceDesc;
 			bindResourceDesc.name = shaderInputDesc.Name;
 			bindResourceDesc.type = static_cast<uint8>(shaderInputDesc.Type);
 			bindResourceDesc.bind_point = static_cast<uint16>(shaderInputDesc.BindPoint);
 			bindResourceDesc.dimension = static_cast<uint8>(shaderInputDesc.Dimension);
 			desc.res_desc.push_back(bindResourceDesc);
-
 			break;
+		}
+		case D3D_SIT_TEXTURE:
+		case D3D_SIT_STRUCTURED:
+		case D3D_SIT_BYTEADDRESS:
+		{
+			nSrvs = (std::max)(nSrvs, static_cast<int>(shaderInputDesc.BindPoint));
+			D3D11ShaderDesc::BoundResourceDesc bindResourceDesc;
+			bindResourceDesc.name = shaderInputDesc.Name;
+			bindResourceDesc.type = static_cast<uint8>(shaderInputDesc.Type);
+			bindResourceDesc.bind_point = static_cast<uint16>(shaderInputDesc.BindPoint);
+			bindResourceDesc.dimension = static_cast<uint8>(shaderInputDesc.Dimension);
+			desc.res_desc.push_back(bindResourceDesc);
+			break;
+
+		}
+		case D3D_SIT_UAV_RWTYPED:
+		case D3D_SIT_UAV_RWSTRUCTURED:
+		case D3D_SIT_UAV_RWBYTEADDRESS:
+		case D3D_SIT_UAV_APPEND_STRUCTURED:
+		case D3D_SIT_UAV_CONSUME_STRUCTURED:
+		case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+		{
+			nUavs = (std::max)(nUavs, static_cast<int>(shaderInputDesc.BindPoint));
+			D3D11ShaderDesc::BoundResourceDesc bindResourceDesc;
+			bindResourceDesc.name = shaderInputDesc.Name;
+			bindResourceDesc.type = static_cast<uint8>(shaderInputDesc.Type);
+			bindResourceDesc.bind_point = static_cast<uint16>(shaderInputDesc.BindPoint);
+			bindResourceDesc.dimension = static_cast<uint8>(shaderInputDesc.Dimension);
+			desc.res_desc.push_back(bindResourceDesc);
+			break;
+		}
 		}
 	}
 	desc.num_samplers = static_cast<uint16>(nSamplers + 1);
 	desc.num_srvs = static_cast<uint16>(nSrvs + 1);
 	desc.num_uavs = static_cast<uint16>(nUavs + 1);
 
+	//todo if it is vertex shader then 
 	//get the input parameters
 	m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
 	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)

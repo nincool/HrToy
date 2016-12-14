@@ -2,12 +2,14 @@
 
 using namespace Hr;
 
-HrTexture::HrTexture()
+HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality):
+	m_textureType(texType), m_nSampleCount(nSampleCount), m_nSampleQuality(nSampleQuality)
 {
-
 }
 
 HrTexture::~HrTexture()
 {
 
 }
+
+
