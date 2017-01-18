@@ -18,7 +18,7 @@ namespace Hr
 
 		void InitResourceManager();
 		
-		HrResource* LoadResource(const std::string& strFile);
+		HrResource* LoadResource(const std::string& strFile, HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN);
 
 		HrResource* GetResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResource* GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
@@ -34,6 +34,9 @@ namespace Hr
 		HrResource* AddEffectResource(const std::string& strFile);
 		HrResource* AddMeshResource(const std::string& strFile);
 		HrResource* AddMaterialResource(const std::string& strFile);
+		HrResource* AddTextureResource(const std::string& strFile);
+
+		HrMaterial* GetDefaultMaterial();
 	protected:
 
 		void CreateBuildInEffects();
@@ -42,12 +45,14 @@ namespace Hr
 
 		HrResource* GetMesh(const std::string& strMeshName);
 		HrResource* GetEffect(const std::string& strEffectName);
+		HrResource* GetMaterial(const std::string& strMaterialName);
 
 		void ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes);
 	protected:
 		std::unordered_map<size_t, HrResource*> m_mapPrefebModels;
 		std::unordered_map<size_t, HrResource*> m_mapMesh;
 		std::unordered_map<size_t, HrResource*> m_mapMaterials;
+		std::unordered_map<size_t, HrResource*> m_mapTextures;
 		
 		std::unordered_map<size_t, HrResource*> m_mapRenderEffects;
 	};

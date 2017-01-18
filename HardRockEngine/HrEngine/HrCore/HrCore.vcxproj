@@ -93,7 +93,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>HrOISD.lib;HrMathD.lib;libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>HrOISD.lib;HrMathD.lib;libfbxsdk-md.lib;FreeImageD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);..\ThirdParty\FBXSDK\lib\vs2015\x64\debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -138,6 +138,7 @@
     <ClInclude Include="Include\Asset\HrResourceManager.h" />
     <ClInclude Include="Include\Asset\HrShaderCompiler.h" />
     <ClInclude Include="Include\Asset\HrStreamData.h" />
+    <ClInclude Include="Include\Asset\HrTexture.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
     <ClInclude Include="Include\Config\HrContextConfig.h" />
@@ -146,6 +147,8 @@
     <ClInclude Include="Include\Event\HrEventKeyboard.h" />
     <ClInclude Include="Include\Event\HrEventListener.h" />
     <ClInclude Include="Include\Event\HrEventListenerKeyboard.h" />
+    <ClInclude Include="Include\Event\HrEventListenerMouse.h" />
+    <ClInclude Include="Include\Event\HrEventMouse.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrExport.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Include\Render\HrDataFormat.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
+    <ClInclude Include="Include\Render\HrSamplerState.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
@@ -201,6 +205,7 @@
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp" />
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
+    <ClCompile Include="Source\Asset\HrTexture.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
@@ -209,6 +214,8 @@
     <ClCompile Include="Source\Event\HrEventKeyboard.cpp" />
     <ClCompile Include="Source\Event\HrEventListener.cpp" />
     <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp" />
+    <ClCompile Include="Source\Event\HrEventListenerMouse.cpp" />
+    <ClCompile Include="Source\Event\HrEventMouse.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
     <ClCompile Include="Source\Kernel\HrExport.cpp" />
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp" />
@@ -227,6 +234,7 @@
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
+    <ClCompile Include="Source\Render\HrSamplerState.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp" />
     <ClCompile Include="Source\Render\HrRenderTarget.cpp" />

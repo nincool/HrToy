@@ -10,19 +10,6 @@
 
 namespace Hr
 {
-	struct D3D11ShaderParameterHandle
-	{
-		uint32_t shader_type;
-
-		D3D_SHADER_VARIABLE_TYPE param_type;
-
-		uint32_t cbuff;
-
-		uint32_t offset;
-		uint32_t elements;
-		uint8_t rows;
-		uint8_t columns;
-	};
 
 	struct D3D11ShaderDesc
 	{
@@ -70,6 +57,7 @@ namespace Hr
 		struct BoundResourceDesc
 		{
 			std::string name;
+			size_t name_hash;
 			uint8_t type;
 			uint8_t dimension;
 			uint16_t bind_point;

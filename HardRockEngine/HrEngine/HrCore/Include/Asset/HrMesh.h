@@ -15,9 +15,13 @@ namespace Hr
 		HrRenderLayout* GetRenderLayout() const;
 		void SetMaterial(HrMaterial* pMaterial);
 		HrMaterial* GetMaterial() const;
+
+		void SetTexture(HrTexture* pTexture);
+		HrTexture* GetTexture() const;
 	protected:
 		HrRenderLayout* m_pRenderLayout;
 		HrMaterial* m_pMaterial;
+		HrTexture* m_pTexture;
 	};
 
 	class HrMesh : public HrResource

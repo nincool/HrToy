@@ -13,10 +13,18 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrRenderTechnique* GetTechnique(std::string strTechniqueName);
+		HrRenderTechnique* GetTechnique(const std::string& strTechniqueName);
+
+		HrRenderEffectParameter* GetParameterByName(const std::string& strParamName);
+		HrRenderEffectStructParameter* GetStructParameterByName(const std::string& strStructName);
+
+
+		void UpdateAutoEffectParams(HrRenderFrameParameters& renderFrameParameters);
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
+
+		void UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters);
 
 	private:
 		size_t m_nHashName;

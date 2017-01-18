@@ -6,6 +6,7 @@
 #include "HrCore/Include/Asset/HrPrefebModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 
 using namespace Hr;
 
@@ -63,6 +64,19 @@ void HrSkinnedMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParam
 		if (pMaterial != nullptr)
 		{
 			renderFrameParameters.SetCurrentMaterial(pMaterial);
+		}
+	}
+}
+
+void HrSkinnedMeshRenderable::UpdateEffectParametersImpl()
+{
+	if (m_pSubMesh != nullptr)
+	{
+		if (m_pSubMesh->GetTexture() != nullptr)
+		{
+			HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
+			if (pTexParam != nullptr)
+				*pTexParam = m_pSubMesh->GetTexture();
 		}
 	}
 }

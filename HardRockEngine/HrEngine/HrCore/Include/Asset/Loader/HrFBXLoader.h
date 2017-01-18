@@ -12,6 +12,7 @@ namespace fbxsdk
 	class FbxDocument;
 	class FbxNode;
 	class FbxMesh;
+	class FbxAMatrix;
 }
 
 namespace Hr
@@ -25,28 +26,43 @@ namespace Hr
 		void Load(std::string& strFile, HrModelDescInfo& modelDesc);
 
 	private:
-		void InitializeSDKObjects(fbxsdk::FbxManager*& pManager, fbxsdk::FbxScene*& pScene);
-		void DestroySdkObjects(fbxsdk::FbxManager* pManager, bool pExitStatus);
+		void InitializeSDKObjects();
+		void DestroySdkObjects(bool pExitStatus);
 
-		bool LoadScene(fbxsdk::FbxManager* pManager, fbxsdk::FbxDocument* pScene, const char* pFilename);
+		bool LoadScene(const char* pFilename);
 
-		void ParseFBXSdkScene(fbxsdk::FbxScene* pScene, HrModelDescInfo& modelDesc);
+		void ParseFBXSdkScene(HrModelDescInfo& modelDesc);
 		
 		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
 
 		void ReadMesh(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
 
-		void ReadVertexPos(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecPrimaryPosition, std::vector<Vector3>& vecVertexPosition);
-		void ReadIndice(fbxsdk::FbxMesh* pMesh, std::vector<uint16>& vecIndices);
-		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, std::vector<Vector3>& vecVertexNormal);
-		void ReadColor(fbxsdk::FbxMesh* pMesh, std::vector<float4>& vecColor);
-		void ReadMaterial(fbxsdk::FbxMesh* pMesh, std::vector<HrModelDescInfo::HrMaterialInfo>& vecMaterialInfo);
-		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, std::map<int, std::vector<int> >& mapMateialIndexMapIndiceInfo, std::vector<HrModelDescInfo::HrSubMeshInfo>& vecSubMeshInfo);
-		
-		void CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo);
+		/**
+		* Compute the global matrix for Fbx Node
+		*
+		* @param Node	Fbx Node
+		* @return KFbxXMatrix*	The global transform matrix
+		*/
+		fbxsdk::FbxAMatrix ComputeTotalMatrix(fbxsdk::FbxNode* pNode);
+		/**
+		* Check if there are negative scale in the transform matrix and its number is odd.
+		* @return bool True if there are negative scale and its number is 1 or 3.
+		*/
+		bool IsOddNegativeScale(const fbxsdk::FbxAMatrix& TotalMatrix);
 
-		void BuildSubMeshInfo(HrModelDescInfo::HrMeshInfo& modelDesc);
+		void ReadVertexPos(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrix, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrixForNormal, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		void ReadVertexColor(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		void ReadVertexUV(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		void ReadMaterial(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh);
+		
+		//void CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo);
+
+		//void BuildSubMeshInfo(HrModelDescInfo::HrMeshInfo& modelDesc);
 	private:
+		fbxsdk::FbxManager* m_pFbxManager;
+		fbxsdk::FbxScene* m_pScene;
 	};
 }
 

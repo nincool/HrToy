@@ -6,7 +6,7 @@
 #include "HrUtilTools/Include/HrUtil.h"
 
 
-namespace Hr
+; namespace Hr
 {
 	class HrVertexElement 
 	{

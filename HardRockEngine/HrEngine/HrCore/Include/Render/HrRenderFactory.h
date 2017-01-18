@@ -2,6 +2,7 @@
 #define _I_RENDERFACTORY_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Asset/HrTexture.h"
 
 namespace Hr
 {
@@ -25,6 +26,12 @@ namespace Hr
 		virtual HrShader* CreateShader() = 0;
 		
 		virtual HrShaderCompilerPtr CreateShaderCompiler() = 0;
+
+		virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+			, uint32 nSampleCount
+			, uint32 nSampleQuality) = 0;
+
+		virtual HrSamplerState* CreateSamplerState() = 0;
 	};
 }
 

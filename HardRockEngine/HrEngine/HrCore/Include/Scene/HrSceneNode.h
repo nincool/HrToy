@@ -24,9 +24,10 @@ namespace Hr
 
 		void AttachRenderable(HrRenderable* pRenderable);
 		
+		void SetParent(HrSceneNode* pParent) { m_pParent = pParent; }
 		HrSceneNode* GetParent() { return m_pParent; }
 		HrRenderable* GetRenderable() { return m_pRenderable; }
-		HrTransform* GetTransfrom() { return m_pTransform; }
+		HrTransform* GetTransform() { return m_pTransform; }
 
 		void AddChild(HrSceneNode* pSceneNode);
 		void RemoveChildren();

@@ -9,17 +9,18 @@ namespace Hr
 	{
 	public:
 		HrStaticMeshRenderable();
-		HrStaticMeshRenderable(HrMesh* pMesh, HrMaterial* pMaterial);
+		HrStaticMeshRenderable(HrSubMesh* pSubMesh, HrMaterial* pMaterial);
 		~HrStaticMeshRenderable();
 
 		virtual HrRenderLayout* GetRenderLayout() override;
 
-		void SetMesh(HrMesh* pMesh) { m_pMesh = pMesh; }
+		void SetSubMesh(HrSubMesh* pMesh) { m_pSubMesh = pMesh; }
 		void SetMaterial(HrMaterial* pMaterial) { m_pMaterial = pMaterial; }
 	protected:
 		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override;
+		virtual void UpdateEffectParametersImpl() override;
 	protected:
-		HrMesh* m_pMesh;
+		HrSubMesh* m_pSubMesh;
 		HrMaterial* m_pMaterial;
 	};
 }

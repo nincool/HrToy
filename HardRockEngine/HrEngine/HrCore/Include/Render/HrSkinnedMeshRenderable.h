@@ -20,6 +20,7 @@ namespace Hr
 		virtual bool CanRender() override;
 	protected:
 		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) override;
+		virtual void UpdateEffectParametersImpl() override;
 	private:
 		//模型资源
 		HrPrefebModel* m_pPrefebModel;

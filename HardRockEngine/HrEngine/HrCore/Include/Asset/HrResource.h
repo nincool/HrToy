@@ -10,10 +10,10 @@ namespace Hr
 	public:
 		enum EnumResourceType
 		{
+			RT_UNKNOWN,
 			RT_TEXTURE,
 			RT_MESH,
 			RT_EFFECT,
-			RT_SHADER,
 			RT_MATERIAL,
 			RT_MODEL,
 		};
@@ -64,7 +64,7 @@ namespace Hr
 
 		EnumResourceType m_resType;
 
-		//资源是否已经加载
+		//璧勬簮鏄惁宸茬粡鍔犺浇
 		bool m_bLoaded;
 	};
 }

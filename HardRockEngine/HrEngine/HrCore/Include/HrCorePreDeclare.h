@@ -44,6 +44,8 @@ namespace Hr
 	class HrRenderEffectParameter;
 	class HrRenderEffectStructParameter;
 	class HrRenderEffectConstantBuffer;
+	class HrTexture;
+	class HrSamplerState;
 	
 	class HrShader;
 	class HrRenderFrameParameters;
@@ -75,6 +77,8 @@ namespace Hr
 	class HrEvent;
 	class HrEventListenerKeyboard;
 	typedef std::shared_ptr<HrEventListenerKeyboard> HrEventListenerKeyboardPtr;
+	class HrEventListenerMouse;
+	typedef std::shared_ptr<HrEventListenerMouse> HrEventListenerMousePtr;
 	class HrEventListener;
 	typedef std::shared_ptr<HrEventListener> HrEventListenerPtr;
 	class HrEventDispatcher;

@@ -262,6 +262,18 @@
     <ClInclude Include="Include\Asset\HrShaderCompiler.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\HrTexture.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrSamplerState.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventMouse.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event\HrEventListenerMouse.h">
+      <Filter>Include\Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -422,6 +434,18 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\HrShaderCompiler.cpp">
       <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrTexture.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrSamplerState.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventMouse.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventListenerMouse.cpp">
+      <Filter>Source\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

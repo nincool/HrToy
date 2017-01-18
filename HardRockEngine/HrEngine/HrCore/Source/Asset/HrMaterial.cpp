@@ -1,4 +1,5 @@
 #include "Asset/HrMaterial.h"
+#include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
 
@@ -14,7 +15,10 @@ HrMaterial::~HrMaterial()
 
 void HrMaterial::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
-
+	m_strFileName = strFileName;
+	m_strFilePath = strFilePath;
+	m_resType = HrResource::RT_MATERIAL;
+	m_nHashID = HrHashValue(strFilePath);
 }
 
 bool HrMaterial::LoadImpl()

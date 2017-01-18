@@ -42,6 +42,7 @@ HrSceneNode::~HrSceneNode()
 void HrSceneNode::AttachRenderable(HrRenderable* pRenderable)
 {
 	m_pRenderable = pRenderable;
+	m_pRenderable->AttachSceneNode(this);
 }
 
 void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
@@ -58,6 +59,7 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 		HrDirector::Instance()->GetRenderTarget()->AddViewPort(pViewPort);
 	}
 
+	pSceneNode->SetParent(this);
 	m_vecChildNode.push_back(pSceneNode);
 }
 
@@ -98,5 +100,9 @@ void HrSceneNode::UpdateRenderParamData(HrRenderFrameParameters& renderFramePara
 void HrSceneNode::DirtyTransform()
 {
 	m_bDirtyTransform = true;
+	for (auto& itemChild : m_vecChildNode)
+	{
+		itemChild->GetTransform()->DirtyTransform();
+	}
 }
 

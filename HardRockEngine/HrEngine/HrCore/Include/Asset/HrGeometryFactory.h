@@ -2,9 +2,29 @@
 #define _HR_GEOMETRYFACTORY_H_
 
 #include "HrCore/Include/Render/HrStaticMeshRenderable.h"
+#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
 
 namespace Hr
 {
+	class HrGeometryPlane : public HrStaticMeshRenderable
+	{
+	public:
+		struct Vertex
+		{
+			float3 position;
+			float3 normal;
+			float2 uv;
+		};
+
+		HrGeometryPlane();
+		~HrGeometryPlane();
+
+	private:
+		void GetBuildInPlaneMesh();
+		void CreateBoxStaticMesh(HrMesh* pMesh);
+
+	};
+
 	class HrGeometryBox : public HrStaticMeshRenderable
 	{
 	public:
@@ -12,7 +32,7 @@ namespace Hr
 		{
 			float3 position;
 			float3 normal;
-			float4 color;
+			float2 uv;
 		};
 
 		HrGeometryBox();

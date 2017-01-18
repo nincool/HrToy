@@ -3,6 +3,7 @@
 #include "Kernel/HrDirector.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrGraphicsBuffer.h"
+#include "Render/HrSamplerState.h"
 
 using namespace Hr;
 
@@ -243,6 +244,18 @@ HrRenderVariable& HrRenderVariable::operator=(std::vector<float4x4> const & /*va
 	return *this;
 }
 
+HrRenderVariable& HrRenderVariable::operator=(const HrTexture* pTexture)
+{
+	BOOST_ASSERT(false);
+	return *this;
+}
+
+HrRenderVariable& HrRenderVariable::operator=(const HrSamplerState* pSamplerState)
+{
+	BOOST_ASSERT(false);
+	return *this;
+}
+
 void HrRenderVariable::Value(bool& /*value*/) const
 {
 	BOOST_ASSERT(false);
@@ -413,6 +426,16 @@ void HrRenderVariable::Value(std::vector<float4x4>& /*value*/) const
 	BOOST_ASSERT(false);
 }
 
+void HrRenderVariable::Value(HrTexture*& val) const
+{
+	BOOST_ASSERT(false);
+}
+
+void HrRenderVariable::Value(HrSamplerState*& val) const
+{
+	BOOST_ASSERT(false);
+}
+
 void HrRenderVariable::BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride)
 {
 	HR_UNUSED(cbuff);
@@ -443,6 +466,50 @@ void HrRenderVariableFloat4x4::Value(float4x4& val) const
 	val = HrMath::Transpose(val);
 }
 
+/////////////////////////////////= HrRenderVariableTexture =/////////////////////////////////////
+HrRenderVariableTexture::HrRenderVariableTexture() : m_pTexture(nullptr)
+{
+
+}
+
+HrRenderVariableTexture::~HrRenderVariableTexture()
+{
+
+}
+
+HrRenderVariable& HrRenderVariableTexture::operator=(const HrTexture* pTexture)
+{
+	m_pTexture = const_cast<HrTexture*>(pTexture);
+	return *this;
+}
+
+void HrRenderVariableTexture::Value(HrTexture*& val) const
+{
+	val = m_pTexture;
+}
+
+////////////////////////////////= HrRenderVarialbeSampler=////////////////////////////////////////
+HrRenderVariableSamplerState::HrRenderVariableSamplerState()
+{
+	//TODO!!!!!!!!!!!!!!!!!
+	m_pSamplerState = HrDirector::Instance()->GetRenderFactory()->CreateSamplerState();
+}
+
+HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
+{
+
+}
+
+HrRenderVariable& HrRenderVariableSamplerState::operator=(const HrSamplerState* pSamplerState)
+{
+	return *this;
+}
+
+void HrRenderVariableSamplerState::Value(HrSamplerState*& val) const
+{
+	val = m_pSamplerState;
+}
+
 ///////////////////////////////////////////
 //
 //
@@ -451,6 +518,7 @@ void HrRenderVariableFloat4x4::Value(float4x4& val) const
 HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName)
 {
 	m_paramType = RPT_UNKNOWN;
+	m_bindType = REPBT_UNKNOWN;
 	m_pRenderVariable = nullptr;
 	m_pBindConstBuffer = nullptr;
 	m_nStride = 0;
@@ -465,10 +533,11 @@ HrRenderEffectParameter::~HrRenderEffectParameter()
 	SAFE_DELETE(m_pRenderVariable);
 }
 
-void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, uint32 nStride, uint32 nArraySize)
+void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, EnumRenderEffectParamBindType bindType, uint32 nStride, uint32 nArraySize)
 {
 	m_paramType = paramType;
 	m_dataType = dataType;
+	m_bindType = bindType;
 	
 	m_nArraySize = m_nArraySize <= 0 ? 1 : m_nArraySize;
 	if (m_pRenderVariable != nullptr)
@@ -500,6 +569,32 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT3 && m_nArraySize == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3();
+		break;
+	}
+	case RPT_TEXTURE:
+	{
+		switch (dataType)
+		{
+		case REDT_TEXTURE2D:
+		{
+			m_pRenderVariable = HR_NEW HrRenderVariableTexture();
+			break;
+		}
+		}
+		break;
+	}
+	case RPT_SAMPLER:
+	{
+		switch (dataType)
+		{
+		case REDT_SAMPLER2D:
+		{
+			m_pRenderVariable = HR_NEW HrRenderVariableSamplerState();
+			break;
+		}
+		default:
+			break;
+		}
 		break;
 	}
 	default:

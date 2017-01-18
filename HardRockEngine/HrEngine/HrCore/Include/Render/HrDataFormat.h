@@ -3,7 +3,7 @@
 
 namespace Hr
 {
-	enum PixelFormat
+	enum EnumPixelFormat
 	{
 		/// Unknown pixel format.
 		PF_UNKNOWN = 0,

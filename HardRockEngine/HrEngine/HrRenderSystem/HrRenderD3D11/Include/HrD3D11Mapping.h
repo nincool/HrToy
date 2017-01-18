@@ -21,7 +21,6 @@ namespace Hr
 		//索引缓存格式
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
-		//static EnumRenderParamType GetRenderParamType(const std::string& strName);
 		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
 		static uint32 GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType);
 
@@ -30,6 +29,8 @@ namespace Hr
 		static D3D11_BIND_FLAG GetGraphicsBindFlag(HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag);
 
 		static D3D11_MAP GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag);
+		//图形像素格式
+		static DXGI_FORMAT GetPixelFormat(EnumPixelFormat pixelFormat);
 	
 	};
 }

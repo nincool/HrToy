@@ -33,6 +33,16 @@ HrMaterial* HrSubMesh::GetMaterial() const
 	return m_pMaterial;
 }
 
+void HrSubMesh::SetTexture(HrTexture* pTexture)
+{
+	m_pTexture = pTexture;
+}
+
+HrTexture* HrSubMesh::GetTexture() const
+{
+	return m_pTexture;
+}
+
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////

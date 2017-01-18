@@ -2,6 +2,7 @@
 #include "Asset/HrMesh.h"
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrRenderEffect.h"
+#include "Asset/HrTexture.h"
 #include "Render/HrVertex.h"
 #include "Render/HrGraphicsBuffer.h"
 #include "Render/HrRenderLayout.h"
@@ -10,6 +11,30 @@
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
+
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+HrGeometryPlane::HrGeometryPlane()
+{
+
+}
+
+HrGeometryPlane::~HrGeometryPlane()
+{
+
+}
+
+void HrGeometryPlane::GetBuildInPlaneMesh()
+{
+
+}
+
+void HrGeometryPlane::CreateBoxStaticMesh(HrMesh* pMesh)
+{
+
+}
 
 ////////////////////////////////////
 //HrGeometryBox
@@ -31,7 +56,6 @@ void HrGeometryBox::GetBuildInBoxMesh()
 	{
 		CreateBoxStaticMesh(pBoxMesh);
 	}
-	m_pMesh = pBoxMesh;
 }
 
 void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
@@ -39,45 +63,94 @@ void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 	m_pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("HrLambert.effectxml", HrResource::RT_EFFECT));
 	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
 
-	Vertex vertices[8] =
+	//Vertex vertices[8] =
+	//{
+	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f)},
+	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
+	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+	//	{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
+	//	{ float3(-10.0f, -10.0f, 10.0f), float3::Zero(), float2::Zero() },
+	//	{ float3(-10.0f, 10.0f, 10.0f), float3::Zero(), float2::Zero() },
+	//	{ float3(10.0f, 10.0f, 10.0f), float3::Zero(), float2::Zero() },
+	//	{ float3(10.0f, -10.0f, 10.0f), float3::Zero(), float2::Zero() },
+	//};
+
+	Vertex vertices[6] =
 	{
-		{ float3(-1.0f, -1.0f, 4.0f),  float3::Zero() },
-		{ float3(-1.0f, 1.0f, 4.0f), float3::Zero() },
-		{ float3(1.0f, 1.0f, 4.0f), float3::Zero() },
-		{ float3(1.0f, -1.0f, 4.0f), float3::Zero() },
-		{ float3(-1.0f, -1.0f, 5.0f), float3::Zero() },
-		{ float3(-1.0f, 1.0f, 5.0f), float3::Zero() },
-		{ float3(1.0f, 1.0f, 5.0f), float3::Zero() },
-		{ float3(1.0f, -1.0f, 5.0f), float3::Zero() }
+		{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f)},
+		{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
+		{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+
+
+		{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+		{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
+		{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+
 	};
 
-	uint16 indices[] =
-	{
-		0, 1, 2, 0, 2, 3,
-		4, 5, 1, 4, 1, 0,
-		7, 6, 5, 7, 5, 4,
-		3, 2, 6, 3, 6, 7,
-		1, 5, 6, 1, 6, 2,
-		4, 0, 3, 4, 3, 7
-	};
+	//Vertex vertices[6] =
+	//{
+	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
+	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
 
-	ComputeNormal(vertices, HR_ARRAY_SIZE(vertices), indices, HR_ARRAY_SIZE(indices));
+	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+	//	{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
+	//};
 
+	//Vertex vertices[3] =
+	//{
+	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
+	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
 
-	HrVertexElement vertexElementArr[] = {
-		HrVertexElement(VEU_POSITION, VET_FLOAT3),
-		HrVertexElement(VEU_NORMAL, VET_FLOAT3),
-		HrVertexElement(VEU_COLOR, VET_FLOAT4)
-	};
-
-	//pMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
-	//	, sizeof(vertices)
-	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-	//	, vertexElementArr
-	//	, HR_ARRAY_SIZE(vertexElementArr));
+		//{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+		//{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+		//{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
+	//};
+	//
 
 
-	//pMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+	//uint16 indices[] =
+	//{
+	//	0, 1, 2, 0, 2, 3,
+	//	4, 5, 1, 4, 1, 0,
+	//	7, 6, 5, 7, 5, 4,
+	//	3, 2, 6, 3, 6, 7,
+	//	1, 5, 6, 1, 6, 2,
+	//	4, 0, 3, 4, 3, 7
+	//};
+
+	//ComputeNormal(vertices, HR_ARRAY_SIZE(vertices), indices, HR_ARRAY_SIZE(indices));
+
+
+	//HrVertexElement vertexElementArr[] = {
+	//	HrVertexElement(VEU_POSITION, VET_FLOAT3),
+	//	HrVertexElement(VEU_NORMAL, VET_FLOAT3),
+	//	HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2)
+	//};
+	std::vector<HrVertexElement> vecVertexElemet;
+	vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
+
+	
+	
+	HrSubMesh* pSubMesh = pMesh->AddSubMesh();
+
+	pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
+		, sizeof(vertices)
+		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+		, vecVertexElemet);
+	//pSubMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
+
+	pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	std::string strFilePath = "E:\\Workspace\\HrGitHub\\HrEngineOld\\HardRockEngine\\Bin_Win\\Media\\Model\\tests\\0001.dds";
+	HrTexture* pRes = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strFilePath, HrResource::RT_TEXTURE));
+	pSubMesh->SetTexture(pRes);
+
+	m_pSubMesh = pSubMesh;
 }
 
 void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)
@@ -110,9 +183,6 @@ void HrGeometryBox::ComputeNormal(Vertex* pVertex, size_t nVertexNum, uint16* pI
 	}
 }
 
-///////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////
 //
@@ -135,3 +205,4 @@ HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 
 
 	return pSceneNode;
 }
+

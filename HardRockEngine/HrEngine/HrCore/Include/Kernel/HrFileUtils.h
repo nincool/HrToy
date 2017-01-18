@@ -27,6 +27,10 @@ namespace Hr
 
 		std::string ReplaceFileName(const std::string& strFile, const std::string& strName) const;
 
+		std::string GetFilePath(const std::string& strFile) const;
+
+		std::string GetFileName(const std::string& strFile) const;
+
 		HrStreamDataPtr GetFileData(const std::string& strFile);
 
 		void AddSearchPath(const std::string& strPath);

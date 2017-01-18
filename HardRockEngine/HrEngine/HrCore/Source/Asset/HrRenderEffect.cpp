@@ -2,6 +2,7 @@
 #include "Asset/HrResourceLoader.h"
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrShaderCompiler.h"
+#include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderFactory.h"
@@ -57,20 +58,6 @@ void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::
 	m_resType = HrResource::RT_EFFECT;
 
 	m_nHashID = HrHashValue(m_strFilePath);
-}
-
-HrRenderTechnique* HrRenderEffect::GetTechnique(std::string strTechniqueName)
-{
-	size_t const nHashName = HrHashValue(strTechniqueName);
-	for (const auto& item : m_vecRenderTechnique)
-	{
-		if (item->GetHashName() == nHashName)
-		{
-			return item;
-		}
-	}
-
-	return nullptr;
 }
 
 bool HrRenderEffect::LoadImpl()
@@ -146,14 +133,10 @@ bool HrRenderEffect::LoadImpl()
 		}
 	}
 
+
 	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
 	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecVertexShaders);
 	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
-
-	for (auto itemTech : m_vecRenderTechnique)
-	{
-		itemTech->CollectShaderParameters();
-	}
 
 	return true;
 }
@@ -163,4 +146,138 @@ bool HrRenderEffect::UnloadImpl()
 	return true;
 }
 
+void HrRenderEffect::UpdateAutoEffectParams(HrRenderFrameParameters& renderFrameParameters)
+{
+	for (auto& item : m_vecRenderEffectStruct)
+	{
+		for (uint32 nIndex = 0; nIndex < item->ElementNum(); ++nIndex)
+		{
+			UpdateOneEffectParameter(*(item->ParameterByIndex(nIndex)), renderFrameParameters);
+		}
+	}
+	for (auto& item : m_vecRenderEffectParameter)
+	{
+		UpdateOneEffectParameter(*item, renderFrameParameters);
+	}
+
+	for (auto& item : m_vecRenderConstantBuffer)
+	{
+		item->UpdateConstantBuffer();
+	}
+
+}
+
+void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters)
+{
+	switch (renderEffectParameter.ParamType())
+	{
+	case RPT_WORLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_INVERSE_WROLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_TRANSPOSE_WORLD_MATRIX:
+	{
+		break;
+	}
+	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
+	{
+		if (renderFrameParameters.InverseTransposeWorldMatrixDirty())
+			renderEffectParameter = renderFrameParameters.GetInverseTransposeWorldMatrix();
+		break;
+	}
+	case RPT_WORLD_VIEW_PROJ_MATRIX:
+	{
+		if (renderFrameParameters.WorldViewProjMatrixDirty())
+			renderEffectParameter = renderFrameParameters.GetWorldViewProjMatrix();
+		break;
+	}
+	case RPT_AMBIENT_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::White.Value();
+		break;
+	}
+	case RPT_DIFFUSE_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::White.Value();
+		break;
+	}
+	case RPT_SPECULAR_LIGHT_COLOR:
+	{
+		renderEffectParameter = HrColor::White.Value();
+		break;
+	}
+	case RPT_LIGHT_DIRECTION:
+	{
+		renderEffectParameter = float3(-1.0, -1.0, -1.0);
+		break;
+	}
+	case RPT_AMBIENT_MATERIAL_COLOR:
+	{
+		renderEffectParameter = renderFrameParameters.GetMaterialAmbient();
+		break;
+	}
+	case RPT_DIFFUSE_MATERIAL_COLOR:
+	{
+		renderEffectParameter = renderFrameParameters.GetMaterialDiffuse();
+		break;
+	}
+	case RPT_SPECULAR_MATERIAL_COLOR:
+	{
+		renderEffectParameter = renderFrameParameters.GetMaterialSpecualr();
+		break;
+	}
+	case RPT_REFLECT_MATERIAL_COLOR:
+	{
+		renderEffectParameter = renderFrameParameters.GetMaterialSpecualr();
+		break;
+	}
+	default:
+		break;
+	}
+
+}
+
+HrRenderTechnique* HrRenderEffect::GetTechnique(const std::string& strTechniqueName)
+{
+	size_t const nHashName = HrHashValue(strTechniqueName);
+	for (const auto& item : m_vecRenderTechnique)
+	{
+		if (item->HashName() == nHashName)
+		{
+			return item;
+		}
+	}
+
+	return nullptr;
+}
+
+HrRenderEffectParameter* HrRenderEffect::GetParameterByName(const std::string& strParamName)
+{
+	size_t const nHashName = HrHashValue(strParamName);
+	for (const auto& item : m_vecRenderEffectParameter)
+	{
+		if (item->HashName() == nHashName)
+		{
+			return item;
+		}
+	}
+	return nullptr;
+}
+
+HrRenderEffectStructParameter* HrRenderEffect::GetStructParameterByName(const std::string& strStructName)
+{
+	size_t const nHashName = HrHashValue(strStructName);
+	for (const auto& item : m_vecRenderEffectStruct)
+	{
+		if (item->HashName() == nHashName)
+		{
+			return item;
+		}
+	}
+	return nullptr;
+}
 

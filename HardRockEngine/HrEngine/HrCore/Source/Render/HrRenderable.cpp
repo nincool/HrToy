@@ -3,6 +3,7 @@
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Asset/HrRenderEffect.h"
 #include "Asset/HrMesh.h"
 #include "Kernel/HrDirector.h"
 
@@ -12,6 +13,7 @@ HrRenderable::HrRenderable()
 {	
 	m_pRenderEffect = nullptr;
 	m_pRenderTechnique = nullptr;
+	m_pAttachSceneNode = nullptr;
 }
 
 HrRenderable::~HrRenderable()
@@ -32,8 +34,9 @@ void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFr
 {
 	renderFrameParameters.SetCurrentRenderable(this);
 	UpdateRenderFrameParametersImpl(renderFrameParameters);
+	m_pRenderEffect->UpdateAutoEffectParams(renderFrameParameters);
 
-	m_pRenderTechnique->UpdateEffectParams(renderFrameParameters);
+	UpdateEffectParametersImpl();
 }
 
 uint32 HrRenderable::GetSubRenderableNum() const
@@ -49,4 +52,14 @@ HrRenderable* HrRenderable::GetSubRenderable(uint32 nIndex) const
 bool HrRenderable::CanRender()
 {
 	return true;
+}
+
+void HrRenderable::AttachSceneNode(HrSceneNode* pSceneNode)
+{
+	m_pAttachSceneNode = pSceneNode;
+}
+
+HrSceneNode* HrRenderable::GetSceneNode() const
+{
+	return m_pAttachSceneNode;
 }

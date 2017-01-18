@@ -7,7 +7,10 @@
 #include "HrRenderD3D11/Include/HrD3D11GraphicsBuffer.h"
 #include "HrRenderD3D11/Include/HrD3D11Mapping.h"
 #include "HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
+#include "HrRenderD3D11/Include/HrD3D11Texture.h"
+#include "HrRenderD3D11/Include/HrD3D11SamplerState.h"
 #include "HrUtilTools/Include/HrUtil.h"
+
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -31,6 +34,38 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
 	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11ImmediateContext();
 
+	//汗。。。。
+	m_vecD3D11SRV.clear();
+	m_vecSamplerState.clear();
+	for (size_t i = 0; i < m_vecBindRenderParameter.size(); ++i)
+	{
+		if (m_vecBindRenderParameter[i]->BindType() == HrRenderEffectParameter::REPBT_RESOURCE)
+		{
+			switch (m_vecBindRenderParameter[i]->DataType())
+			{
+			case REDT_TEXTURE2D:
+			{
+				HrTexture* pTex = nullptr;
+				m_vecBindRenderParameter[i]->Value(pTex);
+				HrD3D11Texture2D* pTex2D = CheckPointerCast<HrD3D11Texture2D>(pTex);
+				if (pTex2D != nullptr)
+					m_vecD3D11SRV.push_back(pTex2D->GetD3D11SRV());
+				break;
+			}
+			case REDT_SAMPLER2D:
+			{
+				HrSamplerState* pSampler = nullptr;
+				m_vecBindRenderParameter[i]->Value(pSampler);
+				HrD3D11SamplerState* pSampler2D = CheckPointerCast<HrD3D11SamplerState>(pSampler);
+				if (pSampler2D != nullptr)
+					m_vecSamplerState.push_back(pSampler2D->GetD3D11SamplerState());
+				break;
+			}
+			}
+
+		}
+	}
+
 	switch (m_shaderType)
 	{
 	case HrShader::ST_VERTEX_SHADER:
@@ -39,13 +74,23 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 
 		if (!m_vecD3D11ConstBuffer.empty())
 		{
+			//todo if the rende has binded the buffer, then continue
 			pD3D11ImmediateContext->VSSetConstantBuffers(0, m_vecD3D11ConstBuffer.size(), &m_vecD3D11ConstBuffer[0]);
+			if (!m_vecD3D11SRV.empty())
+				pD3D11ImmediateContext->VSSetShaderResources(0, m_vecD3D11SRV.size(), &m_vecD3D11SRV[0]);
+			if (!m_vecSamplerState.empty())
+				pD3D11ImmediateContext->VSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
+			break;
 		}
 		break;
 	}
 	case HrShader::ST_PIXEL_SHADER:
 	{
 		pD3D11ImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
+		if (!m_vecD3D11SRV.empty())
+			pD3D11ImmediateContext->PSSetShaderResources(0, m_vecD3D11SRV.size(), &m_vecD3D11SRV[0]);
+		if (!m_vecSamplerState.empty())
+			pD3D11ImmediateContext->PSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
 		break;
 	}
 	default:

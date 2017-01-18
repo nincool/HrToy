@@ -55,6 +55,12 @@
     <ClInclude Include="Include\HrD3D11GraphicsBuffer.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrD3D11Texture.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrD3D11SamplerState.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -94,6 +100,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11Texture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11SamplerState.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

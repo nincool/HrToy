@@ -30,6 +30,7 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Event/HrEventKeyboard.h"
+#include "HrCore/Include/Event/HrEventMouse.h"
 #include "HrOIS/includes/OIS.h"
 #include "HrCommon/include/HrSingleton.h"
 
@@ -57,6 +58,7 @@ namespace Hr
 
 	protected:
 		HrEventKeyboard::EnumKeyCode GetKeyCodeMap(OIS::KeyCode keyCode);
+		HrEventMouse::EnumMouseButtonID GetMouseButtonMap(OIS::MouseButtonID mouseID);
 	};
 
     class HrInputManager : 

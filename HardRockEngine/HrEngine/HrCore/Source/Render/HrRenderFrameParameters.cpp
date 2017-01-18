@@ -1,6 +1,8 @@
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrCamera.h"
+#include "Scene/HrSceneNode.h"
+#include "Scene/HrTransform.h"
 #include "Asset/HrMaterial.h"
 
 using namespace Hr;
@@ -26,6 +28,8 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
 {
 	m_pCurrentRenderable = rend;
+
+	m_bWorldMatrixDirty = true;
 	m_bWorldViewProjMatrixDirty = true;
 }
 
@@ -52,9 +56,10 @@ const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 {
 	if (m_bWorldMatrixDirty)
 	{
-		
+		m_bWorldMatrixDirty = false;
+		m_worldMatrix = m_pCurrentRenderable->GetSceneNode()->GetTransform()->GetWorldMatrix();
 	}
-	return Matrix4::Identity();
+	return m_worldMatrix;
 }
 
 const Matrix4& HrRenderFrameParameters::GetInverseWroldMatrix()

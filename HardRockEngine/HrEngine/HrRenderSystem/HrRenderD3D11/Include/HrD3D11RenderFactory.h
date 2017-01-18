@@ -26,6 +26,13 @@ namespace Hr
 		virtual HrShader* CreateShader() override;
 
 		virtual HrShaderCompilerPtr CreateShaderCompiler() override;
+
+		virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+			, uint32 nSampleCount
+			, uint32 nSampleQuality) override;
+
+
+		virtual HrSamplerState* CreateSamplerState() override;
 	};
 }
 

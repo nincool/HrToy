@@ -5,6 +5,7 @@
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrMaterial.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
+#include "HrCore/Include/Asset/HrTexture.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrGraphicsBuffer.h"
 #include "HrCore/Include/Render/HrVertex.h"
@@ -37,33 +38,25 @@ void HrModelLoader::Load(std::string& strFile)
 	std::vector<HrVertexElement> vecVertexElement;
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.m_vecMeshInfo.size(); ++nMeshInfoIndex)
+
+	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(strFile));
+	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.meshInfo.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
-		HrModelDescInfo::HrMeshInfo& meshInfo = m_modelDesc.m_vecMeshInfo[nMeshInfoIndex];
+		HrModelDescInfo::HrSubMeshInfo& subMeshInfo = m_modelDesc.meshInfo.vecSubMeshInfo[nMeshInfoIndex];
+		HrStreamData streamVertexBuffer;
+		MakeVertexStream(subMeshInfo, streamVertexBuffer, vecVertexElement);
+		HrSubMesh* pSubMesh = m_pMesh->AddSubMesh();
+		HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
+		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
+		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
 
-		FillEmptyModelInfo(meshInfo);
-
-		//Add Material Res
-		MakeMaterialResource(meshInfo);
-
-		HrMesh* pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(HrFileUtils::Instance()->ReplaceFileName(strFile, meshInfo.strMeshName)));
-		m_vecMesh.push_back(pMesh);
-		for (size_t i = 0; i < meshInfo.m_vecSubMeshInfo.size(); ++i)
-		{
-			HrStreamData streamVertexBuffer;
-			MakeVertexStream(meshInfo.m_vecSubMeshInfo[i], streamVertexBuffer, vecVertexElement);
-
-			HrSubMesh* pSubMesh = pMesh->AddSubMesh();
-			HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
-			pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
-			pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
-			if (meshInfo.m_vecSubMeshInfo[i].m_vecIndice.size() > 0)
-			{
-				pRenderLayout->BindIndexBuffer((const char*)(&meshInfo.m_vecSubMeshInfo[i].m_vecIndice[0]), meshInfo.m_vecSubMeshInfo[i].m_vecIndice.size() * sizeof(meshInfo.m_vecSubMeshInfo[i].m_vecIndice[0]), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
-			}
-			pSubMesh->SetMaterial(m_vecMaterial[meshInfo.m_vecSubMeshInfo[i].nMaterialIndex]);
-		}
+		BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
+		HrMaterial* pMaterial = MakeMaterialResource(subMeshInfo.vecMaterialInfo[0]);
+		std::vector<HrTexture*> vecTextures = std::move(MakeTextureResource(subMeshInfo.vecTextureFileName));
+		pSubMesh->SetMaterial(pMaterial);
+		pSubMesh->SetTexture(vecTextures[0]);
 	}
 }
 
@@ -72,21 +65,33 @@ void HrModelLoader::FillEmptyModelInfo(HrModelDescInfo::HrMeshInfo& meshInfo)
 	HR_UNUSED(meshInfo);
 }
 
-void HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMeshInfo& meshInfo)
+HrMaterial* HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMaterialInfo& materialInfo)
 {
-	for (size_t i = 0; i < meshInfo.m_vecMaterialInfo.size(); ++i)
+	//»»ÏÂMaterialµÄÃû×Ö
+	std::string strFilePath = HrFileUtils::Instance()->GetFilePath(m_strFileName);
+	std::string strFileName = HrFileUtils::Instance()->GetFileName(m_strFileName);
+	materialInfo.strMaterialName = strFilePath + "\\" + strFileName + "-" + materialInfo.strMaterialName;
+	HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(materialInfo.strMaterialName));
+	pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
+	return pMaterial;
+}
+
+std::vector<HrTexture*> HrModelLoader::MakeTextureResource(std::vector<std::string>& vecTextureFile)
+{
+	std::vector<HrTexture*> vecTexture;
+	for (size_t nTexIndex = 0; nTexIndex < vecTextureFile.size(); ++nTexIndex)
 	{
-		HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(HrFileUtils::Instance()->ReplaceFileName(m_strFileName, meshInfo.m_vecMaterialInfo[i].strMaterialName)));
-		HrModelDescInfo::HrMaterialInfo&  matInfo = meshInfo.m_vecMaterialInfo[i];
-		pMaterial->FillMaterialInfo(matInfo.v4Ambient, matInfo.v4Diffuse, matInfo.v4Specular, matInfo.v4Emissive, matInfo.fOpacity);
-		m_vecMaterial.push_back(pMaterial);
-	}
+		std::string strAbsolutePath = HrFileUtils::Instance()->ReplaceFileName(m_strFileName, vecTextureFile[nTexIndex]);
+		HrTexture* pRes = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath, HrResource::RT_TEXTURE));
+		vecTexture.push_back(pRes);
+	} 
+	return vecTexture; 
 }
 
 void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement)
 {
 	//[POSITION,NORMAL,COLOR]
-	for (size_t nIndex = 0; nIndex < subMeshInfo.m_vecPrimaryPos.size(); ++nIndex)
+	for (size_t nIndex = 0; nIndex < subMeshInfo.vecVertexPos.size(); ++nIndex)
 	{
 		for (size_t nEleIndex = 0; nEleIndex < vecVertexElement.size(); ++nEleIndex)
 		{
@@ -94,17 +99,22 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo
 			{
 			case VEU_POSITION:
 			{
-				streamData.AddBuffer((Byte*)(&subMeshInfo.m_vecPrimaryPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)(&subMeshInfo.vecVertexPos[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_NORMAL:
 			{
-				streamData.AddBuffer((Byte*)&(subMeshInfo.m_vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(subMeshInfo.vecNormal[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_COLOR:
 			{
-				streamData.AddBuffer((Byte*)&(subMeshInfo.m_vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(subMeshInfo.vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				break;
+			}
+			case VEU_TEXTURECOORD:
+			{
+				streamData.AddBuffer((Byte*)&(subMeshInfo.vecTexCoord[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			}

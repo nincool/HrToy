@@ -5,6 +5,7 @@
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
+#include "Asset/HrTexture.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
@@ -57,7 +58,12 @@ void HrResourceManager::CreateBuildInMaterial()
 	pMaterial->BuildToDefultMaterial();
 }
 
-HrResource* HrResourceManager::LoadResource(const std::string& strFile)
+HrMaterial* HrResourceManager::GetDefaultMaterial()
+{
+	return static_cast<HrMaterial*>(GetResource(std::string(HR_BUILDIN_RES_PATH) + "DEFAULTMATERIAL", HrResource::RT_MATERIAL));
+}
+
+HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
 	HrResource* pReturnRes = nullptr;
 
@@ -76,6 +82,11 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile)
 			pReturnRes = AddEffectResource(strFullFilePath);
 			pReturnRes->Load();
 		}
+		else if (resType == HrResource::RT_TEXTURE)
+		{
+			pReturnRes = AddTextureResource(strFullFilePath);
+			pReturnRes->Load();
+		}
 	}
 
 	return pReturnRes;
@@ -92,7 +103,7 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	case HrResource::RT_EFFECT:
 		return GetEffect(strFile);
 	case HrResource::RT_MATERIAL:
-		break;
+		return GetMaterial(strFile);
 	case HrResource::RT_MODEL:
 		break;
 	default:
@@ -166,7 +177,7 @@ HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 	size_t nMeshHashID = pMesh->GetHashID();
 	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
 	{
-		return pMesh;
+		return nullptr;
 	}
 	m_mapMesh.insert(std::make_pair(nMeshHashID, pMesh));
 
@@ -182,11 +193,26 @@ HrResource* HrResourceManager::AddMaterialResource(const std::string& strFile)
 	size_t nMaterialID = pMaterial->GetHashID();
 	if (m_mapMaterials.find(nMaterialID) != m_mapMaterials.end())
 	{
-		return pMaterial;
+		return nullptr;
 	}
-	m_mapMesh.insert(std::make_pair(nMaterialID, pMaterial));
+	m_mapMaterials.insert(std::make_pair(nMaterialID, pMaterial));
 
 	return pMaterial;
+}
+
+HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
+{
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
+	HrTexture* pTexture = HrDirector::Instance()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
+	pTexture->DeclareResource(strFileName, strFile);
+	size_t nTextureID = pTexture->GetHashID();
+	if (m_mapMaterials.find(nTextureID) != m_mapMaterials.end())
+	{
+		return nullptr;
+	}
+	m_mapMesh.insert(std::make_pair(nTextureID, pTexture));
+
+	return pTexture;
 }
 
 HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
@@ -204,5 +230,16 @@ HrResource* HrResourceManager::GetEffect(const std::string& strEffectName)
 		return item->second;
 	}
 
+	return nullptr;
+}
+
+HrResource* HrResourceManager::GetMaterial(const std::string& strMaterialName)
+{
+	size_t nHashID = HrHashValue(strMaterialName);
+	auto item = m_mapMaterials.find(nHashID);
+	if (item != m_mapMaterials.end())
+	{
+		return item->second;
+	}
 	return nullptr;
 }

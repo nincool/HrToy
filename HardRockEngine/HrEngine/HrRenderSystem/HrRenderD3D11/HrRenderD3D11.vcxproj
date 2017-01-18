@@ -29,8 +29,10 @@
     <ClInclude Include="Include\HrD3D11RenderLayout.h" />
     <ClInclude Include="Include\HrD3D11RenderPrerequisite.h" />
     <ClInclude Include="Include\HrD3D11RenderWindow.h" />
+    <ClInclude Include="Include\HrD3D11SamplerState.h" />
     <ClInclude Include="Include\HrD3D11Shader.h" />
     <ClInclude Include="Include\HrD3D11ShaderCompiler.h" />
+    <ClInclude Include="Include\HrD3D11Texture.h" />
     <ClInclude Include="Include\HrD3D11VideoMode.h" />
     <ClInclude Include="Include\HrExport.h" />
   </ItemGroup>
@@ -44,8 +46,10 @@
     <ClCompile Include="Source\HrD3D11RenderFactory.cpp" />
     <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />
     <ClCompile Include="Source\HrD3D11RenderWindow.cpp" />
+    <ClCompile Include="Source\HrD3D11SamplerState.cpp" />
     <ClCompile Include="Source\HrD3D11Shader.cpp" />
     <ClCompile Include="Source\HrD3D11ShaderCompiler.cpp" />
+    <ClCompile Include="Source\HrD3D11Texture.cpp" />
     <ClCompile Include="Source\HrD3D11VideoMode.cpp" />
     <ClCompile Include="Source\HrExport.cpp" />
   </ItemGroup>
@@ -143,7 +147,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;HrCoreD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;D3DCompiler.lib;HrCoreD.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

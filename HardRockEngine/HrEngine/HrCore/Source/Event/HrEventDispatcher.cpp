@@ -2,6 +2,7 @@
 #include "Event/HrEventListener.h"
 #include "Event/HrEvent.h"
 #include "Event/HrEventListenerKeyboard.h"
+#include "Event/HrEventListenerMouse.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include <algorithm> 
 
@@ -58,6 +59,10 @@ void HrEventDispatcher::DispatcherEvent(HrEvent* pEvent)
 	{
 		DispatcherKeyBoardEvent(pEvent);
 	}
+	else if (pEvent->GetType() == HrEvent::EnumEventType::MOUSE)
+	{
+		DispatcherMouseEvent(pEvent);
+	}
 }
 
 void HrEventDispatcher::DispatcherKeyBoardEvent(HrEvent* pEvent)
@@ -75,7 +80,15 @@ void HrEventDispatcher::DispatcherKeyBoardEvent(HrEvent* pEvent)
 
 void HrEventDispatcher::DispatcherMouseEvent(HrEvent* pEvent)
 {
-
+	size_t nEventListenerID = HrEventListenerMouse::m_s_nEventListenerMouseHashID;
+	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
+	if (listListenersItem != m_mapEventListener.end())
+	{
+		for (auto& listItem : listListenersItem->second)
+		{
+			listItem->OnEvent(pEvent);
+		}
+	}
 }
 
 size_t HrEventDispatcher::GetListenerID(HrEvent* pEvent)

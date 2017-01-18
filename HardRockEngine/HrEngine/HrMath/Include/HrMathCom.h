@@ -128,6 +128,8 @@ namespace Hr
 			return std::isnan(x);
 		}
 
+		inline bool IsPowerOfTwo(unsigned int n) { return ((n&(n - 1)) == 0); }
+
 		// 2D 向量
 		///////////////////////////////////////////////////////////////////////////////
 		inline float Cross(Vector2 const& lhs, Vector2 const& rhs)
@@ -152,10 +154,25 @@ namespace Hr
 			return KlayGE::MathLib::normalize(lhs);
 		}
 
+		//四元数
+		inline Quaternion Normalize(Quaternion const& lhs)
+		{
+			return KlayGE::MathLib::normalize(lhs);
+		}
+
+		inline Matrix4 ToMatrix(Quaternion const& lhs)
+		{
+			return KlayGE::MathLib::to_matrix(lhs);
+		}
+
+		inline Quaternion RotationQuaternionYawPitchRoll(Vector3 const& angle)
+		{
+			return KlayGE::MathLib::rotation_quat_yaw_pitch_roll(angle);
+		}
+
 		// 4D 矩阵
 		///////////////////////////////////////////////////////////////////////////////
 
-		//Matrix4_T<T> inverse(Matrix4_T<T> const & rhs) KLAYGE_NOEXCEPT;
 		inline Matrix4 Inverse(Matrix4 const& rhs)
 		{
 			return KlayGE::MathLib::inverse(rhs);
@@ -171,12 +188,33 @@ namespace Hr
 			return KlayGE::MathLib::perspective_fov_lh(fov, aspect, nearPlane, farPlane);
 		}
 
-
 		inline Matrix4 Transpose(Matrix4 const & rhs)
 		{
 			return KlayGE::MathLib::transpose(rhs);
 		}
 
+		inline Matrix4 Scaling(Vector3 const& scale)
+		{
+			return KlayGE::MathLib::scaling(scale);
+		}
+
+		inline Matrix4 Translation(Vector3 const& pos)
+		{
+			return KlayGE::MathLib::translation(pos);
+		}
+
+		inline Matrix4 MakeTransform(const Vector3& pos, const Vector3& scale, const Quaternion& orientation)
+		{
+			// Ordering:
+			//    1. Scale
+			//    2. Rotate
+			//    3. Translate
+			Matrix4 matTranslation = Translation(pos);
+			Matrix4 matScale = Scaling(scale);
+			Matrix4 matRotate = ToMatrix(orientation);
+
+			return matScale * matRotate * matTranslation;
+		}
 		// Color
 		///////////////////////////////////////////////////////////////////////////////
 		inline HrColor MakeColor(uint8 r, uint8 g, uint8 b, uint8 a)
@@ -187,3 +225,5 @@ namespace Hr
 }
 
 #endif
+
+

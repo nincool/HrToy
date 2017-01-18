@@ -50,6 +50,8 @@ namespace Hr
 		ID3D11PixelShader* m_pPixelShader;
 
 		std::vector<ID3D11Buffer*> m_vecD3D11ConstBuffer;
+		std::vector<ID3D11ShaderResourceView*> m_vecD3D11SRV;
+		std::vector<ID3D11SamplerState*> m_vecSamplerState;
 	};
 }
 

@@ -2,9 +2,9 @@
 #include "Kernel/HrDirector.h"
 #include "Platform/AppWin32/HrWindowWin.h"
 #include "Event/HrEventKeyboard.h"
+#include "Event/HrEventMouse.h"
 #include "Event/HrEventDispatcher.h"
 #include "HrUtilTools/Include/HrUtil.h"
-
 using namespace Hr;
 
 
@@ -30,18 +30,30 @@ bool HrInputEventListener::keyReleased(const OIS::KeyEvent &arg)
 
 bool HrInputEventListener::mouseMoved(const OIS::MouseEvent &arg)
 {
-
+	float x, y;
+	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrEventMouse event(HrEventMouse::EnumMouseButtonID::MBI_UNKNOW, HrEventMouse::EnumMouseEventFlag::MEF_MOVE, x, y);
+	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
 bool HrInputEventListener::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
-
+	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
+	float x, y;
+	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y);
+	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
 bool HrInputEventListener::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
+	float x, y;
+	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y);
+	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
@@ -168,25 +180,25 @@ HrEventKeyboard::EnumKeyCode HrInputEventListener::GetKeyCodeMap(OIS::KeyCode ke
 	case OIS::KC_CAPITAL:
 		break;
 	case OIS::KC_F1:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F1;
 	case OIS::KC_F2:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F2;
 	case OIS::KC_F3:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F3;
 	case OIS::KC_F4:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F4;
 	case OIS::KC_F5:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F5;
 	case OIS::KC_F6:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F6;
 	case OIS::KC_F7:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F7;
 	case OIS::KC_F8:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F8;
 	case OIS::KC_F9:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F9;
 	case OIS::KC_F10:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_F10;
 	case OIS::KC_NUMLOCK:
 		break;
 	case OIS::KC_SCROLL:
@@ -345,6 +357,32 @@ HrEventKeyboard::EnumKeyCode HrInputEventListener::GetKeyCodeMap(OIS::KeyCode ke
 	return HrEventKeyboard::EnumKeyCode::KEY_0;
 }
 
+HrEventMouse::EnumMouseButtonID HrInputEventListener::GetMouseButtonMap(OIS::MouseButtonID mouseID)
+{
+	switch (mouseID)
+	{
+	case OIS::MB_Left:
+		return HrEventMouse::EnumMouseButtonID::MBI_LEFT;
+	case OIS::MB_Right:
+		return HrEventMouse::EnumMouseButtonID::MBI_RIGHT;
+	case OIS::MB_Middle:
+		return HrEventMouse::EnumMouseButtonID::MBI_MIDDLE;
+	case OIS::MB_Button3:
+		return HrEventMouse::EnumMouseButtonID::MBI_BUTTON3;
+	case OIS::MB_Button4:
+		return HrEventMouse::EnumMouseButtonID::MBI_BUTTON4;
+	case OIS::MB_Button5:
+		return HrEventMouse::EnumMouseButtonID::MBI_BUTTON5;
+	case OIS::MB_Button6:
+		return HrEventMouse::EnumMouseButtonID::MBI_BUTTON6;
+	case OIS::MB_Button7:
+		return HrEventMouse::EnumMouseButtonID::MBI_BUTTON7;
+	default:
+		break;
+	}
+	return HrEventMouse::EnumMouseButtonID::MBI_LEFT;
+}
+
 ///////////////////////////////////////////////////////////////
 //CreateInputSystem
 ///////////////////////////////////////////////////////////////
@@ -355,7 +393,8 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	size_t nWinHandle = (size_t)(StaticPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow())->GetHwnd());
+	HrWindowWinPtr pWin = StaticPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+	size_t nWinHandle = (size_t)(pWin->GetHwnd());
 	winHandleStr << nWinHandle;
 
 	pl.insert(std::make_pair("WINDOW", winHandleStr.str()));
@@ -370,6 +409,10 @@ void HrInputManager::CreateInputSystem()
 	m_pInputManager = OIS::InputManager::createInputSystem(pl);
 	mKeyboard = static_cast<OIS::Keyboard*>(m_pInputManager->createInputObject(OIS::OISKeyboard, true));
 	mMouse = static_cast<OIS::Mouse*>(m_pInputManager->createInputObject(OIS::OISMouse, true));
+
+	mMouse->getMouseState().width = pWin->GetWidth();
+	mMouse->getMouseState().height = pWin->GetHeight();
+	
 
 	mKeyboard->setEventCallback(&m_inputEventListener);
 	mMouse->setEventCallback(&m_inputEventListener);

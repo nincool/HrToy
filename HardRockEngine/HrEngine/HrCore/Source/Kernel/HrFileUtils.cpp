@@ -122,11 +122,49 @@ std::string HrFileUtils::GetFileSuffix(const std::string& strFile) const
 
 std::string HrFileUtils::ReplaceFileName(const std::string& strFile, const std::string& strName) const
 {
-	size_t nFildPos = strFile.rfind(".");
+	size_t nFildPos = strFile.rfind("\\");
 	if (nFildPos == std::string::npos)
 	{
 		return std::string(strFile + "\\" + strName);
 	}
 	return std::string(strFile.substr(0, nFildPos) + "\\" + strName);
+}
+
+std::string HrFileUtils::GetFilePath(const std::string& strFile) const
+{
+	size_t nFilePos = strFile.rfind("\\");
+	if (nFilePos == std::string::npos)
+	{
+		return strFile;
+	}
+	return strFile.substr(0, nFilePos);
+}
+
+std::string HrFileUtils::GetFileName(const std::string& strFile) const
+{
+	size_t nFileNamePos = strFile.rfind("\\");
+	size_t nSuffixPos = strFile.rfind(".");
+	if (nFileNamePos == std::string::npos)
+	{
+		if (nSuffixPos == std::string::npos)
+		{
+			return strFile;
+		}
+		else
+		{
+			return strFile.substr(0, nSuffixPos);
+		}
+	}
+	else
+	{
+		if (nSuffixPos == std::string::npos)
+		{
+			return strFile.substr(nFileNamePos + 1, strFile.size()-nFileNamePos-1);
+		}
+		else
+		{
+			return strFile.substr(nFileNamePos + 1, nSuffixPos - nFileNamePos-1);
+		}
+	}
 }
 

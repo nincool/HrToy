@@ -7,6 +7,8 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11SamplerState.h" 
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -61,5 +63,25 @@ HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
 	HrShaderCompilerPtr pShaderCompiler = MakeSharedPtr<HrD3D11ShaderCompiler>();
 
 	return pShaderCompiler;
+}
+
+HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
+	, uint32 nSampleCount
+	, uint32 nSampleQuality)
+{
+	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetDevice()
+		, HrD3D11Device::Instance()->GetImmediateContext()
+		, texType
+		, nSampleCount
+		, nSampleQuality);
+	return pTexture2D;
+}
+
+HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
+{
+	HrD3D11SamplerState* pSamplerState = HR_NEW HrD3D11SamplerState(HrD3D11Device::Instance()->GetDevice()
+		, HrD3D11Device::Instance()->GetImmediateContext());
+
+	return pSamplerState;
 }
 

@@ -314,3 +314,14 @@ D3D11_MAP HrD3D11Mapping::GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage
 	}
 }
 
+DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
+{
+	switch (pixelFormat)
+	{
+	case PF_B8G8R8A8:
+		return DXGI_FORMAT_B8G8R8A8_UNORM;
+	default:
+		return DXGI_FORMAT_UNKNOWN;
+	}
+}
+
