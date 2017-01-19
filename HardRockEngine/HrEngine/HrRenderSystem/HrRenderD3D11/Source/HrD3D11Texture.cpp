@@ -2,10 +2,7 @@
 #include "HrD3D11Mapping.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 
-#include "ThirdParty/DirectXTK/Inc/DDSTextureLoader.h"
-
 using namespace Hr;
-using namespace DirectX;
 
 HrD3D11Texture::HrD3D11Texture(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pContext, EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality)
 	:HrTexture(texType, nSampleCount, nSampleQuality), m_pD3D11Device(pD3D11Device), m_pImmediateContext(pContext)
