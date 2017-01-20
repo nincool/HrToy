@@ -240,6 +240,7 @@ void HrFBXLoader::ParseFBXSdkNode(FbxNode* pNode, HrModelDescInfo& modelDesc)
 void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 {
 	fbxsdk::FbxMesh* pMesh = (fbxsdk::FbxMesh*)pNode->GetNodeAttribute();
+	pMesh->RemoveBadPolygons();
 
 	if (!pMesh->IsTriangleMesh())
 	{
@@ -269,17 +270,17 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 
 FbxAMatrix HrFBXLoader::ComputeTotalMatrix(fbxsdk::FbxNode* pNode)
 {
-	FbxVector4 vTranslate = pNode->LclTranslation.Get();
-	FbxVector4 vRotation = pNode->LclRotation.Get();
-	FbxVector4 vScaling = pNode->LclScaling.Get();
-
+	FbxVector4 Translation, Rotation, Scaling;
+	Translation = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
+	Rotation = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
+	Scaling = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
 	FbxAMatrix matGeometry;
-	matGeometry.SetTRS(vTranslate, vRotation, vScaling);
+	matGeometry.SetTRS(Translation, Rotation, Scaling);
 	FbxAMatrix& matGlobalTransform = m_pScene->GetAnimationEvaluator()->GetNodeGlobalTransform(pNode);
 
 	FbxAMatrix matTotalMatrix;
 	matTotalMatrix = matGlobalTransform * matGeometry;
-	return matGlobalTransform;
+	return matTotalMatrix;
 }
 
 void HrFBXLoader::ReadVertexPos(fbxsdk::FbxMesh* pMesh, FbxAMatrix& totalMatrix, HrModelDescInfo::HrSubMeshInfo& subMeshInfo)

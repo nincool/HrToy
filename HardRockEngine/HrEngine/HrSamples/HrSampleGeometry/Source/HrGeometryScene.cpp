@@ -34,6 +34,11 @@ void HrGeometryScene::ResetKeyFlag()
 
 	m_bLeftMousePressed = false;
 	m_bRightMousePressed = false;
+
+	m_bKeyLeftPressed = false;
+	m_bKeyRightPressed = false;
+	m_bKeyUpPressed = false;
+	m_bKeyDownPressed = false;
 }
 
 void HrGeometryScene::OnEnter()
@@ -102,6 +107,18 @@ void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent
 	case HrEventKeyboard::EnumKeyCode::KEY_F2:
 		m_bKeyF2Pressed = true;
 		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
+		m_bKeyLeftPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
+		m_bKeyRightPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
+		m_bKeyUpPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
+		m_bKeyDownPressed = true;
+		break;
 	default:
 		break;
 	}
@@ -134,6 +151,18 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEven
 		break;
 	case HrEventKeyboard::EnumKeyCode::KEY_F2:
 		m_bKeyF2Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
+		m_bKeyLeftPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
+		m_bKeyRightPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
+		m_bKeyUpPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
+		m_bKeyDownPressed = false;
 		break;
 	default:
 		break;
@@ -178,6 +207,24 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	else if (m_bKeyF2Pressed)
 	{
 
+	}
+	else if (m_bKeyLeftPressed)
+	{
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
+	}
+	else if (m_bKeyRightPressed)
+	{
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(-HrMath::PI() / 100, 0.0f, 0.0f));
+	}
+	else if (m_bKeyUpPressed)
+	{
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, HrMath::PI() / 100, 0.0f));
+	}
+	else if (m_bKeyDownPressed)
+	{
+		//m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, -HrMath::PI() / 100, 0.0f));
+
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, 0.0f, HrMath::PI() / 100));
 	}
 }
 
@@ -228,12 +275,16 @@ void HrGeometryScene::OnMouseMove(HrEvent* pEvent)
 		if (x - s_floatX > 0)
 		{
 			//m_pSceneMainCamera->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
-			m_pTestSceneNode->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
+			//m_pTestSceneNode->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
+		}
+		else
+		{
+			//m_pTestSceneNode->GetTransform()->Rotate(Vector3(-HrMath::PI() / 100, 0.0f, 0.0f));
 		}
 		
 		if (y - s_floatY)
 		{
-			//m_pSceneMainCamera->GetTransform()->Rotate(Vector3(0.0f, HrMath::PI() / 100, 0.0f));
+			//m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, HrMath::PI() / 100, 0.0f));
 		}
 	}
 

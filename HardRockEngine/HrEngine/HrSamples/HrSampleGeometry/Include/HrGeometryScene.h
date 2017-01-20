@@ -45,6 +45,12 @@ namespace Hr
 		bool m_bLeftMousePressed;
 		bool m_bRightMousePressed;
 
+		bool m_bKeyLeftPressed;
+		bool m_bKeyRightPressed;
+		bool m_bKeyUpPressed;
+		bool m_bKeyDownPressed;
+
+
 	};
 }
 

@@ -304,17 +304,17 @@ HrEventKeyboard::EnumKeyCode HrInputEventListener::GetKeyCodeMap(OIS::KeyCode ke
 	case OIS::KC_HOME:
 		break;
 	case OIS::KC_UP:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_KP_UP;
 	case OIS::KC_PGUP:
 		break;
 	case OIS::KC_LEFT:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT;
 	case OIS::KC_RIGHT:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT;
 	case OIS::KC_END:
 		break;
 	case OIS::KC_DOWN:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN;
 	case OIS::KC_PGDOWN:
 		break;
 	case OIS::KC_INSERT:
