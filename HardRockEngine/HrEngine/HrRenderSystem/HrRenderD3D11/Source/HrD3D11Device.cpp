@@ -18,6 +18,7 @@ HrD3D11Device::HrD3D11Device()
 
 HrD3D11Device::~HrD3D11Device()
 {
+	Release();
 }
 
 bool HrD3D11Device::CreateD3D11Device()
@@ -130,7 +131,10 @@ bool HrD3D11Device::D3D11EnumerateAdapter()
 
 void HrD3D11Device::Release()
 {
-	m_pAdapterList->Release();
+	if (m_pAdapterList)
+	{
+		m_pAdapterList->Release();
+	}
 	SAFE_DELETE(m_pAdapterList);
 	SAFE_RELEASE(m_pD3D11ImmediateContext);
 	SAFE_RELEASE(m_pD3D11Device);

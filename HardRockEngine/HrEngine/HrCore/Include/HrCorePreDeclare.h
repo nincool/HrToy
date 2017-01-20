@@ -86,6 +86,7 @@ namespace Hr
 	
 	class HrScheduler;
 	typedef std::shared_ptr<HrScheduler> HrSchedulerPtr;
+	typedef std::weak_ptr<HrScheduler> HrWeakSchedulerPtr;
 
 	class HrTransform;
 	typedef std::shared_ptr<HrTransform> HrTransformPtr;

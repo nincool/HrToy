@@ -9,9 +9,8 @@ using namespace Hr;
 //HrSchedulerTimer
 /////////////////////////////////////////////////////
 
-HrSchedulerTimer::HrSchedulerTimer(HrSchedulerPtr pScheduler)
+HrSchedulerTimer::HrSchedulerTimer(HrSchedulerPtr pScheduler):m_pScheduler(pScheduler)
 {
-	m_pScheduler = nullptr;
 	m_fElapsed = 0;
 	m_bRunForever = false;
 	m_bUseDelay = false;
@@ -22,12 +21,10 @@ HrSchedulerTimer::HrSchedulerTimer(HrSchedulerPtr pScheduler)
 
 	m_nTargetHashKey = 0;
 	m_nHashKey = 0;
-	m_pScheduler = pScheduler;
 }
 
 HrSchedulerTimer::~HrSchedulerTimer()
 {
-
 }
 
 void HrSchedulerTimer::InitTimer(HrSchedulerFunc callBack, size_t nTargetHashKey, size_t nHashKey, float fInterval, uint32 nTriggerTimes, float fDelay)
@@ -110,7 +107,11 @@ void HrSchedulerTimer::Trigger(float fDelta)
 
 void HrSchedulerTimer::Cancel()
 {
-	m_pScheduler->UnSchedule(m_nTargetHashKey, m_nHashKey);
+	if (!m_pScheduler.expired())
+	{
+		auto& pScheduler = m_pScheduler.lock();
+		pScheduler->UnSchedule(m_nTargetHashKey, m_nHashKey);
+	}
 }
 
 /////////////////////////////////////////////////////
@@ -123,7 +124,7 @@ HrScheduler::HrScheduler()
 
 HrScheduler::~HrScheduler()
 {
-
+	ReleaseSchedulerTimers();
 }
 
 void HrScheduler::Update(float fDetal)

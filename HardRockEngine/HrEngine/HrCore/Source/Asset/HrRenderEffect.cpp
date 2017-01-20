@@ -48,6 +48,15 @@ HrRenderEffect::~HrRenderEffect()
 		SAFE_DELETE(item);
 	}
 	m_vecRenderConstantBuffer.clear();
+
+	for (auto& item : m_vecVertexShaders)
+	{
+		SAFE_DELETE(item);
+	}
+	for (auto& item : m_vecPixelShaders)
+	{
+		SAFE_DELETE(item);
+	}
 }
 
 void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)

@@ -61,7 +61,7 @@ void HrD3D11Render::ClearDepthStencilView()
 	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void HrD3D11Render::Release()
+void HrD3D11Render::ReleaseRenderEngine()
 {
 	HrD3D11Device::Instance()->Release();
 }

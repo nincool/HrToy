@@ -3,8 +3,6 @@
 #include "HrCommon/Include/HrPrerequisite.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 
-//#include "HrMain/Include/HrLog.h"
-
 bool EraseEndStringWithChar(TCHAR* p, TCHAR c)
 {
 	TCHAR* pFlag = _tcsrchr(p, c);
@@ -61,7 +59,6 @@ int main()
 	}
 
 	moduleLoaderApp.HrFreeModule();
-
 	return 0;
 }
 

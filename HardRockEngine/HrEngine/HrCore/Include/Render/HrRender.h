@@ -32,7 +32,7 @@ namespace Hr
 		*	@Param:
 		*	@Return:
 		*/
-		virtual void Release() = 0;
+		virtual void ReleaseRenderEngine() = 0;
 
 		//—ßœ∞≤‚ ‘‰÷»æ”√
 		virtual bool StartRender() = 0;

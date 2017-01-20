@@ -30,7 +30,7 @@ namespace Hr
 		size_t GetHashKey() { return m_nHashKey; }
 
 	protected:
-		HrSchedulerPtr m_pScheduler;
+		HrWeakSchedulerPtr m_pScheduler;
 		float m_fElapsed;
 		bool m_bRunForever;
 		bool m_bUseDelay;

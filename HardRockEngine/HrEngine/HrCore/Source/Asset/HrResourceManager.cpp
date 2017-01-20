@@ -24,10 +24,17 @@ HrResourceManager::HrResourceManager()
 
 HrResourceManager::~HrResourceManager()
 {
+	ReleaseAllResources();
+}
+
+void HrResourceManager::ReleaseAllResources()
+{
 	//todo release assets
 	ReleaseResourceCache(m_mapPrefebModels);
 	ReleaseResourceCache(m_mapMesh);
+	ReleaseResourceCache(m_mapMaterials);
 	ReleaseResourceCache(m_mapRenderEffects);
+
 }
 
 void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes)

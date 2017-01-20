@@ -81,11 +81,11 @@
     <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\..\..\..\..\Bin_Win\HrEngine64D\</OutDir>
+    <IntDir>..\..\..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\..\..\Bin_Win\HrEngine64D\\</OutDir>
+    <OutDir>..\..\..\..\..\Bin_Win\HrEngine64D\</OutDir>
     <IntDir>..\..\..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

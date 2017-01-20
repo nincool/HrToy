@@ -85,10 +85,10 @@
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>.\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\..\..\Bin_Win\HrEngine32D\</OutDir>
+    <IntDir>..\..\..\Intermediate.Dir\$(ProjectName)\$(Configuration)\</IntDir>
     <GenerateManifest>false</GenerateManifest>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\Bin_Win\HrEngine64D\</OutDir>

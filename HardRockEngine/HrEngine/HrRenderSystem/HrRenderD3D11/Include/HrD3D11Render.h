@@ -31,7 +31,7 @@ namespace Hr
 		virtual void Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* pRenderLayout) override;
 		virtual void SwapChain() override;
 
-		virtual void Release() override;
+		virtual void ReleaseRenderEngine() override;
 		virtual bool StartRender() override;
 
 	private:

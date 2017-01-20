@@ -37,6 +37,8 @@ namespace Hr
 		HrResource* AddTextureResource(const std::string& strFile);
 
 		HrMaterial* GetDefaultMaterial();
+
+		void ReleaseAllResources();
 	protected:
 
 		void CreateBuildInEffects();

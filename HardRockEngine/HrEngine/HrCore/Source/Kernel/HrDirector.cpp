@@ -25,7 +25,9 @@ HrDirector::HrDirector()
 
 HrDirector::~HrDirector()
 {
-
+	//内存检测
+	m_pScheduler.reset();
+	m_pSceneManager.reset();
 }
 
 bool HrDirector::Init()
@@ -107,6 +109,7 @@ bool HrDirector::CreateRenderEngine()
 void HrDirector::ReleaseRenderEngine()
 {
 	m_pRenderTarget.reset();
+	m_pRenderEngine->ReleaseRenderEngine();
 	m_pRenderEngine.reset();
 	
 	m_pRenderFactory.reset();
@@ -204,6 +207,8 @@ void HrDirector::End()
 
 void HrDirector::Release()
 {
+	//先释放资源
+	HrSingleTon<HrResourceManager>::Instance()->ReleaseAllResources();
 	ReleaseRenderEngine();
 }
 

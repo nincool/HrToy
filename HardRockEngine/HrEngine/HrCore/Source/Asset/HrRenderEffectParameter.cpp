@@ -497,7 +497,7 @@ HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
 {
-
+	SAFE_DELETE(m_pSamplerState);
 }
 
 HrRenderVariable& HrRenderVariableSamplerState::operator=(const HrSamplerState* pSamplerState)
