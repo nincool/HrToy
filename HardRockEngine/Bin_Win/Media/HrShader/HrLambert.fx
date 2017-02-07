@@ -14,16 +14,26 @@ cbuffer cbPerObject
     Material mat;
 };
 
+//Œ∆¿Ì
+Texture2D g_tex;
+//…Ë÷√π˝¬À
+SamplerState samTex
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+};
+
 struct VertexIn
 {
     float3	pos 	: POSITION;
     float3	normal 	: NORMAL;
+    float2  tex     : TEXCOORD;
 };
 
 struct VertexOut
 {
     float4	posH	: SV_POSITION;
     float4	color	: COLOR;
+    float2 tex : TEXCOORD;
 };
 
 VertexOut VS_Main(VertexIn v)
@@ -37,8 +47,9 @@ VertexOut VS_Main(VertexIn v)
 	float4 fDiffuse = fDiffuseFactor * mat.diffuse_material_color * directLight.diffuse_light_color;
 
     vout.posH = mul(float4(v.pos, 1.f), world_view_proj_matrix);
-    //vout.color = fAmbient + fDiffuse;
-    vout.color = float4(normalDirection, 1.0);
+    vout.color = fAmbient + fDiffuse;
+    vout.tex = v.tex;
+    //vout.color = float4(normalDirection, 1.0);
 	//vout.color = fDiffuseFactor;
 	//vout.color = float4(1.0, fDiffuseFactor, 0.0, 1.0);
 
@@ -47,7 +58,10 @@ VertexOut VS_Main(VertexIn v)
 
 float4 PS_Main(VertexOut pin) :SV_TARGET
 {
-    return pin.color;
+    float4 texColor = g_tex.Sample(samTex, pin.tex);
+    //float4 finalColor = texColor * pin.color;
+    float4 finalColor = float4(pin.tex, 0.0, 1.0);
+    return texColor;
 }
 
 
