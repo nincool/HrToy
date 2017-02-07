@@ -178,6 +178,7 @@
     <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h" />
     <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h" />
     <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h" />
+    <ClInclude Include="Include\Render\HrBlendState.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="Source\Platform\AppWin32\HrApplicationWin.cpp" />
     <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp" />
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp" />
+    <ClCompile Include="Source\Render\HrBlendState.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />

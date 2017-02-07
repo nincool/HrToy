@@ -33,6 +33,8 @@ namespace Hr
 
 
 		virtual HrSamplerState* CreateSamplerState() override;
+
+		virtual HrBlendState* CreateBlendState() override;
 	};
 }
 

@@ -274,6 +274,9 @@
     <ClInclude Include="Include\Event\HrEventListenerMouse.h">
       <Filter>Include\Event</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrBlendState.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -446,6 +449,9 @@
     </ClCompile>
     <ClCompile Include="Source\Event\HrEventListenerMouse.cpp">
       <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrBlendState.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

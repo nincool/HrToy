@@ -32,6 +32,8 @@ namespace Hr
 			, uint32 nSampleQuality) = 0;
 
 		virtual HrSamplerState* CreateSamplerState() = 0;
+
+		virtual HrBlendState* CreateBlendState() = 0;
 	};
 }
 

@@ -9,6 +9,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11SamplerState.h" 
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11BlendState.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -83,5 +84,10 @@ HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
 		, HrD3D11Device::Instance()->GetImmediateContext());
 
 	return pSamplerState;
+}
+
+HrBlendState* HrD3D11RenderFactory::CreateBlendState()
+{
+	//HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState();
 }
 

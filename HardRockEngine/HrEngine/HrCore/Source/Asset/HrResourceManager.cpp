@@ -94,6 +94,11 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResour
 			pReturnRes = AddTextureResource(strFullFilePath);
 			pReturnRes->Load();
 		}
+		else if (resType == HrResource::RT_MATERIAL)
+		{
+			pReturnRes = AddMaterialResource(strFullFilePath);
+			pReturnRes->Load();
+		}
 	}
 
 	return pReturnRes;

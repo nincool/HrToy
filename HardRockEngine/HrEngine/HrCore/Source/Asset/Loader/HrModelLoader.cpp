@@ -71,8 +71,13 @@ HrMaterial* HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMaterialInfo&
 	std::string strFilePath = HrFileUtils::Instance()->GetFilePath(m_strFileName);
 	std::string strFileName = HrFileUtils::Instance()->GetFileName(m_strFileName);
 	materialInfo.strMaterialName = strFilePath + "\\" + strFileName + "-" + materialInfo.strMaterialName;
-	HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(materialInfo.strMaterialName));
-	pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
+	HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
+	if (pMaterial == nullptr)
+	{
+		pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(materialInfo.strMaterialName));
+		pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
+	}
+
 	return pMaterial;
 }
 
@@ -81,9 +86,13 @@ std::vector<HrTexture*> HrModelLoader::MakeTextureResource(std::vector<std::stri
 	std::vector<HrTexture*> vecTexture;
 	for (size_t nTexIndex = 0; nTexIndex < vecTextureFile.size(); ++nTexIndex)
 	{
-		std::string strAbsolutePath = HrFileUtils::Instance()->ReplaceFileName(m_strFileName, vecTextureFile[nTexIndex]);
-		HrTexture* pRes = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath, HrResource::RT_TEXTURE));
-		vecTexture.push_back(pRes);
+		std::string strAbsolutePath = HrFileUtils::Instance()->GetFullPathForFileName(vecTextureFile[nTexIndex]);
+		HrTexture* pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath));
+		if (pTexture == nullptr)
+		{
+			pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath, HrResource::RT_TEXTURE));
+		}
+		vecTexture.push_back(pTexture);
 	} 
 	return vecTexture; 
 }

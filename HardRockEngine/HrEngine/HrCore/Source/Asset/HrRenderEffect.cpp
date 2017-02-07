@@ -21,6 +21,8 @@ using namespace Hr;
 HrRenderEffect::HrRenderEffect()
 {
 	//m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
+	//for testing
+	
 }
 
 HrRenderEffect::~HrRenderEffect()

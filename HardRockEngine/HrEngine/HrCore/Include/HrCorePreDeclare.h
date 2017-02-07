@@ -46,6 +46,7 @@ namespace Hr
 	class HrRenderEffectConstantBuffer;
 	class HrTexture;
 	class HrSamplerState;
+	class HrBlendState;
 	
 	class HrShader;
 	class HrRenderFrameParameters;
