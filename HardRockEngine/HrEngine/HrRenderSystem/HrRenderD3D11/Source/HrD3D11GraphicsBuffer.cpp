@@ -72,6 +72,13 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 		HRERROR("HrD3D11GraphicsBuffer CreateHardwareBuffer Error!");
 		return;
 	}
+	//if (m_usage == HrGraphicsBuffer::HBB_SHADER_RESOURCE)
+	//{
+	//	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	//	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	//	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+	//}
 }
 
 ID3D11Buffer* HrD3D11GraphicsBuffer::GetD3DGraphicsBuffer()
