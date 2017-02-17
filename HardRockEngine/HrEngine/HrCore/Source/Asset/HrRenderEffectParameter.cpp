@@ -15,6 +15,8 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 16, 64),
 	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 16, 64),
 
+	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 3, 12),
+
 	HrRenderParamDefine(RPT_AMBIENT_LIGHT_COLOR, "ambient_light_color", REDT_FLOAT4, 4, 16),
 	HrRenderParamDefine(RPT_DIFFUSE_LIGHT_COLOR, "diffuse_light_color", REDT_FLOAT4, 4, 16),
 	HrRenderParamDefine(RPT_SPECULAR_LIGHT_COLOR, "specular_light_color", REDT_FLOAT4, 4, 16),
@@ -25,6 +27,10 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 4, 16),
 	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 4, 16),
 	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 4, 16),
+
+	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
+	HrRenderParamDefine(RPT_FOG_RANGE, "fog_range", REDT_FLOAT1, 1, 4),
 };
 
 //////////////////////////////////////////////////////////
@@ -546,6 +552,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	}
 	switch (paramType)
 	{
+	case RPT_WORLD_MATRIX:
 	case RPT_WORLD_VIEW_PROJ_MATRIX:
 	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
 	{
@@ -560,15 +567,24 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	case RPT_SPECULAR_MATERIAL_COLOR:
 	case RPT_REFLECT_MATERIAL_COLOR:
+	case RPT_FOG_COLOR:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4();
 		break;
 	}
 	case RPT_LIGHT_DIRECTION:
+	case RPT_CAMERA_POSITION:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT3 && m_nArraySize == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3();
+		break;
+	}
+	case RPT_FOG_START:
+	case RPT_FOG_RANGE:
+	{
+		BOOST_ASSERT(m_dataType == REDT_FLOAT1 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW RenderVariableFloat();
 		break;
 	}
 	case RPT_TEXTURE:

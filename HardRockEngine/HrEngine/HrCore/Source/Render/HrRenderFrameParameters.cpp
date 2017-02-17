@@ -38,10 +38,12 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 	if (m_pCurrentCamera != pCamera)
 	{
 		m_pCurrentCamera = pCamera;
+		m_bCameraDirty = true;
 		m_bWorldViewProjMatrixDirty = true;
 	}
 	else if (m_pCurrentCamera->ViewProjDirty())
 	{
+		m_bCameraDirty = true;
 		m_bWorldViewProjMatrixDirty = true;
 	}
 }
@@ -124,5 +126,29 @@ float HrRenderFrameParameters::GetMaterialOpacity() const
 {
 	BOOST_ASSERT(m_pCurrentMaterial);
 	return m_pCurrentMaterial->GetOpacity();
+}
+
+const float3& HrRenderFrameParameters::GetCameraPosition()
+{
+	if (m_bCameraDirty)
+	{
+		m_cameraPosition = m_pCurrentCamera->GetEyePos();
+		m_bCameraDirty = false;
+	}
+	return m_cameraPosition;
+}
+
+void HrRenderFrameParameters::SetFogParam(float4& fogColor, float fogStart, float fogRange)
+{
+	m_fogColor = fogColor;
+	m_fogStart = fogStart;
+	m_fogRange = fogRange;
+}
+
+const void HrRenderFrameParameters::GetFogParam(float4& fogColor, float& fogStart, float& fogRange)
+{
+	fogColor = m_fogColor;
+	fogStart = m_fogStart;
+	fogRange = m_fogRange;
 }
 

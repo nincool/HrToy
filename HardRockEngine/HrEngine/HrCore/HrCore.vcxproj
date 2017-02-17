@@ -99,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>HR_CORE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\ThirdParty\FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ThirdParty\FBXSDK\include;..\ThirdParty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -200,6 +200,7 @@
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
     <ClInclude Include="Include\Scene\HrCameraNode.h" />
     <ClInclude Include="Include\Scene\HrScene.h" />
+    <ClInclude Include="Include\Scene\HrSceneImported.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
     <ClInclude Include="Include\Scene\HrTransform.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
     <ClCompile Include="Source\Scene\HrCameraNode.cpp" />
     <ClCompile Include="Source\Scene\HrScene.cpp" />
+    <ClCompile Include="Source\Scene\HrSceneImported.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
     <ClCompile Include="Source\Scene\HrTransform.cpp" />

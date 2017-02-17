@@ -1,5 +1,6 @@
 #include "Render/HrRenderPass.h"
 #include "Render/HrShader.h"
+#include "Render/HrBlendState.h"
 #include "Render/HrRenderFactory.h"
 #include "Asset/HrRenderEffectParameter.h"
 #include "Kernel/HrDirector.h"
@@ -12,6 +13,9 @@ HrRenderPass::HrRenderPass(std::string strPassName)
 	m_strPassName = strPassName;
 	m_pVertexShader = nullptr;
 	m_pPixelShader = nullptr;
+
+	//to release
+	m_pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState();
 }
 
 HrRenderPass::~HrRenderPass()
@@ -20,6 +24,8 @@ HrRenderPass::~HrRenderPass()
 
 void HrRenderPass::BindPass(HrRender* pRender)
 {
+	m_pBlendState->Bind(pRender);
+
 	m_pVertexShader->Bind(pRender);
 	m_pPixelShader->Bind(pRender);
 }

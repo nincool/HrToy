@@ -1,4 +1,7 @@
 #include "HrD3D11BlendState.h"
+#include "HrD3D11Render.h"
+
+#include <boost/cast.hpp>
 
 using namespace Hr;
 
@@ -25,7 +28,12 @@ HrD3D11BlendState::~HrD3D11BlendState()
 
 }
 
-void HrD3D11BlendState::Bind()
+void HrD3D11BlendState::Bind(HrRender* pRender)
 {
+	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
+	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11ImmediateContext();
 
+	float blendFactor[4] = { 0.f,0.f,0.f,0.f };
+	//开启“透明”效果
+	pD3D11ImmediateContext->OMSetBlendState(m_pD3D11BlendState, blendFactor, 0xffffffff);
 }

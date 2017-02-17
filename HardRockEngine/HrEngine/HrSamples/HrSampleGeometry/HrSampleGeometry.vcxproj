@@ -98,7 +98,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>Include;..\;..\..\;..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Include;..\;..\..\;..\..\..\;..\ThirdParty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -138,11 +138,13 @@
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrGeometryApp.h" />
     <ClInclude Include="Include\HrGeometryScene.h" />
+    <ClInclude Include="Include\HrTestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrGeometryApp.cpp" />
     <ClCompile Include="Source\HrGeometryScene.cpp" />
+    <ClCompile Include="Source\HrTestScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

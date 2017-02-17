@@ -29,6 +29,9 @@ namespace Hr
 		const Vector3& GetRight() const;
 		const Vector3& GetUp() const;
 
+		void SetScale(const Vector3& v3Scale);
+		const Vector3& GetScale();
+
 		virtual void Translate(const Vector3& v3, EnumTransformSpace relativeTo = TS_LOCAL);
 
 		const Vector3& GetWorldScale();

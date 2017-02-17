@@ -27,6 +27,12 @@ namespace Hr
 		bool WorldViewProjMatrixDirty() const { return m_bWorldViewProjMatrixDirty; }
 		const Matrix4& GetWorldViewProjMatrix();
 
+		const float3& GetCameraPosition();
+
+		//fog
+		void SetFogParam(float4& fogColor, float fogStart, float fogRange);
+		const void GetFogParam(float4& fogColor, float& fogStart, float& fogRange);
+
 		//获取材质信息
 		float4 GetMaterialAmbient() const;
 		float4 GetMaterialDiffuse() const;
@@ -44,7 +50,12 @@ namespace Hr
 		mutable Matrix4 m_worldViewProjMatrix;
 		bool m_bWorldViewProjMatrixDirty = true;
 
-
+		mutable float3 m_cameraPosition;
+		bool m_bCameraDirty = true;
+	
+		mutable float4 m_fogColor;
+		mutable float m_fogStart;
+		mutable float m_fogRange;
 	private:
 		const HrRenderable* m_pCurrentRenderable;
 		const HrMaterial* m_pCurrentMaterial;

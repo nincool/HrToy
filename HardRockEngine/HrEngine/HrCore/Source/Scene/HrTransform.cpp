@@ -208,3 +208,14 @@ void HrTransform::DirtyTransform()
 	m_bDirtyTransform = true;
 	m_pSceneNode->DirtyTransform();
 }
+
+void HrTransform::SetScale(const Vector3& v3Scale)
+{
+	m_vScale = v3Scale;
+	m_bDirtyTransform = true;
+}
+
+const Vector3& HrTransform::GetScale()
+{
+	return m_vScale;
+}

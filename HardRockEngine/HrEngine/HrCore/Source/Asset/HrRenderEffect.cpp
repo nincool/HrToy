@@ -22,7 +22,6 @@ HrRenderEffect::HrRenderEffect()
 {
 	//m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
 	//for testing
-	
 }
 
 HrRenderEffect::~HrRenderEffect()
@@ -175,7 +174,6 @@ void HrRenderEffect::UpdateAutoEffectParams(HrRenderFrameParameters& renderFrame
 	{
 		item->UpdateConstantBuffer();
 	}
-
 }
 
 void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters)
@@ -184,6 +182,8 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 	{
 	case RPT_WORLD_MATRIX:
 	{
+		if (renderFrameParameters.WorldMatrixDirty())
+			renderEffectParameter = renderFrameParameters.GetWorldMatrix();
 		break;
 	}
 	case RPT_INVERSE_WROLD_MATRIX:

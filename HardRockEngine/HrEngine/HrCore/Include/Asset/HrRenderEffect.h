@@ -18,7 +18,6 @@ namespace Hr
 		HrRenderEffectParameter* GetParameterByName(const std::string& strParamName);
 		HrRenderEffectStructParameter* GetStructParameterByName(const std::string& strStructName);
 
-
 		void UpdateAutoEffectParams(HrRenderFrameParameters& renderFrameParameters);
 	protected:
 		virtual bool LoadImpl() override;
@@ -42,7 +41,6 @@ namespace Hr
 		std::vector<HrRenderEffectStructParameter*> m_vecRenderEffectStruct;
 		std::vector<HrRenderEffectConstantBuffer*> m_vecRenderConstantBuffer;
 
-		HrBlendState* m_pBlendState;
 	};
 }
 

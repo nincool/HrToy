@@ -10,6 +10,9 @@
 #ifndef __HRWIN32SPECIFIC_H__
 #define __HRWIN32SPECIFIC_H__
 
+#ifndef NOMINMAX                       
+#  define NOMINMAX
+#endif
 #include <Windows.h>
 #include <tchar.h>
 #include <cstdint>

@@ -5,7 +5,6 @@
 #include "Asset/HrRenderEffectParameter.h"
 #include "Render/HrRenderFrameParameters.h"
 
-
 using namespace Hr;
 
 HrStaticMeshRenderable::HrStaticMeshRenderable()

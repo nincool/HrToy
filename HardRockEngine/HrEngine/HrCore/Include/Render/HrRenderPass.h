@@ -27,10 +27,14 @@ namespace Hr
 	private:
 		std::string m_strPassName;
 
+		HrBlendState* m_pBlendState;
+
 		HrShader* m_pVertexShader;
 		HrShader* m_pPixelShader;
 
 		std::array<uint32, HrShader::ST_NUMSHADERTYPES> m_arrShaderIndex;
+
+
 	};
 }
 

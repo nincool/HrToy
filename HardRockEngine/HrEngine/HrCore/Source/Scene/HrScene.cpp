@@ -7,11 +7,12 @@ using namespace Hr;
 
 HrScene::HrScene()
 {
-	m_pRootNode = MakeSharedPtr<HrSceneNode>();
+	m_pRootNode = HR_NEW HrSceneNode();
 }
 
 HrScene::~HrScene()
 {
+	SAFE_DELETE(m_pRootNode);
 }
 
 void HrScene::OnEnter()

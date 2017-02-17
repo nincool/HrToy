@@ -21,8 +21,8 @@ namespace Hr
 		virtual void Update();
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
 
-	private:
-		HrSceneNodePtr m_pRootNode;
+	protected:
+		HrSceneNode* m_pRootNode;
 	};
 }
 

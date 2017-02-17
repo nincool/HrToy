@@ -277,6 +277,9 @@
     <ClInclude Include="Include\Render\HrBlendState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Scene\HrSceneImported.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -452,6 +455,9 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrBlendState.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrSceneImported.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

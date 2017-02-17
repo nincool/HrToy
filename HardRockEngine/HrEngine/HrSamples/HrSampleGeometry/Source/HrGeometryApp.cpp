@@ -1,7 +1,9 @@
 #include "HrGeometryApp.h"
 #include "HrGeometryScene.h"
+#include "HrTestScene.h"
 #include <sstream>
 #include "HrEngine.h"
+
 
 using namespace Hr;
 
@@ -43,6 +45,11 @@ void HrGeometryApp::LoadAssets()
 
 void HrGeometryApp::CreateScene()
 {
-	std::shared_ptr<HrGeometryScene> pGeometryScene = MakeSharedPtr<HrGeometryScene>();
-	HrDirector::Instance()->RunScene(pGeometryScene);
+	//std::shared_ptr<HrGeometryScene> pTestScene = MakeSharedPtr<HrGeometryScene>();
+	////pTestScene->LoadScene("HrTestScene.json");
+	//HrDirector::Instance()->RunScene(pTestScene);
+
+	std::shared_ptr<HrTestScene> pTestScene = MakeSharedPtr<HrTestScene>();
+	pTestScene->LoadScene("HrTestScene.json");
+	HrDirector::Instance()->RunScene(pTestScene);
 }

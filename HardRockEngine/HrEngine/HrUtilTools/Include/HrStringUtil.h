@@ -5,6 +5,8 @@
 #include <cctype>
 #include <algorithm>
 
+#include <boost/lexical_cast.hpp> 
+
 namespace Hr
 {
 	class HrStringUtil
@@ -21,7 +23,67 @@ namespace Hr
 			std::transform(s.begin(), s.end(), s.begin(),
 				[](unsigned char c) { return std::toupper(c); });
 		}
+
+		static Vector3 GetVector3FromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<float> vecElement = GetFloatVectorFromString(strContent);
+			return Vector3(vecElement[0], vecElement[1], vecElement[2]);
+		}
+
+		static std::vector<float> GetFloatVectorFromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<float> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<float>(temp[i].c_str()));
+			}
+			return result;
+		}
+
+		static std::vector<int> GetIntVectorFromString(const std::string& strContent, const char* p1)
+		{
+			std::vector<int> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); i++) {
+				result.push_back(atoi(temp[i].c_str()));
+			}
+			return result;
+		}
+
+		static std::vector<int64> GetInt64VectorFromString(const std::string& strContent, const char* p1)
+		{
+			std::vector<int64> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<int64>(temp[i].c_str()));
+			}
+			return result;
+		}
+
+		static std::vector<std::string> GetVector(const std::string& strContent, const char* p1)
+		{
+			std::vector<std::string> result;
+			if (strContent == "")
+			{
+				return result;
+			}
+
+			char c[20480];
+			char *resource = const_cast<char*>(strContent.data());
+			strcpy(c, resource);
+
+			char *p;
+			strtok(c, p1);
+			result.push_back(c);
+			while ((p = strtok(NULL, p1)))
+				result.push_back(p);
+
+			return result;
+		}
 	};
+
 }
 
 

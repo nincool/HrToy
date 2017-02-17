@@ -88,6 +88,9 @@ HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
 
 HrBlendState* HrD3D11RenderFactory::CreateBlendState()
 {
-	//HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState();
+	HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetDevice()
+		, HrD3D11Device::Instance()->GetImmediateContext());
+
+	return pBlendState;
 }
 

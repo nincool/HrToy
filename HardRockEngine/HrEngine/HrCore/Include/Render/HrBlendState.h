@@ -11,7 +11,7 @@ namespace Hr
 		HrBlendState();
 		virtual ~HrBlendState();
 
-		virtual void Bind() = 0;
+		virtual void Bind(HrRender* pRender) = 0;
 	};
 }
 

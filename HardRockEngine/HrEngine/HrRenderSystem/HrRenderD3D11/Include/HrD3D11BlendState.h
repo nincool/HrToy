@@ -14,7 +14,7 @@ namespace Hr
 			, ID3D11DeviceContext* pContext);
 		virtual ~HrD3D11BlendState();
 
-		virtual void Bind() override;
+		virtual void Bind(HrRender* pRender) override;
 
 	protected:
 		ID3D11Device* m_pD3D11Device;
