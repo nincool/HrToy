@@ -3,7 +3,7 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
-#include "HrCore/Include/Asset/HrPrefebModel.h"
+#include "HrCore/Include/Asset/HrPrefabModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
@@ -34,7 +34,7 @@ HrRenderLayout* HrSkinnedMeshRenderable::GetRenderLayout()
 	return nullptr;
 }
 
-void HrSkinnedMeshRenderable::AttachPrefebModel(HrPrefebModel* pPrefebModel)
+void HrSkinnedMeshRenderable::AttachPrefebModel(HrPrefabModel* pPrefebModel)
 {
 	m_pPrefebModel = pPrefebModel;
 

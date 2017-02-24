@@ -70,12 +70,16 @@ namespace Hr
 		
 		bool CreateRenderTarget();
 		void ReleaseRenderTarget();
-		
+
+		bool CreateRenderState();
+		void ReleaseRenderState();
+
 		bool CreateResourceManager();
 		void ReleaseResourceManager();
 
 		bool CreateInputManager();
 		void ReleaseInputManager();
+
 
 		void Update();
 	private:

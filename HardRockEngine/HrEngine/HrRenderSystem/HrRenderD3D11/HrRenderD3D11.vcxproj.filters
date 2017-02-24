@@ -64,6 +64,9 @@
     <ClInclude Include="Include\HrD3D11BlendState.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrD3D11RasterizerState.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -112,6 +115,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11BlendState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11RasterizerState.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

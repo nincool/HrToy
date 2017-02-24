@@ -45,11 +45,10 @@ void HrGeometryApp::LoadAssets()
 
 void HrGeometryApp::CreateScene()
 {
-	//std::shared_ptr<HrGeometryScene> pTestScene = MakeSharedPtr<HrGeometryScene>();
-	////pTestScene->LoadScene("HrTestScene.json");
-	//HrDirector::Instance()->RunScene(pTestScene);
-
-	std::shared_ptr<HrTestScene> pTestScene = MakeSharedPtr<HrTestScene>();
-	pTestScene->LoadScene("HrTestScene.json");
+	std::shared_ptr<HrGeometryScene> pTestScene = MakeSharedPtr<HrGeometryScene>();
 	HrDirector::Instance()->RunScene(pTestScene);
+
+	//std::shared_ptr<HrTestScene> pTestScene = MakeSharedPtr<HrTestScene>();
+	//pTestScene->LoadScene("HrTestScene.json");
+	//HrDirector::Instance()->RunScene(pTestScene);
 }

@@ -28,6 +28,9 @@ namespace Hr
 		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality);
 		virtual ~HrTexture();
 
+
+		static size_t GetHashName(const std::string& strFullFilePath);
+
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath);
 		/** Returns the height of the texture.
 		*/

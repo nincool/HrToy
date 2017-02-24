@@ -325,3 +325,31 @@ DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
 	}
 }
 
+D3D11_FILL_MODE HrD3D11Mapping::GetFillMode(EnumRasterizerFillModel fillMode)
+{
+	switch (fillMode)
+	{
+	case RFM_WIREFRAME:
+		return D3D11_FILL_WIREFRAME;
+	case RFM_SOLD:
+		return D3D11_FILL_SOLID;
+	default:
+		return D3D11_FILL_SOLID;
+	}
+}
+
+D3D11_CULL_MODE HrD3D11Mapping::GetCullMode(EnumRasterizerCullModel cullMode)
+{
+	switch (cullMode)
+	{
+	case RCM_CULL_NONE:
+		return D3D11_CULL_NONE;
+	case RCM_CULL_FRONT:
+		return D3D11_CULL_FRONT;
+	case RCM_CULL_BACK:
+		return D3D11_CULL_BACK;
+	default:
+		return D3D11_CULL_NONE;
+	}
+}
+

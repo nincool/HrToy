@@ -31,6 +31,7 @@ namespace Hr
 		HrCameraNode* m_pSceneMainCamera;
 
 		HrSceneNode* m_pTestSceneNode;
+		HrSceneNode* m_pTestSceneNode2;
 
 		bool m_bKeyAPressed;
 		bool m_bKeyWPressed;

@@ -221,6 +221,12 @@ namespace Hr
 		{
 			return HrColor(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 		}
+
+		inline HrColor MakeColor(std::vector<uint8>& rgba)
+		{
+			BOOST_ASSERT(rgba.size() == 4);
+			return HrColor(rgba[0] / 255.0f, rgba[1] / 255.0f, rgba[2] / 255.0f, rgba[3] / 255.0f);
+		}
 	}
 }
 

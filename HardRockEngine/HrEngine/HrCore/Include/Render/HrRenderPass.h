@@ -28,6 +28,7 @@ namespace Hr
 		std::string m_strPassName;
 
 		HrBlendState* m_pBlendState;
+		HrRasterizerState* m_pRasterizerState;
 
 		HrShader* m_pVertexShader;
 		HrShader* m_pPixelShader;

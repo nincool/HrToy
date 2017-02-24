@@ -32,6 +32,10 @@ namespace Hr
 		//Í¼ÐÎÏñËØ¸ñÊ½
 		static DXGI_FORMAT GetPixelFormat(EnumPixelFormat pixelFormat);
 	
+		static D3D11_FILL_MODE GetFillMode(EnumRasterizerFillModel fillMode);
+		static D3D11_CULL_MODE GetCullMode(EnumRasterizerCullModel cullMode);
+
+
 	};
 }
 

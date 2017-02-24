@@ -1,5 +1,6 @@
 #include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 #include "HrCore/Include/Kernel/HrFileUtils.h"
+#include "HrCore/Include/Kernel/HrLog.h"
 #include "HrCore/Include/Asset/Loader/HrFBXLoader.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrMesh.h"
@@ -25,13 +26,18 @@ HrModelLoader::~HrModelLoader()
 
 void HrModelLoader::Load(std::string& strFile)
 {
-	m_strFileName = strFile;
-	std::string strSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
+	m_strFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	if (m_strFileName.empty())
+	{
+		HRERROR("HrModelLoader::Load Error! Can not find the file. FileName[%s]", strFile.c_str());
+		return;
+	}
+	std::string strSuffix = HrFileUtils::Instance()->GetFileSuffix(m_strFileName);
 	HrStringUtil::ToLowerCase(strSuffix);
 	if (strSuffix == "fbx")
 	{
 		std::shared_ptr<HrFBXLoader> pFBXLoader = MakeSharedPtr<HrFBXLoader>();
-		pFBXLoader->Load(strFile, m_modelDesc);
+		pFBXLoader->Load(m_strFileName, m_modelDesc);
 	}
 
 	//construct default vertexelement
@@ -40,8 +46,7 @@ void HrModelLoader::Load(std::string& strFile)
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-
-	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(strFile));
+	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(m_strFileName));
 	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.meshInfo.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
 		HrModelDescInfo::HrSubMeshInfo& subMeshInfo = m_modelDesc.meshInfo.vecSubMeshInfo[nMeshInfoIndex];
@@ -52,11 +57,12 @@ void HrModelLoader::Load(std::string& strFile)
 		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
 
-		BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
-		HrMaterial* pMaterial = MakeMaterialResource(subMeshInfo.vecMaterialInfo[0]);
-		std::vector<HrTexture*> vecTextures = std::move(MakeTextureResource(subMeshInfo.vecTextureFileName));
-		pSubMesh->SetMaterial(pMaterial);
-		pSubMesh->SetTexture(vecTextures[0]);
+		//所有的模型统一材质
+		//BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
+		//HrMaterial* pMaterial = HrResourceManager::Instance()->GetDefaultMaterial();//MakeMaterialResource(subMeshInfo.vecMaterialInfo[0]);
+		//std::vector<HrTexture*> vecTextures = std::move(MakeTextureResource(subMeshInfo.vecTextureFileName));
+		//pSubMesh->SetMaterial(pMaterial);
+		//pSubMesh->SetTexture(vecTextures[0]);
 	}
 }
 

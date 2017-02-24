@@ -1,7 +1,7 @@
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrStreamData.h"
 #include "Asset/HrResourceLoader.h"
-#include "Asset/HrPrefebModel.h"
+#include "Asset/HrPrefabModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
@@ -30,7 +30,7 @@ HrResourceManager::~HrResourceManager()
 void HrResourceManager::ReleaseAllResources()
 {
 	//todo release assets
-	ReleaseResourceCache(m_mapPrefebModels);
+	ReleaseResourceCache(m_mapPrefabModels);
 	ReleaseResourceCache(m_mapMesh);
 	ReleaseResourceCache(m_mapMaterials);
 	ReleaseResourceCache(m_mapRenderEffects);
@@ -70,6 +70,14 @@ HrMaterial* HrResourceManager::GetDefaultMaterial()
 	return static_cast<HrMaterial*>(GetResource(std::string(HR_BUILDIN_RES_PATH) + "DEFAULTMATERIAL", HrResource::RT_MATERIAL));
 }
 
+HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
+{
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrLambert.effectxml", HrResource::RT_EFFECT));
+	BOOST_ASSERT(pRenderEffect);
+
+	return pRenderEffect;
+}
+
 HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
 	HrResource* pReturnRes = nullptr;
@@ -79,26 +87,38 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResour
 	{
 		std::string strfileSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
 		HrStringUtil::ToLowerCase(strfileSuffix);
-		if (strfileSuffix == "fbx")
+		switch (resType)
 		{
-			pReturnRes = AddFBXResource(strFullFilePath);
+		case HrResource::RT_MODEL:
+		{
+			pReturnRes = AddModelResource(strFullFilePath);
 			pReturnRes->Load();
+			break;
 		}
-		else if (strfileSuffix == "effectxml")
+		case HrResource::RT_TEXTURE:
+		{
+			pReturnRes = AddTextureResource(strFullFilePath);
+			pReturnRes->Load();
+			break;
+		}
+		case HrResource::RT_MATERIAL:
+		{
+			pReturnRes = AddMaterialResource(strFullFilePath);
+			pReturnRes->Load();
+			break;
+		}
+		}
+
+		//todo
+		if (strfileSuffix == "effectxml")
 		{
 			pReturnRes = AddEffectResource(strFullFilePath);
 			pReturnRes->Load();
 		}
-		else if (resType == HrResource::RT_TEXTURE)
-		{
-			pReturnRes = AddTextureResource(strFullFilePath);
-			pReturnRes->Load();
-		}
-		else if (resType == HrResource::RT_MATERIAL)
-		{
-			pReturnRes = AddMaterialResource(strFullFilePath);
-			pReturnRes->Load();
-		}
+	}
+	else
+	{
+		HRERROR("HrResourceManager::LoadResource Error! FileName[%s]", strFile.c_str());
 	}
 
 	return pReturnRes;
@@ -109,7 +129,7 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	switch (resType)
 	{
 	case HrResource::RT_TEXTURE:
-		break;
+		return GetTexture(strFile);
 	case HrResource::RT_MESH:
 		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
@@ -117,7 +137,7 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	case HrResource::RT_MATERIAL:
 		return GetMaterial(strFile);
 	case HrResource::RT_MODEL:
-		break;
+		return GetModel(strFile);
 	default:
 		break;
 	}
@@ -134,32 +154,24 @@ HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrR
 	}
 	else
 	{
-		return LoadResource(strFile);
+		return LoadResource(strFile, resType);
 	}
 }
 
-HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
-{
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrLambert.effectxml", HrResource::RT_EFFECT));
-	BOOST_ASSERT(pRenderEffect);
-
-	return pRenderEffect;
-}
-
-HrResource* HrResourceManager::AddFBXResource(const std::string& strFile)
+HrResource* HrResourceManager::AddModelResource(const std::string& strFile)
 {
 	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
 	
-	HrPrefebModel* pRes = HR_NEW HrPrefebModel();
+	HrPrefabModel* pRes = HR_NEW HrPrefabModel();
 	pRes->DeclareResource(strFileName, strFile);
 
-	if (m_mapPrefebModels.find(pRes->GetHashID()) != m_mapPrefebModels.end())
+	if (m_mapPrefabModels.find(pRes->GetHashID()) != m_mapPrefabModels.end())
 	{
 		SAFE_DELETE(pRes);
 		HRASSERT(nullptr, "AddFBXResource Error!");
 		return nullptr;
 	}
-	m_mapPrefebModels.insert(std::make_pair(pRes->GetHashID(), pRes));
+	m_mapPrefabModels.insert(std::make_pair(pRes->GetHashID(), pRes));
 
 	return pRes;
 }
@@ -227,6 +239,18 @@ HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
 	return pTexture;
 }
 
+HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
+{
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strTextureName);
+	size_t nHashID = HrTexture::GetHashName(strFullFileName);
+	auto item = m_mapTextures.find(nHashID);
+	if (item != m_mapTextures.end())
+	{
+		return item->second;
+	}
+	return nullptr;
+}
+
 HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
 {
 	return nullptr;
@@ -255,3 +279,16 @@ HrResource* HrResourceManager::GetMaterial(const std::string& strMaterialName)
 	}
 	return nullptr;
 }
+
+HrResource* HrResourceManager::GetModel(const std::string& strModelName)
+{
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strModelName);
+	size_t nHashID = HrPrefabModel::CreateHashName(strFullFileName);
+	auto item = m_mapPrefabModels.find(nHashID);
+	if (item != m_mapPrefabModels.end())
+	{
+		return item->second;
+	}
+	return nullptr;
+}
+

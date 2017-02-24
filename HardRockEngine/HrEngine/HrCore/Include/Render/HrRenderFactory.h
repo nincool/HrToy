@@ -3,13 +3,14 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Asset/HrTexture.h"
+#include "HrCore/Include/Render/HrRasterizerState.h"
 
 namespace Hr
 {
 	class HR_CORE_API HrRenderFactory
 	{
 	public:
-		virtual ~HrRenderFactory(){};
+		virtual ~HrRenderFactory();
 
 	public:
 		
@@ -34,6 +35,14 @@ namespace Hr
 		virtual HrSamplerState* CreateSamplerState() = 0;
 
 		virtual HrBlendState* CreateBlendState() = 0;
+
+		virtual HrRasterizerState* CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc) = 0;
+
+		void CreateBuildInRasterizerState();
+		HrRasterizerState* GetDefualtRasterizerState();
+	protected:
+		HrRasterizerState* m_pDefaultRasterizerState;
+		std::unordered_map<size_t, HrRasterizerState*> m_mapRasterizerStatePool;
 	};
 }
 

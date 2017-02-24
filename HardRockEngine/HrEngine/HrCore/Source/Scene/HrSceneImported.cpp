@@ -70,9 +70,9 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 			const rapidjson::Value& sceneNodeValue = jsonValue[strItemName.c_str()];
 			nodeInfo.strName = sceneNodeValue["NAME"].GetString();
 			nodeInfo.strEntityResource = sceneNodeValue["ENTITY"].GetString();
-			nodeInfo.v3Position = HrStringUtil::GetVector3FromString(sceneNodeValue["POSITION"].GetString());
-			nodeInfo.v3Rotation = HrStringUtil::GetVector3FromString(sceneNodeValue["ROTATION"].GetString());
-			nodeInfo.v3Scale = HrStringUtil::GetVector3FromString(sceneNodeValue["SCALE"].GetString());
+			nodeInfo.v3Position = HrStringUtil::GetFloat3FromString(sceneNodeValue["POSITION"].GetString());
+			nodeInfo.v3Rotation = HrStringUtil::GetFloat3FromString(sceneNodeValue["ROTATION"].GetString());
+			nodeInfo.v3Scale = HrStringUtil::GetFloat3FromString(sceneNodeValue["SCALE"].GetString());
 			
 			if (sceneNodeValue.HasMember("CHILDREN"))
 			{
@@ -87,7 +87,6 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 
 		++nTempIndex;
 	}
-
 }
 
 void HrSceneImported::CreateSceneFromData()

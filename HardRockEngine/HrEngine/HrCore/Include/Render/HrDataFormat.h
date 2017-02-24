@@ -286,6 +286,23 @@ namespace Hr
 		IT_16BIT,
 		IT_32BIT,
 	};
+
+	//RasterizerFillMode
+	enum EnumRasterizerFillModel
+	{
+		RFM_WIREFRAME,
+		RFM_SOLD,
+	};
+
+	//RasterizerCullMode
+	enum EnumRasterizerCullModel
+	{
+		RCM_CULL_NONE,
+		RCM_CULL_FRONT,
+		RCM_CULL_BACK
+	};
+
+
 }
 
 #endif

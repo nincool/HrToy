@@ -1,11 +1,4 @@
 #include "HrGeometryScene.h"
-#include "HrCore/Include/Asset/HrGeometryFactory.h"
-#include "HrCore/Include/Scene/HrCameraNode.h"
-#include "HrCore/Include/Scene/HrTransform.h"
-#include "HrCore/Include/Asset/HrResourceManager.h"
-#include "HrCore/Include/Asset/HrSceneObjectFactory.h"
-#include "HrCore/Include/Kernel/HrDirector.h"
-#include "HrCore/Include/Kernel/HrScheduler.h"
 
 using namespace Hr;
 
@@ -59,12 +52,18 @@ void HrGeometryScene::CreateSceneElements()
 	AddSceneNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 
-	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("tests/56Por1.FBX");
+
+	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab1.prefab");
 	AddSceneNode(m_pTestSceneNode);
+	m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
+
+	//m_pTestSceneNode2 = HrSceneObjectFactory::Instance()->CreateModel("tests/56Por1.FBX");
+	//m_pTestSceneNode->AddChild(m_pTestSceneNode2);
+	//m_pTestSceneNode2->GetTransform()->Translate(Vector3(30, 0, 0));
+	//AddSceneNode(m_pTestSceneNode2);
 
 	//HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
 	//AddSceneNode(pBox);
-
 }
 
 void HrGeometryScene::CreateInputEvent()

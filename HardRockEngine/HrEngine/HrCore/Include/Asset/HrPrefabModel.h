@@ -5,15 +5,21 @@
 
 namespace Hr
 {
-	class HrPrefebModel : public HrResource
+	class HrPrefabModel : public HrResource
 	{
 	public:
-		HrPrefebModel();
-		~HrPrefebModel();
-	
+		HrPrefabModel();
+		~HrPrefabModel();
+		
+		/**
+		 @Comment: Create HashName [2/20/2017 By Hr]
+		 @Param: full path of the res
+		 @Return: HashName
+		*/
+		static size_t CreateHashName(const std::string& strFullFilePath);
+
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		//这里这么写其实是不对的 一个Model可以有多个Mesh 一个Mesh可以有多个SubMesh
 		HrMesh* GetMesh()
 		{
 			return m_pMesh;
@@ -24,6 +30,8 @@ namespace Hr
 		virtual bool UnloadImpl() override;
 	protected:
 		HrMesh* m_pMesh;
+		std::vector<HrMaterial*> m_vecMaterial;
+		std::vector<HrTexture*> m_vecTexture;
 	};
 }
 

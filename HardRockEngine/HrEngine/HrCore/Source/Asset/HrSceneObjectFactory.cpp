@@ -5,7 +5,7 @@
 #include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
-#include "HrCore/Include/Asset/HrPrefebModel.h"
+#include "HrCore/Include/Asset/HrPrefabModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
@@ -46,7 +46,7 @@ HrSceneNode* HrSceneObjectFactory::CreateBox()
 HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
 {
 	HrResource* pRes = HrResourceManager::Instance()->GetOrLoadResource(strName, HrResource::RT_MODEL);
-	HrPrefebModel* pPrefabModel = static_cast<HrPrefebModel*>(pRes);
+	HrPrefabModel* pPrefabModel = static_cast<HrPrefabModel*>(pRes);
 
 	if (pPrefabModel == nullptr)
 	{

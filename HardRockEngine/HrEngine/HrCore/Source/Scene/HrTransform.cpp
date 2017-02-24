@@ -16,13 +16,13 @@ HrTransform::HrTransform(HrSceneNode* pSceneNode)
 
 void HrTransform::SetPosition(const Vector3& v3Pos)
 {
-
+	m_vPosition = v3Pos;
 	DirtyTransform();
 }
 
 void HrTransform::SetPosition(REAL x, REAL y, REAL z)
 {
-
+	SetPosition(Vector3(x, y, z));
 	DirtyTransform();
 }
 

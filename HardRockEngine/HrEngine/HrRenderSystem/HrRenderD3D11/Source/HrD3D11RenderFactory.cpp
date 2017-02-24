@@ -10,6 +10,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11SamplerState.h" 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11BlendState.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RasterizerState.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -92,5 +93,13 @@ HrBlendState* HrD3D11RenderFactory::CreateBlendState()
 		, HrD3D11Device::Instance()->GetImmediateContext());
 
 	return pBlendState;
+}
+
+HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc)
+{
+	HrD3D11RasterizerState* pRasterizer = HR_NEW HrD3D11RasterizerState(HrD3D11Device::Instance()->GetDevice()
+		, HrD3D11Device::Instance()->GetImmediateContext(), desc);
+
+	return pRasterizer;
 }
 

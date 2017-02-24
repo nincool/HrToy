@@ -229,9 +229,6 @@
     <ClInclude Include="Include\Kernel\HrFileUtils.h">
       <Filter>Include\Kernel</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrPrefebModel.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h">
       <Filter>Include\Asset\Loader</Filter>
     </ClInclude>
@@ -279,6 +276,12 @@
     </ClInclude>
     <ClInclude Include="Include\Scene\HrSceneImported.h">
       <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrPrefabModel.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRasterizerState.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -405,9 +408,6 @@
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp">
       <Filter>Source\Kernel</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrPrefebModel.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp">
       <Filter>Source\Asset\Loader</Filter>
     </ClCompile>
@@ -458,6 +458,15 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrSceneImported.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrPrefabModel.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRasterizerState.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderFactory.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

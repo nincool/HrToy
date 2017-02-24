@@ -264,8 +264,11 @@ void HrFBXLoader::ReadMesh(FbxNode* pNode, HrModelDescInfo& modelDesc)
 	ReadVertexNormal(pMesh, totalMatrixForNormal, subMeshInfo);
 	ReadVertexUV(pMesh, subMeshInfo);
 	ReadMaterial(pMesh, subMeshInfo);
-	BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
-	ReadMaterialConnections(pMesh);
+	if (subMeshInfo.vecMaterialInfo.size() > 0)
+	{
+		ReadMaterialConnections(pMesh);
+	}
+	//BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
 }
 
 FbxAMatrix HrFBXLoader::ComputeTotalMatrix(fbxsdk::FbxNode* pNode)

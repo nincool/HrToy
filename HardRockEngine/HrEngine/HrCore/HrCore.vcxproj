@@ -141,7 +141,7 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
-    <ClInclude Include="Include\Asset\HrPrefebModel.h" />
+    <ClInclude Include="Include\Asset\HrPrefabModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
@@ -182,6 +182,7 @@
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
+    <ClInclude Include="Include\Render\HrRasterizerState.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
     <ClInclude Include="Include\Render\HrSamplerState.h" />
@@ -211,7 +212,7 @@
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
-    <ClCompile Include="Source\Asset\HrPrefebModel.cpp" />
+    <ClCompile Include="Source\Asset\HrPrefabModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
@@ -246,6 +247,8 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
+    <ClCompile Include="Source\Render\HrRasterizerState.cpp" />
+    <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrSamplerState.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />

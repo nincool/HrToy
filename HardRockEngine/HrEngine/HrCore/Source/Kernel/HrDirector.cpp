@@ -41,21 +41,31 @@ bool HrDirector::Init()
 
 	if (!CreateRenderEngine())
 	{
+		HRERROR("CreateRenderEngine Error!");
 		return false;
 	}
 
 	if (!CreateRenderTarget())
 	{
+		HRERROR("CreateRenderTarget Error!");
+		return false;
+	}
+	
+	if (!CreateRenderState())
+	{
+		HRERROR("CreateRenderState Error!");
 		return false;
 	}
 
 	if (!CreateResourceManager())
 	{
+		HRERROR("CreateResourceManager Error!");
 		return false;
 	}
 
 	if (!CreateInputManager())
 	{
+		HRERROR("CreateInputManager Error!");
 		return false;
 	}
 
@@ -135,6 +145,21 @@ bool HrDirector::CreateRenderTarget()
 }
 
 void HrDirector::ReleaseRenderTarget()
+{
+
+}
+
+bool HrDirector::CreateRenderState()
+{
+	if (m_pRenderFactory)
+	{
+		m_pRenderFactory->CreateBuildInRasterizerState();
+		return true;
+	}
+	return false;
+}
+
+void HrDirector::ReleaseRenderState()
 {
 
 }

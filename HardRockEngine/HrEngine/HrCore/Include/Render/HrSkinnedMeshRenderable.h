@@ -12,7 +12,7 @@ namespace Hr
 		HrSkinnedMeshRenderable();
 		~HrSkinnedMeshRenderable();
 
-		void AttachPrefebModel(HrPrefebModel* pPrefebModel);
+		void AttachPrefebModel(HrPrefabModel* pPrefebModel);
 		void AttachSubMesh(HrSubMesh* pSubMesh);
 
 		virtual HrRenderLayout* GetRenderLayout() override;
@@ -23,7 +23,7 @@ namespace Hr
 		virtual void UpdateEffectParametersImpl() override;
 	private:
 		//模型资源
-		HrPrefebModel* m_pPrefebModel;
+		HrPrefabModel* m_pPrefebModel;
 		//持有的SubMesh
 		HrSubMesh* m_pSubMesh;
 	};

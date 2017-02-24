@@ -24,10 +24,16 @@ namespace Hr
 				[](unsigned char c) { return std::toupper(c); });
 		}
 
-		static Vector3 GetVector3FromString(const std::string& strContent, const char* p1 = "|")
+		static float3 GetFloat3FromString(const std::string& strContent, const char* p1 = "|")
 		{
 			std::vector<float> vecElement = GetFloatVectorFromString(strContent);
-			return Vector3(vecElement[0], vecElement[1], vecElement[2]);
+			return float3(vecElement[0], vecElement[1], vecElement[2]);
+		}
+
+		static float4 GetFloat4FromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<float> vecElement = GetFloatVectorFromString(strContent);
+			return float4(vecElement[0], vecElement[1], vecElement[2], vecElement[3]);
 		}
 
 		static std::vector<float> GetFloatVectorFromString(const std::string& strContent, const char* p1 = "|")
@@ -41,12 +47,36 @@ namespace Hr
 			return result;
 		}
 
-		static std::vector<int> GetIntVectorFromString(const std::string& strContent, const char* p1)
+		template<typename T>
+		static std::vector<T> GetTVectorFromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<T> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<T>(temp[i].c_str()));
+			}
+			return result;
+		}
+
+		static std::vector<uint8> GetUInt8FromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<uint8> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<unsigned int>(temp[i].c_str()));
+			}
+			return result;
+		}
+
+		static std::vector<int> GetIntVectorFromString(const std::string& strContent, const char* p1 = "|")
 		{
 			std::vector<int> result;
 			std::vector<std::string> temp = GetVector(strContent, p1);
-			for (int i = 0; i < temp.size(); i++) {
-				result.push_back(atoi(temp[i].c_str()));
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<int>(temp[i].c_str()));
 			}
 			return result;
 		}

@@ -25,6 +25,7 @@
     <ClInclude Include="Include\HrD3D11Device.h" />
     <ClInclude Include="Include\HrD3D11GraphicsBuffer.h" />
     <ClInclude Include="Include\HrD3D11Mapping.h" />
+    <ClInclude Include="Include\HrD3D11RasterizerState.h" />
     <ClInclude Include="Include\HrD3D11Render.h" />
     <ClInclude Include="Include\HrD3D11RenderFactory.h" />
     <ClInclude Include="Include\HrD3D11RenderLayout.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="Source\HrD3D11Device.cpp" />
     <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp" />
     <ClCompile Include="Source\HrD3D11Mapping.cpp" />
+    <ClCompile Include="Source\HrD3D11RasterizerState.cpp" />
     <ClCompile Include="Source\HrD3D11Render.cpp" />
     <ClCompile Include="Source\HrD3D11RenderFactory.cpp" />
     <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />

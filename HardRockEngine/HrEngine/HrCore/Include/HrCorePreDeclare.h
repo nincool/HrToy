@@ -47,6 +47,7 @@ namespace Hr
 	class HrTexture;
 	class HrSamplerState;
 	class HrBlendState;
+	class HrRasterizerState;
 	
 	class HrShader;
 	class HrRenderFrameParameters;
@@ -63,7 +64,7 @@ namespace Hr
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
 	class HrMesh;
 	class HrSubMesh;
-	class HrPrefebModel;
+	class HrPrefabModel;
 	class HrMaterial;
 
 	class HrShaderCompiler;

@@ -35,6 +35,8 @@ namespace Hr
 		virtual HrSamplerState* CreateSamplerState() override;
 
 		virtual HrBlendState* CreateBlendState() override;
+
+		virtual HrRasterizerState* CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc) override;
 	};
 }
 
