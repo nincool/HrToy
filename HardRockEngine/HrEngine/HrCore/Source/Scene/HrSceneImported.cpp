@@ -5,7 +5,7 @@
 #include "Kernel/HrLog.h"
 
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
-#include "HrCore/Include/Scene/HrCameraNode.h"
+#include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
@@ -48,7 +48,9 @@ bool HrSceneImported::LoadScene(const std::string& strSceneName)
 	}
 	
 	const rapidjson::Value& sceneRootInfo = d["SCENE_ROOT"];
-	
+
+	m_sceneDataInfo.ambientColor = HrMath::MakeColor(HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["AMBIENT_LIGHT_COLOR"].GetString()));
+
 	LoadSceneNode(sceneRootInfo, m_sceneDataInfo.vecSceneNodeInfo);
 
 	CreateSceneFromData();
@@ -69,11 +71,35 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 			HrSceneInfo::HrSceneNodeInfo& nodeInfo = vecSceneNodeInfo.back();
 			const rapidjson::Value& sceneNodeValue = jsonValue[strItemName.c_str()];
 			nodeInfo.strName = sceneNodeValue["NAME"].GetString();
-			nodeInfo.strEntityResource = sceneNodeValue["ENTITY"].GetString();
+			
+			const rapidjson::Value& nodeEntityValue = sceneNodeValue["ENTITY"];
+			nodeInfo.nEntityType = (HrSceneInfo::EnumEntityType)nodeEntityValue["ENTITY_TYPE"].GetInt();
+			switch (nodeInfo.nEntityType)
+			{
+			case HrSceneInfo::ET_LIGHT:
+			{
+				nodeInfo.sceneLightInfo.nLightType = nodeEntityValue["LIGHT_TYPE"].GetInt();
+				nodeInfo.sceneLightInfo.strLightName = nodeEntityValue["LIGHT_NAME"].GetString();
+				nodeInfo.sceneLightInfo.vPosition = HrStringUtil::GetFloat3FromString(nodeEntityValue["LIGHT_POSITION"].GetString());
+				nodeInfo.sceneLightInfo.vDirection = HrStringUtil::GetFloat3FromString(nodeEntityValue["LIGHT_DIRECTION"].GetString());
+				nodeInfo.sceneLightInfo.diffuseColor = HrMath::MakeColor(HrStringUtil::GetUInt8VectorFromString(nodeEntityValue["LIGHT_DIFFUSE_COLOR"].GetString()));
+				nodeInfo.sceneLightInfo.specularColor = HrMath::MakeColor(HrStringUtil::GetUInt8VectorFromString(nodeEntityValue["LIGHT_SPECULAR_COLOR"].GetString()));
+				break;
+			}
+			case HrSceneInfo::ET_PREFAB:
+			{
+				nodeInfo.strEntityResource = nodeEntityValue["PREFAB"].GetString();
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
 			nodeInfo.v3Position = HrStringUtil::GetFloat3FromString(sceneNodeValue["POSITION"].GetString());
 			nodeInfo.v3Rotation = HrStringUtil::GetFloat3FromString(sceneNodeValue["ROTATION"].GetString());
 			nodeInfo.v3Scale = HrStringUtil::GetFloat3FromString(sceneNodeValue["SCALE"].GetString());
-			
+
 			if (sceneNodeValue.HasMember("CHILDREN"))
 			{
 				const rapidjson::Value& childrenNodeInfo = sceneNodeValue["CHILDREN"];
@@ -94,20 +120,62 @@ void HrSceneImported::CreateSceneFromData()
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
+
+	SetAmbientLight(m_sceneDataInfo.ambientColor);
 
 	//创建Entity节点
 	CreateSceneNode(m_pRootNode, m_sceneDataInfo.vecSceneNodeInfo);
+}
 
+void HrSceneImported::CreateSceneLights(HrSceneNode* pNode, std::vector<HrSceneInfo::HrSceneLightInfo>& vecSceneLightsInfo)
+{
+	for (auto& itemSceneLight : vecSceneLightsInfo)
+	{
+		switch (itemSceneLight.nLightType)
+		{
+		case HrLight::LT_DIRECTIONAL:
+		{
+			auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(itemSceneLight.vDirection, itemSceneLight.diffuseColor, itemSceneLight.specularColor);
+			AddSceneNode(pLight);
+			pLight->GetTransform()->SetPosition(itemSceneLight.vPosition);
+			break;
+		}
+		}
+	}
 }
 
 void HrSceneImported::CreateSceneNode(HrSceneNode* pParent, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo)
-{
+{ 
 	for (auto& itemSceneNode : vecSceneNodeInfo)
 	{
-		auto pSceneNode = HrSceneObjectFactory::Instance()->CreateModel(itemSceneNode.strEntityResource);
+		HrSceneNode* pSceneNode = nullptr;
+		switch (itemSceneNode.nEntityType)
+		{
+		case HrSceneInfo::ET_LIGHT:
+		{
+			switch (itemSceneNode.sceneLightInfo.nLightType)
+			{
+			case HrLight::LT_DIRECTIONAL:
+			{
+				pSceneNode = HrSceneObjectFactory::Instance()->CreateDirectionalLight(itemSceneNode.sceneLightInfo.vDirection
+					, itemSceneNode.sceneLightInfo.diffuseColor
+					, itemSceneNode.sceneLightInfo.specularColor);
+				break;
+			}
+			}
+			break;
+		}
+		case HrSceneInfo::ET_PREFAB:
+		{
+			pSceneNode = HrSceneObjectFactory::Instance()->CreateModel(itemSceneNode.strEntityResource);
+
+			break;
+		}
+		}
+		pSceneNode->GetTransform()->SetScale(itemSceneNode.v3Scale);
+		pSceneNode->GetTransform()->SetOrientation(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(itemSceneNode.v3Rotation)));
 		pSceneNode->GetTransform()->SetPosition(itemSceneNode.v3Position);
-		pSceneNode->GetTransform()->SetOrientation(HrMath::RotationQuaternionYawPitchRoll(itemSceneNode.v3Rotation));
 		if (itemSceneNode.vecChildrenSceneNode.size() > 0)
 		{
 			CreateSceneNode(pSceneNode, itemSceneNode.vecChildrenSceneNode);

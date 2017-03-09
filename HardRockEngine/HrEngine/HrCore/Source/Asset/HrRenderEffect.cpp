@@ -206,24 +206,24 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 			renderEffectParameter = renderFrameParameters.GetWorldViewProjMatrix();
 		break;
 	}
-	case RPT_AMBIENT_LIGHT_COLOR:
+	case RPT_AMBIENT_COLOR:
 	{
-		renderEffectParameter = HrColor::White.Value();
+		renderEffectParameter = renderFrameParameters.GetAmbientColor();
 		break;
 	}
-	case RPT_DIFFUSE_LIGHT_COLOR:
+	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
 	{
-		renderEffectParameter = HrColor::White.Value();
+		renderEffectParameter = renderFrameParameters.GetDirectionalLightDiffuseColors();
 		break;
 	}
-	case RPT_SPECULAR_LIGHT_COLOR:
+	case RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY:
 	{
-		renderEffectParameter = HrColor::White.Value();
+		renderEffectParameter = renderFrameParameters.GetDirectionalLightSpecularColors();
 		break;
 	}
-	case RPT_LIGHT_DIRECTION:
+	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
 	{
-		renderEffectParameter = float3(-1.0, -1.0, -1.0);
+		renderEffectParameter = renderFrameParameters.GetDirectionalLightDirections();
 		break;
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:

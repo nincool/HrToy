@@ -23,7 +23,7 @@ HrEventListenerMouse::~HrEventListenerMouse()
 
 void HrEventListenerMouse::OnEvent(HrEvent* pEvent)
 {
-	HrEventMouse* pEventMouse = CheckPointerCast<HrEventMouse>(pEvent);
+	HrEventMouse* pEventMouse = HrCheckPointerCast<HrEventMouse>(pEvent);
 	switch (pEventMouse->GetMouseEventFlag())
 	{
 	case HrEventMouse::EnumMouseEventFlag::MEF_PRESSED:

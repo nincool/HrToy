@@ -1,6 +1,7 @@
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrCamera.h"
+#include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrTransform.h"
 #include "Asset/HrMaterial.h"
@@ -23,6 +24,20 @@ HrRenderFrameParameters::HrRenderFrameParameters()
 
 HrRenderFrameParameters::~HrRenderFrameParameters()
 {
+}
+
+void HrRenderFrameParameters::SetCurrentScene(const HrScenePtr& pScene)
+{
+	m_pCurrentScene = pScene;
+
+	//环境光
+	m_ambientColor = m_pCurrentScene->GetAmbientColor();
+
+	//直线光
+	if (m_pCurrentScene->IsLightsDirty(HrLight::LT_DIRECTIONAL))
+	{
+		m_pCurrentScene->GetDirectionalLightsParam(m_vecDirectionalDirections, m_vecDirectionalDiffuseColor, m_vecDirectionalSpecularColor);
+	}
 }
 
 void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
@@ -150,5 +165,25 @@ const void HrRenderFrameParameters::GetFogParam(float4& fogColor, float& fogStar
 	fogColor = m_fogColor;
 	fogStart = m_fogStart;
 	fogRange = m_fogRange;
+}
+
+float4 HrRenderFrameParameters::GetAmbientColor()
+{
+	return m_ambientColor;
+}
+
+const std::vector<float3>& HrRenderFrameParameters::GetDirectionalLightDirections()
+{
+	return m_vecDirectionalDirections;
+}
+
+const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightDiffuseColors()
+{
+	return m_vecDirectionalDiffuseColor;
+}
+
+const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightSpecularColors()
+{
+	return m_vecDirectionalSpecularColor;
 }
 

@@ -29,7 +29,7 @@ namespace Hr
 		virtual ~HrTexture();
 
 
-		static size_t GetHashName(const std::string& strFullFilePath);
+		static size_t CreateHashName(const std::string& strFullFilePath);
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath);
 		/** Returns the height of the texture.

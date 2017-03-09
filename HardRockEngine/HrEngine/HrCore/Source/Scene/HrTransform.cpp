@@ -94,7 +94,7 @@ void HrTransform::Rotate(const Vector3& axis, const Radian& angle, EnumTransform
 
 void HrTransform::Rotate(const Vector3& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
 {
-	Rotate(HrMath::RotationQuaternionYawPitchRoll(angle), relativeTo);
+	Rotate(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)), relativeTo);
 }
 
 void HrTransform::Rotate(const Quaternion& q, EnumTransformSpace relativeTo /*= TS_LOCAL*/)

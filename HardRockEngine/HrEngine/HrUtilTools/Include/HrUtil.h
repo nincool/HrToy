@@ -36,13 +36,13 @@ namespace Hr
 
 	//ÒýÓÃ×ÔKlayGE
 	template <typename T, typename... Args>
-	inline std::shared_ptr<T> MakeSharedPtr(Args&& ... args)
+	inline std::shared_ptr<T> HrMakeSharedPtr(Args&& ... args)
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
 	template <typename T, typename... Args>
-	inline std::unique_ptr<T> MakeUniquePtr(Args&& ... args)
+	inline std::unique_ptr<T> HrMakeUniquePtr(Args&& ... args)
 	{
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
@@ -62,26 +62,26 @@ namespace Hr
 	}
 
 	template <typename T, typename U>
-	inline std::shared_ptr<T> CheckPointerCast(U& u)
+	inline std::shared_ptr<T> HrCheckPointerCast(U& u)
 	{
 		BOOST_ASSERT(std::dynamic_pointer_cast<T>(u) == std::static_pointer_cast<T>(u));
 		return std::static_pointer_cast<T>(u);
 	}
 
 	template <typename T, typename U>
-	inline std::shared_ptr<T> StaticPointerCast(U& u)
+	inline std::shared_ptr<T> HrStaticPointerCast(U& u)
 	{
 		return std::static_pointer_cast<T>(u);
 	}
 
 	template <typename T, typename U>
-	inline T* CheckPointerCast(U* p)
+	inline T* HrCheckPointerCast(U* p)
 	{
 		return boost::polymorphic_downcast<T*>(p);
 	}
 
 	template <typename T, typename U>
-	inline T* StaticPointerCast(U* p)
+	inline T* HrStaticPointerCast(U* p)
 	{
 		return static_cast<T*>(p);
 	}

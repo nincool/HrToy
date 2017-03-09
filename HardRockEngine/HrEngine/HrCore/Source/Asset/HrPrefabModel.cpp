@@ -82,10 +82,6 @@ bool HrPrefabModel::LoadImpl()
 			if (materialInfo.HasMember(strMaterialItem.c_str()))
 			{
 				const rapidjson::Value& childMaterial = materialInfo[strMaterialItem.c_str()];
-				if (childMaterial.HasMember("DEFAULT_MATERIAL_NAME"))
-				{
-					std::string strDefaultMaterialName = childMaterial["DEFAULT_MATERIAL_NAME"].GetString();
-				}
 				if (childMaterial.HasMember("NORMAL_TEXTURE"))
 				{
 					std::string strNormalTexture = childMaterial["NORMAL_TEXTURE"].GetString();
@@ -98,10 +94,10 @@ bool HrPrefabModel::LoadImpl()
 					const rapidjson::Value& selfMaterialInfo = childMaterial["SELF_MATERIAL"];
 					std::string strMaterialName = selfMaterialInfo["NAME"].GetString();
 
-					std::vector<uint8> vAmbient = HrStringUtil::GetUInt8FromString(selfMaterialInfo["AMBIENT"].GetString());
-					std::vector<uint8> vDiffuse = HrStringUtil::GetUInt8FromString(selfMaterialInfo["DIFFUSE"].GetString());
-					std::vector<uint8> vSpecular = HrStringUtil::GetUInt8FromString(selfMaterialInfo["SPECULAR"].GetString());
-					std::vector<uint8> vEmissive = HrStringUtil::GetUInt8FromString(selfMaterialInfo["EMISSIVE"].GetString());
+					std::vector<uint8> vAmbient = HrStringUtil::GetUInt8VectorFromString(selfMaterialInfo["AMBIENT"].GetString());
+					std::vector<uint8> vDiffuse = HrStringUtil::GetUInt8VectorFromString(selfMaterialInfo["DIFFUSE"].GetString());
+					std::vector<uint8> vSpecular = HrStringUtil::GetUInt8VectorFromString(selfMaterialInfo["SPECULAR"].GetString());
+					std::vector<uint8> vEmissive = HrStringUtil::GetUInt8VectorFromString(selfMaterialInfo["EMISSIVE"].GetString());
 					float fOpacity = selfMaterialInfo["OPACITY"].GetFloat();
 					
 					//»»ÏÂMaterialµÄÃû×Ö
@@ -111,7 +107,7 @@ bool HrPrefabModel::LoadImpl()
 					HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(strMaterialName, HrResource::RT_MATERIAL));
 					if (pMaterial == nullptr)
 					{
-						pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(strMaterialName));
+						pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetOrAddResource(strMaterialName, HrResource::RT_MATERIAL));
 						pMaterial->FillMaterialInfo(HrMath::MakeColor(vAmbient).Value()
 							, HrMath::MakeColor(vDiffuse).Value()
 							, HrMath::MakeColor(vSpecular).Value()
@@ -119,6 +115,23 @@ bool HrPrefabModel::LoadImpl()
 							, fOpacity);
 					}
 					m_vecMaterial.push_back(pMaterial);
+				}
+				else if (childMaterial.HasMember("DEFAULT_MATERIAL_NAME"))
+				{
+					std::string strDefaultMaterialName = childMaterial["DEFAULT_MATERIAL_NAME"].GetString();
+					HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(strDefaultMaterialName, HrResource::RT_MATERIAL));
+					if (pMaterial != nullptr)
+					{
+						m_vecMaterial.push_back(pMaterial);
+					}
+					else
+					{
+						m_vecMaterial.push_back(HrResourceManager::Instance()->GetDefaultMaterial());
+					}
+				}
+				else
+				{
+					m_vecMaterial.push_back(HrResourceManager::Instance()->GetDefaultMaterial());
 				}
 			}
 			else

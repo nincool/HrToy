@@ -385,7 +385,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 								, pRenderParamDefine->dataType
 								, HrRenderEffectParameter::REPBT_CONSTBUFFER
 								, pRenderParamDefine->nStride
-								, varDesc.elements);
+								, varStructMen.elements);
 							size_t nParamSize = pRenderParamDefine->nStride;
 							nStructSize += nParamSize;
 							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
@@ -396,7 +396,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 								, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type)
 								, HrRenderEffectParameter::REPBT_CONSTBUFFER
 								, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type))
-								, varDesc.elements);
+								, varStructMen.elements);
 							nStructSize += pRenderParamDefine->nStride;
 							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
 						}

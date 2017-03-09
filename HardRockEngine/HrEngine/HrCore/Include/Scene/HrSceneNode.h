@@ -13,24 +13,37 @@ namespace Hr
 		{
 			NT_NORMAL,
 			NT_CAMERA,
+			NT_LIGHT,
 		};
 
 	public:
 		HrSceneNode();
 		HrSceneNode(HrRenderable* pRenderable);
+		HrSceneNode(const std::string& strName, HrRenderable* pRenderable);
 		virtual ~HrSceneNode();
 
 		EnumNodeType GetNodeType() { return m_nodeType; }
 
 		void AttachRenderable(HrRenderable* pRenderable);
+
+		void SetName(const std::string& strName);
+		const std::string& GetName() const;
 		
-		void SetParent(HrSceneNode* pParent) { m_pParent = pParent; }
-		HrSceneNode* GetParent() { return m_pParent; }
-		HrRenderable* GetRenderable() { return m_pRenderable; }
-		HrTransform* GetTransform() { return m_pTransform; }
+		void SetParent(HrSceneNode* pParent);
+		HrSceneNode* GetParent() const;
+
+		HrRenderable* GetRenderable() const;
+		
+		HrTransform* GetTransform() const;
 
 		void AddChild(HrSceneNode* pSceneNode);
 		void RemoveChildren();
+
+		bool IsRunning() const;
+
+		virtual void OnEnter();
+		virtual void OnEnterDidFinish();
+		virtual void OnExist();
 
 		//查找可渲染物件并且加入到渲染队列
 		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
@@ -41,7 +54,12 @@ namespace Hr
 		void DirtyTransform();
 	protected:
 		EnumNodeType m_nodeType;
+		
 		HrRenderable* m_pRenderable;
+		
+		std::string m_strName;
+
+		bool m_bRunning;
 
 		HrSceneNode* m_pParent;
 		std::vector<HrSceneNode*> m_vecChildNode;

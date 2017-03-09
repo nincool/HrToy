@@ -12,7 +12,6 @@ namespace Hr
 		HrSkinnedMeshRenderable();
 		~HrSkinnedMeshRenderable();
 
-		void AttachPrefebModel(HrPrefabModel* pPrefebModel);
 		void AttachSubMesh(HrSubMesh* pSubMesh);
 
 		virtual HrRenderLayout* GetRenderLayout() override;

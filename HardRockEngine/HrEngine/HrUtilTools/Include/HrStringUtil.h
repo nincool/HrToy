@@ -59,7 +59,7 @@ namespace Hr
 			return result;
 		}
 
-		static std::vector<uint8> GetUInt8FromString(const std::string& strContent, const char* p1 = "|")
+		static std::vector<uint8> GetUInt8VectorFromString(const std::string& strContent, const char* p1 = "|")
 		{
 			std::vector<uint8> result;
 			std::vector<std::string> temp = GetVector(strContent, p1);

@@ -18,6 +18,8 @@ namespace Hr
 		virtual void RenderScene(HrRenderTargetPtr& renderTarget);
 		virtual void Destroy();
 	
+		const HrScenePtr& GetRunningScene();
+
 	protected:
 		void FlushScene();
 		bool CheckSceneRunning();

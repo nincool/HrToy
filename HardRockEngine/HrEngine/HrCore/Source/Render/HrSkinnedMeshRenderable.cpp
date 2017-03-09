@@ -34,14 +34,6 @@ HrRenderLayout* HrSkinnedMeshRenderable::GetRenderLayout()
 	return nullptr;
 }
 
-void HrSkinnedMeshRenderable::AttachPrefebModel(HrPrefabModel* pPrefebModel)
-{
-	m_pPrefebModel = pPrefebModel;
-
-	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
-}
-
 void HrSkinnedMeshRenderable::AttachSubMesh(HrSubMesh* pSubMesh)
 {
 	m_pSubMesh = pSubMesh;

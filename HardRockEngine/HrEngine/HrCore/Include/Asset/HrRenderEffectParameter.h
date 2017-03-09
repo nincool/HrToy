@@ -89,11 +89,11 @@ namespace Hr
 		RPT_CAMERA_POSITION,
 
 		//灯光属性
-		RPT_AMBIENT_LIGHT_COLOR,
-		RPT_DIFFUSE_LIGHT_COLOR,
-		RPT_SPECULAR_LIGHT_COLOR,
-		//灯的方向
-		RPT_LIGHT_DIRECTION,
+		RPT_AMBIENT_COLOR,
+		//方向光
+		RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY,
+		RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY,
+		RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY,
 
 		//材质属性
 		RPT_AMBIENT_MATERIAL_COLOR,
@@ -249,7 +249,7 @@ namespace Hr
 
 		std::unique_ptr<HrRenderVariable> Clone() override
 		{
-			auto pRet = MakeUniquePtr< HrRenderVariableConcrete<T> >();
+			auto pRet = HrMakeUniquePtr< HrRenderVariableConcrete<T> >();
 			pRet->m_dataType = this->m_dataType;
 			pRet->m_semantic = this->m_semantic;
 			pRet->m_nBufferOffset = this->m_nBufferOffset;
@@ -341,7 +341,7 @@ namespace Hr
 
 		virtual std::unique_ptr<HrRenderVariable> Clone() override
 		{
-			auto pRet = MakeUniquePtr< HrRenderVariableTexture >();
+			auto pRet = HrMakeUniquePtr< HrRenderVariableTexture >();
 
 			return std::move(pRet);
 		}
@@ -361,7 +361,7 @@ namespace Hr
 		
 		virtual std::unique_ptr<HrRenderVariable> Clone() override
 		{
-			auto pRet = MakeUniquePtr< HrRenderVariableSamplerState >();
+			auto pRet = HrMakeUniquePtr< HrRenderVariableSamplerState >();
 
 			return std::move(pRet);
 		}
@@ -371,32 +371,32 @@ namespace Hr
 		HrSamplerState* m_pSamplerState;
 	};
 
-	typedef HrRenderVariableConcrete<bool> RenderVariableBool;
-	typedef HrRenderVariableConcrete<uint32_t> RenderVariableUInt;
-	typedef HrRenderVariableConcrete<int32_t> RenderVariableInt;
-	typedef HrRenderVariableConcrete<float> RenderVariableFloat;
-	typedef HrRenderVariableConcrete<uint2> RenderVariableUInt2;
-	typedef HrRenderVariableConcrete<uint3> RenderVariableUInt3;
-	typedef HrRenderVariableConcrete<uint4> RenderVariableUInt4;
-	typedef HrRenderVariableConcrete<int2> RenderVariableInt2;
-	typedef HrRenderVariableConcrete<int3> RenderVariableInt3;
-	typedef HrRenderVariableConcrete<int4> RenderVariableInt4;
-	typedef HrRenderVariableConcrete<float2> RenderVariableFloat2;
+	typedef HrRenderVariableConcrete<bool> HrRenderVariableBool;
+	typedef HrRenderVariableConcrete<uint32_t> HrRenderVariableUInt;
+	typedef HrRenderVariableConcrete<int32_t> HrRenderVariableInt;
+	typedef HrRenderVariableConcrete<float> HrRenderVariableFloat;
+	typedef HrRenderVariableConcrete<uint2> HrRenderVariableUInt2;
+	typedef HrRenderVariableConcrete<uint3> HrRenderVariableUInt3;
+	typedef HrRenderVariableConcrete<uint4> HrRenderVariableUInt4;
+	typedef HrRenderVariableConcrete<int2> HrRenderVariableInt2;
+	typedef HrRenderVariableConcrete<int3> HrRenderVariableInt3;
+	typedef HrRenderVariableConcrete<int4> HrRenderVariableInt4;
+	typedef HrRenderVariableConcrete<float2> HrRenderVariableFloat2;
 	typedef HrRenderVariableConcrete<float3> HrRenderVariableFloat3;
 	typedef HrRenderVariableConcrete<float4> HrRenderVariableFloat4;
 	//typedef HrRenderVariableConcrete<SamplerStateObjectPtr> RenderVariableSampler;
-	typedef HrRenderVariableConcrete<std::string> RenderVariableString;
+	typedef HrRenderVariableConcrete<std::string> HrRenderVariableString;
 	//typedef HrRenderVariableConcrete<ShaderDesc> RenderVariableShader;
-	typedef HrRenderVariableArray<bool> RenderVariableBoolArray;
-	typedef HrRenderVariableArray<uint32_t> RenderVariableUIntArray;
-	typedef HrRenderVariableArray<int32_t> RenderVariableIntArray;
-	typedef HrRenderVariableArray<float> RenderVariableFloatArray;
-	typedef HrRenderVariableArray<int2> RenderVariableInt2Array;
-	typedef HrRenderVariableArray<int3> RenderVariableInt3Array;
-	typedef HrRenderVariableArray<int4> RenderVariableInt4Array;
-	typedef HrRenderVariableArray<float2> RenderVariableFloat2Array;
-	typedef HrRenderVariableArray<float3> RenderVariableFloat3Array;
-	typedef HrRenderVariableArray<float4> RenderVariableFloat4Array;
+	typedef HrRenderVariableArray<bool> HrRenderVariableBoolArray;
+	typedef HrRenderVariableArray<uint32_t> HrRenderVariableUIntArray;
+	typedef HrRenderVariableArray<int32_t> HrRenderVariableIntArray;
+	typedef HrRenderVariableArray<float> HrRenderVariableFloatArray;
+	typedef HrRenderVariableArray<int2> HrRenderVariableInt2Array;
+	typedef HrRenderVariableArray<int3> HrRenderVariableInt3Array;
+	typedef HrRenderVariableArray<int4> HrRenderVariableInt4Array;
+	typedef HrRenderVariableArray<float2> HrRenderVariableFloat2Array;
+	typedef HrRenderVariableArray<float3> HrRenderVariableFloat3Array;
+	typedef HrRenderVariableArray<float4> HrRenderVariableFloat4Array;
 
 
 	class HR_CORE_API HrRenderEffectParameter : public boost::noncopyable

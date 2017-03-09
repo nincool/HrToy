@@ -3,10 +3,12 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderTarget.h"
-#include "Scene/HrCameraNode.h"
+#include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
+#include "Scene/HrSceneManager.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
+#include "HrUtilTools/Include/HrUtil.h"
 #include <boost/cast.hpp>
 
 using namespace Hr;
@@ -16,6 +18,7 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_nodeType = NT_NORMAL;
 	m_pRenderable = nullptr;
 	m_pParent = nullptr;
+	m_bRunning = false;
 
 	m_pTransform = HR_NEW HrTransform(this);
 
@@ -23,6 +26,12 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 }
 
 HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
+{
+	AttachRenderable(pRenderable);
+}
+
+HrSceneNode::HrSceneNode(const std::string& strName, HrRenderable* pRenderable) 
+	: HrIDObject(HrID::GenerateID<HrSceneNode>()), m_strName(strName)
 {
 	AttachRenderable(pRenderable);
 }
@@ -39,6 +48,16 @@ HrSceneNode::~HrSceneNode()
 	SAFE_DELETE(m_pRenderable);
 }
 
+void HrSceneNode::SetName(const std::string& strName)
+{
+	m_strName = strName;
+}
+
+const std::string& HrSceneNode::GetName() const
+{
+	return m_strName;
+}
+
 void HrSceneNode::AttachRenderable(HrRenderable* pRenderable)
 {
 	m_pRenderable = pRenderable;
@@ -52,15 +71,36 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 		HRERROR(_T("SceneNode AddChild Error! Already has parent"));
 		return;
 	}
-	if (pSceneNode->GetNodeType() == NT_CAMERA)
-	{
-		HrCameraNode* pCameraNode = boost::polymorphic_downcast<HrCameraNode*>(pSceneNode);
-		HrViewPort* pViewPort = pCameraNode->GetViewPort();
-		HrDirector::Instance()->GetRenderTarget()->AddViewPort(pViewPort);
-	}
 
 	pSceneNode->SetParent(this);
+	if (IsRunning())
+	{
+		pSceneNode->OnEnter();
+	}
+
 	m_vecChildNode.push_back(pSceneNode);
+}
+
+void HrSceneNode::OnEnter()
+{
+	m_bRunning = true;
+	for (auto& itemChild : m_vecChildNode)
+	{
+		itemChild->OnEnter();
+	}
+}
+
+void HrSceneNode::OnEnterDidFinish()
+{
+}
+
+void HrSceneNode::OnExist()
+{
+	m_bRunning = false;
+	for (auto& itemChild : m_vecChildNode)
+	{
+		itemChild->OnExist();
+	}
 }
 
 void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
@@ -79,6 +119,7 @@ void HrSceneNode::RemoveChildren()
 {
 	for (size_t i = 0; i < m_vecChildNode.size(); ++i)
 	{
+		m_vecChildNode[i]->OnExist();
 		SAFE_DELETE(m_vecChildNode[i]);
 	}
 	m_vecChildNode.clear();
@@ -106,3 +147,32 @@ void HrSceneNode::DirtyTransform()
 	}
 }
 
+bool HrSceneNode::IsRunning() const
+{
+	return m_bRunning;
+}
+
+void HrSceneNode::SetParent(HrSceneNode* pParent)
+{
+	BOOST_ASSERT(pParent);
+	if (pParent->IsRunning())
+	{
+		m_bRunning = true;
+	}
+	m_pParent = pParent;
+}
+
+HrSceneNode* HrSceneNode::GetParent() const
+{
+	return m_pParent;
+}
+
+HrRenderable* HrSceneNode::GetRenderable() const
+{
+	return m_pRenderable;
+}
+
+HrTransform* HrSceneNode::GetTransform() const
+{
+	return m_pTransform;
+}

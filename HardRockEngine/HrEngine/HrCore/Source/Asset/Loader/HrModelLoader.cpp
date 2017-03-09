@@ -36,7 +36,7 @@ void HrModelLoader::Load(std::string& strFile)
 	HrStringUtil::ToLowerCase(strSuffix);
 	if (strSuffix == "fbx")
 	{
-		std::shared_ptr<HrFBXLoader> pFBXLoader = MakeSharedPtr<HrFBXLoader>();
+		std::shared_ptr<HrFBXLoader> pFBXLoader = HrMakeSharedPtr<HrFBXLoader>();
 		pFBXLoader->Load(m_strFileName, m_modelDesc);
 	}
 
@@ -46,7 +46,7 @@ void HrModelLoader::Load(std::string& strFile)
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->AddMeshResource(m_strFileName));
+	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(m_strFileName, HrResource::RT_MESH));
 	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.meshInfo.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
 		HrModelDescInfo::HrSubMeshInfo& subMeshInfo = m_modelDesc.meshInfo.vecSubMeshInfo[nMeshInfoIndex];
@@ -80,7 +80,7 @@ HrMaterial* HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMaterialInfo&
 	HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
 	if (pMaterial == nullptr)
 	{
-		pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->AddMaterialResource(materialInfo.strMaterialName));
+		pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetOrAddResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
 		pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
 	}
 

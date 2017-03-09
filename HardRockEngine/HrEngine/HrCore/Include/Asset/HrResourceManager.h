@@ -22,7 +22,9 @@ namespace Hr
 
 		HrResource* GetResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResource* GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
+		HrResource* GetOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
+		HrResource* GetSkyBoxResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		/*
 			@brief	默认材质 [2/22/2017 By Hr]
 		*/
@@ -31,18 +33,18 @@ namespace Hr
 			@brief	初始化时默认的效果 [11/15/2016 By Hr]
 		*/
 		HrRenderEffect* GetDefaultRenderEffect();
+
+
+		void ReleaseAllResources();
+	protected:
 		/*
-			@brief	只添加资源并不加载 [11/15/2016 By Hr]
+		@brief	只添加资源并不加载 [11/15/2016 By Hr]
 		*/
 		HrResource* AddModelResource(const std::string& strFile);
 		HrResource* AddEffectResource(const std::string& strFile);
 		HrResource* AddMeshResource(const std::string& strFile);
 		HrResource* AddMaterialResource(const std::string& strFile);
 		HrResource* AddTextureResource(const std::string& strFile);
-
-
-		void ReleaseAllResources();
-	protected:
 
 		void CreateBuildInEffects();
 		void CreateBuildInMaterial();

@@ -1,5 +1,6 @@
 #include "Asset/HrMesh.h"
 #include "Asset/HrMaterial.h"
+#include "Asset/HrResourceManager.h"
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFactory.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
@@ -11,6 +12,8 @@ HrSubMesh::HrSubMesh()
 {
 	//for test
 	m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
+	//先设置一个默认的材质
+	m_pMaterial = HrResourceManager::Instance()->GetDefaultMaterial();
 }
 
 HrSubMesh::~HrSubMesh()
@@ -61,13 +64,18 @@ HrMesh::~HrMesh()
 	}
 }
 
+size_t HrMesh::CreateHashName(const std::string& strFullFilePath)
+{
+	return HrHashValue(strFullFilePath + ".Hr_Mesh");
+}
+
 void HrMesh::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
 	m_strFilePath = strFilePath;
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_MESH;
 
-	m_nHashID = HrHashValue(m_strFilePath + strFileName + ".Hr_Mesh");
+	m_nHashID = CreateHashName(m_strFilePath);
 }
 
 bool HrMesh::LoadImpl()

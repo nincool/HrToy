@@ -30,13 +30,13 @@ void HrTestScene::OnEnter()
 
 void HrTestScene::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = MakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrTestScene::OnKeyPressed, this)
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrTestScene::OnKeyPressed, this)
 		, HR_CALLBACK_2(HrTestScene::OnKeyReleased, this));
-	HrEventDispatcher::Instance()->AddEventListener(CheckPointerCast<HrEventListener>(pEventListenerKeyboard));
+	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerKeyboard));
 
-	HrEventListenerMousePtr pEventListenerMouse = MakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrTestScene::OnMousePressed, this)
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrTestScene::OnMousePressed, this)
 		, HR_CALLBACK_2(HrTestScene::OnMouseReleased, this), HR_CALLBACK_1(HrTestScene::OnMouseMove, this));
-	HrEventDispatcher::Instance()->AddEventListener(CheckPointerCast<HrEventListener>(pEventListenerMouse));
+	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerMouse));
 }
 
 void HrTestScene::ResetKeyFlag()
@@ -198,13 +198,13 @@ void HrTestScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, HrEven
 {
 	switch (mouseID)
 	{
-	case Hr::HrEventMouse::EnumMouseButtonID::MBI_LEFT:
+	case HrEventMouse::EnumMouseButtonID::MBI_LEFT:
 		m_bLeftMousePressed = true;
 		break;
-	case Hr::HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
+	case HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
 		m_bRightMousePressed = true;
 		break;
-	case Hr::HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
+	case HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
 		break;
 	default:
 		break;

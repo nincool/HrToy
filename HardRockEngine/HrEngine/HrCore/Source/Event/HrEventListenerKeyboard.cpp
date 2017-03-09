@@ -21,7 +21,7 @@ HrEventListenerKeyboard::~HrEventListenerKeyboard()
 
 void HrEventListenerKeyboard::OnEvent(HrEvent* pEvent)
 {
-	HrEventKeyboard* pEventKeyboard = CheckPointerCast<HrEventKeyboard>(pEvent);
+	HrEventKeyboard* pEventKeyboard = HrCheckPointerCast<HrEventKeyboard>(pEvent);
 	if (pEventKeyboard->GetPressed())
 	{
 		if (m_funcOnKeyPressed)

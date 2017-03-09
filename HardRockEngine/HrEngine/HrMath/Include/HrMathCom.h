@@ -2,6 +2,7 @@
 #define _HR_MATHCOM_H_
 
 #include "HrMathPrerequisites.h"
+#include "HrMath/Include/HrColor.h"
 #include <cmath>
 
 namespace Hr
@@ -17,6 +18,16 @@ namespace Hr
 		}
 		inline float RAD2DEG() {
 			return KlayGE::RAD2DEG;
+		}
+
+		inline Vector3 Degree2Radian(const Vector3& angle)
+		{
+			return Vector3(angle * DEG2RAD());
+		}
+
+		inline Vector3 Radian2Degree(const Vector3& angle)
+		{
+			return Vector3(angle * RAD2DEG());
 		}
 
 		//Çó¾ø¶ÔÖµ
@@ -170,6 +181,11 @@ namespace Hr
 			return KlayGE::MathLib::rotation_quat_yaw_pitch_roll(angle);
 		}
 
+		inline Quaternion RotationQuaternionPitchYawRoll(Vector3 const& angle)
+		{
+			return KlayGE::MathLib::rotation_quat_yaw_pitch_roll(angle.y(), angle.x(), angle.z());
+		}
+
 		// 4D ¾ØÕó
 		///////////////////////////////////////////////////////////////////////////////
 
@@ -222,7 +238,7 @@ namespace Hr
 			return HrColor(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 		}
 
-		inline HrColor MakeColor(std::vector<uint8>& rgba)
+		inline HrColor MakeColor(const std::vector<uint8>& rgba)
 		{
 			BOOST_ASSERT(rgba.size() == 4);
 			return HrColor(rgba[0] / 255.0f, rgba[1] / 255.0f, rgba[2] / 255.0f, rgba[3] / 255.0f);

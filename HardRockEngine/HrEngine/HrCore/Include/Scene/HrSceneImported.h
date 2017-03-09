@@ -8,17 +8,37 @@ namespace Hr
 {
 	struct HrSceneInfo
 	{
+		enum EnumEntityType
+		{
+			ET_CAMERA = 0,
+			ET_LIGHT,
+			ET_PREFAB
+		};
+
 		//lights
+		struct HrSceneLightInfo
+		{
+			int nLightType;
+			std::string strLightName;
+			Vector3 vPosition;
+			Vector3 vDirection;
+			HrColor diffuseColor;
+			HrColor specularColor;
+		};
 		//Camera
 		struct HrSceneNodeInfo
 		{
 			std::string strName;
+			EnumEntityType nEntityType;
 			std::string strEntityResource;
 			Vector3 v3Position;
 			Vector3 v3Rotation;
 			Vector3 v3Scale;
+			HrSceneLightInfo sceneLightInfo;
 			std::vector<HrSceneNodeInfo> vecChildrenSceneNode;
 		};
+		
+		HrColor ambientColor;
 
 		std::vector<HrSceneNodeInfo> vecSceneNodeInfo;
 	};
@@ -35,6 +55,7 @@ namespace Hr
 		void LoadSceneNode(const rapidjson::Value& jsonValue, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo);
 
 		virtual void CreateSceneFromData();
+		void CreateSceneLights(HrSceneNode* pNode, std::vector<HrSceneInfo::HrSceneLightInfo>& vecSceneLightsInfo);
 		void CreateSceneNode(HrSceneNode* pParent, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo);
 	protected:
 		HrSceneInfo m_sceneDataInfo;

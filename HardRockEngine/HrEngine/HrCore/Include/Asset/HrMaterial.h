@@ -11,9 +11,9 @@ namespace Hr
 		HrMaterial();
 		~HrMaterial();
 
-		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
+		static size_t CreateHashName(const std::string& strFullFilePath);
 
-		void BuildToDefultMaterial();
+		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		void FillMaterialInfo(const float4& ambient, const float4& diffuse, const float4& specular, const float4& emissive, float fOpacity);
 
@@ -27,6 +27,8 @@ namespace Hr
 		virtual bool UnloadImpl() override;
 
 	private:
+		HR_SYNTHESIZE_PASS_BY_REF(std::string, m_strMaterialName, MaterialName);
+
 		//the amount of ambient light the surface reflects and absorbs
 		float4 m_ambient;
 		//the amount of diffuse light the surface reflects and absorbs

@@ -9,26 +9,26 @@ using namespace Hr;
 
 std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 {
-	HrRenderParamDefine(RPT_WORLD_MATRIX, "world_matrix", REDT_MATRIX_4X4, 16, 64),
-	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 16, 64),
-	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 16, 64),
-	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 16, 64),
-	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 16, 64),
+	HrRenderParamDefine(RPT_WORLD_MATRIX, "world_matrix", REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
 
-	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 3, 12),
+	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 12),
 
-	HrRenderParamDefine(RPT_AMBIENT_LIGHT_COLOR, "ambient_light_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_DIFFUSE_LIGHT_COLOR, "diffuse_light_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_SPECULAR_LIGHT_COLOR, "specular_light_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
 
-	HrRenderParamDefine(RPT_LIGHT_DIRECTION, "light_direction", REDT_FLOAT3, 3, 12),
+	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY, "diffuse_light_color", REDT_FLOAT4, 4, 64),
+	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY, "specular_light_color", REDT_FLOAT4, 4, 64),
+	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY, "light_direction", REDT_FLOAT3, 4, 48),
 
-	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 1, 16),
 
-	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
 	HrRenderParamDefine(RPT_FOG_RANGE, "fog_range", REDT_FLOAT1, 1, 4),
 };
@@ -458,7 +458,6 @@ void HrRenderVariable::RebindToCBuffer(HrRenderEffectConstantBuffer* cbuff)
 	BOOST_ASSERT(false);
 }
 
-
 /////////////////////////////////= HrRenderVariableFloat4x4 =/////////////////////////////////////
 
 HrRenderVariable& HrRenderVariableFloat4x4::operator=(const float4x4& value)
@@ -544,8 +543,8 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	m_paramType = paramType;
 	m_dataType = dataType;
 	m_bindType = bindType;
-	
-	m_nArraySize = m_nArraySize <= 0 ? 1 : m_nArraySize;
+	m_nArraySize = nArraySize <= 0 ? 1 : nArraySize;
+
 	if (m_pRenderVariable != nullptr)
 	{
 		SAFE_DELETE(m_pRenderVariable);
@@ -560,9 +559,15 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
 		break;
 	}
-	case RPT_AMBIENT_LIGHT_COLOR:
-	case RPT_DIFFUSE_LIGHT_COLOR:
-	case RPT_SPECULAR_LIGHT_COLOR:
+	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
+	case RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY:
+		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 4);
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat4Array();
+		break;
+	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat3Array();
+		break;
+	case RPT_AMBIENT_COLOR:
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	case RPT_SPECULAR_MATERIAL_COLOR:
@@ -573,7 +578,6 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4();
 		break;
 	}
-	case RPT_LIGHT_DIRECTION:
 	case RPT_CAMERA_POSITION:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT3 && m_nArraySize == 1);
@@ -584,7 +588,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	case RPT_FOG_RANGE:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT1 && m_nArraySize == 1);
-		m_pRenderVariable = HR_NEW RenderVariableFloat();
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat();
 		break;
 	}
 	case RPT_TEXTURE:

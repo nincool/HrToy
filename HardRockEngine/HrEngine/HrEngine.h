@@ -12,7 +12,7 @@
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 
-#include "HrCore/Include/Scene/HrCameraNode.h"
+#include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Scene/HrSceneImported.h"
 

@@ -18,6 +18,7 @@ HrFileUtils::HrFileUtils()
 	AddSearchPath(m_strAppPath += "\\");
 	AddSearchPath(strAssetPath + "\\");
 	AddSearchPath(strAssetPath + "\\Media\\");
+	AddSearchPath(strAssetPath + "\\Media\\Material\\");
 	AddSearchPath(strAssetPath + "\\Media\\HrShader\\");
 	AddSearchPath(strAssetPath + "\\Media\\Model\\");
 	AddSearchPath(strAssetPath + "\\Media\\Scene\\");

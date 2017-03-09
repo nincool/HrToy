@@ -6,6 +6,7 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
 #include "Asset/HrTexture.h"
+#include "Asset/HrGeometryFactory.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
@@ -55,25 +56,25 @@ void HrResourceManager::InitResourceManager()
 void HrResourceManager::CreateBuildInEffects()
 {
 	LoadResource("Media/HrShader/HrLambert.effectxml");
-	//LoadResource("Media/HrShader/HrBasicEffect.effectxml");
-	//LoadResource("Media/HrShader/HrTestLighting.effectxml");
 }
 
 void HrResourceManager::CreateBuildInMaterial()
 {
-	HrMaterial* pMaterial = static_cast<HrMaterial*>(this->AddMaterialResource(std::string(HR_BUILDIN_RES_PATH) + "DEFAULTMATERIAL"));
-	pMaterial->BuildToDefultMaterial();
+	LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL);
 }
 
 HrMaterial* HrResourceManager::GetDefaultMaterial()
 {
-	return static_cast<HrMaterial*>(GetResource(std::string(HR_BUILDIN_RES_PATH) + "DEFAULTMATERIAL", HrResource::RT_MATERIAL));
+	HrMaterial* pMaterial = static_cast<HrMaterial*>(GetResource("MaterialDefault.material", HrResource::RT_MATERIAL));
+	HRASSERT(pMaterial, "GetDefaultMaterial Error!");
+
+	return pMaterial;
 }
 
 HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
 {
 	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrLambert.effectxml", HrResource::RT_EFFECT));
-	BOOST_ASSERT(pRenderEffect);
+	HRASSERT(pRenderEffect, "GetDefaultRenderEffect Error!");
 
 	return pRenderEffect;
 }
@@ -145,6 +146,25 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	return nullptr;
 }
 
+HrResource* HrResourceManager::GetSkyBoxResource(const std::string& strFile, HrResource::EnumResourceType resType)
+{
+	size_t nHashID = HrPrefabModel::CreateHashName(strFile);
+	auto item = m_mapPrefabModels.find(nHashID);
+	if (item != m_mapPrefabModels.end())
+	{
+		return item->second;
+	}
+	else
+	{
+		HrGeometrySkyBox* pSkyBox = new HrGeometrySkyBox();
+		pSkyBox->DeclareResource(strFile, strFile);
+		pSkyBox->Load();
+		m_mapPrefabModels[nHashID] = pSkyBox;
+
+		return pSkyBox;
+	}
+}
+
 HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
 	HrResource* pRes = GetResource(strFile, resType);
@@ -156,6 +176,43 @@ HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrR
 	{
 		return LoadResource(strFile, resType);
 	}
+}
+
+HrResource* HrResourceManager::GetOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType)
+{
+	HrResource* pReturnRes = GetResource(strFile, resType);
+	if (pReturnRes != nullptr)
+	{
+		return pReturnRes;
+	}
+	else
+	{
+		switch (resType)
+		{
+		case HrResource::RT_MODEL:
+		{
+			pReturnRes = AddModelResource(strFile);
+			break;
+		}
+		case HrResource::RT_TEXTURE:
+		{
+			pReturnRes = AddTextureResource(strFile);
+			break;
+		}
+		case HrResource::RT_MATERIAL:
+		{
+			pReturnRes = AddMaterialResource(strFile);
+			break;
+		}
+		case HrResource::RT_MESH:
+		{
+			pReturnRes = AddMeshResource(strFile);
+			break;
+		}
+		}
+	}
+
+	return pReturnRes;
 }
 
 HrResource* HrResourceManager::AddModelResource(const std::string& strFile)
@@ -201,6 +258,8 @@ HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 	size_t nMeshHashID = pMesh->GetHashID();
 	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
 	{
+		SAFE_DELETE(pMesh);
+		HRASSERT(nullptr, "AddMeshResource Error!");
 		return nullptr;
 	}
 	m_mapMesh.insert(std::make_pair(nMeshHashID, pMesh));
@@ -242,7 +301,7 @@ HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
 HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strTextureName);
-	size_t nHashID = HrTexture::GetHashName(strFullFileName);
+	size_t nHashID = HrTexture::CreateHashName(strFullFileName);
 	auto item = m_mapTextures.find(nHashID);
 	if (item != m_mapTextures.end())
 	{
@@ -253,6 +312,14 @@ HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
 
 HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
 {
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strMeshName);
+	size_t nHashID = HrMesh::CreateHashName(strFullFileName);
+	auto item = m_mapMesh.find(nHashID);
+	if (item != m_mapMesh.end())
+	{
+		return item->second;
+	}
+
 	return nullptr;
 }
 
@@ -271,7 +338,8 @@ HrResource* HrResourceManager::GetEffect(const std::string& strEffectName)
 
 HrResource* HrResourceManager::GetMaterial(const std::string& strMaterialName)
 {
-	size_t nHashID = HrHashValue(strMaterialName);
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strMaterialName);
+	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
 	auto item = m_mapMaterials.find(nHashID);
 	if (item != m_mapMaterials.end())
 	{

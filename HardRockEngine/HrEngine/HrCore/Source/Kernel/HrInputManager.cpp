@@ -393,7 +393,7 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	HrWindowWinPtr pWin = StaticPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+	HrWindowWinPtr pWin = HrStaticPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
 	size_t nWinHandle = (size_t)(pWin->GetHwnd());
 	winHandleStr << nWinHandle;
 

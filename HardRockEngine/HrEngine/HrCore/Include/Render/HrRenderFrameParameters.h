@@ -12,6 +12,7 @@ namespace Hr
 		HrRenderFrameParameters();
 		~HrRenderFrameParameters();
 
+		void SetCurrentScene(const HrScenePtr& pScene);
 		void SetCurrentCamera(HrCamera* pCamera);
 		void SetCurrentRenderable(const HrRenderable* rend);
 		void SetCurrentMaterial(const HrMaterial* pMaterial);
@@ -28,6 +29,12 @@ namespace Hr
 		const Matrix4& GetWorldViewProjMatrix();
 
 		const float3& GetCameraPosition();
+
+		//lights
+		float4 GetAmbientColor();
+		const std::vector<float3>& GetDirectionalLightDirections();
+		const std::vector<float4>& GetDirectionalLightDiffuseColors();
+		const std::vector<float4>& GetDirectionalLightSpecularColors();
 
 		//fog
 		void SetFogParam(float4& fogColor, float fogStart, float fogRange);
@@ -52,11 +59,19 @@ namespace Hr
 
 		mutable float3 m_cameraPosition;
 		bool m_bCameraDirty = true;
-	
+
+		//lights
+		float4 m_ambientColor;
+
+		std::vector<float3> m_vecDirectionalDirections;
+		std::vector<float4> m_vecDirectionalDiffuseColor;
+		std::vector<float4> m_vecDirectionalSpecularColor;
+
 		mutable float4 m_fogColor;
 		mutable float m_fogStart;
 		mutable float m_fogRange;
 	private:
+		HrScenePtr m_pCurrentScene;
 		const HrRenderable* m_pCurrentRenderable;
 		const HrMaterial* m_pCurrentMaterial;
 		HrCamera* m_pCurrentCamera;

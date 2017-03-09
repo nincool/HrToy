@@ -18,7 +18,7 @@ HrTexture::~HrTexture()
 	SAFE_DELETE(m_pTexData);
 }
 
-size_t HrTexture::GetHashName(const std::string& strFullFilePath)
+size_t HrTexture::CreateHashName(const std::string& strFullFilePath)
 {
 	return HrHashValue(strFullFilePath);
 }
@@ -30,7 +30,7 @@ void HrTexture::DeclareResource(const std::string& strFileName, const std::strin
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_EFFECT;
 
-	m_nHashID = GetHashName(m_strFilePath);
+	m_nHashID = CreateHashName(m_strFilePath);
 }
 
 bool HrTexture::LoadImpl()

@@ -1,5 +1,5 @@
 #include "Render/HrCamera.h"
-#include "Scene/HrCameraNode.h"
+#include "Scene/HrEntityNode.h"
 
 using namespace Hr;
 

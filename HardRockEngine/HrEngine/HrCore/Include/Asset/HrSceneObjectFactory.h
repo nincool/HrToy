@@ -3,6 +3,8 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCommon/include/HrSingleton.h"
+#include "HrMath/Include/HrMath.h"
+
 
 namespace Hr
 {
@@ -16,7 +18,12 @@ namespace Hr
 
 		HrCameraNode* CreateCamera();
 		HrCameraNode* CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder);
+
+		HrLightNode* CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular);
+		
+		HrSceneNode* CreatePanel();
 		HrSceneNode* CreateBox();
+		HrSceneNode* CreateSkyBox();
 
 		HrSceneNode* CreateModel(const std::string& strName);
 

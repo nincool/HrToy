@@ -9,13 +9,14 @@ namespace Hr
 	{
 	public:
 		HrColor();
+		HrColor(const HrColor& color);
 		explicit HrColor(const float* rhs);
 		HrColor(const float& rhs);
 		HrColor(float&& rhs);
 		HrColor(float r, float g, float b, float a);
 		explicit HrColor(uint32 dw);
 
-		float4 Value();
+		float4 Value() const;
 	public:
 		static HrColor Black;
 		static HrColor White;

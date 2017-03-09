@@ -52,7 +52,7 @@ bool HrD3D11RenderWindow::CreateSwapChain()
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	HrWindowWinPtr pWindow = CheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+	HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
 	swapChainDesc.OutputWindow = pWindow->GetHwnd();
 	swapChainDesc.Windowed = true;
 

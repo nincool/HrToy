@@ -12,12 +12,16 @@ namespace Hr
 		HrContextConfig();
 		~HrContextConfig();
 
-		
-		HR_SYNTHESIZE_READONLY(uint32, m_nWindowWidth, WindowWidth);
-		HR_SYNTHESIZE_READONLY(uint32, m_nWindowHeight, WindowHeight);
+		uint32 GetWindowWidth() { return m_nWindowWidth; }
+		uint32 GetWindowHeight() { return m_nWindowHeight; }
+		uint32 GetRenderTargetViewWidth() { return m_nRenderTargetViewWidth; }
+		uint32 GetRenderTargetViewHeight() { return m_nRenderTargetViewHeight; }
+	protected:
+		uint32 m_nWindowHeight;
+		uint32 m_nWindowWidth;
+		uint32 m_nRenderTargetViewHeight;
+		uint32 m_nRenderTargetViewWidth;
 
-		HR_SYNTHESIZE_READONLY(uint32, m_nRenderTargetViewWidth, RenderTargetViewWidth);
-		HR_SYNTHESIZE_READONLY(uint32, m_nRenderTargetViewHeight, RenderTargetViewHeight);
 	};
 }
 

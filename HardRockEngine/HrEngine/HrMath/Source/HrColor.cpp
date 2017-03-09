@@ -16,6 +16,11 @@ HrColor::HrColor() :Color()
 {
 }
 
+HrColor::HrColor(const HrColor& color)
+{
+
+}
+
 HrColor::HrColor(const float* rhs):Color(rhs)
 {
 }
@@ -36,7 +41,8 @@ HrColor::HrColor(uint32 dw):Color(dw)
 {
 }
 
-float4 HrColor::Value()
+
+float4 HrColor::Value() const
 {
 	return float4(r(), g(), b(), a());
 }

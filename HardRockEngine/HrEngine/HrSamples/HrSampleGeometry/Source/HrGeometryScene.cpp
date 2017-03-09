@@ -50,12 +50,23 @@ void HrGeometryScene::CreateSceneElements()
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
+	//设置环境光
+	SetAmbientLight(HrColor::White);
+
+	//创建灯光
+	auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);
+	AddSceneNode(pLight);
+	pLight->GetTransform()->SetPosition(Vector3::Zero());
+
+	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateSkyBox();
+	//AddSceneNode(m_pTestSceneNode);
+	//m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
 
 	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab1.prefab");
 	AddSceneNode(m_pTestSceneNode);
-	m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
+	m_pTestSceneNode->GetTransform()->Translate(Vector3(0, 0, 0));
 
 	//m_pTestSceneNode2 = HrSceneObjectFactory::Instance()->CreateModel("tests/56Por1.FBX");
 	//m_pTestSceneNode->AddChild(m_pTestSceneNode2);
@@ -68,13 +79,13 @@ void HrGeometryScene::CreateSceneElements()
 
 void HrGeometryScene::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = MakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrGeometryScene::OnKeyPressed, this)
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrGeometryScene::OnKeyPressed, this)
 		, HR_CALLBACK_2(HrGeometryScene::OnKeyReleased, this));
-	HrEventDispatcher::Instance()->AddEventListener(CheckPointerCast<HrEventListener>(pEventListenerKeyboard));
+	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerKeyboard));
 
-	HrEventListenerMousePtr pEventListenerMouse = MakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrGeometryScene::OnMousePressed, this)
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrGeometryScene::OnMousePressed, this)
 		, HR_CALLBACK_2(HrGeometryScene::OnMouseReleased, this), HR_CALLBACK_1(HrGeometryScene::OnMouseMove, this));
-	HrEventDispatcher::Instance()->AddEventListener(CheckPointerCast<HrEventListener>(pEventListenerMouse));
+	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerMouse));
 }
 
 void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent)
@@ -221,8 +232,6 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKeyDownPressed)
 	{
-		//m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, -HrMath::PI() / 100, 0.0f));
-
 		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, 0.0f, HrMath::PI() / 100));
 	}
 }

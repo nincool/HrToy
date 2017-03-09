@@ -19,8 +19,8 @@ using namespace Hr;
 HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
-	m_pSceneManager = MakeSharedPtr<HrSceneManager>();
-	m_pScheduler = MakeSharedPtr<HrScheduler>();
+	m_pSceneManager = HrMakeSharedPtr<HrSceneManager>();
+	m_pScheduler = HrMakeSharedPtr<HrScheduler>();
 }
 
 HrDirector::~HrDirector()
@@ -77,7 +77,7 @@ bool HrDirector::Init()
 
 bool HrDirector::CreateAppWindow()
 {
-	m_pWindow = MakeSharedPtr<HrWindowWin>();
+	m_pWindow = HrMakeSharedPtr<HrWindowWin>();
 
 	return true;
 }
@@ -89,7 +89,7 @@ void HrDirector::ReleaseAppWindow()
 
 bool HrDirector::CreateRenderEngine()
 {
-	m_pRenderModuleLoader = MakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
+	m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
 	m_pRenderModuleLoader->HrLoadModule();
 	
 	typedef void(*RENDER_INIT_FUNC)(HrRenderFactoryPtr& ptr);

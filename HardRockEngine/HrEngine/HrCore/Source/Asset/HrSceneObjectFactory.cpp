@@ -1,12 +1,13 @@
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
-#include "HrCore/Include/Render/HrCamera.h"
-#include "HrCore/Include/Render/HrViewPort.h"
-#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
-#include "HrCore/Include/Scene/HrCameraNode.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrPrefabModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
+#include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Render/HrViewPort.h"
+#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
+#include "HrCore/Include/Render/HrLight.h"
+#include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -16,7 +17,7 @@ using namespace Hr;
 
 HrSceneObjectFactory::HrSceneObjectFactory()
 {
-	m_pGeometryFactory = MakeSharedPtr<HrGeometryFactory>();
+	m_pGeometryFactory = HrMakeSharedPtr<HrGeometryFactory>();
 }
 
 HrSceneObjectFactory::~HrSceneObjectFactory()
@@ -37,10 +38,27 @@ HrCameraNode* HrSceneObjectFactory::CreateCamera(float fLeft, float fTop, float 
 	return pCameraNode;
 }
 
+HrLightNode* HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular)
+{
+	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrDirectionalLight>(direction, diffuse, specular));
+	HrLightNode* pLightNode = HR_NEW HrLightNode(pLight);
+
+	return pLightNode;
+}
+
+HrSceneNode* HrSceneObjectFactory::CreatePanel()
+{
+	return m_pGeometryFactory->CreatePanel();
+}
 
 HrSceneNode* HrSceneObjectFactory::CreateBox()
 {
 	return m_pGeometryFactory->CreateBox(10, 10, 10);
+}
+
+HrSceneNode* HrSceneObjectFactory::CreateSkyBox()
+{
+	return m_pGeometryFactory->CreateSkyBox();
 }
 
 HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
@@ -66,4 +84,3 @@ HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
 
 	return pSceneNode;
 }
-

@@ -39,6 +39,11 @@ namespace Hr
 			return m_pRenderTarget;
 		}
 
+		const HrSceneManagerPtr& GetSceneManager()
+		{
+			return m_pSceneManager;
+		}
+
 		HrWindowPtr& GetWindow()
 		{
 			return m_pWindow;

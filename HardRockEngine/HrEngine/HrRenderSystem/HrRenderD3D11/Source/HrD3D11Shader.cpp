@@ -47,7 +47,7 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 			{
 				HrTexture* pTex = nullptr;
 				m_vecBindRenderParameter[i]->Value(pTex);
-				HrD3D11Texture2D* pTex2D = CheckPointerCast<HrD3D11Texture2D>(pTex);
+				HrD3D11Texture2D* pTex2D = HrCheckPointerCast<HrD3D11Texture2D>(pTex);
 				if (pTex2D != nullptr)
 					m_vecD3D11SRV.push_back(pTex2D->GetD3D11SRV());
 				break;
@@ -56,7 +56,7 @@ void HrD3D11Shader::Bind(HrRender* pRender)
 			{
 				HrSamplerState* pSampler = nullptr;
 				m_vecBindRenderParameter[i]->Value(pSampler);
-				HrD3D11SamplerState* pSampler2D = CheckPointerCast<HrD3D11SamplerState>(pSampler);
+				HrD3D11SamplerState* pSampler2D = HrCheckPointerCast<HrD3D11SamplerState>(pSampler);
 				if (pSampler2D != nullptr)
 					m_vecSamplerState.push_back(pSampler2D->GetD3D11SamplerState());
 				break;
@@ -150,7 +150,7 @@ void HrD3D11Shader::BindRenderParameterImpl()
 {
 	for (size_t i = 0; i < m_vecBindRenderConstantBuffer.size(); ++i)
 	{
-		HrD3D11GraphicsBuffer* pGraphicsBuffer = CheckPointerCast<HrD3D11GraphicsBuffer>(m_vecBindRenderConstantBuffer[i]->GetGraphicsBuffer());
+		HrD3D11GraphicsBuffer* pGraphicsBuffer = HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_vecBindRenderConstantBuffer[i]->GetGraphicsBuffer());
 		m_vecD3D11ConstBuffer.push_back(pGraphicsBuffer->GetD3DGraphicsBuffer());
 	}
 }

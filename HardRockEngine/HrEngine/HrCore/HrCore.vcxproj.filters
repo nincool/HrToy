@@ -139,9 +139,6 @@
     <ClInclude Include="Include\Render\HrViewPort.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Scene\HrCameraNode.h">
-      <Filter>Include\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h">
       <Filter>Include\Platform\AppWin32</Filter>
     </ClInclude>
@@ -283,6 +280,15 @@
     <ClInclude Include="Include\Render\HrRasterizerState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrSkyBox.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrLight.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrEntityNode.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -341,9 +347,6 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrViewPort.cpp">
       <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\HrCameraNode.cpp">
-      <Filter>Source\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp">
       <Filter>Source\Platform\AppWin32</Filter>
@@ -467,6 +470,15 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderFactory.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrSkyBox.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrLight.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrEntityNode.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

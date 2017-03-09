@@ -28,6 +28,11 @@ namespace Hr
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
 	class HrCameraNode;
+	class HrLightNode;
+	class HrLight;
+	typedef std::shared_ptr<HrLight> HrLightPtr;
+	class HrDirectionalLight;
+	typedef std::shared_ptr<HrLight> HrDirectionalLightPtr;
 
 	class HrVertexElement;
 	class HrVertex;

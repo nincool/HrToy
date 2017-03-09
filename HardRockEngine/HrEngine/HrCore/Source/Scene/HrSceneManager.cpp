@@ -1,6 +1,6 @@
 #include "Scene/HrSceneManager.h"
 #include "Scene/HrScene.h"
-#include "Scene/HrCameraNode.h"
+#include "Scene/HrEntityNode.h"
 #include "Render/HrRender.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrRenderable.h"
@@ -19,14 +19,19 @@ HrSceneManager::HrSceneManager()
 {
 	m_bSceneRunning = false;
 
-	m_pRenderQueue = MakeSharedPtr<HrRenderQueue>();
-	m_pRenderParameters = MakeUniquePtr<HrRenderFrameParameters>();
+	m_pRenderQueue = HrMakeSharedPtr<HrRenderQueue>();
+	m_pRenderParameters = HrMakeUniquePtr<HrRenderFrameParameters>();
 
 	m_pCurrentCamera = nullptr;
 }
 
 HrSceneManager::~HrSceneManager()
 {
+}
+
+const HrScenePtr& HrSceneManager::GetRunningScene()
+{
+	return m_pRunningScene;
 }
 
 void HrSceneManager::RunScene(const HrScenePtr& pScene)
@@ -66,6 +71,9 @@ void HrSceneManager::RenderScene(HrRenderTargetPtr& renderTarget)
 {
 	HrDirector::Instance()->GetRenderEngine()->ClearRenderTargetView();
 	HrDirector::Instance()->GetRenderEngine()->ClearDepthStencilView();
+
+	//Lights
+	m_pRenderParameters->SetCurrentScene(m_pRunningScene);
 
 	std::map<int, HrViewPort*>& mapViewPorts = renderTarget->GetViewPorts();
 	for (auto& itemViewPorts : mapViewPorts)

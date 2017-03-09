@@ -30,6 +30,8 @@ namespace Hr
 		HrMesh();
 		virtual ~HrMesh();
 
+		static size_t CreateHashName(const std::string& strFullFilePath);
+
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		HrSubMesh* AddSubMesh();

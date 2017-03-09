@@ -28,12 +28,12 @@ HrD3D11RenderFactory::~HrD3D11RenderFactory()
 
 HrRenderPtr HrD3D11RenderFactory::CreateRender()
 {
-	return std::static_pointer_cast<HrRender>(MakeSharedPtr<HrD3D11Render>());
+	return std::static_pointer_cast<HrRender>(HrMakeSharedPtr<HrD3D11Render>());
 }
 
 HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
 {
-	return std::static_pointer_cast<HrRenderTarget>(MakeSharedPtr<HrD3D11RenderWindow>());
+	return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderWindow>());
 }
 
 HrVertex* HrD3D11RenderFactory::CreateVertex()
@@ -62,7 +62,7 @@ HrShader* HrD3D11RenderFactory::CreateShader()
 
 HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
 {
-	HrShaderCompilerPtr pShaderCompiler = MakeSharedPtr<HrD3D11ShaderCompiler>();
+	HrShaderCompilerPtr pShaderCompiler = HrMakeSharedPtr<HrD3D11ShaderCompiler>();
 
 	return pShaderCompiler;
 }
