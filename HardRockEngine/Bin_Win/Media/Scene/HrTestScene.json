@@ -4,15 +4,15 @@
         "CAMERA": {},
         "SCENE_NODE_0": {
             "NAME": "Node1",
-	    "ENTITY":"tests/56Por1.FBX",
+	    "ENTITY":"PrefabModel/HrPrefab1.prefab",
             "POSITION": "0.0|0.0|0.0|",
             "ROTATION": "0.0|0.0|0.0|",
             "SCALE": "1.0|1.0|1.0|",
             "CHILDREN": {
                 "SCENE_NODE_0": {
 			"NAME": "Node2-Node1'Child",
-			"ENTITY":"tests/bGUN01h2.FBX",
-			"POSITION": "-10000.0|0.0|0.0|",
+			"ENTITY":"PrefabModel/HrPrefab1.prefab",
+			"POSITION": "20.0|0.0|0.0|",
 			"ROTATION": "0.0|0.0|0.0|",
 			"SCALE": "1.0|1.0|1.0|"
 		}

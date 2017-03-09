@@ -1,0 +1,30 @@
+{
+    "SCENE_ROOT": {
+        "AMBIENT_LIGHT_COLOR": "255|255|255|255|",
+        "SCENE_NODE_0": {
+            "NAME": "Node1",
+            "ENTITY": {
+                "ENTITY_TYPE": 1,
+                "LIGHT_TYPE": 1,
+                "LIGHT_NAME": "Light_1",
+                "LIGHT_POSITION": "0.0|0.0|0.0|",
+                "LIGHT_DIRECTION": "1.0|-1.0|1.0|",
+                "LIGHT_DIFFUSE_COLOR": "255|255|0|255|",
+                "LIGHT_SPECULAR_COLOR": "0|255|0|255|"
+            },
+            "POSITION": "0.0|0.0|0.0|",
+            "ROTATION": "0.0|0.0|0.0|",
+            "SCALE": "1.0|1.0|1.0|"
+        },
+        "SCENE_NODE_1": {
+            "NAME": "Node1",
+            "ENTITY": {
+                "ENTITY_TYPE": 2,
+                "PREFAB": "PrefabModel/HrPrefab1.prefab"
+            },
+            "POSITION": "0.0|0.0|0.0|",
+            "ROTATION": "0.0|0.0|0.0|",
+            "SCALE": "1.0|1.0|1.0|"
+        }
+    }
+}
