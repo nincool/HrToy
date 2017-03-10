@@ -55,7 +55,9 @@ void HrResourceManager::InitResourceManager()
 
 void HrResourceManager::CreateBuildInEffects()
 {
-	LoadResource("Media/HrShader/HrLambert.effectxml");
+	//LoadResource("Media/HrShader/HrLambert.effectxml");
+	//LoadResource("Media/HrShader/HrPhong.effectxml");
+	LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -73,7 +75,7 @@ HrMaterial* HrResourceManager::GetDefaultMaterial()
 
 HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
 {
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrLambert.effectxml", HrResource::RT_EFFECT));
+	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
 	HRASSERT(pRenderEffect, "GetDefaultRenderEffect Error!");
 
 	return pRenderEffect;
@@ -108,14 +110,20 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResour
 			pReturnRes->Load();
 			break;
 		}
-		}
-
-		//todo
-		if (strfileSuffix == "effectxml")
+		case HrResource::RT_EFFECT:
 		{
 			pReturnRes = AddEffectResource(strFullFilePath);
 			pReturnRes->Load();
+			break;
 		}
+		}
+
+		//todo
+		//if (strfileSuffix == "effectxml")
+		//{
+		//	pReturnRes = AddEffectResource(strFullFilePath);
+		//	pReturnRes->Load();
+		//}
 	}
 	else
 	{
@@ -235,15 +243,17 @@ HrResource* HrResourceManager::AddModelResource(const std::string& strFile)
 
 HrResource* HrResourceManager::AddEffectResource(const std::string& strFile)
 {
-	std::string strFileName = strFile.substr(strFile.rfind("/") + 1, strFile.size());
-	HrResource* pRes = HR_NEW HrRenderEffect();
-	pRes->DeclareResource(strFileName, strFile);
-	if (m_mapRenderEffects.find(pRes->GetHashID()) != m_mapRenderEffects.end())
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	size_t nHashID = HrRenderEffect::CreateHashName(strFullFileName);
+	if (m_mapRenderEffects.find(nHashID) != m_mapRenderEffects.end())
 	{
-		SAFE_DELETE(pRes);
 		HRASSERT(nullptr, "AddEffectResource Error!");
 		return nullptr;
 	}
+
+	std::string strFileName = strFile.substr(strFile.rfind("/") + 1, strFile.size());
+	HrResource* pRes = HR_NEW HrRenderEffect();
+	pRes->DeclareResource(strFileName, strFullFileName);
 	m_mapRenderEffects.insert(std::make_pair(pRes->GetHashID(), pRes));
 
 	return pRes;
@@ -251,49 +261,54 @@ HrResource* HrResourceManager::AddEffectResource(const std::string& strFile)
 
 HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 {
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-
-	HrResource* pMesh = HR_NEW HrMesh();
-	pMesh->DeclareResource(strFileName, strFile);
-	size_t nMeshHashID = pMesh->GetHashID();
-	if (m_mapMesh.find(nMeshHashID) != m_mapMesh.end())
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	size_t nHashID = HrMesh::CreateHashName(strFullFileName);
+	if (m_mapMesh.find(nHashID) != m_mapMesh.end())
 	{
-		SAFE_DELETE(pMesh);
 		HRASSERT(nullptr, "AddMeshResource Error!");
 		return nullptr;
 	}
-	m_mapMesh.insert(std::make_pair(nMeshHashID, pMesh));
+
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
+	HrResource* pMesh = HR_NEW HrMesh();
+	pMesh->DeclareResource(strFileName, strFullFileName);
+	m_mapMesh.insert(std::make_pair(pMesh->GetHashID(), pMesh));
 
 	return pMesh;
 }
 
 HrResource* HrResourceManager::AddMaterialResource(const std::string& strFile)
 {
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-
-	HrMaterial* pMaterial = HR_NEW HrMaterial();
-	pMaterial->DeclareResource(strFileName, strFile);
-	size_t nMaterialID = pMaterial->GetHashID();
-	if (m_mapMaterials.find(nMaterialID) != m_mapMaterials.end())
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
+	if (m_mapMaterials.find(nHashID) != m_mapMaterials.end())
 	{
+		HRASSERT(nullptr, "AddMeshResource Error!");
 		return nullptr;
 	}
-	m_mapMaterials.insert(std::make_pair(nMaterialID, pMaterial));
+
+	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
+	HrMaterial* pMaterial = HR_NEW HrMaterial();
+	pMaterial->DeclareResource(strFileName, strFile);
+	m_mapMaterials.insert(std::make_pair(pMaterial->GetHashID(), pMaterial));
 
 	return pMaterial;
 }
 
 HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
 {
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	size_t nHashID = HrTexture::CreateHashName(strFullFileName);
+	if (m_mapTextures.find(nHashID) != m_mapTextures.end())
+	{
+		HRASSERT(nullptr, "AddMeshResource Error!");
+		return nullptr;
+	}
+
 	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
 	HrTexture* pTexture = HrDirector::Instance()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
 	pTexture->DeclareResource(strFileName, strFile);
-	size_t nTextureID = pTexture->GetHashID();
-	if (m_mapMaterials.find(nTextureID) != m_mapMaterials.end())
-	{
-		return nullptr;
-	}
-	m_mapMesh.insert(std::make_pair(nTextureID, pTexture));
+	m_mapMesh.insert(std::make_pair(pTexture->GetHashID(), pTexture));
 
 	return pTexture;
 }

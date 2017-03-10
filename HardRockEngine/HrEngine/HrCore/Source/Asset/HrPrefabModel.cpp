@@ -147,7 +147,11 @@ bool HrPrefabModel::LoadImpl()
 		if (pSubMesh && m_vecMaterial.size() > i)
 		{
 			pSubMesh->SetMaterial(m_vecMaterial[i]);
-			pSubMesh->SetTexture(m_vecTexture[i]);
+			//todo texture需要重新修改
+			if (0 <= i && i < m_vecTexture.size())
+			{
+				pSubMesh->SetTexture(m_vecTexture[i]);
+			}
 		}
 	}
 

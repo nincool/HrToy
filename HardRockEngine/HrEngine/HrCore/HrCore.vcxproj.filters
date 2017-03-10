@@ -491,5 +491,8 @@
     <None Include="..\..\Bin_Win\Media\HrShader\HrLightingCommon.fx">
       <Filter>Effects</Filter>
     </None>
+    <None Include="..\..\Bin_Win\Media\HrShader\HrPhong.fx">
+      <Filter>Effects</Filter>
+    </None>
   </ItemGroup>
 </Project>

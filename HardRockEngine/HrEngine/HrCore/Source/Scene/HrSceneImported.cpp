@@ -128,23 +128,6 @@ void HrSceneImported::CreateSceneFromData()
 	CreateSceneNode(m_pRootNode, m_sceneDataInfo.vecSceneNodeInfo);
 }
 
-void HrSceneImported::CreateSceneLights(HrSceneNode* pNode, std::vector<HrSceneInfo::HrSceneLightInfo>& vecSceneLightsInfo)
-{
-	for (auto& itemSceneLight : vecSceneLightsInfo)
-	{
-		switch (itemSceneLight.nLightType)
-		{
-		case HrLight::LT_DIRECTIONAL:
-		{
-			auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(itemSceneLight.vDirection, itemSceneLight.diffuseColor, itemSceneLight.specularColor);
-			AddSceneNode(pLight);
-			pLight->GetTransform()->SetPosition(itemSceneLight.vPosition);
-			break;
-		}
-		}
-	}
-}
-
 void HrSceneImported::CreateSceneNode(HrSceneNode* pParent, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo)
 { 
 	for (auto& itemSceneNode : vecSceneNodeInfo)

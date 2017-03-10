@@ -16,9 +16,12 @@ HrColor::HrColor() :Color()
 {
 }
 
-HrColor::HrColor(const HrColor& color)
+HrColor::HrColor(const HrColor& color) : KlayGE::Color(color)
 {
+}
 
+HrColor::HrColor(HrColor&& color):KlayGE::Color(color)
+{
 }
 
 HrColor::HrColor(const float* rhs):Color(rhs)
@@ -41,9 +44,70 @@ HrColor::HrColor(uint32 dw):Color(dw)
 {
 }
 
-
 float4 HrColor::Value() const
 {
 	return float4(r(), g(), b(), a());
 }
 
+HrColor& HrColor::operator+=(HrColor const & rhs) 
+{
+	col_ += rhs.col_;
+	return *this;
+}
+
+HrColor& HrColor::operator-=(HrColor const & rhs) 
+{
+	col_ -= rhs.col_;
+	return *this;
+}
+
+HrColor& HrColor::operator*=(float rhs) 
+{
+	col_ *= rhs;
+	return *this;
+}
+
+HrColor& HrColor::operator*=(HrColor const & rhs) 
+{
+	return HrColor(col_[0] * rhs[0], col_[1] * rhs[1], col_[2] * rhs[2], col_[3] * rhs[3]);
+}
+
+HrColor& HrColor::operator/=(float rhs) 
+{
+	col_ /= rhs;
+	return *this;
+}
+
+HrColor& HrColor::operator=(HrColor const & rhs) 
+{
+	if (this != &rhs)
+	{
+		col_ = rhs.col_;
+	}
+	return *this;
+}
+
+HrColor& HrColor::operator=(HrColor&& rhs) 
+{
+	if (this != &rhs)
+	{
+		col_ = rhs.col_;
+	}
+	return *this;
+}
+
+
+HrColor const HrColor::operator+() const 
+{
+	return *this;
+}
+
+HrColor const HrColor::operator-() const 
+{
+	return HrColor(-this->r(), -this->g(), -this->b(), -this->a());
+}
+
+bool Hr::HrColor::operator==(HrColor const & rhs) const
+{
+	return col_ == rhs.col_;
+}

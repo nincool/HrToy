@@ -15,6 +15,10 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+#include "ThirdParty/rapidjson/include/rapidjson/document.h"
+
+#include <boost/format.hpp>
+
 
 using namespace Hr;
 
@@ -60,6 +64,11 @@ HrRenderEffect::~HrRenderEffect()
 	}
 }
 
+size_t HrRenderEffect::CreateHashName(const std::string& strFullFilePath)
+{
+	return HrHashValue(strFullFilePath);
+}
+
 void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
 	m_strFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFilePath);
@@ -67,86 +76,176 @@ void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_EFFECT;
 
-	m_nHashID = HrHashValue(m_strFilePath);
+	m_nHashID = CreateHashName(m_strFilePath);
 }
 
 bool HrRenderEffect::LoadImpl()
 {
-	HrStreamDataPtr pStreamData;
-	HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
-
-	typedef boost::property_tree::ptree::value_type ptValue;
-	boost::property_tree::ptree pt;
-	boost::property_tree::read_xml(m_strFilePath, pt);
-
-	for (ptValue& rootEffectValue : pt.get_child("effect"))
+	std::string strFullPath = HrFileUtils::Instance()->GetFullPathForFileName(m_strFilePath);
+	if (strFullPath.length() <= 0)
 	{
-		if (rootEffectValue.first == "effectfile")
-		{
-			m_strEffectFile = HrFileUtils::Instance()->GetFullPathForFileName(rootEffectValue.second.get_value<std::string>());
-			
-			//加载Shader文件
-			pStreamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
-		}
-		else if (rootEffectValue.first == "technique")
-		{
-			std::string strTechniqueName = rootEffectValue.second.get<std::string>("<xmlattr>.name");
-
-			//创建Technique
-			HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(strTechniqueName);
-			m_vecRenderTechnique.push_back(pRenderTechnique);
-
-			for (ptValue& nodeTechniqueValue : rootEffectValue.second)
-			{
-				if (nodeTechniqueValue.first == "pass")
-				{
-					std::string strPassName = nodeTechniqueValue.second.get<std::string>("<xmlattr>.name");
-
-					//创建Pass
-					HrRenderPass* pRenderPass = pRenderTechnique->AddPass(strPassName);
-					for (ptValue& nodePassValue : nodeTechniqueValue.second)
-					{
-						if (nodePassValue.first == "param")
-						{
-							std::string strParamName = nodePassValue.second.get<std::string>("<xmlattr>.name");
-							std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
-							if (strParamName == "vertex_shader")
-							{
-								HrStreamData effectStreamBuffer;
-								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, effectStreamBuffer);
-								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_VERTEX_SHADER);
-								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
-								
-								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								pVertexShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_VERTEX_SHADER);
-
-								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
-								m_vecVertexShaders.push_back(pVertexShader);
-							}
-							else if (strParamName == "pixel_shader")
-							{
-								HrStreamData effectStreamBuffer;
-								pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_PIXEL_SHADER, strParamValue, effectStreamBuffer);
-								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_PIXEL_SHADER);
-								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
-
-								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-								pPixelShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
-
-								pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
-								m_vecPixelShaders.push_back(pPixelShader);
-							}
-						}
-					}
-				}
-			}
-		}
+		HRERROR("HrRenderEffect::LoadImpl Error! FileName[%s]", m_strFilePath.c_str());
+		return false;
+	}
+	HrStreamDataPtr pStreamData = HrFileUtils::Instance()->GetFileData(strFullPath);
+	rapidjson::Document d;
+	d.Parse<0>(pStreamData->GetBufferPoint());
+	if (d.HasParseError())
+	{
+		int nErrorCode = d.GetParseError();
+		int nOffset = d.GetErrorOffset();
+		HRERROR("HrRenderEffect::LoadImpl Error! ParseJsonFile Error! ErrorCode[%d] Offset[%d]", nErrorCode, nOffset);
+		return false;
 	}
 
+	const rapidjson::Value& sceneRootInfo = d["EFFECT_ROOT"];
 
-	pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
-	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecVertexShaders);
-	pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
+	{
+		std::string strShadeFile = sceneRootInfo["SHADER_FILE"].GetString();
+		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShadeFile);
+
+		HrStreamDataPtr pShaderFileData = HrFileUtils::Instance()->GetFileData(m_strShaderFile);
+		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
+
+		int nTempTechniqueIndex = 0;
+		while (true)
+		{
+			boost::format fmtTechniqueItem("TECHNIQUE_%1%");
+			std::string strTechniqueItem = (fmtTechniqueItem % nTempTechniqueIndex).str();
+			if (sceneRootInfo.HasMember(strTechniqueItem.c_str()))
+			{
+				const rapidjson::Value& techniqueInfo = sceneRootInfo[strTechniqueItem.c_str()];
+				HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(techniqueInfo["NAME"].GetString());
+				m_vecRenderTechnique.push_back(pRenderTechnique);
+
+				int nTempPassIndex = 0;
+				while (true)
+				{
+					boost::format fmtPassItem("PASS_%1%");
+					std::string strPassName = (fmtPassItem % nTempPassIndex).str();
+					if (techniqueInfo.HasMember(strPassName.c_str()))
+					{
+						const rapidjson::Value& passInfo = techniqueInfo[strPassName.c_str()];
+						HrRenderPass* pRenderPass = pRenderTechnique->AddPass(passInfo["NAME"].GetString());
+						{
+							std::string strVertexEnterPoint = passInfo["VERTEX_SHADER"].GetString();
+							HrStreamData effectStreamBuffer;
+							pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_VERTEX_SHADER, strVertexEnterPoint, effectStreamBuffer);
+							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
+							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+
+							HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+							pVertexShader->StreamIn(effectStreamBuffer, m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
+
+							pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+							m_vecVertexShaders.push_back(pVertexShader);
+						}
+						{
+							std::string strPixelEnterPoint = passInfo["PIXEL_SHADER"].GetString();
+							HrStreamData effectStreamBuffer;
+							pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_PIXEL_SHADER, strPixelEnterPoint, effectStreamBuffer);
+							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+
+							HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+							pPixelShader->StreamIn(effectStreamBuffer, m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+
+							pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
+							m_vecPixelShaders.push_back(pPixelShader);
+						}
+
+					}
+					else
+					{
+						break;
+					}
+					++nTempPassIndex;
+				}
+			}
+			else
+			{
+				break;
+			}
+			++nTempTechniqueIndex;
+		}
+
+		pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
+		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecVertexShaders);
+		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
+	}
+
+	//HrStreamDataPtr pStreamData;
+	//HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
+
+	//typedef boost::property_tree::ptree::value_type ptValue;
+	//boost::property_tree::ptree pt;
+	//boost::property_tree::read_xml(m_strFilePath, pt);
+
+	//for (ptValue& rootEffectValue : pt.get_child("effect"))
+	//{
+	//	if (rootEffectValue.first == "effectfile")
+	//	{
+	//		m_strEffectFile = HrFileUtils::Instance()->GetFullPathForFileName(rootEffectValue.second.get_value<std::string>());
+	//		
+	//		//加载Shader文件
+	//		pStreamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
+	//	}
+	//	else if (rootEffectValue.first == "technique")
+	//	{
+	//		std::string strTechniqueName = rootEffectValue.second.get<std::string>("<xmlattr>.name");
+
+	//		//创建Technique
+	//		HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(strTechniqueName);
+	//		m_vecRenderTechnique.push_back(pRenderTechnique);
+
+	//		for (ptValue& nodeTechniqueValue : rootEffectValue.second)
+	//		{
+	//			if (nodeTechniqueValue.first == "pass")
+	//			{
+	//				std::string strPassName = nodeTechniqueValue.second.get<std::string>("<xmlattr>.name");
+
+	//				//创建Pass
+	//				HrRenderPass* pRenderPass = pRenderTechnique->AddPass(strPassName);
+	//				for (ptValue& nodePassValue : nodeTechniqueValue.second)
+	//				{
+	//					if (nodePassValue.first == "param")
+	//					{
+	//						std::string strParamName = nodePassValue.second.get<std::string>("<xmlattr>.name");
+	//						std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
+	//						if (strParamName == "vertex_shader")
+	//						{
+	//							HrStreamData effectStreamBuffer;
+	//							pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, effectStreamBuffer);
+	//							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_VERTEX_SHADER);
+	//							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+	//							
+	//							HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+	//							pVertexShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_VERTEX_SHADER);
+
+	//							pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+	//							m_vecVertexShaders.push_back(pVertexShader);
+	//						}
+	//						else if (strParamName == "pixel_shader")
+	//						{
+	//							HrStreamData effectStreamBuffer;
+	//							pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_PIXEL_SHADER, strParamValue, effectStreamBuffer);
+	//							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_PIXEL_SHADER);
+	//							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+
+	//							HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+	//							pPixelShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
+
+	//							pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
+	//							m_vecPixelShaders.push_back(pPixelShader);
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+
 
 	return true;
 }

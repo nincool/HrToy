@@ -11,6 +11,8 @@ namespace Hr
 		HrRenderEffect();
 		virtual ~HrRenderEffect();
 
+		static size_t CreateHashName(const std::string& strFullFilePath);
+
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
 		HrRenderTechnique* GetTechnique(const std::string& strTechniqueName);
@@ -30,7 +32,7 @@ namespace Hr
 
 		std::string m_strEffectName;
 		std::string m_strFilePath;
-		std::string m_strEffectFile;
+		std::string m_strShaderFile;
 		
 		std::vector<HrShader*> m_vecVertexShaders;
 		std::vector<HrShader*> m_vecPixelShaders;

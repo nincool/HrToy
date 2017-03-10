@@ -155,7 +155,7 @@ namespace KlayGE
 
 		bool operator==(Color_T<T> const & rhs) const KLAYGE_NOEXCEPT;
 
-	private:
+	protected:
 		Vector_T<T, elem_num> col_;
 	};
 }

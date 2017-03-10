@@ -69,6 +69,10 @@ void HrSceneManager::UpdateScene()
 
 void HrSceneManager::RenderScene(HrRenderTargetPtr& renderTarget)
 {
+	if (!CheckSceneRunning())
+	{
+		return;
+	}
 	HrDirector::Instance()->GetRenderEngine()->ClearRenderTargetView();
 	HrDirector::Instance()->GetRenderEngine()->ClearDepthStencilView();
 
