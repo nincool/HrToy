@@ -1,7 +1,7 @@
 
 cbuffer PerFrame
 {
-	float4x4	g_worldViewProj;
+	float4x4	world_view_proj_matrix;
 };
 
 struct VertexIn
@@ -19,7 +19,7 @@ struct VertexOut
 VertexOut VS_Main(VertexIn vin)
 {
 	VertexOut vout;
-	vout.posH = mul(float4(vin.pos,1.f),g_worldViewProj);
+	vout.posH = mul(float4(vin.pos,1.f),world_view_proj_matrix);
 	vout.color = vin.color;
 	
 	return vout;
@@ -30,11 +30,3 @@ float4 PS_Main(VertexOut pin):SV_TARGET
 	return pin.color;
 }
 
-technique11 BasicDraw
-{
-	Pass p0
-	{
-		SetVertexShader(CompileShader(vs_5_0,VS()));
-		SetPixelShader(CompileShader(ps_5_0,PS()));
-	}
-}

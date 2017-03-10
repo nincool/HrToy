@@ -1,0 +1,21 @@
+{
+    "EFFECT_ROOT": {
+        "SHADER_FILE": "Media/HrShader/HrPhong.fx",
+        "TECHNIQUE_0": {
+            "NAME": "Technique_0",
+            "PASS_0": {
+                "NAME": "Technique_0_Pass_0",
+                "VERTEX_SHADER": "Pass0_VS_Main",
+                "PIXEL_SHADER": "Pass0_PS_Main"
+            }
+        },
+        "TECHNIQUE_1": {
+            "NAME": "Technique_1",
+            "PASS_0": {
+                "NAME": "Technique_1_Pass_1",
+                "VERTEX_SHADER": "Pass1_VS_Main",
+                "PIXEL_SHADER": "Pass1_PS_Main"
+            }
+        }
+    }
+}

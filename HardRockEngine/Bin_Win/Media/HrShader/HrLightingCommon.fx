@@ -1,10 +1,9 @@
 
 struct DirectionLight
 {
-    float4 ambient_light_color;
-    float4 diffuse_light_color;
-    float4 specular_light_color;
-    float3 light_direction;
+    float4 diffuse_light_color[4];
+    float4 specular_light_color[4];
+    float3 light_direction[4];
 };
 
 struct Material
