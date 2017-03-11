@@ -15,6 +15,8 @@ using namespace Hr;
 
 HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
+	m_bEnable = true;
+
 	m_nodeType = NT_NORMAL;
 	m_pRenderable = nullptr;
 	m_pParent = nullptr;
@@ -105,13 +107,16 @@ void HrSceneNode::OnExist()
 
 void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
-	if (m_pRenderable != nullptr && m_pRenderable->CanRender())
+	if (this->m_bEnable)
 	{
-		pRenderQueue->AddRenderable(this);
-	}
-	for (auto& item : m_vecChildNode)
-	{
-		item->FindVisibleRenderable(pRenderQueue);
+		if (m_pRenderable != nullptr && m_pRenderable->CanRender())
+		{
+			pRenderQueue->AddRenderable(this);
+		}
+		for (auto& item : m_vecChildNode)
+		{
+			item->FindVisibleRenderable(pRenderQueue);
+		}
 	}
 }
 
@@ -175,4 +180,35 @@ HrRenderable* HrSceneNode::GetRenderable() const
 HrTransform* HrSceneNode::GetTransform() const
 {
 	return m_pTransform;
+}
+
+HrSceneNode* HrSceneNode::GetNodeByNameFromHierarchy(const std::string& strName)
+{
+	if (this->m_strName == strName)
+	{
+		return this;
+	}
+	else
+	{
+		for (auto& itemChild : m_vecChildNode)
+		{
+			HrSceneNode* pResult = itemChild->GetNodeByNameFromHierarchy(strName);
+			if (pResult != nullptr)
+			{
+				return pResult;
+			}
+		}
+
+		return nullptr;
+	}
+}
+
+void HrSceneNode::SetEnable(bool bEnable)
+{
+	m_bEnable = bEnable;
+}
+
+bool HrSceneNode::GetEnable() const
+{
+	return m_bEnable;
 }

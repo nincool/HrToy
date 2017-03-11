@@ -186,6 +186,11 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 				constantVariableDesc.name = constVarDesc.Name;
 				constantVariableDesc.start_offset = constVarDesc.StartOffset;
 				constantVariableDesc.size = static_cast<uint32>(constVarDesc.Size);
+				//最后一个size在字节对齐的情况下是有问题的，不知道什么原因
+				if (nCBVarIndex == constantBufferDesc.Variables - 1)
+				{
+					constantVariableDesc.size = constantBufferDesc.Size - constantVariableDesc.start_offset;
+				}
 
 				constantVariableDesc.typeName = varRefTypeDesc.Name;
 				constantVariableDesc.varClass = static_cast<uint32>(varRefTypeDesc.Class);
@@ -193,6 +198,7 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 				constantVariableDesc.rows = static_cast<uint8>(varRefTypeDesc.Rows);
 				constantVariableDesc.columns = static_cast<uint8>(varRefTypeDesc.Columns);
 				constantVariableDesc.elements = static_cast<uint16>(varRefTypeDesc.Elements);
+				constantVariableDesc.elements = constantVariableDesc.elements > 0 ? constantVariableDesc.elements : 1;
 				constantVariableDesc.bUsed = constVarDesc.uFlags & D3D_SVF_USED;
 
 				{
@@ -217,11 +223,13 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc structVariableDesc;
 						structVariableDesc.name = pVarRefType->GetMemberTypeName(nStructVarIndex);
 						structVariableDesc.start_offset = memberTypeDesc.Offset + nParentOffset;
+						
 						structVariableDesc.varClass = static_cast<uint32>(memberTypeDesc.Class);
 						structVariableDesc.type = static_cast<uint8>(memberTypeDesc.Type);
 						structVariableDesc.rows = static_cast<uint8>(memberTypeDesc.Rows);
 						structVariableDesc.columns = static_cast<uint8>(memberTypeDesc.Columns);
 						structVariableDesc.elements = static_cast<uint16>(memberTypeDesc.Elements);
+						structVariableDesc.elements = structVariableDesc.elements > 0 ? structVariableDesc.elements : 1;
 						structVariableDesc.bUsed = constantVariableDesc.bUsed;
 
 						{
@@ -236,6 +244,26 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(HrStreamData& shaderBuffer, 
 						}
 
 						constantVariableDesc.struct_desc.push_back(structVariableDesc);
+					}
+
+					if (constantVariableDesc.struct_desc.size() == 1)
+					{
+						constantVariableDesc.struct_desc[0].size = constantVariableDesc.size;
+					}
+					else
+					{
+						if (constantVariableDesc.struct_desc.size() >= 2)
+						{ 
+							uint32 nLastVariableOffset = 0;
+							for (size_t nStructVariableIndex = 0; nStructVariableIndex < constantVariableDesc.struct_desc.size() - 1; ++nStructVariableIndex)
+							{
+								constantVariableDesc.struct_desc[nStructVariableIndex].size =
+									constantVariableDesc.struct_desc[nStructVariableIndex + 1].start_offset - constantVariableDesc.struct_desc[nStructVariableIndex].start_offset;
+							}
+							constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].size = 
+								constantVariableDesc.size - constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].start_offset
+								+ constantVariableDesc.start_offset;
+						}
 					}
 				}
 
@@ -381,23 +409,24 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 						HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varStructMen.name);
 						if (pRenderParamDefine != nullptr)
 						{
+							//HLSL 是按照4D向量对齐 但是在cbuffer中分配内存又很奇怪，待验证
+							BOOST_ASSERT(pRenderParamDefine->nStride * pRenderParamDefine->nElementCount <= varStructMen.size);
 							pEffectParameter->ParamInfo(pRenderParamDefine->paramType
 								, pRenderParamDefine->dataType
 								, HrRenderEffectParameter::REPBT_CONSTBUFFER
-								, pRenderParamDefine->nStride
+								, varStructMen.size / varStructMen.elements
 								, varStructMen.elements);
-							size_t nParamSize = pRenderParamDefine->nStride;
-							nStructSize += nParamSize;
+							nStructSize += pRenderParamDefine->nStride;
 							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
 						}
 						else
 						{
+							//todo 自定义变量
 							pEffectParameter->ParamInfo(RPT_UNKNOWN
 								, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type)
 								, HrRenderEffectParameter::REPBT_CONSTBUFFER
 								, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type))
 								, varStructMen.elements);
-							nStructSize += pRenderParamDefine->nStride;
 							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
 						}
 						pEffectStruct->AddRenderEffectParameter(pEffectParameter);

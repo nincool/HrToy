@@ -174,79 +174,6 @@ bool HrRenderEffect::LoadImpl()
 		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
 	}
 
-	//HrStreamDataPtr pStreamData;
-	//HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
-
-	//typedef boost::property_tree::ptree::value_type ptValue;
-	//boost::property_tree::ptree pt;
-	//boost::property_tree::read_xml(m_strFilePath, pt);
-
-	//for (ptValue& rootEffectValue : pt.get_child("effect"))
-	//{
-	//	if (rootEffectValue.first == "effectfile")
-	//	{
-	//		m_strEffectFile = HrFileUtils::Instance()->GetFullPathForFileName(rootEffectValue.second.get_value<std::string>());
-	//		
-	//		//加载Shader文件
-	//		pStreamData = HrFileUtils::Instance()->GetFileData(m_strEffectFile);
-	//	}
-	//	else if (rootEffectValue.first == "technique")
-	//	{
-	//		std::string strTechniqueName = rootEffectValue.second.get<std::string>("<xmlattr>.name");
-
-	//		//创建Technique
-	//		HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(strTechniqueName);
-	//		m_vecRenderTechnique.push_back(pRenderTechnique);
-
-	//		for (ptValue& nodeTechniqueValue : rootEffectValue.second)
-	//		{
-	//			if (nodeTechniqueValue.first == "pass")
-	//			{
-	//				std::string strPassName = nodeTechniqueValue.second.get<std::string>("<xmlattr>.name");
-
-	//				//创建Pass
-	//				HrRenderPass* pRenderPass = pRenderTechnique->AddPass(strPassName);
-	//				for (ptValue& nodePassValue : nodeTechniqueValue.second)
-	//				{
-	//					if (nodePassValue.first == "param")
-	//					{
-	//						std::string strParamName = nodePassValue.second.get<std::string>("<xmlattr>.name");
-	//						std::string strParamValue = nodePassValue.second.get<std::string>("<xmlattr>.value");
-	//						if (strParamName == "vertex_shader")
-	//						{
-	//							HrStreamData effectStreamBuffer;
-	//							pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_VERTEX_SHADER, strParamValue, effectStreamBuffer);
-	//							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_VERTEX_SHADER);
-	//							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
-	//							
-	//							HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-	//							pVertexShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_VERTEX_SHADER);
-
-	//							pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
-	//							m_vecVertexShaders.push_back(pVertexShader);
-	//						}
-	//						else if (strParamName == "pixel_shader")
-	//						{
-	//							HrStreamData effectStreamBuffer;
-	//							pShaderCompiler->CompileShaderFromCode(m_strEffectFile, *pStreamData.get(), HrShader::ST_PIXEL_SHADER, strParamValue, effectStreamBuffer);
-	//							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strParamValue, HrShader::ST_PIXEL_SHADER);
-	//							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
-
-	//							HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-	//							pPixelShader->StreamIn(effectStreamBuffer, m_strEffectFile, strParamValue, HrShader::ST_PIXEL_SHADER);
-
-	//							pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
-	//							m_vecPixelShaders.push_back(pPixelShader);
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-
-
 	return true;
 }
 
@@ -305,9 +232,28 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 			renderEffectParameter = renderFrameParameters.GetWorldViewProjMatrix();
 		break;
 	}
+	case RPT_CAMERA_POSITION:
+	{
+		renderEffectParameter = renderFrameParameters.GetCameraPosition();
+		break;
+	}
+	case RPT_SHININESS:
+	{
+		renderEffectParameter = 10u;
+		break;
+	}
+	case RPT_SAMPLER:
+	{
+		break;
+	}
 	case RPT_AMBIENT_COLOR:
 	{
 		renderEffectParameter = renderFrameParameters.GetAmbientColor();
+		break;
+	}
+	case RPT_LIGHTS_NUM:
+	{
+		renderEffectParameter = renderFrameParameters.GetLightsNum();
 		break;
 	}
 	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
@@ -337,12 +283,12 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 	}
 	case RPT_SPECULAR_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialSpecualr();
+		renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
 		break;
 	}
 	case RPT_REFLECT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialSpecualr();
+		renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
 		break;
 	}
 	default:

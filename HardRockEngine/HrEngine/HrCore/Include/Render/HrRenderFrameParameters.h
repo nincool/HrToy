@@ -31,7 +31,8 @@ namespace Hr
 		const float3& GetCameraPosition();
 
 		//lights
-		float4 GetAmbientColor();
+		const float4& GetAmbientColor();
+		const int3& GetLightsNum();
 		const std::vector<float3>& GetDirectionalLightDirections();
 		const std::vector<float4>& GetDirectionalLightDiffuseColors();
 		const std::vector<float4>& GetDirectionalLightSpecularColors();
@@ -43,7 +44,7 @@ namespace Hr
 		//获取材质信息
 		float4 GetMaterialAmbient() const;
 		float4 GetMaterialDiffuse() const;
-		float4 GetMaterialSpecualr() const;
+		float4 GetMaterialSpecular() const;
 		float4 GetMaterialEmissive() const;
 		float GetMaterialOpacity() const;
 	protected:
@@ -62,7 +63,7 @@ namespace Hr
 
 		//lights
 		float4 m_ambientColor;
-
+		int3 m_lightsNum;
 		std::vector<float3> m_vecDirectionalDirections;
 		std::vector<float4> m_vecDirectionalDiffuseColor;
 		std::vector<float4> m_vecDirectionalSpecularColor;

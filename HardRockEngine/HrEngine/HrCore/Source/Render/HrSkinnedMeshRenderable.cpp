@@ -16,7 +16,7 @@ HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
 	m_pSubMesh = nullptr;
 
 	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Technique_0");
+	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Technique_1");
 	BOOST_ASSERT(m_pRenderTechnique);
 }
 

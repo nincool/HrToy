@@ -17,11 +17,14 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 12),
 
+	HrRenderParamDefine(RPT_SHININESS, "shininess", REDT_UINT1, 1, 4),
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
 
-	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY, "diffuse_light_color", REDT_FLOAT4, 4, 64),
-	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY, "specular_light_color", REDT_FLOAT4, 4, 64),
-	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY, "light_direction", REDT_FLOAT3, 4, 48),
+	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_INT3, 1, 1),
+
+	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY, "diffuse_light_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY, "specular_light_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY, "light_direction", REDT_FLOAT3, 4, 12),
 
 	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
@@ -543,6 +546,8 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	m_paramType = paramType;
 	m_dataType = dataType;
 	m_bindType = bindType;
+	m_nStride = nStride;
+
 	m_nArraySize = nArraySize <= 0 ? 1 : nArraySize;
 
 	if (m_pRenderVariable != nullptr)
@@ -567,6 +572,18 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3Array();
 		break;
+	case RPT_LIGHTS_NUM:
+	{
+		BOOST_ASSERT(m_dataType == REDT_INT3 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableInt3();
+		break;
+	}
+	case RPT_SHININESS:
+	{
+		BOOST_ASSERT(m_dataType == REDT_UINT1 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableUInt();
+		break;
+	}
 	case RPT_AMBIENT_COLOR:
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	case RPT_DIFFUSE_MATERIAL_COLOR:

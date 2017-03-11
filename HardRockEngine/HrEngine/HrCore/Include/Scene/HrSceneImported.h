@@ -29,6 +29,7 @@ namespace Hr
 		struct HrSceneNodeInfo
 		{
 			std::string strName;
+			int nEnable;
 			EnumEntityType nEntityType;
 			std::string strEntityResource;
 			Vector3 v3Position;

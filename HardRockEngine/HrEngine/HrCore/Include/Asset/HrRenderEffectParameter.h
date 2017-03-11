@@ -89,7 +89,10 @@ namespace Hr
 		RPT_CAMERA_POSITION,
 
 		//灯光属性
+		RPT_SHININESS,
 		RPT_AMBIENT_COLOR,
+
+		RPT_LIGHTS_NUM,
 		//方向光
 		RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY,
 		RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY,
@@ -308,8 +311,9 @@ namespace Hr
 		{
 			for (size_t i = 0; i < value.size(); ++i)
 			{
-				memcpy(m_pData + i * m_nStride, &value[0], sizeof(value[i]));
+				memcpy(m_pData + i * m_nStride, &value[i], sizeof(value[i]));
 			}
+			//memcpy(m_pData, &value[0], m_nStride)
 			return *this;
 		}
 		virtual void Value(std::vector<T>& val) const override
@@ -317,7 +321,7 @@ namespace Hr
 			val.resize(m_nSize);
 			for (size_t i = 0; i < m_nSize; ++i)
 			{
-				memcpy(&val[0], m_pData + i * m_nStride, sizeof(val[i]));
+				memcpy(&val[i], m_pData + i * m_nStride, sizeof(val[i]));
 			}
 		}
 	private:

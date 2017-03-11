@@ -28,9 +28,13 @@ namespace Hr
 
 		void SetName(const std::string& strName);
 		const std::string& GetName() const;
+
+		void SetEnable(bool bEnable);
+		bool GetEnable() const;
 		
 		void SetParent(HrSceneNode* pParent);
 		HrSceneNode* GetParent() const;
+		HrSceneNode* GetNodeByNameFromHierarchy(const std::string& strName);
 
 		HrRenderable* GetRenderable() const;
 		
@@ -58,6 +62,7 @@ namespace Hr
 		HrRenderable* m_pRenderable;
 		
 		std::string m_strName;
+		bool m_bEnable;
 
 		bool m_bRunning;
 

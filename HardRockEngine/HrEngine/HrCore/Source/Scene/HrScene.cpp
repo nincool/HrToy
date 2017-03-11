@@ -121,3 +121,13 @@ float4 HrScene::GetAmbientColor()
 {
 	return m_ambientLightColor.Value();
 }
+
+HrSceneNode* HrScene::GetSceneNodeByName(const std::string& strNodeName)
+{
+	if (strNodeName.empty())
+	{
+		return nullptr;
+	}
+
+	return m_pRootNode->GetNodeByNameFromHierarchy(strNodeName);
+}

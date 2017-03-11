@@ -4,7 +4,7 @@ using namespace Hr;
 
 HrTestScene::HrTestScene()
 {
-
+	m_bSphereDir = true;
 }
 
 HrTestScene::~HrTestScene()
@@ -23,6 +23,9 @@ void HrTestScene::OnEnter()
 	HrSceneImported::OnEnter();
 
 	CreateInputEvent();
+
+	m_pSphere = this->GetSceneNodeByName("Node3");
+	m_pSphere->GetTransform()->Translate(Vector3(-50, 0, 0));
 
 	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrTestScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
@@ -191,6 +194,23 @@ void HrTestScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKeyDownPressed)
 	{
+	}
+
+	if (m_bSphereDir)
+	{
+		m_pSphere->GetTransform()->Translate(Vector3(0.2, 0, 0));
+		if (m_pSphere->GetTransform()->GetPosition().x() >= 50)
+		{
+			m_bSphereDir = false;
+		}
+	}
+	else
+	{
+		m_pSphere->GetTransform()->Translate(Vector3(-0.2, 0, 0));
+		if (m_pSphere->GetTransform()->GetPosition().x() <= -50)
+		{
+			m_bSphereDir = true;
+		}
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "Render/HrCamera.h"
 #include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
+#include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
 #include "Asset/HrMaterial.h"
 
@@ -37,6 +38,7 @@ void HrRenderFrameParameters::SetCurrentScene(const HrScenePtr& pScene)
 	if (m_pCurrentScene->IsLightsDirty(HrLight::LT_DIRECTIONAL))
 	{
 		m_pCurrentScene->GetDirectionalLightsParam(m_vecDirectionalDirections, m_vecDirectionalDiffuseColor, m_vecDirectionalSpecularColor);
+		m_lightsNum[0] = m_vecDirectionalDirections.size();
 	}
 }
 
@@ -125,7 +127,7 @@ float4 HrRenderFrameParameters::GetMaterialDiffuse() const
 	return m_pCurrentMaterial->GetDiffuse();
 }
 
-float4 HrRenderFrameParameters::GetMaterialSpecualr() const
+float4 HrRenderFrameParameters::GetMaterialSpecular() const
 {
 	BOOST_ASSERT(m_pCurrentMaterial);
 	return m_pCurrentMaterial->GetSpecular();
@@ -147,7 +149,7 @@ const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
 	{
-		m_cameraPosition = m_pCurrentCamera->GetEyePos();
+		m_cameraPosition = m_pCurrentCamera->GetAttachCameraNode()->GetTransform()->GetWorldPosition();
 		m_bCameraDirty = false;
 	}
 	return m_cameraPosition;
@@ -167,9 +169,14 @@ const void HrRenderFrameParameters::GetFogParam(float4& fogColor, float& fogStar
 	fogRange = m_fogRange;
 }
 
-float4 HrRenderFrameParameters::GetAmbientColor()
+const float4& HrRenderFrameParameters::GetAmbientColor()
 {
 	return m_ambientColor;
+}
+
+const int3& HrRenderFrameParameters::GetLightsNum()
+{
+	return m_lightsNum;
 }
 
 const std::vector<float3>& HrRenderFrameParameters::GetDirectionalLightDirections()

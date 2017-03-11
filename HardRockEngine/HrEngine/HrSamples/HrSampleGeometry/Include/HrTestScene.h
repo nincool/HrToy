@@ -48,7 +48,8 @@ namespace Hr
 		bool m_bKeyDownPressed;
 
 
-
+		HrSceneNode* m_pSphere;
+		bool m_bSphereDir;
 	};
 }
 
