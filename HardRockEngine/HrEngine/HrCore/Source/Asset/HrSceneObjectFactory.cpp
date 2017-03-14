@@ -46,6 +46,14 @@ HrLightNode* HrSceneObjectFactory::CreateDirectionalLight(const Vector3& directi
 	return pLightNode;
 }
 
+HrLightNode* HrSceneObjectFactory::CreatePointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2)
+{
+	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrPointLight>(diffuse, specular, fRange, fAttenuation0, fAttenuation1, fAttenuation2));
+	HrLightNode* pLightNode = HR_NEW HrLightNode(pLight);
+
+	return pLightNode;
+}
+
 HrSceneNode* HrSceneObjectFactory::CreatePanel()
 {
 	return m_pGeometryFactory->CreatePanel();
@@ -77,10 +85,10 @@ HrSceneNode* HrSceneObjectFactory::CreateModel(const std::string& strName)
 	{
 		HrSkinnedMeshRenderable* pSkinRenderable = HR_NEW HrSkinnedMeshRenderable();
 		pSkinRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
-		HrSceneNode* pChildNode = HR_NEW HrSceneNode();
+		HrSceneNode* pChildNode = HR_NEW HrSceneNode(pPrefabModel->GetMesh()->GetSubMesh(i)->GetName(), pSkinRenderable);
 		pSceneNode->AddChild(pChildNode);
-		pChildNode->AttachRenderable(pSkinRenderable);
 	}
 
 	return pSceneNode;
 }
+

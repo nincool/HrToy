@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrRenderEffect : public HrResource
+	class HR_CORE_API HrRenderEffect : public HrResource
 	{
 	public:
 		HrRenderEffect();

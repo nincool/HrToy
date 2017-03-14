@@ -21,6 +21,16 @@ HrSubMesh::~HrSubMesh()
 	SAFE_DELETE(m_pRenderLayout);
 }
 
+void HrSubMesh::SetName(const std::string& strName)
+{
+	m_strName = strName;
+}
+
+const std::string& HrSubMesh::GetName()
+{
+	return m_strName;
+}
+
 HrRenderLayout* HrSubMesh::GetRenderLayout() const
 {
 	return m_pRenderLayout;

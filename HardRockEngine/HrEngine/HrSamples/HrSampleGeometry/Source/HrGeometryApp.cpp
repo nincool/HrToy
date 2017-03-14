@@ -47,6 +47,7 @@ void HrGeometryApp::CreateScene()
 {
 	//std::shared_ptr<HrGeometryScene> pTestScene = HrMakeSharedPtr<HrGeometryScene>();
 	//HrDirector::Instance()->RunScene(pTestScene);
+
 	std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();
 	pTestScene->LoadScene("PlayerScene.json");
 	HrDirector::Instance()->RunScene(pTestScene);

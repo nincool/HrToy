@@ -49,7 +49,10 @@ namespace Hr
 
 
 		HrSceneNode* m_pSphere;
+		HrRenderEffect* m_pEffect;
 		bool m_bSphereDir;
+
+		unsigned int m_nShiness;
 	};
 }
 

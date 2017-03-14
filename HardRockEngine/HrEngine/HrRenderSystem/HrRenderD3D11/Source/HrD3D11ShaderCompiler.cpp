@@ -440,7 +440,6 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 					//if it is worldviewprojmatrix , the class is D3D_SVC_MATRIX_COLUMNS, need to transpose the matrix
 					HrRenderEffectParameter* pEffectParameter = HR_NEW HrRenderEffectParameter(varDesc.name, varDesc.name_hash);
 					HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varDesc.name);
-					BOOST_ASSERT(pRenderParamDefine);
 					if (pRenderParamDefine != nullptr)
 					{
 						pEffectParameter->ParamInfo(pRenderParamDefine->paramType
@@ -449,6 +448,10 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 							, pRenderParamDefine->nStride
 							,  varDesc.elements);
 						pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
+					}
+					else
+					{
+
 					}
 
 					vecParameter.push_back(pEffectParameter);

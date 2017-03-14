@@ -237,11 +237,7 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 		renderEffectParameter = renderFrameParameters.GetCameraPosition();
 		break;
 	}
-	case RPT_SHININESS:
-	{
-		renderEffectParameter = 10u;
-		break;
-	}
+
 	case RPT_SAMPLER:
 	{
 		break;
@@ -269,6 +265,27 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
 	{
 		renderEffectParameter = renderFrameParameters.GetDirectionalLightDirections();
+		break;
+	}
+	//µ„π‚‘¥
+	case RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY:
+	{
+		renderEffectParameter = renderFrameParameters.GetPointLightDiffuseColors();
+		break;
+	}
+	case RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY:
+	{
+		renderEffectParameter = renderFrameParameters.GetPointLightSpecularColors();
+		break;
+	}
+	case RPT_POINT_LIGHT_POSITION_ARRAY:
+	{
+		renderEffectParameter = renderFrameParameters.GetPointLightPositions();
+		break;
+	}
+	case RPT_POINT_LIGHT_ATTENUATION_ARRAY:
+	{
+		renderEffectParameter = renderFrameParameters.GetPointLightAttenuations();
 		break;
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:

@@ -8,9 +8,13 @@
 #include "HrCore/Include/Event/HrEventListenerKeyboard.h"
 #include "HrCore/Include/Event/HrEventListenerMouse.h"
 
+#include "HrCore/Include/Asset/HrRenderEffect.h"
+#include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
+
+
 
 #include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"

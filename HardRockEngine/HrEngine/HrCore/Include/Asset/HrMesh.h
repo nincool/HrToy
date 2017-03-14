@@ -12,6 +12,9 @@ namespace Hr
 		HrSubMesh();
 		~HrSubMesh();
 
+		void SetName(const std::string& strName);
+		const std::string& GetName();
+
 		HrRenderLayout* GetRenderLayout() const;
 		void SetMaterial(HrMaterial* pMaterial);
 		HrMaterial* GetMaterial() const;
@@ -19,6 +22,7 @@ namespace Hr
 		void SetTexture(HrTexture* pTexture);
 		HrTexture* GetTexture() const;
 	protected:
+		std::string m_strName;
 		HrRenderLayout* m_pRenderLayout;
 		HrMaterial* m_pMaterial;
 		HrTexture* m_pTexture;

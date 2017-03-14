@@ -37,6 +37,11 @@ namespace Hr
 		const std::vector<float4>& GetDirectionalLightDiffuseColors();
 		const std::vector<float4>& GetDirectionalLightSpecularColors();
 
+		const std::vector<float4>& GetPointLightDiffuseColors();
+		const std::vector<float4>& GetPointLightSpecularColors();
+		const std::vector<float3>& GetPointLightPositions();
+		const std::vector<float4>& GetPointLightAttenuations();
+
 		//fog
 		void SetFogParam(float4& fogColor, float fogStart, float fogRange);
 		const void GetFogParam(float4& fogColor, float& fogStart, float& fogRange);
@@ -67,6 +72,11 @@ namespace Hr
 		std::vector<float3> m_vecDirectionalDirections;
 		std::vector<float4> m_vecDirectionalDiffuseColor;
 		std::vector<float4> m_vecDirectionalSpecularColor;
+
+		std::vector<float3> m_vecPointLightPositions;
+		std::vector<float4> m_vecPointLightRangeAttenuation;
+		std::vector<float4> m_vecPointLightDiffuseColors;
+		std::vector<float4> m_vecPointLightSpecularColors;
 
 		mutable float4 m_fogColor;
 		mutable float m_fogStart;

@@ -30,12 +30,27 @@ namespace Hr
 		void SetSpecular(const HrColor& specular);
 		const HrColor& GetSpecular() const;
 
+		void SetAttenuation(float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
+		float GetAttenuationRange() const;
+		float GetAttenuation0() const;
+		float GetAttenuation1() const;
+		float GetAttenuation2() const;
+		
+		void AttachLightNode(HrLightNode* pLightNode);
+		HrLightNode* GetAttachLightNode() const;
 	protected:
 		EnumLightType m_lightType;
 		Vector3 m_v3Direction;
 
 		HrColor m_diffuse;
 		HrColor m_specular;
+
+		float m_fRange;
+		float m_fAttenuation0;
+		float m_fAttenuation1;
+		float m_fAttenuation2;
+
+		HrLightNode* m_pAttachNode;
 	};
 
 	class HrDirectionalLight : public HrLight
@@ -44,6 +59,16 @@ namespace Hr
 		HrDirectionalLight();
 		HrDirectionalLight(const Vector3 v3Direction, const HrColor& diffuse, const HrColor& specular);
 		virtual ~HrDirectionalLight();
+	};
+
+	class HrPointLight : public HrLight
+	{
+	public:
+		HrPointLight();
+		HrPointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
+		virtual ~HrPointLight();
+
+
 	};
 }
 

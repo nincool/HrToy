@@ -17,7 +17,6 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 12),
 
-	HrRenderParamDefine(RPT_SHININESS, "shininess", REDT_UINT1, 1, 4),
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
 
 	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_INT3, 1, 1),
@@ -30,6 +29,11 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 1, 16),
+
+	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION_ARRAY, "point_light_position", REDT_FLOAT3, 1, 12),
+	HrRenderParamDefine(RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY, "point_light_diffuse_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY, "point_light_specular_color", REDT_FLOAT4, 4, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION_ARRAY, "point_light_range_attenuation", REDT_FLOAT4, 4, 16),
 
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
@@ -566,22 +570,24 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType, EnumRende
 	}
 	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
 	case RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY:
+	case RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY:
+	case RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY:
+	case RPT_POINT_LIGHT_ATTENUATION_ARRAY:
+	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 4);
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4Array();
 		break;
+	}
 	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
+	case RPT_POINT_LIGHT_POSITION_ARRAY:
+	{
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3Array();
 		break;
+	}
 	case RPT_LIGHTS_NUM:
 	{
 		BOOST_ASSERT(m_dataType == REDT_INT3 && m_nArraySize == 1);
 		m_pRenderVariable = HR_NEW HrRenderVariableInt3();
-		break;
-	}
-	case RPT_SHININESS:
-	{
-		BOOST_ASSERT(m_dataType == REDT_UINT1 && m_nArraySize == 1);
-		m_pRenderVariable = HR_NEW HrRenderVariableUInt();
 		break;
 	}
 	case RPT_AMBIENT_COLOR:

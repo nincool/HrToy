@@ -29,12 +29,34 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 
 HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
+	m_bEnable = true;
+
+	m_nodeType = NT_NORMAL;
+	m_pRenderable = nullptr;
+	m_pParent = nullptr;
+	m_bRunning = false;
+
+	m_pTransform = HR_NEW HrTransform(this);
+
+	m_bDirtyTransform = false;
+
 	AttachRenderable(pRenderable);
 }
 
 HrSceneNode::HrSceneNode(const std::string& strName, HrRenderable* pRenderable) 
 	: HrIDObject(HrID::GenerateID<HrSceneNode>()), m_strName(strName)
 {
+	m_bEnable = true;
+
+	m_nodeType = NT_NORMAL;
+	m_pRenderable = nullptr;
+	m_pParent = nullptr;
+	m_bRunning = false;
+
+	m_pTransform = HR_NEW HrTransform(this);
+
+	m_bDirtyTransform = false;
+
 	AttachRenderable(pRenderable);
 }
 
@@ -180,6 +202,18 @@ HrRenderable* HrSceneNode::GetRenderable() const
 HrTransform* HrSceneNode::GetTransform() const
 {
 	return m_pTransform;
+}
+
+HrSceneNode* HrSceneNode::GetChildByName(const std::string& strName) const
+{
+	for (auto& item : m_vecChildNode)
+	{
+		if (item->m_strName == strName)
+		{
+			return item;
+		}
+	}
+	return nullptr;
 }
 
 HrSceneNode* HrSceneNode::GetNodeByNameFromHierarchy(const std::string& strName)

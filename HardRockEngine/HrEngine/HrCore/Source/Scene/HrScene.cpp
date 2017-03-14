@@ -1,5 +1,7 @@
 #include "Scene/HrScene.h"
 #include "Scene/HrEntityNode.h"
+#include "Scene/HrTransform.h"
+#include "Render/HrLight.h"
 #include "Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -106,15 +108,47 @@ void HrScene::GetDirectionalLightsParam(std::vector<float3>& vecDirectionalLight
 		m_vecDirectionalSpecularColor.clear();
 		for (size_t i = 0; i < m_arrLights[HrLight::LT_DIRECTIONAL].second.size(); ++i)
 		{
-			m_vecDirectionalLightsDirections.push_back(m_arrLights[HrLight::LT_DIRECTIONAL].second[i]->GetDirection());
-			m_vecDirectionalDiffuseColor.push_back(m_arrLights[HrLight::LT_DIRECTIONAL].second[i]->GetDiffuse().Value());
-			m_vecDirectionalSpecularColor.push_back(m_arrLights[HrLight::LT_DIRECTIONAL].second[i]->GetSpecular().Value());
+			HrLightPtr& pLight = m_arrLights[HrLight::LT_DIRECTIONAL].second[i];
+			m_vecDirectionalLightsDirections.push_back(pLight->GetDirection());
+			m_vecDirectionalDiffuseColor.push_back(pLight->GetDiffuse().Value());
+			m_vecDirectionalSpecularColor.push_back(pLight->GetSpecular().Value());
 		}
 		m_arrLights[HrLight::LT_DIRECTIONAL].first = false;
 	}
 	vecDirectionalLightDirections = m_vecDirectionalLightsDirections;
 	vecDirectionalDiffuse = m_vecDirectionalDiffuseColor;
 	vecDirectionalSpecular = m_vecDirectionalSpecularColor;
+}
+
+void HrScene::GetPointLightsParam(std::vector<float3>& vecPointLightPositions, std::vector<float4>& vecRangeAttenuation, std::vector<float4>& vecPointDiffuse, std::vector<float4>& vecPointSpecular)
+{
+	if (m_arrLights[HrLight::LT_POINT].first)
+	{
+		m_vecPointLightPositions.clear();
+		m_vecRangeAttenuation.clear();
+		m_vecPointDiffuse.clear();
+		m_vecPointSpecular.clear();
+		for (size_t i = 0; i < m_arrLights[HrLight::LT_POINT].second.size(); ++i)
+		{
+			HrLightPtr& pLight = m_arrLights[HrLight::LT_POINT].second[i];
+			m_vecPointLightPositions.push_back(pLight->GetAttachLightNode()->GetTransform()->GetWorldPosition());
+			
+			float4 attenuation;
+			attenuation[0] = pLight->GetAttenuationRange();
+			attenuation[1] = pLight->GetAttenuation0();
+			attenuation[2] = pLight->GetAttenuation1();
+			attenuation[3] = pLight->GetAttenuation2();
+
+			m_vecRangeAttenuation.push_back(attenuation);
+			m_vecPointDiffuse.push_back(pLight->GetDiffuse().Value());
+			m_vecPointSpecular.push_back(pLight->GetDiffuse().Value());
+		}
+		m_arrLights[HrLight::LT_POINT].first = false;
+	}
+	vecPointLightPositions = m_vecPointLightPositions;
+	vecRangeAttenuation = m_vecRangeAttenuation;
+	vecPointDiffuse = m_vecPointDiffuse;
+	vecPointSpecular = m_vecPointSpecular;
 }
 
 float4 HrScene::GetAmbientColor()

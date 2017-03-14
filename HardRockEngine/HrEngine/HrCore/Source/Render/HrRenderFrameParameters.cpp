@@ -40,6 +40,12 @@ void HrRenderFrameParameters::SetCurrentScene(const HrScenePtr& pScene)
 		m_pCurrentScene->GetDirectionalLightsParam(m_vecDirectionalDirections, m_vecDirectionalDiffuseColor, m_vecDirectionalSpecularColor);
 		m_lightsNum[0] = m_vecDirectionalDirections.size();
 	}
+	//µã¹âÔ´
+	if (m_pCurrentScene->IsLightsDirty(HrLight::LT_POINT))
+	{
+		m_pCurrentScene->GetPointLightsParam(m_vecPointLightPositions, m_vecPointLightRangeAttenuation, m_vecPointLightDiffuseColors, m_vecPointLightSpecularColors);
+		m_lightsNum[1] = m_vecPointLightPositions.size();
+	}
 }
 
 void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
@@ -192,5 +198,25 @@ const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightDiffuseCo
 const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightSpecularColors()
 {
 	return m_vecDirectionalSpecularColor;
+}
+
+const std::vector<float4>& HrRenderFrameParameters::GetPointLightDiffuseColors()
+{
+	return m_vecPointLightDiffuseColors;
+}
+
+const std::vector<float4>& HrRenderFrameParameters::GetPointLightSpecularColors()
+{
+	return m_vecPointLightSpecularColors;
+}
+
+const std::vector<float3>& HrRenderFrameParameters::GetPointLightPositions()
+{
+	return m_vecPointLightPositions;
+}
+
+const std::vector<float4>& HrRenderFrameParameters::GetPointLightAttenuations()
+{
+	return m_vecPointLightRangeAttenuation;
 }
 

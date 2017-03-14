@@ -63,3 +63,8 @@ HrSceneNode* HrRenderable::GetSceneNode() const
 {
 	return m_pAttachSceneNode;
 }
+
+HrRenderEffect* HrRenderable::GetRenderEffect() const
+{
+	return m_pRenderEffect;
+}

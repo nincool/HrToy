@@ -56,15 +56,19 @@ void HrGeometryScene::CreateSceneElements()
 	SetAmbientLight(HrColor::White);
 
 	//´´½¨µÆ¹â
-	auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);
+	//auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);
+	//AddSceneNode(pLight);
+	//pLight->GetTransform()->SetPosition(Vector3::Zero());
+
+	auto pLight = HrSceneObjectFactory::Instance()->CreatePointLight(HrColor::Blue, HrColor::Green, 10000, 0.2, 0.0005, 0.000005);
 	AddSceneNode(pLight);
-	pLight->GetTransform()->SetPosition(Vector3::Zero());
+	pLight->GetTransform()->SetPosition(Vector3(200, 0, 0));
 
 	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateSkyBox();
 	//AddSceneNode(m_pTestSceneNode);
 	//m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
 
-	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab1.prefab");
+	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab2.prefab");
 	AddSceneNode(m_pTestSceneNode);
 	m_pTestSceneNode->GetTransform()->Translate(Vector3(0, 0, 0));
 

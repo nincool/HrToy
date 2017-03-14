@@ -33,6 +33,7 @@ namespace Hr
 		float4 GetAmbientColor();
 		bool IsLightsDirty(HrLight::EnumLightType lightType);
 		void GetDirectionalLightsParam(std::vector<float3>& vecDirectionalLightDirections, std::vector<float4>& vecDirectionalDiffuse, std::vector<float4>& vecDirectionalSpecular);
+		void GetPointLightsParam(std::vector<float3>& vecPointLightPositions, std::vector<float4>& vecRangeAttenuation, std::vector<float4>& vecPointDiffuse, std::vector<float4>& vecPointSpecular);
 
 		HrSceneNode* GetSceneNodeByName(const std::string& strNodeName);
 
@@ -43,6 +44,11 @@ namespace Hr
 		std::vector<float3> m_vecDirectionalLightsDirections;
 		std::vector<float4> m_vecDirectionalDiffuseColor;
 		std::vector<float4> m_vecDirectionalSpecularColor;
+
+		std::vector<float3> m_vecPointLightPositions;
+		std::vector<float4> m_vecRangeAttenuation;
+		std::vector<float4> m_vecPointDiffuse;
+		std::vector<float4> m_vecPointSpecular;
 
 		HrColor m_ambientLightColor;
 	};

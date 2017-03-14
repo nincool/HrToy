@@ -34,6 +34,7 @@ namespace Hr
 		
 		void SetParent(HrSceneNode* pParent);
 		HrSceneNode* GetParent() const;
+		HrSceneNode* GetChildByName(const std::string& strName) const;
 		HrSceneNode* GetNodeByNameFromHierarchy(const std::string& strName);
 
 		HrRenderable* GetRenderable() const;

@@ -23,6 +23,8 @@ namespace Hr
 
 		void AttachSceneNode(HrSceneNode* pSceneNode);
 		HrSceneNode* GetSceneNode() const;
+
+		HrRenderEffect* GetRenderEffect() const;
 	protected:
 		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) = 0;
 		virtual void UpdateEffectParametersImpl() = 0;

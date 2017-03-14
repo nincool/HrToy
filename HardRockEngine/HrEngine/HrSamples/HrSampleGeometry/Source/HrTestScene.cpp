@@ -5,6 +5,7 @@ using namespace Hr;
 HrTestScene::HrTestScene()
 {
 	m_bSphereDir = true;
+	m_nShiness = 10;
 }
 
 HrTestScene::~HrTestScene()
@@ -24,8 +25,10 @@ void HrTestScene::OnEnter()
 
 	CreateInputEvent();
 
-	m_pSphere = this->GetSceneNodeByName("Node3");
+	m_pSphere = this->GetSceneNodeByName("Node2");
 	m_pSphere->GetTransform()->Translate(Vector3(-50, 0, 0));
+
+	m_pEffect = m_pSphere->GetChildByName("Sphere01")->GetRenderable()->GetRenderEffect();
 
 	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrTestScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
@@ -175,6 +178,10 @@ void HrTestScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKey1Pressed)
 	{
+		++m_nShiness;
+
+		*(m_pEffect->GetParameterByName("shininess")) = m_nShiness;
+
 	}
 	else if (m_bKeyF1Pressed)
 	{

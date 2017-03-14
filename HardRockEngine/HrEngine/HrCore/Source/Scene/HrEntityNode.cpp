@@ -91,6 +91,7 @@ HrLightNode::HrLightNode(const HrLightPtr& pLight)
 {
 	m_nodeType = HrSceneNode::NT_LIGHT;
 	m_pLight = pLight;
+	m_pLight->AttachLightNode(this);
 }
 
 HrLightNode::~HrLightNode()
@@ -112,7 +113,6 @@ void HrLightNode::OnEnter()
 	HrSceneNode::OnEnter();
 
 	HrDirector::Instance()->GetSceneManager()->GetRunningScene()->AddLight(m_pLight);
-
 }
 
 void HrLightNode::OnEnterDidFinish()

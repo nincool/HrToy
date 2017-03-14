@@ -53,6 +53,7 @@ void HrModelLoader::Load(std::string& strFile)
 		HrStreamData streamVertexBuffer;
 		MakeVertexStream(subMeshInfo, streamVertexBuffer, vecVertexElement);
 		HrSubMesh* pSubMesh = m_pMesh->AddSubMesh();
+		pSubMesh->SetName(subMeshInfo.strMeshName);
 		HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
 		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
