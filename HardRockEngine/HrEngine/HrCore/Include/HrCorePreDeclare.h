@@ -51,6 +51,7 @@ namespace Hr
 	class HrRenderEffectConstantBuffer;
 	class HrTexture;
 	class HrSamplerState;
+	class HrDepthStencilState;
 	class HrBlendState;
 	class HrRasterizerState;
 	

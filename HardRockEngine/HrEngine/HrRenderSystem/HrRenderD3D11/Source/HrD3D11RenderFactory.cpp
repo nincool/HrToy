@@ -9,6 +9,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11SamplerState.h" 
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11DepthStencilState.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11BlendState.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RasterizerState.h"
 #include "HrCore/Include/Render/HrVertex.h"
@@ -87,12 +88,38 @@ HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
 	return pSamplerState;
 }
 
-HrBlendState* HrD3D11RenderFactory::CreateBlendState()
+HrDepthStencilState* HrD3D11RenderFactory::CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc)
 {
-	HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetDevice()
-		, HrD3D11Device::Instance()->GetImmediateContext());
+	auto itemBlend = m_mapDepthStencilStatePool.find(depthStencilStateDesc.hashName);
+	if (itemBlend != m_mapDepthStencilStatePool.end())
+	{
+		return static_cast<HrDepthStencilState*>(itemBlend->second);
+	}
+	else
+	{
+		HrDepthStencilState* pDepthStencilStawte = HR_NEW HrD3D11DepthStencilState(HrD3D11Device::Instance()->GetDevice()
+			, HrD3D11Device::Instance()->GetImmediateContext(), depthStencilStateDesc);
+		m_mapDepthStencilStatePool[depthStencilStateDesc.hashName] = pDepthStencilStawte;
 
-	return pBlendState;
+		return pDepthStencilStawte;
+	}
+}
+
+HrBlendState* HrD3D11RenderFactory::CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc)
+{
+	auto itemBlend = m_mapBlendStatePool.find(blendDesc.hashName);
+	if (itemBlend != m_mapBlendStatePool.end())
+	{
+		return static_cast<HrD3D11BlendState*>(itemBlend->second);
+	}
+	else
+	{
+		HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetDevice()
+			, HrD3D11Device::Instance()->GetImmediateContext(), blendDesc);
+		m_mapBlendStatePool[blendDesc.hashName] = pBlendState;
+
+		return pBlendState;
+	}
 }
 
 HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc)
@@ -102,4 +129,3 @@ HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState
 
 	return pRasterizer;
 }
-

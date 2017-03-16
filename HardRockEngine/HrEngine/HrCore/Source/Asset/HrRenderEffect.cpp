@@ -6,6 +6,8 @@
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderFactory.h"
+#include "HrCore/Include/Render/HrDepthStencilState.h"
+#include "HrCore/Include/Render/HrBlendState.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrCore/Include/Kernel/HrLog.h"
@@ -18,6 +20,7 @@
 #include "ThirdParty/rapidjson/include/rapidjson/document.h"
 
 #include <boost/format.hpp>
+#include <boost/functional/hash.hpp>
 
 
 using namespace Hr;
@@ -128,32 +131,99 @@ bool HrRenderEffect::LoadImpl()
 						const rapidjson::Value& passInfo = techniqueInfo[strPassName.c_str()];
 						HrRenderPass* pRenderPass = pRenderTechnique->AddPass(passInfo["NAME"].GetString());
 						{
-							std::string strVertexEnterPoint = passInfo["VERTEX_SHADER"].GetString();
-							HrStreamData effectStreamBuffer;
-							pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_VERTEX_SHADER, strVertexEnterPoint, effectStreamBuffer);
-							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
-							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+							const rapidjson::Value& shaderInfo = passInfo["SHADER"];
+							//shader
+							{
+								std::string strVertexEnterPoint = shaderInfo["VERTEX_SHADER"].GetString();
+								HrStreamData effectStreamBuffer;
+								pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_VERTEX_SHADER, strVertexEnterPoint, effectStreamBuffer);
+								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
+								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
 
-							HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-							pVertexShader->StreamIn(effectStreamBuffer, m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
+								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								pVertexShader->StreamIn(effectStreamBuffer, m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 
-							pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
-							m_vecVertexShaders.push_back(pVertexShader);
+								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+								m_vecVertexShaders.push_back(pVertexShader);
+							}
+							{
+								std::string strPixelEnterPoint = shaderInfo["PIXEL_SHADER"].GetString();
+								HrStreamData effectStreamBuffer;
+								pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_PIXEL_SHADER, strPixelEnterPoint, effectStreamBuffer);
+								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+
+								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								pPixelShader->StreamIn(effectStreamBuffer, m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+
+								pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
+								m_vecPixelShaders.push_back(pPixelShader);
+							}
 						}
+						//DepthStencil
 						{
-							std::string strPixelEnterPoint = passInfo["PIXEL_SHADER"].GetString();
-							HrStreamData effectStreamBuffer;
-							pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_PIXEL_SHADER, strPixelEnterPoint, effectStreamBuffer);
-							pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
-							pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+							const rapidjson::Value& depthStencil = passInfo["DEPTH_STENCIL"];
 
-							HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
-							pPixelShader->StreamIn(effectStreamBuffer, m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+							HrDepthStencilState::HrDepthStencilStateDesc depthStencilDesc;
+							depthStencilDesc.bDepthEnable = depthStencil["DEPTH_ENABLE"].GetBool();
+							depthStencilDesc.depthWriteMask = DepthWriteMash(depthStencil["DEPTH_WRITE_MASK"].GetString());
+							depthStencilDesc.depthCompareFunc = ComparisonFunc(depthStencil["COMPARISON_FUNC"].GetString());
+							depthStencilDesc.bStencilEnable = depthStencil["STENCIL_ENABLE"].GetBool();
+							depthStencilDesc.stencilReadMask = depthStencil["STENCIL_READ_MASK"].GetUint();
+							depthStencilDesc.stencilWriteMask = depthStencil["STENCIL_WRITE_MASK"].GetUint();
+							depthStencilDesc.frontFaceCompareFunc = ComparisonFunc(depthStencil["FRONT_FACE_COMPARE_FUNC"].GetString());
+							depthStencilDesc.frontFaceStencilFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCIL_FAILED_OP"].GetString());
+							depthStencilDesc.frontFaceStencilDepthFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCILDEPTH_FAIL_OP"].GetString());
+							depthStencilDesc.frontFaceStencilPassOp = StencilOperation(depthStencil["FRONT_FACE_PASS_OP"].GetString());
+							depthStencilDesc.backFaceCompareFunc = ComparisonFunc(depthStencil["BACK_FACE_COMPARE_FUNC"].GetString());
+							depthStencilDesc.backFaceStencilFailOp = StencilOperation(depthStencil["BACK_FACE_STENCIL_FAILED_OP"].GetString());
+							depthStencilDesc.backFaceStencilDepthFailOp = StencilOperation(depthStencil["BACK_FACE_STENCILDEPTH_FAIL_OP"].GetString());
+							depthStencilDesc.backFaceStencilPassOp = StencilOperation(depthStencil["BACK_FACE_PASS_OP"].GetString());
 
-							pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
-							m_vecPixelShaders.push_back(pPixelShader);
+							depthStencilDesc.hashName = 0;
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bDepthEnable);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthWriteMask);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthCompareFunc);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bStencilEnable);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilReadMask);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilWriteMask);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceCompareFunc);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilFailOp);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilDepthFailOp);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilPassOp);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceCompareFunc);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilFailOp);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilDepthFailOp);
+							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
+
+							HrDepthStencilState* pDepthStencilState = HrDirector::Instance()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+							pRenderPass->SetDepthStencilState(pDepthStencilState);
 						}
+						//Blend
+						{
+							const rapidjson::Value& blendInfo = passInfo["BLEND"];
 
+							HrBlendState::HrBlendStateDesc blendDesc;
+							blendDesc.bBlendEnable = blendInfo["BLEND_ENABLE"].GetBool();
+							blendDesc.blendOperation = BlendOperation(blendInfo["BLEND_OP"].GetString());
+							blendDesc.srcBlend = AlphaBlendFactor(blendInfo["SRC_BLEND"].GetString());
+							blendDesc.dstBlend = AlphaBlendFactor(blendInfo["DEST_BLEND"].GetString());
+							blendDesc.blendOperationAlpha = BlendOperation(blendInfo["BLEND_OP_ALPHA"].GetString());
+							blendDesc.srcBlendAlpha = AlphaBlendFactor(blendInfo["SRC_BLEND_ALPHA"].GetString());
+							blendDesc.dstBlendAlpha = AlphaBlendFactor(blendInfo["DEST_BLEND_ALPHA"].GetString());
+							blendDesc.hashName = 0;
+							boost::hash_combine(blendDesc.hashName, blendDesc.bBlendEnable);
+							boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
+							boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
+							boost::hash_combine(blendDesc.hashName, blendDesc.srcBlend);
+							boost::hash_combine(blendDesc.hashName, blendDesc.dstBlend);
+							boost::hash_combine(blendDesc.hashName, blendDesc.blendOperationAlpha);
+							boost::hash_combine(blendDesc.hashName, blendDesc.srcBlendAlpha);
+							boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
+							
+							HrBlendState* pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState(blendDesc);
+							pRenderPass->SetBlendState(pBlendState);
+						}
 					}
 					else
 					{

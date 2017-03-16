@@ -2,6 +2,7 @@
 #define _HR_RENDEREFFECT_H_
 
 #include "HrResource.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
 
 namespace Hr
 {

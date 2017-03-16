@@ -19,6 +19,9 @@ namespace Hr
 
 		HrShader* GetShader(HrShader::EnumShaderType shaderType);
 		void SetShader(HrShader* pShader, HrShader::EnumShaderType shaderType);
+
+		void SetDepthStencilState(HrDepthStencilState* pDepthStencilState);
+		void SetBlendState(HrBlendState* pBlendState);
 	private:
 		void StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
 			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
@@ -27,6 +30,7 @@ namespace Hr
 	private:
 		std::string m_strPassName;
 
+		HrDepthStencilState* m_pDepthStencilState;
 		HrBlendState* m_pBlendState;
 		HrRasterizerState* m_pRasterizerState;
 

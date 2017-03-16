@@ -34,7 +34,9 @@ namespace Hr
 
 		virtual HrSamplerState* CreateSamplerState() override;
 
-		virtual HrBlendState* CreateBlendState() override;
+		virtual HrDepthStencilState* CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) override;
+
+		virtual HrBlendState* CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc) override;
 
 		virtual HrRasterizerState* CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc) override;
 	};

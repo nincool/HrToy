@@ -6,6 +6,8 @@ using namespace Hr;
 HrRenderFactory::~HrRenderFactory()
 {
 	m_pDefaultRasterizerState = nullptr;
+	m_pDefaultDepthStencilState = nullptr;
+	m_pDefaultBlendState = nullptr;
 }
 
 HrRasterizerState* HrRenderFactory::GetDefualtRasterizerState()
@@ -66,4 +68,19 @@ void HrRenderFactory::CreateBuildInRasterizerState()
 		m_pDefaultRasterizerState = pRasterizerState;
 
 	}
+}
+
+void HrRenderFactory::CreateBuildInBlendState()
+{
+
+}
+
+HrBlendState* HrRenderFactory::GetDefaultBuildInBlendState()
+{
+	return nullptr;
+}
+
+void HrRenderFactory::ReleaseRenderStatePool()
+{
+	
 }

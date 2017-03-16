@@ -289,6 +289,9 @@
     <ClInclude Include="Include\Scene\HrEntityNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrDepthStencilState.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -479,6 +482,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrEntityNode.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrDepthStencilState.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

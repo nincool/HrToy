@@ -345,3 +345,134 @@ D3D11_CULL_MODE HrD3D11Mapping::GetCullMode(EnumRasterizerCullModel cullMode)
 	}
 }
 
+D3D11_BLEND HrD3D11Mapping::GetBlend(EnumAlphaBlendFactor blendFactor)
+{
+	switch (blendFactor)
+	{
+	case ABF_UNKNOW:
+		return D3D11_BLEND_ONE;
+	case ABF_ZERO:
+		return D3D11_BLEND_ZERO;
+	case ABF_ONE:
+		return D3D11_BLEND_ONE;
+	case ABF_SCR_ALPHA:
+		return D3D11_BLEND_SRC_ALPHA;
+	case ABF_DST_ALPHA:
+		return D3D11_BLEND_DEST_ALPHA;
+	case ABF_INV_SRC_ALPHA:
+		return D3D11_BLEND_INV_SRC_ALPHA;
+	case ABF_INV_DST_ALPHA:
+		return D3D11_BLEND_INV_DEST_ALPHA;
+	case ABF_SRC_COLOR:
+		return D3D11_BLEND_SRC_COLOR;
+	case ABF_DST_COLOR:
+		return D3D11_BLEND_DEST_COLOR;
+	case ABF_INV_SRC_COLOR:
+		return D3D11_BLEND_INV_SRC_COLOR;
+	case ABF_INV_DST_COLOR:
+		return D3D11_BLEND_INV_DEST_COLOR;
+	case ABF_SRC_ALPHA_SAT:
+		return D3D11_BLEND_SRC_ALPHA_SAT;
+	case ABF_BLEND_FACTOR:
+		return D3D11_BLEND_BLEND_FACTOR;
+	case ABF_INV_BLEND_FACTOR:
+		return D3D11_BLEND_INV_BLEND_FACTOR;
+	case ABF_SRC1_ALPHA:
+		return D3D11_BLEND_SRC1_ALPHA;
+	case ABF_INV_SRC1_ALPHA:
+		return D3D11_BLEND_INV_SRC1_ALPHA;
+	case ABF_SRC1_COLOR:
+		return D3D11_BLEND_SRC1_COLOR;
+	case ABF_INV_SRC1_COLOR:
+		return D3D11_BLEND_INV_SRC1_COLOR;
+	default:
+		BOOST_ASSERT(nullptr);
+		break;
+	}
+}
+
+D3D11_BLEND_OP HrD3D11Mapping::GetBlendOperation(EnumBlendOperation blendOp)
+{
+	switch (blendOp)
+	{
+	case BO_UNKNOW:
+		return D3D11_BLEND_OP_ADD;
+	case BO_ADD:
+		return D3D11_BLEND_OP_ADD;
+	case BO_SUB:
+		return D3D11_BLEND_OP_SUBTRACT;
+	case BO_REV_SUB:
+		return D3D11_BLEND_OP_REV_SUBTRACT;
+	case BO_MIN:
+		return D3D11_BLEND_OP_MIN;
+	case BO_MAX:
+		return D3D11_BLEND_OP_MAX;
+	default:
+		BOOST_ASSERT(nullptr);
+		break;
+	}
+}
+
+D3D11_DEPTH_WRITE_MASK HrD3D11Mapping::GetDepthWriteMask(EnumDepthWriteMask writeMask)
+{
+	switch (writeMask)
+	{
+	case DWM_ZERO:
+		return D3D11_DEPTH_WRITE_MASK_ZERO;
+	case DWM_ALL:
+		return D3D11_DEPTH_WRITE_MASK_ALL;
+	default:
+		return D3D11_DEPTH_WRITE_MASK_ALL;
+	}
+}
+
+D3D11_COMPARISON_FUNC HrD3D11Mapping::GetComparisonFunc(EnumComparisonFunc comFunc)
+{
+	switch (comFunc)
+	{
+	case CF_NEVER:
+		return D3D11_COMPARISON_NEVER;
+	case CF_LESS:
+		return D3D11_COMPARISON_LESS;
+	case CF_EQUAL:
+		return D3D11_COMPARISON_EQUAL;
+	case CF_LESS_EQUAL:
+		return D3D11_COMPARISON_LESS_EQUAL;
+	case CF_GREATER:
+		return D3D11_COMPARISON_GREATER;
+	case CF_NOT_EQUAL:
+		return D3D11_COMPARISON_NOT_EQUAL;
+	case CF_GREATER_EQUAL:
+		return D3D11_COMPARISON_GREATER_EQUAL;
+	case CF_ALWAYS:
+		return D3D11_COMPARISON_ALWAYS;
+	default:
+		return D3D11_COMPARISON_LESS;
+	}
+}
+
+D3D11_STENCIL_OP HrD3D11Mapping::GetDepthStencilOperation(EnumStencilOperation stencilOp)
+{
+	switch (stencilOp)
+	{
+	case SO_KEEP:
+		return D3D11_STENCIL_OP_KEEP;
+	case SO_ZERO:
+		return D3D11_STENCIL_OP_ZERO;
+	case SO_REPLACE:
+		return D3D11_STENCIL_OP_REPLACE;
+	case SO_INCR_SAT:
+		return D3D11_STENCIL_OP_INCR_SAT;
+	case SO_DECR_SAT:
+		return D3D11_STENCIL_OP_DECR_SAT;
+	case SO_INVERT:
+		return D3D11_STENCIL_OP_INVERT;
+	case SO_INCR:
+		return D3D11_STENCIL_OP_INCR;
+	case SO_DECR:
+		return D3D11_STENCIL_OP_DECR;
+	default:
+		return D3D11_STENCIL_OP_KEEP;
+	}
+}
+

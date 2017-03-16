@@ -302,6 +302,132 @@ namespace Hr
 		RCM_CULL_BACK
 	};
 
+	enum EnumBlendOperation
+	{
+		BO_UNKNOW,
+		BO_ADD,
+		BO_SUB,
+		BO_REV_SUB,
+		BO_MIN,
+		BO_MAX,
+	};
+
+	inline EnumBlendOperation BlendOperation(const std::string& strBlendOP)
+	{
+		if ("add" == strBlendOP) return BO_ADD;
+		if ("sub" == strBlendOP) return BO_SUB;
+		if ("rev_sub" == strBlendOP) return BO_REV_SUB;
+		if ("min" == strBlendOP) return BO_MIN;
+		if ("max" == strBlendOP) return BO_MAX;
+		return BO_UNKNOW;
+	}
+
+	enum EnumAlphaBlendFactor
+	{
+		ABF_UNKNOW,
+		ABF_ZERO,
+		ABF_ONE,
+		ABF_SCR_ALPHA,
+		ABF_DST_ALPHA,
+		ABF_INV_SRC_ALPHA,
+		ABF_INV_DST_ALPHA,
+		ABF_SRC_COLOR,
+		ABF_DST_COLOR,
+		ABF_INV_SRC_COLOR,
+		ABF_INV_DST_COLOR,
+		ABF_SRC_ALPHA_SAT,
+		ABF_BLEND_FACTOR,
+		ABF_INV_BLEND_FACTOR,
+		ABF_SRC1_ALPHA,
+		ABF_INV_SRC1_ALPHA,
+		ABF_SRC1_COLOR,
+		ABF_INV_SRC1_COLOR,
+	};
+
+	inline EnumAlphaBlendFactor AlphaBlendFactor(const std::string& strAlphaBlendFactor)
+	{
+		if ("zero" == strAlphaBlendFactor) return ABF_ZERO;
+		if ("one" == strAlphaBlendFactor) return ABF_ONE;
+		if ("src_alpha" == strAlphaBlendFactor) return ABF_SCR_ALPHA;
+		if ("dst_alpha" == strAlphaBlendFactor) return ABF_DST_ALPHA;
+		if ("inv_src_alpha" == strAlphaBlendFactor) return ABF_INV_SRC_ALPHA;
+		if ("inv_dst_alpha" == strAlphaBlendFactor) return ABF_INV_DST_ALPHA;
+		if ("src_color" == strAlphaBlendFactor) return ABF_SRC_COLOR;
+		if ("dst_color" == strAlphaBlendFactor) return ABF_DST_COLOR;
+		if ("inv_src_color" == strAlphaBlendFactor) return ABF_INV_SRC_COLOR;
+		if ("inv_dst_color" == strAlphaBlendFactor) return ABF_INV_DST_COLOR;
+		if ("src_alpha_sat" == strAlphaBlendFactor) return ABF_SRC_ALPHA_SAT;
+		if ("blend_factor" == strAlphaBlendFactor) return ABF_BLEND_FACTOR;
+		if ("inv_blend_factor" == strAlphaBlendFactor) return ABF_INV_BLEND_FACTOR;
+		if ("src1_alpha" == strAlphaBlendFactor) return ABF_SRC1_ALPHA;
+		if ("inv_src1_alpha" == strAlphaBlendFactor) return ABF_INV_SRC1_ALPHA;
+		if ("src1_color" == strAlphaBlendFactor) return ABF_SRC1_COLOR;
+		if ("inv_src1_color" == strAlphaBlendFactor) return ABF_INV_SRC1_COLOR;
+		return ABF_UNKNOW;
+	}
+
+	enum EnumDepthWriteMask
+	{
+		DWM_ZERO,
+		DWM_ALL,
+	};
+
+	inline EnumDepthWriteMask DepthWriteMash(const std::string& strDepthWriteMask)
+	{
+		if ("zero" == strDepthWriteMask) return DWM_ZERO;
+		if ("all" == strDepthWriteMask) return DWM_ALL;
+		return DWM_ALL;
+	}
+
+	enum EnumComparisonFunc
+	{
+		CF_NEVER,
+		CF_LESS,
+		CF_EQUAL,
+		CF_LESS_EQUAL,
+		CF_GREATER,
+		CF_NOT_EQUAL,
+		CF_GREATER_EQUAL,
+		CF_ALWAYS,
+	};
+
+	inline EnumComparisonFunc ComparisonFunc(const std::string& strComparisonFunc)
+	{
+		if ("never" == strComparisonFunc) return CF_NEVER;
+		if ("less" == strComparisonFunc) return CF_LESS;
+		if ("equal" == strComparisonFunc) return CF_EQUAL;
+		if ("less_equal" == strComparisonFunc) return CF_LESS_EQUAL;
+		if ("greater" == strComparisonFunc) return CF_GREATER;
+		if ("not_equal" == strComparisonFunc) return CF_NOT_EQUAL;
+		if ("greater_equal" == strComparisonFunc) return CF_GREATER_EQUAL;
+		if ("always" == strComparisonFunc) return CF_ALWAYS;
+		return CF_LESS;
+	}
+
+	enum EnumStencilOperation
+	{
+		SO_KEEP,
+		SO_ZERO,
+		SO_REPLACE,
+		SO_INCR_SAT,
+		SO_DECR_SAT,
+		SO_INVERT,
+		SO_INCR,
+		SO_DECR,
+	};
+
+	inline EnumStencilOperation StencilOperation(const std::string& strStencilOp)
+	{
+		if ("keep" == strStencilOp) return SO_KEEP;
+		if ("zero" == strStencilOp) return SO_ZERO;
+		if ("replace" == strStencilOp) return SO_REPLACE;
+		if ("incr_sat" == strStencilOp) return SO_INCR_SAT;
+		if ("decr_sat" == strStencilOp) return SO_DECR_SAT;
+		if ("invert" == strStencilOp) return SO_INVERT;
+		if ("incr" == strStencilOp) return SO_INCR;
+		if ("decr" == strStencilOp) return SO_DECR;
+		return SO_KEEP;
+	}
 
 }
 

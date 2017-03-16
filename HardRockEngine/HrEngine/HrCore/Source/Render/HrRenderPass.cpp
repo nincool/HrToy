@@ -1,5 +1,6 @@
 #include "Render/HrRenderPass.h"
 #include "Render/HrShader.h"
+#include "Render/HrDepthStencilState.h"
 #include "Render/HrBlendState.h"
 #include "Render/HrRasterizerState.h"
 #include "Render/HrRenderFactory.h"
@@ -16,7 +17,9 @@ HrRenderPass::HrRenderPass(std::string strPassName)
 	m_pPixelShader = nullptr;
 
 	//TODO!!!to release
-	m_pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState();
+	//m_pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState();
+	m_pDepthStencilState = nullptr;
+	m_pBlendState = nullptr;
 	m_pRasterizerState = HrDirector::Instance()->GetRenderFactory()->GetDefualtRasterizerState();
 }
 
@@ -26,6 +29,14 @@ HrRenderPass::~HrRenderPass()
 
 void HrRenderPass::BindPass(HrRender* pRender)
 {
+	BOOST_ASSERT(m_pDepthStencilState);
+	BOOST_ASSERT(m_pBlendState);
+	BOOST_ASSERT(m_pRasterizerState);
+
+	BOOST_ASSERT(m_pVertexShader);
+	BOOST_ASSERT(m_pPixelShader);
+
+	m_pDepthStencilState->Bind(pRender);
 	m_pBlendState->Bind(pRender);
 	m_pRasterizerState->Bind(pRender);
 
@@ -84,6 +95,16 @@ void HrRenderPass::SetShader(HrShader* pShader, HrShader::EnumShaderType shaderT
 	default:
 		break;
 	}
+}
+
+void HrRenderPass::SetDepthStencilState(HrDepthStencilState* pDepthStencilState)
+{
+	m_pDepthStencilState = pDepthStencilState;
+}
+
+void HrRenderPass::SetBlendState(HrBlendState* pBlendState)
+{
+	m_pBlendState = pBlendState;
 }
 
 void HrRenderPass::CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct)

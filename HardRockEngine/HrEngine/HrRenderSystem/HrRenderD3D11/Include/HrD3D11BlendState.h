@@ -11,7 +11,8 @@ namespace Hr
 	{
 	public:
 		HrD3D11BlendState(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext);
+			, ID3D11DeviceContext* pContext
+			, const HrBlendState::HrBlendStateDesc& blendDesc);
 		virtual ~HrD3D11BlendState();
 
 		virtual void Bind(HrRender* pRender) override;

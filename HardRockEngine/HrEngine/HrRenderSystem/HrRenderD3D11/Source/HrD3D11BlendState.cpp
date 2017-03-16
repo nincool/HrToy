@@ -1,31 +1,34 @@
 #include "HrD3D11BlendState.h"
 #include "HrD3D11Render.h"
+#include "HrD3D11Mapping.h"
 
 #include <boost/cast.hpp>
 
 using namespace Hr;
 
 HrD3D11BlendState::HrD3D11BlendState(ID3D11Device* pD3D11Device
-	, ID3D11DeviceContext* pContext) :
+	, ID3D11DeviceContext* pContext
+	, const HrBlendState::HrBlendStateDesc& blendDesc):
 	m_pD3D11Device(pD3D11Device), m_pImmediateContext(pContext)
 {
-	D3D11_BLEND_DESC blendDesc;
-	blendDesc.AlphaToCoverageEnable = false;
-	blendDesc.IndependentBlendEnable = false;
-	blendDesc.RenderTarget[0].BlendEnable = true;
-	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	TIF(m_pD3D11Device->CreateBlendState(&blendDesc, &m_pD3D11BlendState));
+
+	D3D11_BLEND_DESC d3d11BlendDesc;
+	d3d11BlendDesc.AlphaToCoverageEnable = false;
+	d3d11BlendDesc.IndependentBlendEnable = false;
+	d3d11BlendDesc.RenderTarget[0].BlendEnable = blendDesc.bBlendEnable;
+	d3d11BlendDesc.RenderTarget[0].SrcBlend = HrD3D11Mapping::GetBlend(blendDesc.srcBlend);
+	d3d11BlendDesc.RenderTarget[0].DestBlend = HrD3D11Mapping::GetBlend(blendDesc.dstBlend);
+	d3d11BlendDesc.RenderTarget[0].BlendOp = HrD3D11Mapping::GetBlendOperation(blendDesc.blendOperation);
+	d3d11BlendDesc.RenderTarget[0].SrcBlendAlpha = HrD3D11Mapping::GetBlend(blendDesc.srcBlendAlpha);
+	d3d11BlendDesc.RenderTarget[0].DestBlendAlpha = HrD3D11Mapping::GetBlend(blendDesc.dstBlendAlpha);
+	d3d11BlendDesc.RenderTarget[0].BlendOpAlpha = HrD3D11Mapping::GetBlendOperation(blendDesc.blendOperationAlpha);
+	d3d11BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	TIF(m_pD3D11Device->CreateBlendState(&d3d11BlendDesc, &m_pD3D11BlendState));
 }
 
 HrD3D11BlendState::~HrD3D11BlendState()
 {
-
+	m_pD3D11BlendState->Release();
 }
 
 void HrD3D11BlendState::Bind(HrRender* pRender)

@@ -22,6 +22,7 @@
     <ClInclude Include="Include\HrD3D11Adapter.h" />
     <ClInclude Include="Include\HrD3D11AdapterList.h" />
     <ClInclude Include="Include\HrD3D11BlendState.h" />
+    <ClInclude Include="Include\HrD3D11DepthStencilState.h" />
     <ClInclude Include="Include\HrD3D11Device.h" />
     <ClInclude Include="Include\HrD3D11GraphicsBuffer.h" />
     <ClInclude Include="Include\HrD3D11Mapping.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Source\HrD3D11Adapter.cpp" />
     <ClCompile Include="Source\HrD3D11AdapterList.cpp" />
     <ClCompile Include="Source\HrD3D11BlendState.cpp" />
+    <ClCompile Include="Source\HrD3D11DepthStencilState.cpp" />
     <ClCompile Include="Source\HrD3D11Device.cpp" />
     <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp" />
     <ClCompile Include="Source\HrD3D11Mapping.cpp" />

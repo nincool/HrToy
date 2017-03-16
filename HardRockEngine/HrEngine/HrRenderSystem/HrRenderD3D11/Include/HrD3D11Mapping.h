@@ -35,7 +35,14 @@ namespace Hr
 		static D3D11_FILL_MODE GetFillMode(EnumRasterizerFillModel fillMode);
 		static D3D11_CULL_MODE GetCullMode(EnumRasterizerCullModel cullMode);
 
+		//depthstencil
+		static D3D11_DEPTH_WRITE_MASK GetDepthWriteMask(EnumDepthWriteMask writeMask);
+		static D3D11_COMPARISON_FUNC GetComparisonFunc(EnumComparisonFunc comFunc);
+		static D3D11_STENCIL_OP GetDepthStencilOperation(EnumStencilOperation stencilOp);
 
+		//Blend
+		static D3D11_BLEND GetBlend(EnumAlphaBlendFactor blendFactor);
+		static D3D11_BLEND_OP GetBlendOperation(EnumBlendOperation blendOp);
 	};
 }
 
