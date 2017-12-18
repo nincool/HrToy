@@ -25,7 +25,9 @@ namespace Hr
 			HrColor diffuseColor;
 			HrColor specularColor;
 		};
+
 		//Camera
+
 		struct HrSceneNodeInfo
 		{
 			std::string strName;

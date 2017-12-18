@@ -52,7 +52,7 @@ std::string HrFileUtils::GetFullPathForFileName(const std::string& strFileName) 
 	filesystem::path filePath(strFileName);
 	if (!filePath.is_absolute())
 	{
-		filesystem::path fileFullPath = filesystem::path(m_strAppPath) / filePath;
+		filesystem::path fileFullPath;
 		for (auto item : m_vecSearchPaths)
 		{
 			fileFullPath = item / filePath;

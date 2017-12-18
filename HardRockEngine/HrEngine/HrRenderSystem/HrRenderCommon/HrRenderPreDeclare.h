@@ -3,8 +3,22 @@
 
 #include <memory>
 
+struct IDXGIFactory1;
+struct IDXGIFactory2;
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+struct IDXGISwapChain;
+struct IDXGISwapChain1;
+
 namespace Hr
 {
+	typedef std::shared_ptr<IDXGIFactory1>				IDXGIFactory1Ptr;
+	typedef std::shared_ptr<IDXGIFactory2>              IDXGIFactory2Ptr;
+	typedef std::shared_ptr<ID3D11Device>               ID3D11DevicePtr;
+	typedef std::shared_ptr<ID3D11DeviceContext>		ID3D11DeviceContextPtr;
+	typedef std::shared_ptr<IDXGISwapChain>             IDXGISwapChainPtr;
+	typedef std::shared_ptr<IDXGISwapChain1>            IDXGISwapChain1Ptr;
+
 	class HrD3D11RenderFactory;
 	typedef std::shared_ptr<HrD3D11RenderFactory> HrD3D11RenderFactoryPtr;
 

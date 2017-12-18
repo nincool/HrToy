@@ -44,7 +44,7 @@ HrVertex* HrD3D11RenderFactory::CreateVertex()
 
 HrGraphicsBuffer* HrD3D11RenderFactory::CreateHardwareBuffer()
 {
-	return HR_NEW HrD3D11GraphicsBuffer(HrD3D11Device::Instance()->GetDevice(), HrD3D11Device::Instance()->GetImmediateContext());
+	return HR_NEW HrD3D11GraphicsBuffer(HrD3D11Device::Instance()->GetD3DDevice().get(), HrD3D11Device::Instance()->GetD3DDeviceContext().get());
 }
 
 HrRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()
@@ -72,8 +72,8 @@ HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texTyp
 	, uint32 nSampleCount
 	, uint32 nSampleQuality)
 {
-	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetDevice()
-		, HrD3D11Device::Instance()->GetImmediateContext()
+	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetD3DDevice().get()
+		, HrD3D11Device::Instance()->GetD3DDeviceContext().get()
 		, texType
 		, nSampleCount
 		, nSampleQuality);
@@ -82,8 +82,8 @@ HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texTyp
 
 HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
 {
-	HrD3D11SamplerState* pSamplerState = HR_NEW HrD3D11SamplerState(HrD3D11Device::Instance()->GetDevice()
-		, HrD3D11Device::Instance()->GetImmediateContext());
+	HrD3D11SamplerState* pSamplerState = HR_NEW HrD3D11SamplerState(HrD3D11Device::Instance()->GetD3DDevice().get()
+		, HrD3D11Device::Instance()->GetD3DDeviceContext().get());
 
 	return pSamplerState;
 }
@@ -97,8 +97,8 @@ HrDepthStencilState* HrD3D11RenderFactory::CreateDepthStencilState(const HrDepth
 	}
 	else
 	{
-		HrDepthStencilState* pDepthStencilStawte = HR_NEW HrD3D11DepthStencilState(HrD3D11Device::Instance()->GetDevice()
-			, HrD3D11Device::Instance()->GetImmediateContext(), depthStencilStateDesc);
+		HrDepthStencilState* pDepthStencilStawte = HR_NEW HrD3D11DepthStencilState(HrD3D11Device::Instance()->GetD3DDevice().get()
+			, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), depthStencilStateDesc);
 		m_mapDepthStencilStatePool[depthStencilStateDesc.hashName] = pDepthStencilStawte;
 
 		return pDepthStencilStawte;
@@ -114,8 +114,8 @@ HrBlendState* HrD3D11RenderFactory::CreateBlendState(const HrBlendState::HrBlend
 	}
 	else
 	{
-		HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetDevice()
-			, HrD3D11Device::Instance()->GetImmediateContext(), blendDesc);
+		HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetD3DDevice().get()
+			, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), blendDesc);
 		m_mapBlendStatePool[blendDesc.hashName] = pBlendState;
 
 		return pBlendState;
@@ -124,8 +124,8 @@ HrBlendState* HrD3D11RenderFactory::CreateBlendState(const HrBlendState::HrBlend
 
 HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc)
 {
-	HrD3D11RasterizerState* pRasterizer = HR_NEW HrD3D11RasterizerState(HrD3D11Device::Instance()->GetDevice()
-		, HrD3D11Device::Instance()->GetImmediateContext(), desc);
+	HrD3D11RasterizerState* pRasterizer = HR_NEW HrD3D11RasterizerState(HrD3D11Device::Instance()->GetD3DDevice().get()
+		, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), desc);
 
 	return pRasterizer;
 }

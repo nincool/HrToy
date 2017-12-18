@@ -18,6 +18,7 @@ namespace Hr
 		virtual std::map<int, HrViewPort*>& GetViewPorts();
 
 	protected:
+		//当前的视口集合
 		std::map<int, HrViewPort*> m_mapViewPort;
 	};
 }

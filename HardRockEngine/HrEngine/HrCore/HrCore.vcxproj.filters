@@ -381,9 +381,6 @@
     <ClCompile Include="Source\Event\HrEventDispatcher.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Event\HrEventListener.cpp">
-      <Filter>Include\Platform\AppWin32</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
@@ -485,6 +482,9 @@
     </ClCompile>
     <ClCompile Include="Source\Render\HrDepthStencilState.cpp">
       <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\HrEventListener.cpp">
+      <Filter>Source\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

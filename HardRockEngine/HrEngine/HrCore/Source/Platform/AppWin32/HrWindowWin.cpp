@@ -7,8 +7,8 @@ using namespace Hr;
 HrWindowWin::HrWindowWin()
 {
 	m_hWnd = nullptr;
-	m_nWidth = 600;
-	m_nHeight = 400;
+	m_nWidth = 1920;
+	m_nHeight = 1080;
 
 	CreateAppWidnow();
 }

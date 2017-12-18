@@ -33,7 +33,6 @@ void HrEventDispatcher::AddEventListener(HrEventListenerPtr& pEventListener)
 	{
 		itemListeners->second.push_back(pEventListener);
 	}
-
 }
 
 void HrEventDispatcher::RemoveEventListener(HrEventListenerPtr& pEventListener)

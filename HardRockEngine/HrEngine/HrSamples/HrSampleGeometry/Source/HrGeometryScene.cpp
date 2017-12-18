@@ -50,27 +50,36 @@ void HrGeometryScene::CreateSceneElements()
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
 	AddSceneNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
 
 	//设置环境光
-	SetAmbientLight(HrColor::White);
+	//SetAmbientLight(HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f));
 
+	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreatePlane(1000.0f, 1000.0f);
+	//AddSceneNode(m_pTestSceneNode);
+	//m_pTestSceneNode->GetTransform()->SetPosition(Vector3(0.0f, -10.0f, 0.0f));
+	//m_pTestSceneNode->GetTransform()->SetRotation(Vector3(90.0f, 0.0f, 0.0f));
+
+	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateBox(100.0f);
+	AddSceneNode(m_pTestSceneNode);
+	m_pTestSceneNode->GetTransform()->SetPosition(Vector3::Zero());
+	
 	//创建灯光
-	//auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);
-	//AddSceneNode(pLight);
-	//pLight->GetTransform()->SetPosition(Vector3::Zero());
-
-	auto pLight = HrSceneObjectFactory::Instance()->CreatePointLight(HrColor::Blue, HrColor::Green, 10000, 0.2, 0.0005, 0.000005);
+	auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);
 	AddSceneNode(pLight);
-	pLight->GetTransform()->SetPosition(Vector3(200, 0, 0));
+	pLight->GetTransform()->SetPosition(Vector3::Zero());
+
+	//auto pLight = HrSceneObjectFactory::Instance()->CreatePointLight(HrColor::Blue, HrColor::Green, 10000, 0.2, 0.0005, 0.000005);
+	//AddSceneNode(pLight);
+	//pLight->GetTransform()->SetPosition(Vector3(200, 0, 0));
 
 	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateSkyBox();
 	//AddSceneNode(m_pTestSceneNode);
 	//m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
 
-	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab2.prefab");
-	AddSceneNode(m_pTestSceneNode);
-	m_pTestSceneNode->GetTransform()->Translate(Vector3(0, 0, 0));
+	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab2.prefab");
+	//AddSceneNode(m_pTestSceneNode);
+	//m_pTestSceneNode->GetTransform()->Translate(Vector3(0, 0, 0));
 
 	//m_pTestSceneNode2 = HrSceneObjectFactory::Instance()->CreateModel("tests/56Por1.FBX");
 	//m_pTestSceneNode->AddChild(m_pTestSceneNode2);
@@ -186,6 +195,7 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEven
 void HrGeometryScene::MouseUpdate(float fDelta)
 {
 	float fSpeed = 0.5f;
+	float fRotateSpeed = 5;
 	if (m_bKeyAPressed)
 	{
 		//m_pSceneMainCamera->GetTransform()->Translate(Vector3(-fSpeed, 0, 0));
@@ -216,7 +226,7 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKeyF1Pressed)
 	{
-		m_pSceneMainCamera->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
+		m_pSceneMainCamera->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
 	}
 	else if (m_bKeyF2Pressed)
 	{
@@ -224,19 +234,23 @@ void HrGeometryScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKeyLeftPressed)
 	{
-		m_pTestSceneNode->GetTransform()->Rotate(Vector3(HrMath::PI() / 100, 0.0f, 0.0f));
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, -fRotateSpeed, 0.0f));
+
 	}
 	else if (m_bKeyRightPressed)
 	{
-		m_pTestSceneNode->GetTransform()->Rotate(Vector3(-HrMath::PI() / 100, 0.0f, 0.0f));
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, fRotateSpeed, 0.0f));
+
 	}
 	else if (m_bKeyUpPressed)
 	{
-		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, HrMath::PI() / 100, 0.0f));
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
+
 	}
 	else if (m_bKeyDownPressed)
 	{
-		m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, 0.0f, HrMath::PI() / 100));
+		m_pTestSceneNode->GetTransform()->Rotate(Vector3(-fRotateSpeed, 0.0f, 0.0f));
+
 	}
 }
 

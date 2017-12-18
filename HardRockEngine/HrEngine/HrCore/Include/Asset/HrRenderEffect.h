@@ -16,7 +16,8 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrRenderTechnique* GetTechnique(const std::string& strTechniqueName);
+		HrRenderTechnique* GetTechniqueByIndex(uint32 nIndex);
+		HrRenderTechnique* GetTechniqueByName(const std::string& strTechniqueName);
 
 		HrRenderEffectParameter* GetParameterByName(const std::string& strParamName);
 		HrRenderEffectStructParameter* GetStructParameterByName(const std::string& strStructName);

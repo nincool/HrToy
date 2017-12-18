@@ -13,7 +13,7 @@ HrScene::HrScene()
 	m_arrLights[HrLight::LT_DIRECTIONAL] = std::pair<bool, std::vector<HrLightPtr> >();
 	m_arrLights[HrLight::LT_SPOTLIGHT] = std::pair<bool, std::vector<HrLightPtr> >();
 
-	m_ambientLightColor = HrColor::White;
+	m_ambientLightColor = HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f);
 
 	m_pRootNode = HR_NEW HrRootNode();
 }

@@ -13,7 +13,6 @@ using namespace Hr;
 
 HrD3D11Render::HrD3D11Render()
 {
-	m_pD3D11ImmediateContext = nullptr;
 }
 
 HrD3D11Render::~HrD3D11Render()
@@ -23,9 +22,6 @@ HrD3D11Render::~HrD3D11Render()
 bool HrD3D11Render::Init()
 {
 	HrD3D11Device::Instance()->CreateD3D11Device();
-	
-	m_pD3D11Device = HrD3D11Device::Instance()->GetDevice();
-	m_pD3D11ImmediateContext = HrD3D11Device::Instance()->GetImmediateContext();
 
 	return true;
 }
@@ -47,18 +43,18 @@ void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 
-	HrD3D11Device::Instance()->GetImmediateContext()->RSSetViewports(1, &vp);
+	GetD3D11DeviceContext()->RSSetViewports(1, &vp);
 }
 
 void HrD3D11Render::ClearRenderTargetView()
 {
 	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	m_pD3D11ImmediateContext->ClearRenderTargetView(m_pRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
+	GetD3D11DeviceContext()->ClearRenderTargetView(m_pRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
 }
 
 void HrD3D11Render::ClearDepthStencilView()
 {
-	m_pD3D11ImmediateContext->ClearDepthStencilView(m_pRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	GetD3D11DeviceContext()->ClearDepthStencilView(m_pRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void HrD3D11Render::ReleaseRenderEngine()
@@ -81,16 +77,16 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 
 	HrShader* pVertexShader = pRenderTechnique->GetRenderPass(0)->GetShader(HrShader::ST_VERTEX_SHADER);
 	ID3D11InputLayout* pInputLayout = pD3D11RenderLayout->GetInputLayout(static_cast<HrD3D11Shader*>(pVertexShader));
-	m_pD3D11ImmediateContext->IASetInputLayout(pInputLayout);
+	GetD3D11DeviceContext()->IASetInputLayout(pInputLayout);
 	
 	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer();
-	m_pD3D11ImmediateContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
-	m_pD3D11ImmediateContext->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
+	GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+	GetD3D11DeviceContext()->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
 
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		ID3D11Buffer* pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-		m_pD3D11ImmediateContext->IASetIndexBuffer(pIndexBuffer, HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
+		GetD3D11DeviceContext()->IASetIndexBuffer(pIndexBuffer, HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
 	const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
@@ -100,7 +96,7 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 		for (uint32 i = 0; i < nPassNum; ++i)
 		{
 			pRenderTechnique->GetRenderPass(i)->BindPass(this);
-			m_pD3D11ImmediateContext->DrawIndexed(nNumIndices, 0, 0);
+			GetD3D11DeviceContext()->DrawIndexed(nNumIndices, 0, 0);
 			pRenderTechnique->GetRenderPass(i)->UnBindPass(this);
 		}
 	}
@@ -110,7 +106,7 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 		for (uint32 i = 0; i < nPassNum; ++i)
 		{
 			pRenderTechnique->GetRenderPass(i)->BindPass(this);
-			m_pD3D11ImmediateContext->Draw(nNumVertices, 0);
+			GetD3D11DeviceContext()->Draw(nNumVertices, 0);
 			pRenderTechnique->GetRenderPass(i)->UnBindPass(this);
 		}
 	}
@@ -118,6 +114,16 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 
 void HrD3D11Render::SwapChain()
 {
-	m_pRenderWindow->GetSwapChain()->Present(0, 0);
+	m_pRenderWindow->PresentSwapChain();
+}
+
+const ID3D11DevicePtr& HrD3D11Render::GetD3D11Device()
+{
+	return HrD3D11Device::Instance()->GetD3DDevice();
+}
+
+const ID3D11DeviceContextPtr& HrD3D11Render::GetD3D11DeviceContext()
+{
+	return HrD3D11Device::Instance()->GetD3DDeviceContext();
 }
 

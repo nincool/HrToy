@@ -24,6 +24,7 @@ namespace Hr
 
 		void SetOrientation(const Quaternion& orientation);
 		const Quaternion& GetOrientation() const;
+		void SetRotation(const Vector3& angle);
 
 		const Vector3& GetForward() const;
 		const Vector3& GetRight() const;

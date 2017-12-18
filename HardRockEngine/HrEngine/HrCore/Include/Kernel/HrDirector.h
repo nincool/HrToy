@@ -70,9 +70,15 @@ namespace Hr
 		bool CreateAppWindow();
 		void ReleaseAppWindow();
 		
+		/**
+		 @Comment: 创建渲染器 [11/21/2017 By Hr]
+		*/
 		bool CreateRenderEngine();
 		void ReleaseRenderEngine();
 		
+		/**
+		 @Comment: 创建渲染目标 [11/21/2017 By Hr]
+		*/
 		bool CreateRenderTarget();
 		void ReleaseRenderTarget();
 

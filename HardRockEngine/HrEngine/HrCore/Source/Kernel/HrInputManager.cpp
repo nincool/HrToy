@@ -31,7 +31,7 @@ bool HrInputEventListener::keyReleased(const OIS::KeyEvent &arg)
 bool HrInputEventListener::mouseMoved(const OIS::MouseEvent &arg)
 {
 	float x, y;
-	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(HrEventMouse::EnumMouseButtonID::MBI_UNKNOW, HrEventMouse::EnumMouseEventFlag::MEF_MOVE, x, y);
 	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
@@ -41,7 +41,7 @@ bool HrInputEventListener::mousePressed(const OIS::MouseEvent &arg, OIS::MouseBu
 {
 	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
 	float x, y;
-	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y);
 	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
@@ -51,7 +51,7 @@ bool HrInputEventListener::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseB
 {
 	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
 	float x, y;
-	HrSingleTon<HrInputManager>::Instance()->GetCursorPosition(x, y);
+	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y);
 	HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;

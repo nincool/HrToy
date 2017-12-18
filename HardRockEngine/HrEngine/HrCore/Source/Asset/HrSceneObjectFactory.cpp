@@ -54,14 +54,14 @@ HrLightNode* HrSceneObjectFactory::CreatePointLight(const HrColor& diffuse, cons
 	return pLightNode;
 }
 
-HrSceneNode* HrSceneObjectFactory::CreatePanel()
+HrSceneNode* HrSceneObjectFactory::CreatePlane(float fWidth, float fHeight)
 {
-	return m_pGeometryFactory->CreatePanel();
+	return m_pGeometryFactory->CreatePlane(fWidth, fHeight);
 }
 
-HrSceneNode* HrSceneObjectFactory::CreateBox()
+HrSceneNode* HrSceneObjectFactory::CreateBox(float fLength)
 {
-	return m_pGeometryFactory->CreateBox(10, 10, 10);
+	return m_pGeometryFactory->CreateBox(fLength);
 }
 
 HrSceneNode* HrSceneObjectFactory::CreateSkyBox()

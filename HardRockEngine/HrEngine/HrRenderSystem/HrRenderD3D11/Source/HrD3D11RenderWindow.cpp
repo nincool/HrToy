@@ -13,6 +13,7 @@ HrD3D11RenderWindow::HrD3D11RenderWindow()
 
 	m_hWnd = NULL;
 	m_pSwapChain = nullptr;
+	m_pSwapChain1 = nullptr;
 	m_pRenderTargetView = nullptr;
 	m_pDepthStencilView = nullptr;
 }
@@ -26,51 +27,111 @@ bool HrD3D11RenderWindow::CreateRenderWindow(uint32 nWidth, uint32 nHeight)
 	
 	CreateD3DView();
 
-	HrD3D11Device::Instance()->GetImmediateContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 
 	return true;
 }
 
 bool HrD3D11RenderWindow::CreateSwapChain()
 {
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-	swapChainDesc.BufferDesc.Width = m_nWidth;
-	swapChainDesc.BufferDesc.Height = m_nHeight;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
-
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
-	swapChainDesc.OutputWindow = pWindow->GetHwnd();
-	swapChainDesc.Windowed = true;
-
-	HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory()->CreateSwapChain(HrD3D11Device::Instance()->GetDevice(), &swapChainDesc, &m_pSwapChain);
-	if (FAILED(hr))
+	if (HrD3D11Device::Instance()->GetDXGISubVersion() >= 2)
 	{
-		HRERROR(_T("D3D11CreateSwapChain Error!"));
-		return false;
-	}
+		DXGI_SWAP_CHAIN_DESC1 swapChainDesc1;
+		ZeroMemory(&swapChainDesc1, sizeof(swapChainDesc1));
+		swapChainDesc1.Width = m_nWidth;
+		swapChainDesc1.Height = m_nHeight;
+		swapChainDesc1.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	return true;
+		bool bStereo = HrD3D11Device::Instance()->GetDXGIFactory2()->IsWindowedStereoEnabled();
+		swapChainDesc1.Stereo = bStereo;
+
+		swapChainDesc1.SampleDesc.Count = 1;
+		swapChainDesc1.SampleDesc.Quality = 0;
+
+		swapChainDesc1.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapChainDesc1.BufferCount = 1;
+
+		swapChainDesc1.Scaling = DXGI_SCALING_STRETCH;
+		swapChainDesc1.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		swapChainDesc1.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+		swapChainDesc1.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+		DXGI_SWAP_CHAIN_FULLSCREEN_DESC swapChainFullScreenDesc;
+		ZeroMemory(&swapChainFullScreenDesc, sizeof(swapChainFullScreenDesc));
+		swapChainFullScreenDesc.RefreshRate.Numerator = 60;
+		swapChainFullScreenDesc.RefreshRate.Denominator = 1;
+		swapChainFullScreenDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		swapChainFullScreenDesc.Windowed = true;
+
+		HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+		IDXGISwapChain1* pSwapChain = nullptr;
+		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory2()->CreateSwapChainForHwnd(HrD3D11Device::Instance()->GetD3DDevice().get(), pWindow->GetHwnd()
+			, &swapChainDesc1
+			, &swapChainFullScreenDesc
+			, nullptr
+			, &pSwapChain);
+
+		if (FAILED(hr))
+		{
+			HRERROR(_T("D3D11CreateSwapChain Error!"));
+			return false;
+		}
+		m_pSwapChain1 = MakeComPtr(pSwapChain);
+
+		return true;
+	}
+	else
+	{
+		DXGI_SWAP_CHAIN_DESC swapChainDesc;
+		ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+		swapChainDesc.BufferDesc.Width = m_nWidth;
+		swapChainDesc.BufferDesc.Height = m_nHeight;
+		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
+
+		swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+		swapChainDesc.SampleDesc.Count = 1;
+		swapChainDesc.SampleDesc.Quality = 0;
+
+		swapChainDesc.BufferCount = 1;
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+
+		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+		swapChainDesc.OutputWindow = pWindow->GetHwnd();
+		swapChainDesc.Windowed = true;
+
+		//todo
+		IDXGISwapChain* pSwapChain = nullptr;
+		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory1()->CreateSwapChain(HrD3D11Device::Instance()->GetD3DDevice().get(), &swapChainDesc, &pSwapChain);
+		if (FAILED(hr))
+		{
+			HRERROR(_T("D3D11CreateSwapChain Error!"));
+			return false;
+		}
+		m_pSwapChain = MakeComPtr(pSwapChain);
+
+		return true;
+	}
 }
 
 bool HrD3D11RenderWindow::CreateD3DView()
 {
 	ID3D11Texture2D* pBackBuffer = nullptr;
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateRenderTargetView(pBackBuffer, 0, &m_pRenderTargetView);
+	if (m_pSwapChain1)
+	{
+		m_pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	}
+	else if (m_pSwapChain)
+	{
+		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	}
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateRenderTargetView(pBackBuffer, 0, &m_pRenderTargetView);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateD3DViews Error!"));
@@ -95,7 +156,7 @@ bool HrD3D11RenderWindow::CreateD3DView()
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	hr = HrD3D11Device::Instance()->GetDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateDepthStencil Error!"));
@@ -115,7 +176,7 @@ bool HrD3D11RenderWindow::CreateD3DView()
 		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	}
 	descDSV.Texture2D.MipSlice = 0;
-	hr = HrD3D11Device::Instance()->GetDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &m_pDepthStencilView);
+	hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateDepthStencilView(pDepthStencil, &descDSV, &m_pDepthStencilView);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateDepthStencilView Error!"));
@@ -123,5 +184,27 @@ bool HrD3D11RenderWindow::CreateD3DView()
 	}
 
 	return true;
+}
+
+const IDXGISwapChainPtr& HrD3D11RenderWindow::GetSwapChain() const
+{
+	return m_pSwapChain;
+}
+
+const IDXGISwapChain1Ptr& HrD3D11RenderWindow::GetSwapChain1() const
+{
+	return m_pSwapChain1;
+}
+
+void HrD3D11RenderWindow::PresentSwapChain() const
+{
+	if (m_pSwapChain1)
+	{
+		m_pSwapChain1->Present(0, 0);
+	}
+	else if (m_pSwapChain)
+	{
+		m_pSwapChain->Present(0, 0);
+	}
 }
 

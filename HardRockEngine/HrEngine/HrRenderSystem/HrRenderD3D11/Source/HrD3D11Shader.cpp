@@ -32,7 +32,7 @@ HrD3D11Shader::~HrD3D11Shader()
 void HrD3D11Shader::Bind(HrRender* pRender)
 {
 	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
-	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11ImmediateContext();
+	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11DeviceContext().get();
 
 	//汗。。。。
 	m_vecD3D11SRV.clear();
@@ -126,7 +126,7 @@ void HrD3D11Shader::StreamIn(HrStreamData& streamBuffer, const std::string& strF
 
 void HrD3D11Shader::CreateVertexShader(HrStreamData& streamBuffer)
 {
-	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateVertexShader(streamBuffer.GetBufferPoint()
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateVertexShader(streamBuffer.GetBufferPoint()
 		, streamBuffer.GetBufferSize(), 0, &m_pVertexShader);
 	if (FAILED(hr))
 	{
@@ -137,7 +137,7 @@ void HrD3D11Shader::CreateVertexShader(HrStreamData& streamBuffer)
 
 void HrD3D11Shader::CreatePixelShader(HrStreamData& streamBuffer)
 {
-	HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreatePixelShader(streamBuffer.GetBufferPoint()
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreatePixelShader(streamBuffer.GetBufferPoint()
 		, streamBuffer.GetBufferSize(), 0, &m_pPixelShader);
 	if (FAILED(hr))
 	{

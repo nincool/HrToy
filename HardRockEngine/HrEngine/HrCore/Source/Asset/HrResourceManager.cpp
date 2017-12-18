@@ -19,8 +19,10 @@
 using namespace Hr;
 
 HrResourceManager::HrResourceManager()
+	:m_pDefaultTexture(nullptr),
+	m_pDefaultMaterial(nullptr),
+	m_pDefaultRenderEffect(nullptr)
 {
-
 }
 
 HrResourceManager::~HrResourceManager()
@@ -49,36 +51,61 @@ void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResour
 
 void HrResourceManager::InitResourceManager()
 {
+	HRLOG("HrResourceManager::InitResourceManager Start to create buildin resources!");
+	CreateBuildInTexture();
 	CreateBuildInEffects();
 	CreateBuildInMaterial();
 }
 
+void HrResourceManager::CreateBuildInTexture()
+{
+	HRLOG("HrResourceManager::CreateBuildTexture Start to create buildin textures!");
+	LoadResource("Media/Model/Buildin/Texture/defaulttexture.png", HrResource::RT_TEXTURE);
+}
+
 void HrResourceManager::CreateBuildInEffects()
 {
-	//LoadResource("Media/HrShader/HrLambert.effectxml");
-	//LoadResource("Media/HrShader/HrPhong.effectxml");
+	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
 	LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
 {
+	HRLOG("HrResourceManager::CreateBuildInMaterial Start to create buildin material!");
 	LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL);
+}
+
+HrTexture* HrResourceManager::GetDefaultTexture()
+{
+	if (m_pDefaultTexture == nullptr)
+	{
+		m_pDefaultTexture = static_cast<HrTexture*>(GetResource("Media/Model/Buildin/Texture/defaulttexture.png", HrResource::RT_TEXTURE));
+		HRASSERT(m_pDefaultTexture, "GetDefaultTexture Error!");
+	}
+	return m_pDefaultTexture;
 }
 
 HrMaterial* HrResourceManager::GetDefaultMaterial()
 {
-	HrMaterial* pMaterial = static_cast<HrMaterial*>(GetResource("MaterialDefault.material", HrResource::RT_MATERIAL));
-	HRASSERT(pMaterial, "GetDefaultMaterial Error!");
+	if (m_pDefaultMaterial == nullptr)
+	{
+		m_pDefaultMaterial = static_cast<HrMaterial*>(GetResource("MaterialDefault.material", HrResource::RT_MATERIAL));
+		HRASSERT(m_pDefaultMaterial, "GetDefaultMaterial Error!");
+	}
 
-	return pMaterial;
+	return m_pDefaultMaterial;
 }
 
 HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
 {
-	HrRenderEffect* pRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
-	HRASSERT(pRenderEffect, "GetDefaultRenderEffect Error!");
+	if (m_pDefaultRenderEffect == nullptr)
+	{
+		m_pDefaultRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
+		HRASSERT(m_pDefaultRenderEffect, "GetDefaultRenderEffect Error!");
 
-	return pRenderEffect;
+	}
+
+	return m_pDefaultRenderEffect;
 }
 
 HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)

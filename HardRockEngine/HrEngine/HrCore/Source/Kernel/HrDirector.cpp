@@ -121,7 +121,7 @@ void HrDirector::ReleaseRenderEngine()
 	m_pRenderTarget.reset();
 	m_pRenderEngine->ReleaseRenderEngine();
 	m_pRenderEngine.reset();
-	
+
 	m_pRenderFactory.reset();
 
 	typedef void(*RENDER_RELEASE_FUNC)();
@@ -233,7 +233,7 @@ void HrDirector::End()
 void HrDirector::Release()
 {
 	//先释放资源
-	HrSingleTon<HrResourceManager>::Instance()->ReleaseAllResources();
+	HrResourceManager::Instance()->ReleaseAllResources();
 	ReleaseRenderEngine();
 }
 

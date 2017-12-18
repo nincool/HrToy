@@ -9,10 +9,6 @@ using namespace Hr;
 
 HrD3D11Device::HrD3D11Device()
 {
-	m_pD3D11DXGIFactory = nullptr;
-	m_pD3D11Device = nullptr;
-	m_pD3D11ImmediateContext = nullptr;
-
 	m_pAdapterList = new HrD3D11AdapterList();
 }
 
@@ -28,31 +24,6 @@ bool HrD3D11Device::CreateD3D11Device()
 	CreateD3DDXGIFactory();
 	
 	D3D11EnumerateAdapter();
-
-	return true;
-}
-
-bool HrD3D11Device::CreateD3DDXGIFactory()
-{
-	//if (this->GetDXGIFactory() == nullptr)
-	//{
-	//	IDXGIFactory1* pDXGIFactory = nullptr;
-	//	HRESULT hr = CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&pDXGIFactory);
-	//	if (FAILED(hr))
-	//	{
-	//		return false;
-	//	}
-	//	this->SetDXGIFactory(pDXGIFactory);
-	//}
-
-	IDXGIDevice1 * pDXGIDevice;
-	HRESULT hr = m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice1), (void **)&pDXGIDevice);
-
-	IDXGIAdapter * pDXGIAdapter;
-	hr = pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&pDXGIAdapter);
-
-	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory1), (void **)&m_pD3D11DXGIFactory);
-
 
 	return true;
 }
@@ -82,7 +53,7 @@ bool HrD3D11Device::CreateD3DDXDevice()
 	//deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 
 	ID3D11Device* pD3DDevice;
-	ID3D11DeviceContext* m_pImmediateContext;
+	ID3D11DeviceContext* pImmediateContext;
 	HRESULT hr = D3D11CreateDevice(pDeviceAdapter
 		, driverType
 		, NULL
@@ -92,24 +63,50 @@ bool HrD3D11Device::CreateD3DDXDevice()
 		, D3D11_SDK_VERSION
 		, &pD3DDevice
 		, NULL
-		, &m_pImmediateContext);
+		, &pImmediateContext);
 	if (hr != S_OK)
 	{
 		HRERROR(_T("D3D11CreateDevice Error!"));
 		return false;
 	}
-	this->SetDevice(pD3DDevice);
-	this->SetImmediateContext(m_pImmediateContext);
+
+	m_pD3D11Device = MakeComPtr(pD3DDevice);
+	m_pD3D11ImmediateContext = MakeComPtr(pImmediateContext);
 
 	return true;
 }
+
+bool HrD3D11Device::CreateD3DDXGIFactory()
+{
+	IDXGIDevice1 * pDXGIDevice;
+	HRESULT hr = m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice1), reinterpret_cast<void**>(&pDXGIDevice));
+
+	IDXGIAdapter * pDXGIAdapter;
+	hr = pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&pDXGIAdapter));
+
+	IDXGIFactory1* pDXGIFactory1;
+	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&pDXGIFactory1));
+	m_pDXGIFactory1 = MakeComPtr(pDXGIFactory1);
+	m_nDXGISubVersion = 1;
+
+	IDXGIFactory2* pDXGIFactory2 = nullptr;
+	pDXGIFactory1->QueryInterface(IID_IDXGIFactory2, reinterpret_cast<void**>(&pDXGIFactory2));
+	if (pDXGIFactory2 != nullptr)
+	{
+		m_pDXGIFactory2 = MakeComPtr(pDXGIFactory2);
+		m_nDXGISubVersion = 2;
+	}
+
+	return true;
+}
+
 
 bool HrD3D11Device::D3D11EnumerateAdapter()
 {
 	for (uint32 nAdapter = 0;; ++nAdapter)
 	{
 		IDXGIAdapter1* pDXGIAdapter = nullptr;
-		HRESULT hr = this->GetDXGIFactory()->EnumAdapters1(nAdapter, &pDXGIAdapter);
+		HRESULT hr = this->GetDXGIFactory1()->EnumAdapters1(nAdapter, &pDXGIAdapter);
 		if (DXGI_ERROR_NOT_FOUND == hr)
 		{
 			hr = S_OK;
@@ -136,7 +133,29 @@ void HrD3D11Device::Release()
 		m_pAdapterList->Release();
 	}
 	SAFE_DELETE(m_pAdapterList);
-	SAFE_RELEASE(m_pD3D11ImmediateContext);
-	SAFE_RELEASE(m_pD3D11Device);
-	SAFE_RELEASE(m_pD3D11DXGIFactory);
+}
+
+const IDXGIFactory1Ptr& HrD3D11Device::GetDXGIFactory1()
+{
+	return m_pDXGIFactory1;
+}
+
+const IDXGIFactory2Ptr& HrD3D11Device::GetDXGIFactory2()
+{
+	return m_pDXGIFactory2;
+}
+
+const ID3D11DevicePtr& HrD3D11Device::GetD3DDevice()
+{
+	return m_pD3D11Device;
+}
+
+const ID3D11DeviceContextPtr& HrD3D11Device::GetD3DDeviceContext()
+{
+	return m_pD3D11ImmediateContext;
+}
+
+int HrD3D11Device::GetDXGISubVersion()
+{
+	return m_nDXGISubVersion;
 }

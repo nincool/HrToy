@@ -22,8 +22,8 @@ namespace Hr
 		HrLightNode* CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular);
 		HrLightNode* CreatePointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
 		
-		HrSceneNode* CreatePanel();
-		HrSceneNode* CreateBox();
+		HrSceneNode* CreatePlane(float fWidth, float fHeight);
+		HrSceneNode* CreateBox(float fLength);
 		HrSceneNode* CreateSkyBox();
 
 		HrSceneNode* CreateModel(const std::string& strName);

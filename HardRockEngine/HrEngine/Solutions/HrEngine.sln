@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrCommon", "..\HrCommon\HrCommon.vcxproj", "{D585B947-4946-4B91-82D6-0C7D06914554}"
 EndProject
@@ -55,6 +55,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DirectXTK", "DirectXTK", "{612B4950-0C5F-4E86-93EC-D9E68E75B57E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2015_Win10", "..\ThirdParty\DirectXTK\DirectXTK_Desktop_2015_Win10.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Media", "Media", "{1352375E-3062-4762-B491-119DF5543094}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scene", "Scene", "{8517E47D-9E52-48FE-8669-728D392906D3}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Bin_Win\Media\Scene\HrTestScene.json = ..\..\Bin_Win\Media\Scene\HrTestScene.json
+		..\..\Bin_Win\Media\Scene\PlayerScene.json = ..\..\Bin_Win\Media\Scene\PlayerScene.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -472,5 +480,7 @@ Global
 		{4BA70798-2804-4A30-930B-EE7E7D10B3FC} = {FBE002A2-7185-440F-B106-CF646E21129C}
 		{612B4950-0C5F-4E86-93EC-D9E68E75B57E} = {FBE002A2-7185-440F-B106-CF646E21129C}
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {612B4950-0C5F-4E86-93EC-D9E68E75B57E}
+		{1352375E-3062-4762-B491-119DF5543094} = {48B7A661-65A3-40D5-A91A-9CE8EC74D6D8}
+		{8517E47D-9E52-48FE-8669-728D392906D3} = {1352375E-3062-4762-B491-119DF5543094}
 	EndGlobalSection
 EndGlobal

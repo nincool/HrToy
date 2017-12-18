@@ -13,10 +13,9 @@ namespace Hr
 
 		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight) override;
 
-		IDXGISwapChain* GetSwapChain()
-		{
-			return m_pSwapChain;
-		}
+		const IDXGISwapChainPtr& GetSwapChain() const;
+		const IDXGISwapChain1Ptr& GetSwapChain1() const;
+
 		ID3D11RenderTargetView* GetRenderTargetView()
 		{
 			return m_pRenderTargetView;
@@ -26,16 +25,30 @@ namespace Hr
 			return m_pDepthStencilView;
 		}
 
+		uint32 GetWidth()
+		{
+			return m_nWidth;
+		}
+
+		uint32 GetHeight()
+		{
+			return m_nHeight;
+		}
+
+		void PresentSwapChain() const;
 	private:
 		bool CreateSwapChain();
 		bool CreateD3DView();
 
 	private:
 		HWND m_hWnd;
-		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);
-		HR_SYNTHESIZE_READONLY(uint32, m_nHeight, Height);
+		
+		uint32 m_nWidth;
+		uint32 m_nHeight;
 
-		IDXGISwapChain* m_pSwapChain;
+		IDXGISwapChainPtr m_pSwapChain;
+		IDXGISwapChain1Ptr m_pSwapChain1;
+
 		ID3D11RenderTargetView* m_pRenderTargetView;
 		ID3D11DepthStencilView* m_pDepthStencilView;
 	

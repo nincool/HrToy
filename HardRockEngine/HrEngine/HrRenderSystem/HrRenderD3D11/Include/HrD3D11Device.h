@@ -3,6 +3,7 @@
 
 #include "HrD3D11RenderPrerequisite.h"
 #include <d3d11.h>
+#include <dxgi1_5.h>
 #include "HrCommon/include/HrSingleton.h"
 
 namespace Hr
@@ -21,13 +22,23 @@ namespace Hr
 		bool CreateD3DDXDevice();
 
 		bool D3D11EnumerateAdapter();
+
+		const IDXGIFactory1Ptr& GetDXGIFactory1();
+		const IDXGIFactory2Ptr& GetDXGIFactory2();
+		int GetDXGISubVersion();
+
+		const ID3D11DevicePtr& GetD3DDevice();
+		const ID3D11DeviceContextPtr& GetD3DDeviceContext();
 	public:
 		void Release();
 
-		HR_SYNTHESIZE(IDXGIFactory1*, m_pD3D11DXGIFactory, DXGIFactory);
+		IDXGIFactory1Ptr m_pDXGIFactory1;
+		IDXGIFactory2Ptr m_pDXGIFactory2;
+		int m_nDXGISubVersion = 1;
 
-		HR_SYNTHESIZE(ID3D11Device*, m_pD3D11Device, Device);
-		HR_SYNTHESIZE(ID3D11DeviceContext*, m_pD3D11ImmediateContext, ImmediateContext);
+		ID3D11DevicePtr m_pD3D11Device;
+		ID3D11DeviceContextPtr m_pD3D11ImmediateContext;
+
 		HR_SYNTHESIZE_READONLY(HrD3D11AdapterList*, m_pAdapterList, AdapterList);
 		
 	};

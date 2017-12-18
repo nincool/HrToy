@@ -384,7 +384,16 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 
 }
 
-HrRenderTechnique* HrRenderEffect::GetTechnique(const std::string& strTechniqueName)
+HrRenderTechnique* HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
+{
+	if (0 <= nIndex && nIndex < m_vecRenderTechnique.size())
+	{
+		return m_vecRenderTechnique[nIndex];
+	}
+	return nullptr;
+}
+
+HrRenderTechnique* HrRenderEffect::GetTechniqueByName(const std::string& strTechniqueName)
 {
 	size_t const nHashName = HrHashValue(strTechniqueName);
 	for (const auto& item : m_vecRenderTechnique)

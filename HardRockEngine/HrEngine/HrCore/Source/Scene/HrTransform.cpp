@@ -31,6 +31,11 @@ const Vector3& HrTransform::GetPosition()
 	return m_vPosition;
 }
 
+void HrTransform::SetRotation(const Vector3& angle)
+{
+	SetOrientation(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)));
+}
+
 const Quaternion& HrTransform::GetOrientation() const
 {
 	return m_orientation;
@@ -219,3 +224,4 @@ const Vector3& HrTransform::GetScale()
 {
 	return m_vScale;
 }
+

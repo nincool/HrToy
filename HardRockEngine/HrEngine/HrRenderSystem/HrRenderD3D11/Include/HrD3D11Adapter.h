@@ -18,9 +18,19 @@ namespace Hr
 		void Release();
 
 		void EnumerateModeList();
+
+		uint32 GetAdapterIndex()
+		{
+			return m_nAdapterIndex;
+		}
+
+		IDXGIAdapter1* GetAdapter()
+		{
+			return m_pAdapter;
+		}
 	private:
-		HR_SYNTHESIZE_READONLY(uint32, m_nAdapterIndex, AdapterIndex);
-		HR_SYNTHESIZE_READONLY(IDXGIAdapter1*, m_pAdapter, Adapter);
+		uint32 m_nAdapterIndex;
+		IDXGIAdapter1* m_pAdapter;
 
 		//显示模式列表
 		std::vector<HrD3D11VideoMode> m_vecModes;

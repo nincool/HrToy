@@ -11,8 +11,6 @@ namespace Hr
 		virtual ~HrRender(){};
 		/**
 		*	@Brief:  ¥¥Ω®‰÷»æ∆˜[10/28/2015 By Hr]
-		*	@Param:
-		*	@Return:
 		*/
 		virtual bool Init() = 0;
 		
@@ -29,8 +27,6 @@ namespace Hr
 		virtual void SwapChain() = 0;
 		/**
 		*	@Brief:  ¥›ªŸ‰÷»æ∆˜[10/28/2015 By Hr]
-		*	@Param:
-		*	@Return:
 		*/
 		virtual void ReleaseRenderEngine() = 0;
 

@@ -1,9 +1,15 @@
 #include "Render/HrStaticMeshRenderable.h"
-#include "Asset/HrMesh.h"
-#include "Asset/HrRenderEffect.h"
-#include "Asset/HrTexture.h"
-#include "Asset/HrRenderEffectParameter.h"
-#include "Render/HrRenderFrameParameters.h"
+#include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
+#include "HrCore/Include/Render/HrRenderTechnique.h"
+#include "HrCore/Include/Render/HrRenderLayout.h"
+#include "HrCore/Include/Render/HrRenderFrameParameters.h"
+#include "HrCore/Include/Asset/HrRenderEffect.h"
+#include "HrCore/Include/Asset/HrPrefabModel.h"
+#include "HrCore/Include/Asset/HrMesh.h"
+#include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrCore/Include/Asset/HrRenderEffectParameter.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
+
 
 using namespace Hr;
 
@@ -49,7 +55,14 @@ void HrStaticMeshRenderable::UpdateEffectParametersImpl()
 		{
 			HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
 			if (pTexParam != nullptr)
-				*pTexParam = m_pSubMesh->GetTexture();
+			{
+				HrTexture* pTexture = m_pSubMesh->GetTexture();
+				if (pTexture == nullptr)
+				{
+					pTexture = HrResourceManager::Instance()->GetDefaultTexture();
+				}
+				*pTexParam = pTexture;
+			}
 		}
 	}
 }

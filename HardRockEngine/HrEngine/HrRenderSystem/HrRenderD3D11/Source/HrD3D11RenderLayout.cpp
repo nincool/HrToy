@@ -45,7 +45,7 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pVertexSha
 			m_pD3DInputElementDesc[i].InstanceDataStepRate = 0;
 		}
 
-		HRESULT hr = HrD3D11Device::Instance()->GetDevice()->CreateInputLayout(
+		HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateInputLayout(
 			m_pD3DInputElementDesc,
 			nVertexElementNum,
 			pVertexShader->GetCodeData()->GetBufferPoint(),

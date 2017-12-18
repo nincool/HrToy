@@ -47,6 +47,12 @@ namespace Hr
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 
+	template <typename T>
+	inline std::shared_ptr<T> MakeComPtr(T* p)
+	{
+		return p ? std::shared_ptr<T>(p, std::mem_fn(&T::Release)) : std::shared_ptr<T>();
+	}
+
 	inline size_t HrHashValue(const char* str)
 	{
 		//static boost::hash<std::string> string_hash;

@@ -25,6 +25,11 @@ namespace Hr
 		HrResource* GetOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
 		HrResource* GetSkyBoxResource(const std::string& strFile, HrResource::EnumResourceType resType);
+
+		/*
+			@brief	默认纹理 [3/16/2017 By Hr]
+		*/
+		HrTexture* GetDefaultTexture();
 		/*
 			@brief	默认材质 [2/22/2017 By Hr]
 		*/
@@ -46,6 +51,7 @@ namespace Hr
 		HrResource* AddMaterialResource(const std::string& strFile);
 		HrResource* AddTextureResource(const std::string& strFile);
 
+		void CreateBuildInTexture();
 		void CreateBuildInEffects();
 		void CreateBuildInMaterial();
 
@@ -63,6 +69,10 @@ namespace Hr
 		std::unordered_map<size_t, HrResource*> m_mapTextures;
 		
 		std::unordered_map<size_t, HrResource*> m_mapRenderEffects;
+
+		HrTexture* m_pDefaultTexture;
+		HrMaterial* m_pDefaultMaterial;
+		HrRenderEffect* m_pDefaultRenderEffect;
 	};
 }
 

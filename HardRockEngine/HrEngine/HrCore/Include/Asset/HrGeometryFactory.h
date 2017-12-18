@@ -22,32 +22,35 @@ namespace Hr
 	* @Date: [2/28/2017 By Hr]
 	*
 	************************************************************************/ 
-	class HrGeometryPanel : public HrStaticMeshRenderable
+	class HrGeometryPlane : public HrStaticMeshRenderable
 	{
 	public:
-		HrGeometryPanel();
-		~HrGeometryPanel();
+		HrGeometryPlane(float fWidth, float fHeight);
+		~HrGeometryPlane();
 
 	private:
-		void GetBuildInPanelMesh();
-		void CreatePanelStaticMesh(HrMesh* pMesh);
+		void GetBuildInPlaneMesh();
+		void CreatePlaneStaticMesh(HrMesh* pMesh);
 
 	public:
 		Vector3 m_normal;
-		REAL m_d;
+		float m_fWidth;
+		float m_fHeight;
 	};
 
 	class HrGeometryBox : public HrStaticMeshRenderable
 	{
 	public:
-		HrGeometryBox();
+		HrGeometryBox(float fLength);
 		~HrGeometryBox();
 
 	private:
 		void GetBuildInBoxMesh();
 		void CreateBoxStaticMesh(HrMesh* pMesh);
 
-		void ComputeNormal(Vertex1* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum);
+		//void ComputeNormal(Vertex1* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum);
+	private:
+		float m_fLength;
 	};
 
 	class HrGeometrySkyBox : public HrPrefabModel
@@ -72,7 +75,7 @@ namespace Hr
 	private:
 		void GetBuildInSkyBoxMesh();
 		void CreateSkyBoxStaticMesh(HrMesh* pMesh);
-		void CreateSkyPanelVertice(EnumSkyPlaneSide side, Vertex1* pVertice, float fDistance);
+		void CreateSkyPlaneVertice(EnumSkyPlaneSide side, Vertex1* pVertice, float fDistance);
 
 	private:
 
@@ -84,8 +87,8 @@ namespace Hr
 		HrGeometryFactory();
 		~HrGeometryFactory();
 
-		HrSceneNode* CreatePanel();
-		HrSceneNode* CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight);
+		HrSceneNode* CreatePlane(float fWidth, float fHeight);
+		HrSceneNode* CreateBox(float fLength);
 		HrSceneNode* CreateSkyBox();
 	};
 }

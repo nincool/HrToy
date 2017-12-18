@@ -7,6 +7,7 @@
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
 
 using namespace Hr;
 
@@ -16,7 +17,7 @@ HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
 	m_pSubMesh = nullptr;
 
 	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Technique_1");
+	m_pRenderTechnique = m_pRenderEffect->GetTechniqueByName("Technique_1");
 	BOOST_ASSERT(m_pRenderTechnique);
 }
 
@@ -69,7 +70,14 @@ void HrSkinnedMeshRenderable::UpdateEffectParametersImpl()
 		{
 			HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
 			if (pTexParam != nullptr)
-				*pTexParam = m_pSubMesh->GetTexture();
+			{
+				HrTexture* pTexture = m_pSubMesh->GetTexture();
+				if (pTexture == nullptr)
+				{
+					pTexture = HrResourceManager::Instance()->GetDefaultTexture();
+				}
+				*pTexParam = pTexture;
+			}
 		}
 	}
 }

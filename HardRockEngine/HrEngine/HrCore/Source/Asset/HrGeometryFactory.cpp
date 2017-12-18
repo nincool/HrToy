@@ -16,39 +16,44 @@ using namespace Hr;
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////
-HrGeometryPanel::HrGeometryPanel()
+HrGeometryPlane::HrGeometryPlane(float fWidth, float fHeight)
+	:m_fWidth(fWidth), m_fHeight(fHeight)
 {
-	GetBuildInPanelMesh();
+	GetBuildInPlaneMesh();
 }
 
-HrGeometryPanel::~HrGeometryPanel()
+HrGeometryPlane::~HrGeometryPlane()
 {
 
 }
 
-void HrGeometryPanel::GetBuildInPanelMesh()
+void HrGeometryPlane::GetBuildInPlaneMesh()
 {
 	HrMesh* pPlaneMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "PLANEMESH", HrResource::RT_MESH));
 	if (!pPlaneMesh->IsLoaded())
 	{
-		CreatePanelStaticMesh(pPlaneMesh);
+		CreatePlaneStaticMesh(pPlaneMesh);
 	}
 }
 
-void HrGeometryPanel::CreatePanelStaticMesh(HrMesh* pMesh)
+void HrGeometryPlane::CreatePlaneStaticMesh(HrMesh* pMesh)
 {
-	m_pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetOrLoadResource("HrLambert.effectxml", HrResource::RT_EFFECT));
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
+	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
+	BOOST_ASSERT(m_pRenderEffect);
+	m_pRenderTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+	BOOST_ASSERT(m_pRenderTechnique);
 
+	float fHalfWidth = m_fWidth * 0.5f;
+	float fHalfHeight = m_fHeight * 0.5f;
 	Vertex1 vertices[6] =
 	{
-		{ float3(-100.0f, -100.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
-		{ float3(-100.0f, 100.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
-		{ float3(100.0f, 100.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+		{ float3(-fHalfWidth, -fHalfHeight, 0.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
+		{ float3(-fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
 
-		{ float3(100.0f, 100.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-		{ float3(100.0f, -100.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
-		{ float3(-100.0f, -100.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+		{ float3(fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfWidth, -fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfWidth, -fHalfHeight, 0.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
 
 	};
 
@@ -67,9 +72,6 @@ void HrGeometryPanel::CreatePanelStaticMesh(HrMesh* pMesh)
 		, vecVertexElemet);
 
 	pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	std::string strFilePath = "tests\\001Plane.jpg";
-	HrTexture* pRes = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strFilePath, HrResource::RT_TEXTURE));
-	pSubMesh->SetTexture(pRes);
 
 	m_pSubMesh = pSubMesh;
 }
@@ -77,14 +79,14 @@ void HrGeometryPanel::CreatePanelStaticMesh(HrMesh* pMesh)
 ////////////////////////////////////
 //HrGeometryBox
 ///////////////////////////////////
-HrGeometryBox::HrGeometryBox()
+HrGeometryBox::HrGeometryBox(float fLength)
+	:m_fLength(fLength)
 {
 	GetBuildInBoxMesh();
 }
 
 HrGeometryBox::~HrGeometryBox()
 {
-
 }
 
 void HrGeometryBox::GetBuildInBoxMesh()
@@ -98,128 +100,115 @@ void HrGeometryBox::GetBuildInBoxMesh()
 
 void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 {
-	m_pRenderEffect = static_cast<HrRenderEffect*>(HrResourceManager::Instance()->GetResource("HrLambert.effectxml", HrResource::RT_EFFECT));
-	m_pRenderTechnique = m_pRenderEffect->GetTechnique("Basic");
+	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
+	BOOST_ASSERT(m_pRenderEffect);
+	m_pRenderTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+	BOOST_ASSERT(m_pRenderTechnique);
 
-	//Vertex vertices[8] =
-	//{
-	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f)},
-	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
-	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-	//	{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
-	//	{ float3(-10.0f, -10.0f, 10.0f), float3::Zero(), float2::Zero() },
-	//	{ float3(-10.0f, 10.0f, 10.0f), float3::Zero(), float2::Zero() },
-	//	{ float3(10.0f, 10.0f, 10.0f), float3::Zero(), float2::Zero() },
-	//	{ float3(10.0f, -10.0f, 10.0f), float3::Zero(), float2::Zero() },
-	//};
-
-	Vertex1 vertices[6] =
+	float fHalfLength = m_fLength * 0.5f;
+	Vertex1 vertices[] =
 	{
-		{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f)},
-		{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
-		{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
+		//front
+		{ float3(-fHalfLength, -fHalfLength, -fHalfLength),  Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f)},
+		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
 
+		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f) },
 
-		{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-		{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
-		{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
+		//right
+		{ float3(fHalfLength, -fHalfLength, -fHalfLength),  Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
 
+		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
+		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+
+		//left
+		{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
+		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+
+		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+
+		//back
+		{ float3(fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f)},
+		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(0.0f, 0.0f) },
+		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
+
+		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
+		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 1.0f) },
+		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f) },
+
+		//top
+		{ float3(-fHalfLength, fHalfLength, -fHalfLength),  Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
+		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
+
+		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
+
+		//buttom
+		{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
+		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
+
+		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
 	};
 
-	//Vertex vertices[6] =
-	//{
-	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
-	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
-	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
 
-	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
-	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-	//	{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
-	//};
-
-	//Vertex vertices[3] =
-	//{
-	//	{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
-	//	{ float3(-10.0f, 10.0f, 0.0f), float3::Zero(), float2(0.0f, 0.0f) },
-	//	{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-
-		//{ float3(-10.0f, -10.0f, 0.0f),  float3::Zero(),  float2(0, 1.0f) },
-		//{ float3(10.0f, 10.0f, 0.0f), float3::Zero(), float2(1.0f, 0.0f) },
-		//{ float3(10.0f, -10.0f, 0.0f), float3::Zero(), float2(1.0f, 1.0f) },
-	//};
-	//
-
-
-	//uint16 indices[] =
-	//{
-	//	0, 1, 2, 0, 2, 3,
-	//	4, 5, 1, 4, 1, 0,
-	//	7, 6, 5, 7, 5, 4,
-	//	3, 2, 6, 3, 6, 7,
-	//	1, 5, 6, 1, 6, 2,
-	//	4, 0, 3, 4, 3, 7
-	//};
-
-	//ComputeNormal(vertices, HR_ARRAY_SIZE(vertices), indices, HR_ARRAY_SIZE(indices));
-
-
-	//HrVertexElement vertexElementArr[] = {
-	//	HrVertexElement(VEU_POSITION, VET_FLOAT3),
-	//	HrVertexElement(VEU_NORMAL, VET_FLOAT3),
-	//	HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2)
-	//};
 	std::vector<HrVertexElement> vecVertexElemet;
 	vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
 	
-	
 	HrSubMesh* pSubMesh = pMesh->AddSubMesh();
-
 	pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
 		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 		, vecVertexElemet);
-	//pSubMesh->GetRenderLayout()->BindIndexBuffer((char*)indices, sizeof(indices), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_16BIT);
-
 	pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	std::string strFilePath = "tests\\001Plane.jpg";
-	HrTexture* pRes = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strFilePath, HrResource::RT_TEXTURE));
-	pSubMesh->SetTexture(pRes);
 
 	m_pSubMesh = pSubMesh;
 }
 
-void HrGeometryBox::ComputeNormal(Vertex1* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)
-{
-	std::vector<Vector3> vecVertexNormal(nVertexNum);
-	for (auto& item : vecVertexNormal)
-	{
-		item = Vector3::Zero();
-	}
-	for (size_t i = 0; i < nIndexNum; i+=3)
-	{
-		uint16 nIndex1 = pIndex[i];
-		uint16 nIndex2 = pIndex[i + 1];
-		uint16 nIndex3 = pIndex[i + 2];
-
-		Vector3 vAB = pVertex[nIndex2].position - pVertex[nIndex1].position;
-		Vector3 vAC = pVertex[nIndex3].position - pVertex[nIndex1].position;
-
-		Vector3 vNormal = HrMath::Cross(vAC, vAB);
-
-		vecVertexNormal[nIndex1] += vNormal;
-		vecVertexNormal[nIndex2] += vNormal;
-		vecVertexNormal[nIndex3] += vNormal;
-	}
-	
-	for (size_t i = 0; i < vecVertexNormal.size(); ++i)
-	{
-		Vector3 normal = HrMath::Normalize(vecVertexNormal[i]);
-		pVertex[i].normal = normal;
-	}
-}
+//void HrGeometryBox::ComputeNormal(Vertex1* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)
+//{
+//	std::vector<Vector3> vecVertexNormal(nVertexNum);
+//	for (auto& item : vecVertexNormal)
+//	{
+//		item = Vector3::Zero();
+//	}
+//	for (size_t i = 0; i < nIndexNum; i+=3)
+//	{
+//		uint16 nIndex1 = pIndex[i];
+//		uint16 nIndex2 = pIndex[i + 1];
+//		uint16 nIndex3 = pIndex[i + 2];
+//
+//		Vector3 vAB = pVertex[nIndex2].position - pVertex[nIndex1].position;
+//		Vector3 vAC = pVertex[nIndex3].position - pVertex[nIndex1].position;
+//
+//		Vector3 vNormal = HrMath::Cross(vAC, vAB);
+//
+//		vecVertexNormal[nIndex1] += vNormal;
+//		vecVertexNormal[nIndex2] += vNormal;
+//		vecVertexNormal[nIndex3] += vNormal;
+//	}
+//	
+//	for (size_t i = 0; i < vecVertexNormal.size(); ++i)
+//	{
+//		Vector3 normal = HrMath::Normalize(vecVertexNormal[i]);
+//		pVertex[i].normal = normal;
+//	}
+//}
 
 ///////////////////////////////////////////////////
 //
@@ -265,7 +254,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	std::string strTextureFile = "";
 	HrTexture* pTexture = nullptr; 
 
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_FRONT, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_FRONT, vertices, fDistance);
 	HrSubMesh* pSubMeshFront = pMesh->AddSubMesh();
 	pSubMeshFront->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -276,7 +265,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
 	pSubMeshFront->SetTexture(pTexture);
 	
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_BACK, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BACK, vertices, fDistance);
 	HrSubMesh* pSubMeshBack = pMesh->AddSubMesh();
 	pSubMeshBack->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -287,7 +276,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
 	pSubMeshBack->SetTexture(pTexture);
 
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_LEFT, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_LEFT, vertices, fDistance);
 	HrSubMesh* pSubMeshLeft = pMesh->AddSubMesh();
 	pSubMeshLeft->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -298,7 +287,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
 	pSubMeshLeft->SetTexture(pTexture);
 
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_RIGHT, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_RIGHT, vertices, fDistance);
 	HrSubMesh* pSubMeshRight = pMesh->AddSubMesh();
 	pSubMeshRight->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -309,7 +298,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
 	pSubMeshRight->SetTexture(pTexture);
 
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_UP, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_UP, vertices, fDistance);
 	HrSubMesh* pSubMeshUp = pMesh->AddSubMesh();
 	pSubMeshUp->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -320,7 +309,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
 	pSubMeshUp->SetTexture(pTexture);
 
-	CreateSkyPanelVertice(HrGeometrySkyBox::SPS_BUTTOM, vertices, fDistance);
+	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BUTTOM, vertices, fDistance);
 	HrSubMesh* pSubMeshButtom = pMesh->AddSubMesh();
 	pSubMeshButtom->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
@@ -334,7 +323,7 @@ void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 	m_pMesh = pMesh;
 }
 
-void HrGeometrySkyBox::CreateSkyPanelVertice(EnumSkyPlaneSide side, Vertex1* pVertice, float fDistance)
+void HrGeometrySkyBox::CreateSkyPlaneVertice(EnumSkyPlaneSide side, Vertex1* pVertice, float fDistance)
 {
 	float fHalfDistance = fDistance * 0.5;
 
@@ -417,18 +406,18 @@ HrGeometryFactory::~HrGeometryFactory()
 {
 }
 
-HrSceneNode* HrGeometryFactory::CreatePanel()
+HrSceneNode* HrGeometryFactory::CreatePlane(float fWidth, float fHeight)
 {
-	HrGeometryPanel* pPanel = HR_NEW HrGeometryPanel();
+	HrGeometryPlane* pPlane = HR_NEW HrGeometryPlane(fWidth, fHeight);
 	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
-	pSceneNode->AttachRenderable(pPanel);
+	pSceneNode->AttachRenderable(pPlane);
 
 	return pSceneNode;
 }
 
-HrSceneNode* HrGeometryFactory::CreateBox(uint32 nLength, uint32 nWidth, uint32 nHeight)
+HrSceneNode* HrGeometryFactory::CreateBox(float fLength)
 {
-	HrGeometryBox* pBox = HR_NEW HrGeometryBox();
+	HrGeometryBox* pBox = HR_NEW HrGeometryBox(fLength);
 	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
 	pSceneNode->AttachRenderable(pBox);
 

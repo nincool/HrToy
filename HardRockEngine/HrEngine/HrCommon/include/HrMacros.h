@@ -4,24 +4,6 @@
 //////////////////////////////////////////////////////////////////////////
 //Macros
 //////////////////////////////////////////////////////////////////////////
-#define HR_PROPERTY_READONLY(varType, varName, funName)\
-protected: varType varName;\
-public:  varType Get##funName(void) const;
-
-#define HR_PROPERTY_READONLY_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public:  const varType& Get##funName(void) const;
-
-#define HR_PROPERTY(varType, varName, funName)\
-protected: varType varName;\
-public:  varType Get##funName(void);\
-public:  void Set##funName(varType var);
-
-#define HR_PROPERTY_PASS_BY_REF(varType, varName, funName)\
-protected: varType varName;\
-public:  const varType& Get##funName(void) const;\
-public:  void Set##funName(const varType& var);
-
 #define HR_SYNTHESIZE_READONLY(varType, varName, funName)\
 protected: varType varName;\
 public:  varType Get##funName(void) const { return varName; }

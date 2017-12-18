@@ -8,6 +8,8 @@ HrRenderFactory::~HrRenderFactory()
 	m_pDefaultRasterizerState = nullptr;
 	m_pDefaultDepthStencilState = nullptr;
 	m_pDefaultBlendState = nullptr;
+
+	ReleaseRenderStatePool();
 }
 
 HrRasterizerState* HrRenderFactory::GetDefualtRasterizerState()
@@ -82,5 +84,16 @@ HrBlendState* HrRenderFactory::GetDefaultBuildInBlendState()
 
 void HrRenderFactory::ReleaseRenderStatePool()
 {
-	
+	for (auto itemRast : m_mapRasterizerStatePool)
+	{
+		HR_DELETE itemRast.second;
+	}
+	for (auto itemDepthStencil : m_mapDepthStencilStatePool)
+	{
+		HR_DELETE itemDepthStencil.second;
+	}
+	for (auto itemBlend : m_mapBlendStatePool)
+	{
+		HR_DELETE itemBlend.second;
+	}
 }

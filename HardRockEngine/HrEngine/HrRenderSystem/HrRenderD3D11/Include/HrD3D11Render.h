@@ -34,10 +34,9 @@ namespace Hr
 		virtual void ReleaseRenderEngine() override;
 		virtual bool StartRender() override;
 
+		const ID3D11DevicePtr& GetD3D11Device();
+		const ID3D11DeviceContextPtr& GetD3D11DeviceContext();
 	private:
-		HR_SYNTHESIZE_READONLY(ID3D11Device*, m_pD3D11Device, D3D11Device);
-		HR_SYNTHESIZE_READONLY(ID3D11DeviceContext*, m_pD3D11ImmediateContext, D3D11ImmediateContext);
-
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
 		HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pRenderWindow, RenderWindow);
