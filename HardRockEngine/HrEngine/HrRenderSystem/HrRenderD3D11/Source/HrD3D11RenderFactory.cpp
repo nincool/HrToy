@@ -5,7 +5,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11GraphicsBuffer.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderLayout.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Shader.h"
-#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderWindow.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderTarget.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11ShaderCompiler.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11SamplerState.h" 
@@ -34,7 +34,7 @@ HrRenderPtr HrD3D11RenderFactory::CreateRender()
 
 HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
 {
-	return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderWindow>());
+	return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderTarget>());
 }
 
 HrVertex* HrD3D11RenderFactory::CreateVertex()

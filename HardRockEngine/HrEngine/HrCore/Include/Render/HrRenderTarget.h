@@ -11,7 +11,7 @@ namespace Hr
 		HrRenderTarget();
 		virtual ~HrRenderTarget();
 
-		virtual bool CreateRenderWindow(uint32 nWidth, uint32 nHeight);
+		virtual bool CreateRenderTargetView(uint32 nWidth, uint32 nHeight);
 		
 		virtual void AddViewPort(HrViewPort* pViewPort);
 		

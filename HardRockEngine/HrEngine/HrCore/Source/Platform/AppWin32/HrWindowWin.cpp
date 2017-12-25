@@ -66,3 +66,18 @@ void HrWindowWin::Destroy()
 	::DestroyWindow(m_hWnd);
 }
 
+HWND HrWindowWin::GetHWnd()
+{
+	return m_hWnd;
+}
+
+uint32 HrWindowWin::GetWidth()
+{
+	return m_nWidth;
+}
+
+uint32 HrWindowWin::GetHeight()
+{
+	return m_nHeight;
+}
+

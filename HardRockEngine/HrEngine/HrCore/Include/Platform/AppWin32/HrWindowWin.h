@@ -15,10 +15,13 @@ namespace Hr
 		virtual void Update() override;
 		virtual void Destroy() override;
 
+		HWND GetHWnd();
+		uint32 GetWidth();
+		uint32 GetHeight();
 	protected:
-		HR_SYNTHESIZE_READONLY(HWND, m_hWnd, Hwnd);
-		HR_SYNTHESIZE_READONLY(uint32, m_nWidth, Width);
-		HR_SYNTHESIZE_READONLY(uint32, m_nHeight, Height);
+		HWND m_hWnd;
+		uint32 m_nWidth;
+		uint32 m_nHeight;
 
 	};
 }

@@ -1,6 +1,6 @@
 ﻿#include "HrD3D11Render.h"
 #include "HrD3D11Shader.h"
-#include "HrD3D11RenderWindow.h"
+#include "HrD3D11RenderTarget.h"
 #include "HrD3D11RenderLayout.h"
 #include "HrD3D11Mapping.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
@@ -28,7 +28,7 @@ bool HrD3D11Render::Init()
 
 void HrD3D11Render::SetRenderTarget(HrRenderTargetPtr& renderTarget)
 {
-	m_pRenderWindow = std::dynamic_pointer_cast<HrD3D11RenderWindow>(renderTarget);
+	m_pRenderTarget = std::dynamic_pointer_cast<HrD3D11RenderTarget>(renderTarget);
 }
 
 void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
@@ -48,13 +48,17 @@ void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
 
 void HrD3D11Render::ClearRenderTargetView()
 {
+	//todo
 	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	GetD3D11DeviceContext()->ClearRenderTargetView(m_pRenderWindow->GetRenderTargetView(), reinterpret_cast<const float*>(&Blue));
+	ID3D11RenderTargetView* pRenderTargetView = m_pRenderTarget->GetRenderTargetView().get();
+	GetD3D11DeviceContext()->ClearRenderTargetView(pRenderTargetView, reinterpret_cast<const float*>(&Blue));
 }
 
 void HrD3D11Render::ClearDepthStencilView()
 {
-	GetD3D11DeviceContext()->ClearDepthStencilView(m_pRenderWindow->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	//todo
+	ID3D11DepthStencilView* pDepthStencilView = m_pRenderTarget->GetDepthStencilView().get();
+	GetD3D11DeviceContext()->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void HrD3D11Render::ReleaseRenderEngine()
@@ -114,7 +118,7 @@ void HrD3D11Render::Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* 
 
 void HrD3D11Render::SwapChain()
 {
-	m_pRenderWindow->PresentSwapChain();
+	m_pRenderTarget->PresentSwapChain();
 }
 
 const ID3D11DevicePtr& HrD3D11Render::GetD3D11Device()

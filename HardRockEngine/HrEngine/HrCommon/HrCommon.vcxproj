@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\HrEngine.h" />
+    <ClInclude Include="Include\HrComponent.h" />
     <ClInclude Include="Include\HrConfig.h" />
     <ClInclude Include="Include\HrLinuxTchar.h" />
     <ClInclude Include="Include\HrLinuxSpecific.h" />

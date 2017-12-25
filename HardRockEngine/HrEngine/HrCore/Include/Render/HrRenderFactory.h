@@ -16,7 +16,6 @@ namespace Hr
 
 		void ReleaseRenderStatePool();
 	public:
-		
 		virtual HrRenderPtr CreateRender() = 0;
 		
 		virtual HrRenderTargetPtr CreateRenderTarget() = 0;

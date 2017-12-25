@@ -54,6 +54,12 @@ namespace Hr
 			return m_pScheduler;
 		}
 
+
+		const HrRenderCoreComponentPtr& GetRenderCoreComponent()
+		{
+			return m_pRenderComponent;
+		}
+
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init();
 		virtual void StartMainLoop();
@@ -75,6 +81,8 @@ namespace Hr
 		*/
 		bool CreateRenderEngine();
 		void ReleaseRenderEngine();
+
+		void CreateRenderComponent();
 		
 		/**
 		 @Comment: 创建渲染目标 [11/21/2017 By Hr]
@@ -93,11 +101,11 @@ namespace Hr
 
 
 		void Update();
+
+
 	private:
 		HrWindowPtr m_pWindow;
-
-		//渲染模块加载
-		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
+		
 		//渲染工厂
 		HrRenderFactoryPtr m_pRenderFactory;
 		//渲染器
@@ -115,6 +123,13 @@ namespace Hr
 		float m_fDeltaTime;
 		/* last time the main loop was updated */
 		std::chrono::steady_clock::time_point m_lastUpdate;
+		
+		//渲染模块加载
+		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
+
+
+
+		HrRenderCoreComponentPtr m_pRenderComponent;
 
 	};
 

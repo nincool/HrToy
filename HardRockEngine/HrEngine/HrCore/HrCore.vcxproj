@@ -163,11 +163,13 @@
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\Kernel\HrApplication.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponent.h" />
     <ClInclude Include="Include\Kernel\HrDirector.h" />
     <ClInclude Include="Include\Kernel\HrFileUtils.h" />
     <ClInclude Include="Include\Kernel\HrIDObject.h" />
     <ClInclude Include="Include\Kernel\HrInputManager.h" />
     <ClInclude Include="Include\Kernel\HrLog.h" />
+    <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h" />
     <ClInclude Include="Include\Kernel\HrScheduler.h" />
     <ClInclude Include="Include\Kernel\HrWindow.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
@@ -187,6 +189,7 @@
     <ClInclude Include="Include\Render\HrRasterizerState.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
+    <ClInclude Include="Include\Render\HrRenderSystem.h" />
     <ClInclude Include="Include\Render\HrSamplerState.h" />
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h" />
@@ -232,11 +235,13 @@
     <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp" />
     <ClCompile Include="Source\Event\HrEventListenerMouse.cpp" />
     <ClCompile Include="Source\Event\HrEventMouse.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
     <ClCompile Include="Source\Kernel\HrExport.cpp" />
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp" />
     <ClCompile Include="Source\Kernel\HrInputManager.cpp" />
     <ClCompile Include="Source\Kernel\HrLog.cpp" />
+    <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrScheduler.cpp" />
     <ClCompile Include="Source\Kernel\HrWindow.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
@@ -255,6 +260,7 @@
     <ClCompile Include="Source\Render\HrRasterizerState.cpp" />
     <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
+    <ClCompile Include="Source\Render\HrRenderSystem.cpp" />
     <ClCompile Include="Source\Render\HrSamplerState.cpp" />
     <ClCompile Include="Source\Render\HrShader.cpp" />
     <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp" />

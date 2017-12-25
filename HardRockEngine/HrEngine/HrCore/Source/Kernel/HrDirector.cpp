@@ -4,8 +4,10 @@
 #include "Kernel/HrScheduler.h"
 #include "Platform/AppWin32/HrWindowWin.h"
 #include "Scene/HrSceneManager.h"
-#include "HrUtilTools/Include/HrUtil.h"
-#include "HrUtilTools/Include/HrModuleLoader.h"
+
+#include "Render/HrRenderSystem.h"
+#include "Kernel/HrRenderCoreComponent.h"
+
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
 #include "Render/HrRenderTarget.h"
@@ -39,6 +41,8 @@ bool HrDirector::Init()
 		return false;
 	}
 
+
+
 	if (!CreateRenderEngine())
 	{
 		HRERROR("CreateRenderEngine Error!");
@@ -69,6 +73,8 @@ bool HrDirector::Init()
 		return false;
 	}
 
+	CreateRenderComponent();
+
 	m_fDeltaTime = 0;
 	m_lastUpdate = std::chrono::steady_clock::now();
 
@@ -85,6 +91,11 @@ bool HrDirector::CreateAppWindow()
 void HrDirector::ReleaseAppWindow()
 {
 
+}
+
+void HrDirector::CreateRenderComponent()
+{
+	m_pRenderComponent = HrMakeSharedPtr<HrRenderCoreComponent>("HrRenderD3D11");
 }
 
 bool HrDirector::CreateRenderEngine()
@@ -138,7 +149,7 @@ void HrDirector::ReleaseRenderEngine()
 bool HrDirector::CreateRenderTarget()
 {
 	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
-	m_pRenderTarget->CreateRenderWindow(HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight());
+	m_pRenderTarget->CreateRenderTargetView(HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight());
 	m_pRenderEngine->SetRenderTarget(m_pRenderTarget);
 
 	return true;

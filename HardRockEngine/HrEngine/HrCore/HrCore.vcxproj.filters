@@ -292,6 +292,15 @@
     <ClInclude Include="Include\Render\HrDepthStencilState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponent.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderSystem.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -485,6 +494,15 @@
     </ClCompile>
     <ClCompile Include="Source\Event\HrEventListener.cpp">
       <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponent.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderSystem.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp">
+      <Filter>Source\Kernel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

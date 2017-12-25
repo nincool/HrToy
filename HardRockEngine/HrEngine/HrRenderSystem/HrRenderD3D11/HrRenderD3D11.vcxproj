@@ -31,7 +31,7 @@
     <ClInclude Include="Include\HrD3D11RenderFactory.h" />
     <ClInclude Include="Include\HrD3D11RenderLayout.h" />
     <ClInclude Include="Include\HrD3D11RenderPrerequisite.h" />
-    <ClInclude Include="Include\HrD3D11RenderWindow.h" />
+    <ClInclude Include="Include\HrD3D11RenderTarget.h" />
     <ClInclude Include="Include\HrD3D11SamplerState.h" />
     <ClInclude Include="Include\HrD3D11Shader.h" />
     <ClInclude Include="Include\HrD3D11ShaderCompiler.h" />
@@ -51,7 +51,7 @@
     <ClCompile Include="Source\HrD3D11Render.cpp" />
     <ClCompile Include="Source\HrD3D11RenderFactory.cpp" />
     <ClCompile Include="Source\HrD3D11RenderLayout.cpp" />
-    <ClCompile Include="Source\HrD3D11RenderWindow.cpp" />
+    <ClCompile Include="Source\HrD3D11RenderTarget.cpp" />
     <ClCompile Include="Source\HrD3D11SamplerState.cpp" />
     <ClCompile Include="Source\HrD3D11Shader.cpp" />
     <ClCompile Include="Source\HrD3D11ShaderCompiler.cpp" />

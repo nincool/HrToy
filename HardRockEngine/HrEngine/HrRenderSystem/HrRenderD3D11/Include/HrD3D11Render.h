@@ -39,7 +39,9 @@ namespace Hr
 	private:
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
-		HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pRenderWindow, RenderWindow);
+		//HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pRenderWindow, RenderWindow);
+
+		HrD3D11RenderTargetPtr m_pRenderTarget;
 
 	};
 }

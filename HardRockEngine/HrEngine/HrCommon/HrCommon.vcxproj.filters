@@ -45,5 +45,8 @@
     <ClInclude Include="include\HrThrowException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
