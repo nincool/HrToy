@@ -2,7 +2,7 @@
     "SCENE_ROOT": {
         "AMBIENT_LIGHT_COLOR": "100|100|100|255|",
         "SCENE_NODE_0": {
-            "NAME": "Node0",
+            "NAME": "Node1",
 	    "ENABLE":1,
             "ENTITY": {
                 "ENTITY_TYPE": 1,
