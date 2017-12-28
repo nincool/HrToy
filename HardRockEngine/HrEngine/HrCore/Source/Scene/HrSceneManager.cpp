@@ -11,6 +11,10 @@
 #include "Render/HrCamera.h"
 #include "Render/HrViewPort.h"
 #include "Kernel/HrDirector.h"
+
+#include "Render/HrRenderSystem.h"
+#include "Kernel/HrRenderCoreComponent.h"
+
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
@@ -58,7 +62,7 @@ void HrSceneManager::StopScene()
 	m_bSceneRunning = false;
 }
 
-void HrSceneManager::UpdateScene()
+void HrSceneManager::UpdateScene(float fDelta)
 {
 	if (!CheckSceneRunning())
 	{
@@ -67,23 +71,26 @@ void HrSceneManager::UpdateScene()
 	m_pRunningScene->Update();
 }
 
-void HrSceneManager::RenderScene(HrRenderTargetPtr& renderTarget)
+void HrSceneManager::RenderScene()
 {
 	if (!CheckSceneRunning())
 	{
 		return;
 	}
-	HrDirector::Instance()->GetRenderEngine()->ClearRenderTargetView();
-	HrDirector::Instance()->GetRenderEngine()->ClearDepthStencilView();
+	
+	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->ClearRenderTargetView();
+	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->ClearDepthStencilView();
+	
+	//HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->
 
 	//Lights
 	m_pRenderParameters->SetCurrentScene(m_pRunningScene);
 
-	std::map<int, HrViewPort*>& mapViewPorts = renderTarget->GetViewPorts();
+	std::map<int, HrViewPort*>& mapViewPorts = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->GetViewPorts();
 	for (auto& itemViewPorts : mapViewPorts)
 	{
 		HrViewPort* pViewPort = itemViewPorts.second;
-		HrDirector::Instance()->GetRenderEngine()->SetCurrentViewPort(pViewPort);
+		HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->SetCurrentViewPort(pViewPort);
 
 		//transfrom current camera
 		pViewPort->GetCamera()->GetAttachCameraNode()->UpdateNode();
@@ -94,7 +101,9 @@ void HrSceneManager::RenderScene(HrRenderTargetPtr& renderTarget)
 
 		FlushScene();
 	}
-	HrDirector::Instance()->GetRenderEngine()->SwapChain();
+
+	//todo
+	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->SwapChain();
 }
 
 void HrSceneManager::FlushScene()
@@ -119,7 +128,7 @@ void HrSceneManager::FlushScene()
 		HrRenderLayout* pRenderLayout = pRenderable->GetRenderLayout();
 		HrRenderTechnique* pRenderTechnique = pRenderable->GetRenderTechnique();
 
-		HrDirector::Instance()->GetRenderEngine()->Render(pRenderTechnique, pRenderLayout);
+		HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->Render(pRenderTechnique, pRenderLayout);
 	}
 }
 

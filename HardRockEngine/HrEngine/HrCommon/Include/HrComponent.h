@@ -6,7 +6,9 @@ class HrComponent
 public:
 	virtual ~HrComponent() {};
 
+	virtual bool InitComponent() = 0;
 
+	virtual bool Update(float fDelta) = 0;
 };
 
 #endif

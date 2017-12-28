@@ -14,8 +14,8 @@ namespace Hr
 		virtual void RunScene(const HrScenePtr& pScene);
 		virtual void StopScene();
 
-		virtual void UpdateScene();
-		virtual void RenderScene(HrRenderTargetPtr& renderTarget);
+		virtual void UpdateScene(float fDelta);
+		virtual void RenderScene();
 		virtual void Destroy();
 	
 		const HrScenePtr& GetRunningScene();

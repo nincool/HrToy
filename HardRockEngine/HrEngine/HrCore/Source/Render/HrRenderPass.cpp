@@ -6,7 +6,9 @@
 #include "Render/HrRenderFactory.h"
 #include "Asset/HrRenderEffectParameter.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrRenderCoreComponent.h"
 
+#include "Render/HrRenderSystem.h"
 
 using namespace Hr;
 
@@ -17,10 +19,10 @@ HrRenderPass::HrRenderPass(std::string strPassName)
 	m_pPixelShader = nullptr;
 
 	//TODO!!!to release
-	//m_pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState();
+	//m_pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState();
 	m_pDepthStencilState = nullptr;
 	m_pBlendState = nullptr;
-	m_pRasterizerState = HrDirector::Instance()->GetRenderFactory()->GetDefualtRasterizerState();
+	m_pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->GetDefualtRasterizerState();
 }
 
 HrRenderPass::~HrRenderPass()

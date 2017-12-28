@@ -13,9 +13,14 @@ namespace Hr
 
 		virtual bool CreateAppWidnow() = 0;
 
-		virtual void Update() = 0;
+		virtual void UpdateMsg() = 0;
 
 		virtual void Destroy() = 0;
+
+		virtual HWND GetHWnd() = 0;
+
+		virtual uint32 GetWidth() = 0;
+		virtual uint32 GetHeight() = 0;
 	};
 }
 

@@ -5,13 +5,22 @@
 
 namespace Hr
 {
-	class HrRenderCoreComponent : public HrCoreComponent
+	class HR_CORE_API HrRenderCoreComponent : public HrCoreComponent
 	{
 	public:
 		HrRenderCoreComponent(const std::string& strRenderModule);
 		~HrRenderCoreComponent();
 
+		virtual bool InitComponent() override;
+
 	public:
+
+
+		//todo ¡Ÿ ±
+		const HrRenderSystemPtr& GetRenderSystem()
+		{
+			return m_pRenderSystem;
+		}
 
 	private:
 		void GetRenderFactory(const std::string& strRenderModule);

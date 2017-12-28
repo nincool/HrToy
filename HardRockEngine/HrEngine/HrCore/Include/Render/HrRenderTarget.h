@@ -11,12 +11,11 @@ namespace Hr
 		HrRenderTarget();
 		virtual ~HrRenderTarget();
 
-		virtual bool CreateRenderTargetView(uint32 nWidth, uint32 nHeight);
+		virtual bool CreateRenderTarget(uint32 nWidth, uint32 nHeight);
 		
 		virtual void AddViewPort(HrViewPort* pViewPort);
 		
 		virtual std::map<int, HrViewPort*>& GetViewPorts();
-
 	protected:
 		//当前的视口集合
 		std::map<int, HrViewPort*> m_mapViewPort;

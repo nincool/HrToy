@@ -5,6 +5,11 @@
 #include "Render/HrGraphicsBuffer.h"
 #include "Render/HrSamplerState.h"
 
+#include "Kernel/HrRenderCoreComponent.h"
+
+#include "Render/HrRenderSystem.h"
+
+
 using namespace Hr;
 
 std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
@@ -504,7 +509,7 @@ void HrRenderVariableTexture::Value(HrTexture*& val) const
 HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 {
 	//TODO!!!!!!!!!!!!!!!!!
-	m_pSamplerState = HrDirector::Instance()->GetRenderFactory()->CreateSamplerState();
+	m_pSamplerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateSamplerState();
 }
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
@@ -690,7 +695,7 @@ HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& st
 	m_nSize = nSize;
 
 	m_pConstantBufferData = HR_NEW HrStreamData(m_nSize);
-	m_pConstantBuffer = HrDirector::Instance()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pConstantBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateHardwareBuffer();
 	m_pConstantBuffer->BindStream(nullptr, m_nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 

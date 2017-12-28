@@ -3,6 +3,7 @@
 #include "HrD3D11RenderTarget.h"
 #include "HrD3D11RenderLayout.h"
 #include "HrD3D11Mapping.h"
+#include "HrD3D11FrameBuffer.h"
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrViewPort.h"
@@ -26,9 +27,11 @@ bool HrD3D11Render::Init()
 	return true;
 }
 
-void HrD3D11Render::SetRenderTarget(HrRenderTargetPtr& renderTarget)
+void HrD3D11Render::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer)
 {
-	m_pRenderTarget = std::dynamic_pointer_cast<HrD3D11RenderTarget>(renderTarget);
+	m_pCurFrameBuffer = HrCheckPointerCast<HrD3D11FrameBuffer>(pRenderFrameBuffer);
+	m_pRenderTarget = HrCheckPointerCast<HrD3D11RenderTarget>(m_pCurFrameBuffer->GetRenderTarget());
+
 }
 
 void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)
@@ -50,7 +53,8 @@ void HrD3D11Render::ClearRenderTargetView()
 {
 	//todo
 	XMVECTORF32 Blue = { 0.69f, 0.77f, 0.87f, 1.0f };
-	ID3D11RenderTargetView* pRenderTargetView = m_pRenderTarget->GetRenderTargetView().get();
+	HrD3D11RenderTargetPtr& pRenderTarget = HrCheckPointerCast<HrD3D11RenderTarget>(m_pCurFrameBuffer->GetRenderTarget());
+	ID3D11RenderTargetView* pRenderTargetView = pRenderTarget->GetRenderTargetView().get();
 	GetD3D11DeviceContext()->ClearRenderTargetView(pRenderTargetView, reinterpret_cast<const float*>(&Blue));
 }
 

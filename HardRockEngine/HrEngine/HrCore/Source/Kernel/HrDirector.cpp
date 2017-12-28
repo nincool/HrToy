@@ -2,11 +2,12 @@
 #include "Kernel/HrInputManager.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrScheduler.h"
-#include "Platform/AppWin32/HrWindowWin.h"
 #include "Scene/HrSceneManager.h"
 
 #include "Render/HrRenderSystem.h"
 #include "Kernel/HrRenderCoreComponent.h"
+#include "Kernel/HrWinCoreComponent.h"
+#include "Kernel/HrSceneCoreComponent.h"
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
@@ -21,27 +22,20 @@ using namespace Hr;
 HrDirector::HrDirector()
 {
 	m_bEndMainLoop = false;
-	m_pSceneManager = HrMakeSharedPtr<HrSceneManager>();
 	m_pScheduler = HrMakeSharedPtr<HrScheduler>();
 }
 
 HrDirector::~HrDirector()
 {
-	//内存检测
-	m_pScheduler.reset();
-	m_pSceneManager.reset();
 }
 
 bool HrDirector::Init()
 {
 	HRLOG(_T("HrDirector Init!"));
 
-	if (!CreateAppWindow())
-	{
-		return false;
-	}
-
-
+	CreateWindowComponent();
+	CreateSceneComponent();
+	CreateRenderComponent();
 
 	if (!CreateRenderEngine())
 	{
@@ -73,7 +67,7 @@ bool HrDirector::Init()
 		return false;
 	}
 
-	CreateRenderComponent();
+	//CreateRenderComponent();
 
 	m_fDeltaTime = 0;
 	m_lastUpdate = std::chrono::steady_clock::now();
@@ -81,76 +75,57 @@ bool HrDirector::Init()
 	return true;
 }
 
-bool HrDirector::CreateAppWindow()
-{
-	m_pWindow = HrMakeSharedPtr<HrWindowWin>();
-
-	return true;
-}
-
-void HrDirector::ReleaseAppWindow()
-{
-
-}
-
-void HrDirector::CreateRenderComponent()
-{
-	m_pRenderComponent = HrMakeSharedPtr<HrRenderCoreComponent>("HrRenderD3D11");
-}
-
 bool HrDirector::CreateRenderEngine()
 {
-	m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
-	m_pRenderModuleLoader->HrLoadModule();
-	
-	typedef void(*RENDER_INIT_FUNC)(HrRenderFactoryPtr& ptr);
-	RENDER_INIT_FUNC func = static_cast<RENDER_INIT_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleInitialize")));
-	if (func)
-	{
-		func(m_pRenderFactory);
-		if (m_pRenderFactory)
-		{
-			m_pRenderEngine = m_pRenderFactory->CreateRender();
-		}
-	}
-	else
-	{
-		HRERROR(_T("RenderInitFunc is null"));
-		return false;
-	}
+	//m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
+	//m_pRenderModuleLoader->HrLoadModule();
+	//
+	//typedef void(*RENDER_INIT_FUNC)(HrRenderFactoryPtr& ptr);
+	//RENDER_INIT_FUNC func = static_cast<RENDER_INIT_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleInitialize")));
+	//if (func)
+	//{
+	//	func(m_pRenderFactory);
+	//	if (m_pRenderFactory)
+	//	{
+	//		m_pRenderEngine = m_pRenderFactory->CreateRender();
+	//	}
+	//}
+	//else
+	//{
+	//	HRERROR(_T("RenderInitFunc is null"));
+	//	return false;
+	//}
 
-	if (!m_pRenderEngine->Init())
-	{
-		return false;
-	}
+	//if (!m_pRenderEngine->Init())
+	//{
+	//	return false;
+	//}
 
 	return true;
 }
 
 void HrDirector::ReleaseRenderEngine()
 {
-	m_pRenderTarget.reset();
-	m_pRenderEngine->ReleaseRenderEngine();
-	m_pRenderEngine.reset();
 
-	m_pRenderFactory.reset();
 
-	typedef void(*RENDER_RELEASE_FUNC)();
-	RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleUnload")));
-	if (releaseFunc)
-	{
-		releaseFunc();
-	}
-	m_pRenderModuleLoader->HrFreeModule();
-	m_pRenderModuleLoader.reset();
+	//m_pRenderFactory.reset();
+
+	//typedef void(*RENDER_RELEASE_FUNC)();
+	//RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleUnload")));
+	//if (releaseFunc)
+	//{
+	//	releaseFunc();
+	//}
+	//m_pRenderModuleLoader->HrFreeModule();
+	//m_pRenderModuleLoader.reset();
 
 }
 
 bool HrDirector::CreateRenderTarget()
 {
-	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
-	m_pRenderTarget->CreateRenderTargetView(HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight());
-	m_pRenderEngine->SetRenderTarget(m_pRenderTarget);
+	//m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
+	//m_pRenderTarget->CreateRenderTarget(HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight());
+	//m_pRenderEngine->SetRenderTarget(m_pRenderTarget);
 
 	return true;
 }
@@ -162,9 +137,10 @@ void HrDirector::ReleaseRenderTarget()
 
 bool HrDirector::CreateRenderState()
 {
-	if (m_pRenderFactory)
+	//todo
+	if (true)
 	{
-		m_pRenderFactory->CreateBuildInRasterizerState();
+		m_pRenderComponent->GetRenderSystem()->GetRenderFactory()->CreateBuildInRasterizerState();
 		return true;
 	}
 	return false;
@@ -203,7 +179,7 @@ void HrDirector::StartMainLoop()
 {
 	while (!m_bEndMainLoop)
 	{
-		m_pWindow->Update();
+		m_pWindowComponet->UpdateWindowMsg();
 
 		if (m_bEndMainLoop)
 		{
@@ -216,28 +192,36 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::Update()
 {
+	CalculateDeltaTime();
+
 	HrInputManager::Instance()->Capture();
 
+	m_pScheduler->Update(m_fDeltaTime);
+
+	m_pWindowComponet->Update(m_fDeltaTime);
+	m_pSceneManagerComponent->Update(m_fDeltaTime);
+	m_pRenderComponent->Update(m_fDeltaTime);
+
+	m_pSceneManagerComponent->RenderScene();
+}
+
+void HrDirector::CalculateDeltaTime()
+{
 	std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
 	m_fDeltaTime = std::chrono::duration_cast<std::chrono::microseconds>(nowTime - m_lastUpdate).count() / 1000000.0f;
 	m_fDeltaTime = (std::max)(0.0f, m_fDeltaTime);
 	m_lastUpdate = nowTime;
-
-	m_pScheduler->Update(m_fDeltaTime);
-
-	m_pSceneManager->UpdateScene();
-	m_pSceneManager->RenderScene(m_pRenderTarget);
 }
 
 void HrDirector::End()
 {
 	m_bEndMainLoop = true;
 
-	m_pSceneManager->Destroy();
+	m_pSceneManagerComponent->Destroy();
 
-	if (m_pWindow)
+	if (m_pWindowComponet)
 	{
-		m_pWindow->Destroy();
+		m_pWindowComponet->DestroyWindow();
 	}
 }
 
@@ -255,5 +239,37 @@ bool HrDirector::Render()
 
 void HrDirector::RunScene(const HrScenePtr& pScene)
 {
-	m_pSceneManager->RunScene(pScene);
+	m_pSceneManagerComponent->RunScene(pScene);
 }
+
+void HrDirector::CreateWindowComponent()
+{
+	m_pWindowComponet = HrMakeSharedPtr<HrWinCoreComponent>();
+}
+
+void HrDirector::CreateRenderComponent()
+{
+	m_pRenderComponent = HrMakeSharedPtr<HrRenderCoreComponent>("HrRenderD3D11");
+	m_pRenderComponent->InitComponent();
+}
+
+void HrDirector::CreateSceneComponent()
+{
+	m_pSceneManagerComponent = HrMakeSharedPtr<HrSceneCoreComponent>();
+}
+
+const HrWinCoreComponentPtr& HrDirector::GetWinCoreComponent()
+{
+	return m_pWindowComponet;
+}
+
+const HrRenderCoreComponentPtr& HrDirector::GetRenderCoreComponent()
+{
+	return m_pRenderComponent;
+}
+
+const HrSceneCoreComponentPtr& HrDirector::GetSceneComponent()
+{
+	return m_pSceneManagerComponent;
+}
+

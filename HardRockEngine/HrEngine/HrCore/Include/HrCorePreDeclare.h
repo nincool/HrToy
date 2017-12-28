@@ -14,9 +14,13 @@ namespace Hr
 	typedef std::shared_ptr<HrWindow> HrWindowPtr;
 	class HrWindowWin;
 	typedef std::shared_ptr<HrWindowWin> HrWindowWinPtr;
+	class HrWinCoreComponent;
+	typedef class std::shared_ptr<HrWinCoreComponent> HrWinCoreComponentPtr;
 	class HrScheduler;
 	typedef std::shared_ptr<HrScheduler> HrSchedulerPtr;
 	typedef std::weak_ptr<HrScheduler> HrWeakSchedulerPtr;
+	class HrSceneCoreComponent;
+	typedef class std::shared_ptr<HrSceneCoreComponent> HrSceneCoreComponentPtr;
 
 	//Render
 	class HrRenderFactory;
@@ -25,6 +29,9 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderSystem> HrRenderSystemPtr;
 	class HrRender;
 	typedef std::shared_ptr<HrRender> HrRenderPtr;
+	class HrRenderFrame;
+	typedef std::shared_ptr<HrRenderFrame> HrRenderFramePtr;
+
 	class HrVertexElement;
 	class HrVertex;
 	class HrGraphicsBuffer;

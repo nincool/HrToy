@@ -170,7 +170,9 @@
     <ClInclude Include="Include\Kernel\HrInputManager.h" />
     <ClInclude Include="Include\Kernel\HrLog.h" />
     <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h" />
+    <ClInclude Include="Include\Kernel\HrSceneCoreComponent.h" />
     <ClInclude Include="Include\Kernel\HrScheduler.h" />
+    <ClInclude Include="Include\Kernel\HrWinCoreComponent.h" />
     <ClInclude Include="Include\Kernel\HrWindow.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Include\Render\HrLight.h" />
     <ClInclude Include="Include\Render\HrRasterizerState.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
+    <ClInclude Include="Include\Render\HrRenderFrame.h" />
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h" />
     <ClInclude Include="Include\Render\HrRenderSystem.h" />
     <ClInclude Include="Include\Render\HrSamplerState.h" />
@@ -210,6 +213,7 @@
     <ClInclude Include="Include\Scene\HrSceneImported.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
+    <ClInclude Include="Include\Scene\HrSceneObject.h" />
     <ClInclude Include="Include\Scene\HrTransform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -242,7 +246,9 @@
     <ClCompile Include="Source\Kernel\HrInputManager.cpp" />
     <ClCompile Include="Source\Kernel\HrLog.cpp" />
     <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp" />
+    <ClCompile Include="Source\Kernel\HrSceneCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrScheduler.cpp" />
+    <ClCompile Include="Source\Kernel\HrWinCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrWindow.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
@@ -259,6 +265,7 @@
     <ClCompile Include="Source\Render\HrLight.cpp" />
     <ClCompile Include="Source\Render\HrRasterizerState.cpp" />
     <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
+    <ClCompile Include="Source\Render\HrRenderFrame.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrameParameters.cpp" />
     <ClCompile Include="Source\Render\HrRenderSystem.cpp" />
     <ClCompile Include="Source\Render\HrSamplerState.cpp" />
@@ -279,6 +286,7 @@
     <ClCompile Include="Source\Scene\HrSceneImported.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
+    <ClCompile Include="Source\Scene\HrSceneObject.cpp" />
     <ClCompile Include="Source\Scene\HrTransform.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,13 @@ HrRenderCoreComponent::~HrRenderCoreComponent()
 
 }
 
+bool HrRenderCoreComponent::InitComponent()
+{
+	m_pRenderSystem->InitRenderSystem();
+
+	return true;
+}
+
 void HrRenderCoreComponent::GetRenderFactory(const std::string& strRenderModule)
 {
 	m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>(strRenderModule);

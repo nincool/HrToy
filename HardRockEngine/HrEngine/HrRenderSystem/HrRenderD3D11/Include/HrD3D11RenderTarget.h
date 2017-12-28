@@ -11,7 +11,7 @@ namespace Hr
 	public:
 		HrD3D11RenderTarget();
 
-		virtual bool CreateRenderTargetView(uint32 nWidth, uint32 nHeight) override;
+		virtual bool CreateRenderTarget(uint32 nWidth, uint32 nHeight) override;
 
 		const IDXGISwapChainPtr& GetSwapChain() const;
 		const IDXGISwapChain1Ptr& GetSwapChain1() const;
@@ -22,7 +22,8 @@ namespace Hr
 		void PresentSwapChain() const;
 	private:
 		bool CreateSwapChain();
-		bool CreateD3DView();
+		bool CreateRenderTargetView();
+		bool CreateDepthStencilView();
 
 	private:
 		HWND m_hWnd;

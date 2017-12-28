@@ -59,6 +59,8 @@ int main()
 	}
 
 	moduleLoaderApp.HrFreeModule();
+
+	
 	return 0;
 }
 

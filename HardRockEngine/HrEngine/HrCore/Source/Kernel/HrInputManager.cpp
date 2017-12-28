@@ -1,6 +1,6 @@
 #include "Kernel/HrInputManager.h"
 #include "Kernel/HrDirector.h"
-#include "Platform/AppWin32/HrWindowWin.h"
+#include "Kernel/HrWinCoreComponent.h"
 #include "Event/HrEventKeyboard.h"
 #include "Event/HrEventMouse.h"
 #include "Event/HrEventDispatcher.h"
@@ -393,8 +393,8 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	HrWindowWinPtr pWin = HrStaticPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
-	size_t nWinHandle = (size_t)(pWin->GetHWnd());
+	const HrWinCoreComponentPtr& pWindowComponet = HrDirector::Instance()->GetWinCoreComponent();
+	size_t nWinHandle = (size_t)(pWindowComponet->GetWindowHWnd());
 	winHandleStr << nWinHandle;
 
 	pl.insert(std::make_pair("WINDOW", winHandleStr.str()));
@@ -410,10 +410,9 @@ void HrInputManager::CreateInputSystem()
 	mKeyboard = static_cast<OIS::Keyboard*>(m_pInputManager->createInputObject(OIS::OISKeyboard, true));
 	mMouse = static_cast<OIS::Mouse*>(m_pInputManager->createInputObject(OIS::OISMouse, true));
 
-	mMouse->getMouseState().width = pWin->GetWidth();
-	mMouse->getMouseState().height = pWin->GetHeight();
+	mMouse->getMouseState().width = pWindowComponet->GetWindowWidth();
+	mMouse->getMouseState().height = pWindowComponet->GetWindowHeight();
 	
-
 	mKeyboard->setEventCallback(&m_inputEventListener);
 	mMouse->setEventCallback(&m_inputEventListener);
 }

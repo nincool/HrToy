@@ -26,11 +26,10 @@ namespace Hr
 	class HrD3D11RenderFactory;
 	typedef std::shared_ptr<HrD3D11RenderFactory> HrD3D11RenderFactoryPtr;
 
-	class HrRender;
-	typedef std::shared_ptr<HrRender> HrRenderPtr;
 	class HrD3D11Render;
 	typedef std::shared_ptr<HrD3D11Render> HrD3D11RenderPtr;
-
+	class HrD3D11FrameBuffer;
+	typedef std::shared_ptr<HrD3D11FrameBuffer> HrD3D11FrameBufferPtr;
 	class HrD3D11RenderTarget;
 	typedef std::shared_ptr<HrD3D11RenderTarget> HrD3D11RenderTargetPtr;
 

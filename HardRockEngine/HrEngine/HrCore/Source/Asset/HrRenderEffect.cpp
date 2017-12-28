@@ -22,6 +22,10 @@
 #include <boost/format.hpp>
 #include <boost/functional/hash.hpp>
 
+#include "Kernel/HrRenderCoreComponent.h"
+
+#include "Render/HrRenderSystem.h"
+
 
 using namespace Hr;
 
@@ -108,7 +112,7 @@ bool HrRenderEffect::LoadImpl()
 		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShadeFile);
 
 		HrStreamDataPtr pShaderFileData = HrFileUtils::Instance()->GetFileData(m_strShaderFile);
-		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderFactory()->CreateShaderCompiler();
+		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShaderCompiler();
 
 		int nTempTechniqueIndex = 0;
 		while (true)
@@ -140,7 +144,7 @@ bool HrRenderEffect::LoadImpl()
 								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
 
-								HrShader* pVertexShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								HrShader* pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShader();
 								pVertexShader->StreamIn(effectStreamBuffer, m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 
 								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
@@ -153,7 +157,7 @@ bool HrRenderEffect::LoadImpl()
 								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
 								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
 
-								HrShader* pPixelShader = HrDirector::Instance()->GetRenderFactory()->CreateShader();
+								HrShader* pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShader();
 								pPixelShader->StreamIn(effectStreamBuffer, m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
 
 								pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
@@ -196,7 +200,7 @@ bool HrRenderEffect::LoadImpl()
 							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilDepthFailOp);
 							boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
 
-							HrDepthStencilState* pDepthStencilState = HrDirector::Instance()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+							HrDepthStencilState* pDepthStencilState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
 							pRenderPass->SetDepthStencilState(pDepthStencilState);
 						}
 						//Blend
@@ -221,7 +225,7 @@ bool HrRenderEffect::LoadImpl()
 							boost::hash_combine(blendDesc.hashName, blendDesc.srcBlendAlpha);
 							boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
 							
-							HrBlendState* pBlendState = HrDirector::Instance()->GetRenderFactory()->CreateBlendState(blendDesc);
+							HrBlendState* pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState(blendDesc);
 							pRenderPass->SetBlendState(pBlendState);
 						}
 					}

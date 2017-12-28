@@ -17,6 +17,8 @@ namespace Hr
 		
 		virtual HrRenderTargetPtr CreateRenderTarget() override;
 
+		virtual HrRenderFramePtr CreateRenderFrameBuffer() override;
+
 		virtual HrVertex* CreateVertex() override;
 		
 		virtual HrGraphicsBuffer* CreateHardwareBuffer() override;

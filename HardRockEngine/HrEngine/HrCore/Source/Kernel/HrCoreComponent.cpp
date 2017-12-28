@@ -16,6 +16,15 @@ HrCoreComponent::~HrCoreComponent()
 
 }
 
+bool HrCoreComponent::InitComponent()
+{
+	return true;
+}
+
+bool HrCoreComponent::Update(float fDelta)
+{
+	return true;
+}
 
 
 

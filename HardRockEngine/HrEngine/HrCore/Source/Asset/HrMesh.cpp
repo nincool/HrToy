@@ -6,12 +6,17 @@
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
+#include "Kernel/HrRenderCoreComponent.h"
+
+#include "Render/HrRenderSystem.h"
+
+
 using namespace Hr;
 
 HrSubMesh::HrSubMesh()
 {
 	//for test
-	m_pRenderLayout = HrDirector::Instance()->GetRenderFactory()->CreateRenderLayout();
+	m_pRenderLayout = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRenderLayout();
 	//先设置一个默认的材质
 	m_pMaterial = HrResourceManager::Instance()->GetDefaultMaterial();
 }

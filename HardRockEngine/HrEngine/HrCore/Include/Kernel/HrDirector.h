@@ -24,30 +24,20 @@ namespace Hr
 		~HrDirector();
 
 
-		HrRenderFactoryPtr& GetRenderFactory()
-		{
-			return m_pRenderFactory;
-		}
+		//HrRenderFactoryPtr& GetRenderFactory()
+		//{
+		//	return m_pRenderFactory;
+		//}
 
-		HrRenderPtr& GetRenderEngine()
-		{
-			return m_pRenderEngine;
-		}
+		//const HrRenderTargetPtr& GetRenderTarget()
+		//{
+		//	return m_pRenderTarget;
+		//}
 
-		const HrRenderTargetPtr& GetRenderTarget()
-		{
-			return m_pRenderTarget;
-		}
-
-		const HrSceneManagerPtr& GetSceneManager()
-		{
-			return m_pSceneManager;
-		}
-
-		HrWindowPtr& GetWindow()
-		{
-			return m_pWindow;
-		}
+		//HrWindowPtr& GetWindow()
+		//{
+		//	return m_pWindow;
+		//}
 
 		const HrSchedulerPtr& GetScheduler()
 		{
@@ -55,10 +45,10 @@ namespace Hr
 		}
 
 
-		const HrRenderCoreComponentPtr& GetRenderCoreComponent()
-		{
-			return m_pRenderComponent;
-		}
+		const HrWinCoreComponentPtr& GetWinCoreComponent();
+		const HrRenderCoreComponentPtr& GetRenderCoreComponent();
+		const HrSceneCoreComponentPtr& GetSceneComponent();
+
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init();
@@ -73,16 +63,16 @@ namespace Hr
 		virtual void RunScene(const HrScenePtr& pScene);
 
 	protected:
-		bool CreateAppWindow();
-		void ReleaseAppWindow();
+
+		void CreateWindowComponent();
+		void CreateSceneComponent();
+		void CreateRenderComponent();
 		
 		/**
 		 @Comment: 创建渲染器 [11/21/2017 By Hr]
 		*/
 		bool CreateRenderEngine();
 		void ReleaseRenderEngine();
-
-		void CreateRenderComponent();
 		
 		/**
 		 @Comment: 创建渲染目标 [11/21/2017 By Hr]
@@ -102,18 +92,19 @@ namespace Hr
 
 		void Update();
 
-
+	private:
+		void CalculateDeltaTime();
 	private:
 		HrWindowPtr m_pWindow;
 		
 		//渲染工厂
-		HrRenderFactoryPtr m_pRenderFactory;
+		//HrRenderFactoryPtr m_pRenderFactory;
 		//渲染器
-		HrRenderPtr m_pRenderEngine;
+		//HrRenderPtr m_pRenderEngine;
 		//渲染目标
 		HrRenderTargetPtr m_pRenderTarget;		
 		//场景管理器
-		HrSceneManagerPtr m_pSceneManager;
+		//HrSceneManagerPtr m_pSceneManager;
 
 		HrSchedulerPtr m_pScheduler;
 
@@ -128,9 +119,9 @@ namespace Hr
 		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
 
 
-
+		HrWinCoreComponentPtr m_pWindowComponet;
 		HrRenderCoreComponentPtr m_pRenderComponent;
-
+		HrSceneCoreComponentPtr m_pSceneManagerComponent;
 	};
 
 }

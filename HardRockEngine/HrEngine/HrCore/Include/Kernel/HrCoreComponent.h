@@ -6,11 +6,14 @@
 
 namespace Hr
 {
-	class HrCoreComponent : public HrComponent
+	class HR_CORE_API HrCoreComponent : public HrComponent
 	{
 	public:
 		HrCoreComponent();
 		~HrCoreComponent();
+
+		virtual bool InitComponent() override;
+		virtual bool Update(float fDelta) override;
 	};
 }
 

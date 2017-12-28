@@ -22,7 +22,8 @@ namespace Hr
 
 	public:
 		virtual bool Init() override;
-		virtual void SetRenderTarget(HrRenderTargetPtr& renderTarget) override;
+
+		virtual void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
 		virtual void SetCurrentViewPort(HrViewPort* pViewPort) override;
 		
 		virtual void ClearRenderTargetView() override;
@@ -39,10 +40,10 @@ namespace Hr
 	private:
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
-		//HR_SYNTHESIZE_READONLY(HrD3D11RenderWindowPtr, m_pRenderWindow, RenderWindow);
-
+		
 		HrD3D11RenderTargetPtr m_pRenderTarget;
 
+		HrD3D11FrameBufferPtr m_pCurFrameBuffer;
 	};
 }
 

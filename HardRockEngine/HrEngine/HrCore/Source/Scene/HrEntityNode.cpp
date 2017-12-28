@@ -1,12 +1,16 @@
 #include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
 #include "Scene/HrScene.h"
-#include "Scene/HrSceneManager.h"
 #include "Render/HrViewPort.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderTarget.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrRenderCoreComponent.h"
+#include "Kernel/HrSceneCoreComponent.h"
 #include "HrUtilTools/Include/HrUtil.h"
+
+//todo
+#include "Render/HrRenderSystem.h"
 
 #include <boost/cast.hpp>
 
@@ -68,7 +72,9 @@ void HrCameraNode::OnEnter()
 {
 	HrSceneNode::OnEnter();
 
-	HrDirector::Instance()->GetRenderTarget()->AddViewPort(m_pViewPort);
+	//todo Çø·ÖMainCamera SubCamera
+	//HrDirector::Instance()->GetRenderTarget()->AddViewPort(m_pViewPort);
+	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->AddViewPort(m_pViewPort);
 }
 
 void HrCameraNode::OnEnterDidFinish()
@@ -112,7 +118,7 @@ void HrLightNode::OnEnter()
 {
 	HrSceneNode::OnEnter();
 
-	HrDirector::Instance()->GetSceneManager()->GetRunningScene()->AddLight(m_pLight);
+	HrDirector::Instance()->GetSceneComponent()->GetRunningScene()->AddLight(m_pLight);
 }
 
 void HrLightNode::OnEnterDidFinish()
@@ -125,6 +131,6 @@ void HrLightNode::OnExist()
 {
 	HrSceneNode::OnExist();
 
-	HrDirector::Instance()->GetSceneManager()->GetRunningScene()->DeleteLight(m_pLight);
+	HrDirector::Instance()->GetSceneComponent()->GetRunningScene()->DeleteLight(m_pLight);
 }
 

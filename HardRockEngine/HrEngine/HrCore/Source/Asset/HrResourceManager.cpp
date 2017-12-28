@@ -16,6 +16,11 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrStringUtil.h"
 
+#include "Kernel/HrRenderCoreComponent.h"
+
+#include "Render/HrRenderSystem.h"
+
+
 using namespace Hr;
 
 HrResourceManager::HrResourceManager()
@@ -333,7 +338,7 @@ HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
 	}
 
 	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	HrTexture* pTexture = HrDirector::Instance()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
+	HrTexture* pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
 	pTexture->DeclareResource(strFileName, strFile);
 	m_mapMesh.insert(std::make_pair(pTexture->GetHashID(), pTexture));
 

@@ -20,6 +20,8 @@ namespace Hr
 		
 		virtual HrRenderTargetPtr CreateRenderTarget() = 0;
 
+		virtual HrRenderFramePtr CreateRenderFrameBuffer() = 0;
+
 		virtual HrVertex* CreateVertex() = 0;
 		
 		virtual HrGraphicsBuffer* CreateHardwareBuffer() = 0;

@@ -4,11 +4,11 @@
 
 using namespace Hr;
 
-HrWindowWin::HrWindowWin()
+HrWindowWin::HrWindowWin(uint32 nWidth, uint32 nHeight)
 {
 	m_hWnd = nullptr;
-	m_nWidth = 1920;
-	m_nHeight = 1080;
+	m_nWidth = nWidth;
+	m_nHeight = nHeight;
 
 	CreateAppWidnow();
 }
@@ -19,9 +19,6 @@ HrWindowWin::~HrWindowWin()
 
 bool HrWindowWin::CreateAppWidnow()
 {
-	m_nWidth = HrContextConfig::Instance()->GetWindowWidth();
-	m_nHeight = HrContextConfig::Instance()->GetWindowHeight();
-
 	HINSTANCE hInst = NULL;
 	static const TCHAR staticVar;
 	GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, &staticVar, &hInst);
@@ -56,7 +53,7 @@ bool HrWindowWin::CreateAppWidnow()
 	return true;
 }
 
-void HrWindowWin::Update()
+void HrWindowWin::UpdateMsg()
 {
 	HrWin32WindowEventUtilities::MessagePump();
 }

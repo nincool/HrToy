@@ -301,6 +301,18 @@
     <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h">
       <Filter>Include\Kernel</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderFrame.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrWinCoreComponent.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrSceneCoreComponent.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrSceneObject.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -503,6 +515,18 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrWinCoreComponent.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrSceneCoreComponent.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderFrame.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrSceneObject.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

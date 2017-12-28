@@ -8,16 +8,16 @@ namespace Hr
 	class HR_CORE_API HrWindowWin : public HrWindow
 	{
 	public:
-		HrWindowWin();
+		HrWindowWin(uint32 nWidth, uint32 nHeight);
 		~HrWindowWin();
 
 		virtual bool CreateAppWidnow() override;
-		virtual void Update() override;
+		virtual void UpdateMsg() override;
 		virtual void Destroy() override;
 
-		HWND GetHWnd();
-		uint32 GetWidth();
-		uint32 GetHeight();
+		virtual HWND GetHWnd() override;
+		virtual uint32 GetWidth() override;
+		virtual uint32 GetHeight() override;
 	protected:
 		HWND m_hWnd;
 		uint32 m_nWidth;

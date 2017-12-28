@@ -24,6 +24,7 @@
     <ClInclude Include="Include\HrD3D11BlendState.h" />
     <ClInclude Include="Include\HrD3D11DepthStencilState.h" />
     <ClInclude Include="Include\HrD3D11Device.h" />
+    <ClInclude Include="Include\HrD3D11FrameBuffer.h" />
     <ClInclude Include="Include\HrD3D11GraphicsBuffer.h" />
     <ClInclude Include="Include\HrD3D11Mapping.h" />
     <ClInclude Include="Include\HrD3D11RasterizerState.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Source\HrD3D11BlendState.cpp" />
     <ClCompile Include="Source\HrD3D11DepthStencilState.cpp" />
     <ClCompile Include="Source\HrD3D11Device.cpp" />
+    <ClCompile Include="Source\HrD3D11FrameBuffer.cpp" />
     <ClCompile Include="Source\HrD3D11GraphicsBuffer.cpp" />
     <ClCompile Include="Source\HrD3D11Mapping.cpp" />
     <ClCompile Include="Source\HrD3D11RasterizerState.cpp" />

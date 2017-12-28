@@ -2,7 +2,7 @@
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
-#include "HrCore/Include/Platform/AppWin32/HrWindowWin.h"
+#include "HrCore/Include/Kernel/HrWinCoreComponent.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
@@ -16,6 +16,9 @@ HrD3D11RenderTarget::HrD3D11RenderTarget()
 	m_pSwapChain1 = nullptr;
 	m_pRenderTargetView = nullptr;
 	m_pDepthStencilView = nullptr;
+
+	//todo
+	CreateRenderTarget(1920, 1080);
 }
 
 const ID3D11RenderTargetViewPtr& HrD3D11RenderTarget::GetRenderTargetView()
@@ -28,13 +31,14 @@ const ID3D11DepthStencilViewPtr& HrD3D11RenderTarget::GetDepthStencilView()
 	return m_pDepthStencilView;
 }
 
-bool HrD3D11RenderTarget::CreateRenderTargetView(uint32 nWidth, uint32 nHeight)
+bool HrD3D11RenderTarget::CreateRenderTarget(uint32 nWidth, uint32 nHeight)
 {
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
 
 	CreateSwapChain();
-	CreateD3DView();
+	CreateRenderTargetView();
+	CreateDepthStencilView();
 
 	ID3D11RenderTargetView* pRenderTargetView = m_pRenderTargetView.get();
 	HrD3D11Device::Instance()->GetD3DDeviceContext()->OMSetRenderTargets(1, &pRenderTargetView, m_pDepthStencilView.get());
@@ -74,9 +78,9 @@ bool HrD3D11RenderTarget::CreateSwapChain()
 		swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 		swapChainFullScreenDesc.Windowed = true;
 
-		HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
+		const HrWinCoreComponentPtr& pWindowComponent = HrDirector::Instance()->GetWinCoreComponent();
 		IDXGISwapChain1* pSwapChain = nullptr;
-		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory2()->CreateSwapChainForHwnd(HrD3D11Device::Instance()->GetD3DDevice().get(), pWindow->GetHWnd()
+		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory2()->CreateSwapChainForHwnd(HrD3D11Device::Instance()->GetD3DDevice().get(), pWindowComponent->GetWindowHWnd()
 			, &swapChainDesc1
 			, &swapChainFullScreenDesc
 			, nullptr
@@ -112,8 +116,9 @@ bool HrD3D11RenderTarget::CreateSwapChain()
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		HrWindowWinPtr pWindow = HrCheckPointerCast<HrWindowWin>(HrDirector::Instance()->GetWindow());
-		swapChainDesc.OutputWindow = pWindow->GetHWnd();
+
+		const HrWinCoreComponentPtr& pWindowComponent = HrDirector::Instance()->GetWinCoreComponent();
+		swapChainDesc.OutputWindow = pWindowComponent->GetWindowHWnd();
 		swapChainDesc.Windowed = true;
 
 		//todo
@@ -130,7 +135,7 @@ bool HrD3D11RenderTarget::CreateSwapChain()
 	}
 }
 
-bool HrD3D11RenderTarget::CreateD3DView()
+bool HrD3D11RenderTarget::CreateRenderTargetView()
 {
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	if (m_pSwapChain1)
@@ -151,6 +156,11 @@ bool HrD3D11RenderTarget::CreateD3DView()
 	m_pRenderTargetView = MakeComPtr(pRenderTargetView);
 	SAFE_RELEASE(pBackBuffer);
 
+	return true;
+}
+
+bool HrD3D11RenderTarget::CreateDepthStencilView()
+{
 	ID3D11Texture2D* pDepthStencil = nullptr;
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -168,7 +178,7 @@ bool HrD3D11RenderTarget::CreateD3DView()
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateTexture2D(&depthStencilDesc, nullptr, &pDepthStencil);
 	if (FAILED(hr))
 	{
 		HRERROR(_T("D3D11CreateDepthStencil Error!"));
@@ -197,6 +207,7 @@ bool HrD3D11RenderTarget::CreateD3DView()
 		return false;
 	}
 	m_pDepthStencilView = MakeComPtr(pDepthStencilView);
+
 	return true;
 }
 

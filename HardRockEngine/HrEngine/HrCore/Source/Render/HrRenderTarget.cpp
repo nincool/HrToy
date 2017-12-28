@@ -13,7 +13,7 @@ HrRenderTarget::~HrRenderTarget()
 	m_mapViewPort.clear();
 }
 
-bool HrRenderTarget::CreateRenderTargetView(uint32 nWidth, uint32 nHeight)
+bool HrRenderTarget::CreateRenderTarget(uint32 nWidth, uint32 nHeight)
 {
 	nWidth = 0;
 	nHeight = 0;
