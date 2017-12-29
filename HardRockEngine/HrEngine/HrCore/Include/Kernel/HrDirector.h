@@ -24,21 +24,6 @@ namespace Hr
 		~HrDirector();
 
 
-		//HrRenderFactoryPtr& GetRenderFactory()
-		//{
-		//	return m_pRenderFactory;
-		//}
-
-		//const HrRenderTargetPtr& GetRenderTarget()
-		//{
-		//	return m_pRenderTarget;
-		//}
-
-		//HrWindowPtr& GetWindow()
-		//{
-		//	return m_pWindow;
-		//}
-
 		const HrSchedulerPtr& GetScheduler()
 		{
 			return m_pScheduler;
@@ -68,17 +53,7 @@ namespace Hr
 		void CreateSceneComponent();
 		void CreateRenderComponent();
 		
-		/**
-		 @Comment: 创建渲染器 [11/21/2017 By Hr]
-		*/
-		bool CreateRenderEngine();
-		void ReleaseRenderEngine();
-		
-		/**
-		 @Comment: 创建渲染目标 [11/21/2017 By Hr]
-		*/
-		bool CreateRenderTarget();
-		void ReleaseRenderTarget();
+
 
 		bool CreateRenderState();
 		void ReleaseRenderState();

@@ -22,6 +22,34 @@ bool HrRenderCoreComponent::InitComponent()
 	return true;
 }
 
+void HrRenderCoreComponent::BindFrameBuffer(const HrRenderFramePtr& pRenderFrame)
+{
+	m_pRenderSystem->SetCurrentFrameBuffer(pRenderFrame);
+}
+
+void HrRenderCoreComponent::OnRenderFrameBegin()
+{
+	ClearRenderFame();
+}
+
+void HrRenderCoreComponent::OnRenderFrameEnd()
+{
+
+}
+
+void HrRenderCoreComponent::ClearRenderFame()
+{
+	m_pRenderSystem->ClearRenderTarget();
+	m_pRenderSystem->ClearDepthStencil();
+}
+
+void HrRenderCoreComponent::SwapChain()
+{
+
+}
+
+
+
 void HrRenderCoreComponent::GetRenderFactory(const std::string& strRenderModule)
 {
 	m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>(strRenderModule);

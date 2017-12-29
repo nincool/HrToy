@@ -3,7 +3,7 @@
 
 using namespace Hr;
 
-HrViewPort::HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, HrCamera* pCamera)
+HrViewPort::HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, const HrCameraPtr& pCamera)
 {
 	m_fLeft = fLeft;
 	m_fTop = fTop;
@@ -18,7 +18,6 @@ HrViewPort::HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int
 
 HrViewPort::~HrViewPort()
 {
-	SAFE_DELETE(m_pCamera);
 }
 
 

@@ -13,8 +13,12 @@ namespace Hr
 
 		virtual bool InitComponent() override;
 
-	public:
+		void BindFrameBuffer(const HrRenderFramePtr& pRenderFrame);
 
+		void OnRenderFrameBegin();
+		void OnRenderFrameEnd();
+
+		void SwapChain();
 
 		//todo ¡Ÿ ±
 		const HrRenderSystemPtr& GetRenderSystem()
@@ -26,6 +30,8 @@ namespace Hr
 		void GetRenderFactory(const std::string& strRenderModule);
 
 		void CreateRenderSystem();
+		
+		void ClearRenderFame();
 	protected:
 		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
 		HrRenderFactoryPtr m_pRenderFactory;

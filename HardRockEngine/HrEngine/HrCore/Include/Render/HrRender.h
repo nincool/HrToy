@@ -15,6 +15,8 @@ namespace Hr
 		virtual bool Init() = 0;
 		
 		virtual void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) = 0;
+		virtual const HrRenderFramePtr& GetCurrentFrameBuffer() = 0;
+
 		virtual void SetCurrentViewPort(HrViewPort* pViewPort) = 0;
 
 		virtual void ClearRenderTargetView() = 0;

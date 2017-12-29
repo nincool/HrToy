@@ -15,6 +15,15 @@ HrRenderSystem::~HrRenderSystem()
 
 }
 
+void HrRenderSystem::InitRenderSystem()
+{
+	InitRender();
+
+	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
+
+	BindScreenFrameBuffer();
+}
+
 const HrRenderFactoryPtr& HrRenderSystem::GetRenderFactory()
 {
 	return m_pRenderFactory;
@@ -35,6 +44,20 @@ const HrRenderTargetPtr& HrRenderSystem::GetRenderTarget()
 	return m_pRenderTarget;
 }
 
+void HrRenderSystem::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrame)
+{
+	m_pRender->SetCurrentFrameBuffer(pRenderFrame);
+}
+
+HrRenderFramePtr HrRenderSystem::GetCurrentFrameBuffer() const
+{
+	const HrRenderFramePtr& pRenderFrame = m_pRender->GetCurrentFrameBuffer();
+	auto pHolder = pRenderFrame.get();
+	HrRenderFramePtr pTempFrame = pRenderFrame;
+
+	return pRenderFrame;
+}
+
 void HrRenderSystem::InitRender()
 {
 	m_pRender = m_pRenderFactory->CreateRender();
@@ -51,12 +74,18 @@ void HrRenderSystem::BindScreenFrameBuffer()
 	m_pScreenFrameBuffer->OnBind();
 }
 
-void HrRenderSystem::InitRenderSystem()
+
+
+void HrRenderSystem::ClearRenderTarget()
 {
-	InitRender();
+	HrRenderFramePtr pFrameBuffer = GetCurrentFrameBuffer();
+	HrRenderFramePtr pTempFrameBuffer = m_pScreenFrameBuffer;
+	pFrameBuffer->ClearTarget();
+	//GetCurrentFrameBuffer()->ClearTarget();
+}
 
-	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
-
-	BindScreenFrameBuffer();
+void HrRenderSystem::ClearDepthStencil()
+{
+	GetCurrentFrameBuffer()->ClearDepthStencil();
 }
 

@@ -24,6 +24,8 @@ namespace Hr
 		virtual bool Init() override;
 
 		virtual void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
+		virtual const HrRenderFramePtr& GetCurrentFrameBuffer() override;
+
 		virtual void SetCurrentViewPort(HrViewPort* pViewPort) override;
 		
 		virtual void ClearRenderTargetView() override;

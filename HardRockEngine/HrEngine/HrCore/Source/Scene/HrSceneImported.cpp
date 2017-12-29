@@ -126,14 +126,14 @@ void HrSceneImported::CreateSceneFromData()
 	SetAmbientLight(m_sceneDataInfo.ambientColor);
 
 	//创建Entity节点
-	CreateSceneNode(m_pRootNode, m_sceneDataInfo.vecSceneNodeInfo);
+	CreateSceneNode(m_pSceneRootNode, m_sceneDataInfo.vecSceneNodeInfo);
 }
 
-void HrSceneImported::CreateSceneNode(HrSceneNode* pParent, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo)
+void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo)
 { 
 	for (auto& itemSceneNode : vecSceneNodeInfo)
 	{
-		HrSceneNode* pSceneNode = nullptr;
+		HrSceneNodePtr pSceneNode;
 		switch (itemSceneNode.nEntityType)
 		{
 		case HrSceneInfo::ET_LIGHT:

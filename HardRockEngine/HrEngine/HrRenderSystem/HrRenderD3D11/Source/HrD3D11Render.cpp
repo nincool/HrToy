@@ -31,7 +31,12 @@ void HrD3D11Render::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBu
 {
 	m_pCurFrameBuffer = HrCheckPointerCast<HrD3D11FrameBuffer>(pRenderFrameBuffer);
 	m_pRenderTarget = HrCheckPointerCast<HrD3D11RenderTarget>(m_pCurFrameBuffer->GetRenderTarget());
+}
 
+const HrRenderFramePtr& HrD3D11Render::GetCurrentFrameBuffer()
+{
+	BOOST_ASSERT(m_pCurFrameBuffer);
+	return m_pCurFrameBuffer;
 }
 
 void HrD3D11Render::SetCurrentViewPort(HrViewPort* pViewPort)

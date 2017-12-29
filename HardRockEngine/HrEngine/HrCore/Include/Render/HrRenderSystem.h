@@ -16,9 +16,16 @@ namespace Hr
 		const HrRenderFactoryPtr& GetRenderFactory();
 		const HrRenderPtr& GetRender();
 		const HrRenderTargetPtr& GetRenderTarget();
-
 		const HrRenderFramePtr& GetScreenFrameBuffer();
 
+		void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrame);
+		/**
+		 @Comment: 这里不能返回引用，因为函数内也存在临时变量 [12/29/2017 By Hr]
+		*/
+		HrRenderFramePtr GetCurrentFrameBuffer() const;
+		
+		void ClearRenderTarget();
+		void ClearDepthStencil();
 	private:
 		void InitRender();
 		void BindScreenFrameBuffer();
@@ -28,6 +35,7 @@ namespace Hr
 		HrRenderPtr m_pRender;
 		HrRenderTargetPtr m_pRenderTarget;
 
+		//主适配器的渲染帧
 		HrRenderFramePtr m_pScreenFrameBuffer;
 	};
 }

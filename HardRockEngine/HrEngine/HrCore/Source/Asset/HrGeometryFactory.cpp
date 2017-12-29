@@ -426,18 +426,20 @@ HrSceneNode* HrGeometryFactory::CreateBox(float fLength)
 
 HrSceneNode* HrGeometryFactory::CreateSkyBox()
 {
-	HrPrefabModel* pPrefabModel = static_cast<HrPrefabModel*>(HrResourceManager::Instance()->GetSkyBoxResource("SKYBOX", HrResource::RT_MODEL));
-	HRASSERT(pPrefabModel, "CreateSkyBox Error!");
+	//HrPrefabModel* pPrefabModel = static_cast<HrPrefabModel*>(HrResourceManager::Instance()->GetSkyBoxResource("SKYBOX", HrResource::RT_MODEL));
+	//HRASSERT(pPrefabModel, "CreateSkyBox Error!");
 
-	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
-	for (size_t i = 0; i < pPrefabModel->GetMesh()->GetSubMeshNum(); ++i)
-	{
-		HrSkinnedMeshRenderable* pSkinRenderable = HR_NEW HrSkinnedMeshRenderable();
-		pSkinRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
-		HrSceneNode* pChildNode = HR_NEW HrSceneNode();
-		pSceneNode->AddChild(pChildNode);
-		pChildNode->AttachRenderable(pSkinRenderable);
-	}
-	return pSceneNode;
+	//HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
+	//for (size_t i = 0; i < pPrefabModel->GetMesh()->GetSubMeshNum(); ++i)
+	//{
+	//	HrSkinnedMeshRenderable* pSkinRenderable = HR_NEW HrSkinnedMeshRenderable();
+	//	pSkinRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
+	//	HrSceneNode* pChildNode = HR_NEW HrSceneNode();
+	//	pSceneNode->AddChild(pChildNode);
+	//	pChildNode->AttachRenderable(pSkinRenderable);
+	//}
+	//return pSceneNode;
+
+	return nullptr;
 }
 

@@ -78,10 +78,9 @@ void HrSceneManager::RenderScene()
 		return;
 	}
 	
-	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->ClearRenderTargetView();
-	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->ClearDepthStencilView();
+	const HrRenderCoreComponentPtr& pRenderComponent = HrDirector::Instance()->GetRenderCoreComponent();
 	
-	//HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->
+	pRenderComponent->OnRenderFrameBegin();
 
 	//Lights
 	m_pRenderParameters->SetCurrentScene(m_pRunningScene);
@@ -94,7 +93,7 @@ void HrSceneManager::RenderScene()
 
 		//transfrom current camera
 		pViewPort->GetCamera()->GetAttachCameraNode()->UpdateNode();
-		m_pRenderParameters->SetCurrentCamera(pViewPort->GetCamera());
+		m_pRenderParameters->SetCurrentCamera(pViewPort->GetCamera().get());
 
 		m_pRenderQueue->PrepareRenderQueue();
 		m_pRunningScene->FillRenderQueue(m_pRenderQueue);
@@ -102,8 +101,7 @@ void HrSceneManager::RenderScene()
 		FlushScene();
 	}
 
-	//todo
-	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRender()->SwapChain();
+	pRenderComponent->SwapChain();
 }
 
 void HrSceneManager::FlushScene()

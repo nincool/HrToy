@@ -37,7 +37,12 @@ namespace Hr
 	class HrGraphicsBuffer;
 	class HrRenderQueue;
 	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
+	
 	class HrRenderable;
+	typedef std::shared_ptr<HrRenderable> HrRenderablePtr;
+	class HrSkinnedMeshRenderable;
+	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
+
 	class HrRenderPass;
 	class HrRenderLayout;
 	class HrRenderTechnique;
@@ -46,6 +51,7 @@ namespace Hr
 	class HrRenderEffectParameter;
 	class HrRenderEffectStructParameter;
 	class HrRenderEffectConstantBuffer;
+	
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
 	class HrSamplerState;
@@ -91,8 +97,13 @@ namespace Hr
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
+	class HrSceneObject;
+	typedef std::shared_ptr<HrSceneObject> HrSceneObjectPtr;
+
 	class HrCameraNode;
+	typedef std::shared_ptr<HrCameraNode> HrCameraNodePtr;
 	class HrLightNode;
+	typedef std::shared_ptr<HrLightNode> HrLightNodePtr;
 	class HrTransform;
 	typedef std::shared_ptr<HrTransform> HrTransformPtr;
 
@@ -106,6 +117,12 @@ namespace Hr
 	typedef std::shared_ptr<HrEventListener> HrEventListenerPtr;
 	class HrEventDispatcher;
 	typedef std::shared_ptr<HrEventDispatcher> HrEventDispatcherPtr;
+
+	//Assets
+	class HrResource;
+	typedef std::shared_ptr<HrResource> HrResourcePtr;
+	class HrPrefabModel;
+	typedef std::shared_ptr<HrPrefabModel> HrPrefabModelPtr;
 }
 
 

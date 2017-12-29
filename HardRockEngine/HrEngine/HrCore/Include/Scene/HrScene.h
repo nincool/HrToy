@@ -16,7 +16,7 @@ namespace Hr
 		virtual void OnEnterDidFinish();
 		virtual void OnExit();
 
-		virtual void AddSceneNode(HrSceneNode* pSceneNode);
+		virtual void AddSceneNode(const HrSceneNodePtr& pSceneNode);
 		virtual void ClearSceneNode();
 
 		virtual void Update();
@@ -38,7 +38,10 @@ namespace Hr
 		HrSceneNode* GetSceneNodeByName(const std::string& strNodeName);
 
 	protected:
-		HrSceneNode* m_pRootNode;
+		HrSceneNodePtr m_pSceneRootNode;
+
+		//deprecated
+		//HrSceneNode* m_pRootNode;
 
 		std::array<std::pair<bool, std::vector<HrLightPtr> >, HrLight::LT_LIGHTTYPE_NUM> m_arrLights;
 		std::vector<float3> m_vecDirectionalLightsDirections;

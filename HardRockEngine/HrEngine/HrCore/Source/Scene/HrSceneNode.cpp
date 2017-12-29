@@ -5,6 +5,7 @@
 #include "Render/HrRenderTarget.h"
 #include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
+#include "Scene/HrSceneObject.h"
 #include "Scene/HrSceneManager.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
@@ -18,7 +19,6 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_bEnable = true;
 
 	m_nodeType = NT_NORMAL;
-	m_pRenderable = nullptr;
 	m_pParent = nullptr;
 	m_bRunning = false;
 
@@ -27,12 +27,42 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_bDirtyTransform = false;
 }
 
+HrSceneNode::HrSceneNode(const HrSceneObjectPtr& pSceneObject) : HrIDObject(HrID::GenerateID<HrSceneNode>())
+{
+	m_pSceneObject = pSceneObject;
+
+	m_bEnable = true;
+	m_nodeType = NT_NORMAL;
+	m_pParent = nullptr;
+	m_bRunning = false;
+	m_pTransform = HR_NEW HrTransform(this);
+
+	m_bDirtyTransform = false;
+
+	AttachRenderable(pSceneObject->GetRenderable().get());
+}
+
+HrSceneNode::HrSceneNode(const std::string& strName, HrSceneObjectPtr& pSceneObject) : HrIDObject(HrID::GenerateID<HrSceneNode>())
+{
+	m_strName = strName;
+	m_pSceneObject = pSceneObject;
+	
+	m_bEnable = true;
+	m_nodeType = NT_NORMAL;
+	m_pParent = nullptr;
+	m_bRunning = false;
+	m_pTransform = HR_NEW HrTransform(this);
+
+	m_bDirtyTransform = false;
+
+	AttachRenderable(pSceneObject->GetRenderable().get());
+}
+
 HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_bEnable = true;
 
 	m_nodeType = NT_NORMAL;
-	m_pRenderable = nullptr;
 	m_pParent = nullptr;
 	m_bRunning = false;
 
@@ -49,7 +79,6 @@ HrSceneNode::HrSceneNode(const std::string& strName, HrRenderable* pRenderable)
 	m_bEnable = true;
 
 	m_nodeType = NT_NORMAL;
-	m_pRenderable = nullptr;
 	m_pParent = nullptr;
 	m_bRunning = false;
 
@@ -62,14 +91,9 @@ HrSceneNode::HrSceneNode(const std::string& strName, HrRenderable* pRenderable)
 
 HrSceneNode::~HrSceneNode()
 {
-	for (size_t i = 0; i < m_vecChildNode.size(); ++i)
-	{
-		SAFE_DELETE(m_vecChildNode[i]);
-	}
-	m_vecChildNode.clear();
+	m_vecChildrenNode.clear();
 
 	SAFE_DELETE(m_pTransform);
-	SAFE_DELETE(m_pRenderable);
 }
 
 void HrSceneNode::SetName(const std::string& strName)
@@ -84,11 +108,10 @@ const std::string& HrSceneNode::GetName() const
 
 void HrSceneNode::AttachRenderable(HrRenderable* pRenderable)
 {
-	m_pRenderable = pRenderable;
-	m_pRenderable->AttachSceneNode(this);
+	pRenderable->AttachSceneNode(this);
 }
 
-void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
+void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 {
 	if (pSceneNode->GetParent() != nullptr)
 	{
@@ -102,13 +125,13 @@ void HrSceneNode::AddChild(HrSceneNode* pSceneNode)
 		pSceneNode->OnEnter();
 	}
 
-	m_vecChildNode.push_back(pSceneNode);
+	m_vecChildrenNode.push_back(pSceneNode);
 }
 
 void HrSceneNode::OnEnter()
 {
 	m_bRunning = true;
-	for (auto& itemChild : m_vecChildNode)
+	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnEnter();
 	}
@@ -121,7 +144,7 @@ void HrSceneNode::OnEnterDidFinish()
 void HrSceneNode::OnExist()
 {
 	m_bRunning = false;
-	for (auto& itemChild : m_vecChildNode)
+	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnExist();
 	}
@@ -131,11 +154,11 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
 	if (this->m_bEnable)
 	{
-		if (m_pRenderable != nullptr && m_pRenderable->CanRender())
+		if (m_pSceneObject && m_pSceneObject->GetRenderable() && m_pSceneObject->GetRenderable()->CanRender())
 		{
 			pRenderQueue->AddRenderable(this);
 		}
-		for (auto& item : m_vecChildNode)
+		for (auto& item : m_vecChildrenNode)
 		{
 			item->FindVisibleRenderable(pRenderQueue);
 		}
@@ -144,12 +167,11 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 
 void HrSceneNode::RemoveChildren()
 {
-	for (size_t i = 0; i < m_vecChildNode.size(); ++i)
+	for (size_t i = 0; i < m_vecChildrenNode.size(); ++i)
 	{
-		m_vecChildNode[i]->OnExist();
-		SAFE_DELETE(m_vecChildNode[i]);
+		m_vecChildrenNode[i]->OnExist();
 	}
-	m_vecChildNode.clear();
+	m_vecChildrenNode.clear();
 }
 
 void HrSceneNode::UpdateNode()
@@ -159,16 +181,17 @@ void HrSceneNode::UpdateNode()
 
 void HrSceneNode::UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters)
 {
-	if (m_pRenderable)
+	//todo
+	if (m_pSceneObject)
 	{
-		m_pRenderable->UpdateRenderFrameParameters(renderFrameParameters);
+		m_pSceneObject->GetRenderable()->UpdateRenderFrameParameters(renderFrameParameters);
 	}
 }
 
 void HrSceneNode::DirtyTransform()
 {
 	m_bDirtyTransform = true;
-	for (auto& itemChild : m_vecChildNode)
+	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->GetTransform()->DirtyTransform();
 	}
@@ -196,7 +219,7 @@ HrSceneNode* HrSceneNode::GetParent() const
 
 HrRenderable* HrSceneNode::GetRenderable() const
 {
-	return m_pRenderable;
+	return m_pSceneObject->GetRenderable().get();
 }
 
 HrTransform* HrSceneNode::GetTransform() const
@@ -206,11 +229,11 @@ HrTransform* HrSceneNode::GetTransform() const
 
 HrSceneNode* HrSceneNode::GetChildByName(const std::string& strName) const
 {
-	for (auto& item : m_vecChildNode)
+	for (auto& item : m_vecChildrenNode)
 	{
 		if (item->m_strName == strName)
 		{
-			return item;
+			return item.get();
 		}
 	}
 	return nullptr;
@@ -224,7 +247,7 @@ HrSceneNode* HrSceneNode::GetNodeByNameFromHierarchy(const std::string& strName)
 	}
 	else
 	{
-		for (auto& itemChild : m_vecChildNode)
+		for (auto& itemChild : m_vecChildrenNode)
 		{
 			HrSceneNode* pResult = itemChild->GetNodeByNameFromHierarchy(strName);
 			if (pResult != nullptr)

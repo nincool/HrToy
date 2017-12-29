@@ -15,17 +15,18 @@ HrScene::HrScene()
 
 	m_ambientLightColor = HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f);
 
-	m_pRootNode = HR_NEW HrRootNode();
+	m_pSceneRootNode = HrMakeSharedPtr<HrRootNode>();
+	//m_pRootNode = HR_NEW HrRootNode();
 }
 
 HrScene::~HrScene()
 {
-	SAFE_DELETE(m_pRootNode);
+	//SAFE_DELETE(m_pRootNode);
 }
 
 void HrScene::OnEnter()
 {
-	m_pRootNode->OnEnter();
+	m_pSceneRootNode->OnEnter();
 }
 
 void HrScene::OnEnterDidFinish()
@@ -39,12 +40,12 @@ void HrScene::OnExit()
 
 void HrScene::ClearSceneNode()
 {
-	m_pRootNode->RemoveChildren();
+	m_pSceneRootNode->RemoveChildren();
 }
 
-void HrScene::AddSceneNode(HrSceneNode* pSceneNode)
+void HrScene::AddSceneNode(const HrSceneNodePtr& pSceneNode)
 {
-	m_pRootNode->AddChild(pSceneNode);
+	m_pSceneRootNode->AddChild(pSceneNode);
 }
 
 void HrScene::Update()
@@ -55,7 +56,7 @@ void HrScene::Update()
 void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)
 {
 	//²éÕÒ¿ÉÊÓ
-	m_pRootNode->FindVisibleRenderable(pRenderQueue);
+	m_pSceneRootNode->FindVisibleRenderable(pRenderQueue);
 }
 
 void HrScene::SetAmbientLight(const HrColor& ambientColor)
@@ -163,5 +164,5 @@ HrSceneNode* HrScene::GetSceneNodeByName(const std::string& strNodeName)
 		return nullptr;
 	}
 
-	return m_pRootNode->GetNodeByNameFromHierarchy(strNodeName);
+	return m_pSceneRootNode->GetNodeByNameFromHierarchy(strNodeName);
 }

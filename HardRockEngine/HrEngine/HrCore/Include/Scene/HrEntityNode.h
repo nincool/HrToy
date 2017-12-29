@@ -15,10 +15,10 @@ namespace Hr
 	class HR_CORE_API HrCameraNode : public HrSceneNode
 	{
 	public:
-		HrCameraNode(HrViewPort* pViewPort);
+		HrCameraNode(const HrViewPortPtr& pViewPort);
 		virtual ~HrCameraNode();
 
-		HrViewPort* GetViewPort();
+		HrViewPortPtr GetViewPort();
 
 		virtual void UpdateNode() override;
 
@@ -29,8 +29,8 @@ namespace Hr
 		void RecalcCameraView();
 
 	private:
-		HrViewPort* m_pViewPort;
-		HrCamera* m_pCamera;
+		HrViewPortPtr m_pViewPort;
+		HrCameraPtr m_pCamera;
 	};
 
 	class HR_CORE_API HrLightNode : public HrSceneNode

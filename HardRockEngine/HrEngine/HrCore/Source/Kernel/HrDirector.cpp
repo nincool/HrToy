@@ -36,18 +36,6 @@ bool HrDirector::Init()
 	CreateWindowComponent();
 	CreateSceneComponent();
 	CreateRenderComponent();
-
-	if (!CreateRenderEngine())
-	{
-		HRERROR("CreateRenderEngine Error!");
-		return false;
-	}
-
-	if (!CreateRenderTarget())
-	{
-		HRERROR("CreateRenderTarget Error!");
-		return false;
-	}
 	
 	if (!CreateRenderState())
 	{
@@ -75,65 +63,6 @@ bool HrDirector::Init()
 	return true;
 }
 
-bool HrDirector::CreateRenderEngine()
-{
-	//m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>("HrRenderD3D11");
-	//m_pRenderModuleLoader->HrLoadModule();
-	//
-	//typedef void(*RENDER_INIT_FUNC)(HrRenderFactoryPtr& ptr);
-	//RENDER_INIT_FUNC func = static_cast<RENDER_INIT_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleInitialize")));
-	//if (func)
-	//{
-	//	func(m_pRenderFactory);
-	//	if (m_pRenderFactory)
-	//	{
-	//		m_pRenderEngine = m_pRenderFactory->CreateRender();
-	//	}
-	//}
-	//else
-	//{
-	//	HRERROR(_T("RenderInitFunc is null"));
-	//	return false;
-	//}
-
-	//if (!m_pRenderEngine->Init())
-	//{
-	//	return false;
-	//}
-
-	return true;
-}
-
-void HrDirector::ReleaseRenderEngine()
-{
-
-
-	//m_pRenderFactory.reset();
-
-	//typedef void(*RENDER_RELEASE_FUNC)();
-	//RENDER_RELEASE_FUNC releaseFunc = static_cast<RENDER_RELEASE_FUNC>(m_pRenderModuleLoader->GetProcAddress(std::string("HrModuleUnload")));
-	//if (releaseFunc)
-	//{
-	//	releaseFunc();
-	//}
-	//m_pRenderModuleLoader->HrFreeModule();
-	//m_pRenderModuleLoader.reset();
-
-}
-
-bool HrDirector::CreateRenderTarget()
-{
-	//m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
-	//m_pRenderTarget->CreateRenderTarget(HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight());
-	//m_pRenderEngine->SetRenderTarget(m_pRenderTarget);
-
-	return true;
-}
-
-void HrDirector::ReleaseRenderTarget()
-{
-
-}
 
 bool HrDirector::CreateRenderState()
 {
@@ -229,7 +158,6 @@ void HrDirector::Release()
 {
 	//先释放资源
 	HrResourceManager::Instance()->ReleaseAllResources();
-	ReleaseRenderEngine();
 }
 
 bool HrDirector::Render()

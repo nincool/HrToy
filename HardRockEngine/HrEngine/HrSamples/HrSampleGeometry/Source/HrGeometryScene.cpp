@@ -48,9 +48,9 @@ void HrGeometryScene::OnEnter()
 void HrGeometryScene::CreateSceneElements()
 {
 	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
-	AddSceneNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
+	//m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
+	//AddSceneNode(m_pSceneMainCamera);
+	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
 
 	//设置环境光
 	//SetAmbientLight(HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f));
@@ -60,9 +60,9 @@ void HrGeometryScene::CreateSceneElements()
 	//m_pTestSceneNode->GetTransform()->SetPosition(Vector3(0.0f, -10.0f, 0.0f));
 	//m_pTestSceneNode->GetTransform()->SetRotation(Vector3(90.0f, 0.0f, 0.0f));
 
-	m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateBox(100.0f);
-	AddSceneNode(m_pTestSceneNode);
-	m_pTestSceneNode->GetTransform()->SetPosition(Vector3::Zero());
+	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateBox(100.0f);
+	//AddSceneNode(m_pTestSceneNode);
+	//m_pTestSceneNode->GetTransform()->SetPosition(Vector3::Zero());
 	
 	//创建灯光
 	auto pLight = HrSceneObjectFactory::Instance()->CreateDirectionalLight(Vector3(1.0f, -1.0f, 1.0f), HrColor::Green, HrColor::Blue);

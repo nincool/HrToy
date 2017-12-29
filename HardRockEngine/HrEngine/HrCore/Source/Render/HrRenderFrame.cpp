@@ -8,7 +8,10 @@ HrRenderFrame::HrRenderFrame()
 	m_nBottom = 0;
 	m_nWidth = 0;
 	m_nHeight = 0;
-	m_clearDepth = 0;
+	m_clearDepth = 1.0f;
+	m_clearStencil = 0.0f;
+
+	m_clearColor = HrColor(0.69f, 0.77f, 0.87f, 1.0f);
 }
 
 HrRenderFrame::~HrRenderFrame()

@@ -18,8 +18,14 @@ namespace Hr
 
 	public:
 		HrSceneNode();
+		HrSceneNode(const HrSceneObjectPtr& pSceneObject);
+		HrSceneNode(const std::string& strName, HrSceneObjectPtr& pSceneObject);
+		
+		//deprecated
 		HrSceneNode(HrRenderable* pRenderable);
+		//deprecated
 		HrSceneNode(const std::string& strName, HrRenderable* pRenderable);
+		
 		virtual ~HrSceneNode();
 
 		EnumNodeType GetNodeType() { return m_nodeType; }
@@ -41,7 +47,7 @@ namespace Hr
 		
 		HrTransform* GetTransform() const;
 
-		void AddChild(HrSceneNode* pSceneNode);
+		void AddChild(const HrSceneNodePtr& pSceneNode);
 		void RemoveChildren();
 
 		bool IsRunning() const;
@@ -57,18 +63,28 @@ namespace Hr
 		void UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters);
 
 		void DirtyTransform();
+
 	protected:
+		//节点类型
 		EnumNodeType m_nodeType;
 		
-		HrRenderable* m_pRenderable;
-		
+		//Scene中实际的节点对象
+		HrSceneObjectPtr m_pSceneObject;
+
 		std::string m_strName;
 		bool m_bEnable;
-
 		bool m_bRunning;
 
+		//children
+		std::vector<HrSceneNodePtr> m_vecChildrenNode;
+
+		
+		//HrRenderable* m_pRenderable;
+		
+	
+		//deprecated
 		HrSceneNode* m_pParent;
-		std::vector<HrSceneNode*> m_vecChildNode;
+		//std::vector<HrSceneNode*> m_vecChildNode;
 
 		HrTransform* m_pTransform;
 

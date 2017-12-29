@@ -29,7 +29,7 @@ HrRootNode::~HrRootNode()
 //
 /////////////////////////////////////////////
 
-HrCameraNode::HrCameraNode(HrViewPort* pViewPort)
+HrCameraNode::HrCameraNode(const HrViewPortPtr& pViewPort)
 {
 	m_nodeType = HrSceneNode::NT_CAMERA;
 	m_pViewPort = pViewPort;
@@ -42,10 +42,9 @@ HrCameraNode::HrCameraNode(HrViewPort* pViewPort)
 
 HrCameraNode::~HrCameraNode()
 {
-	SAFE_DELETE(m_pViewPort);
 }
 
-HrViewPort* HrCameraNode::GetViewPort()
+HrViewPortPtr HrCameraNode::GetViewPort()
 {
 	return m_pViewPort;
 }
@@ -74,7 +73,8 @@ void HrCameraNode::OnEnter()
 
 	//todo Çø·ÖMainCamera SubCamera
 	//HrDirector::Instance()->GetRenderTarget()->AddViewPort(m_pViewPort);
-	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->AddViewPort(m_pViewPort);
+	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->AddViewPort(m_pViewPort.get());
+
 }
 
 void HrCameraNode::OnEnterDidFinish()

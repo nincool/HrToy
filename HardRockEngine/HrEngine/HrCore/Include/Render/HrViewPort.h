@@ -8,7 +8,7 @@ namespace Hr
 	class HR_CORE_API HrViewPort 
 	{
 	public:
-		HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, HrCamera* pCamera);
+		HrViewPort(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder, const HrCameraPtr& pCamera);
 		~HrViewPort();
 
 		float GetLeft()
@@ -31,7 +31,7 @@ namespace Hr
 		{
 			return m_nZOrder;
 		}
-		HrCamera* GetCamera()
+		HrCameraPtr GetCamera()
 		{
 			return m_pCamera;
 		}
@@ -42,7 +42,8 @@ namespace Hr
 			delete this;
 		}
 	private:
-		HrCamera* m_pCamera;
+		HrCameraPtr m_pCamera;
+
 		float m_fLeft;
 		float m_fTop;
 		float m_fWidth;

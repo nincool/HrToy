@@ -58,11 +58,11 @@ namespace Hr
 		void LoadSceneNode(const rapidjson::Value& jsonValue, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo);
 
 		virtual void CreateSceneFromData();
-		void CreateSceneNode(HrSceneNode* pParent, std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo);
+		void CreateSceneNode(const HrSceneNodePtr& pParent, const std::vector<HrSceneInfo::HrSceneNodeInfo>& vecSceneNodeInfo);
 	protected:
 		HrSceneInfo m_sceneDataInfo;
 
-		HrCameraNode* m_pSceneMainCamera;
+		HrCameraNodePtr m_pSceneMainCamera;
 
 	};
 }

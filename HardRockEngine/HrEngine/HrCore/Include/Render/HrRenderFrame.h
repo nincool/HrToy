@@ -11,17 +11,19 @@ namespace Hr
 		HrRenderFrame();
 		virtual ~HrRenderFrame();
 
-		void AttachRenderTarget(HrRenderTargetPtr& pRenderTarget);
-		void DetachRenderTarget();
-
-		void SetClearColor(const HrColor& color);
-		void SetClearDepth(float fDepth);
+		virtual void AttachRenderTarget(HrRenderTargetPtr& pRenderTarget);
+		virtual void DetachRenderTarget();
 
 		virtual void OnBind() = 0;
 		virtual void OnUnBind() = 0;
 
 		virtual void ClearTarget() = 0;
 		virtual void ClearDepthStencil() = 0;
+
+		virtual void SwapChain() = 0;
+
+		void SetClearColor(const HrColor& color);
+		void SetClearDepth(float fDepth);
 
 		uint32 GetLeft() const;
 		uint32 GetBottom() const;
@@ -39,6 +41,7 @@ namespace Hr
 	protected:
 		HrColor m_clearColor;
 		float m_clearDepth;
+		float m_clearStencil;
 
 		uint32 m_nLeft;
 		uint32 m_nBottom;
