@@ -3,6 +3,7 @@
 #include "Render/HrRenderFrame.h"
 #include "Render/HrRender.h"
 
+
 using namespace Hr;
 
 HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
@@ -49,13 +50,9 @@ void HrRenderSystem::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrame)
 	m_pRender->SetCurrentFrameBuffer(pRenderFrame);
 }
 
-HrRenderFramePtr HrRenderSystem::GetCurrentFrameBuffer() const
+HrRenderFramePtr HrRenderSystem::GetCurrentFrameBuffer()
 {
-	const HrRenderFramePtr& pRenderFrame = m_pRender->GetCurrentFrameBuffer();
-	auto pHolder = pRenderFrame.get();
-	HrRenderFramePtr pTempFrame = pRenderFrame;
-
-	return pRenderFrame;
+	return m_pRender->GetCurrentFrameBuffer();
 }
 
 void HrRenderSystem::InitRender()
@@ -74,8 +71,6 @@ void HrRenderSystem::BindScreenFrameBuffer()
 	m_pScreenFrameBuffer->OnBind();
 }
 
-
-
 void HrRenderSystem::ClearRenderTarget()
 {
 	HrRenderFramePtr pFrameBuffer = GetCurrentFrameBuffer();
@@ -87,5 +82,10 @@ void HrRenderSystem::ClearRenderTarget()
 void HrRenderSystem::ClearDepthStencil()
 {
 	GetCurrentFrameBuffer()->ClearDepthStencil();
+}
+
+void HrRenderSystem::SwapChain()
+{
+	GetCurrentFrameBuffer()->SwapChain();
 }
 

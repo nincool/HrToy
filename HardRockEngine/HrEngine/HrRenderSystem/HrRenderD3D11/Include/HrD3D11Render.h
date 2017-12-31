@@ -42,10 +42,9 @@ namespace Hr
 	private:
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
-		
-		HrD3D11RenderTargetPtr m_pRenderTarget;
+		HrRenderFramePtr m_pCurFrameBuffer;
 
-		HrD3D11FrameBufferPtr m_pCurFrameBuffer;
+		HrD3D11RenderTargetPtr m_pRenderTarget;
 	};
 }
 

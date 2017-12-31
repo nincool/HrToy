@@ -7,6 +7,7 @@
 #include "HrCore/Include/Render/HrRenderPass.h"
 #include "HrCore/Include/Render/HrRenderTechnique.h"
 #include "HrCore/Include/Render/HrViewPort.h"
+#include "HrCore/Include/Render/HrRenderTarget.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <boost/cast.hpp>
 
@@ -29,13 +30,12 @@ bool HrD3D11Render::Init()
 
 void HrD3D11Render::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer)
 {
-	m_pCurFrameBuffer = HrCheckPointerCast<HrD3D11FrameBuffer>(pRenderFrameBuffer);
+	m_pCurFrameBuffer = pRenderFrameBuffer;
 	m_pRenderTarget = HrCheckPointerCast<HrD3D11RenderTarget>(m_pCurFrameBuffer->GetRenderTarget());
 }
 
 const HrRenderFramePtr& HrD3D11Render::GetCurrentFrameBuffer()
 {
-	BOOST_ASSERT(m_pCurFrameBuffer);
 	return m_pCurFrameBuffer;
 }
 
@@ -139,4 +139,3 @@ const ID3D11DeviceContextPtr& HrD3D11Render::GetD3D11DeviceContext()
 {
 	return HrD3D11Device::Instance()->GetD3DDeviceContext();
 }
-

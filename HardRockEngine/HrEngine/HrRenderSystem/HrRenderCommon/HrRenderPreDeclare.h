@@ -45,7 +45,6 @@ namespace Hr
 	typedef std::shared_ptr<HrD3D11ShaderCompiler> HrD3D11ShaderCompilerPtr;
 
 	class HrD3D11BlendState;
-
 }
 
 #endif

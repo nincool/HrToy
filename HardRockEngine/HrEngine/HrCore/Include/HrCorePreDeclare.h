@@ -123,6 +123,7 @@ namespace Hr
 	typedef std::shared_ptr<HrResource> HrResourcePtr;
 	class HrPrefabModel;
 	typedef std::shared_ptr<HrPrefabModel> HrPrefabModelPtr;
+
 }
 
 

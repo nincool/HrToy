@@ -45,10 +45,8 @@ void HrRenderCoreComponent::ClearRenderFame()
 
 void HrRenderCoreComponent::SwapChain()
 {
-
+	m_pRenderSystem->SwapChain();
 }
-
-
 
 void HrRenderCoreComponent::GetRenderFactory(const std::string& strRenderModule)
 {

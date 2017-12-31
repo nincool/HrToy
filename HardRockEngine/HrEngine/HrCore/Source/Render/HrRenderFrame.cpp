@@ -69,3 +69,4 @@ void HrRenderFrame::DetachRenderTarget()
 	m_pRenderTarget.reset();
 }
 
+

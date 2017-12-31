@@ -33,9 +33,6 @@ namespace Hr
 
 		//—ßœ∞≤‚ ‘‰÷»æ”√
 		virtual bool StartRender() = 0;
-	public:
-		
-
 	};
 }
 

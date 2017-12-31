@@ -22,10 +22,12 @@ namespace Hr
 		/**
 		 @Comment: 这里不能返回引用，因为函数内也存在临时变量 [12/29/2017 By Hr]
 		*/
-		HrRenderFramePtr GetCurrentFrameBuffer() const;
+		HrRenderFramePtr GetCurrentFrameBuffer();
 		
 		void ClearRenderTarget();
 		void ClearDepthStencil();
+
+		void SwapChain();
 	private:
 		void InitRender();
 		void BindScreenFrameBuffer();
