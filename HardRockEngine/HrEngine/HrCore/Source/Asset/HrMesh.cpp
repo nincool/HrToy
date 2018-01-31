@@ -6,24 +6,23 @@
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
-#include "Kernel/HrRenderCoreComponent.h"
+#include "Kernel/HrCoreComponentRender.h"
 
 #include "Render/HrRenderSystem.h"
 
 
 using namespace Hr;
 
-HrSubMesh::HrSubMesh()
+
+HrSubMesh::HrSubMesh(int nSubIndex, const HrMeshPtr& pParent, const std::string& strName)
 {
-	//for test
-	m_pRenderLayout = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRenderLayout();
-	//先设置一个默认的材质
-	m_pMaterial = HrResourceManager::Instance()->GetDefaultMaterial();
+	m_nSubIndex = nSubIndex;
+	m_pParentMesh = pParent;
+	m_strName = strName;
 }
 
 HrSubMesh::~HrSubMesh()
 {
-	SAFE_DELETE(m_pRenderLayout);
 }
 
 void HrSubMesh::SetName(const std::string& strName)
@@ -36,29 +35,24 @@ const std::string& HrSubMesh::GetName()
 	return m_strName;
 }
 
-HrRenderLayout* HrSubMesh::GetRenderLayout() const
+const HrRenderLayoutPtr& HrSubMesh::GetRenderLayout()
 {
+	if (!m_pRenderLayout) 
+	{
+		m_pRenderLayout = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateRenderLayout();
+	}
+
 	return m_pRenderLayout;
 }
 
-void HrSubMesh::SetMaterial(HrMaterial* pMaterial)
+void HrSubMesh::SetMaterial(const HrMaterialPtr& pMaterial)
 {
 	m_pMaterial = pMaterial;
 }
 
-HrMaterial* HrSubMesh::GetMaterial() const
+const HrMaterialPtr& HrSubMesh::GetMaterial()
 {
 	return m_pMaterial;
-}
-
-void HrSubMesh::SetTexture(HrTexture* pTexture)
-{
-	m_pTexture = pTexture;
-}
-
-HrTexture* HrSubMesh::GetTexture() const
-{
-	return m_pTexture;
 }
 
 ///////////////////////////////////////////////////
@@ -73,15 +67,11 @@ HrMesh::HrMesh()
 
 HrMesh::~HrMesh()
 {
-	for (auto& item : m_vecSubMesh)
-	{
-		SAFE_DELETE(item);
-	}
 }
 
-size_t HrMesh::CreateHashName(const std::string& strFullFilePath)
+size_t HrMesh::CreateHashName(const std::string& strHashValue)
 {
-	return HrHashValue(strFullFilePath + ".Hr_Mesh");
+	return HrHashValue(strHashValue + ".Hr_Mesh");
 }
 
 void HrMesh::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
@@ -95,19 +85,22 @@ void HrMesh::DeclareResource(const std::string& strFileName, const std::string& 
 
 bool HrMesh::LoadImpl()
 {
+	m_resStatus = HrResource::RS_LOADED;
 	return true;
 }
 
 bool HrMesh::UnloadImpl()
 {
+	m_resStatus = HrResource::RS_DECLARED;
 	return true;
 }
 
-HrSubMesh* HrMesh::AddSubMesh()
+const HrSubMeshPtr& HrMesh::AddSubMesh(const std::string& strName)
 {
-	HrSubMesh* pSubMesh = HR_NEW HrSubMesh();
+	HrSubMeshPtr pSubMesh = HrMakeSharedPtr<HrSubMesh>(m_vecSubMesh.size(), shared_from_this(), strName);
 	m_vecSubMesh.push_back(pSubMesh);
-	return pSubMesh;
+
+	return m_vecSubMesh.back();
 }
 
 uint32 HrMesh::GetSubMeshNum()
@@ -115,7 +108,7 @@ uint32 HrMesh::GetSubMeshNum()
 	return m_vecSubMesh.size();
 }
 
-HrSubMesh* HrMesh::GetSubMesh(uint32 nIndex)
+const HrSubMeshPtr& HrMesh::GetSubMesh(uint32 nIndex)
 {
 	BOOST_ASSERT(nIndex < m_vecSubMesh.size());
 	return m_vecSubMesh[nIndex];
@@ -123,6 +116,5 @@ HrSubMesh* HrMesh::GetSubMesh(uint32 nIndex)
 
 void HrMesh::FinishedBuildMesh()
 {
-	m_bLoaded = true;
 }
 

@@ -1,20 +1,20 @@
-#include "Kernel/HrWinCoreComponent.h"
+#include "Kernel/HrCoreComponentWin.h"
 #include "Platform/AppWin32/HrWindowWin.h"
 #include "Config/HrContextConfig.h"
 
 using namespace Hr;
 
-HrWinCoreComponent::HrWinCoreComponent()
+HrCoreComponentWin::HrCoreComponentWin()
 {
 	CreateAppWindow();
 }
 
-HrWinCoreComponent::~HrWinCoreComponent()
+HrCoreComponentWin::~HrCoreComponentWin()
 {
 
 }
 
-void HrWinCoreComponent::CreateAppWindow()
+void HrCoreComponentWin::CreateAppWindow()
 {
 	uint32 nWidth = HrContextConfig::Instance()->GetWindowWidth();
 	uint32 nHeight = HrContextConfig::Instance()->GetWindowHeight();
@@ -22,12 +22,12 @@ void HrWinCoreComponent::CreateAppWindow()
 	m_pWindow = HrCheckPointerCast<HrWindow>(HrMakeSharedPtr<HrWindowWin>(nWidth, nHeight));
 }
 
-bool HrWinCoreComponent::Update(float fDelta)
+bool HrCoreComponentWin::Update(float fDelta)
 {
 	return true;
 }
 
-HWND HrWinCoreComponent::GetWindowHWnd()
+HWND HrCoreComponentWin::GetWindowHWnd()
 {
 	if (m_pWindow)
 	{
@@ -37,7 +37,7 @@ HWND HrWinCoreComponent::GetWindowHWnd()
 	return 0;
 }
 
-uint32 HrWinCoreComponent::GetWindowWidth()
+uint32 HrCoreComponentWin::GetWindowWidth()
 {
 	if (m_pWindow)
 	{
@@ -47,7 +47,7 @@ uint32 HrWinCoreComponent::GetWindowWidth()
 	return 0;
 }
 
-uint32 HrWinCoreComponent::GetWindowHeight()
+uint32 HrCoreComponentWin::GetWindowHeight()
 {
 	if (m_pWindow)
 	{
@@ -57,7 +57,7 @@ uint32 HrWinCoreComponent::GetWindowHeight()
 	return 0;
 }
 
-void HrWinCoreComponent::DestroyWindow()
+void HrCoreComponentWin::DestroyWindow()
 {
 	if (m_pWindow)
 	{
@@ -65,7 +65,7 @@ void HrWinCoreComponent::DestroyWindow()
 	}
 }
 
-void HrWinCoreComponent::UpdateWindowMsg()
+void HrCoreComponentWin::UpdateWindowMsg()
 {
 	if (m_pWindow)
 	{

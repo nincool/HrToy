@@ -26,22 +26,19 @@ HrSceneObjectFactory::~HrSceneObjectFactory()
 {
 }
 
-HrCameraNodePtr HrSceneObjectFactory::CreateCamera()
+HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, uint32 nTopX, uint32 nTopY, uint32 nWidth, uint32 nHeight, int nZOrder)
 {
-	return CreateCamera(0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
-}
+	HrCameraPtr pCamera = HrMakeSharedPtr<HrCamera>(strName);
+	HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(nTopX, nTopY, nWidth, nHeight, nZOrder);
+	pViewPort->SetCamera(pCamera);
+	
+	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+	pSceneObj->AddComponent(HrSceneObject::SCT_CAMERA, pCamera);
 
-HrCameraNodePtr HrSceneObjectFactory::CreateCamera(float fLeft, float fTop, float fWidth, float fHeight, int nZOrder)
-{
-	HrCameraPtr pCamera = HrMakeSharedPtr<HrCamera>();
-	HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(fLeft, fTop, fWidth, fHeight, nZOrder, pCamera);
-	HrCameraNodePtr pCameraNode = HrMakeSharedPtr<HrCameraNode>(pViewPort);
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(pCamera->GetName());
+	pSceneNode->SetSceneObject(pSceneObj);
 
-	//HrCamera* pCamera = HR_NEW HrCamera();
-	//HrViewPort* pViewPort = HR_NEW HrViewPort(fLeft, fTop, fWidth, fHeight, nZOrder, pCamera);
-	//HrCameraNode* pCameraNode = HR_NEW HrCameraNode(pViewPort);
-
-	return pCameraNode;
+	return pSceneNode;
 }
 
 HrLightNodePtr HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular)
@@ -60,15 +57,15 @@ HrLightNodePtr HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direc
 //	return pLightNode;
 //}
 
-HrLightNode* HrSceneObjectFactory::CreatePointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2)
-{
-	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrPointLight>(diffuse, specular, fRange, fAttenuation0, fAttenuation1, fAttenuation2));
-	HrLightNode* pLightNode = HR_NEW HrLightNode(pLight);
+//HrLightNode* HrSceneObjectFactory::CreatePointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2)
+//{
+//	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrPointLight>(diffuse, specular, fRange, fAttenuation0, fAttenuation1, fAttenuation2));
+//	HrLightNode* pLightNode = HR_NEW HrLightNode(pLight);
+//
+//	return pLightNode;
+//}
 
-	return pLightNode;
-}
-
-HrSceneNode* HrSceneObjectFactory::CreatePlane(float fWidth, float fHeight)
+HrSceneNodePtr HrSceneObjectFactory::CreatePlane(float fWidth, float fHeight)
 {
 	return m_pGeometryFactory->CreatePlane(fWidth, fHeight);
 }
@@ -85,18 +82,15 @@ HrSceneNode* HrSceneObjectFactory::CreateSkyBox()
 
 HrSceneNodePtr HrSceneObjectFactory::CreateModel(const std::string& strName)
 {
-	//todo shared
-	HrResource* pRes = HrResourceManager::Instance()->GetOrLoadResource(strName, HrResource::RT_MODEL);
-	HrPrefabModel* pPrefabModel = static_cast<HrPrefabModel*>(pRes);
+	HrResourcePtr pRes = HrResourceManager::Instance()->RetriveOrLoadResource(strName, HrResource::RT_MODEL);
+	HrPrefabModelPtr pPrefabModel = HrCheckPointerCast<HrPrefabModel>(pRes);
 	if (pPrefabModel == nullptr)
 	{
 		BOOST_ASSERT(false);
 		return nullptr;
 	}
 
-	std::shared_ptr<HrPrefabModel> pSharedPrefabModel(pPrefabModel);
-	
-	return CreateSceneNode(pSharedPrefabModel);
+	return CreateSceneNode(pPrefabModel);
 }
 
 HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrPrefabModelPtr& pPrefabModel)
@@ -106,9 +100,12 @@ HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrPrefabModelPtr& pPrefabMo
 	{
 		HrSkinnedMeshRenderablePtr pSkinnedRenderable = HrMakeSharedPtr<HrSkinnedMeshRenderable>();
 		pSkinnedRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
-		HrSceneObjectPtr pSceneObject = HrMakeSharedPtr<HrSceneObject>(pPrefabModel->GetMesh()->GetSubMesh(i)->GetName(), pSkinnedRenderable);
-		HrSceneNodePtr pChildNode = HrMakeSharedPtr<HrSceneNode>(pSceneObject->GetName(), pSceneObject);
-		pSceneNode->AddChild(pChildNode);
+		pSkinnedRenderable->SetRenderEffect(HrResourceManager::Instance()->GetDefaultRenderEffect());
+
+		HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>(pSkinnedRenderable);
+		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pPrefabModel->GetMesh()->GetSubMesh(i)->GetName());
+		pNode->SetSceneObject(pSceneObj);
+		pSceneNode->AddChild(pNode);
 	}
 
 	return pSceneNode;

@@ -10,25 +10,30 @@ namespace Hr
 	class HR_CORE_API HrShaderCompiler : public boost::noncopyable
 	{
 	public:
-		~HrShaderCompiler() {};
+		HrShaderCompiler(const std::string& strFileName);
+		virtual ~HrShaderCompiler();
 
-		virtual bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
-			, HrShader::EnumShaderType shaderType
-			, const std::string& strEntryPoint
-			, HrStreamData& shaderBuffer) = 0;
+		virtual bool CompileShaderFromCode(const std::string& strEntryPoint, HrShader::EnumShaderType shaderType) = 0;
 
-		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, const std::string& strShaderEntryPoint, HrShader::EnumShaderType shaderType) = 0;
+		virtual bool ReflectEffectParameters(const std::string& strEntryPoint) = 0;
 
-		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) = 0;
+		virtual HrStreamDataPtr StripCompiledCode(const HrStreamData& shaderBuffer) = 0;
 
-		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) = 0;
+		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameterPtr>& vecParameter
+			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer) = 0;
 
-		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
-			, std::vector<HrShader*>& vecShader) = 0;
+		virtual void BindParametersToShader(std::vector<HrRenderEffectParameterPtr>& vecParameter
+			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer
+			, std::unordered_map<std::string, HrShaderPtr>& vecShader) = 0;
+
+		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) = 0;
+
+	protected:
+		std::string m_strFileName;
+
+		HrStreamDataPtr m_pStreamData;
 	};
 }
 

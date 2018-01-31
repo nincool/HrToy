@@ -8,11 +8,20 @@ namespace Hr
 	class HR_CORE_API HrRenderFrame
 	{
 	public:
+		enum EnumRenderTargetLayer
+		{
+			RTL_0,
+			RTL_1,
+			RTL_2,
+			RTL_3,
+			RTL_MAX = 8,
+		};
+	public:
 		HrRenderFrame();
 		virtual ~HrRenderFrame();
 
-		virtual void AttachRenderTarget(HrRenderTargetPtr& pRenderTarget);
-		virtual void DetachRenderTarget();
+		virtual void AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget);
+		virtual void DetachRenderTarget(EnumRenderTargetLayer attachLayer);
 
 		virtual void OnBind() = 0;
 		virtual void OnUnBind() = 0;
@@ -20,37 +29,24 @@ namespace Hr
 		virtual void ClearTarget() = 0;
 		virtual void ClearDepthStencil() = 0;
 
-		virtual void SwapChain() = 0;
+		virtual void Present() = 0;
 
 		void SetClearColor(const HrColor& color);
 		void SetClearDepth(float fDepth);
+		
+		void AddViewPort(const HrViewPortPtr& pViewPort);
+		const HrViewPortPtr& GetViewPort(uint32 zOrder) const;
+		const std::map<uint32, HrViewPortPtr>& GetAllViewPorts();
 
-		uint32 GetLeft() const;
-		uint32 GetBottom() const;
-		uint32 GetWidht() const;
-		uint32 GetHeight() const;
 
-		void SetViewPort(const HrViewPortPtr& pViewPort);
-		const HrViewPortPtr& GetViewPort() const;
-
-		//todo test
-		const HrRenderTargetPtr& GetRenderTarget()
-		{
-			return m_pRenderTarget;
-		}
 	protected:
 		HrColor m_clearColor;
 		float m_clearDepth;
 		float m_clearStencil;
 
-		uint32 m_nLeft;
-		uint32 m_nBottom;
-		uint32 m_nWidth;
-		uint32 m_nHeight;
-
-		HrRenderTargetPtr m_pRenderTarget;
-		HrViewPortPtr m_pCurViewPort;
-
+		std::map<uint32, HrViewPortPtr> m_mapViewPorts;
+		std::array<HrRenderTargetPtr, RTL_MAX> m_arrRenderTargets;
+		HrDepthStencilPtr m_pDepthStencil;
 	};
 }
 

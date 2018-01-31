@@ -16,9 +16,9 @@ HrShader::~HrShader()
 
 }
 
-void HrShader::BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter
-	, std::vector<HrRenderEffectStructParameter*>& vecRenderStructParameter
-	, std::vector<HrRenderEffectConstantBuffer*>& vecRenderConstBuffer)
+void HrShader::BindRenderParameter(std::vector<HrRenderEffectParameterPtr>& vecRenderParameter
+	, std::vector<HrRenderEffectStructParameterPtr>& vecRenderStructParameter
+	, std::vector<HrRenderEffectConstantBufferPtr>& vecRenderConstBuffer)
 {
 	m_vecBindRenderParameter.swap(vecRenderParameter);
 	m_vecBindRenderStructParameter.swap(vecRenderStructParameter);
@@ -27,7 +27,7 @@ void HrShader::BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRen
 	BindRenderParameterImpl();
 }
 
-void HrShader::GetBindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderStruct)
+void HrShader::GetBindRenderParameter(std::vector<HrRenderEffectParameterPtr>& vecRenderParameter, std::vector<HrRenderEffectStructParameterPtr>& vecRenderStruct)
 {
 	vecRenderParameter = m_vecBindRenderParameter;
 	vecRenderStruct = m_vecBindRenderStructParameter;

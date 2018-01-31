@@ -5,8 +5,8 @@
 #include "Render/HrCamera.h"
 #include "Render/HrRenderTarget.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrRenderCoreComponent.h"
-#include "Kernel/HrSceneCoreComponent.h"
+#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrCoreComponentScene.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
 //todo
@@ -16,78 +16,66 @@
 
 using namespace Hr;
 
-HrRootNode::HrRootNode()
-{
-}
 
-HrRootNode::~HrRootNode()
-{
-}
 
 
 /////////////////////////////////////////////
 //
 /////////////////////////////////////////////
 
-HrCameraNode::HrCameraNode(const HrViewPortPtr& pViewPort)
-{
-	m_nodeType = HrSceneNode::NT_CAMERA;
-	m_pViewPort = pViewPort;
-	m_pCamera = m_pViewPort->GetCamera();
-	m_pCamera->AttachCameraNode(this);
-	m_bDirtyTransform = false;
-	
-	m_pTransform->SetPosition(Vector3::Zero());
-}
-
-HrCameraNode::~HrCameraNode()
-{
-}
-
-HrViewPortPtr HrCameraNode::GetViewPort()
-{
-	return m_pViewPort;
-}
-
-void HrCameraNode::UpdateNode()
-{
-	HrSceneNode::UpdateNode();
-	
-	RecalcCameraView();
-}
-
-void HrCameraNode::RecalcCameraView()
-{
-	if (m_bDirtyTransform)
-	{
-		m_pCamera->ViewParams(m_pTransform->GetPosition()
-			, m_pTransform->GetPosition() + m_pTransform->GetForward() * m_pCamera->GetLookAtDistance()
-			, m_pTransform->GetUp());
-		m_bDirtyTransform = false;
-	}
-}
-
-void HrCameraNode::OnEnter()
-{
-	HrSceneNode::OnEnter();
-
-	//todo 区分MainCamera SubCamera
-	//HrDirector::Instance()->GetRenderTarget()->AddViewPort(m_pViewPort);
-	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderTarget()->AddViewPort(m_pViewPort.get());
-
-}
-
-void HrCameraNode::OnEnterDidFinish()
-{
-	HrSceneNode::OnEnterDidFinish();
-
-}
-
-void HrCameraNode::OnExist()
-{
-	HrSceneNode::OnExist();
-
-}
+//HrCameraNode::HrCameraNode(const HrViewPortPtr& pViewPort)
+//{
+//	m_nodeType = HrSceneNode::NT_CAMERA;
+//	m_pViewPort = pViewPort;
+//	m_pCamera = m_pViewPort->GetCamera();
+//	m_pCamera->AttachCameraNode(this);
+//	m_bDirtyTransform = false;
+//	
+//	m_pTransform->SetPosition(Vector3::Zero());
+//}
+//
+//HrCameraNode::~HrCameraNode()
+//{
+//}
+//
+//HrViewPortPtr HrCameraNode::GetViewPort()
+//{
+//	return m_pViewPort;
+//}
+//
+//void HrCameraNode::UpdateNode()
+//{
+//	HrSceneNode::UpdateNode();
+//	
+//	RecalcCameraView();
+//}
+//
+//void HrCameraNode::RecalcCameraView()
+//{
+//	if (m_bDirtyTransform)
+//	{
+//		m_pCamera->ViewParams(m_pTransform->GetPosition()
+//			, m_pTransform->GetPosition() + m_pTransform->GetForward() * m_pCamera->GetLookAtDistance()
+//			, m_pTransform->GetUp());
+//		m_bDirtyTransform = false;
+//	}
+//}
+//
+//void HrCameraNode::OnEnter()
+//{
+//	HrSceneNode::OnEnter();
+//
+//	//todo 区分MainCamera SubCamera
+//	//HrDirector::Instance()->GetRenderTarget()->AddViewPort(m_pViewPort);
+//	HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetScreenRenderTarget()->AddViewPort(m_pViewPort.get());
+//
+//}
+//
+//void HrCameraNode::OnExist()
+//{
+//	HrSceneNode::OnExist();
+//
+//}
 
 //////////////////////////////////////////////
 //
@@ -109,7 +97,7 @@ HrLightPtr& HrLightNode::GetLight()
 	return m_pLight;
 }
 
-void HrLightNode::UpdateNode()
+void HrLightNode::UpdateNode(float fDt)
 {
 
 }
@@ -119,12 +107,6 @@ void HrLightNode::OnEnter()
 	HrSceneNode::OnEnter();
 
 	HrDirector::Instance()->GetSceneComponent()->GetRunningScene()->AddLight(m_pLight);
-}
-
-void HrLightNode::OnEnterDidFinish()
-{
-	HrSceneNode::OnEnterDidFinish();
-
 }
 
 void HrLightNode::OnExist()

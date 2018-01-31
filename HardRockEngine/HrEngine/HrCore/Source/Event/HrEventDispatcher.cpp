@@ -1,8 +1,6 @@
 #include "Event/HrEventDispatcher.h"
 #include "Event/HrEventListener.h"
 #include "Event/HrEvent.h"
-#include "Event/HrEventListenerKeyboard.h"
-#include "Event/HrEventListenerMouse.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include <algorithm> 
 
@@ -10,7 +8,7 @@ using namespace Hr;
 
 HrEventDispatcher::HrEventDispatcher()
 {
-
+	m_bDispatching = false;
 }
 
 HrEventDispatcher::~HrEventDispatcher()
@@ -18,10 +16,118 @@ HrEventDispatcher::~HrEventDispatcher()
 
 }
 
-void HrEventDispatcher::AddEventListener(HrEventListenerPtr& pEventListener)
+void HrEventDispatcher::AddEventListener(const HrEventListenerPtr& pEventListener)
 {
 	HRASSERT(pEventListener, "AddEventListener Error");
-	size_t nEventListenerID = pEventListener->GetEventListenerHashID();
+
+	if (!m_bDispatching)
+	{
+		ForceAddEventListener(pEventListener);
+	}
+	else
+	{
+		m_lisReadyAddListeners.push_back(pEventListener);
+	}
+
+}
+
+void HrEventDispatcher::RemoveEventListener(const HrEventListenerPtr& pEventListener)
+{
+	if (m_bDispatching)
+	{
+		ForceRemoveEventListener(pEventListener);
+	}
+	else
+	{
+		m_lisReadyRemoveListeners.push_back(pEventListener);
+	}
+
+}
+
+void HrEventDispatcher::DispatcherEvent(const HrEventPtr& pEvent)
+{
+	m_bDispatching = true;
+
+	if (pEvent->GetType() == HrEvent::EnumEventType::KEYBOARD)
+	{
+		DispatcherKeyBoardEvent(pEvent);
+	}
+	else if (pEvent->GetType() == HrEvent::EnumEventType::MOUSE)
+	{
+		DispatcherMouseEvent(pEvent);
+	}
+	else if (pEvent->GetType() == HrEvent::EnumEventType::CUSTOM)
+	{
+		DispatcherCustomEvent(pEvent);
+	}
+	else
+	{
+		BOOST_ASSERT_MSG(false, "unknow event type");
+	}
+
+	m_bDispatching = false;
+
+	UpdateListeners();
+}
+
+void HrEventDispatcher::DispatcherKeyBoardEvent(const HrEventPtr& pEvent)
+{
+	size_t nEventListenerID = HrEventKeyboard::m_s_nEventKeyboardHashID;
+	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
+	if (listListenersItem != m_mapEventListener.end())
+	{
+		for (auto& listItem : listListenersItem->second)
+		{
+			listItem->OnEvent(pEvent);
+		}
+	}
+}
+
+void HrEventDispatcher::DispatcherMouseEvent(const HrEventPtr& pEvent)
+{
+	size_t nEventListenerID = HrEventMouse::m_s_nEventMouseHashID;
+	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
+	if (listListenersItem != m_mapEventListener.end())
+	{
+		for (auto& listItem : listListenersItem->second)
+		{
+			listItem->OnEvent(pEvent);
+		}
+	}
+}
+
+void HrEventDispatcher::DispatcherCustomEvent(const HrEventPtr& pEvent)
+{
+	size_t nEventListenerID = pEvent->GetHashID();
+	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
+	if (listListenersItem != m_mapEventListener.end())
+	{
+		for (auto& listItem : listListenersItem->second)
+		{
+			listItem->OnEvent(pEvent);
+		}
+	}
+}
+
+size_t HrEventDispatcher::GetListenerID(const HrEventPtr& pEvent)
+{
+	switch (pEvent->GetType())
+	{
+	case HrEvent::EnumEventType::KEYBOARD:
+	{
+		return HrEventKeyboard::m_s_nEventKeyboardHashID;
+	}
+	default:
+	{
+		HRASSERT(NULL, "Invalid type");
+		return 0;
+	}
+	}
+}
+
+void HrEventDispatcher::ForceAddEventListener(const HrEventListenerPtr& pEventListener)
+{
+	size_t nEventListenerID = pEventListener->GetEventHashID();
 	auto itemListeners = m_mapEventListener.find(nEventListenerID);
 	if (itemListeners == m_mapEventListener.end())
 	{
@@ -35,13 +141,13 @@ void HrEventDispatcher::AddEventListener(HrEventListenerPtr& pEventListener)
 	}
 }
 
-void HrEventDispatcher::RemoveEventListener(HrEventListenerPtr& pEventListener)
+void HrEventDispatcher::ForceRemoveEventListener(const HrEventListenerPtr& pEventListener)
 {
-	size_t nEventListenerID = pEventListener->GetEventListenerHashID();
+	size_t nEventListenerID = pEventListener->GetEventHashID();
 	auto itemListeners = m_mapEventListener.find(nEventListenerID);
 	if (itemListeners != m_mapEventListener.end())
 	{
-		itemListeners->second.erase(std::find_if(itemListeners->second.begin(), itemListeners->second.end(), [&pEventListener] (HrEventListenerPtr& pListener)
+		itemListeners->second.erase(std::find_if(itemListeners->second.begin(), itemListeners->second.end(), [&pEventListener](HrEventListenerPtr& pListener)
 		{
 			if (pListener == pEventListener)
 			{
@@ -52,57 +158,15 @@ void HrEventDispatcher::RemoveEventListener(HrEventListenerPtr& pEventListener)
 	}
 }
 
-void HrEventDispatcher::DispatcherEvent(HrEvent* pEvent)
+void HrEventDispatcher::UpdateListeners()
 {
-	if (pEvent->GetType() == HrEvent::EnumEventType::KEYBOARD)
+	for (auto& iteLis : m_lisReadyAddListeners)
 	{
-		DispatcherKeyBoardEvent(pEvent);
+		ForceAddEventListener(iteLis);
 	}
-	else if (pEvent->GetType() == HrEvent::EnumEventType::MOUSE)
+	for (auto& iteLis : m_lisReadyRemoveListeners)
 	{
-		DispatcherMouseEvent(pEvent);
-	}
-}
-
-void HrEventDispatcher::DispatcherKeyBoardEvent(HrEvent* pEvent)
-{
-	size_t nEventListenerID = HrEventListenerKeyboard::m_s_nEventListenerKeyboardHashID;
-	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
-	if (listListenersItem != m_mapEventListener.end())
-	{
-		for (auto& listItem : listListenersItem->second)
-		{
-			listItem->OnEvent(pEvent);
-		}
-	}
-}
-
-void HrEventDispatcher::DispatcherMouseEvent(HrEvent* pEvent)
-{
-	size_t nEventListenerID = HrEventListenerMouse::m_s_nEventListenerMouseHashID;
-	auto listListenersItem = m_mapEventListener.find(nEventListenerID);
-	if (listListenersItem != m_mapEventListener.end())
-	{
-		for (auto& listItem : listListenersItem->second)
-		{
-			listItem->OnEvent(pEvent);
-		}
-	}
-}
-
-size_t HrEventDispatcher::GetListenerID(HrEvent* pEvent)
-{
-	switch (pEvent->GetType())
-	{
-	case HrEvent::EnumEventType::KEYBOARD:
-	{
-		return HrEventListenerKeyboard::m_s_nEventListenerKeyboardHashID;
-	}
-	default:
-	{
-		HRASSERT(NULL, "Invalid type");
-		return 0;
-	}
+		ForceRemoveEventListener(iteLis);
 	}
 }
 

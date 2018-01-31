@@ -11,6 +11,7 @@ typedef long HRESULT;
 #endif
 
 #define TIF(x) {HRESULT hr = x; if (static_cast<HRESULT>(hr) < 0){throw std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__));}}
+#define TRE(x) {{throw std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + ":" + x);}}
 
 #endif
 

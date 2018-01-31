@@ -16,18 +16,18 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrRenderTechnique* GetTechniqueByIndex(uint32 nIndex);
-		HrRenderTechnique* GetTechniqueByName(const std::string& strTechniqueName);
+		const HrRenderTechniquePtr& GetTechniqueByIndex(uint32 nIndex);
+		const HrRenderTechniquePtr& GetTechniqueByName(const std::string& strTechniqueName);
 
-		HrRenderEffectParameter* GetParameterByName(const std::string& strParamName);
-		HrRenderEffectStructParameter* GetStructParameterByName(const std::string& strStructName);
+		const HrRenderEffectParameterPtr& GetParameterByName(const std::string& strParamName);
+		const HrRenderEffectStructParameterPtr& GetStructParameterByName(const std::string& strStructName);
 
-		void UpdateAutoEffectParams(HrRenderFrameParameters& renderFrameParameters);
+		void UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 
-		void UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters);
+		void UpdateOneEffectParameter(const HrRenderEffectParameterPtr& renderEffectParameter, const HrRenderFrameParametersPtr&  renderFrameParameters);
 
 	private:
 		size_t m_nHashName;
@@ -36,14 +36,16 @@ namespace Hr
 		std::string m_strFilePath;
 		std::string m_strShaderFile;
 		
-		std::vector<HrShader*> m_vecVertexShaders;
-		std::vector<HrShader*> m_vecPixelShaders;
+		std::unordered_map<std::string, HrShaderPtr> m_mapVertexShaders;
+		std::unordered_map<std::string, HrShaderPtr> m_mapPixelShaders;
+		//std::vector<HrShaderPtr> m_vecVertexShaders;
+		std::vector<HrShaderPtr> m_vecPixelShaders;
 
-		std::vector<HrRenderTechnique*> m_vecRenderTechnique;
+		std::vector<HrRenderTechniquePtr> m_vecRenderTechnique;
 
-		std::vector<HrRenderEffectParameter*> m_vecRenderEffectParameter;
-		std::vector<HrRenderEffectStructParameter*> m_vecRenderEffectStruct;
-		std::vector<HrRenderEffectConstantBuffer*> m_vecRenderConstantBuffer;
+		std::vector<HrRenderEffectParameterPtr> m_vecRenderEffectParameter;
+		std::vector<HrRenderEffectStructParameterPtr> m_vecRenderEffectStruct;
+		std::vector<HrRenderEffectConstantBufferPtr> m_vecRenderConstantBuffer;
 
 	};
 }

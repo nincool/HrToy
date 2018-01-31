@@ -18,37 +18,33 @@ namespace Hr
 
 		void InitResourceManager();
 		
-		HrResource* LoadResource(const std::string& strFile, HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN);
+		HrResourcePtr RetriveResource(const std::string& strFile, HrResource::EnumResourceType resType);
+		
+		HrResourcePtr RetriveOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
+		HrResourcePtr RetriveOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
-		HrResource* GetResource(const std::string& strFile, HrResource::EnumResourceType resType);
-		HrResource* GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
-		HrResource* GetOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
-
-		HrResource* GetSkyBoxResource(const std::string& strFile, HrResource::EnumResourceType resType);
-
-		/*
-			@brief	默认纹理 [3/16/2017 By Hr]
-		*/
+		HrMaterialPtr CreateDefaultMaterial();
 		HrTexture* GetDefaultTexture();
-		/*
-			@brief	默认材质 [2/22/2017 By Hr]
-		*/
-		HrMaterial* GetDefaultMaterial();
-		/*
-			@brief	初始化时默认的效果 [11/15/2016 By Hr]
-		*/
-		HrRenderEffect* GetDefaultRenderEffect();
+		HrRenderEffectPtr GetDefaultRenderEffect();
 
 
 		void ReleaseAllResources();
 	protected:
+		/**
+		 @Comment: 加载资源 [1/30/2018 By Hr]
+		 @Param:
+		 @Return:
+		*/
+		HrResourcePtr LoadResource(const std::string& strFile, HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN);
 		/*
 		@brief	只添加资源并不加载 [11/15/2016 By Hr]
 		*/
-		HrResource* AddModelResource(const std::string& strFile);
-		HrResource* AddEffectResource(const std::string& strFile);
-		HrResource* AddMeshResource(const std::string& strFile);
-		HrResource* AddMaterialResource(const std::string& strFile);
+		HrResourcePtr AddResource(const std::string& strFile, HrResource::EnumResourceType resType);
+
+		HrResourcePtr AddModelResource(const std::string& strFile);
+		HrResourcePtr AddEffectResource(const std::string& strFile);
+		HrResourcePtr AddMeshResource(const std::string& strFile);
+		HrResourcePtr AddMaterialResource(const std::string& strFile);
 		HrResource* AddTextureResource(const std::string& strFile);
 
 		void CreateBuildInTexture();
@@ -56,23 +52,23 @@ namespace Hr
 		void CreateBuildInMaterial();
 
 		HrResource* GetTexture(const std::string& strTextureName);
-		HrResource* GetMesh(const std::string& strMeshName);
-		HrResource* GetEffect(const std::string& strEffectName);
-		HrResource* GetMaterial(const std::string& strMaterialName);
-		HrResource* GetModel(const std::string& strModelName);
+		HrResourcePtr GetMesh(const std::string& strMeshName);
+		HrResourcePtr GetEffect(const std::string& strEffectName);
+		const HrResourcePtr& GetMaterial(const std::string& strMaterialName);
+		HrResourcePtr GetModel(const std::string& strModelName);
 
-		void ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes);
+		void ReleaseResourceCache(std::unordered_map<size_t, HrResourcePtr>& mapRes);
 	protected:
-		std::unordered_map<size_t, HrResource*> m_mapPrefabModels;
-		std::unordered_map<size_t, HrResource*> m_mapMesh;
-		std::unordered_map<size_t, HrResource*> m_mapMaterials;
+		std::unordered_map<size_t, HrResourcePtr> m_mapPrefabModels;
+		std::unordered_map<size_t, HrResourcePtr> m_mapMesh;
+		std::unordered_map<size_t, HrResourcePtr> m_mapMaterials;
 		std::unordered_map<size_t, HrResource*> m_mapTextures;
 		
-		std::unordered_map<size_t, HrResource*> m_mapRenderEffects;
+		std::unordered_map<size_t, HrResourcePtr> m_mapRenderEffects;
 
 		HrTexture* m_pDefaultTexture;
-		HrMaterial* m_pDefaultMaterial;
-		HrRenderEffect* m_pDefaultRenderEffect;
+		HrRenderEffectPtr m_pDefaultRenderEffect;
+		HrMaterialPtr m_pDefaultMaterial;
 	};
 }
 

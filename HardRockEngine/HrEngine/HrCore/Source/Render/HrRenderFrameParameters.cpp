@@ -48,7 +48,7 @@ void HrRenderFrameParameters::SetCurrentScene(const HrScenePtr& pScene)
 	}
 }
 
-void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
+void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr& rend)
 {
 	m_pCurrentRenderable = rend;
 
@@ -56,7 +56,7 @@ void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderable* rend)
 	m_bWorldViewProjMatrixDirty = true;
 }
 
-void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
+void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
 {
 	if (m_pCurrentCamera != pCamera)
 	{
@@ -71,7 +71,7 @@ void HrRenderFrameParameters::SetCurrentCamera(HrCamera* pCamera)
 	}
 }
 
-void HrRenderFrameParameters::SetCurrentMaterial(const HrMaterial* pMaterial)
+void HrRenderFrameParameters::SetCurrentMaterial(const HrMaterialPtr& pMaterial)
 {
 	m_pCurrentMaterial = pMaterial;
 	BOOST_ASSERT(m_pCurrentMaterial);
@@ -155,7 +155,7 @@ const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
 	{
-		m_cameraPosition = m_pCurrentCamera->GetAttachCameraNode()->GetTransform()->GetWorldPosition();
+		//m_cameraPosition = m_pCurrentCamera->GetAttachCameraNode()->GetTransform()->GetWorldPosition();
 		m_bCameraDirty = false;
 	}
 	return m_cameraPosition;

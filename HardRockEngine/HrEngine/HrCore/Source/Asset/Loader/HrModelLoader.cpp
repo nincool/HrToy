@@ -39,6 +39,11 @@ void HrModelLoader::Load(std::string& strFile)
 		std::shared_ptr<HrFBXLoader> pFBXLoader = HrMakeSharedPtr<HrFBXLoader>();
 		pFBXLoader->Load(m_strFileName, m_modelDesc);
 	}
+	else
+	{
+		TRE("unsuported types!");
+		return;
+	}
 
 	//construct default vertexelement
 	std::vector<HrVertexElement> vecVertexElement;
@@ -46,61 +51,58 @@ void HrModelLoader::Load(std::string& strFile)
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-	m_pMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(m_strFileName, HrResource::RT_MESH));
-	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.meshInfo.vecSubMeshInfo.size(); ++nMeshInfoIndex)
+	m_pMesh = HrCheckPointerCast<HrMesh>(HrResourceManager::Instance()->RetriveOrAddResource(m_strFileName, HrResource::RT_MESH));
+	BOOST_ASSERT(!m_pMesh->IsLoaded());
+	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
-		HrModelDescInfo::HrSubMeshInfo& subMeshInfo = m_modelDesc.meshInfo.vecSubMeshInfo[nMeshInfoIndex];
+		HrModelDescInfo::HrSubMeshInfo& subMeshInfo = m_modelDesc.vecSubMeshInfo[nMeshInfoIndex];
 		HrStreamData streamVertexBuffer;
 		MakeVertexStream(subMeshInfo, streamVertexBuffer, vecVertexElement);
-		HrSubMesh* pSubMesh = m_pMesh->AddSubMesh();
-		pSubMesh->SetName(subMeshInfo.strMeshName);
-		HrRenderLayout* pRenderLayout = pSubMesh->GetRenderLayout();
-		pRenderLayout->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
-		pRenderLayout->SetTopologyType(TT_TRIANGLELIST);
+		
+		HrSubMeshPtr pSubMesh = m_pMesh->AddSubMesh(subMeshInfo.strMeshName);
+		pSubMesh->GetRenderLayout()->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 
-		//所有的模型统一材质
-		//BOOST_ASSERT(subMeshInfo.vecMaterialInfo.size() == 1);
-		//HrMaterial* pMaterial = HrResourceManager::Instance()->GetDefaultMaterial();//MakeMaterialResource(subMeshInfo.vecMaterialInfo[0]);
-		//std::vector<HrTexture*> vecTextures = std::move(MakeTextureResource(subMeshInfo.vecTextureFileName));
-		//pSubMesh->SetMaterial(pMaterial);
-		//pSubMesh->SetTexture(vecTextures[0]);
+		//todo material
+		HrMaterialPtr pMaterial = HrResourceManager::Instance()->CreateDefaultMaterial();
+		pSubMesh->SetMaterial(pMaterial);
 	}
 }
 
-void HrModelLoader::FillEmptyModelInfo(HrModelDescInfo::HrMeshInfo& meshInfo)
+void HrModelLoader::FillEmptyModelInfo()
 {
-	HR_UNUSED(meshInfo);
+
 }
 
 HrMaterial* HrModelLoader::MakeMaterialResource(HrModelDescInfo::HrMaterialInfo& materialInfo)
 {
 	//换下Material的名字
-	std::string strFilePath = HrFileUtils::Instance()->GetFilePath(m_strFileName);
-	std::string strFileName = HrFileUtils::Instance()->GetFileName(m_strFileName);
-	materialInfo.strMaterialName = strFilePath + "\\" + strFileName + "-" + materialInfo.strMaterialName;
-	HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
-	if (pMaterial == nullptr)
-	{
-		pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetOrAddResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
-		pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
-	}
+	//std::string strFilePath = HrFileUtils::Instance()->GetFilePath(m_strFileName);
+	//std::string strFileName = HrFileUtils::Instance()->GetFileName(m_strFileName);
+	//materialInfo.strMaterialName = strFilePath + "\\" + strFileName + "-" + materialInfo.strMaterialName;
+	//HrMaterial* pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
+	//if (pMaterial == nullptr)
+	//{
+	//	pMaterial = static_cast<HrMaterial*>(HrResourceManager::Instance()->GetOrAddResource(materialInfo.strMaterialName, HrResource::RT_MATERIAL));
+	//	pMaterial->FillMaterialInfo(materialInfo.v4Ambient, materialInfo.v4Diffuse, materialInfo.v4Specular, materialInfo.v4Emissive, materialInfo.fOpacity);
+	//}
 
-	return pMaterial;
+	//return pMaterial;
+	return nullptr;
 }
 
 std::vector<HrTexture*> HrModelLoader::MakeTextureResource(std::vector<std::string>& vecTextureFile)
 {
 	std::vector<HrTexture*> vecTexture;
-	for (size_t nTexIndex = 0; nTexIndex < vecTextureFile.size(); ++nTexIndex)
-	{
-		std::string strAbsolutePath = HrFileUtils::Instance()->GetFullPathForFileName(vecTextureFile[nTexIndex]);
-		HrTexture* pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath));
-		if (pTexture == nullptr)
-		{
-			pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath, HrResource::RT_TEXTURE));
-		}
-		vecTexture.push_back(pTexture);
-	} 
+	//for (size_t nTexIndex = 0; nTexIndex < vecTextureFile.size(); ++nTexIndex)
+	//{
+	//	std::string strAbsolutePath = HrFileUtils::Instance()->GetFullPathForFileName(vecTextureFile[nTexIndex]);
+	//	HrTexture* pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath));
+	//	if (pTexture == nullptr)
+	//	{
+	//		pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->LoadResource(strAbsolutePath, HrResource::RT_TEXTURE));
+	//	}
+	//	vecTexture.push_back(pTexture);
+	//} 
 	return vecTexture; 
 }
 
@@ -130,7 +132,7 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo
 			}
 			case VEU_TEXTURECOORD:
 			{
-				streamData.AddBuffer((Byte*)&(subMeshInfo.vecTexCoord[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
+				streamData.AddBuffer((Byte*)&(subMeshInfo.vecUV[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			}

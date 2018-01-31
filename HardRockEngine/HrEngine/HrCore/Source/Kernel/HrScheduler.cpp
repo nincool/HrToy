@@ -132,9 +132,9 @@ void HrScheduler::Update(float fDetal)
 	//因为有可能在Update的时候就会销毁，所以应该把准备销毁的缓存起来最后统一销毁
 	if (!m_mapSchedulerTimer.empty())
 	{
-		for (auto itemTargetTimers : m_mapSchedulerTimer)
+		for (auto& itemTargetTimers : m_mapSchedulerTimer)
 		{
-			for (auto itemTimer : itemTargetTimers.second)
+			for (auto& itemTimer : itemTargetTimers.second)
 			{
 				itemTimer->Update(fDetal);
 			}
@@ -143,10 +143,10 @@ void HrScheduler::Update(float fDetal)
 
 	for (auto& itemReadyErase : m_vecReadyTimersInfoReadyErase)
 	{
-		auto itemTargetTimers = m_mapSchedulerTimer.find(itemReadyErase.first);
+		auto& itemTargetTimers = m_mapSchedulerTimer.find(itemReadyErase.first);
 		if (itemTargetTimers != m_mapSchedulerTimer.end())
 		{
-			for (auto itemTimer = itemTargetTimers->second.begin(); itemTimer != itemTargetTimers->second.end(); ++itemTimer)
+			for (auto& itemTimer = itemTargetTimers->second.begin(); itemTimer != itemTargetTimers->second.end(); ++itemTimer)
 			{
 				if ((*itemTimer)->GetHashKey() == itemReadyErase.second)
 				{
@@ -170,7 +170,7 @@ void HrScheduler::Schedule(HrSchedulerFunc callBack, void* pTarget, const std::s
 
 	size_t nTargetHashKey = reinterpret_cast<size_t>(pTarget);
 	size_t nTimerHashKey = HrHashValue(strKey);
-	auto itemTargetTimers = m_mapSchedulerTimer.find(nTargetHashKey);
+	auto& itemTargetTimers = m_mapSchedulerTimer.find(nTargetHashKey);
 	if (itemTargetTimers != m_mapSchedulerTimer.end())
 	{
 #if HR_DEBUG >= 1

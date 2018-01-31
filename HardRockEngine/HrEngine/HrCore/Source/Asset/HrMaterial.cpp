@@ -6,6 +6,7 @@
 #include "HrUtilTools/Include/HrStringUtil.h"
 #include "ThirdParty/rapidjson/include/rapidjson/document.h"
 
+
 using namespace Hr;
 
 HrMaterial::HrMaterial()
@@ -13,22 +14,50 @@ HrMaterial::HrMaterial()
 	m_fOpacity = 0.0f;
 }
 
+HrMaterial::HrMaterial(const HrMaterial& material)
+{
+	m_strMaterialName = material.m_strMaterialName;
+	m_ambient = material.m_ambient;
+	m_diffuse = material.m_diffuse;
+	m_specular = material.m_specular;
+	m_emissive = material.m_emissive;
+	m_fOpacity = material.m_fOpacity;
+	m_arrTextures = material.m_arrTextures;
+	
+	DeclareResource(material.m_strFileName, material.m_strFilePath);
+}
+
+HrMaterial::HrMaterial(const HrMaterialPtr& pMaterial)
+{
+	m_strMaterialName = pMaterial->m_strMaterialName;
+	m_ambient = pMaterial->m_ambient;
+	m_diffuse = pMaterial->m_diffuse;
+	m_specular = pMaterial->m_specular;
+	m_emissive = pMaterial->m_emissive;
+	m_fOpacity = pMaterial->m_fOpacity;
+	m_arrTextures = pMaterial->m_arrTextures;
+
+	DeclareResource(pMaterial->m_strFileName, pMaterial->m_strFilePath);
+}
+
 HrMaterial::~HrMaterial()
 {
 
 }
 
-size_t HrMaterial::CreateHashName(const std::string& strFullFilePath)
+size_t HrMaterial::CreateHashName(const std::string& strHashValue)
 {
-	return HrHashValue(strFullFilePath);
+	return HrHashValue(strHashValue);
 }
 
 void HrMaterial::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
 	m_strFileName = strFileName;
 	m_strFilePath = strFilePath;
+	m_strMaterialName = HrFileUtils::Instance()->GetFileName(m_strFileName);
 	m_resType = HrResource::RT_MATERIAL;
-	m_nHashID = CreateHashName(strFilePath);
+	m_resStatus = HrResource::RS_DECLARED;
+	m_nHashID = CreateHashName(m_strFilePath + m_strUUID);
 }
 
 bool HrMaterial::LoadImpl()
@@ -103,4 +132,14 @@ const float4& HrMaterial::GetEmissive() const
 float HrMaterial::GetOpacity() const
 {
 	return m_fOpacity;
+}
+
+void HrMaterial::SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTexture)
+{
+	m_arrTextures[tsSlot] = pTexture;
+}
+
+const HrTexturePtr& HrMaterial::GetTexture(EnumMaterialTexSlot tsSlot)
+{
+	return m_arrTextures[tsSlot];
 }

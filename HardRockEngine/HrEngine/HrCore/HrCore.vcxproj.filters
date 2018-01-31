@@ -184,12 +184,6 @@
     <ClInclude Include="Include\Event\HrEventListener.h">
       <Filter>Include\Event</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Event\HrEventListenerKeyboard.h">
-      <Filter>Include\Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Event\HrEventKeyboard.h">
-      <Filter>Include\Event</Filter>
-    </ClInclude>
     <ClInclude Include="Include\HrCorePreDeclare.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -262,12 +256,6 @@
     <ClInclude Include="Include\Render\HrSamplerState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Event\HrEventMouse.h">
-      <Filter>Include\Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Event\HrEventListenerMouse.h">
-      <Filter>Include\Event</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrBlendState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -298,20 +286,29 @@
     <ClInclude Include="Include\Render\HrRenderSystem.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderFrame.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kernel\HrWinCoreComponent.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kernel\HrSceneCoreComponent.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Scene\HrSceneObject.h">
       <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrSceneObjectComponent.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrDepthStencil.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponentRender.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponentScene.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponentWin.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponentEvent.h">
+      <Filter>Include\Kernel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -402,12 +399,6 @@
     <ClCompile Include="Source\Event\HrEventDispatcher.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp">
-      <Filter>Source\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Event\HrEventKeyboard.cpp">
-      <Filter>Source\Event</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Kernel\HrDirector.cpp">
       <Filter>Source\Kernel</Filter>
     </ClCompile>
@@ -471,12 +462,6 @@
     <ClCompile Include="Source\Render\HrSamplerState.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Event\HrEventMouse.cpp">
-      <Filter>Source\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Event\HrEventListenerMouse.cpp">
-      <Filter>Source\Event</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrBlendState.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -513,20 +498,32 @@
     <ClCompile Include="Source\Render\HrRenderSystem.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrWinCoreComponent.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrSceneCoreComponent.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrRenderFrame.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\HrSceneObject.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrSceneObjectComponent.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrDepthStencil.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrResource.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponentRender.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponentScene.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponentWin.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp">
+      <Filter>Source\Kernel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

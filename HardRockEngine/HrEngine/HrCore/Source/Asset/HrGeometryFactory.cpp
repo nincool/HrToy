@@ -8,6 +8,7 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Scene/HrSceneNode.h"
+#include "Scene/HrSceneObject.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "Kernel/HrLog.h"
 
@@ -29,31 +30,31 @@ HrGeometryPlane::~HrGeometryPlane()
 
 void HrGeometryPlane::GetBuildInPlaneMesh()
 {
-	HrMesh* pPlaneMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "PLANEMESH", HrResource::RT_MESH));
+	HrMeshPtr pPlaneMesh = HrCheckPointerCast<HrMesh>(HrResourceManager::Instance()->RetriveOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "PLANEMESH", HrResource::RT_MESH));
 	if (!pPlaneMesh->IsLoaded())
 	{
 		CreatePlaneStaticMesh(pPlaneMesh);
 	}
 }
 
-void HrGeometryPlane::CreatePlaneStaticMesh(HrMesh* pMesh)
+void HrGeometryPlane::CreatePlaneStaticMesh(const HrMeshPtr& pMesh)
 {
-	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
+	m_pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
 	BOOST_ASSERT(m_pRenderEffect);
-	m_pRenderTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
-	BOOST_ASSERT(m_pRenderTechnique);
+	m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+	BOOST_ASSERT(m_pCurTechnique);
 
 	float fHalfWidth = m_fWidth * 0.5f;
 	float fHalfHeight = m_fHeight * 0.5f;
 	Vertex1 vertices[6] =
 	{
-		{ float3(-fHalfWidth, -fHalfHeight, 0.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
-		{ float3(-fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
+		{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
+		{ float3(-fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(0.0f, 0.0f) },
+		{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfWidth, fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfWidth, -fHalfHeight, 0.0f), Vector3(0, 0, -1.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfWidth, -fHalfHeight, 0.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
+		{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
+		{ float3(fHalfWidth, -fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 1.0f) },
+		{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
 
 	};
 
@@ -62,18 +63,16 @@ void HrGeometryPlane::CreatePlaneStaticMesh(HrMesh* pMesh)
 	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-
-
-	HrSubMesh* pSubMesh = pMesh->AddSubMesh();
+	const HrSubMeshPtr& pSubMesh = pMesh->AddSubMesh("plane");
 
 	pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
 		, sizeof(vertices)
 		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 		, vecVertexElemet);
 
-	pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-
+	pSubMesh->SetMaterial(HrResourceManager::Instance()->CreateDefaultMaterial());
 	m_pSubMesh = pSubMesh;
+	pMesh->Load();
 }
 
 ////////////////////////////////////
@@ -91,93 +90,93 @@ HrGeometryBox::~HrGeometryBox()
 
 void HrGeometryBox::GetBuildInBoxMesh()
 {
-	HrMesh* pBoxMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH)+"BOXMESH", HrResource::RT_MESH));
-	if (!pBoxMesh->IsLoaded())
-	{
-		CreateBoxStaticMesh(pBoxMesh);
-	}
+	//HrMesh* pBoxMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH)+"BOXMESH", HrResource::RT_MESH));
+	//if (!pBoxMesh->IsLoaded())
+	//{
+	//	CreateBoxStaticMesh(pBoxMesh);
+	//}
 }
 
 void HrGeometryBox::CreateBoxStaticMesh(HrMesh* pMesh)
 {
-	m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	BOOST_ASSERT(m_pRenderEffect);
-	m_pRenderTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
-	BOOST_ASSERT(m_pRenderTechnique);
+	//m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
+	//BOOST_ASSERT(m_pRenderEffect);
+	//m_pRenderTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+	//BOOST_ASSERT(m_pRenderTechnique);
 
-	float fHalfLength = m_fLength * 0.5f;
-	Vertex1 vertices[] =
-	{
-		//front
-		{ float3(-fHalfLength, -fHalfLength, -fHalfLength),  Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f)},
-		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
+	//float fHalfLength = m_fLength * 0.5f;
+	//Vertex1 vertices[] =
+	//{
+	//	//front
+	//	{ float3(-fHalfLength, -fHalfLength, -fHalfLength),  Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f)},
+	//	{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(0.0f, 0.0f) },
+	//	{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f) },
+	//	{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 0.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f), float2(1.0f, 1.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, 0.0f, -1.0f),  float2(0, 1.0f) },
 
-		//right
-		{ float3(fHalfLength, -fHalfLength, -fHalfLength),  Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
-		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	//right
+	//	{ float3(fHalfLength, -fHalfLength, -fHalfLength),  Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
+	//	{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
-		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
 
-		//left
-		{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
-		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
-		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	//left
+	//	{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(0.0f, 0.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
 
-		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
-		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(-1.0f, 0.0f, 0.0f), float2(1.0f, 1.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(-1.0f, 0.0f, 0.0f),  float2(0, 1.0f) },
 
-		//back
-		{ float3(fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f)},
-		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(0.0f, 0.0f) },
-		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
+	//	//back
+	//	{ float3(fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f)},
+	//	{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(0.0f, 0.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
 
-		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
-		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 1.0f) },
-		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 0.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f), float2(1.0f, 1.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, 0.0f, 1.0f),  float2(0, 1.0f) },
 
-		//top
-		{ float3(-fHalfLength, fHalfLength, -fHalfLength),  Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
-		{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	//top
+	//	{ float3(-fHalfLength, fHalfLength, -fHalfLength),  Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(0.0f, 0.0f) },
+	//	{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(fHalfLength, fHalfLength, fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	{ float3(fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f), float2(1.0f, 1.0f) },
+	//	{ float3(-fHalfLength, fHalfLength, -fHalfLength), Vector3(0.0f, 1.0f, 0.0f),  float2(0, 1.0f) },
 
-		//buttom
-		{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
-		{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	//buttom
+	//	{ float3(-fHalfLength, -fHalfLength, fHalfLength),  Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(0.0f, 0.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
-	};
+	//	{ float3(fHalfLength, -fHalfLength, -fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 0.0f) },
+	//	{ float3(fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f), float2(1.0f, 1.0f) },
+	//	{ float3(-fHalfLength, -fHalfLength, fHalfLength), Vector3(0.0f, -1.0f, 0.0f),  float2(0, 1.0f) },
+	//};
 
 
-	std::vector<HrVertexElement> vecVertexElemet;
-	vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
+	//std::vector<HrVertexElement> vecVertexElemet;
+	//vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-	
-	HrSubMesh* pSubMesh = pMesh->AddSubMesh();
-	pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//
+	//HrSubMesh* pSubMesh = pMesh->AddSubMesh();
+	//pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
 
-	m_pSubMesh = pSubMesh;
+	//m_pSubMesh = pSubMesh;
 }
 
 //void HrGeometryBox::ComputeNormal(Vertex1* pVertex, size_t nVertexNum, uint16* pIndex, size_t nIndexNum)
@@ -224,11 +223,11 @@ HrGeometrySkyBox::~HrGeometrySkyBox()
 
 bool HrGeometrySkyBox::LoadImpl()
 {
-	HrMesh* pBoxMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "SKYBOXMESH", HrResource::RT_MESH));
-	if (!pBoxMesh->IsLoaded())
-	{
-		CreateSkyBoxStaticMesh(pBoxMesh);
-	}
+	//HrMesh* pBoxMesh = static_cast<HrMesh*>(HrResourceManager::Instance()->GetOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "SKYBOXMESH", HrResource::RT_MESH));
+	//if (!pBoxMesh->IsLoaded())
+	//{
+	//	CreateSkyBoxStaticMesh(pBoxMesh);
+	//}
 
 	return true;
 }
@@ -244,83 +243,83 @@ void HrGeometrySkyBox::GetBuildInSkyBoxMesh()
 
 void HrGeometrySkyBox::CreateSkyBoxStaticMesh(HrMesh* pMesh)
 {
-	Vertex1 vertices[6];
-	float fDistance = 1000.0f;
-	std::vector<HrVertexElement> vecVertexElemet;
-	vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
+	//Vertex1 vertices[6];
+	//float fDistance = 1000.0f;
+	//std::vector<HrVertexElement> vecVertexElemet;
+	//vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
 
-	std::string strTextureFile = "";
-	HrTexture* pTexture = nullptr; 
+	//std::string strTextureFile = "";
+	//HrTexture* pTexture = nullptr; 
 
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_FRONT, vertices, fDistance);
-	HrSubMesh* pSubMeshFront = pMesh->AddSubMesh();
-	pSubMeshFront->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshFront->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_front.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshFront->SetTexture(pTexture);
-	
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BACK, vertices, fDistance);
-	HrSubMesh* pSubMeshBack = pMesh->AddSubMesh();
-	pSubMeshBack->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshBack->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_back.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshBack->SetTexture(pTexture);
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_FRONT, vertices, fDistance);
+	//HrSubMesh* pSubMeshFront = pMesh->AddSubMesh();
+	//pSubMeshFront->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshFront->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_front.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshFront->SetTexture(pTexture);
+	//
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BACK, vertices, fDistance);
+	//HrSubMesh* pSubMeshBack = pMesh->AddSubMesh();
+	//pSubMeshBack->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshBack->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_back.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshBack->SetTexture(pTexture);
 
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_LEFT, vertices, fDistance);
-	HrSubMesh* pSubMeshLeft = pMesh->AddSubMesh();
-	pSubMeshLeft->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshLeft->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_left.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshLeft->SetTexture(pTexture);
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_LEFT, vertices, fDistance);
+	//HrSubMesh* pSubMeshLeft = pMesh->AddSubMesh();
+	//pSubMeshLeft->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshLeft->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_left.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshLeft->SetTexture(pTexture);
 
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_RIGHT, vertices, fDistance);
-	HrSubMesh* pSubMeshRight = pMesh->AddSubMesh();
-	pSubMeshRight->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshRight->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_right.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshRight->SetTexture(pTexture);
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_RIGHT, vertices, fDistance);
+	//HrSubMesh* pSubMeshRight = pMesh->AddSubMesh();
+	//pSubMeshRight->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshRight->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_right.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshRight->SetTexture(pTexture);
 
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_UP, vertices, fDistance);
-	HrSubMesh* pSubMeshUp = pMesh->AddSubMesh();
-	pSubMeshUp->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshUp->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_up.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshUp->SetTexture(pTexture);
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_UP, vertices, fDistance);
+	//HrSubMesh* pSubMeshUp = pMesh->AddSubMesh();
+	//pSubMeshUp->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshUp->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_up.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshUp->SetTexture(pTexture);
 
-	CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BUTTOM, vertices, fDistance);
-	HrSubMesh* pSubMeshButtom = pMesh->AddSubMesh();
-	pSubMeshButtom->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
-	pSubMeshButtom->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
-	strTextureFile = "Skybox\\demo1\\sunset_down.png";
-	pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->GetOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
-	pSubMeshButtom->SetTexture(pTexture);
+	//CreateSkyPlaneVertice(HrGeometrySkyBox::SPS_BUTTOM, vertices, fDistance);
+	//HrSubMesh* pSubMeshButtom = pMesh->AddSubMesh();
+	//pSubMeshButtom->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
+	//pSubMeshButtom->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//strTextureFile = "Skybox\\demo1\\sunset_down.png";
+	//pTexture = static_cast<HrTexture*>(HrResourceManager::Instance()->RetriveOrLoadResource(strTextureFile, HrResource::RT_TEXTURE));
+	//pSubMeshButtom->SetTexture(pTexture);
 
-	m_pMesh = pMesh;
+	//m_pMesh = pMesh;
 }
 
 void HrGeometrySkyBox::CreateSkyPlaneVertice(EnumSkyPlaneSide side, Vertex1* pVertice, float fDistance)
@@ -406,20 +405,21 @@ HrGeometryFactory::~HrGeometryFactory()
 {
 }
 
-HrSceneNode* HrGeometryFactory::CreatePlane(float fWidth, float fHeight)
+HrSceneNodePtr HrGeometryFactory::CreatePlane(float fWidth, float fHeight)
 {
-	HrGeometryPlane* pPlane = HR_NEW HrGeometryPlane(fWidth, fHeight);
-	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
-	pSceneNode->AttachRenderable(pPlane);
+	std::shared_ptr<HrGeometryPlane> pPlane = HrMakeSharedPtr<HrGeometryPlane>(fWidth, fHeight);
+	HrSceneObjectPtr pPlaneObj = HrMakeSharedPtr<HrSceneObject>(pPlane);
+	HrSceneNodePtr pPlaneNode = HrMakeSharedPtr<HrSceneNode>("plane");
+	pPlaneNode->SetSceneObject(pPlaneObj);
 
-	return pSceneNode;
+	return pPlaneNode;
 }
 
 HrSceneNode* HrGeometryFactory::CreateBox(float fLength)
 {
 	HrGeometryBox* pBox = HR_NEW HrGeometryBox(fLength);
 	HrSceneNode* pSceneNode = HR_NEW HrSceneNode();
-	pSceneNode->AttachRenderable(pBox);
+	//pSceneNode->AttachRenderable(pBox);
 
 	return pSceneNode;
 }

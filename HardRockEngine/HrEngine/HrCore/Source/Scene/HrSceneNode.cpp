@@ -8,7 +8,10 @@
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrSceneManager.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrCoreComponentEvent.h"
 #include "Kernel/HrLog.h"
+#include "Event/HrEvent.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include <boost/cast.hpp>
 
@@ -16,84 +19,25 @@ using namespace Hr;
 
 HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
-	m_bEnable = true;
-
-	m_nodeType = NT_NORMAL;
-	m_pParent = nullptr;
-	m_bRunning = false;
-
-	m_pTransform = HR_NEW HrTransform(this);
-
-	m_bDirtyTransform = false;
-}
-
-HrSceneNode::HrSceneNode(const HrSceneObjectPtr& pSceneObject) : HrIDObject(HrID::GenerateID<HrSceneNode>())
-{
-	m_pSceneObject = pSceneObject;
-
+	m_strName = "NoName";
 	m_bEnable = true;
 	m_nodeType = NT_NORMAL;
-	m_pParent = nullptr;
 	m_bRunning = false;
-	m_pTransform = HR_NEW HrTransform(this);
-
-	m_bDirtyTransform = false;
-
-	AttachRenderable(pSceneObject->GetRenderable().get());
+	m_pTransform = HrMakeSharedPtr<HrTransform>();
 }
 
-HrSceneNode::HrSceneNode(const std::string& strName, HrSceneObjectPtr& pSceneObject) : HrIDObject(HrID::GenerateID<HrSceneNode>())
+HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_strName = strName;
-	m_pSceneObject = pSceneObject;
-	
 	m_bEnable = true;
 	m_nodeType = NT_NORMAL;
-	m_pParent = nullptr;
 	m_bRunning = false;
-	m_pTransform = HR_NEW HrTransform(this);
-
-	m_bDirtyTransform = false;
-
-	AttachRenderable(pSceneObject->GetRenderable().get());
-}
-
-HrSceneNode::HrSceneNode(HrRenderable* pRenderable) : HrIDObject(HrID::GenerateID<HrSceneNode>())
-{
-	m_bEnable = true;
-
-	m_nodeType = NT_NORMAL;
-	m_pParent = nullptr;
-	m_bRunning = false;
-
-	m_pTransform = HR_NEW HrTransform(this);
-
-	m_bDirtyTransform = false;
-
-	AttachRenderable(pRenderable);
-}
-
-HrSceneNode::HrSceneNode(const std::string& strName, HrRenderable* pRenderable) 
-	: HrIDObject(HrID::GenerateID<HrSceneNode>()), m_strName(strName)
-{
-	m_bEnable = true;
-
-	m_nodeType = NT_NORMAL;
-	m_pParent = nullptr;
-	m_bRunning = false;
-
-	m_pTransform = HR_NEW HrTransform(this);
-
-	m_bDirtyTransform = false;
-
-	AttachRenderable(pRenderable);
+	m_pTransform = HrMakeSharedPtr<HrTransform>();
 }
 
 HrSceneNode::~HrSceneNode()
 {
 	m_vecChildrenNode.clear();
-
-	SAFE_DELETE(m_pTransform);
 }
 
 void HrSceneNode::SetName(const std::string& strName)
@@ -106,11 +50,6 @@ const std::string& HrSceneNode::GetName() const
 	return m_strName;
 }
 
-void HrSceneNode::AttachRenderable(HrRenderable* pRenderable)
-{
-	pRenderable->AttachSceneNode(this);
-}
-
 void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 {
 	if (pSceneNode->GetParent() != nullptr)
@@ -119,7 +58,7 @@ void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 		return;
 	}
 
-	pSceneNode->SetParent(this);
+	pSceneNode->SetParent(shared_from_this());
 	if (IsRunning())
 	{
 		pSceneNode->OnEnter();
@@ -131,14 +70,17 @@ void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 void HrSceneNode::OnEnter()
 {
 	m_bRunning = true;
+
+	AddEventListeners();
+
+	if (m_pSceneObject)
+	{
+		m_pSceneObject->OnEnter();
+	}
 	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnEnter();
 	}
-}
-
-void HrSceneNode::OnEnterDidFinish()
-{
 }
 
 void HrSceneNode::OnExist()
@@ -150,13 +92,34 @@ void HrSceneNode::OnExist()
 	}
 }
 
+void HrSceneNode::AddEventListeners()
+{
+	HrDirector::Instance()->GetEventComponent()->AddEventCustomListener(HrEvent::scEventBeginUpdateScene, std::bind(&HrSceneNode::OnBeginRenderScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventComponent()->AddEventCustomListener(HrEvent::scEventEndUpdateScene, std::bind(&HrSceneNode::OnEndRenderScene, this, std::placeholders::_1), this);
+}
+
+void HrSceneNode::RemoveEventListeners()
+{
+	
+}
+
+void HrSceneNode::OnBeginRenderScene(const HrEventPtr& pEvent)
+{
+	
+}
+
+void HrSceneNode::OnEndRenderScene(const HrEventPtr& pEvent)
+{
+
+}
+
 void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
 	if (this->m_bEnable)
 	{
 		if (m_pSceneObject && m_pSceneObject->GetRenderable() && m_pSceneObject->GetRenderable()->CanRender())
 		{
-			pRenderQueue->AddRenderable(this);
+			pRenderQueue->AddRenderable(m_pSceneObject->GetRenderable());
 		}
 		for (auto& item : m_vecChildrenNode)
 		{
@@ -174,27 +137,21 @@ void HrSceneNode::RemoveChildren()
 	m_vecChildrenNode.clear();
 }
 
-void HrSceneNode::UpdateNode()
+void HrSceneNode::UpdateNode(float fDt)
 {
+	m_pTransform->UpdateTransform(fDt);
 
-}
-
-void HrSceneNode::UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters)
-{
-	//todo
 	if (m_pSceneObject)
 	{
-		m_pSceneObject->GetRenderable()->UpdateRenderFrameParameters(renderFrameParameters);
+		m_pSceneObject->Update(fDt, m_pTransform);
 	}
-}
 
-void HrSceneNode::DirtyTransform()
-{
-	m_bDirtyTransform = true;
-	for (auto& itemChild : m_vecChildrenNode)
+	for (auto& iteChild : m_vecChildrenNode)
 	{
-		itemChild->GetTransform()->DirtyTransform();
+		iteChild->UpdateNode(fDt);
 	}
+
+	m_pTransform->SetTransformDirty(false);
 }
 
 bool HrSceneNode::IsRunning() const
@@ -202,7 +159,7 @@ bool HrSceneNode::IsRunning() const
 	return m_bRunning;
 }
 
-void HrSceneNode::SetParent(HrSceneNode* pParent)
+void HrSceneNode::SetParent(const HrSceneNodePtr& pParent)
 {
 	BOOST_ASSERT(pParent);
 	if (pParent->IsRunning())
@@ -210,19 +167,22 @@ void HrSceneNode::SetParent(HrSceneNode* pParent)
 		m_bRunning = true;
 	}
 	m_pParent = pParent;
+	m_pTransform->SetParentTransform(pParent->GetTransform());
 }
 
-HrSceneNode* HrSceneNode::GetParent() const
+HrSceneNodePtr HrSceneNode::GetParent() const
 {
-	return m_pParent;
+	if (m_pParent.expired())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return m_pParent.lock();
+	}
 }
 
-HrRenderable* HrSceneNode::GetRenderable() const
-{
-	return m_pSceneObject->GetRenderable().get();
-}
-
-HrTransform* HrSceneNode::GetTransform() const
+const HrTransformPtr& HrSceneNode::GetTransform() const
 {
 	return m_pTransform;
 }
@@ -269,3 +229,15 @@ bool HrSceneNode::GetEnable() const
 {
 	return m_bEnable;
 }
+
+void HrSceneNode::SetSceneObject(const HrSceneObjectPtr& pSceneObj)
+{
+	m_pSceneObject = pSceneObj;
+	m_pSceneObject->AttachSceneNode(shared_from_this());
+}
+
+const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
+{
+	return m_pSceneObject;
+}
+

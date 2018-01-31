@@ -73,6 +73,9 @@
     <ClInclude Include="Include\HrD3D11FrameBuffer.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrD3D11DepthStencil.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -130,6 +133,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrD3D11FrameBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrD3D11DepthStencil.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

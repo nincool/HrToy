@@ -15,22 +15,22 @@ namespace Hr
 		HrD3D11Shader();
 		~HrD3D11Shader();
 
-		virtual void Bind(HrRender* pRender) override;
+		virtual void Bind(const HrRenderPtr& pRender) override;
 
-		virtual void UnBind(HrRender* pRender) override;
+		virtual void UnBind(const HrRenderPtr& pRender) override;
 
-		virtual void StreamIn(HrStreamData& streamBuffer, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) override;
+		virtual void StreamIn(const HrStreamDataPtr& pStreamBuf, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) override;
 
-		HrStreamData* GetCodeData()
+		const HrStreamDataPtr& GetCodeData()
 		{
 			return m_pShaderBuffer;
 		}
 
-		ID3D11VertexShader* GetVSShader()
+		const ID3D11VertexShaderPtr& GetVSShader()
 		{
 			return m_pVertexShader;
 		}
-		ID3D11PixelShader* GetPSShader()
+		const ID3D11PixelShaderPtr& GetPSShader()
 		{
 			return m_pPixelShader;
 		}
@@ -38,16 +38,16 @@ namespace Hr
 	protected:
 		virtual void BindRenderParameterImpl() override;
 	private:
-		void CreateVertexShader(HrStreamData& streamBuffer);
-		void CreatePixelShader(HrStreamData& streamBuffer);
+		void CreateVertexShader();
+		void CreatePixelShader();
 
 	private:
 		std::string m_strFilePath;
 
-		HrStreamData* m_pShaderBuffer;
+		HrStreamDataPtr m_pShaderBuffer;
 
-		ID3D11VertexShader* m_pVertexShader;
-		ID3D11PixelShader* m_pPixelShader;
+		ID3D11VertexShaderPtr m_pVertexShader;
+		ID3D11PixelShaderPtr m_pPixelShader;
 
 		std::vector<ID3D11Buffer*> m_vecD3D11ConstBuffer;
 		std::vector<ID3D11ShaderResourceView*> m_vecD3D11SRV;

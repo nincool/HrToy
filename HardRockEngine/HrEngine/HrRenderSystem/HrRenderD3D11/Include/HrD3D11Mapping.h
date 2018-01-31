@@ -3,6 +3,7 @@
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderPrerequisite.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11GraphicsBuffer.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrD3D11Device.h"
@@ -16,11 +17,14 @@ namespace Hr
 		static LPCSTR GetInputElementSemanticName(EnumVertexElementUsage usage);
 
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
+		
 		//拓扑类型
 		static D3D_PRIMITIVE_TOPOLOGY GetTopologyType(EnumTopologyType topologyType);
+		
 		//索引缓存格式
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
+		//Shader Data type
 		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
 		static uint32 GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType);
 
@@ -29,8 +33,12 @@ namespace Hr
 		static D3D11_BIND_FLAG GetGraphicsBindFlag(HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag);
 
 		static D3D11_MAP GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag);
-		//图形像素格式
+		
+		//EnumPixelFormat <=> DXGI_FORMAT
 		static DXGI_FORMAT GetPixelFormat(EnumPixelFormat pixelFormat);
+		static EnumPixelFormat GetPixelFormat(DXGI_FORMAT dxPixelFormat);
+		
+
 	
 		static D3D11_FILL_MODE GetFillMode(EnumRasterizerFillModel fillMode);
 		static D3D11_CULL_MODE GetCullMode(EnumRasterizerCullModel cullMode);
@@ -43,6 +51,10 @@ namespace Hr
 		//Blend
 		static D3D11_BLEND GetBlend(EnumAlphaBlendFactor blendFactor);
 		static D3D11_BLEND_OP GetBlendOperation(EnumBlendOperation blendOp);
+
+		//HrTexture::EnumTextureUsage <=> D3D11_USAGE
+		static D3D11_USAGE GetTextureUsage(HrTexture::EnumTextureUsage usage);
+		static HrTexture::EnumTextureUsage GetTextureUsage(D3D11_USAGE usage);
 	};
 }
 

@@ -5,6 +5,7 @@
 using namespace Hr;
 using namespace std::experimental;
 
+std::string HrFileUtils::m_s_strSeparator = "\\";
 
 HrFileUtils::HrFileUtils()
 {
@@ -12,8 +13,8 @@ HrFileUtils::HrFileUtils()
 	::GetModuleFileNameA(nullptr, cBuf, sizeof(cBuf));
 	std::string strAppPath = cBuf;
 
-	m_strAppPath = strAppPath.substr(0, strAppPath.rfind("\\"));
-	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind("\\"));
+	m_strAppPath = strAppPath.substr(0, strAppPath.rfind(m_s_strSeparator));
+	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind(m_s_strSeparator));
 
 	AddSearchPath(m_strAppPath += "\\");
 	AddSearchPath(strAssetPath + "\\");
@@ -53,7 +54,7 @@ std::string HrFileUtils::GetFullPathForFileName(const std::string& strFileName) 
 	if (!filePath.is_absolute())
 	{
 		filesystem::path fileFullPath;
-		for (auto item : m_vecSearchPaths)
+		for (auto& item : m_vecSearchPaths)
 		{
 			fileFullPath = item / filePath;
 			if (filesystem::exists(fileFullPath))

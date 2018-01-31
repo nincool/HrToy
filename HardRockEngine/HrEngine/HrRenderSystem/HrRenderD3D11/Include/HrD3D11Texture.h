@@ -11,53 +11,57 @@ namespace Hr
 	class HrD3D11Texture : public HrTexture
 	{
 	public:
-		/// Enums describing buffer usage; not mutually exclusive
-		enum EnumTextureUsage
+		enum EnumD3DTEXTURE_USED
 		{
-			TU_GPUREAD_GPUWRITE,
-			TU_GPUREAD_CPUWRITE,
-			TU_GPUREAD_IMMUTABLE,
-			TU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE,
+			D3D_TEX_RENDERTARGETVIEW,
+			D3D_TEX_DEPTHSTENCILVIEW,
 		};
 	public:
-		HrD3D11Texture(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext
-			, EnumTextureType texType
+		HrD3D11Texture(EnumTextureType texType
+			, uint32 nWidth
+			, uint32 nHeight
 			, uint32 nSampleCount
-			, uint32 nSampleQuality);
+			, uint32 nSampleQuality
+			, EnumD3DTEXTURE_USED texUsage);
+
 		~HrD3D11Texture();
 
-		ID3D11Resource* GetD3DResource() const { return m_pD3DResource; }
-		ID3D11ShaderResourceView* GetD3D11SRV() const { return m_pD3DSRV; }
+		const ID3D11RenderTargetViewPtr& GetD3DRenderTargetView();
+		const ID3D11DepthStencilViewPtr& GetD3DDepthStencilView();
 
+		const ID3D11ResourcePtr& GetD3D11Resource();
 	protected:
-		virtual void CreateTexture() override;
-		virtual void CreateSRV() override;
-	protected:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
-		ID3D11Resource* m_pD3DResource;
+		ID3D11DevicePtr m_pD3D11Device;
+		ID3D11DeviceContextPtr m_pD3D11Context;
 
-		ID3D11ShaderResourceView* m_pD3DSRV;
+		EnumD3DTEXTURE_USED m_texUsage;
 
+		ID3D11ResourcePtr m_pD3DTexture;
+
+		ID3D11RenderTargetViewPtr m_pRenderTargetView;
+		ID3D11DepthStencilViewPtr m_pDepthStencilView;
 	};
 
 	class HrD3D11Texture2D : public HrD3D11Texture
 	{
 	public:
-		HrD3D11Texture2D(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext
-			, EnumTextureType texType
+		HrD3D11Texture2D(uint32 nWidth
+			, uint32 nHeight
+			, EnumD3DTEXTURE_USED texUsage);
+		HrD3D11Texture2D( uint32 nWidth
+			, uint32 nHeight
 			, uint32 nSampleCount
-			, uint32 nSampleQuality);
+			, uint32 nSampleQuality
+			, EnumD3DTEXTURE_USED texUsage);
+		HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DTEXTURE_USED texUsage);
+
 		~HrD3D11Texture2D();
 
 	protected:
-		virtual void CreateTexture() override;
-		virtual void CreateSRV() override;
-
+		bool CreateRenderTargetView();
+		bool CreateDepthStencilView();
 	protected:
-		ID3D11Texture2D* m_pD3DTexture2D;
+	
 	};
 }
 

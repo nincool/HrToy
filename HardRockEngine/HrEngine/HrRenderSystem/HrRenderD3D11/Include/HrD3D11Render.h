@@ -14,7 +14,7 @@ namespace Hr
 	class HrD3D11Device;
 	class IRenderDemo;
 
-	class HrD3D11Render : public HrRender
+	class HrD3D11Render : public HrRender, public std::enable_shared_from_this<HrD3D11Render>
 	{
 	public:
 		HrD3D11Render();
@@ -23,15 +23,12 @@ namespace Hr
 	public:
 		virtual bool Init() override;
 
-		virtual void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
-		virtual const HrRenderFramePtr& GetCurrentFrameBuffer() override;
+		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
+		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
 
-		virtual void SetCurrentViewPort(HrViewPort* pViewPort) override;
-		
-		virtual void ClearRenderTargetView() override;
-		virtual void ClearDepthStencilView() override;
+		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) override;
 
-		virtual void Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* pRenderLayout) override;
+		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) override;
 		virtual void SwapChain() override;
 
 		virtual void ReleaseRenderEngine() override;
@@ -43,8 +40,6 @@ namespace Hr
 		/////////////////////////////--- RenderTest ---/////////////////////////////////
 	public:
 		HrRenderFramePtr m_pCurFrameBuffer;
-
-		HrD3D11RenderTargetPtr m_pRenderTarget;
 	};
 }
 

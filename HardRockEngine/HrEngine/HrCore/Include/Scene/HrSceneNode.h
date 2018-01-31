@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrSceneNode : public HrIDObject
+	class HR_CORE_API HrSceneNode : public HrIDObject, public std::enable_shared_from_this<HrSceneNode>
 	{
 	public:
 		enum EnumNodeType
@@ -18,34 +18,27 @@ namespace Hr
 
 	public:
 		HrSceneNode();
-		HrSceneNode(const HrSceneObjectPtr& pSceneObject);
-		HrSceneNode(const std::string& strName, HrSceneObjectPtr& pSceneObject);
-		
-		//deprecated
-		HrSceneNode(HrRenderable* pRenderable);
-		//deprecated
-		HrSceneNode(const std::string& strName, HrRenderable* pRenderable);
+		HrSceneNode(const std::string& strName);
 		
 		virtual ~HrSceneNode();
 
 		EnumNodeType GetNodeType() { return m_nodeType; }
 
-		void AttachRenderable(HrRenderable* pRenderable);
-
 		void SetName(const std::string& strName);
 		const std::string& GetName() const;
 
+		void SetSceneObject(const HrSceneObjectPtr& pSceneObj);
+		const HrSceneObjectPtr& GetSceneObject();
+
 		void SetEnable(bool bEnable);
 		bool GetEnable() const;
-		
-		void SetParent(HrSceneNode* pParent);
-		HrSceneNode* GetParent() const;
+
+		void SetParent(const HrSceneNodePtr& pParent);
+		HrSceneNodePtr GetParent() const;
 		HrSceneNode* GetChildByName(const std::string& strName) const;
 		HrSceneNode* GetNodeByNameFromHierarchy(const std::string& strName);
-
-		HrRenderable* GetRenderable() const;
 		
-		HrTransform* GetTransform() const;
+		const HrTransformPtr& GetTransform() const;
 
 		void AddChild(const HrSceneNodePtr& pSceneNode);
 		void RemoveChildren();
@@ -53,42 +46,31 @@ namespace Hr
 		bool IsRunning() const;
 
 		virtual void OnEnter();
-		virtual void OnEnterDidFinish();
 		virtual void OnExist();
+		virtual void UpdateNode(float fDt = 0.0f);
 
-		//查找可渲染物件并且加入到渲染队列
 		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
-		
-		virtual void UpdateNode();
-		void UpdateRenderParamData(HrRenderFrameParameters& renderFrameParameters);
 
-		void DirtyTransform();
+		void OnBeginRenderScene(const HrEventPtr& pEvent);
+		void OnEndRenderScene(const HrEventPtr& pEvent);
+	private:
+		void AddEventListeners();
+		void RemoveEventListeners();
 
 	protected:
-		//节点类型
 		EnumNodeType m_nodeType;
-		
-		//Scene中实际的节点对象
 		HrSceneObjectPtr m_pSceneObject;
 
 		std::string m_strName;
 		bool m_bEnable;
 		bool m_bRunning;
 
+		//parent
+		std::weak_ptr<HrSceneNode> m_pParent;
 		//children
 		std::vector<HrSceneNodePtr> m_vecChildrenNode;
 
-		
-		//HrRenderable* m_pRenderable;
-		
-	
-		//deprecated
-		HrSceneNode* m_pParent;
-		//std::vector<HrSceneNode*> m_vecChildNode;
-
-		HrTransform* m_pTransform;
-
-		bool m_bDirtyTransform;
+		HrTransformPtr m_pTransform;
 	};
 }
 

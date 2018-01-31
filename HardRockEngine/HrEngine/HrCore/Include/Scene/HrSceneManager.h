@@ -14,19 +14,20 @@ namespace Hr
 		virtual void RunScene(const HrScenePtr& pScene);
 		virtual void StopScene();
 
-		virtual void UpdateScene(float fDelta);
+		virtual void UpdateScene(float fDeltaTime);
 		virtual void RenderScene();
 		virtual void Destroy();
 	
 		const HrScenePtr& GetRunningScene();
 
 	protected:
-		void FlushScene();
+		//void FlushScene();
 		bool CheckSceneRunning();
 	
 	private:
 		HrScenePtr m_pRunningScene;
 		HrRenderQueuePtr m_pRenderQueue;
+		
 		HrCamera* m_pCurrentCamera;
 
 		bool m_bSceneRunning;

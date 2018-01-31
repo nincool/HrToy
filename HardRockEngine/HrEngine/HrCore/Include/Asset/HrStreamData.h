@@ -12,15 +12,15 @@ namespace Hr
 		HrStreamData(uint32 nStreamLength);
 		~HrStreamData();
 
-		HrStreamData& operator=(HrStreamData& streamData);
+		HrStreamData& operator=(const HrStreamData& streamData);
 		
-		void CopyFrom(HrStreamData& streamData);
+		void CopyFrom(const HrStreamData& streamData);
 
 		Byte* ResizeBuffer(uint64 nLength);
 		Byte* GetBufferPoint();
 		const Byte* GetBufferPoint() const;
 		
-		uint64 GetBufferSize();
+		uint64 GetBufferSize() const;
 		uint64 GetBufferSizeWithoutNULLTerminator();
 
 		void ClearBuffer();

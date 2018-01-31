@@ -2,17 +2,16 @@
 #include "Render/HrVertex.h"
 #include "Render/HrRenderFactory.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrRenderCoreComponent.h"
-
+#include "Kernel/HrCoreComponentRender.h"
 #include "Render/HrRenderSystem.h"
 
 using namespace Hr;
 
 HrRenderLayout::HrRenderLayout()
 {
-	m_pVertex = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateVertex();
-	m_pHDVertexBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateHardwareBuffer();
-	m_pHDIndexBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateHardwareBuffer();
+	m_pVertex = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateVertex();
+	m_pVertexBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pIndexBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
 
 	m_topologyType = TT_TRIANGLELIST;
 	m_indexBufferType = IT_16BIT;
@@ -26,9 +25,6 @@ HrRenderLayout::HrRenderLayout()
 
 HrRenderLayout::~HrRenderLayout()
 {
-	SAFE_DELETE(m_pVertex);
-	SAFE_DELETE(m_pHDVertexBuffer);
-	SAFE_DELETE(m_pHDIndexBuffer);
 }
 
 void HrRenderLayout::SetTopologyType(EnumTopologyType topologyType)
@@ -41,7 +37,7 @@ void HrRenderLayout::BindVertexBuffer(const char* pBuffer
 	, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 	, std::vector<HrVertexElement>& vecVertexElement)
 {
-	m_pHDVertexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_VERTEXT);
+	m_pVertexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_VERTEXT);
 	m_pVertex->AddElementArray(vecVertexElement);
 	m_nVertices = nBufferSize / m_pVertex->GetVertexSize();
 }
@@ -50,7 +46,7 @@ void HrRenderLayout::BindIndexBuffer(const char* pBuffer, uint32 nBufferSize, Hr
 {
 	m_indexBufferType = indexType;
 	m_nIndices = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
-	m_pHDIndexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_INDEX);
+	m_pIndexBuffer->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_INDEX);
 }
 
 uint32 HrRenderLayout::GetVertexSize()
@@ -65,7 +61,7 @@ EnumTopologyType HrRenderLayout::GetTopologyType()
 
 bool HrRenderLayout::UseIndices()
 {
-	return m_pHDIndexBuffer->GetByteWidth();
+	return m_pIndexBuffer->GetByteWidth();
 }
 
 void HrRenderLayout::SetIndexBufferType(EnumIndexType indexType)

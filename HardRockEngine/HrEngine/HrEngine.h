@@ -5,8 +5,7 @@
 #include "HrCore/Include/Kernel/HrDirector.h"
 
 #include "HrCore/Include/Event/HrEventDispatcher.h"
-#include "HrCore/Include/Event/HrEventListenerKeyboard.h"
-#include "HrCore/Include/Event/HrEventListenerMouse.h"
+#include "HrCore/Include/Event/HrEventListener.h"
 
 #include "HrCore/Include/Asset/HrRenderEffect.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
@@ -14,11 +13,9 @@
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 
-
-
-#include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Scene/HrSceneImported.h"
+#include "HrCore/Include/Scene/HrSceneNode.h"
 
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrCore/Include/Kernel/HrScheduler.h"

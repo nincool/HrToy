@@ -1,13 +1,10 @@
 #include "Render/HrRenderFrame.h"
+#include "Render/HrViewPort.h"
 
 using namespace Hr;
 
 HrRenderFrame::HrRenderFrame()
 {
-	m_nLeft = 0;
-	m_nBottom = 0;
-	m_nWidth = 0;
-	m_nHeight = 0;
 	m_clearDepth = 1.0f;
 	m_clearStencil = 0.0f;
 
@@ -16,7 +13,6 @@ HrRenderFrame::HrRenderFrame()
 
 HrRenderFrame::~HrRenderFrame()
 {
-
 }
 
 void HrRenderFrame::SetClearColor(const HrColor& color)
@@ -29,44 +25,43 @@ void HrRenderFrame::SetClearDepth(float fDepth)
 	m_clearDepth = fDepth;
 }
 
-uint32 HrRenderFrame::GetLeft() const
+void HrRenderFrame::AddViewPort(const HrViewPortPtr& pViewPort)
 {
-	return m_nLeft;
+	if (m_mapViewPorts.find(pViewPort->GetZOrder()) != m_mapViewPorts.end())
+	{
+		TRE("HrRenderFrame::AddViewPort Error! can not add a same zOrder");
+	}
+	
+	m_mapViewPorts.insert(std::make_pair(pViewPort->GetZOrder(), pViewPort));
 }
 
-uint32 HrRenderFrame::GetBottom() const
+const HrViewPortPtr& HrRenderFrame::GetViewPort(uint32 zOrder) const
 {
-	return m_nBottom;
+	auto itemViewPort = m_mapViewPorts.find(zOrder);
+	if (itemViewPort != m_mapViewPorts.end())
+	{
+		return itemViewPort->second;
+	}
+
+	return nullptr;
 }
 
-uint32 HrRenderFrame::GetWidht() const
+void HrRenderFrame::AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget)
 {
-	return m_nWidth;
+	BOOST_ASSERT(attachLayer < HrRenderFrame::RTL_MAX);
+	m_arrRenderTargets[attachLayer] = pRenderTarget;
 }
 
-uint32 HrRenderFrame::GetHeight() const
+void HrRenderFrame::DetachRenderTarget(EnumRenderTargetLayer attachLayer)
 {
-	return m_nHeight;
+	if (m_arrRenderTargets[attachLayer])
+	{
+		m_arrRenderTargets[attachLayer].reset();
+	}
 }
 
-const HrViewPortPtr& HrRenderFrame::GetViewPort() const
+const std::map<uint32, Hr::HrViewPortPtr>& HrRenderFrame::GetAllViewPorts()
 {
-	return m_pCurViewPort;
+	return m_mapViewPorts;
 }
-
-void HrRenderFrame::SetViewPort(const HrViewPortPtr& pViewPort)
-{
-	m_pCurViewPort = pViewPort;
-}
-
-void HrRenderFrame::AttachRenderTarget(HrRenderTargetPtr& pRenderTarget)
-{
-	m_pRenderTarget = pRenderTarget;
-}
-
-void HrRenderFrame::DetachRenderTarget()
-{
-	m_pRenderTarget.reset();
-}
-
 

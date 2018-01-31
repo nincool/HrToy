@@ -62,7 +62,7 @@ namespace Hr
 	protected:
 		HrSceneInfo m_sceneDataInfo;
 
-		HrCameraNodePtr m_pSceneMainCamera;
+		HrSceneNodePtr m_pSceneMainCamera;
 
 	};
 }

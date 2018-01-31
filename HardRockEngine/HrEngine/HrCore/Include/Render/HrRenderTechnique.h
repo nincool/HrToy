@@ -14,14 +14,14 @@ namespace Hr
 		size_t HashName();
 		
 		size_t GetRenderPassNum() { return m_vecPass.size(); }
-		HrRenderPass* GetRenderPass(uint32 nIndex);
+		const HrRenderPassPtr& GetRenderPass(uint32 nIndex);
 
-		HrRenderPass* AddPass(std::string strPassName);
+		HrRenderPassPtr AddPass(const std::string& strPassName);
 
 	protected:
 		size_t m_nHashName;
 		std::string m_strTechniqueName;
-		std::vector<HrRenderPass*> m_vecPass;
+		std::vector<HrRenderPassPtr> m_vecPass;
 	};
 }
 

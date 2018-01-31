@@ -22,7 +22,7 @@
 #include <boost/format.hpp>
 #include <boost/functional/hash.hpp>
 
-#include "Kernel/HrRenderCoreComponent.h"
+#include "Kernel/HrCoreComponentRender.h"
 
 #include "Render/HrRenderSystem.h"
 
@@ -31,49 +31,15 @@ using namespace Hr;
 
 HrRenderEffect::HrRenderEffect()
 {
-	//m_pEffectStreamBuffer = MakeSharedPtr<HrStreamData>();
-	//for testing
 }
 
 HrRenderEffect::~HrRenderEffect()
 {
-	for (auto& itemRT : m_vecRenderTechnique)
-	{
-		SAFE_DELETE(itemRT);
-	}
-	m_vecRenderTechnique.clear();
-
-	for (auto& item : m_vecRenderEffectStruct)
-	{
-		SAFE_DELETE(item);
-	}
-	m_vecRenderEffectStruct.clear();
-
-	for (auto item : m_vecRenderEffectParameter)
-	{
-		SAFE_DELETE(item);
-	}
-	m_vecRenderEffectParameter.clear();
-
-	for (auto item : m_vecRenderConstantBuffer)
-	{
-		SAFE_DELETE(item);
-	}
-	m_vecRenderConstantBuffer.clear();
-
-	for (auto& item : m_vecVertexShaders)
-	{
-		SAFE_DELETE(item);
-	}
-	for (auto& item : m_vecPixelShaders)
-	{
-		SAFE_DELETE(item);
-	}
 }
 
 size_t HrRenderEffect::CreateHashName(const std::string& strFullFilePath)
 {
-	return HrHashValue(strFullFilePath);
+	return HrHashValue(strFullFilePath + ".Hr_Effect");
 }
 
 void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
@@ -82,7 +48,7 @@ void HrRenderEffect::DeclareResource(const std::string& strFileName, const std::
 	HRASSERT(!m_strFilePath.empty(), "HrRenderEffect::DeclareResource");
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_EFFECT;
-
+	m_resStatus = HrResource::RS_DECLARED;
 	m_nHashID = CreateHashName(m_strFilePath);
 }
 
@@ -106,62 +72,62 @@ bool HrRenderEffect::LoadImpl()
 	}
 
 	const rapidjson::Value& sceneRootInfo = d["EFFECT_ROOT"];
-
 	{
-		std::string strShadeFile = sceneRootInfo["SHADER_FILE"].GetString();
-		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShadeFile);
+		std::string strShaderFile = sceneRootInfo["SHADER_FILE"].GetString();
+		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShaderFile);
 
-		HrStreamDataPtr pShaderFileData = HrFileUtils::Instance()->GetFileData(m_strShaderFile);
-		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShaderCompiler();
+		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
 
 		int nTempTechniqueIndex = 0;
 		while (true)
 		{
-			boost::format fmtTechniqueItem("TECHNIQUE_%1%");
-			std::string strTechniqueItem = (fmtTechniqueItem % nTempTechniqueIndex).str();
+			std::string strTechniqueItem = (boost::format("TECHNIQUE_%1%") % nTempTechniqueIndex).str();
 			if (sceneRootInfo.HasMember(strTechniqueItem.c_str()))
 			{
 				const rapidjson::Value& techniqueInfo = sceneRootInfo[strTechniqueItem.c_str()];
-				HrRenderTechnique* pRenderTechnique = HR_NEW HrRenderTechnique(techniqueInfo["NAME"].GetString());
+				HrRenderTechniquePtr pRenderTechnique = HrMakeSharedPtr<HrRenderTechnique>(techniqueInfo["NAME"].GetString());
 				m_vecRenderTechnique.push_back(pRenderTechnique);
 
 				int nTempPassIndex = 0;
 				while (true)
 				{
-					boost::format fmtPassItem("PASS_%1%");
-					std::string strPassName = (fmtPassItem % nTempPassIndex).str();
+					std::string strPassName = (boost::format("PASS_%1%") % nTempPassIndex).str();
 					if (techniqueInfo.HasMember(strPassName.c_str()))
 					{
 						const rapidjson::Value& passInfo = techniqueInfo[strPassName.c_str()];
-						HrRenderPass* pRenderPass = pRenderTechnique->AddPass(passInfo["NAME"].GetString());
+						HrRenderPassPtr pRenderPass = pRenderTechnique->AddPass(passInfo["NAME"].GetString());
 						{
 							const rapidjson::Value& shaderInfo = passInfo["SHADER"];
 							//shader
 							{
 								std::string strVertexEnterPoint = shaderInfo["VERTEX_SHADER"].GetString();
-								HrStreamData effectStreamBuffer;
-								pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_VERTEX_SHADER, strVertexEnterPoint, effectStreamBuffer);
-								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
-								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+								if (pShaderCompiler->CompileShaderFromCode(strVertexEnterPoint, HrShader::ST_VERTEX_SHADER))
+								{
+									HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+									pVertexShader->StreamIn(pShaderCompiler->GetCompiledData(strVertexEnterPoint), m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 
-								HrShader* pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShader();
-								pVertexShader->StreamIn(effectStreamBuffer, m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
-
-								pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
-								m_vecVertexShaders.push_back(pVertexShader);
+									pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+									m_mapVertexShaders.insert(std::make_pair(strVertexEnterPoint, pVertexShader));
+								}
+								else
+								{
+									TRE("compiler shader error!");
+								}
 							}
 							{
 								std::string strPixelEnterPoint = shaderInfo["PIXEL_SHADER"].GetString();
-								HrStreamData effectStreamBuffer;
-								pShaderCompiler->CompileShaderFromCode(m_strShaderFile, *pShaderFileData.get(), HrShader::ST_PIXEL_SHADER, strPixelEnterPoint, effectStreamBuffer);
-								pShaderCompiler->ReflectEffectParameters(effectStreamBuffer, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
-								pShaderCompiler->StripCompiledCode(effectStreamBuffer);
+								if (pShaderCompiler->CompileShaderFromCode(strPixelEnterPoint, HrShader::ST_PIXEL_SHADER))
+								{
+									HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+									pPixelShader->StreamIn(pShaderCompiler->GetCompiledData(strPixelEnterPoint), m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
 
-								HrShader* pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateShader();
-								pPixelShader->StreamIn(effectStreamBuffer, m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
-
-								pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
-								m_vecPixelShaders.push_back(pPixelShader);
+									pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
+									m_mapPixelShaders.insert(std::make_pair(strPixelEnterPoint, pPixelShader));
+								}
+								else
+								{
+									TRE("compiler shader error!");
+								}
 							}
 						}
 						//DepthStencil
@@ -244,8 +210,8 @@ bool HrRenderEffect::LoadImpl()
 		}
 
 		pShaderCompiler->CreateEffectParameters(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer);
-		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecVertexShaders);
-		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_vecPixelShaders);
+		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_mapVertexShaders);
+		pShaderCompiler->BindParametersToShader(m_vecRenderEffectParameter, m_vecRenderEffectStruct, m_vecRenderConstantBuffer, m_mapPixelShaders);
 	}
 
 	return true;
@@ -256,18 +222,18 @@ bool HrRenderEffect::UnloadImpl()
 	return true;
 }
 
-void HrRenderEffect::UpdateAutoEffectParams(HrRenderFrameParameters& renderFrameParameters)
+void HrRenderEffect::UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pRenderFrameParameters)
 {
 	for (auto& item : m_vecRenderEffectStruct)
 	{
 		for (uint32 nIndex = 0; nIndex < item->ElementNum(); ++nIndex)
 		{
-			UpdateOneEffectParameter(*(item->ParameterByIndex(nIndex)), renderFrameParameters);
+			UpdateOneEffectParameter(item->ParameterByIndex(nIndex), pRenderFrameParameters);
 		}
 	}
 	for (auto& item : m_vecRenderEffectParameter)
 	{
-		UpdateOneEffectParameter(*item, renderFrameParameters);
+		UpdateOneEffectParameter(item, pRenderFrameParameters);
 	}
 
 	for (auto& item : m_vecRenderConstantBuffer)
@@ -276,14 +242,14 @@ void HrRenderEffect::UpdateAutoEffectParams(HrRenderFrameParameters& renderFrame
 	}
 }
 
-void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEffectParameter, HrRenderFrameParameters& renderFrameParameters)
+void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& pRenderEffectParameter, const HrRenderFrameParametersPtr& pRenderFrameParameters)
 {
-	switch (renderEffectParameter.ParamType())
+	switch (pRenderEffectParameter->ParamType())
 	{
 	case RPT_WORLD_MATRIX:
 	{
-		if (renderFrameParameters.WorldMatrixDirty())
-			renderEffectParameter = renderFrameParameters.GetWorldMatrix();
+		if (pRenderFrameParameters->WorldMatrixDirty())
+			*pRenderEffectParameter = pRenderFrameParameters->GetWorldMatrix();
 		break;
 	}
 	case RPT_INVERSE_WROLD_MATRIX:
@@ -296,19 +262,19 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 	}
 	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
 	{
-		if (renderFrameParameters.InverseTransposeWorldMatrixDirty())
-			renderEffectParameter = renderFrameParameters.GetInverseTransposeWorldMatrix();
+		//if (renderFrameParameters.InverseTransposeWorldMatrixDirty())
+		//	renderEffectParameter = renderFrameParameters.GetInverseTransposeWorldMatrix();
 		break;
 	}
 	case RPT_WORLD_VIEW_PROJ_MATRIX:
 	{
-		if (renderFrameParameters.WorldViewProjMatrixDirty())
-			renderEffectParameter = renderFrameParameters.GetWorldViewProjMatrix();
+		if (pRenderFrameParameters->WorldViewProjMatrixDirty())
+			*pRenderEffectParameter = pRenderFrameParameters->GetWorldViewProjMatrix();
 		break;
 	}
 	case RPT_CAMERA_POSITION:
 	{
-		renderEffectParameter = renderFrameParameters.GetCameraPosition();
+		//renderEffectParameter = renderFrameParameters.GetCameraPosition();
 		break;
 	}
 
@@ -318,68 +284,68 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 	}
 	case RPT_AMBIENT_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetAmbientColor();
+		//renderEffectParameter = renderFrameParameters.GetAmbientColor();
 		break;
 	}
 	case RPT_LIGHTS_NUM:
 	{
-		renderEffectParameter = renderFrameParameters.GetLightsNum();
+		//renderEffectParameter = renderFrameParameters.GetLightsNum();
 		break;
 	}
 	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetDirectionalLightDiffuseColors();
+		//renderEffectParameter = renderFrameParameters.GetDirectionalLightDiffuseColors();
 		break;
 	}
 	case RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetDirectionalLightSpecularColors();
+		//renderEffectParameter = renderFrameParameters.GetDirectionalLightSpecularColors();
 		break;
 	}
 	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetDirectionalLightDirections();
+		//renderEffectParameter = renderFrameParameters.GetDirectionalLightDirections();
 		break;
 	}
 	//µ„π‚‘¥
 	case RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetPointLightDiffuseColors();
+		//renderEffectParameter = renderFrameParameters.GetPointLightDiffuseColors();
 		break;
 	}
 	case RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetPointLightSpecularColors();
+		//renderEffectParameter = renderFrameParameters.GetPointLightSpecularColors();
 		break;
 	}
 	case RPT_POINT_LIGHT_POSITION_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetPointLightPositions();
+		//renderEffectParameter = renderFrameParameters.GetPointLightPositions();
 		break;
 	}
 	case RPT_POINT_LIGHT_ATTENUATION_ARRAY:
 	{
-		renderEffectParameter = renderFrameParameters.GetPointLightAttenuations();
+		//renderEffectParameter = renderFrameParameters.GetPointLightAttenuations();
 		break;
 	}
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialAmbient();
+		//renderEffectParameter = renderFrameParameters.GetMaterialAmbient();
 		break;
 	}
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialDiffuse();
+		//renderEffectParameter = renderFrameParameters.GetMaterialDiffuse();
 		break;
 	}
 	case RPT_SPECULAR_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
+		//renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
 		break;
 	}
 	case RPT_REFLECT_MATERIAL_COLOR:
 	{
-		renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
+		//renderEffectParameter = renderFrameParameters.GetMaterialSpecular();
 		break;
 	}
 	default:
@@ -388,7 +354,7 @@ void HrRenderEffect::UpdateOneEffectParameter(HrRenderEffectParameter& renderEff
 
 }
 
-HrRenderTechnique* HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
+const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
 {
 	if (0 <= nIndex && nIndex < m_vecRenderTechnique.size())
 	{
@@ -397,7 +363,7 @@ HrRenderTechnique* HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
 	return nullptr;
 }
 
-HrRenderTechnique* HrRenderEffect::GetTechniqueByName(const std::string& strTechniqueName)
+const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByName(const std::string& strTechniqueName)
 {
 	size_t const nHashName = HrHashValue(strTechniqueName);
 	for (const auto& item : m_vecRenderTechnique)
@@ -411,7 +377,7 @@ HrRenderTechnique* HrRenderEffect::GetTechniqueByName(const std::string& strTech
 	return nullptr;
 }
 
-HrRenderEffectParameter* HrRenderEffect::GetParameterByName(const std::string& strParamName)
+const HrRenderEffectParameterPtr& HrRenderEffect::GetParameterByName(const std::string& strParamName)
 {
 	size_t const nHashName = HrHashValue(strParamName);
 	for (const auto& item : m_vecRenderEffectParameter)
@@ -424,7 +390,7 @@ HrRenderEffectParameter* HrRenderEffect::GetParameterByName(const std::string& s
 	return nullptr;
 }
 
-HrRenderEffectStructParameter* HrRenderEffect::GetStructParameterByName(const std::string& strStructName)
+const HrRenderEffectStructParameterPtr& HrRenderEffect::GetStructParameterByName(const std::string& strStructName)
 {
 	size_t const nHashName = HrHashValue(strStructName);
 	for (const auto& item : m_vecRenderEffectStruct)

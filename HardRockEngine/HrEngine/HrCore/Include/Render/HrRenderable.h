@@ -5,35 +5,36 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrRenderable
+	class HR_CORE_API HrRenderable : public std::enable_shared_from_this<HrRenderable>
 	{
 	public:
 		HrRenderable();
 		virtual ~HrRenderable();
 
-		virtual HrRenderLayout* GetRenderLayout() = 0;
-		virtual HrRenderTechnique* GetRenderTechnique();
+		virtual const HrRenderLayoutPtr& GetRenderLayout();
+		virtual const HrRenderTechniquePtr& GetRenderTechnique();
 
-		virtual void UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters);
+		virtual void UpdateRenderFrameParameters(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 		
 		uint32 GetSubRenderableNum() const;
-		HrRenderable* GetSubRenderable(uint32 nIndex) const;
+		const HrRenderablePtr GetSubRenderable(uint32 nIndex) const;
 
 		virtual bool CanRender();
 
-		void AttachSceneNode(HrSceneNode* pSceneNode);
-		HrSceneNode* GetSceneNode() const;
+		void AttachSceneNode(const HrSceneNodePtr& pSceneNode);
+		const HrSceneNodePtr& GetSceneNode() const;
 
-		HrRenderEffect* GetRenderEffect() const;
+		void SetRenderEffect(const HrRenderEffectPtr& pRenderEff);
+		const HrRenderEffectPtr& GetRenderEffect() const;
 	protected:
-		virtual void UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters) = 0;
+		virtual void UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters) = 0;
 		virtual void UpdateEffectParametersImpl() = 0;
 	protected:
-		HrRenderEffect* m_pRenderEffect;
-		HrRenderTechnique* m_pRenderTechnique;
-		HrSceneNode* m_pAttachSceneNode;
+		HrRenderEffectPtr m_pRenderEffect;
+		HrRenderTechniquePtr m_pCurTechnique;
+		HrSceneNodePtr m_pAttachSceneNode;
 
-		std::vector<HrRenderable*> m_vecSubRenderable;
+		std::vector<HrRenderablePtr> m_vecSubRenderable;
 	};
 }
 

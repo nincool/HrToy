@@ -18,10 +18,9 @@ HrStaticMeshRenderable::HrStaticMeshRenderable()
 
 }
 
-HrStaticMeshRenderable::HrStaticMeshRenderable(HrSubMesh* pSubMesh, HrMaterial* pMaterial)
+HrStaticMeshRenderable::HrStaticMeshRenderable(const HrSubMeshPtr& pSubMesh, const HrMaterialPtr& pMaterial)
 {
-	m_pSubMesh = pSubMesh;
-	m_pMaterial = pMaterial;
+
 }
 
 HrStaticMeshRenderable::~HrStaticMeshRenderable()
@@ -29,41 +28,47 @@ HrStaticMeshRenderable::~HrStaticMeshRenderable()
 
 }
 
-HrRenderLayout* HrStaticMeshRenderable::GetRenderLayout()
-{
-	BOOST_ASSERT(m_pSubMesh);
-	return m_pSubMesh->GetRenderLayout();
-}
-
-void HrStaticMeshRenderable::UpdateRenderFrameParametersImpl(HrRenderFrameParameters& renderFrameParameters)
+const HrRenderLayoutPtr& HrStaticMeshRenderable::GetRenderLayout()
 {
 	if (m_pSubMesh != nullptr)
 	{
-		HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
-		if (pMaterial != nullptr)
-		{
-			renderFrameParameters.SetCurrentMaterial(pMaterial);
-		}
+		return m_pSubMesh->GetRenderLayout();
 	}
+	else
+	{
+		TRE("HrStaticMeshRenderable::GerRenderLayout Error!");
+	}
+}
+
+void HrStaticMeshRenderable::UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters)
+{
+	//if (m_pSubMesh != nullptr)
+	//{
+	//	HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
+	//	if (pMaterial != nullptr)
+	//	{
+	//		renderFrameParameters.SetCurrentMaterial(pMaterial);
+	//	}
+	//}
 }
 
 void HrStaticMeshRenderable::UpdateEffectParametersImpl()
 {
-	if (m_pSubMesh != nullptr)
-	{
-		if (m_pSubMesh->GetTexture() != nullptr)
-		{
-			HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
-			if (pTexParam != nullptr)
-			{
-				HrTexture* pTexture = m_pSubMesh->GetTexture();
-				if (pTexture == nullptr)
-				{
-					pTexture = HrResourceManager::Instance()->GetDefaultTexture();
-				}
-				*pTexParam = pTexture;
-			}
-		}
-	}
+	//if (m_pSubMesh != nullptr)
+	//{
+	//	if (m_pSubMesh->GetTexture() != nullptr)
+	//	{
+	//		HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
+	//		if (pTexParam != nullptr)
+	//		{
+	//			HrTexture* pTexture = m_pSubMesh->GetTexture();
+	//			if (pTexture == nullptr)
+	//			{
+	//				pTexture = HrResourceManager::Instance()->GetDefaultTexture();
+	//			}
+	//			*pTexParam = pTexture;
+	//		}
+	//	}
+	//}
 }
 

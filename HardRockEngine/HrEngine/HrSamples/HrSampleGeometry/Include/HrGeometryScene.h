@@ -28,7 +28,7 @@ namespace Hr
 
 		void ResetKeyFlag();
 	private:
-		HrCameraNode* m_pSceneMainCamera;
+		HrSceneNodePtr m_pSceneMainCamera;
 
 		HrSceneNode* m_pTestSceneNode;
 		HrSceneNode* m_pTestSceneNode2;

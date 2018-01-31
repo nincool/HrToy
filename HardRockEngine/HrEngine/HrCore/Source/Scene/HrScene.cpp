@@ -15,13 +15,11 @@ HrScene::HrScene()
 
 	m_ambientLightColor = HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f);
 
-	m_pSceneRootNode = HrMakeSharedPtr<HrRootNode>();
-	//m_pRootNode = HR_NEW HrRootNode();
+	m_pSceneRootNode = HrMakeSharedPtr<HrSceneNode>();
 }
 
 HrScene::~HrScene()
 {
-	//SAFE_DELETE(m_pRootNode);
 }
 
 void HrScene::OnEnter()
@@ -43,14 +41,14 @@ void HrScene::ClearSceneNode()
 	m_pSceneRootNode->RemoveChildren();
 }
 
-void HrScene::AddSceneNode(const HrSceneNodePtr& pSceneNode)
+void HrScene::AddNode(const HrSceneNodePtr& pSceneNode)
 {
 	m_pSceneRootNode->AddChild(pSceneNode);
 }
 
 void HrScene::Update()
 {
-
+	m_pSceneRootNode->UpdateNode();
 }
 
 void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)

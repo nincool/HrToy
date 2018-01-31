@@ -17,7 +17,7 @@ namespace Hr
 {
 	class HrModuleLoader;
 
-	class HR_CORE_API HrDirector : public HrSingleTon<HrDirector>
+	class HR_CORE_API HrDirector : public HrSingleTon<HrDirector>, public boost::noncopyable
 	{
 	public:
 		HrDirector();
@@ -29,10 +29,10 @@ namespace Hr
 			return m_pScheduler;
 		}
 
-
-		const HrWinCoreComponentPtr& GetWinCoreComponent();
-		const HrRenderCoreComponentPtr& GetRenderCoreComponent();
-		const HrSceneCoreComponentPtr& GetSceneComponent();
+		const HrCoreComponentEventPtr& GetEventComponent();
+		const HrCoreComponentWinPtr& GetWinCoreComponent();
+		const HrCoreComponentRenderPtr& GetRenderCoreComponent();
+		const HrCoreComponentScenePtr& GetSceneComponent();
 
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
@@ -48,7 +48,7 @@ namespace Hr
 		virtual void RunScene(const HrScenePtr& pScene);
 
 	protected:
-
+		void CreateEventComponent();
 		void CreateWindowComponent();
 		void CreateSceneComponent();
 		void CreateRenderComponent();
@@ -70,17 +70,6 @@ namespace Hr
 	private:
 		void CalculateDeltaTime();
 	private:
-		HrWindowPtr m_pWindow;
-		
-		//渲染工厂
-		//HrRenderFactoryPtr m_pRenderFactory;
-		//渲染器
-		//HrRenderPtr m_pRenderEngine;
-		//渲染目标
-		HrRenderTargetPtr m_pRenderTarget;		
-		//场景管理器
-		//HrSceneManagerPtr m_pSceneManager;
-
 		HrSchedulerPtr m_pScheduler;
 
 		bool m_bEndMainLoop;
@@ -93,10 +82,11 @@ namespace Hr
 		//渲染模块加载
 		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
 
+		HrCoreComponentEventPtr m_pEventComponent;
+		HrCoreComponentWinPtr m_pWindowComponet;
+		HrCoreComponentRenderPtr m_pRenderComponent;
+		HrCoreComponentScenePtr m_pSceneManagerComponent;
 
-		HrWinCoreComponentPtr m_pWindowComponet;
-		HrRenderCoreComponentPtr m_pRenderComponent;
-		HrSceneCoreComponentPtr m_pSceneManagerComponent;
 	};
 
 }

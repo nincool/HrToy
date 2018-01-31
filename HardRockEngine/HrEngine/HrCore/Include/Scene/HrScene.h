@@ -16,7 +16,7 @@ namespace Hr
 		virtual void OnEnterDidFinish();
 		virtual void OnExit();
 
-		virtual void AddSceneNode(const HrSceneNodePtr& pSceneNode);
+		virtual void AddNode(const HrSceneNodePtr& pSceneNode);
 		virtual void ClearSceneNode();
 
 		virtual void Update();

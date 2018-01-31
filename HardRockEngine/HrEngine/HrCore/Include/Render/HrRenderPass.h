@@ -9,16 +9,16 @@ namespace Hr
 	class HR_CORE_API HrRenderPass 
 	{
 	public:
-		HrRenderPass(std::string strPassName);
+		HrRenderPass(const std::string& strPassName);
 		~HrRenderPass();
 
-		void BindPass(HrRender* pRender);
-		void UnBindPass(HrRender* pRender);
+		void BindPass(const HrRenderPtr& pRender);
+		void UnBindPass(const HrRenderPtr& pRender);
 
-		void CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct);
+		//void CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct);
 
-		HrShader* GetShader(HrShader::EnumShaderType shaderType);
-		void SetShader(HrShader* pShader, HrShader::EnumShaderType shaderType);
+		const HrShaderPtr& GetShader(HrShader::EnumShaderType shaderType);
+		void SetShader(const HrShaderPtr& pShader, HrShader::EnumShaderType shaderType);
 
 		void SetDepthStencilState(HrDepthStencilState* pDepthStencilState);
 		void SetBlendState(HrBlendState* pBlendState);
@@ -34,8 +34,8 @@ namespace Hr
 		HrBlendState* m_pBlendState;
 		HrRasterizerState* m_pRasterizerState;
 
-		HrShader* m_pVertexShader;
-		HrShader* m_pPixelShader;
+		HrShaderPtr m_pVertexShader;
+		HrShaderPtr m_pPixelShader;
 
 		std::array<uint32, HrShader::ST_NUMSHADERTYPES> m_arrShaderIndex;
 

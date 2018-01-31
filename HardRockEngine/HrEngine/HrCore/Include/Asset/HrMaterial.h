@@ -8,10 +8,26 @@ namespace Hr
 	class HrMaterial : public HrResource
 	{
 	public:
+		enum EnumMaterialTexSlot
+		{
+			TS_SLOT_0,
+			TS_SLOT_1,
+			TS_SLOT_2,
+			TS_SLOT_3,
+			TS_SLOT_4,
+			TS_SLOT_5,
+			TS_SLOT_6,
+			TS_SLOT_7,
+
+			TS_SLOT_NUM
+		};
+	public:
 		HrMaterial();
+		HrMaterial(const HrMaterial& material);
+		HrMaterial(const HrMaterialPtr& pMaterial);
 		~HrMaterial();
 
-		static size_t CreateHashName(const std::string& strFullFilePath);
+		static size_t CreateHashName(const std::string& strHashValue);
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
@@ -22,12 +38,15 @@ namespace Hr
 		const float4& GetSpecular() const;
 		const float4& GetEmissive() const;
 		float GetOpacity() const;
+
+		void SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTexture);
+		const HrTexturePtr& GetTexture(EnumMaterialTexSlot stSlot);
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 
 	private:
-		HR_SYNTHESIZE_PASS_BY_REF(std::string, m_strMaterialName, MaterialName);
+		std::string m_strMaterialName;
 
 		//the amount of ambient light the surface reflects and absorbs
 		float4 m_ambient;
@@ -39,6 +58,8 @@ namespace Hr
 		float4 m_emissive;
 
 		float m_fOpacity;
+
+		std::array<HrTexturePtr, TS_SLOT_NUM> m_arrTextures;
 	};
 }
 

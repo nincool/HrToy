@@ -1,17 +1,14 @@
 #include "Render/HrCamera.h"
-#include "Scene/HrEntityNode.h"
+#include "Render/HrViewPort.h"
 
 using namespace Hr;
 
-HrCamera::HrCamera()
-	:m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
+HrCamera::HrCamera(const std::string& strName) : HrSceneObjectComponent(strName)
+	, m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
 {
 	m_bViewProjDirty = false;
-}
 
-void HrCamera::AttachCameraNode(HrCameraNode* pCameraNode)
-{
-	m_pAttachCameraNode = pCameraNode;
+	this->ViewParams(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f));
 }
 
 void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up)
@@ -59,4 +56,59 @@ Matrix4 const& HrCamera::GetViewProjMatrix()
 	}
 
 	return m_matViewProj;
+}
+
+const Vector3& HrCamera::GetEyePos() const
+{
+	return m_v3EyePos;
+}
+
+const Vector3& HrCamera::GetForward() const
+{
+	return m_v3Forward;
+}
+
+const Vector3& HrCamera::GetUp() const
+{
+	return m_v3Up;
+}
+
+const Vector3& HrCamera::GetLookAt() const
+{
+	return m_v3LookAt;
+}
+
+float HrCamera::GetLookAtDistance()
+{
+	return m_fLookAtDistance;
+}
+
+float HrCamera::FOV() const
+{
+	return m_fFov;
+}
+
+float HrCamera::Apsect() const
+{
+	return m_fAspect;
+}
+
+float HrCamera::NearPlane() const
+{
+	return m_fNearPlane;
+}
+
+float HrCamera::FarPlane() const
+{
+	return m_fFarPlane;
+}
+
+void HrCamera::AttachViewPort(const HrViewPortPtr& pViewPort)
+{
+	m_pViewPort = pViewPort;
+}
+
+const HrViewPortPtr& HrCamera::GetViewPort()
+{
+	return m_pViewPort;
 }

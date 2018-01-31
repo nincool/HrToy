@@ -24,8 +24,17 @@ namespace Hr
 			/// 2D non-square texture, used in combination with 2D texture coordinates
 			TEX_TYPE_2D_RECT = 6
 		};
+
+		/// Enums describing buffer usage; not mutually exclusive
+		enum EnumTextureUsage
+		{
+			TU_GPUREAD_GPUWRITE,
+			TU_GPUREAD_CPUWRITE,
+			TU_GPUREAD_IMMUTABLE,
+			TU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE,
+		};
 	public:
-		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality);
+		explicit HrTexture(EnumTextureType texType, uint32 nWidth, uint32 nHeight, uint32 nSampleCount, uint32 nSampleQuality);
 		virtual ~HrTexture();
 
 
@@ -44,12 +53,13 @@ namespace Hr
 		*/
 		uint32 GetDepth(void) const { return m_nDepth; }
 
+		EnumPixelFormat GetPixFormat(void) const { return m_format; }
 	protected:
 		virtual bool LoadImpl();
 		virtual bool UnloadImpl();
 
-		virtual void CreateTexture() = 0;
-		virtual void CreateSRV() = 0;
+		//virtual void CreateTexture() = 0;
+		//virtual void CreateSRV() = 0;
 	protected:
 		uint32 m_nHeight;
 		uint32 m_nWidth;
@@ -61,8 +71,9 @@ namespace Hr
 		uint32 m_nSampleCount;
 		uint32 m_nSampleQuality;
 		EnumPixelFormat m_format;
+		EnumTextureUsage m_textureUsage;
 
-		HrStreamData* m_pTexData;
+		HrStreamDataPtr m_pTexData;
 
 	};
 }

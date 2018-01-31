@@ -18,23 +18,30 @@ namespace Hr
 	public:
 		virtual HrRenderPtr CreateRender() = 0;
 		
-		virtual HrRenderTargetPtr CreateRenderTarget() = 0;
+		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) = 0;
 
 		virtual HrRenderFramePtr CreateRenderFrameBuffer() = 0;
+		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
 
-		virtual HrVertex* CreateVertex() = 0;
-		
-		virtual HrGraphicsBuffer* CreateHardwareBuffer() = 0;
-		
-		virtual HrRenderLayout* CreateRenderLayout() = 0;
-		
-		virtual HrShader* CreateShader() = 0;
-		
-		virtual HrShaderCompilerPtr CreateShaderCompiler() = 0;
-
-		virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+		virtual HrTexturePtr CreateTexture(HrTexture::EnumTextureType texType
+			, uint32 nWidth
+			, uint32 nHeight
 			, uint32 nSampleCount
 			, uint32 nSampleQuality) = 0;
+
+		virtual HrRenderLayoutPtr CreateRenderLayout() = 0;
+
+		virtual HrVertexPtr CreateVertex() = 0;
+		
+		virtual HrGraphicsBufferPtr CreateGraphicsBuffer() = 0;
+		
+		virtual HrShaderPtr CreateShader() = 0;
+		
+		virtual HrShaderCompilerPtr CreateShaderCompiler(const std::string& strFileName) = 0;
+
+		//virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+		//	, uint32 nSampleCount
+		//	, uint32 nSampleQuality) = 0;
 
 		virtual HrSamplerState* CreateSamplerState() = 0;
 

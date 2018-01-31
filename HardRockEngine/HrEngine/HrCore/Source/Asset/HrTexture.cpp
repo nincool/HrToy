@@ -7,15 +7,18 @@
 
 using namespace Hr;
 
-HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality):
-	m_textureType(texType), m_nSampleCount(nSampleCount), m_nSampleQuality(nSampleQuality)
+HrTexture::HrTexture(EnumTextureType texType, uint32 nWidth, uint32 nHeight, uint32 nSampleCount, uint32 nSampleQuality):
+	m_textureType(texType)
+	, m_nWidth(nWidth)
+	, m_nHeight(nHeight)
+	, m_nSampleCount(nSampleCount)
+	, m_nSampleQuality(nSampleQuality)
+	, m_pTexData(HrMakeSharedPtr<HrStreamData>())
 {
-	m_pTexData = HR_NEW HrStreamData();
 }
 
 HrTexture::~HrTexture()
 {
-	SAFE_DELETE(m_pTexData);
 }
 
 size_t HrTexture::CreateHashName(const std::string& strFullFilePath)
@@ -26,9 +29,9 @@ size_t HrTexture::CreateHashName(const std::string& strFullFilePath)
 void HrTexture::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
 	m_strFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFilePath);
-	HRASSERT(!m_strFilePath.empty(), "HrRenderEffect::DeclareResource");
+	HRASSERT(!m_strFilePath.empty(), "HrTexture::DeclareResource");
 	m_strFileName = strFileName;
-	m_resType = HrResource::RT_EFFECT;
+	m_resType = HrResource::RT_TEXTURE;
 
 	m_nHashID = CreateHashName(m_strFilePath);
 }
@@ -77,8 +80,8 @@ bool HrTexture::LoadImpl()
 
 		FreeImage_Unload(dib);
 
-		CreateTexture();
-		CreateSRV();
+		//CreateTexture();
+		//CreateSRV();
 	}
 
 	return true;

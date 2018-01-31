@@ -8,22 +8,38 @@ namespace Hr
 	class HR_CORE_API HrSceneObject
 	{
 	public:
+		enum EnumSceneComponentType
+		{
+			SCT_NORMAL,
+			SCT_CAMERA,
+		};
+	public:
 		HrSceneObject();
-		HrSceneObject(const std::string& strName);
-		HrSceneObject(const std::string& strName, const HrRenderablePtr& pRenderable);
+		HrSceneObject(const HrRenderablePtr& pRenderable);
 		~HrSceneObject();
 
-		void SetName(const std::string& strName);
-		const std::string& GetName();
+		void AttachSceneNode(const HrSceneNodePtr& pSceneNode);
 
-		void AttachRenderable(const HrRenderablePtr& pRenderable);
+		void OnEnter();
+		void OnExist();
+		void Update(float fDelta, const HrTransformPtr& pTrans);
+
+		void SetRenderable(const HrRenderablePtr& pRenderable);
 		const HrRenderablePtr& GetRenderable();
+
+		void AddComponent(EnumSceneComponentType comType, const HrSceneObjectComponentPtr& pSceneObjComponent);
+	private:
+		void AddCameraToScene(const HrCameraPtr& pCamera);
 	protected:
-		std::string m_strName;
+		std::weak_ptr<HrSceneNode> m_pContainerNode;
 
 		HrRenderablePtr m_pRenderable;
-		
+
+		std::list<HrCameraPtr> m_lisCameras;
+		std::list<HrSceneObjectComponentPtr> m_lisComponents;
 	};
+
+
 }
 
 #endif

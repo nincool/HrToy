@@ -2,27 +2,29 @@
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrame.h"
 #include "Render/HrRender.h"
-
+#include "Render/HrViewPort.h"
+#include "Render/HrRenderable.h"
+#include "Render/HrRenderQueue.h"
+#include "Render/HrRenderFrameParameters.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentWin.h"
 
 using namespace Hr;
+
+const std::string HrRenderSystem::m_sc_strScreenFrameBufferKey ="ScreenFrameBufferKey";
 
 HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
 {
 	m_pRenderFactory = pRenderFactory;
+
+	CreateRender();
+	//默认先创建屏幕渲染
+	CreateScreenFrameBuffer(HrDirector::Instance()->GetWinCoreComponent()->GetWindowWidth()
+		, HrDirector::Instance()->GetWinCoreComponent()->GetWindowHeight());
 }
 
 HrRenderSystem::~HrRenderSystem()
 {
-
-}
-
-void HrRenderSystem::InitRenderSystem()
-{
-	InitRender();
-
-	m_pRenderTarget = m_pRenderFactory->CreateRenderTarget();
-
-	BindScreenFrameBuffer();
 }
 
 const HrRenderFactoryPtr& HrRenderSystem::GetRenderFactory()
@@ -40,52 +42,73 @@ const HrRenderFramePtr& HrRenderSystem::GetScreenFrameBuffer()
 	return m_pScreenFrameBuffer;
 }
 
-const HrRenderTargetPtr& HrRenderSystem::GetRenderTarget()
+void HrRenderSystem::BindScreenFrameBuffer()
 {
-	return m_pRenderTarget;
+	this->BindFrameBuffer(GetScreenFrameBuffer());
 }
 
-void HrRenderSystem::SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrame)
+const HrRenderFramePtr& HrRenderSystem::GetBindFrameBuffer()
 {
-	m_pRender->SetCurrentFrameBuffer(pRenderFrame);
+	return m_pRender->GetBindFrameBuffer();
 }
 
-HrRenderFramePtr HrRenderSystem::GetCurrentFrameBuffer()
-{
-	return m_pRender->GetCurrentFrameBuffer();
-}
-
-void HrRenderSystem::InitRender()
+void HrRenderSystem::CreateRender()
 {
 	m_pRender = m_pRenderFactory->CreateRender();
 	m_pRender->Init();
 }
 
-void HrRenderSystem::BindScreenFrameBuffer()
+void HrRenderSystem::CreateScreenFrameBuffer(uint32 nWidth, uint32 nHeight)
 {
-	if (!m_pScreenFrameBuffer)
-	{
-		m_pScreenFrameBuffer = m_pRenderFactory->CreateRenderFrameBuffer();
-		m_pScreenFrameBuffer->AttachRenderTarget(m_pRenderTarget);
-	}
-	m_pScreenFrameBuffer->OnBind();
+	m_pScreenFrameBuffer = m_pRenderFactory->CreateScreenRenderFrameBuffer(nWidth, nHeight);
+	m_mapRenderFrames.insert(std::make_pair(m_sc_strScreenFrameBufferKey, m_pScreenFrameBuffer));
+}
+
+void HrRenderSystem::BindFrameBuffer(const HrRenderFramePtr& pRenderFrame)
+{
+	m_pRender->BindFrameBuffer(pRenderFrame);
 }
 
 void HrRenderSystem::ClearRenderTarget()
 {
-	HrRenderFramePtr pFrameBuffer = GetCurrentFrameBuffer();
-	HrRenderFramePtr pTempFrameBuffer = m_pScreenFrameBuffer;
-	pFrameBuffer->ClearTarget();
-	//GetCurrentFrameBuffer()->ClearTarget();
+	GetBindFrameBuffer()->ClearTarget();
 }
 
 void HrRenderSystem::ClearDepthStencil()
 {
-	GetCurrentFrameBuffer()->ClearDepthStencil();
+	GetBindFrameBuffer()->ClearDepthStencil();
 }
 
-void HrRenderSystem::SwapChain()
+void HrRenderSystem::Present()
 {
-	GetCurrentFrameBuffer()->SwapChain();
+	GetBindFrameBuffer()->Present();
 }
 
+void HrRenderSystem::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	const HrRenderFramePtr& pBindFrameBuffer = m_pRender->GetBindFrameBuffer();
+	if (pBindFrameBuffer)
+	{
+		auto mapAllViewPorts = pBindFrameBuffer->GetAllViewPorts();
+		for (auto& itemViewPort : mapAllViewPorts)
+		{
+			const HrViewPortPtr& pViewPort = itemViewPort.second;
+			m_pRender->SetCurrentViewPort(pViewPort);
+			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
+
+			const std::unordered_map<HrRenderablePtr, HrSceneNodePtr>& mapRenderables = pRenderQueue->GetRenderables();
+			for (auto& itemMapRenderable : mapRenderables)
+			{
+				const HrRenderablePtr& pRenderable = itemMapRenderable.first;
+				const HrSceneNodePtr& pSceneNode = itemMapRenderable.second;
+
+				pRenderable->UpdateRenderFrameParameters(pRenderFrameParam);
+
+				const HrRenderLayoutPtr& pRenderLayout = pRenderable->GetRenderLayout();
+				const HrRenderTechniquePtr& pRenderTechnique = pRenderable->GetRenderTechnique();
+				m_pRender->Render(pRenderTechnique, pRenderLayout);
+			}
+
+		}
+	}
+}

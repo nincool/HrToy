@@ -17,17 +17,13 @@ namespace Hr
 		HrD3D11RenderLayout();
 		~HrD3D11RenderLayout();
 
-		ID3D11InputLayout* GetInputLayout(HrD3D11Shader* pShader);
-		ID3D11Buffer* GetVertexBuffer();
-		ID3D11Buffer* GetIndexBuffer();
-	public:
-
-		ID3D11VertexShader* m_pSolidColorVS;
-		ID3D11PixelShader* m_pSolidColorPS;
+		const ID3D11InputLayoutPtr& GetInputLayout(const HrD3D11ShaderPtr& pShader);
+		const ID3D11BufferPtr& GetVertexBuffer();
+		const ID3D11BufferPtr& GetIndexBuffer();
 	private:
 		D3D11_INPUT_ELEMENT_DESC* m_pD3DInputElementDesc;
-		ID3D11InputLayout* m_pInputLayout;
-		ID3D11Buffer* m_pVertexBuffer;
+		ID3D11InputLayoutPtr m_pD3DInputLayout;
+		ID3D11Buffer* m_pD3DVertexBuffer;
 	};
 }
 

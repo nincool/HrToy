@@ -13,36 +13,29 @@ HrTestScene::~HrTestScene()
 
 }
 
-
-void HrTestScene::CreateSceneFromData()
-{
-	HrSceneImported::CreateSceneFromData();
-}
-
 void HrTestScene::OnEnter()
 {
 	HrSceneImported::OnEnter();
 
 	CreateInputEvent();
 
-	m_pSphere = this->GetSceneNodeByName("Node2");
-	m_pSphere->GetTransform()->Translate(Vector3(-50, 0, 0));
+	//m_pSphere = this->GetSceneNodeByName("Node2");
+	//m_pSphere->GetTransform()->Translate(Vector3(-50, 0, 0));
 
-	m_pEffect = m_pSphere->GetChildByName("Sphere01")->GetRenderable()->GetRenderEffect();
+	//m_pEffect = m_pSphere->GetChildByName("Sphere01")->GetRenderable()->GetRenderEffect();
 
 	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrTestScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
-
 void HrTestScene::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrTestScene::OnKeyPressed, this)
-		, HR_CALLBACK_2(HrTestScene::OnKeyReleased, this));
-	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerKeyboard));
+	//HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrTestScene::OnKeyPressed, this)
+	//	, HR_CALLBACK_2(HrTestScene::OnKeyReleased, this));
+	//HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerKeyboard));
 
-	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrTestScene::OnMousePressed, this)
-		, HR_CALLBACK_2(HrTestScene::OnMouseReleased, this), HR_CALLBACK_1(HrTestScene::OnMouseMove, this));
-	HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerMouse));
+	//HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrTestScene::OnMousePressed, this)
+	//	, HR_CALLBACK_2(HrTestScene::OnMouseReleased, this), HR_CALLBACK_1(HrTestScene::OnMouseMove, this));
+	//HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerMouse));
 }
 
 void HrTestScene::ResetKeyFlag()
@@ -178,9 +171,9 @@ void HrTestScene::MouseUpdate(float fDelta)
 	}
 	else if (m_bKey1Pressed)
 	{
-		++m_nShiness;
+		//++m_nShiness;
 
-		*(m_pEffect->GetParameterByName("shininess")) = m_nShiness;
+		//*(m_pEffect->GetParameterByName("shininess")) = m_nShiness;
 
 	}
 	else if (m_bKeyF1Pressed)
@@ -205,19 +198,19 @@ void HrTestScene::MouseUpdate(float fDelta)
 
 	if (m_bSphereDir)
 	{
-		m_pSphere->GetTransform()->Translate(Vector3(0.2, 0, 0));
-		if (m_pSphere->GetTransform()->GetPosition().x() >= 50)
-		{
-			m_bSphereDir = false;
-		}
+		//m_pSphere->GetTransform()->Translate(Vector3(0.2, 0, 0));
+		//if (m_pSphere->GetTransform()->GetPosition().x() >= 50)
+		//{
+		//	m_bSphereDir = false;
+		//}
 	}
 	else
 	{
-		m_pSphere->GetTransform()->Translate(Vector3(-0.2, 0, 0));
-		if (m_pSphere->GetTransform()->GetPosition().x() <= -50)
-		{
-			m_bSphereDir = true;
-		}
+		//m_pSphere->GetTransform()->Translate(Vector3(-0.2, 0, 0));
+		//if (m_pSphere->GetTransform()->GetPosition().x() <= -50)
+		//{
+		//	m_bSphereDir = true;
+		//}
 	}
 }
 

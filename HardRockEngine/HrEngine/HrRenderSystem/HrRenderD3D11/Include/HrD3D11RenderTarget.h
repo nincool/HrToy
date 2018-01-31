@@ -9,34 +9,15 @@ namespace Hr
 	class HrD3D11RenderTarget : public HrRenderTarget
 	{
 	public:
-		HrD3D11RenderTarget();
-
-		virtual bool CreateRenderTarget(uint32 nWidth, uint32 nHeight) override;
-
-		const IDXGISwapChainPtr& GetSwapChain() const;
-		const IDXGISwapChain1Ptr& GetSwapChain1() const;
+		HrD3D11RenderTarget(const ID3D11Texture2DPtr& pBackBuffer);
 
 		const ID3D11RenderTargetViewPtr& GetRenderTargetView();
-		const ID3D11DepthStencilViewPtr& GetDepthStencilView();
-
-		void PresentSwapChain() const;
-	private:
-		bool CreateSwapChain();
-		bool CreateRenderTargetView();
-		bool CreateDepthStencilView();
 
 	private:
-		HWND m_hWnd;
-		
-		uint32 m_nWidth;
-		uint32 m_nHeight;
-
-		IDXGISwapChainPtr m_pSwapChain;
-		IDXGISwapChain1Ptr m_pSwapChain1;
-
-		ID3D11RenderTargetViewPtr m_pRenderTargetView;
-		ID3D11DepthStencilViewPtr m_pDepthStencilView;
-	
+		void CreateRenderTargetView(const ID3D11Texture2DPtr& pBackBuffer);
+	private:
+		HrD3D11Texture2DPtr m_pRenderTargetBuff;
+		HrD3D11Texture2DPtr m_pTexRenderTargetView;
 	};
 }
 

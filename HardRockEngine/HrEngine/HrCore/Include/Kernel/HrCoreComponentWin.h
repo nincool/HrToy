@@ -5,11 +5,11 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrWinCoreComponent : public HrCoreComponent
+	class HR_CORE_API HrCoreComponentWin : public HrCoreComponent
 	{
 	public:
-		HrWinCoreComponent();
-		~HrWinCoreComponent();
+		HrCoreComponentWin();
+		~HrCoreComponentWin();
 
 		virtual bool Update(float fDelta) override;
 		

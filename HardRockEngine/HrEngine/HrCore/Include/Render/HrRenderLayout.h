@@ -18,8 +18,6 @@ namespace Hr
 		
 		void SetIndexBufferType(EnumIndexType indexType);
 		 EnumIndexType GetIndexBufferType();
-
-		uint32 GetVertexSize();
 		
 		void BindVertexBuffer(const char* pBuffer
 			, uint64 nBufferSize
@@ -32,6 +30,8 @@ namespace Hr
 			, EnumIndexType indexType);
 
 		bool UseIndices();
+		
+		uint32 GetVertexSize();
 
 		uint32 GetIndicesNum() const;
 		uint32 GetVerticesNum() const;
@@ -45,10 +45,10 @@ namespace Hr
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;
 
-		HrVertex* m_pVertex;
+		HrVertexPtr m_pVertex;
 
-		HrGraphicsBuffer* m_pHDVertexBuffer;
-		HrGraphicsBuffer* m_pHDIndexBuffer;
+		HrGraphicsBufferPtr m_pVertexBuffer;
+		HrGraphicsBufferPtr m_pIndexBuffer;
 
 		uint32 m_nVertices;
 		uint32 m_nIndices;

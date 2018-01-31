@@ -17,9 +17,17 @@ namespace Hr
 			RT_MATERIAL,
 			RT_MODEL,
 		};
+
+		enum EnumResourceStatus
+		{
+			RS_UNKNOWN,
+			RS_DECLARED,
+			RS_LOADING,
+			RS_LOADED,
+		};
 	public:
-		HrResource() { m_bLoaded = false; };
-		virtual ~HrResource() {};
+		HrResource();
+		virtual ~HrResource();
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) = 0;
 
@@ -27,45 +35,23 @@ namespace Hr
 		std::string& GetFileName() { return m_strFileName; }
 		size_t GetHashID() { return m_nHashID; }
 
-		bool IsLoaded() { return m_bLoaded; }
+		bool IsDeclared() { return m_resStatus != RS_UNKNOWN; }
+		bool IsLoaded() { return m_resStatus == RS_LOADED; }
 
-		virtual bool Load()
-		{
-			if (m_bLoaded)
-			{
-				return true;
-			}
-			if (!LoadImpl())
-			{
-				return false;
-			}
-			m_bLoaded = true;
-			return true;
-		}
-
-		virtual bool Unload()
-		{
-			if (!m_bLoaded)
-			{
-				return true;
-			}
-			UnloadImpl();
-			m_bLoaded = false;
-			return true;
-		}
+		bool Load();
+		bool Unload();
 	protected:
 		virtual bool LoadImpl() = 0;
 		virtual bool UnloadImpl() = 0;
 	protected:
 		std::string m_strFilePath;
 		std::string m_strFileName;
+		std::string m_strUUID;
 
 		size_t m_nHashID;
 
 		EnumResourceType m_resType;
-
-		//资源是否已经加载
-		bool m_bLoaded;
+		EnumResourceStatus m_resStatus;
 	};
 }
 

@@ -15,8 +15,6 @@ namespace Hr
 
 		void MouseUpdate(float fDelta);
 	protected:
-		virtual void CreateSceneFromData() override;
-	
 		void CreateInputEvent();
 
 		void OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent);

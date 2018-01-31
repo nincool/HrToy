@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrSceneCoreComponent : public HrCoreComponent
+	class HrCoreComponentScene : public HrCoreComponent
 	{
 	public:
 		enum class EnumSceneManagerType
@@ -13,8 +13,8 @@ namespace Hr
 			SMT_NORMAL,
 		};
 	public:
-		HrSceneCoreComponent(EnumSceneManagerType sceneManagerType = EnumSceneManagerType::SMT_NORMAL);
-		~HrSceneCoreComponent();
+		HrCoreComponentScene(EnumSceneManagerType sceneManagerType = EnumSceneManagerType::SMT_NORMAL);
+		~HrCoreComponentScene();
 
 		bool Update(float fDelta) override;
 
@@ -29,6 +29,9 @@ namespace Hr
 		bool CreateSceneManager(EnumSceneManagerType sceneManagerType);
 	private:
 		HrSceneManagerPtr m_pSceneManager;
+
+		HrEventPtr m_pEventUpdateBegin;
+		HrEventPtr m_pEventUpdateEnd;
 	};
 }
 

@@ -2,52 +2,30 @@
 #define _HR_CAMERA_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Scene/HrSceneObjectComponent.h"
 #include "HrMath/Include/HrMath.h"
+
 
 namespace Hr
 {
-	class HR_CORE_API HrCamera
+	class HR_CORE_API HrCamera : public HrSceneObjectComponent
 	{
 	public:
-		HrCamera();
+		HrCamera(const std::string& strName);
 
-		const Vector3& GetEyePos() const
-		{
-			return m_v3EyePos;
-		}
-		const Vector3& GetForward() const
-		{
-			return m_v3Forward;
-		}
-		const Vector3& GetUp() const
-		{
-			return m_v3Up;
-		}
-		const Vector3& GetLookAt() const
-		{
-			return m_v3LookAt;
-		}
-		float GetLookAtDistance()
-		{
-			return m_fLookAtDistance;
-		}
+		const Vector3& GetEyePos() const;
+		const Vector3& GetForward() const;
+		const Vector3& GetUp() const;
+	
 
-		float FOV() const
-		{
-			return m_fFov;
-		}
-		float Apsect() const
-		{
-			return m_fAspect;
-		}
-		float NearPlane() const
-		{
-			return m_fNearPlane;
-		}
-		float FarPlane() const
-		{
-			return m_fFarPlane;
-		}
+		const Vector3& GetLookAt() const;
+		float GetLookAtDistance();
+
+		float FOV() const;
+		float Apsect() const;
+
+		float NearPlane() const;
+		float FarPlane() const;
 
 		void ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up);
 		virtual void ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane);
@@ -57,8 +35,8 @@ namespace Hr
 		bool ViewProjDirty() { return m_bViewProjDirty; }
 		Matrix4 const& GetViewProjMatrix();
 
-		void AttachCameraNode(HrCameraNode* pCameraNode);
-		HrCameraNode* GetAttachCameraNode() { return m_pAttachCameraNode; }
+		void AttachViewPort(const HrViewPortPtr& pViewPort);
+		const HrViewPortPtr& GetViewPort();
 	private:
 		float m_fLookAtDistance;
 
@@ -76,12 +54,12 @@ namespace Hr
 
 		//投影相关
 		float m_fFov;
+		//Width / Height
 		float m_fAspect;
 		float m_fNearPlane;
 		float m_fFarPlane;
 
-
-		HrCameraNode* m_pAttachCameraNode;
+		HrViewPortPtr m_pViewPort;
 	};
 }
 

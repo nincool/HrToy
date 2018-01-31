@@ -9,16 +9,8 @@ namespace Hr
 	{
 	public:
 		HrRenderTarget();
+		HrRenderTarget(const HrTexturePtr& pBackBuff);
 		virtual ~HrRenderTarget();
-
-		virtual bool CreateRenderTarget(uint32 nWidth, uint32 nHeight);
-		
-		virtual void AddViewPort(HrViewPort* pViewPort);
-		
-		virtual std::map<int, HrViewPort*>& GetViewPorts();
-	protected:
-		//当前的视口集合
-		std::map<int, HrViewPort*> m_mapViewPort;
 	};
 }
 

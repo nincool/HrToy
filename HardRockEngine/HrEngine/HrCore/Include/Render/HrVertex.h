@@ -11,7 +11,7 @@ namespace Hr
 	class HrVertexElement 
 	{
 	public:
-		HrVertexElement(HrVertexElement::EnumVertexElementUsage usage, EnumVertexElementType pixelFormat)
+		HrVertexElement(EnumVertexElementUsage usage, EnumVertexElementType pixelFormat)
 		{
 			m_elementUsage = usage;
 			m_elementType = pixelFormat;
@@ -45,7 +45,7 @@ namespace Hr
 
 		const HrVertexElement& GetVertexElement(uint32 nIndex);
 	private:
-		void AddElement(HrVertexElement& usage);
+		void AddElement(const HrVertexElement& usage);
 	protected:
 		uint32 m_nVertexSize;
 

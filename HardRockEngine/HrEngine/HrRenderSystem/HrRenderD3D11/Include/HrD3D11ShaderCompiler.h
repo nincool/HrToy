@@ -108,36 +108,37 @@ namespace Hr
 	class HrD3D11ShaderCompiler : public HrShaderCompiler
 	{
 	public:
-		HrD3D11ShaderCompiler();
+		HrD3D11ShaderCompiler(const std::string& strFileName);
 		~HrD3D11ShaderCompiler();
 
-		virtual bool CompileShaderFromCode(std::string& strShaderFileName, HrStreamData& streamData
-			, HrShader::EnumShaderType shaderType
-			, const std::string& strEntryPoint
-			, HrStreamData& shaderBuffer) override;
+		virtual bool CompileShaderFromCode(const std::string& strEntryPoint, HrShader::EnumShaderType shaderType) override;
 
+		virtual bool ReflectEffectParameters(const std::string& strEntryPoint) override;
 
-		virtual bool ReflectEffectParameters(HrStreamData& shaderBuffer, const std::string& strShaderEntryPoint, HrShader::EnumShaderType shaderType) override;
+		virtual HrStreamDataPtr StripCompiledCode(const HrStreamData& shaderBuffer) override;
 
-		virtual bool StripCompiledCode(HrStreamData& shaderBuffer) override;
+		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameterPtr>& vecParameter
+			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer) override;
 
-		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameter*>& vecParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer) override;
+		virtual void BindParametersToShader(std::vector<HrRenderEffectParameterPtr>& vecParameter
+			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
+			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer
+			, std::unordered_map<std::string, HrShaderPtr>& vecShader) override;
 
-		virtual void BindParametersToShader(std::vector<HrRenderEffectParameter*>& vecParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBuffer*>& vecConstantBuffer
-			, std::vector<HrShader*>& vecShader) override;
+		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
-		HrRenderEffectConstantBuffer* GetConstantBuffer(std::vector<HrRenderEffectConstantBuffer*>& renderEffectConstBuffer, size_t nHashName);
-		HrRenderEffectStructParameter* GetEffectStruct(std::vector<HrRenderEffectStructParameter*>& renderEffectStruct, size_t nHashName);
-		HrRenderEffectParameter* GetEffectParameter(std::vector<HrRenderEffectParameter*>& renderEffectParameter, size_t nHashName);
-		HrRenderParamDefine* GetRenderParamDefine(const std::string& strParamName);
+		HrRenderEffectConstantBufferPtr GetConstantBuffer(std::vector<HrRenderEffectConstantBufferPtr>& vecConstBuffer, size_t nHashName);
+		HrRenderEffectStructParameterPtr GetEffectStruct(std::vector<HrRenderEffectStructParameterPtr>& renderEffectStruct, size_t nHashName);
+		HrRenderEffectParameterPtr GetEffectParameter(std::vector<HrRenderEffectParameterPtr>& renderEffectParameter, size_t nHashName);
+		const HrRenderParamDefine* GetRenderParamDefine(const std::string& strParamName);
 
 	protected:
+		std::unordered_map<std::string, std::tuple<HrShader::EnumShaderType, HrStreamDataPtr, HrStreamDataPtr, D3D11ShaderDesc> > m_mapCompileData;
+		//std::unordered_map<std::string, D3D11ShaderDesc> m_mapShaderDesc;
+
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;
 		UINT m_nNumSlots = 0;
@@ -145,7 +146,7 @@ namespace Hr
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
 		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
 
-		std::unordered_map<size_t, D3D11ShaderDesc> m_mapShaderDesc;
+	
 		//std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;
 	};
 }

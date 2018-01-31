@@ -117,13 +117,19 @@ namespace Hr
 		RPT_FOG_START,
 		RPT_FOG_RANGE,
 
+		PRT_CUSTOM,
+
 		RPT_UNKNOWN = 999
 	};
 
 	class HR_CORE_API HrRenderParamDefine
 	{
 	public:
-		HrRenderParamDefine(EnumRenderParamType _paramType, const std::string& _strName, EnumRenderEffectDataType _dataType, uint32 _nElementCount, uint32 _nStride)
+		HrRenderParamDefine(EnumRenderParamType _paramType
+			, const std::string& _strName
+			, EnumRenderEffectDataType _dataType
+			, uint32 _nElementCount
+			, uint32 _nStride)
 			:paramType(_paramType), strName(_strName), dataType(_dataType), nElementCount(_nElementCount), nStride(_nStride)
 		{
 		}
@@ -218,8 +224,8 @@ namespace Hr
 		virtual void Value(std::vector<float4>& val) const;
 		virtual void Value(std::vector<float4x4>& val) const;
 
-		virtual void BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride);
-		virtual void RebindToCBuffer(HrRenderEffectConstantBuffer* cbuff);
+		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride);
+		virtual void RebindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff);
 		//virtual bool InCBuffer() const
 		//{
 		//	return false;
@@ -278,7 +284,7 @@ namespace Hr
 			val = RetriveT();
 		}
 
-		virtual void BindToCBuffer(HrRenderEffectConstantBuffer* cbuff, uint32_t offset, uint32_t stride) override
+		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride) override
 		{
 			m_nBufferOffset = offset;
 			m_nStride = stride;
@@ -448,28 +454,33 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
 
-		void ParamInfo(EnumRenderParamType paramType, EnumRenderEffectDataType dataType, EnumRenderEffectParamBindType bindType, uint32 nStride, uint32 nArraySize);
+		void ParamInfo(EnumRenderParamType paramType
+			, EnumRenderEffectDataType dataType
+			, EnumRenderEffectParamBindType bindType
+			, uint32 nStride, uint32 nArraySize);
 
 		EnumRenderParamType ParamType() { return m_paramType; }
 		EnumRenderEffectDataType DataType() { return m_dataType; }
 		EnumRenderEffectParamBindType BindType() { return m_bindType; }
 		uint32 ArraySize() { return m_nArraySize; }
+		uint32 MemorySize() { return m_nMemorySize; }
 
-		void BindConstantBuffer(HrRenderEffectConstantBuffer* pConstantBuffer, uint32 nOffset);
-		HrRenderEffectConstantBuffer* GetBindConstantBuffer() const { return m_pBindConstBuffer; }
+		void BindConstantBuffer(const HrRenderEffectConstantBufferPtr& pConstantBuffer, uint32 nOffset);
+		const HrRenderEffectConstantBufferPtr& GetBindConstantBuffer() const { return m_pBindConstBuffer; }
 	private:
 		EnumRenderParamType m_paramType;
 		EnumRenderEffectDataType m_dataType;
 		EnumRenderEffectParamBindType m_bindType;
 		uint32 m_nStride;
 		uint32 m_nArraySize;
+		uint32 m_nMemorySize;
 
 		std::string m_strName;
 		size_t m_nHashName;
 
 		HrRenderVariable* m_pRenderVariable;
 
-		HrRenderEffectConstantBuffer* m_pBindConstBuffer;
+		HrRenderEffectConstantBufferPtr m_pBindConstBuffer;
 	};
 
 	class HR_CORE_API HrRenderEffectStructParameter : public boost::noncopyable
@@ -482,11 +493,11 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; }
 
-		void AddRenderEffectParameter(HrRenderEffectParameter* pRenderParameter);
+		void AddRenderEffectParameter(const HrRenderEffectParameterPtr& pRenderParameter);
 
 		uint32 ElementNum() { return m_vecRenderEffectParameter.size(); }
-		HrRenderEffectParameter* ParameterByIndex(uint32 nIndex) { BOOST_ASSERT(nIndex < m_vecRenderEffectParameter.size()); return m_vecRenderEffectParameter[nIndex]; };
-		HrRenderEffectParameter* ParameterByName(const std::string& strParameter);
+		const HrRenderEffectParameterPtr& ParameterByIndex(uint32 nIndex);
+		//HrRenderEffectParameter* ParameterByName(const std::string& strParameter);
 	private:
 		std::string m_strTypeName;
 		std::string m_strName;
@@ -494,7 +505,7 @@ namespace Hr
 
 		uint32 m_nStride;
 
-		std::vector<HrRenderEffectParameter*> m_vecRenderEffectParameter;
+		std::vector<HrRenderEffectParameterPtr> m_vecRenderEffectParameter;
 	};
 
 	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable
@@ -515,12 +526,12 @@ namespace Hr
 		void Dirty(bool bDirty) { m_bDirty = bDirty; };
 		bool Dirty() { return m_bDirty; };
 
-		HrGraphicsBuffer* GetGraphicsBuffer() { return m_pConstantBuffer; }
+		const HrGraphicsBufferPtr& GetGraphicsBuffer() { return m_pConstantBuffer; }
 
 		void UpdateConstantBuffer();
 	private:
-		HrStreamData* m_pConstantBufferData;
-		HrGraphicsBuffer* m_pConstantBuffer;
+		HrStreamDataPtr m_pConstantBufferData;
+		HrGraphicsBufferPtr m_pConstantBuffer;
 
 		std::string m_strConstBufferName;
 		size_t m_nHashName;

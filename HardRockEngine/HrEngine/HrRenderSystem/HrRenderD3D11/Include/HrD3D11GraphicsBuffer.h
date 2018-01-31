@@ -20,7 +20,7 @@ namespace Hr
 //
 //Staging                     yes                       yes                       yes                        yes
 	public:
-		HrD3D11GraphicsBuffer(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pImmediateContext);
+		HrD3D11GraphicsBuffer(const ID3D11DevicePtr& pD3D11Device, const ID3D11DeviceContextPtr& pImmediateContext);
 		HrD3D11GraphicsBuffer(HrD3D11GraphicsBuffer& hardwareBuffer);
 		HrD3D11GraphicsBuffer(HrD3D11GraphicsBuffer&& hardwardBuffer);
 		virtual ~HrD3D11GraphicsBuffer();
@@ -30,7 +30,7 @@ namespace Hr
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag) override;
 		
-		ID3D11Buffer* GetD3DGraphicsBuffer();
+		const ID3D11BufferPtr& GetD3DGraphicsBuffer();
 
 	private:
 		virtual void* Map(HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag) override;
@@ -39,11 +39,11 @@ namespace Hr
 		void CreateHardwareBuffer(const void* pResourceData);
 		
 	private:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
+		ID3D11DevicePtr m_pD3D11Device;
+		ID3D11DeviceContextPtr m_pImmediateContext;
 
-		ID3D11Buffer* m_pD3D11Buffer;
-		ID3D11ShaderResourceView* m_pSRV;
+		ID3D11BufferPtr m_pD3D11Buffer;
+		ID3D11ShaderResourceViewPtr m_pSRV;
 	};
 }
 

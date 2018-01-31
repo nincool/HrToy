@@ -14,10 +14,6 @@ HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName)
 
 HrRenderTechnique::~HrRenderTechnique()
 {
-	for (auto& itemPass : m_vecPass)
-	{
-		SAFE_DELETE(itemPass);
-	}
 	m_vecPass.clear();
 }
 
@@ -26,16 +22,16 @@ size_t HrRenderTechnique::HashName()
 	return m_nHashName;
 }
 
-HrRenderPass* HrRenderTechnique::GetRenderPass(uint32 nIndex)
+const HrRenderPassPtr& HrRenderTechnique::GetRenderPass(uint32 nIndex)
 {
 	BOOST_ASSERT(nIndex < m_vecPass.size());
 
 	return m_vecPass[nIndex];
 }
 
-HrRenderPass* HrRenderTechnique::AddPass(std::string strPassName)
+HrRenderPassPtr HrRenderTechnique::AddPass(const std::string& strPassName)
 {
-	HrRenderPass* pRenderPass = HR_NEW HrRenderPass(strPassName);
+	HrRenderPassPtr pRenderPass = HrMakeSharedPtr<HrRenderPass>(strPassName);
 	m_vecPass.push_back(pRenderPass);
 
 	return pRenderPass;

@@ -30,7 +30,7 @@ namespace Hr
 
 	private:
 		void GetBuildInPlaneMesh();
-		void CreatePlaneStaticMesh(HrMesh* pMesh);
+		void CreatePlaneStaticMesh(const HrMeshPtr& pMesh);
 
 	public:
 		Vector3 m_normal;
@@ -87,7 +87,7 @@ namespace Hr
 		HrGeometryFactory();
 		~HrGeometryFactory();
 
-		HrSceneNode* CreatePlane(float fWidth, float fHeight);
+		HrSceneNodePtr CreatePlane(float fWidth, float fHeight);
 		HrSceneNode* CreateBox(float fLength);
 		HrSceneNode* CreateSkyBox();
 	};

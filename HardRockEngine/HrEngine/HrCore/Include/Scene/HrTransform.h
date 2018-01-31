@@ -16,7 +16,11 @@ namespace Hr
 		};
 
 	public:
-		HrTransform(HrSceneNode* pSceneNode);
+		HrTransform();
+
+		void SetParentTransform(const HrTransformPtr& pTrans);
+
+		void UpdateTransform(float fDelta);
 
 		void SetPosition(const Vector3& v3Pos);
 		void SetPosition(REAL x, REAL y, REAL z);
@@ -60,10 +64,13 @@ namespace Hr
 
 		void Rotate(const Quaternion& q, EnumTransformSpace relativeTo = TS_LOCAL);
 
-		void DirtyTransform();
+		bool GetTransformDirty();
+		void SetTransformDirty(bool bDirty);
 	protected:
 		void UpdateFromParent();
 	protected:
+		HrTransformPtr m_pParentTransform;
+
 		Vector3 m_vPosition;
 		Vector3 m_vForward;
 		Vector3 m_vRight;
@@ -72,13 +79,17 @@ namespace Hr
 		Vector3 m_vEulerAngles;
 		Vector3 m_vLocalEulerAngles;
 		Quaternion m_orientation;
-		Matrix4 m_matWorldMatrix;
+
 		Matrix4 m_matLocalWorldMatrix;
+		
+		bool m_bDirtyWorldMatrix;
+		Matrix4 m_matWorldMatrix;
 
-		HrSceneNode* m_pSceneNode;
-
+		bool m_bDirtyWorldScale;
 		Vector3 m_vWorldScale;
+		bool m_bDirtyOriention;
 		Quaternion m_worldOriention;
+		bool m_bDirtyPosition;
 		Vector3 m_vWorldPosition;
 
 		//these members are derived by combining the local and those of theirs parents.

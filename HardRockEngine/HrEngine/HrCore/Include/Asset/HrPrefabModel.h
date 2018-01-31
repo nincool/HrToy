@@ -20,16 +20,12 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrMesh* GetMesh()
-		{
-			return m_pMesh;
-		}
-
+		const HrMeshPtr& GetMesh() const;
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 	protected:
-		HrMesh* m_pMesh;
+		HrMeshPtr m_pMesh;
 		std::vector<HrMaterial*> m_vecMaterial;
 		std::vector<HrTexture*> m_vecTexture;
 	};

@@ -5,33 +5,27 @@
 
 namespace Hr
 {
-	class HrRootNode : public HrSceneNode
-	{
-	public:
-		HrRootNode();
-		virtual ~HrRootNode();
-	};
 
-	class HR_CORE_API HrCameraNode : public HrSceneNode
-	{
-	public:
-		HrCameraNode(const HrViewPortPtr& pViewPort);
-		virtual ~HrCameraNode();
 
-		HrViewPortPtr GetViewPort();
+	//class HR_CORE_API HrCameraNode : public HrSceneNode
+	//{
+	//public:
+	//	HrCameraNode(const HrViewPortPtr& pViewPort);
+	//	virtual ~HrCameraNode();
 
-		virtual void UpdateNode() override;
+	//	HrViewPortPtr GetViewPort();
 
-		virtual void OnEnter() override;
-		virtual void OnEnterDidFinish() override;
-		virtual void OnExist() override;
-	private:
-		void RecalcCameraView();
+	//	virtual void UpdateNode() override;
 
-	private:
-		HrViewPortPtr m_pViewPort;
-		HrCameraPtr m_pCamera;
-	};
+	//	virtual void OnEnter() override;
+	//	virtual void OnExist() override;
+	//private:
+	//	void RecalcCameraView();
+
+	//private:
+	//	HrViewPortPtr m_pViewPort;
+	//	HrCameraPtr m_pCamera;
+	//};
 
 	class HR_CORE_API HrLightNode : public HrSceneNode
 	{
@@ -41,10 +35,9 @@ namespace Hr
 
 		HrLightPtr& GetLight();
 
-		virtual void UpdateNode() override;
+		virtual void UpdateNode(float fDt) override;
 
 		virtual void OnEnter() override;
-		virtual void OnEnterDidFinish() override;
 		virtual void OnExist() override;
 
 	private:

@@ -16,8 +16,7 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrStringUtil.h"
 
-#include "Kernel/HrRenderCoreComponent.h"
-
+#include "Kernel/HrCoreComponentRender.h"
 #include "Render/HrRenderSystem.h"
 
 
@@ -38,26 +37,22 @@ HrResourceManager::~HrResourceManager()
 void HrResourceManager::ReleaseAllResources()
 {
 	//todo release assets
-	ReleaseResourceCache(m_mapPrefabModels);
+	//ReleaseResourceCache(m_mapPrefabModels);
 	ReleaseResourceCache(m_mapMesh);
-	ReleaseResourceCache(m_mapMaterials);
-	ReleaseResourceCache(m_mapRenderEffects);
+	//ReleaseResourceCache(m_mapMaterials);
+	//ReleaseResourceCache(m_mapRenderEffects);
 
 }
 
-void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResource*>& mapRes)
+void HrResourceManager::ReleaseResourceCache(std::unordered_map<size_t, HrResourcePtr>& mapRes)
 {
-	for (auto it = mapRes.begin(); it != mapRes.end(); ++it)
-	{
-		SAFE_DELETE(it->second);
-	}
 	mapRes.clear();
 }
 
 void HrResourceManager::InitResourceManager()
 {
 	HRLOG("HrResourceManager::InitResourceManager Start to create buildin resources!");
-	CreateBuildInTexture();
+	//CreateBuildInTexture();
 	CreateBuildInEffects();
 	CreateBuildInMaterial();
 }
@@ -71,91 +66,52 @@ void HrResourceManager::CreateBuildInTexture()
 void HrResourceManager::CreateBuildInEffects()
 {
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
-	LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT);
+	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
 }
 
 void HrResourceManager::CreateBuildInMaterial()
 {
 	HRLOG("HrResourceManager::CreateBuildInMaterial Start to create buildin material!");
-	LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL);
+	m_pDefaultMaterial = HrCheckPointerCast<HrMaterial>(LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL));
 }
 
 HrTexture* HrResourceManager::GetDefaultTexture()
 {
 	if (m_pDefaultTexture == nullptr)
 	{
-		m_pDefaultTexture = static_cast<HrTexture*>(GetResource("Media/Model/Buildin/Texture/defaulttexture.png", HrResource::RT_TEXTURE));
 		HRASSERT(m_pDefaultTexture, "GetDefaultTexture Error!");
 	}
+
 	return m_pDefaultTexture;
 }
 
-HrMaterial* HrResourceManager::GetDefaultMaterial()
-{
-	if (m_pDefaultMaterial == nullptr)
-	{
-		m_pDefaultMaterial = static_cast<HrMaterial*>(GetResource("MaterialDefault.material", HrResource::RT_MATERIAL));
-		HRASSERT(m_pDefaultMaterial, "GetDefaultMaterial Error!");
-	}
-
-	return m_pDefaultMaterial;
-}
-
-HrRenderEffect* HrResourceManager::GetDefaultRenderEffect()
+HrRenderEffectPtr HrResourceManager::GetDefaultRenderEffect()
 {
 	if (m_pDefaultRenderEffect == nullptr)
 	{
-		m_pDefaultRenderEffect = static_cast<HrRenderEffect*>(GetResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
 		HRASSERT(m_pDefaultRenderEffect, "GetDefaultRenderEffect Error!");
-
 	}
 
 	return m_pDefaultRenderEffect;
 }
 
-HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
+HrMaterialPtr HrResourceManager::CreateDefaultMaterial()
 {
-	HrResource* pReturnRes = nullptr;
+	HrMaterialPtr pTempDefaultMaterial = HrMakeSharedPtr<HrMaterial>(m_pDefaultMaterial);
+	m_mapMaterials.insert(std::make_pair(pTempDefaultMaterial->GetHashID(), pTempDefaultMaterial));
+
+	return pTempDefaultMaterial;
+}
+
+HrResourcePtr HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
+{
+	HrResourcePtr pReturnRes = nullptr;
 
 	std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	if (!strFullFilePath.empty())
 	{
-		std::string strfileSuffix = HrFileUtils::Instance()->GetFileSuffix(strFile);
-		HrStringUtil::ToLowerCase(strfileSuffix);
-		switch (resType)
-		{
-		case HrResource::RT_MODEL:
-		{
-			pReturnRes = AddModelResource(strFullFilePath);
-			pReturnRes->Load();
-			break;
-		}
-		case HrResource::RT_TEXTURE:
-		{
-			pReturnRes = AddTextureResource(strFullFilePath);
-			pReturnRes->Load();
-			break;
-		}
-		case HrResource::RT_MATERIAL:
-		{
-			pReturnRes = AddMaterialResource(strFullFilePath);
-			pReturnRes->Load();
-			break;
-		}
-		case HrResource::RT_EFFECT:
-		{
-			pReturnRes = AddEffectResource(strFullFilePath);
-			pReturnRes->Load();
-			break;
-		}
-		}
-
-		//todo
-		//if (strfileSuffix == "effectxml")
-		//{
-		//	pReturnRes = AddEffectResource(strFullFilePath);
-		//	pReturnRes->Load();
-		//}
+		pReturnRes = AddResource(strFullFilePath, resType);
+		pReturnRes->Load();
 	}
 	else
 	{
@@ -165,12 +121,12 @@ HrResource* HrResourceManager::LoadResource(const std::string& strFile, HrResour
 	return pReturnRes;
 }
 
-HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResource::EnumResourceType resType)
+HrResourcePtr HrResourceManager::RetriveResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
 	switch (resType)
 	{
-	case HrResource::RT_TEXTURE:
-		return GetTexture(strFile);
+	//case HrResource::RT_TEXTURE:
+	//	return GetTexture(strFile);
 	case HrResource::RT_MESH:
 		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
@@ -186,28 +142,9 @@ HrResource* HrResourceManager::GetResource(const std::string& strFile, HrResourc
 	return nullptr;
 }
 
-HrResource* HrResourceManager::GetSkyBoxResource(const std::string& strFile, HrResource::EnumResourceType resType)
+HrResourcePtr HrResourceManager::RetriveOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
-	size_t nHashID = HrPrefabModel::CreateHashName(strFile);
-	auto item = m_mapPrefabModels.find(nHashID);
-	if (item != m_mapPrefabModels.end())
-	{
-		return item->second;
-	}
-	else
-	{
-		HrGeometrySkyBox* pSkyBox = new HrGeometrySkyBox();
-		pSkyBox->DeclareResource(strFile, strFile);
-		pSkyBox->Load();
-		m_mapPrefabModels[nHashID] = pSkyBox;
-
-		return pSkyBox;
-	}
-}
-
-HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
-{
-	HrResource* pRes = GetResource(strFile, resType);
+	HrResourcePtr pRes = RetriveResource(strFile, resType);
 	if (pRes != nullptr)
 	{
 		return pRes;
@@ -218,54 +155,51 @@ HrResource* HrResourceManager::GetOrLoadResource(const std::string& strFile, HrR
 	}
 }
 
-HrResource* HrResourceManager::GetOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType)
+HrResourcePtr HrResourceManager::RetriveOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
-	HrResource* pReturnRes = GetResource(strFile, resType);
-	if (pReturnRes != nullptr)
+	HrResourcePtr pRes = RetriveResource(strFile, resType);
+	if (pRes != nullptr)
 	{
-		return pReturnRes;
+		return pRes;
 	}
 	else
 	{
-		switch (resType)
-		{
-		case HrResource::RT_MODEL:
-		{
-			pReturnRes = AddModelResource(strFile);
-			break;
-		}
-		case HrResource::RT_TEXTURE:
-		{
-			pReturnRes = AddTextureResource(strFile);
-			break;
-		}
-		case HrResource::RT_MATERIAL:
-		{
-			pReturnRes = AddMaterialResource(strFile);
-			break;
-		}
-		case HrResource::RT_MESH:
-		{
-			pReturnRes = AddMeshResource(strFile);
-			break;
-		}
-		}
+		return AddResource(strFile, resType);
 	}
-
-	return pReturnRes;
 }
 
-HrResource* HrResourceManager::AddModelResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	
-	HrPrefabModel* pRes = HR_NEW HrPrefabModel();
-	pRes->DeclareResource(strFileName, strFile);
+	switch (resType)
+	{
+		//case HrResource::RT_TEXTURE:
+		//	return GetTexture(strFile);
+	case HrResource::RT_MESH:
+		return AddMeshResource(strFile);
+	case HrResource::RT_EFFECT:
+		return AddEffectResource(strFile);
+	case HrResource::RT_MATERIAL:
+		return AddMaterialResource(strFile);
+	case HrResource::RT_MODEL:
+		return AddModelResource(strFile);
+	default:
+		break;
+	}
 
+	return nullptr;
+}
+
+HrResourcePtr HrResourceManager::AddModelResource(const std::string& strFile)
+{
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	
+	HrPrefabModelPtr pRes = HrMakeSharedPtr<HrPrefabModel>();
+	pRes->DeclareResource(strFileName, strFile);
 	if (m_mapPrefabModels.find(pRes->GetHashID()) != m_mapPrefabModels.end())
 	{
-		SAFE_DELETE(pRes);
+		pRes = nullptr;
 		HRASSERT(nullptr, "AddFBXResource Error!");
+		
 		return nullptr;
 	}
 	m_mapPrefabModels.insert(std::make_pair(pRes->GetHashID(), pRes));
@@ -273,7 +207,7 @@ HrResource* HrResourceManager::AddModelResource(const std::string& strFile)
 	return pRes;
 }
 
-HrResource* HrResourceManager::AddEffectResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddEffectResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	size_t nHashID = HrRenderEffect::CreateHashName(strFullFileName);
@@ -283,15 +217,15 @@ HrResource* HrResourceManager::AddEffectResource(const std::string& strFile)
 		return nullptr;
 	}
 
-	std::string strFileName = strFile.substr(strFile.rfind("/") + 1, strFile.size());
-	HrResource* pRes = HR_NEW HrRenderEffect();
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	HrResourcePtr pRes = HrMakeSharedPtr<HrRenderEffect>();
 	pRes->DeclareResource(strFileName, strFullFileName);
 	m_mapRenderEffects.insert(std::make_pair(pRes->GetHashID(), pRes));
 
 	return pRes;
 }
 
-HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddMeshResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	size_t nHashID = HrMesh::CreateHashName(strFullFileName);
@@ -301,26 +235,19 @@ HrResource* HrResourceManager::AddMeshResource(const std::string& strFile)
 		return nullptr;
 	}
 
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	HrResource* pMesh = HR_NEW HrMesh();
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	HrResourcePtr pMesh = HrMakeSharedPtr<HrMesh>();
 	pMesh->DeclareResource(strFileName, strFullFileName);
 	m_mapMesh.insert(std::make_pair(pMesh->GetHashID(), pMesh));
 
 	return pMesh;
 }
 
-HrResource* HrResourceManager::AddMaterialResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
-	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
-	if (m_mapMaterials.find(nHashID) != m_mapMaterials.end())
-	{
-		HRASSERT(nullptr, "AddMeshResource Error!");
-		return nullptr;
-	}
-
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	HrMaterial* pMaterial = HR_NEW HrMaterial();
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	HrMaterialPtr pMaterial = HrMakeSharedPtr<HrMaterial>();
 	pMaterial->DeclareResource(strFileName, strFile);
 	m_mapMaterials.insert(std::make_pair(pMaterial->GetHashID(), pMaterial));
 
@@ -337,12 +264,12 @@ HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
 		return nullptr;
 	}
 
-	std::string strFileName = strFile.substr(strFile.rfind("\\") + 1, strFile.size());
-	HrTexture* pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
-	pTexture->DeclareResource(strFileName, strFile);
-	m_mapMesh.insert(std::make_pair(pTexture->GetHashID(), pTexture));
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	//HrTexture* pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
+	//pTexture->DeclareResource(strFileName, strFile);
+	//m_mapMesh.insert(std::make_pair(pTexture->GetHashID(), pTexture));
 
-	return pTexture;
+	return nullptr;
 }
 
 HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
@@ -357,10 +284,10 @@ HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
 	return nullptr;
 }
 
-HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
+HrResourcePtr HrResourceManager::GetMesh(const std::string& strMeshName)
 {
-	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strMeshName);
-	size_t nHashID = HrMesh::CreateHashName(strFullFileName);
+	std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strMeshName);
+	size_t nHashID = HrMesh::CreateHashName(strFullFilePath);
 	auto item = m_mapMesh.find(nHashID);
 	if (item != m_mapMesh.end())
 	{
@@ -370,7 +297,7 @@ HrResource* HrResourceManager::GetMesh(const std::string& strMeshName)
 	return nullptr;
 }
 
-HrResource* HrResourceManager::GetEffect(const std::string& strEffectName)
+HrResourcePtr HrResourceManager::GetEffect(const std::string& strEffectName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strEffectName);
 	size_t nHashID = HrHashValue(strFullFileName);
@@ -383,7 +310,7 @@ HrResource* HrResourceManager::GetEffect(const std::string& strEffectName)
 	return nullptr;
 }
 
-HrResource* HrResourceManager::GetMaterial(const std::string& strMaterialName)
+const HrResourcePtr& HrResourceManager::GetMaterial(const std::string& strMaterialName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strMaterialName);
 	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
@@ -395,7 +322,7 @@ HrResource* HrResourceManager::GetMaterial(const std::string& strMaterialName)
 	return nullptr;
 }
 
-HrResource* HrResourceManager::GetModel(const std::string& strModelName)
+HrResourcePtr HrResourceManager::GetModel(const std::string& strModelName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strModelName);
 	size_t nHashID = HrPrefabModel::CreateHashName(strFullFileName);

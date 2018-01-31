@@ -154,25 +154,22 @@
     <ClInclude Include="Include\Config\HrContextConfig.h" />
     <ClInclude Include="Include\Event\HrEvent.h" />
     <ClInclude Include="Include\Event\HrEventDispatcher.h" />
-    <ClInclude Include="Include\Event\HrEventKeyboard.h" />
     <ClInclude Include="Include\Event\HrEventListener.h" />
-    <ClInclude Include="Include\Event\HrEventListenerKeyboard.h" />
-    <ClInclude Include="Include\Event\HrEventListenerMouse.h" />
-    <ClInclude Include="Include\Event\HrEventMouse.h" />
     <ClInclude Include="Include\HrCorePreDeclare.h" />
     <ClInclude Include="Include\HrCorePrerequisite.h" />
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\Kernel\HrApplication.h" />
     <ClInclude Include="Include\Kernel\HrCoreComponent.h" />
     <ClInclude Include="Include\Kernel\HrDirector.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponentEvent.h" />
     <ClInclude Include="Include\Kernel\HrFileUtils.h" />
     <ClInclude Include="Include\Kernel\HrIDObject.h" />
     <ClInclude Include="Include\Kernel\HrInputManager.h" />
     <ClInclude Include="Include\Kernel\HrLog.h" />
-    <ClInclude Include="Include\Kernel\HrRenderCoreComponent.h" />
-    <ClInclude Include="Include\Kernel\HrSceneCoreComponent.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponentRender.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponentScene.h" />
     <ClInclude Include="Include\Kernel\HrScheduler.h" />
-    <ClInclude Include="Include\Kernel\HrWinCoreComponent.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponentWin.h" />
     <ClInclude Include="Include\Kernel\HrWindow.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatorConfig.h" />
@@ -184,6 +181,7 @@
     <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h" />
     <ClInclude Include="Include\Render\HrBlendState.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
+    <ClInclude Include="Include\Render\HrDepthStencil.h" />
     <ClInclude Include="Include\Render\HrDepthStencilState.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
@@ -214,11 +212,13 @@
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
     <ClInclude Include="Include\Scene\HrSceneNode.h" />
     <ClInclude Include="Include\Scene\HrSceneObject.h" />
+    <ClInclude Include="Include\Scene\HrSceneObjectComponent.h" />
     <ClInclude Include="Include\Scene\HrTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Asset\HrMaterial.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffectParameter.cpp" />
+    <ClCompile Include="Source\Asset\HrResource.cpp" />
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
@@ -234,21 +234,18 @@
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
     <ClCompile Include="Source\Event\HrEvent.cpp" />
     <ClCompile Include="Source\Event\HrEventDispatcher.cpp" />
-    <ClCompile Include="Source\Event\HrEventKeyboard.cpp" />
     <ClCompile Include="Source\Event\HrEventListener.cpp" />
-    <ClCompile Include="Source\Event\HrEventListenerKeyboard.cpp" />
-    <ClCompile Include="Source\Event\HrEventListenerMouse.cpp" />
-    <ClCompile Include="Source\Event\HrEventMouse.cpp" />
     <ClCompile Include="Source\Kernel\HrCoreComponent.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
     <ClCompile Include="Source\Kernel\HrExport.cpp" />
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp" />
     <ClCompile Include="Source\Kernel\HrInputManager.cpp" />
     <ClCompile Include="Source\Kernel\HrLog.cpp" />
-    <ClCompile Include="Source\Kernel\HrRenderCoreComponent.cpp" />
-    <ClCompile Include="Source\Kernel\HrSceneCoreComponent.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponentRender.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponentScene.cpp" />
     <ClCompile Include="Source\Kernel\HrScheduler.cpp" />
-    <ClCompile Include="Source\Kernel\HrWinCoreComponent.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponentWin.cpp" />
     <ClCompile Include="Source\Kernel\HrWindow.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
@@ -259,6 +256,7 @@
     <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp" />
     <ClCompile Include="Source\Render\HrBlendState.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
+    <ClCompile Include="Source\Render\HrDepthStencil.cpp" />
     <ClCompile Include="Source\Render\HrDepthStencilState.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
@@ -287,6 +285,7 @@
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrSceneNode.cpp" />
     <ClCompile Include="Source\Scene\HrSceneObject.cpp" />
+    <ClCompile Include="Source\Scene\HrSceneObjectComponent.cpp" />
     <ClCompile Include="Source\Scene\HrTransform.cpp" />
   </ItemGroup>
   <ItemGroup>

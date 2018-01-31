@@ -6,48 +6,48 @@
 
 namespace Hr
 {
-	class HrSubMesh
+	class HrSubMesh 
 	{
 	public:
-		HrSubMesh();
+		HrSubMesh(int nSubIndex, const HrMeshPtr& pParent, const std::string& strName);
 		~HrSubMesh();
 
 		void SetName(const std::string& strName);
 		const std::string& GetName();
 
-		HrRenderLayout* GetRenderLayout() const;
-		void SetMaterial(HrMaterial* pMaterial);
-		HrMaterial* GetMaterial() const;
+		void SetMaterial(const HrMaterialPtr& pMaterial);
+		const HrMaterialPtr& GetMaterial();
 
-		void SetTexture(HrTexture* pTexture);
-		HrTexture* GetTexture() const;
+		const HrRenderLayoutPtr& GetRenderLayout();
 	protected:
+		int m_nSubIndex;
 		std::string m_strName;
-		HrRenderLayout* m_pRenderLayout;
-		HrMaterial* m_pMaterial;
-		HrTexture* m_pTexture;
+
+		HrMeshPtr m_pParentMesh;
+		HrRenderLayoutPtr m_pRenderLayout;
+		HrMaterialPtr m_pMaterial;
 	};
 
-	class HrMesh : public HrResource
+	class HrMesh : public HrResource, public std::enable_shared_from_this<HrMesh>
 	{
 	public:
 		HrMesh();
 		virtual ~HrMesh();
 
-		static size_t CreateHashName(const std::string& strFullFilePath);
+		static size_t CreateHashName(const std::string& strHashValue);
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		HrSubMesh* AddSubMesh();
+		const HrSubMeshPtr& AddSubMesh(const std::string& strName);
 		uint32 GetSubMeshNum();
-		HrSubMesh* GetSubMesh(uint32 nIndex);
+		const HrSubMeshPtr& GetSubMesh(uint32 nIndex);
 
 		void FinishedBuildMesh();
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
 	protected:
-		std::vector<HrSubMesh*> m_vecSubMesh;
+		std::vector<HrSubMeshPtr> m_vecSubMesh;
 	};
 }
 

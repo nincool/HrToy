@@ -11,30 +11,27 @@ using namespace Hr;
 
 HrRenderable::HrRenderable()
 {	
-	m_pRenderEffect = nullptr;
-	m_pRenderTechnique = nullptr;
-	m_pAttachSceneNode = nullptr;
 }
 
 HrRenderable::~HrRenderable()
 {
-	for (size_t i = 0; i < m_vecSubRenderable.size(); ++i)
-	{
-		SAFE_DELETE(m_vecSubRenderable[i]);
-	}
-	m_vecSubRenderable.clear();
 }
 
-HrRenderTechnique* HrRenderable::GetRenderTechnique()
+const HrRenderLayoutPtr& HrRenderable::GetRenderLayout()
 {
-	return m_pRenderTechnique;
+	return nullptr;
 }
 
-void HrRenderable::UpdateRenderFrameParameters(HrRenderFrameParameters& renderFrameParameters)
+const HrRenderTechniquePtr& HrRenderable::GetRenderTechnique()
 {
-	renderFrameParameters.SetCurrentRenderable(this);
-	UpdateRenderFrameParametersImpl(renderFrameParameters);
-	m_pRenderEffect->UpdateAutoEffectParams(renderFrameParameters);
+	return m_pCurTechnique;
+}
+
+void HrRenderable::UpdateRenderFrameParameters(const HrRenderFrameParametersPtr& pRenderFrameParameters)
+{
+	pRenderFrameParameters->SetCurrentRenderable(shared_from_this());
+	UpdateRenderFrameParametersImpl(pRenderFrameParameters);
+	m_pRenderEffect->UpdateAutoEffectParams(pRenderFrameParameters);
 
 	UpdateEffectParametersImpl();
 }
@@ -44,7 +41,7 @@ uint32 HrRenderable::GetSubRenderableNum() const
 	return m_vecSubRenderable.size();
 }
 
-HrRenderable* HrRenderable::GetSubRenderable(uint32 nIndex) const
+const HrRenderablePtr HrRenderable::GetSubRenderable(uint32 nIndex) const
 {
 	return m_vecSubRenderable[nIndex];
 }
@@ -54,17 +51,24 @@ bool HrRenderable::CanRender()
 	return true;
 }
 
-void HrRenderable::AttachSceneNode(HrSceneNode* pSceneNode)
+void HrRenderable::AttachSceneNode(const HrSceneNodePtr& pSceneNode)
 {
 	m_pAttachSceneNode = pSceneNode;
 }
 
-HrSceneNode* HrRenderable::GetSceneNode() const
+const HrSceneNodePtr& HrRenderable::GetSceneNode() const
 {
 	return m_pAttachSceneNode;
 }
 
-HrRenderEffect* HrRenderable::GetRenderEffect() const
+void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
+{
+	m_pRenderEffect = pRenderEff;
+	//todo Ñ°ÕÒ×îºÏÊÊµÄ
+	m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+}
+
+const HrRenderEffectPtr& HrRenderable::GetRenderEffect() const
 {
 	return m_pRenderEffect;
 }

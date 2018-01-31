@@ -34,6 +34,9 @@ namespace Hr
 		void ParseFBXSdkScene(HrModelDescInfo& modelDesc);
 		
 		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
+		void ReadMaterial(fbxsdk::FbxNode* pNode, HrModelDescInfo::HrSubMeshInfo& meshInfo);
+		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+
 
 		void ReadMesh(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
 
@@ -50,12 +53,19 @@ namespace Hr
 		*/
 		bool IsOddNegativeScale(const fbxsdk::FbxAMatrix& TotalMatrix);
 
-		void ReadVertexPos(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrix, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrixForNormal, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		void ReadVertexColor(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		void ReadVertexUV(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		void ReadMaterial(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh);
+		void ReadVertexInfo(fbxsdk::FbxMesh* pMesh
+			, fbxsdk::FbxAMatrix& totalMatrix
+			, fbxsdk::FbxAMatrix& totalMatrixForNormal
+			, HrModelDescInfo::HrSubMeshInfo& subMeshInfo
+			, bool bAllByControlPoint
+			, bool bHasNormal
+			, bool bHasUV);
+
+
+		//void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrixForNormal, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		//void ReadVertexColor(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		//void ReadVertexUV(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
+		
 		
 		//void CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo);
 

@@ -14,16 +14,12 @@ namespace Hr
 		*/
 		virtual bool Init() = 0;
 		
-		virtual void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) = 0;
-		virtual const HrRenderFramePtr& GetCurrentFrameBuffer() = 0;
+		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) = 0;
+		virtual const HrRenderFramePtr& GetBindFrameBuffer() = 0;
 
-		virtual void SetCurrentViewPort(HrViewPort* pViewPort) = 0;
+		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) = 0;
 
-		virtual void ClearRenderTargetView() = 0;
-		
-		virtual void ClearDepthStencilView() = 0;
-
-		virtual void Render(HrRenderTechnique* pRenderTechnique, HrRenderLayout* pRenderLayout) = 0;
+		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) = 0;
 
 		virtual void SwapChain() = 0;
 		/**

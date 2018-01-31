@@ -12,11 +12,8 @@ using namespace Hr;
 
 HrD3D11RenderLayout::HrD3D11RenderLayout()
 {
-	m_pInputLayout = nullptr;
-	m_pVertexBuffer = nullptr;
-
-	m_pSolidColorPS = nullptr;
-	m_pSolidColorVS = nullptr;
+	m_pD3DInputLayout = nullptr;
+	m_pD3DVertexBuffer = nullptr;
 
 	m_pD3DInputElementDesc = nullptr;
 }
@@ -26,9 +23,9 @@ Hr::HrD3D11RenderLayout::~HrD3D11RenderLayout()
 	SAFE_DELETE_ARRAY(m_pD3DInputElementDesc);
 }
 
-ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pVertexShader)
+const ID3D11InputLayoutPtr& HrD3D11RenderLayout::GetInputLayout(const HrD3D11ShaderPtr& pShader)
 {
-	if (m_pInputLayout == nullptr)
+	if (m_pD3DInputLayout == nullptr)
 	{
 		size_t nVertexElementNum = m_pVertex->GetVertexElementNum();
 		m_pD3DInputElementDesc = new D3D11_INPUT_ELEMENT_DESC[nVertexElementNum];
@@ -45,29 +42,33 @@ ID3D11InputLayout* HrD3D11RenderLayout::GetInputLayout(HrD3D11Shader* pVertexSha
 			m_pD3DInputElementDesc[i].InstanceDataStepRate = 0;
 		}
 
+		ID3D11InputLayout* pD3DInputLayout = nullptr;
 		HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateInputLayout(
 			m_pD3DInputElementDesc,
 			nVertexElementNum,
-			pVertexShader->GetCodeData()->GetBufferPoint(),
-			pVertexShader->GetCodeData()->GetBufferSize(),
-			&m_pInputLayout);
+			pShader->GetCodeData()->GetBufferPoint(),
+			pShader->GetCodeData()->GetBufferSize(),
+			&pD3DInputLayout);
 		if (FAILED(hr))
 		{
-			if (m_pInputLayout)
-				m_pInputLayout->Release();
+			TRE("HrD3D11RenderLayout::GetInput Error!");
+		}
+		else
+		{
+			m_pD3DInputLayout = MakeComPtr(pD3DInputLayout);
 		}
 	}
-	return m_pInputLayout;
+	return m_pD3DInputLayout;
 }
 
-ID3D11Buffer* HrD3D11RenderLayout::GetVertexBuffer()
+const ID3D11BufferPtr& HrD3D11RenderLayout::GetVertexBuffer()
 {
-	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDVertexBuffer)->GetD3DGraphicsBuffer();
+	return (HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_pVertexBuffer))->GetD3DGraphicsBuffer();
 }
 
-ID3D11Buffer* HrD3D11RenderLayout::GetIndexBuffer()
+const ID3D11BufferPtr& HrD3D11RenderLayout::GetIndexBuffer()
 {
-	return static_cast<HrD3D11GraphicsBuffer*>(m_pHDIndexBuffer)->GetD3DGraphicsBuffer();
+	return (HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_pIndexBuffer))->GetD3DGraphicsBuffer();
 }
 
 

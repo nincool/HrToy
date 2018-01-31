@@ -1,8 +1,7 @@
 #include "Kernel/HrInputManager.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrWinCoreComponent.h"
-#include "Event/HrEventKeyboard.h"
-#include "Event/HrEventMouse.h"
+#include "Kernel/HrCoreComponentWin.h"
+#include "Event/HrEvent.h"
 #include "Event/HrEventDispatcher.h"
 #include "HrUtilTools/Include/HrUtil.h"
 using namespace Hr;
@@ -13,7 +12,7 @@ bool HrInputEventListener::keyPressed(const OIS::KeyEvent &arg)
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
 	HrEventKeyboard event(keyCode, true);
-	HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
 
 	return true;
 }
@@ -23,7 +22,7 @@ bool HrInputEventListener::keyReleased(const OIS::KeyEvent &arg)
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
 	HrEventKeyboard event(keyCode, false);
-	HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
 
 	return true;
 }
@@ -33,7 +32,7 @@ bool HrInputEventListener::mouseMoved(const OIS::MouseEvent &arg)
 	float x, y;
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(HrEventMouse::EnumMouseButtonID::MBI_UNKNOW, HrEventMouse::EnumMouseEventFlag::MEF_MOVE, x, y);
-	HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
@@ -43,7 +42,7 @@ bool HrInputEventListener::mousePressed(const OIS::MouseEvent &arg, OIS::MouseBu
 	float x, y;
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y);
-	HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
@@ -53,7 +52,7 @@ bool HrInputEventListener::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseB
 	float x, y;
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y);
-	HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
 	return true;
 }
 
@@ -393,7 +392,7 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	const HrWinCoreComponentPtr& pWindowComponet = HrDirector::Instance()->GetWinCoreComponent();
+	const HrCoreComponentWinPtr& pWindowComponet = HrDirector::Instance()->GetWinCoreComponent();
 	size_t nWinHandle = (size_t)(pWindowComponet->GetWindowHWnd());
 	winHandleStr << nWinHandle;
 

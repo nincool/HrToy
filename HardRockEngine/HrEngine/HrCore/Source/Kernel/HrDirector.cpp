@@ -5,9 +5,10 @@
 #include "Scene/HrSceneManager.h"
 
 #include "Render/HrRenderSystem.h"
-#include "Kernel/HrRenderCoreComponent.h"
-#include "Kernel/HrWinCoreComponent.h"
-#include "Kernel/HrSceneCoreComponent.h"
+#include "Kernel/HrCoreComponentEvent.h"
+#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrCoreComponentWin.h"
+#include "Kernel/HrCoreComponentScene.h"
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
@@ -33,6 +34,7 @@ bool HrDirector::Init()
 {
 	HRLOG(_T("HrDirector Init!"));
 
+	CreateEventComponent();
 	CreateWindowComponent();
 	CreateSceneComponent();
 	CreateRenderComponent();
@@ -54,8 +56,6 @@ bool HrDirector::Init()
 		HRERROR("CreateInputManager Error!");
 		return false;
 	}
-
-	//CreateRenderComponent();
 
 	m_fDeltaTime = 0;
 	m_lastUpdate = std::chrono::steady_clock::now();
@@ -116,6 +116,7 @@ void HrDirector::StartMainLoop()
 		}
 
 		Update();
+		Render();
 	}
 }
 
@@ -130,8 +131,12 @@ void HrDirector::Update()
 	m_pWindowComponet->Update(m_fDeltaTime);
 	m_pSceneManagerComponent->Update(m_fDeltaTime);
 	m_pRenderComponent->Update(m_fDeltaTime);
+}
 
+bool HrDirector::Render()
+{
 	m_pSceneManagerComponent->RenderScene();
+	return true;
 }
 
 void HrDirector::CalculateDeltaTime()
@@ -160,43 +165,48 @@ void HrDirector::Release()
 	HrResourceManager::Instance()->ReleaseAllResources();
 }
 
-bool HrDirector::Render()
-{
-	return true;
-}
-
 void HrDirector::RunScene(const HrScenePtr& pScene)
 {
 	m_pSceneManagerComponent->RunScene(pScene);
 }
 
+void HrDirector::CreateEventComponent()
+{
+	m_pEventComponent = HrMakeSharedPtr<HrCoreComponentEvent>();
+}
+
 void HrDirector::CreateWindowComponent()
 {
-	m_pWindowComponet = HrMakeSharedPtr<HrWinCoreComponent>();
+	m_pWindowComponet = HrMakeSharedPtr<HrCoreComponentWin>();
 }
 
 void HrDirector::CreateRenderComponent()
 {
-	m_pRenderComponent = HrMakeSharedPtr<HrRenderCoreComponent>("HrRenderD3D11");
+	m_pRenderComponent = HrMakeSharedPtr<HrCoreComponentRender>("HrRenderD3D11");
 	m_pRenderComponent->InitComponent();
 }
 
 void HrDirector::CreateSceneComponent()
 {
-	m_pSceneManagerComponent = HrMakeSharedPtr<HrSceneCoreComponent>();
+	m_pSceneManagerComponent = HrMakeSharedPtr<HrCoreComponentScene>();
 }
 
-const HrWinCoreComponentPtr& HrDirector::GetWinCoreComponent()
+const HrCoreComponentEventPtr& HrDirector::GetEventComponent()
+{
+	return m_pEventComponent;
+}
+
+const HrCoreComponentWinPtr& HrDirector::GetWinCoreComponent()
 {
 	return m_pWindowComponet;
 }
 
-const HrRenderCoreComponentPtr& HrDirector::GetRenderCoreComponent()
+const HrCoreComponentRenderPtr& HrDirector::GetRenderCoreComponent()
 {
 	return m_pRenderComponent;
 }
 
-const HrSceneCoreComponentPtr& HrDirector::GetSceneComponent()
+const HrCoreComponentScenePtr& HrDirector::GetSceneComponent()
 {
 	return m_pSceneManagerComponent;
 }

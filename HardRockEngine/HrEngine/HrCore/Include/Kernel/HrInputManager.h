@@ -29,8 +29,7 @@
 #define __InputContext_H__
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Event/HrEventKeyboard.h"
-#include "HrCore/Include/Event/HrEventMouse.h"
+#include "HrCore/Include/Event/HrEvent.h"
 #include "HrOIS/includes/OIS.h"
 #include "HrCommon/include/HrSingleton.h"
 

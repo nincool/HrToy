@@ -5,20 +5,26 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrRenderCoreComponent : public HrCoreComponent
+	class HR_CORE_API HrCoreComponentRender : public HrCoreComponent
 	{
 	public:
-		HrRenderCoreComponent(const std::string& strRenderModule);
-		~HrRenderCoreComponent();
+		HrCoreComponentRender(const std::string& strRenderModule);
+		~HrCoreComponentRender();
 
 		virtual bool InitComponent() override;
+
+		void AddViewPort(const HrViewPortPtr& pViewPort);
 
 		void BindFrameBuffer(const HrRenderFramePtr& pRenderFrame);
 
 		void OnRenderFrameBegin();
 		void OnRenderFrameEnd();
 
-		void SwapChain();
+		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
+
+		void Present();
+
+		const HrRenderFactoryPtr& GetRenderFactory() const;
 
 		//todo ¡Ÿ ±
 		const HrRenderSystemPtr& GetRenderSystem()
@@ -27,10 +33,9 @@ namespace Hr
 		}
 
 	private:
-		void GetRenderFactory(const std::string& strRenderModule);
+		bool CreateRenderFactory(const std::string& strRenderModule);
 
-		void CreateRenderSystem();
-		
+		void CreateRenderSystem();		
 		void ClearRenderFame();
 	protected:
 		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;

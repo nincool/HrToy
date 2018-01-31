@@ -11,34 +11,34 @@ namespace Hr
 		HrRenderSystem(HrRenderFactoryPtr& pRenderFactory);
 		virtual ~HrRenderSystem();
 
-		void InitRenderSystem();
-
 		const HrRenderFactoryPtr& GetRenderFactory();
 		const HrRenderPtr& GetRender();
-		const HrRenderTargetPtr& GetRenderTarget();
 		const HrRenderFramePtr& GetScreenFrameBuffer();
 
-		void SetCurrentFrameBuffer(const HrRenderFramePtr& pRenderFrame);
-		/**
-		 @Comment: 这里不能返回引用，因为函数内也存在临时变量 [12/29/2017 By Hr]
-		*/
-		HrRenderFramePtr GetCurrentFrameBuffer();
+		void BindFrameBuffer(const HrRenderFramePtr& pRenderFrame);
+		void BindScreenFrameBuffer();
+
+		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
+
+		const HrRenderFramePtr& GetBindFrameBuffer();
 		
 		void ClearRenderTarget();
 		void ClearDepthStencil();
 
-		void SwapChain();
+		void Present();
 	private:
-		void InitRender();
-		void BindScreenFrameBuffer();
+		void CreateRender();
+		void CreateScreenFrameBuffer(uint32 nWidth, uint32 nHeight);
+
+	public:
+		//define const string key
+		static const std::string m_sc_strScreenFrameBufferKey;
 	private:
 		HrRenderFactoryPtr m_pRenderFactory;
-
 		HrRenderPtr m_pRender;
-		HrRenderTargetPtr m_pRenderTarget;
-
-		//主适配器的渲染帧
+		
 		HrRenderFramePtr m_pScreenFrameBuffer;
+		std::unordered_map<std::string, HrRenderFramePtr> m_mapRenderFrames;
 	};
 }
 

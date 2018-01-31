@@ -23,19 +23,19 @@ namespace Hr
 		HrShader();
 		virtual ~HrShader();
 
-		virtual void Bind(HrRender* pRender) = 0;
-		virtual void UnBind(HrRender* pRender) = 0;
+		virtual void Bind(const HrRenderPtr& pRender) = 0;
+		virtual void UnBind(const HrRenderPtr& pRender) = 0;
 
-		virtual void StreamIn(HrStreamData& streamBuffer, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) = 0;
+		virtual void StreamIn(const HrStreamDataPtr& streamBuffer, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) = 0;
 
 		EnumShaderType ShaderType() { return m_shaderType; }
 		std::string& Name() { return m_strName; }
 		size_t HashName() { return m_nHashName; }
 
-		virtual void BindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderStructParameter
-			, std::vector<HrRenderEffectConstantBuffer*>& vecRenderConstBuffer);
-		void GetBindRenderParameter(std::vector<HrRenderEffectParameter*>& vecRenderParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderStruct);
+		virtual void BindRenderParameter(std::vector<HrRenderEffectParameterPtr>& vecRenderParameter
+			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderStructParameter
+			, std::vector<HrRenderEffectConstantBufferPtr>& vecRenderConstBuffer);
+		void GetBindRenderParameter(std::vector<HrRenderEffectParameterPtr>& vecRenderParameter, std::vector<HrRenderEffectStructParameterPtr>& vecRenderStruct);
 	protected:
 		virtual void BindRenderParameterImpl() = 0;
 
@@ -44,10 +44,10 @@ namespace Hr
 		std::string m_strName;
 		size_t m_nHashName;
 
-		std::vector<HrRenderEffectParameter*> m_vecBindRenderParameter;
+		std::vector<HrRenderEffectParameterPtr> m_vecBindRenderParameter;
 		//这里有问题，应该根据不同的shader绑定的不同的ConstantBuffer来区分
-		std::vector<HrRenderEffectStructParameter*> m_vecBindRenderStructParameter;
-		std::vector<HrRenderEffectConstantBuffer*> m_vecBindRenderConstantBuffer;
+		std::vector<HrRenderEffectStructParameterPtr> m_vecBindRenderStructParameter;
+		std::vector<HrRenderEffectConstantBufferPtr> m_vecBindRenderConstantBuffer;
 	};
 }
 

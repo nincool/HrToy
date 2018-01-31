@@ -116,7 +116,7 @@ void HrVertex::AddElementArray(HrVertexElement* pVertexElementArr, uint32 nVerte
 	m_nVertexSize = nOffset;
 }
 
-void HrVertex::AddElement(HrVertexElement& usage)
+void HrVertex::AddElement(const HrVertexElement& usage)
 {
 	m_vecVertexElement.emplace_back(usage);
 }

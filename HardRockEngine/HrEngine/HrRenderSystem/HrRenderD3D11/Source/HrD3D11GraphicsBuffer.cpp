@@ -5,7 +5,7 @@
 
 using namespace Hr;
 
-HrD3D11GraphicsBuffer::HrD3D11GraphicsBuffer(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pImmediateContext)
+HrD3D11GraphicsBuffer::HrD3D11GraphicsBuffer(const ID3D11DevicePtr& pD3D11Device, const ID3D11DeviceContextPtr& pImmediateContext)
 {
 	m_pD3D11Device = pD3D11Device;
 	m_pImmediateContext = pImmediateContext;
@@ -66,12 +66,14 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 		pSubResourceData = &subResourceData;
 	}
 
-	HRESULT rt = m_pD3D11Device->CreateBuffer(&desc, pSubResourceData, &m_pD3D11Buffer);
+	ID3D11Buffer* pD3D11Buffer = nullptr;
+	HRESULT rt = m_pD3D11Device->CreateBuffer(&desc, pSubResourceData, &(pD3D11Buffer));
 	if (FAILED(rt))
 	{
 		HRERROR("HrD3D11GraphicsBuffer CreateHardwareBuffer Error!");
 		return;
 	}
+	m_pD3D11Buffer = MakeComPtr(pD3D11Buffer);
 	//if (m_usage == HrGraphicsBuffer::HBB_SHADER_RESOURCE)
 	//{
 	//	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -81,7 +83,7 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 	//}
 }
 
-ID3D11Buffer* HrD3D11GraphicsBuffer::GetD3DGraphicsBuffer()
+const ID3D11BufferPtr& HrD3D11GraphicsBuffer::GetD3DGraphicsBuffer()
 {
 	return m_pD3D11Buffer;
 }
@@ -89,12 +91,13 @@ ID3D11Buffer* HrD3D11GraphicsBuffer::GetD3DGraphicsBuffer()
 void* HrD3D11GraphicsBuffer::Map(HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag)
 {
 	D3D11_MAPPED_SUBRESOURCE mapped;
-	TIF(m_pImmediateContext->Map(m_pD3D11Buffer, 0, HrD3D11Mapping::GetBufferMap(m_usage, accessFlag), 0, &mapped));
+	TIF(m_pImmediateContext->Map(m_pD3D11Buffer.get(), 0, HrD3D11Mapping::GetBufferMap(m_usage, accessFlag), 0, &mapped));
+	
 	return mapped.pData;
 }
 
 void HrD3D11GraphicsBuffer::Unmap()
 {
-	m_pImmediateContext->Unmap(m_pD3D11Buffer, 0);
+	m_pImmediateContext->Unmap(m_pD3D11Buffer.get(), 0);
 }
 

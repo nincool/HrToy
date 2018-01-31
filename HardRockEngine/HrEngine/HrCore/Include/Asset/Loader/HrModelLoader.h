@@ -36,23 +36,19 @@ namespace Hr
 		{
 			std::string strMeshName;
 
+			std::vector<uint32> vecIndices;
 			std::vector<Vector3> vecVertexPos;
 			std::vector<Vector3> vecNormal;
 			std::vector<float4> vecColor;
-			std::vector<float2> vecTexCoord;
+			std::vector<float2> vecUV;
 
-			std::vector<HrMaterialInfo> vecMaterialInfo;
+			HrMaterialInfo materialInfo;
 			std::vector<std::string> vecTextureFileName;
 		};
 
-		struct HrMeshInfo
-		{
-			std::vector<HrSubMeshInfo> vecSubMeshInfo;
-
-		};
-
 	public:
-		HrMeshInfo meshInfo;
+
+		std::vector<HrSubMeshInfo> vecSubMeshInfo;
 	};
 
 	class HrModelLoader
@@ -68,19 +64,19 @@ namespace Hr
 		HrModelLoader();
 		virtual ~HrModelLoader();
 
-		HrMesh* GetMesh() { return m_pMesh; }
+		HrMeshPtr GetMesh() { return m_pMesh; }
 	public:
 		void Load(std::string& strFile);
 
 	private:
-		void FillEmptyModelInfo(HrModelDescInfo::HrMeshInfo& meshInfo);
+		void FillEmptyModelInfo();
 		HrMaterial* MakeMaterialResource(HrModelDescInfo::HrMaterialInfo& materialInfo);
 		std::vector<HrTexture*> MakeTextureResource(std::vector<std::string>& vecTextureFile);
 		void MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
 
 	protected:
 		std::string m_strFileName;
-		HrMesh* m_pMesh;
+		HrMeshPtr m_pMesh;
 
 		HrModelDescInfo m_modelDesc;
 

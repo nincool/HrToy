@@ -5,29 +5,14 @@ using namespace Hr;
 
 HrRenderTarget::HrRenderTarget()
 {
+}
+
+HrRenderTarget::HrRenderTarget(const HrTexturePtr& pBackBuff)
+{
 
 }
 
 HrRenderTarget::~HrRenderTarget()
 {
-	m_mapViewPort.clear();
-}
-
-bool HrRenderTarget::CreateRenderTarget(uint32 nWidth, uint32 nHeight)
-{
-	nWidth = 0;
-	nHeight = 0;
-
-	return false;
-}
-
-void HrRenderTarget::AddViewPort(HrViewPort* pViewPort)
-{
-	m_mapViewPort.insert(std::make_pair(pViewPort->GetZOrder(), pViewPort));
-}
-
-std::map<int, HrViewPort*>& HrRenderTarget::GetViewPorts()
-{
-	return m_mapViewPort;
 }
 

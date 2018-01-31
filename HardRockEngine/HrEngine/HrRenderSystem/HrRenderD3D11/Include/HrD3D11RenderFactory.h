@@ -15,23 +15,30 @@ namespace Hr
 	public:
 		virtual HrRenderPtr CreateRender() override;
 		
-		virtual HrRenderTargetPtr CreateRenderTarget() override;
+		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
 
 		virtual HrRenderFramePtr CreateRenderFrameBuffer() override;
+		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 
-		virtual HrVertex* CreateVertex() override;
-		
-		virtual HrGraphicsBuffer* CreateHardwareBuffer() override;
-		
-		virtual HrRenderLayout* CreateRenderLayout() override;
-		
-		virtual HrShader* CreateShader() override;
-
-		virtual HrShaderCompilerPtr CreateShaderCompiler() override;
-
-		virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+		virtual HrTexturePtr CreateTexture(HrTexture::EnumTextureType texType
+			, uint32 nWidth
+			, uint32 nHeight
 			, uint32 nSampleCount
 			, uint32 nSampleQuality) override;
+
+		virtual HrRenderLayoutPtr CreateRenderLayout() override;
+
+		virtual HrVertexPtr CreateVertex() override;
+		
+		virtual HrGraphicsBufferPtr CreateGraphicsBuffer() override;
+		
+		virtual HrShaderPtr CreateShader() override;
+
+		virtual HrShaderCompilerPtr CreateShaderCompiler(const std::string& strFileName) override;
+
+		/*	virtual HrTexture* CreateTexture(HrTexture::EnumTextureType texType
+				, uint32 nSampleCount
+				, uint32 nSampleQuality) override;*/
 
 
 		virtual HrSamplerState* CreateSamplerState() override;

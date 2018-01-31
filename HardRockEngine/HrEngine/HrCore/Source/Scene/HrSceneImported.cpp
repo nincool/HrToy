@@ -1,8 +1,11 @@
 #include "Scene/HrSceneImported.h"
 
 #include "Asset/HrStreamData.h"
+
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
+
+#include "Config/HrContextConfig.h"
 
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
 #include "HrCore/Include/Scene/HrEntityNode.h"
@@ -50,9 +53,7 @@ bool HrSceneImported::LoadScene(const std::string& strSceneName)
 	const rapidjson::Value& sceneRootInfo = d["SCENE_ROOT"];
 
 	m_sceneDataInfo.ambientColor = HrMath::MakeColor(HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["AMBIENT_LIGHT_COLOR"].GetString()));
-
 	LoadSceneNode(sceneRootInfo, m_sceneDataInfo.vecSceneNodeInfo);
-
 	CreateSceneFromData();
 
 	HRLOG("HrSceneImported::LoadScene[%s] success!", strSceneName.c_str());
@@ -118,9 +119,8 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 
 void HrSceneImported::CreateSceneFromData()
 {
-	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera();
-	AddSceneNode(m_pSceneMainCamera);
+	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
+	AddNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
 	SetAmbientLight(m_sceneDataInfo.ambientColor);
@@ -138,6 +138,9 @@ void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::
 		{
 		case HrSceneInfo::ET_LIGHT:
 		{
+			//todo 先不创建灯光
+			continue;
+
 			switch (itemSceneNode.sceneLightInfo.nLightType)
 			{
 			case HrLight::LT_DIRECTIONAL:
@@ -156,18 +159,25 @@ void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::
 
 			break;
 		}
+		default:
+			TRE("HrSceneImported::CreateSceneNode Error!");
+		}
+		if (!pSceneNode)
+		{
+			TRE("HrSceneImported::CreateSceneNode Error!");
 		}
 		pSceneNode->SetName(itemSceneNode.strName);
 		pSceneNode->SetEnable(itemSceneNode.nEnable == 1);
 		pSceneNode->GetTransform()->SetScale(itemSceneNode.v3Scale);
 		pSceneNode->GetTransform()->SetOrientation(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(itemSceneNode.v3Rotation)));
 		pSceneNode->GetTransform()->SetPosition(itemSceneNode.v3Position);
+		
+		pParent->AddChild(pSceneNode);
+
 		if (itemSceneNode.vecChildrenSceneNode.size() > 0)
 		{
 			CreateSceneNode(pSceneNode, itemSceneNode.vecChildrenSceneNode);
 		}
-		pParent->AddChild(pSceneNode);
-
 	}
 }
 

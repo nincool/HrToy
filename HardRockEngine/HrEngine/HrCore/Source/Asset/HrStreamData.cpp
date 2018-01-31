@@ -33,7 +33,7 @@ const Byte* HrStreamData::GetBufferPoint() const
 	return static_cast<const Byte*>(&m_vecStreamData[0]);
 }
 
-uint64 HrStreamData::GetBufferSize()
+uint64 HrStreamData::GetBufferSize() const
 {
 	return m_vecStreamData.size();
 }
@@ -61,14 +61,14 @@ void HrStreamData::AddBuffer(Byte* pData, uint32 nSize)
 	memcpy((Byte*)&m_vecStreamData[nOldSize], pData, nSize);
 }
 
-HrStreamData& HrStreamData::operator=(HrStreamData& streamData)
+HrStreamData& HrStreamData::operator=(const HrStreamData& streamData)
 {
 	ResizeBuffer(streamData.m_vecStreamData.size());
 	memcpy(&m_vecStreamData[0], &streamData.m_vecStreamData[0], streamData.m_vecStreamData.size());
 	return *this;
 }
 
-void HrStreamData::CopyFrom(HrStreamData& streamData)
+void HrStreamData::CopyFrom(const HrStreamData& streamData)
 {
 	this->operator=(streamData);
 }

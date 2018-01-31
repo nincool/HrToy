@@ -33,9 +33,10 @@ HrRenderPtr HrD3D11RenderFactory::CreateRender()
 	return std::static_pointer_cast<HrRender>(HrMakeSharedPtr<HrD3D11Render>());
 }
 
-HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget()
+HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget(const HrTexturePtr& pTexture)
 {
-	return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderTarget>());
+	//return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderTarget>());
+	return nullptr;
 }
 
 HrRenderFramePtr HrD3D11RenderFactory::CreateRenderFrameBuffer()
@@ -43,48 +44,87 @@ HrRenderFramePtr HrD3D11RenderFactory::CreateRenderFrameBuffer()
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11FrameBuffer>());
 }
 
-HrVertex* HrD3D11RenderFactory::CreateVertex()
+HrRenderFramePtr HrD3D11RenderFactory::CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight)
 {
-	return HR_NEW HrVertex();
+	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11ScreenFrameBuffer>(nWidth, nHeight));
 }
 
-HrGraphicsBuffer* HrD3D11RenderFactory::CreateHardwareBuffer()
+HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
+	, uint32 nWidth
+	, uint32 nHeight
+	, uint32 nSampleCount
+	, uint32 nSampleQuality)
 {
-	return HR_NEW HrD3D11GraphicsBuffer(HrD3D11Device::Instance()->GetD3DDevice().get(), HrD3D11Device::Instance()->GetD3DDeviceContext().get());
+	switch (texType)
+	{
+	case HrTexture::TEX_TYPE_1D:
+		break;
+	case HrTexture::TEX_TYPE_2D:
+		return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth
+			, nHeight
+			, nSampleCount
+			, nSampleQuality
+			, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW);
+	case HrTexture::TEX_TYPE_3D:
+		break;
+	case HrTexture::TEX_TYPE_CUBE_MAP:
+		break;
+	case HrTexture::TEX_TYPE_2D_ARRAY:
+		break;
+	case HrTexture::TEX_TYPE_2D_RECT:
+		break;
+	default:
+		return HrTexturePtr(nullptr);
+	}
 }
 
-HrRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()
+HrRenderLayoutPtr HrD3D11RenderFactory::CreateRenderLayout()
 {
-	HrRenderLayout* pRenderLayout = HR_NEW HrD3D11RenderLayout();
-
-	return pRenderLayout;
+	return HrMakeSharedPtr<HrD3D11RenderLayout>();
 }
 
-HrShader* HrD3D11RenderFactory::CreateShader()
+HrVertexPtr HrD3D11RenderFactory::CreateVertex()
 {
-	HrShader* pD3D11Shader = HR_NEW HrD3D11Shader();
+	return HrMakeSharedPtr<HrVertex>();
+}
+
+HrGraphicsBufferPtr HrD3D11RenderFactory::CreateGraphicsBuffer()
+{
+	return HrMakeSharedPtr<HrD3D11GraphicsBuffer>(HrD3D11Device::Instance()->GetD3DDevice(), HrD3D11Device::Instance()->GetD3DDeviceContext());
+}
+
+//HrRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()
+//{
+//	HrRenderLayout* pRenderLayout = HR_NEW HrD3D11RenderLayout();
+//
+//	return pRenderLayout;
+//}
+
+HrShaderPtr HrD3D11RenderFactory::CreateShader()
+{
+	HrShaderPtr pD3D11Shader = HrMakeSharedPtr<HrD3D11Shader>();
 
 	return pD3D11Shader;
 }
 
-HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler()
+HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler(const std::string& strFileName)
 {
-	HrShaderCompilerPtr pShaderCompiler = HrMakeSharedPtr<HrD3D11ShaderCompiler>();
+	HrShaderCompilerPtr pShaderCompiler = HrMakeSharedPtr<HrD3D11ShaderCompiler>(strFileName);
 
 	return pShaderCompiler;
 }
 
-HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
-	, uint32 nSampleCount
-	, uint32 nSampleQuality)
-{
-	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetD3DDevice().get()
-		, HrD3D11Device::Instance()->GetD3DDeviceContext().get()
-		, texType
-		, nSampleCount
-		, nSampleQuality);
-	return pTexture2D;
-}
+//HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
+//	, uint32 nSampleCount
+//	, uint32 nSampleQuality)
+//{
+//	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetD3DDevice().get()
+//		, HrD3D11Device::Instance()->GetD3DDeviceContext().get()
+//		, texType
+//		, nSampleCount
+//		, nSampleQuality);
+//	return pTexture2D;
+//}
 
 HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
 {
