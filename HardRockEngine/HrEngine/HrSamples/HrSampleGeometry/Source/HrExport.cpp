@@ -9,6 +9,6 @@ extern "C" HR_EXPORT void HrModuleInitialize()
 
 extern "C"  HR_EXPORT void HrModuleUnload(void)
 {
-	Hr::HrGeometryApp::Instance()->Release();
+	Hr::HrGeometryApp::Instance()->Destroy();
 }
 

@@ -136,6 +136,7 @@
     <ClInclude Include="Include\HrMathConfig.h" />
     <ClInclude Include="Include\HrMathPreDeclare.h" />
     <ClInclude Include="Include\HrMathPrerequisites.h" />
+    <ClInclude Include="Include\HrMurmurHash3.h" />
     <ClInclude Include="Include\KFL\AABBox.hpp" />
     <ClInclude Include="Include\KFL\AlignedAllocator.hpp" />
     <ClInclude Include="Include\KFL\Bound.hpp" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrColor.cpp" />
+    <ClCompile Include="Source\HrMurmurHash3.cpp" />
     <ClCompile Include="Source\KFL\Kernel\CpuInfo.cpp" />
     <ClCompile Include="Source\KFL\Kernel\CustomizedStreamBuf.cpp" />
     <ClCompile Include="Source\KFL\Kernel\DllLoader.cpp" />

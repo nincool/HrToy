@@ -11,14 +11,14 @@ namespace Hr
 	class HrSchedulerTimer
 	{
 	public:
-		HrSchedulerTimer(HrSchedulerPtr pScheduler);
+		HrSchedulerTimer(const HrSchedulerPtr& pScheduler);
 		~HrSchedulerTimer();
 
 		inline float GetInterval() const { return m_fInterval; }
 
 		inline void SetInterval(float fInterval) { m_fInterval = fInterval; }
 
-		void InitTimer(HrSchedulerFunc callBack, size_t nTargetHashKey, size_t nHashKey, float fInterval, uint32 nTriggerTimes, float fDelay);
+		void InitTimer(const HrSchedulerFunc& callBack, size_t nTargetHashKey, size_t nHashKey, float fInterval, uint32 nTriggerTimes, float fDelay);
 
 		void Trigger(float fDelta);
 
@@ -57,7 +57,7 @@ namespace Hr
 		//schedule
 		/////////////////////////////////////////////
 
-		void Schedule(HrSchedulerFunc callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay);
+		void Schedule(const HrSchedulerFunc& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay);
 
 		void UnShcedule(void* pTarget, const std::string& strKey);
 

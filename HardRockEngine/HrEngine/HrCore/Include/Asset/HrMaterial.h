@@ -37,6 +37,7 @@ namespace Hr
 		const float4& GetDiffuse() const;
 		const float4& GetSpecular() const;
 		const float4& GetEmissive() const;
+		float GetGlossiness() const;
 		float GetOpacity() const;
 
 		void SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTexture);
@@ -56,6 +57,8 @@ namespace Hr
 		float4 m_specular;
 		//The colour of light emitted from the object
 		float4 m_emissive;
+
+		float m_fGlossiness;
 
 		float m_fOpacity;
 

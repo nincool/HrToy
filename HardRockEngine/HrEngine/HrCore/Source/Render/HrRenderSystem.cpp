@@ -6,8 +6,11 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Asset/HrRenderEffect.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrCoreComponentWin.h"
+#include "Scene/HrSceneNode.h"
+#include "Scene/HrSceneObject.h"
 
 using namespace Hr;
 
@@ -96,19 +99,16 @@ void HrRenderSystem::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue,
 			m_pRender->SetCurrentViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
 
-			const std::unordered_map<HrRenderablePtr, HrSceneNodePtr>& mapRenderables = pRenderQueue->GetRenderables();
-			for (auto& itemMapRenderable : mapRenderables)
+			const std::vector<HrSceneNodePtr>& vecSceneNodes = pRenderQueue->GetRenderables();
+			for (auto& iteSceneNode : vecSceneNodes)
 			{
-				const HrRenderablePtr& pRenderable = itemMapRenderable.first;
-				const HrSceneNodePtr& pSceneNode = itemMapRenderable.second;
+				pRenderFrameParam->SetCurrentSceneNode(iteSceneNode);
 
-				pRenderable->UpdateRenderFrameParameters(pRenderFrameParam);
+				iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
 
-				const HrRenderLayoutPtr& pRenderLayout = pRenderable->GetRenderLayout();
-				const HrRenderTechniquePtr& pRenderTechnique = pRenderable->GetRenderTechnique();
-				m_pRender->Render(pRenderTechnique, pRenderLayout);
+				m_pRender->Render(iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderTechnique()
+					, iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderLayout());
 			}
-
 		}
 	}
 }

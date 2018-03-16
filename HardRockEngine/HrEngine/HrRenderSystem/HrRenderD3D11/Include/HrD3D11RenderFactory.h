@@ -41,7 +41,7 @@ namespace Hr
 				, uint32 nSampleQuality) override;*/
 
 
-		virtual HrSamplerState* CreateSamplerState() override;
+		virtual HrSamplerStatePtr CreateSamplerState() override;
 
 		virtual HrDepthStencilState* CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) override;
 

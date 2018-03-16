@@ -11,23 +11,17 @@ HrRenderQueue::~HrRenderQueue()
 
 void HrRenderQueue::PrepareRenderQueue()
 {
-	m_mapRenderQueue.clear();
+	m_vecSceneNodes.clear();
 }
 
-void HrRenderQueue::AddRenderable(const HrRenderablePtr& pRenderable)
+void HrRenderQueue::AddRenderable(const HrSceneNodePtr& pSceneNode)
 {
-	if (pRenderable)
-	{
-		if (m_mapRenderQueue.find(pRenderable) == m_mapRenderQueue.end())
-		{
-			m_mapRenderQueue.emplace(pRenderable, pRenderable->GetSceneNode());
-		}
-	}
+	m_vecSceneNodes.push_back(pSceneNode);
 }
 
-const std::unordered_map<HrRenderablePtr, HrSceneNodePtr>& HrRenderQueue::GetRenderables()
+const std::vector<HrSceneNodePtr>& HrRenderQueue::GetRenderables()
 {
-	return m_mapRenderQueue;
+	return m_vecSceneNodes;
 }
 
 

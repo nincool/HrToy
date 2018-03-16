@@ -12,6 +12,7 @@ using namespace Hr;
 HrMaterial::HrMaterial()
 {
 	m_fOpacity = 0.0f;
+	m_fGlossiness = 0.0f;
 }
 
 HrMaterial::HrMaterial(const HrMaterial& material)
@@ -21,6 +22,7 @@ HrMaterial::HrMaterial(const HrMaterial& material)
 	m_diffuse = material.m_diffuse;
 	m_specular = material.m_specular;
 	m_emissive = material.m_emissive;
+	m_fGlossiness = material.m_fGlossiness;
 	m_fOpacity = material.m_fOpacity;
 	m_arrTextures = material.m_arrTextures;
 	
@@ -34,6 +36,7 @@ HrMaterial::HrMaterial(const HrMaterialPtr& pMaterial)
 	m_diffuse = pMaterial->m_diffuse;
 	m_specular = pMaterial->m_specular;
 	m_emissive = pMaterial->m_emissive;
+	m_fGlossiness = pMaterial->m_fGlossiness;
 	m_fOpacity = pMaterial->m_fOpacity;
 	m_arrTextures = pMaterial->m_arrTextures;
 
@@ -89,6 +92,7 @@ bool HrMaterial::LoadImpl()
 	m_diffuse = HrMath::MakeColor(vDiffuse).Value();
 	m_specular = HrMath::MakeColor(vSpecular).Value();
 	m_emissive = HrMath::MakeColor(vEmissive).Value();
+	m_fGlossiness = sceneRootInfo["GLOSSINESS"].GetFloat();
 	
 	m_fOpacity= sceneRootInfo["OPACITY"].GetFloat();
 
@@ -127,6 +131,11 @@ const float4& HrMaterial::GetSpecular() const
 const float4& HrMaterial::GetEmissive() const
 {
 	return m_emissive;
+}
+
+float HrMaterial::GetGlossiness() const
+{
+	return m_fGlossiness;
 }
 
 float HrMaterial::GetOpacity() const

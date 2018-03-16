@@ -10,7 +10,8 @@ namespace Hr
 	public:
 		enum EnumLightType
 		{
-			LT_POINT = 0,
+			LT_AMBIENT = 0,
+			LT_POINT,
 			LT_DIRECTIONAL,
 			LT_SPOTLIGHT,
 
@@ -24,6 +25,9 @@ namespace Hr
 
 		void SetDirection(const Vector3& v3Direction);
 		const Vector3& GetDirection() const;
+		
+		void SetPosition(const Vector3& vPosition);
+		const Vector3& GetPosition() const;
 
 		void SetDiffuse(const HrColor& diffuse);
 		const HrColor& GetDiffuse() const;
@@ -35,12 +39,10 @@ namespace Hr
 		float GetAttenuation0() const;
 		float GetAttenuation1() const;
 		float GetAttenuation2() const;
-		
-		void AttachLightNode(HrLightNode* pLightNode);
-		HrLightNode* GetAttachLightNode() const;
 	protected:
 		EnumLightType m_lightType;
 		Vector3 m_v3Direction;
+		Vector3 m_v3Position;
 
 		HrColor m_diffuse;
 		HrColor m_specular;
@@ -49,8 +51,13 @@ namespace Hr
 		float m_fAttenuation0;
 		float m_fAttenuation1;
 		float m_fAttenuation2;
+	};
 
-		HrLightNode* m_pAttachNode;
+	class HrAmbientLight : public HrLight
+	{
+	public:
+		HrAmbientLight();
+		HrAmbientLight(const HrColor& ambient);
 	};
 
 	class HrDirectionalLight : public HrLight

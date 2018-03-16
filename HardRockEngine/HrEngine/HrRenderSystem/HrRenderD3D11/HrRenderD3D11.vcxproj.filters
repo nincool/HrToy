@@ -11,6 +11,9 @@
     <Filter Include="Source">
       <UniqueIdentifier>{802b76d9-4302-4733-8bd5-c27a7d254fb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HrShader">
+      <UniqueIdentifier>{566e69b4-3aa0-47d7-9198-c6a67e03387b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h">
@@ -138,5 +141,13 @@
     <ClCompile Include="Source\HrD3D11DepthStencil.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Bin_Win\Media\HrShader\HrLightingCommon.hlsl">
+      <Filter>HrShader</Filter>
+    </None>
+    <None Include="..\..\..\Bin_Win\Media\HrShader\HrSimple.hlsl">
+      <Filter>HrShader</Filter>
+    </None>
   </ItemGroup>
 </Project>

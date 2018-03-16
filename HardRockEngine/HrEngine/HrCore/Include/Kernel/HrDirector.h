@@ -32,20 +32,21 @@ namespace Hr
 		const HrCoreComponentEventPtr& GetEventComponent();
 		const HrCoreComponentWinPtr& GetWinCoreComponent();
 		const HrCoreComponentRenderPtr& GetRenderCoreComponent();
-		const HrCoreComponentScenePtr& GetSceneComponent();
+		const HrCoreComponentScenePtr& GetSceneCoreComponent();
 
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
 		virtual bool Init();
 		virtual void StartMainLoop();
 		virtual void End();
-		virtual void Release();
+		virtual void Destroy();
 
 		/////////////////////////////--- 渲染 ---/////////////////////////////////
 		virtual bool Render();
 
 		/////////////////////////////--- 业务 ---/////////////////////////////////
-		virtual void RunScene(const HrScenePtr& pScene);
+		void Schedule(const std::function<void(float)>& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay);
+		void UnSchedule(size_t nTargetHashKeyID, size_t nHashID);
 
 	protected:
 		void CreateEventComponent();

@@ -27,15 +27,6 @@ const HrRenderTechniquePtr& HrRenderable::GetRenderTechnique()
 	return m_pCurTechnique;
 }
 
-void HrRenderable::UpdateRenderFrameParameters(const HrRenderFrameParametersPtr& pRenderFrameParameters)
-{
-	pRenderFrameParameters->SetCurrentRenderable(shared_from_this());
-	UpdateRenderFrameParametersImpl(pRenderFrameParameters);
-	m_pRenderEffect->UpdateAutoEffectParams(pRenderFrameParameters);
-
-	UpdateEffectParametersImpl();
-}
-
 uint32 HrRenderable::GetSubRenderableNum() const
 {
 	return m_vecSubRenderable.size();
@@ -51,16 +42,6 @@ bool HrRenderable::CanRender()
 	return true;
 }
 
-void HrRenderable::AttachSceneNode(const HrSceneNodePtr& pSceneNode)
-{
-	m_pAttachSceneNode = pSceneNode;
-}
-
-const HrSceneNodePtr& HrRenderable::GetSceneNode() const
-{
-	return m_pAttachSceneNode;
-}
-
 void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
 	m_pRenderEffect = pRenderEff;
@@ -71,4 +52,9 @@ void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 const HrRenderEffectPtr& HrRenderable::GetRenderEffect() const
 {
 	return m_pRenderEffect;
+}
+
+const HrMaterialPtr& HrRenderable::GetMaterial()
+{
+	return nullptr;
 }

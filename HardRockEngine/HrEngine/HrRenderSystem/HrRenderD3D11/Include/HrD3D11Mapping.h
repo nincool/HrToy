@@ -17,24 +17,23 @@ namespace Hr
 		static LPCSTR GetInputElementSemanticName(EnumVertexElementUsage usage);
 
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
-		
-		//拓扑类型
+		//topology
 		static D3D_PRIMITIVE_TOPOLOGY GetTopologyType(EnumTopologyType topologyType);
-		
 		//索引缓存格式
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
 		//Shader Data type
 		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
 		static uint32 GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType);
-
+		
+		//D3D11_USAGE <=> HrGraphicsBuffer::EnumGraphicsBufferUsage
 		static D3D11_USAGE GetGraphicsUsage(HrGraphicsBuffer::EnumGraphicsBufferUsage usage);
 		static UINT GetCPUAccessFlag(HrGraphicsBuffer::EnumGraphicsBufferUsage usage);
 		static D3D11_BIND_FLAG GetGraphicsBindFlag(HrGraphicsBuffer::EnumGraphicsBufferBind bindFlag);
 
 		static D3D11_MAP GetBufferMap(HrGraphicsBuffer::EnumGraphicsBufferUsage usage, HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag);
 		
-		//EnumPixelFormat <=> DXGI_FORMAT
+		//DXGI_FORMAT <=> EnumPixelFormat
 		static DXGI_FORMAT GetPixelFormat(EnumPixelFormat pixelFormat);
 		static EnumPixelFormat GetPixelFormat(DXGI_FORMAT dxPixelFormat);
 		

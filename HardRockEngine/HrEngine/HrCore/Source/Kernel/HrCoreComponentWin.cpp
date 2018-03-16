@@ -1,5 +1,5 @@
 #include "Kernel/HrCoreComponentWin.h"
-#include "Platform/AppWin32/HrWindowWin.h"
+#include "Platform/AppWin/HrWindowWin.h"
 #include "Config/HrContextConfig.h"
 
 using namespace Hr;

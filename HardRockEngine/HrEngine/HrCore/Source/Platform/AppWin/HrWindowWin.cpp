@@ -1,5 +1,5 @@
-#include "Platform/AppWin32/HrWindowWin.h"
-#include "Platform/AppWin32/HrWin32WindowEventUtilities.h"
+#include "Platform/AppWin/HrWindowWin.h"
+#include "Platform/AppWin/HrWindowsEventUtilities.h"
 #include "Config/HrContextConfig.h"
 
 using namespace Hr;
@@ -26,7 +26,7 @@ bool HrWindowWin::CreateAppWidnow()
 	WNDCLASS wc;
 	memset(&wc, 0, sizeof(wc));
 	wc.style = CS_DBLCLKS;
-	wc.lpfnWndProc = &HrWin32WindowEventUtilities::WinProc;
+	wc.lpfnWndProc = &HrWindowsEventUtilities::WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInst;
@@ -55,7 +55,7 @@ bool HrWindowWin::CreateAppWidnow()
 
 void HrWindowWin::UpdateMsg()
 {
-	HrWin32WindowEventUtilities::MessagePump();
+	HrWindowsEventUtilities::MessagePump();
 }
 
 void HrWindowWin::Destroy()

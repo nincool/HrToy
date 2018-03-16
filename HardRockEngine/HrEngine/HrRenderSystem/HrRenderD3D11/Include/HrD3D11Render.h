@@ -3,6 +3,7 @@
 
 #include "HrD3D11RenderPrerequisite.h"
 #include "HrCore/Include/Render/HrRender.h"
+#include "HrCore/Include/Render/HrShader.h"
 
 struct ID3D11DeviceContext;
 struct ID3D11Device;
@@ -24,21 +25,24 @@ namespace Hr
 		virtual bool Init() override;
 
 		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
+		
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
 
 		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) override;
 
+		virtual void BindShader(const HrShaderPtr& pShader) override;
+
 		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) override;
+
 		virtual void SwapChain() override;
 
 		virtual void ReleaseRenderEngine() override;
-		virtual bool StartRender() override;
 
 		const ID3D11DevicePtr& GetD3D11Device();
 		const ID3D11DeviceContextPtr& GetD3D11DeviceContext();
 	private:
-		/////////////////////////////--- RenderTest ---/////////////////////////////////
-	public:
+		std::array<const std::vector<ID3D11Buffer*>*, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindShaderBuffers;
+	private:
 		HrRenderFramePtr m_pCurFrameBuffer;
 	};
 }

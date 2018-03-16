@@ -3,8 +3,7 @@
 
 using namespace Hr;
 
-HrCamera::HrCamera(const std::string& strName) : HrSceneObjectComponent(strName)
-	, m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
+HrCamera::HrCamera(const std::string& strName) : m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
 {
 	m_bViewProjDirty = false;
 

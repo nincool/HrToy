@@ -3,15 +3,14 @@
 #include "Render/HrCamera.h"
 #include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
-#include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
+#include "Scene/HrSceneObject.h"
 #include "Asset/HrMaterial.h"
 
 using namespace Hr;
 
 HrRenderFrameParameters::HrRenderFrameParameters()
 {
-	m_pCurrentRenderable = nullptr;
 	m_pCurrentMaterial = nullptr;
 	m_pCurrentCamera = nullptr;
 
@@ -27,33 +26,21 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 {
 }
 
-void HrRenderFrameParameters::SetCurrentScene(const HrScenePtr& pScene)
+
+void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode)
 {
-	m_pCurrentScene = pScene;
+	m_pCurrentSceneNode = pSceneNode;
+	m_pCurrentMaterial = pSceneNode->GetSceneObject()->GetRenderable()->GetMaterial();
 
-	//环境光
-	m_ambientColor = m_pCurrentScene->GetAmbientColor();
-
-	//直线光
-	if (m_pCurrentScene->IsLightsDirty(HrLight::LT_DIRECTIONAL))
-	{
-		m_pCurrentScene->GetDirectionalLightsParam(m_vecDirectionalDirections, m_vecDirectionalDiffuseColor, m_vecDirectionalSpecularColor);
-		m_lightsNum[0] = m_vecDirectionalDirections.size();
-	}
-	//点光源
-	if (m_pCurrentScene->IsLightsDirty(HrLight::LT_POINT))
-	{
-		m_pCurrentScene->GetPointLightsParam(m_vecPointLightPositions, m_vecPointLightRangeAttenuation, m_vecPointLightDiffuseColors, m_vecPointLightSpecularColors);
-		m_lightsNum[1] = m_vecPointLightPositions.size();
-	}
-}
-
-void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr& rend)
-{
-	m_pCurrentRenderable = rend;
-
+	//todo
 	m_bWorldMatrixDirty = true;
 	m_bWorldViewProjMatrixDirty = true;
+}
+
+
+void HrRenderFrameParameters::SetLightsData(const HrSceneLightDataPtr& pLightData)
+{
+	m_pLightsData = pLightData;
 }
 
 void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
@@ -82,7 +69,7 @@ const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 	if (m_bWorldMatrixDirty)
 	{
 		m_bWorldMatrixDirty = false;
-		m_worldMatrix = m_pCurrentRenderable->GetSceneNode()->GetTransform()->GetWorldMatrix();
+		m_worldMatrix = m_pCurrentSceneNode->GetTransform()->GetWorldMatrix();
 	}
 	return m_worldMatrix;
 }
@@ -105,7 +92,7 @@ const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix()
 {
 	if (m_bWorldViewProjMatrixDirty)
 	{
-		m_worldViewProjMatrix = m_worldMatrix * m_pCurrentCamera->GetViewProjMatrix();
+		m_worldViewProjMatrix = GetWorldMatrix() * m_pCurrentCamera->GetViewProjMatrix();
 		m_bWorldViewProjMatrixDirty = false;
 	}
 	
@@ -119,6 +106,11 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 		m_inverseTransposeWorldMatrix = HrMath::Transpose(GetInverseWroldMatrix());
 	}
 	return m_inverseTransposeWorldMatrix;
+}
+
+float HrRenderFrameParameters::GetMaterialGlossiness() const
+{
+	return m_pCurrentMaterial->GetGlossiness();
 }
 
 float4 HrRenderFrameParameters::GetMaterialAmbient() const
@@ -155,7 +147,7 @@ const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
 	{
-		//m_cameraPosition = m_pCurrentCamera->GetAttachCameraNode()->GetTransform()->GetWorldPosition();
+		m_cameraPosition = m_pCurrentCamera->GetEyePos();
 		m_bCameraDirty = false;
 	}
 	return m_cameraPosition;
@@ -175,48 +167,58 @@ const void HrRenderFrameParameters::GetFogParam(float4& fogColor, float& fogStar
 	fogRange = m_fogRange;
 }
 
-const float4& HrRenderFrameParameters::GetAmbientColor()
+const float4 HrRenderFrameParameters::GetAmbientColor()
 {
-	return m_ambientColor;
+	return m_pLightsData->GetLight(HrLight::LT_AMBIENT, 0)->GetDiffuse().Value();
 }
 
-const int3& HrRenderFrameParameters::GetLightsNum()
+const uint4 HrRenderFrameParameters::GetLightsNum()
 {
-	return m_lightsNum;
+	return uint4(m_pLightsData->GetLightsNum(HrLight::LT_AMBIENT), m_pLightsData->GetLightsNum(HrLight::LT_POINT), m_pLightsData->GetLightsNum(HrLight::LT_DIRECTIONAL), 0);
 }
 
-const std::vector<float3>& HrRenderFrameParameters::GetDirectionalLightDirections()
+const int HrRenderFrameParameters::GetLightNum(HrLight::EnumLightType lightType)
 {
-	return m_vecDirectionalDirections;
+	return m_pLightsData->GetLightsNum(lightType);
 }
 
-const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightDiffuseColors()
+const float4 HrRenderFrameParameters::GetDirectionalLightDirection(int nLightIndex)
 {
-	return m_vecDirectionalDiffuseColor;
+	const Vector3& v3Direction = m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetDirection();
+	return float4(v3Direction.x(), v3Direction.y(), v3Direction.z(), 0.0f);
 }
 
-const std::vector<float4>& HrRenderFrameParameters::GetDirectionalLightSpecularColors()
+const float4 HrRenderFrameParameters::GetDirectionalLightDiffuseColor(int nLightIndex)
 {
-	return m_vecDirectionalSpecularColor;
+	return m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetDiffuse().Value();
 }
 
-const std::vector<float4>& HrRenderFrameParameters::GetPointLightDiffuseColors()
+const float4 HrRenderFrameParameters::GetDirectionalLightSpecularColor(int nLightIndex)
 {
-	return m_vecPointLightDiffuseColors;
+	return m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetSpecular().Value();
 }
 
-const std::vector<float4>& HrRenderFrameParameters::GetPointLightSpecularColors()
+const float4 HrRenderFrameParameters::GetPointLightDiffuseColor(int nLightIndex)
 {
-	return m_vecPointLightSpecularColors;
+	return m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetDiffuse().Value();
 }
 
-const std::vector<float3>& HrRenderFrameParameters::GetPointLightPositions()
+const float4 HrRenderFrameParameters::GetPointLightSpecularColor(int nLightIndex)
 {
-	return m_vecPointLightPositions;
+	return m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetSpecular().Value();
 }
 
-const std::vector<float4>& HrRenderFrameParameters::GetPointLightAttenuations()
+const float4 HrRenderFrameParameters::GetPointLightPosition(int nLightIndex)
 {
-	return m_vecPointLightRangeAttenuation;
+	const Vector3& v3Position = m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetPosition();
+	return float4(v3Position.x(), v3Position.y(), v3Position.z(), 0.0);
+}
+
+const float4 HrRenderFrameParameters::GetPointLightAttenuation(int nLightIndex)
+{
+	return float4(m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuation0()
+		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuation1()
+		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuation2()
+		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuationRange());
 }
 

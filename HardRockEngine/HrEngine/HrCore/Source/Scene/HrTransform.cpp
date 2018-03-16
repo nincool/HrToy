@@ -3,7 +3,7 @@
 
 using namespace Hr;
 
-HrTransform::HrTransform()
+HrTransform::HrTransform(const std::function<void(void)>& funDirtyPos)
 {
 	m_bDirtyTransform 
 		= m_bDirtyWorldScale 
@@ -16,6 +16,9 @@ HrTransform::HrTransform()
 	m_orientation = Quaternion::Identity();
 
 	Rotate(m_orientation);
+
+	m_funDirtyPos = funDirtyPos;
+
 }
 
 void HrTransform::SetParentTransform(const HrTransformPtr& pTrans)
@@ -26,7 +29,7 @@ void HrTransform::SetParentTransform(const HrTransformPtr& pTrans)
 void HrTransform::SetPosition(const Vector3& v3Pos)
 {
 	m_vPosition = v3Pos;
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyPosition = true;
+	DirtyPosition();
 }
 
 void HrTransform::SetPosition(REAL x, REAL y, REAL z)
@@ -82,7 +85,12 @@ void HrTransform::Translate(const Vector3& v3, EnumTransformSpace relativeTo /*=
 	case TS_PARENT:
 		break;
 	}
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyPosition = true;
+	DirtyPosition();
+
+	if (m_funDirtyPos)
+	{
+		m_funDirtyPos();
+	}
 }
 
 void HrTransform::Roll(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
@@ -246,5 +254,10 @@ void HrTransform::UpdateTransform(float fDelta)
 	HR_UNUSED(fDelta);
 
 	GetWorldMatrix();	
+}
+
+void HrTransform::DirtyPosition()
+{
+	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyPosition = true;
 }
 

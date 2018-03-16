@@ -10,7 +10,7 @@ HrTestScene::HrTestScene()
 
 HrTestScene::~HrTestScene()
 {
-
+	HRLOG("HrTestScene destroy!");
 }
 
 void HrTestScene::OnEnter()

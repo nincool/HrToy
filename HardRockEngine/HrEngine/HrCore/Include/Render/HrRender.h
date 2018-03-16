@@ -15,9 +15,12 @@ namespace Hr
 		virtual bool Init() = 0;
 		
 		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) = 0;
+		
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() = 0;
 
 		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) = 0;
+
+		virtual void BindShader(const HrShaderPtr& pShader) = 0;
 
 		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) = 0;
 
@@ -27,8 +30,6 @@ namespace Hr
 		*/
 		virtual void ReleaseRenderEngine() = 0;
 
-		//—ßœ∞≤‚ ‘‰÷»æ”√
-		virtual bool StartRender() = 0;
 	};
 }
 

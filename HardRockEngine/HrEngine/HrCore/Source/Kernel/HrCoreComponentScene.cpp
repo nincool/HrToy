@@ -1,6 +1,7 @@
 #include "Kernel/HrCoreComponentScene.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrCoreComponentEvent.h"
+#include "Kernel/HrLog.h"
 #include "Event/HrEvent.h"
 #include "Scene/HrSceneManager.h"
 
@@ -16,7 +17,7 @@ HrCoreComponentScene::HrCoreComponentScene(EnumSceneManagerType sceneManagerType
 
 HrCoreComponentScene::~HrCoreComponentScene()
 {
-
+	HRLOG("HrCoreComponentScene Destroy!");
 }
 
 bool HrCoreComponentScene::Update(float fDelta)

@@ -34,7 +34,7 @@ void HrGeometryApp::ApplicationWillEnterForeground()
 
 bool HrGeometryApp::Destroy()
 {
-	bool bRet = HrApplicationWin::Destroy();
+	bool bRet = HrAppWindows::Destroy();
 
 	return bRet;
 }
@@ -46,7 +46,7 @@ void HrGeometryApp::LoadAssets()
 void HrGeometryApp::CreateScene()
 {
 	std::shared_ptr<HrGeometryScene> pTestScene = HrMakeSharedPtr<HrGeometryScene>();
-	HrDirector::Instance()->RunScene(pTestScene);
+	HrDirector::Instance()->GetSceneCoreComponent()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();
 	//pTestScene->LoadScene("PlayerScene.json");

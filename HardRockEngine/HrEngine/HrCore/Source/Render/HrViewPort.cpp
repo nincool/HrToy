@@ -3,12 +3,12 @@
 
 using namespace Hr;
 
-HrViewPort::HrViewPort( uint32 nTopX, uint32 nTopY, uint32 nWidth, uint32 nHeight, int nZOrder)
+HrViewPort::HrViewPort(float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)
 {
-	m_nTopX = nTopX;
-	m_nTopY = nTopY;
-	m_nWidth = nWidth;
-	m_nHeight = nHeight;
+	m_fTopX = fTopX;
+	m_fTopY = fTopY;
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
 	m_nZOrder = nZOrder;
 }
 
@@ -24,28 +24,28 @@ void HrViewPort::SetCamera(const HrCameraPtr& pCamera)
 		m_pCamera->AttachViewPort(shared_from_this());
 
 		m_pCamera->ViewParams(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f));
-		m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_nWidth / m_nHeight, 0.3f, 1000.0f);
+		m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_fWidth / m_fHeight, 0.3f, 1000.0f);
 	}
 }
 
-uint32 HrViewPort::GetTopX() const
+float HrViewPort::GetTopX() const
 {
-	return m_nTopX;
+	return m_fTopX;
 }
 
-uint32 HrViewPort::GetTopY() const
+float HrViewPort::GetTopY() const
 {
-	return m_nTopY;
+	return m_fTopY;
 }
 
-uint32 HrViewPort::GetWidth() const
+float HrViewPort::GetWidth() const
 {
-	return m_nWidth;
+	return m_fWidth;
 }
 
-uint32 HrViewPort::GetHeight() const
+float HrViewPort::GetHeight() const
 {
-	return m_nHeight;
+	return m_fHeight;
 }
 
 int HrViewPort::GetZOrder() const

@@ -1,5 +1,4 @@
 #include "Render/HrLight.h"
-#include "Scene/HrEntityNode.h"
 
 using namespace Hr;
 
@@ -12,8 +11,6 @@ HrLight::HrLight()
 	m_fAttenuation0 = 1.0f;
 	m_fAttenuation1 = 0.0f;
 	m_fAttenuation2 = 0.0f;
-
-	m_pAttachNode = nullptr;
 }
 
 HrLight::~HrLight()
@@ -84,15 +81,33 @@ float HrLight::GetAttenuation2() const
 	return m_fAttenuation2;
 }
 
-void HrLight::AttachLightNode(HrLightNode* pLightNode)
+void HrLight::SetPosition(const Vector3& vPosition)
 {
-	m_pAttachNode = pLightNode;
+	m_v3Position = vPosition;
 }
 
-HrLightNode* HrLight::GetAttachLightNode() const
+const Vector3& HrLight::GetPosition() const
 {
-	return m_pAttachNode;
+	return m_v3Position;
 }
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
+
+HrAmbientLight::HrAmbientLight()
+{
+	m_lightType = HrLight::LT_AMBIENT;
+	m_diffuse = HrColor(0.5f, 0.5f, 0.5f, 1.0f);
+}
+
+HrAmbientLight::HrAmbientLight(const HrColor& ambient)
+{
+	m_lightType = HrLight::LT_AMBIENT;
+	m_diffuse = ambient;
+}
+
 
 ///////////////////////////////////////////////////
 //
@@ -101,6 +116,9 @@ HrLightNode* HrLight::GetAttachLightNode() const
 HrDirectionalLight::HrDirectionalLight()
 {
 	m_lightType = HrLight::LT_DIRECTIONAL;
+	m_v3Direction = Vector3(1.0f, -1.0f, 1.0f);
+	m_diffuse = HrMath::MakeColor(200.0f, 200.0f, 200.0f, 255.0f);
+	m_specular = HrMath::MakeColor(255.0f, 244.0f, 215.0f, 255.0f);
 }
 
 HrDirectionalLight::HrDirectionalLight(const Vector3 v3Direction, const HrColor& diffuse, const HrColor& specular)

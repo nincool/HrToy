@@ -34,6 +34,8 @@ inline bool SetMyCurrentDirectory()
 	return true;
 }
 
+#include "HrCore/Include/Kernel/HrDirector.h"
+
 int main()
 {
 	SetMyCurrentDirectory();
@@ -58,8 +60,8 @@ int main()
 		}
 	}
 
-	moduleLoaderApp.HrFreeModule();
-
+	//todo
+	//moduleLoaderApp.HrFreeModule();
 	
 	return 0;
 }

@@ -9,7 +9,7 @@ using namespace Hr;
 //HrSchedulerTimer
 /////////////////////////////////////////////////////
 
-HrSchedulerTimer::HrSchedulerTimer(HrSchedulerPtr pScheduler):m_pScheduler(pScheduler)
+HrSchedulerTimer::HrSchedulerTimer(const HrSchedulerPtr& pScheduler):m_pScheduler(pScheduler)
 {
 	m_fElapsed = 0;
 	m_bRunForever = false;
@@ -27,7 +27,7 @@ HrSchedulerTimer::~HrSchedulerTimer()
 {
 }
 
-void HrSchedulerTimer::InitTimer(HrSchedulerFunc callBack, size_t nTargetHashKey, size_t nHashKey, float fInterval, uint32 nTriggerTimes, float fDelay)
+void HrSchedulerTimer::InitTimer(const HrSchedulerFunc& callBack, size_t nTargetHashKey, size_t nHashKey, float fInterval, uint32 nTriggerTimes, float fDelay)
 {
 	m_fElapsed = -1;
 	m_fInterval = fInterval;
@@ -163,12 +163,12 @@ void HrScheduler::Update(float fDetal)
 	m_vecReadyTimersInfoReadyErase.clear();
 }
 
-void HrScheduler::Schedule(HrSchedulerFunc callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay)
+void HrScheduler::Schedule(const HrSchedulerFunc& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay)
 {
 	HRASSERT(pTarget, "Argument pTarget must be non-nullptr");
 	HRASSERT(!strKey.empty(), "strKey should not be empty");
 
-	size_t nTargetHashKey = reinterpret_cast<size_t>(pTarget);
+	size_t nTargetHashKey = boost::hash_value(pTarget);
 	size_t nTimerHashKey = HrHashValue(strKey);
 	auto& itemTargetTimers = m_mapSchedulerTimer.find(nTargetHashKey);
 	if (itemTargetTimers != m_mapSchedulerTimer.end())

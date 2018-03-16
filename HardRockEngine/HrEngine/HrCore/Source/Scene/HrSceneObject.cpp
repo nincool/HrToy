@@ -2,8 +2,11 @@
 #include "Scene/HrSceneObjectComponent.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrTransform.h"
+#include "Scene/HrScene.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrLog.h"
 #include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrCoreComponentScene.h"
 #include "Render/HrCamera.h"
 
 using namespace Hr;
@@ -29,9 +32,13 @@ void HrSceneObject::AttachSceneNode(const HrSceneNodePtr& pSceneNode)
 
 void HrSceneObject::OnEnter()
 {
-	for (auto& iteCamera : m_lisCameras)
+	if (m_pCachedCamera)
 	{
-		AddCameraToScene(iteCamera);
+		AddCameraToScene(m_pCachedCamera->GetCamera());
+	}
+	if (m_pCachedLight)
+	{
+		AddLightToScene(m_pCachedLight->GetLight());
 	}
 }
 
@@ -43,9 +50,10 @@ void HrSceneObject::Update(float fDelta, const HrTransformPtr& pTrans)
 {
 	if (pTrans->GetTransformDirty())
 	{
-		for (auto& iteCamera : m_lisCameras)
+		if (m_pCachedCamera)
 		{
-			iteCamera->ViewParams(pTrans->GetWorldPosition(), iteCamera->GetLookAt(), iteCamera->GetUp());
+			const HrCameraPtr& pCamera = m_pCachedCamera->GetCamera();
+			pCamera->ViewParams(pTrans->GetWorldPosition(), pCamera->GetLookAt(), pCamera->GetUp());
 		}
 	}
 }
@@ -65,23 +73,53 @@ const HrRenderablePtr& HrSceneObject::GetRenderable()
 	return m_pRenderable;
 }
 
-void HrSceneObject::AddComponent(EnumSceneComponentType comType, const HrSceneObjectComponentPtr& pSceneObjComponent)
+void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent)
 {
+	auto comType = pSceneObjComponent->GetComType();
+
 	switch (comType)
 	{
-	case HrSceneObject::SCT_NORMAL:
+	case HrSceneObjectComponent::SCT_NORMAL:
 		break;
-	case HrSceneObject::SCT_CAMERA:
+	case HrSceneObjectComponent::SCT_CAMERA:
 	{
-		HrCameraPtr pCamera = HrCheckPointerCast<HrCamera>(pSceneObjComponent);
-		m_lisCameras.push_back(pCamera);
-		AddCameraToScene(pCamera);
+		if (!m_pCachedCamera)
+		{
+			m_mapComponents[comType] = pSceneObjComponent;
+			m_pCachedCamera = HrCheckPointerCast<HrCameraComponet>(pSceneObjComponent);
+			AddCameraToScene(m_pCachedCamera->GetCamera());
+			break;
+		}
+		else
+		{
+			HRERROR("HrSceneObject::AddComponent Error! Can not add a camera again!");
+		}
+	}
+	case HrSceneObjectComponent::SCT_LIGHT:
+	{
+		if (!m_pCachedLight)
+		{
+			m_mapComponents[comType] = pSceneObjComponent;
+			m_pCachedLight = HrCheckPointerCast<HrLightComponent>(pSceneObjComponent);
+			AddLightToScene(m_pCachedLight->GetLight());
+		}
+		else
+		{
+			HRERROR("HrSceneObject::AddComponent Error! Can not add a light again!");
+		}
 		break;
 	}
 	default:
+	{
+		if (m_mapComponents.find(comType) != m_mapComponents.end())
+		{
+			HRLOG("HrSceneObject::AddComponent Error! Type[%d]", comType);
+			return;
+		}
+		m_mapComponents[comType] = pSceneObjComponent;
 		break;
 	}
-	m_lisComponents.push_back(pSceneObjComponent);
+	}
 }
 
 void HrSceneObject::AddCameraToScene(const HrCameraPtr& pCamera)
@@ -92,6 +130,18 @@ void HrSceneObject::AddCameraToScene(const HrCameraPtr& pCamera)
 		if (pSceneNode->GetEnable())
 		{
 			HrDirector::Instance()->GetRenderCoreComponent()->AddViewPort(pCamera->GetViewPort());
+		}
+	}
+}
+
+void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
+{
+	if (!m_pContainerNode.expired())
+	{
+		HrSceneNodePtr pSceneNode = m_pContainerNode.lock();
+		if (pSceneNode->GetEnable())
+		{
+			HrDirector::Instance()->GetSceneCoreComponent()->GetRunningScene()->GetLightsData()->AddLight(pLight);
 		}
 	}
 }

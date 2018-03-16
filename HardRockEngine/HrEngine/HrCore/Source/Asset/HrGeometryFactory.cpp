@@ -39,6 +39,7 @@ void HrGeometryPlane::GetBuildInPlaneMesh()
 
 void HrGeometryPlane::CreatePlaneStaticMesh(const HrMeshPtr& pMesh)
 {
+	//todo
 	m_pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
 	BOOST_ASSERT(m_pRenderEffect);
 	m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);

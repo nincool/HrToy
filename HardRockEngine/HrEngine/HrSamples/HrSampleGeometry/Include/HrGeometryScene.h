@@ -13,14 +13,14 @@ namespace Hr
 
 		virtual void OnEnter() override;
 
-		void MouseUpdate(float fDelta);
+		void SceneUpdate(float fDelta);
 	private:
 		void CreateSceneElements();
 
 		void CreateInputEvent();
 
-		void OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent);
-		void OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent);
+		void OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent);
+		void OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent);
 
 		void OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, HrEvent* pEvent);
 		void OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, HrEvent* pEvent);
@@ -29,9 +29,7 @@ namespace Hr
 		void ResetKeyFlag();
 	private:
 		HrSceneNodePtr m_pSceneMainCamera;
-
-		HrSceneNode* m_pTestSceneNode;
-		HrSceneNode* m_pTestSceneNode2;
+		HrSceneNodePtr m_pTestNode;
 
 		bool m_bKeyAPressed;
 		bool m_bKeyWPressed;

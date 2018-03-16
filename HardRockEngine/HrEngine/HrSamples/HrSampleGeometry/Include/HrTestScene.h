@@ -45,9 +45,6 @@ namespace Hr
 		bool m_bKeyUpPressed;
 		bool m_bKeyDownPressed;
 
-
-		HrSceneNode* m_pSphere;
-		HrRenderEffect* m_pEffect;
 		bool m_bSphereDir;
 
 		unsigned int m_nShiness;

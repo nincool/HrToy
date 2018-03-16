@@ -1,15 +1,11 @@
 #include "Scene/HrSceneImported.h"
-
 #include "Asset/HrStreamData.h"
-
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
-
 #include "Config/HrContextConfig.h"
-
 #include "HrCore/Include/Asset/HrGeometryFactory.h"
-#include "HrCore/Include/Scene/HrEntityNode.h"
 #include "HrCore/Include/Scene/HrTransform.h"
+#include "HrCore/Include/Scene/HrSceneNode.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
@@ -123,7 +119,7 @@ void HrSceneImported::CreateSceneFromData()
 	AddNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
-	SetAmbientLight(m_sceneDataInfo.ambientColor);
+	//SetAmbientLight(m_sceneDataInfo.ambientColor);
 
 	//创建Entity节点
 	CreateSceneNode(m_pSceneRootNode, m_sceneDataInfo.vecSceneNodeInfo);
@@ -145,9 +141,9 @@ void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::
 			{
 			case HrLight::LT_DIRECTIONAL:
 			{
-				pSceneNode = HrSceneObjectFactory::Instance()->CreateDirectionalLight(itemSceneNode.sceneLightInfo.vDirection
-					, itemSceneNode.sceneLightInfo.diffuseColor
-					, itemSceneNode.sceneLightInfo.specularColor);
+				//pSceneNode = HrSceneObjectFactory::Instance()->CreateDirectionalLight(itemSceneNode.sceneLightInfo.vDirection
+				//	, itemSceneNode.sceneLightInfo.diffuseColor
+				//	, itemSceneNode.sceneLightInfo.specularColor);
 				break;
 			}
 			}

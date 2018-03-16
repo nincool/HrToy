@@ -7,6 +7,7 @@
 #include <D3DCompiler.h>
 #include <algorithm>
 
+
 using namespace Hr;
 
 HrD3D11ShaderCompiler::HrD3D11ShaderCompiler(const std::string& strFileName) 
@@ -40,10 +41,14 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 
 	UINT compileFlags = 0;
 	//https://msdn.microsoft.com/en-us/library/windows/desktop/gg615083(v=vs.85).aspx
-	compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+	//compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
 	//Directs the compiler to pack matrices in column-major order on input and output from the shader. 
 	//This type of packing is generally more efficient because a series of dot-products can then perform vector-matrix multiplication.
-	compileFlags |= D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR; 
+	//compileFlags |= D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR; 
+
+	compileFlags |= D3DCOMPILE_ENABLE_STRICTNESS;
+	compileFlags |= D3DCOMPILE_DEBUG;
+	compileFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 	
 	std::string strShaderModel = "";
 	switch (shaderType)
@@ -61,10 +66,25 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 	ID3DBlob* pD3DShaderBuffer = nullptr;
 	ID3DBlob* pErrorBuffer = nullptr;
 
+	std::wstring strWFileName(m_strFileName.length(), L' ');
+	std::copy(m_strFileName.begin(), m_strFileName.end(), strWFileName.begin());
+	HRESULT hr = D3DCompileFromFile(
+		strWFileName.c_str(),
+		pDefines,
+		&includeHandler,
+		strEntryPoint.c_str(),
+		strShaderModel.c_str(),
+		compileFlags,
+		NULL,
+		&pD3DShaderBuffer,
+		&pErrorBuffer
+	);
+
+	/*
 	HRESULT hr = D3DCompile(
 		pSource,					// [in] Pointer to the shader in memory. 
 		nSize,						// [in] Size of the shader in memory.  
-		m_strFileName.c_str(),  // [in] Optional. You can use this parameter for strings that specify error messages.
+		m_strFileName.c_str(),      // [in] Optional. You can use this parameter for strings that specify error messages.
 		pDefines,					// [in] Optional. Pointer to a NULL-terminated array of macro definitions. See D3D_SHADER_MACRO. If not used, set this to NULL. 
 		&includeHandler,			// [in] Optional. Pointer to an ID3DInclude Interface interface for handling include files. Setting this to NULL will cause a compile error if a shader contains a #include. 
 		strEntryPoint.c_str(),		// [in] Name of the shader-entrypoint function where shader execution begins. 
@@ -74,6 +94,8 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 		&pD3DShaderBuffer,			// [out] A pointer to an ID3DBlob Interface which contains the compiled shader, as well as any embedded debug and symbol-table information. 
 		&pErrorBuffer				// [out] A pointer to an ID3DBlob Interface which contains a listing of errors and warnings that occurred during compilation. These errors and warnings are identical to the the debug output from a debugger.
 	);
+	*/
+
 	if (FAILED(hr))
 	{
 		if (pErrorBuffer != 0)
@@ -94,9 +116,9 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 	pCompiledData->ResizeBuffer(pD3DShaderBuffer->GetBufferSize());
 	memcpy(pCompiledData->GetBufferPoint(), pD3DShaderBuffer->GetBufferPointer(), pD3DShaderBuffer->GetBufferSize());
 
-	auto pStripStreamData = StripCompiledCode(*pCompiledData.get());
-
-	m_mapCompileData.insert(std::make_pair(strEntryPoint, std::make_tuple(shaderType, pCompiledData, pStripStreamData, D3D11ShaderDesc())));
+	//auto pStripStreamData = StripCompiledCode(*pCompiledData.get());
+	
+	m_mapCompileData.insert(std::make_pair(strEntryPoint, std::make_tuple(shaderType, pCompiledData, nullptr, D3D11ShaderDesc())));
 
 	pD3DShaderBuffer->Release();
 
@@ -208,11 +230,6 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 				constantVariableDesc.name = constVarDesc.Name;
 				constantVariableDesc.start_offset = constVarDesc.StartOffset;
 				constantVariableDesc.size = static_cast<uint32>(constVarDesc.Size);
-				//最后一个size在字节对齐的情况下是有问题的，不知道什么原因
-				//if (nCBVarIndex == constantBufferDesc.Variables - 1)
-				//{
-				//	constantVariableDesc.size = constantBufferDesc.Size - constantVariableDesc.start_offset;
-				//}
 
 				constantVariableDesc.typeName = varRefTypeDesc.Name;
 				constantVariableDesc.varClass = static_cast<uint32>(varRefTypeDesc.Class);
@@ -222,20 +239,11 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 				constantVariableDesc.elements = static_cast<uint16>(varRefTypeDesc.Elements);
 				constantVariableDesc.elements = constantVariableDesc.elements > 0 ? constantVariableDesc.elements : 1;
 				constantVariableDesc.bUsed = constVarDesc.uFlags & D3D_SVF_USED;
-
-				{
-					size_t nSeed = HrHashValue(constVarDesc.Name);
-					//boost::hash_combine(nSeed, constantVariableDesc.varClass);
-					//boost::hash_combine(nSeed, constantVariableDesc.type);
-					//boost::hash_combine(nSeed, constantVariableDesc.rows);
-					//boost::hash_combine(nSeed, constantVariableDesc.columns);
-					//boost::hash_combine(nSeed, constantVariableDesc.elements);
-					constantVariableDesc.name_hash = nSeed;
-				}
-
+				constantVariableDesc.name_hash = HrHashValue(constantVariableDesc.name);
+		
+				//struct
 				if (constantVariableDesc.varClass == D3D_SVC_STRUCT)
 				{
-					const UINT nParentOffset = constVarDesc.StartOffset;
 					for (uint32 nStructVarIndex = 0; nStructVarIndex < varRefTypeDesc.Members; ++nStructVarIndex)
 					{
 						D3D11_SHADER_TYPE_DESC memberTypeDesc;
@@ -244,8 +252,8 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 						pMemberType->GetDesc(&memberTypeDesc);
 						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc structVariableDesc;
 						structVariableDesc.name = pVarRefType->GetMemberTypeName(nStructVarIndex);
-						structVariableDesc.start_offset = memberTypeDesc.Offset + nParentOffset;
-						
+						structVariableDesc.start_offset = memberTypeDesc.Offset;
+
 						structVariableDesc.varClass = static_cast<uint32>(memberTypeDesc.Class);
 						structVariableDesc.type = static_cast<uint8>(memberTypeDesc.Type);
 						structVariableDesc.rows = static_cast<uint8>(memberTypeDesc.Rows);
@@ -253,16 +261,21 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 						structVariableDesc.elements = static_cast<uint16>(memberTypeDesc.Elements);
 						structVariableDesc.elements = structVariableDesc.elements > 0 ? structVariableDesc.elements : 1;
 						structVariableDesc.bUsed = constantVariableDesc.bUsed;
+						structVariableDesc.name_hash = HrHashValue(structVariableDesc.name);
 
+						for (uint32 nParentEleIndex = 0; nParentEleIndex < constantVariableDesc.elements; ++nParentEleIndex)
 						{
-							size_t nSeed = HrHashValue(structVariableDesc.name);
-							//boost::hash_combine(nSeed, constVarDesc.Name);
-							//boost::hash_combine(nSeed, structVariableDesc.varClass);
-							//boost::hash_combine(nSeed, structVariableDesc.type);
-							//boost::hash_combine(nSeed, structVariableDesc.rows);
-							//boost::hash_combine(nSeed, structVariableDesc.columns);
-							//boost::hash_combine(nSeed, structVariableDesc.elements);
-							structVariableDesc.name_hash = nSeed;						
+							for (uint32 nStructVarEleIndex = 0; nStructVarEleIndex < structVariableDesc.elements; ++nStructVarEleIndex)
+							{
+								size_t nSeed = constantVariableDesc.name_hash;
+								HrHashCombine(nSeed, structVariableDesc.name);
+								HrHashCombine(nSeed, nParentEleIndex);
+								HrHashCombine(nSeed, nStructVarEleIndex);
+
+								std::pair<uint32, uint32> indexPair = std::make_pair(nParentEleIndex, nStructVarEleIndex);
+								std::pair<size_t, std::pair<uint32, uint32> > valuePair = std::make_pair(nSeed, indexPair);
+								structVariableDesc.vecTestHashKey.push_back(valuePair);
+							}
 						}
 
 						constantVariableDesc.struct_desc.push_back(structVariableDesc);
@@ -275,17 +288,29 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 					else
 					{
 						if (constantVariableDesc.struct_desc.size() >= 2)
-						{ 
+						{
 							uint32 nLastVariableOffset = 0;
 							for (size_t nStructVariableIndex = 0; nStructVariableIndex < constantVariableDesc.struct_desc.size() - 1; ++nStructVariableIndex)
 							{
 								constantVariableDesc.struct_desc[nStructVariableIndex].size =
 									constantVariableDesc.struct_desc[nStructVariableIndex + 1].start_offset - constantVariableDesc.struct_desc[nStructVariableIndex].start_offset;
 							}
-							constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].size = 
+							constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].size =
 								constantVariableDesc.size - constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].start_offset
 								+ constantVariableDesc.start_offset;
 						}
+					}
+				}
+				else
+				{
+					for (uint32 nEleIndex = 0; nEleIndex < constantVariableDesc.elements; ++nEleIndex)
+					{
+						size_t nSeed = constantVariableDesc.name_hash;
+						HrHashCombine(nSeed, nEleIndex);
+
+						std::pair<uint32, uint32> indexPair = std::make_pair(nEleIndex, -1);
+						std::pair<size_t, std::pair<uint32, uint32> > valuePair = std::make_pair(nSeed, indexPair);
+						constantVariableDesc.vecTestHashKey.push_back(valuePair);
 					}
 				}
 
@@ -394,9 +419,7 @@ HrStreamDataPtr HrD3D11ShaderCompiler::StripCompiledCode(const HrStreamData& sha
 	return pStripStreamData;
 }
 
-void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectParameterPtr>& vecParameter
-	, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-	, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer)
+void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer)
 {
 	for (auto shaderDescItem : m_mapCompileData)
 	{
@@ -407,11 +430,16 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 		{
 			D3D11ShaderDesc::ConstantBufferDesc& cbDesc = shaderDesc.cb_desc[nCBIndex];
 
-			HrRenderEffectConstantBufferPtr pConstBuffer = GetConstantBuffer(vecConstantBuffer, cbDesc.name_hash);
-			if (pConstBuffer == nullptr)
+			HrRenderEffectConstantBufferPtr pConstBuffer = nullptr;
+			auto iteBuffer = mapConstantBuffer.find(cbDesc.name_hash);
+			if (iteBuffer == mapConstantBuffer.end())
 			{
 				pConstBuffer = HrMakeSharedPtr<HrRenderEffectConstantBuffer>(cbDesc.name, cbDesc.name_hash, cbDesc.size);
-				vecConstantBuffer.push_back(pConstBuffer);
+				mapConstantBuffer[cbDesc.name_hash] = pConstBuffer;
+			}
+			else
+			{
+				continue;
 			}
 
 			uint32 nVarNum = shaderDesc.cb_desc[nCBIndex].var_desc.size();
@@ -420,66 +448,78 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = shaderDesc.cb_desc[nCBIndex].var_desc[nVarIndex];
 				if (varDesc.varClass == D3D_SVC_STRUCT)
 				{
-					HrRenderEffectStructParameterPtr pEffectStruct = HrMakeSharedPtr<HrRenderEffectStructParameter>(varDesc.typeName, varDesc.name, varDesc.name_hash);
-					for (uint32 nStructMemIndex = 0; nStructMemIndex < varDesc.struct_desc.size(); ++nStructMemIndex)
+					for (size_t nEleIndex = 0; nEleIndex < varDesc.elements; ++nEleIndex)
 					{
-						D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varStructMen = varDesc.struct_desc[nStructMemIndex];
-						HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(varStructMen.name, varStructMen.name_hash);
+						for (uint32 nStructMemIndex = 0; nStructMemIndex < varDesc.struct_desc.size(); ++nStructMemIndex)
+						{
+							D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varStructMen = varDesc.struct_desc[nStructMemIndex];
+							for (uint32 nStructMemElement = 0; nStructMemElement < varStructMen.elements; ++nStructMemElement)
+							{
+								size_t nHashKey = varStructMen.vecTestHashKey[nEleIndex * varStructMen.elements + nStructMemElement].first;
+								int nIndex1 = varStructMen.vecTestHashKey[nEleIndex * varStructMen.elements + nStructMemElement].second.first;
+								int nIndex2 = varStructMen.vecTestHashKey[nEleIndex * varStructMen.elements + nStructMemElement].second.second;
+								HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(varStructMen.name, nHashKey, nIndex1, nIndex2);
 
-						const HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varStructMen.name);
-						if (pRenderParamDefine != nullptr)
-						{
-							//HLSL 是按照4D向量对齐 但是在cbuffer中分配内存又很奇怪，待验证
-							BOOST_ASSERT(pRenderParamDefine->nStride * pRenderParamDefine->nElementCount == varStructMen.size);
-							pEffectParameter->ParamInfo(pRenderParamDefine->paramType
-								, pRenderParamDefine->dataType
-								, HrRenderEffectParameter::REPBT_CONSTBUFFER
-								, varStructMen.size / varStructMen.elements
-								, varStructMen.elements);
-							
-							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
+								const HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varStructMen.name);
+								if (pRenderParamDefine != nullptr)
+								{
+									pEffectParameter->ParamInfo(pRenderParamDefine->paramType
+										, pRenderParamDefine->dataType
+										, HrRenderEffectParameter::REPBT_CONSTBUFFER
+										, varStructMen.size / varStructMen.elements
+										, varStructMen.elements);
+
+									pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset + varDesc.start_offset + varDesc.size * nEleIndex);
+								}
+								else
+								{
+									//todo 自定义变量
+									pEffectParameter->ParamInfo(PRT_CUSTOM
+										, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type)
+										, HrRenderEffectParameter::REPBT_CONSTBUFFER
+										, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type))
+										, varStructMen.elements);
+									pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset + varDesc.start_offset + varDesc.size * nEleIndex);
+								}
+
+								BOOST_ASSERT(mapParameters.find(nHashKey) == mapParameters.end());
+								mapParameters[nHashKey] = pEffectParameter;
+							}
 						}
-						else
-						{
-							//todo 自定义变量
-							pEffectParameter->ParamInfo(PRT_CUSTOM
-								, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type)
-								, HrRenderEffectParameter::REPBT_CONSTBUFFER
-								, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varStructMen.type))
-								, varStructMen.elements);
-							pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset);
-						}
-						//pEffectStruct->AddRenderEffectParameter(pEffectParameter);
 					}
-					vecRenderEffectStruct.push_back(pEffectStruct);
-
-					//BOOST_ASSERT(nStructSize <= varDesc.size);
 				}
 				else
 				{
-					//if it is worldviewprojmatrix , the class is D3D_SVC_MATRIX_COLUMNS, need to transpose the matrix
-					HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(varDesc.name, varDesc.name_hash);
-					const HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varDesc.name);
-					if (pRenderParamDefine != nullptr)
+					for (size_t nEleIndex = 0; nEleIndex < varDesc.elements; ++nEleIndex)
 					{
-						pEffectParameter->ParamInfo(pRenderParamDefine->paramType
-							, pRenderParamDefine->dataType
-							, HrRenderEffectParameter::REPBT_CONSTBUFFER
-							, pRenderParamDefine->nStride
-							, varDesc.elements);
-						pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
-					}
-					else
-					{
-						pEffectParameter->ParamInfo(EnumRenderParamType::PRT_CUSTOM
-							, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varDesc.type)
-							, HrRenderEffectParameter::REPBT_CONSTBUFFER
-							, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varDesc.type))
-							, varDesc.elements);
- 						pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
-					}
+						//if it is worldviewprojmatrix , the class is D3D_SVC_MATRIX_COLUMNS, need to transpose the matrix
+						size_t nHashKey = varDesc.vecTestHashKey[nEleIndex].first;
+						int nIndex1 = varDesc.vecTestHashKey[nEleIndex].second.first;
+						int nIndex2 = varDesc.vecTestHashKey[nEleIndex].second.second;
+						HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(varDesc.name, nHashKey, nIndex1, nIndex2);
+						const HrRenderParamDefine* pRenderParamDefine = GetRenderParamDefine(varDesc.name);
+						if (pRenderParamDefine != nullptr)
+						{
+							pEffectParameter->ParamInfo(pRenderParamDefine->paramType
+								, pRenderParamDefine->dataType
+								, HrRenderEffectParameter::REPBT_CONSTBUFFER
+								, pRenderParamDefine->nStride
+								, varDesc.elements);
+							pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
+						}
+						else
+						{
+							pEffectParameter->ParamInfo(EnumRenderParamType::PRT_CUSTOM
+								, HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varDesc.type)
+								, HrRenderEffectParameter::REPBT_CONSTBUFFER
+								, HrD3D11Mapping::GetRenderParamDataSize(HrD3D11Mapping::GetRenderParamDataType((D3D_SHADER_VARIABLE_TYPE)varDesc.type))
+								, varDesc.elements);
+							pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset);
+						}
 
-					vecParameter.push_back(pEffectParameter);
+						BOOST_ASSERT(mapParameters.find(nHashKey) == mapParameters.end());
+						mapParameters[nHashKey] = pEffectParameter;
+					}
 				}
 			}
 		}
@@ -510,9 +550,8 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::vector<HrRenderEffectPar
 	}
 }
 
-void HrD3D11ShaderCompiler::BindParametersToShader(std::vector<HrRenderEffectParameterPtr>& vecParameter
-	, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-	, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer
+void HrD3D11ShaderCompiler::BindParametersToShader(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapRenderEffectParameters
+	, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapRenderConstantBuffers
 	, std::unordered_map<std::string, HrShaderPtr>& mapShader)
 {
 	std::vector<HrRenderEffectParameterPtr> vecShaderBindParameters;
@@ -528,43 +567,46 @@ void HrD3D11ShaderCompiler::BindParametersToShader(std::vector<HrRenderEffectPar
 				for (size_t nCBIndex = 0; nCBIndex < d3dDescShader.cb_desc.size(); ++nCBIndex)
 				{
 					const D3D11ShaderDesc::ConstantBufferDesc& cbDesc = d3dDescShader.cb_desc[nCBIndex];
-					HrRenderEffectConstantBufferPtr pConstBuffer = GetConstantBuffer(vecConstantBuffer, cbDesc.name_hash);
-					BOOST_ASSERT(pConstBuffer);
-					vecShaderBindConstantBuffers.push_back(pConstBuffer);
-					
+					auto iteConstantBuff = mapRenderConstantBuffers.find(cbDesc.name_hash);
+					BOOST_ASSERT(iteConstantBuff != mapRenderConstantBuffers.end());
+					vecShaderBindConstantBuffers.push_back(iteConstantBuff->second);
+		
 					for (size_t nVarIndex = 0; nVarIndex < d3dDescShader.cb_desc[nCBIndex].var_desc.size(); ++nVarIndex)
 					{
 						const D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = d3dDescShader.cb_desc[nCBIndex].var_desc[nVarIndex];
 						//先看看是不是结构体
 						if (varDesc.struct_desc.size() > 0)
 						{
-							HrRenderEffectStructParameterPtr pEffectStruct = GetEffectStruct(vecRenderEffectStruct, varDesc.name_hash);
-							BOOST_ASSERT(pEffectStruct);
-							vecShaderBindStructParameters.push_back(pEffectStruct);
+							for (size_t nStructVarIndex = 0; nStructVarIndex < varDesc.struct_desc.size(); ++nStructVarIndex)
+							{
+								const D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& structVar = varDesc.struct_desc[nStructVarIndex];
+								for (size_t nStructVarEleIndex = 0; nStructVarEleIndex < structVar.vecTestHashKey.size(); ++nStructVarEleIndex)
+								{
+									size_t nHashKey = structVar.vecTestHashKey[nStructVarEleIndex].first;
+									auto iteParam = mapRenderEffectParameters.find(nHashKey);
+									BOOST_ASSERT(iteParam != mapRenderEffectParameters.end());
+									vecShaderBindParameters.push_back(iteParam->second);
+								}
+							}
+							
 						}
 						else
 						{
-							HrRenderEffectParameterPtr pParameter = GetEffectParameter(vecParameter, varDesc.name_hash);
-							BOOST_ASSERT(pParameter);
-							vecShaderBindParameters.push_back(pParameter);
+							for (size_t nVarEleIndex = 0; nVarEleIndex < varDesc.vecTestHashKey.size(); ++nVarEleIndex)
+							{
+								size_t nHashKey = varDesc.vecTestHashKey[nVarEleIndex].first;
+								auto iteParam = mapRenderEffectParameters.find(nHashKey);
+								BOOST_ASSERT(iteParam != mapRenderEffectParameters.end());
+								vecShaderBindParameters.push_back(iteParam->second);
+							}
 						}
 					}
 				}
-				//for (size_t nResIndex = 0; nResIndex < desc.res_desc.size(); ++nResIndex)
-				//{
-				//	D3D11ShaderDesc::BoundResourceDesc& resDesc = desc.res_desc[nResIndex];
-				//	HrRenderEffectParameter* pParameter = GetEffectParameter(vecParameter, resDesc.name_hash);
-				//	//BOOST_ASSERT(pParameter);
-				//	if (pParameter != nullptr)
-				//	{
-				//		vecShaderBindParameters.push_back(pParameter);
-				//	}
-				//}
 
 				break;
 			}
 		}
-		itemShader.second->BindRenderParameter(vecShaderBindParameters, vecShaderBindStructParameters, vecShaderBindConstantBuffers);
+		itemShader.second->BindRenderParameter(vecShaderBindParameters, vecShaderBindConstantBuffers);
 	}
 }
 
@@ -573,7 +615,7 @@ HrStreamDataPtr HrD3D11ShaderCompiler::GetCompiledData(const std::string& strEnt
 	auto iteCompiledInfo = m_mapCompileData.find(strEntryPoint);
 	if (iteCompiledInfo != m_mapCompileData.end())
 	{
-		HrStreamDataPtr pCompiledData = std::get<2>(iteCompiledInfo->second);
+		HrStreamDataPtr pCompiledData = std::get<1>(iteCompiledInfo->second);
 
 		return pCompiledData;
 	}
@@ -581,7 +623,7 @@ HrStreamDataPtr HrD3D11ShaderCompiler::GetCompiledData(const std::string& strEnt
 	return nullptr;
 }
 
-HrRenderEffectStructParameterPtr Hr::HrD3D11ShaderCompiler::GetEffectStruct(std::vector<HrRenderEffectStructParameterPtr>& renderEffectStruct, size_t nHashName)
+HrRenderEffectStructParameterPtr HrD3D11ShaderCompiler::GetEffectStruct(std::vector<HrRenderEffectStructParameterPtr>& renderEffectStruct, size_t nHashName)
 {
 	for (auto item : renderEffectStruct)
 	{

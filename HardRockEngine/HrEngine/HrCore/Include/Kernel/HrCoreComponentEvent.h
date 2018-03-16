@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrCoreComponentEvent : public HrCoreComponent
+	class HR_CORE_API HrCoreComponentEvent : public HrCoreComponent
 	{
 	public:
 		HrCoreComponentEvent();

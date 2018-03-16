@@ -24,22 +24,25 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
 
-	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_INT3, 1, 12),
+	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_UINT4, 1, 16),
 
-	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY, "diffuse_light_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY, "specular_light_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY, "light_direction", REDT_FLOAT3, 4, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR, "diffuse_light_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR, "specular_light_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION, "light_direction", REDT_FLOAT4, 1, 16),
 
+	HrRenderParamDefine(RPT_POINT_LIGHT_DIFFUSE_COLOR, "point_light_diffuse_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_SPECULAR_COLOR, "point_light_specular_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION, "point_light_range_attenuation", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION, "point_light_position", REDT_FLOAT4, 1, 16),
+
+	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "glossiness_material", REDT_FLOAT1, 1, 4),
 	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_REFLECT_MATERIAL_COLOR, "reflect_material_color", REDT_FLOAT4, 1, 16),
+
 
 	
-	HrRenderParamDefine(RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY, "point_light_diffuse_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY, "point_light_specular_color", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION_ARRAY, "point_light_range_attenuation", REDT_FLOAT4, 4, 16),
-	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION_ARRAY, "point_light_position", REDT_FLOAT3, 1, 64),
+
 
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
@@ -450,7 +453,7 @@ void HrRenderVariable::Value(HrTexture*& val) const
 	BOOST_ASSERT(false);
 }
 
-void HrRenderVariable::Value(HrSamplerState*& val) const
+void HrRenderVariable::Value(HrSamplerStatePtr& val) const
 {
 	BOOST_ASSERT(false);
 }
@@ -515,7 +518,6 @@ HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
 {
-	SAFE_DELETE(m_pSamplerState);
 }
 
 HrRenderVariable& HrRenderVariableSamplerState::operator=(const HrSamplerState* pSamplerState)
@@ -523,7 +525,7 @@ HrRenderVariable& HrRenderVariableSamplerState::operator=(const HrSamplerState* 
 	return *this;
 }
 
-void HrRenderVariableSamplerState::Value(HrSamplerState*& val) const
+void HrRenderVariableSamplerState::Value(HrSamplerStatePtr& val) const
 {
 	val = m_pSamplerState;
 }
@@ -533,7 +535,7 @@ void HrRenderVariableSamplerState::Value(HrSamplerState*& val) const
 //
 ///////////////////////////////////////////
 
-HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName)
+HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName, int nIndex1, int nIndex2)
 {
 	m_paramType = RPT_UNKNOWN;
 	m_bindType = REPBT_UNKNOWN;
@@ -545,6 +547,9 @@ HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, 
 
 	m_strName = strVarName;
 	m_nHashName = nHashName;
+
+	m_nIndex1 = nIndex1;
+	m_nIndex2 = nIndex2;
 }
 
 HrRenderEffectParameter::~HrRenderEffectParameter()
@@ -579,33 +584,28 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
 		break;
 	}
-	case RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY:
-	case RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY:
-	case RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY:
-	case RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY:
-	case RPT_POINT_LIGHT_ATTENUATION_ARRAY:
+	case RPT_DIRECTIONAL_DIFFUSE_COLOR:
+	case RPT_DIRECTIONAL_SPECULAR_COLOR:
+	case RPT_POINT_LIGHT_DIFFUSE_COLOR:
+	case RPT_POINT_LIGHT_SPECULAR_COLOR:
+	case RPT_POINT_LIGHT_ATTENUATION:
+	case RPT_DIRECTIONAL_LIGHT_DIRECTION:
+	case RPT_POINT_LIGHT_POSITION:
 	{
-		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 4);
-		m_pRenderVariable = HR_NEW HrRenderVariableFloat4Array();
-		break;
-	}
-	case RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY:
-	case RPT_POINT_LIGHT_POSITION_ARRAY:
-	{
-		m_pRenderVariable = HR_NEW HrRenderVariableFloat3Array();
+		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableFloat4();
 		break;
 	}
 	case RPT_LIGHTS_NUM:
 	{
-		BOOST_ASSERT(m_dataType == REDT_INT3 && m_nArraySize == 1);
-		m_pRenderVariable = HR_NEW HrRenderVariableInt3();
+		BOOST_ASSERT(m_dataType == REDT_UINT4 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableUInt4();
 		break;
 	}
 	case RPT_AMBIENT_COLOR:
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	case RPT_DIFFUSE_MATERIAL_COLOR:
 	case RPT_SPECULAR_MATERIAL_COLOR:
-	case RPT_REFLECT_MATERIAL_COLOR:
 	case RPT_FOG_COLOR:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 1);
@@ -618,6 +618,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3();
 		break;
 	}
+	case RPT_MATERIAL_GLOSSINESS:
 	case RPT_FOG_START:
 	case RPT_FOG_RANGE:
 	{
@@ -824,7 +825,7 @@ HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& st
 	m_nHashName = nHashName;
 	m_nSize = nSize;
 
-	m_pConstantBufferData = HrMakeSharedPtr<HrStreamData>(m_nSize);
+	m_pConstantBufferData = HrMakeSharedPtr<HrStreamData>(static_cast<uint32>(m_nSize));
 	m_pConstantBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pConstantBuffer->BindStream(nullptr, m_nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }

@@ -53,18 +53,23 @@ namespace Hr
 		return p ? std::shared_ptr<T>(p, std::mem_fn(&T::Release)) : std::shared_ptr<T>();
 	}
 
-	inline size_t HrHashValue(const char* str)
+	template <typename T>
+	inline size_t HrHashValue(const T& p)
 	{
-		//static boost::hash<std::string> string_hash;
-		static std::hash<std::string> string_hash;
-		return string_hash(str);
+		return boost::hash_value(p);
 	}
 
-	inline size_t HrHashValue(const std::string str)
+	//template <>
+	//inline size_t HrHashValue<std::string>(const std::string& str)
+	//{
+	//	static std::hash<std::string> string_hash;
+	//	return string_hash(str);
+	//}
+
+	template <class T>
+	inline void HrHashCombine(std::size_t& seed, T const& v)
 	{
-		//static boost::hash_range(str.begin(), str.end());
-		static std::hash<std::string> string_hash;
-		return string_hash(str);
+		return boost::hash_combine(seed, v);
 	}
 
 	template <typename T, typename U>

@@ -17,9 +17,10 @@ namespace Hr
 		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
 		virtual bool CanRender() override;
+
+		virtual const HrMaterialPtr& GetMaterial() override;
 	protected:
-		virtual void UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters) override;
-		virtual void UpdateEffectParametersImpl() override;
+
 	private:
 		//³ÖÓÐµÄSubMesh
 		HrSubMeshPtr m_pSubMesh;

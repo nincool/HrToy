@@ -28,6 +28,7 @@ HrDirector::HrDirector()
 
 HrDirector::~HrDirector()
 {
+	HRLOG("HrDirector Destroy");
 }
 
 bool HrDirector::Init()
@@ -62,7 +63,6 @@ bool HrDirector::Init()
 
 	return true;
 }
-
 
 bool HrDirector::CreateRenderState()
 {
@@ -159,16 +159,10 @@ void HrDirector::End()
 	}
 }
 
-void HrDirector::Release()
+void HrDirector::Destroy()
 {
-	//先释放资源
-	HrResourceManager::Instance()->ReleaseAllResources();
-}
 
-void HrDirector::RunScene(const HrScenePtr& pScene)
-{
-	m_pSceneManagerComponent->RunScene(pScene);
-}
+} 
 
 void HrDirector::CreateEventComponent()
 {
@@ -206,8 +200,17 @@ const HrCoreComponentRenderPtr& HrDirector::GetRenderCoreComponent()
 	return m_pRenderComponent;
 }
 
-const HrCoreComponentScenePtr& HrDirector::GetSceneComponent()
+const HrCoreComponentScenePtr& HrDirector::GetSceneCoreComponent()
 {
 	return m_pSceneManagerComponent;
 }
 
+void HrDirector::Schedule(const std::function<void(float)>& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay)
+{
+	m_pScheduler->Schedule(callBack, pTarget, strKey, fInterval, nRepeat, fDelay);
+}
+
+void HrDirector::UnSchedule(size_t nTargetHashKeyID, size_t nHashID)
+{
+	m_pScheduler->UnSchedule(nTargetHashKeyID, nHashID);
+}

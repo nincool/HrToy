@@ -15,8 +15,6 @@ namespace Hr
 		void BindPass(const HrRenderPtr& pRender);
 		void UnBindPass(const HrRenderPtr& pRender);
 
-		//void CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct);
-
 		const HrShaderPtr& GetShader(HrShader::EnumShaderType shaderType);
 		void SetShader(const HrShaderPtr& pShader, HrShader::EnumShaderType shaderType);
 

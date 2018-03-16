@@ -43,7 +43,7 @@ namespace Hr
 		//	, uint32 nSampleCount
 		//	, uint32 nSampleQuality) = 0;
 
-		virtual HrSamplerState* CreateSamplerState() = 0;
+		virtual HrSamplerStatePtr CreateSamplerState() = 0;
 
 		virtual HrDepthStencilState* CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) = 0;
 

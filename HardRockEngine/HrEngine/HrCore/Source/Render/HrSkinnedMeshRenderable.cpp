@@ -51,35 +51,8 @@ bool HrSkinnedMeshRenderable::CanRender()
 	return true;
 }
 
-void HrSkinnedMeshRenderable::UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters)
+const HrMaterialPtr& HrSkinnedMeshRenderable::GetMaterial()
 {
-	//if (m_pSubMesh != nullptr)
-	//{
-	//	HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
-	//	if (pMaterial != nullptr)
-	//	{
-	//		renderFrameParameters.SetCurrentMaterial(pMaterial);
-	//	}
-	//}
-}
-
-void HrSkinnedMeshRenderable::UpdateEffectParametersImpl()
-{
-	//if (m_pSubMesh != nullptr)
-	//{
-	//	if (m_pSubMesh->GetTexture() != nullptr)
-	//	{
-	//		HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
-	//		if (pTexParam != nullptr)
-	//		{
-	//			HrTexture* pTexture = m_pSubMesh->GetTexture();
-	//			if (pTexture == nullptr)
-	//			{
-	//				pTexture = HrResourceManager::Instance()->GetDefaultTexture();
-	//			}
-	//			*pTexParam = pTexture;
-	//		}
-	//	}
-	//}
+	return m_pSubMesh->GetMaterial();
 }
 

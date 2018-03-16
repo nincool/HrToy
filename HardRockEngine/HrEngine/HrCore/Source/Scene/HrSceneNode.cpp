@@ -3,7 +3,6 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderTarget.h"
-#include "Scene/HrEntityNode.h"
 #include "Scene/HrTransform.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrSceneManager.h"
@@ -23,7 +22,7 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_bEnable = true;
 	m_nodeType = NT_NORMAL;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>();
+	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
 }
 
 HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::GenerateID<HrSceneNode>())
@@ -32,7 +31,7 @@ HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::Generate
 	m_bEnable = true;
 	m_nodeType = NT_NORMAL;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>();
+	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
 }
 
 HrSceneNode::~HrSceneNode()
@@ -119,7 +118,7 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 	{
 		if (m_pSceneObject && m_pSceneObject->GetRenderable() && m_pSceneObject->GetRenderable()->CanRender())
 		{
-			pRenderQueue->AddRenderable(m_pSceneObject->GetRenderable());
+			pRenderQueue->AddRenderable(shared_from_this());
 		}
 		for (auto& item : m_vecChildrenNode)
 		{
@@ -187,29 +186,29 @@ const HrTransformPtr& HrSceneNode::GetTransform() const
 	return m_pTransform;
 }
 
-HrSceneNode* HrSceneNode::GetChildByName(const std::string& strName) const
+const HrSceneNodePtr& HrSceneNode::GetChildByName(const std::string& strName) const
 {
 	for (auto& item : m_vecChildrenNode)
 	{
 		if (item->m_strName == strName)
 		{
-			return item.get();
+			return item;
 		}
 	}
 	return nullptr;
 }
 
-HrSceneNode* HrSceneNode::GetNodeByNameFromHierarchy(const std::string& strName)
+const HrSceneNodePtr& HrSceneNode::GetNodeByNameFromHierarchy(const std::string& strName)
 {
 	if (this->m_strName == strName)
 	{
-		return this;
+		return shared_from_this();
 	}
 	else
 	{
 		for (auto& itemChild : m_vecChildrenNode)
 		{
-			HrSceneNode* pResult = itemChild->GetNodeByNameFromHierarchy(strName);
+			const HrSceneNodePtr& pResult = itemChild->GetNodeByNameFromHierarchy(strName);
 			if (pResult != nullptr)
 			{
 				return pResult;
@@ -239,5 +238,13 @@ void HrSceneNode::SetSceneObject(const HrSceneObjectPtr& pSceneObj)
 const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 {
 	return m_pSceneObject;
+}
+
+void HrSceneNode::DirtyPosition()
+{
+	for (auto& iteChild : m_vecChildrenNode)
+	{
+		iteChild->GetTransform()->DirtyPosition();
+	}
 }
 

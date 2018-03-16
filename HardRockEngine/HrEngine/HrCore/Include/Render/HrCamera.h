@@ -2,13 +2,12 @@
 #define _HR_CAMERA_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Scene/HrSceneObjectComponent.h"
 #include "HrMath/Include/HrMath.h"
 
 
 namespace Hr
 {
-	class HR_CORE_API HrCamera : public HrSceneObjectComponent
+	class HR_CORE_API HrCamera
 	{
 	public:
 		HrCamera(const std::string& strName);
@@ -17,7 +16,6 @@ namespace Hr
 		const Vector3& GetForward() const;
 		const Vector3& GetUp() const;
 	
-
 		const Vector3& GetLookAt() const;
 		float GetLookAtDistance();
 

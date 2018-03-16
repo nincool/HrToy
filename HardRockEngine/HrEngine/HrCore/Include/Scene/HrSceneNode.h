@@ -35,8 +35,8 @@ namespace Hr
 
 		void SetParent(const HrSceneNodePtr& pParent);
 		HrSceneNodePtr GetParent() const;
-		HrSceneNode* GetChildByName(const std::string& strName) const;
-		HrSceneNode* GetNodeByNameFromHierarchy(const std::string& strName);
+		const HrSceneNodePtr& GetChildByName(const std::string& strName) const;
+		const HrSceneNodePtr& GetNodeByNameFromHierarchy(const std::string& strName);
 		
 		const HrTransformPtr& GetTransform() const;
 
@@ -53,6 +53,9 @@ namespace Hr
 
 		void OnBeginRenderScene(const HrEventPtr& pEvent);
 		void OnEndRenderScene(const HrEventPtr& pEvent);
+
+		void DirtyPosition();
+
 	private:
 		void AddEventListeners();
 		void RemoveEventListeners();

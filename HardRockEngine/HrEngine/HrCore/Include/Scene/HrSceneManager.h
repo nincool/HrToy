@@ -27,8 +27,6 @@ namespace Hr
 	private:
 		HrScenePtr m_pRunningScene;
 		HrRenderQueuePtr m_pRenderQueue;
-		
-		HrCamera* m_pCurrentCamera;
 
 		bool m_bSceneRunning;
 

@@ -43,9 +43,8 @@ namespace Hr
 
 		std::vector<HrRenderTechniquePtr> m_vecRenderTechnique;
 
-		std::vector<HrRenderEffectParameterPtr> m_vecRenderEffectParameter;
-		std::vector<HrRenderEffectStructParameterPtr> m_vecRenderEffectStruct;
-		std::vector<HrRenderEffectConstantBufferPtr> m_vecRenderConstantBuffer;
+		std::unordered_map<size_t, HrRenderEffectParameterPtr> m_mapRenderEffectParameters;
+		std::unordered_map<size_t, HrRenderEffectConstantBufferPtr> m_mapRenderConstantBuffers;
 
 	};
 }

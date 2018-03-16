@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrCoreComponentScene : public HrCoreComponent
+	class HR_CORE_API HrCoreComponentScene : public HrCoreComponent
 	{
 	public:
 		enum class EnumSceneManagerType

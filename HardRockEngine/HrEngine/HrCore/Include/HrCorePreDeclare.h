@@ -69,7 +69,10 @@ namespace Hr
 	
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
+	
 	class HrSamplerState;
+	typedef std::shared_ptr<HrSamplerState> HrSamplerStatePtr;
+
 	class HrDepthStencilState;
 	class HrBlendState;
 	class HrRasterizerState;
@@ -87,22 +90,25 @@ namespace Hr
 
 
 	//Scene
+	class HrSceneLightData;
+	typedef std::shared_ptr<HrSceneLightData> HrSceneLightDataPtr;
 	class HrScene;
 	typedef std::shared_ptr<HrScene> HrScenePtr;
 	class HrSceneManager;
 	typedef std::shared_ptr<HrSceneManager> HrSceneManagerPtr;
 	class HrSceneNode;
 	typedef std::shared_ptr<HrSceneNode> HrSceneNodePtr;
-
+	class HrTransform;
+	typedef std::shared_ptr<HrTransform> HrTransformPtr;
 	class HrSceneObject;
 	typedef std::shared_ptr<HrSceneObject> HrSceneObjectPtr;
 	class HrSceneObjectComponent;
 	typedef std::shared_ptr<HrSceneObjectComponent> HrSceneObjectComponentPtr;
+	class HrCameraComponet;
+	typedef std::shared_ptr<HrCameraComponet> HrCameraComponentPtr;
+	class HrLightComponent;
+	typedef std::shared_ptr<HrLightComponent> HrLightComponentPtr;
 
-	class HrLightNode;
-	typedef std::shared_ptr<HrLightNode> HrLightNodePtr;
-	class HrTransform;
-	typedef std::shared_ptr<HrTransform> HrTransformPtr;
 
 	//Event
 	class HrEvent;

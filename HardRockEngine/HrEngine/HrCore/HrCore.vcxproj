@@ -176,9 +176,9 @@
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedAlloc.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryNedPooling.h" />
     <ClInclude Include="Include\MemoryAlloc\HrMemoryTracker.h" />
-    <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h" />
-    <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h" />
-    <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h" />
+    <ClInclude Include="Include\Platform\AppWin\HrAppWindows.h" />
+    <ClInclude Include="Include\Platform\AppWin\HrWindowsEventUtilities.h" />
+    <ClInclude Include="Include\Platform\AppWin\HrWindowWin.h" />
     <ClInclude Include="Include\Render\HrBlendState.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrDepthStencil.h" />
@@ -206,7 +206,6 @@
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderPass.h" />
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
-    <ClInclude Include="Include\Scene\HrEntityNode.h" />
     <ClInclude Include="Include\Scene\HrScene.h" />
     <ClInclude Include="Include\Scene\HrSceneImported.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
@@ -235,6 +234,7 @@
     <ClCompile Include="Source\Event\HrEvent.cpp" />
     <ClCompile Include="Source\Event\HrEventDispatcher.cpp" />
     <ClCompile Include="Source\Event\HrEventListener.cpp" />
+    <ClCompile Include="Source\Kernel\HrApplication.cpp" />
     <ClCompile Include="Source\Kernel\HrCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
@@ -251,9 +251,9 @@
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedAlloc.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryNedPooling.cpp" />
     <ClCompile Include="Source\MemoryAlloc\HrMemoryTracker.cpp" />
-    <ClCompile Include="Source\Platform\AppWin32\HrApplicationWin.cpp" />
-    <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp" />
-    <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp" />
+    <ClCompile Include="Source\Platform\AppWin\HrAppWindows.cpp" />
+    <ClCompile Include="Source\Platform\AppWin\HrWindowsEventUtilities.cpp" />
+    <ClCompile Include="Source\Platform\AppWin\HrWindowWin.cpp" />
     <ClCompile Include="Source\Render\HrBlendState.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrDepthStencil.cpp" />
@@ -279,7 +279,6 @@
     <ClCompile Include="Source\Render\HrVertex.cpp" />
     <ClCompile Include="Source\Render\HrViewPort.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
-    <ClCompile Include="Source\Scene\HrEntityNode.cpp" />
     <ClCompile Include="Source\Scene\HrScene.cpp" />
     <ClCompile Include="Source\Scene\HrSceneImported.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />

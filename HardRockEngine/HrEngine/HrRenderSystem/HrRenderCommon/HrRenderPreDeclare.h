@@ -21,6 +21,8 @@ struct ID3D11VertexShader;
 struct ID3D11PixelShader;
 struct ID3D11InputLayout;
 
+struct ID3D11SamplerState;
+
 namespace Hr
 {
 	typedef std::shared_ptr<IDXGIFactory1>				IDXGIFactory1Ptr;
@@ -41,6 +43,7 @@ namespace Hr
 	typedef std::shared_ptr<ID3D11PixelShader>          ID3D11PixelShaderPtr;
 	typedef std::shared_ptr<ID3D11InputLayout>          ID3D11InputLayoutPtr;
 
+	typedef std::shared_ptr<ID3D11SamplerState>         ID3D11SamplerStatePtr;
 
 	class HrD3D11Device;
 	typedef std::unique_ptr<HrD3D11Device> HrD3D11DevicePtr;

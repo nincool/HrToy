@@ -3,13 +3,12 @@
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrPrefabModel.h"
 #include "Asset/HrMesh.h"
-#include "Render/HrCamera.h"
 #include "Render/HrViewPort.h"
 #include "Render/HrSkinnedMeshRenderable.h"
 #include "Render/HrLight.h"
-#include "Scene/HrEntityNode.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
+#include "Scene/HrSceneObjectComponent.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -28,12 +27,12 @@ HrSceneObjectFactory::~HrSceneObjectFactory()
 
 HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, uint32 nTopX, uint32 nTopY, uint32 nWidth, uint32 nHeight, int nZOrder)
 {
-	HrCameraPtr pCamera = HrMakeSharedPtr<HrCamera>(strName);
+	HrCameraComponentPtr pCamera = HrMakeSharedPtr<HrCameraComponet>(strName);
 	HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(nTopX, nTopY, nWidth, nHeight, nZOrder);
-	pViewPort->SetCamera(pCamera);
+	pViewPort->SetCamera(pCamera->GetCamera());
 	
 	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneObj->AddComponent(HrSceneObject::SCT_CAMERA, pCamera);
+	pSceneObj->AddComponent(pCamera);
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(pCamera->GetName());
 	pSceneNode->SetSceneObject(pSceneObj);
@@ -41,13 +40,13 @@ HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, ui
 	return pSceneNode;
 }
 
-HrLightNodePtr HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular)
-{
-	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrDirectionalLight>(direction, diffuse, specular));
-	HrLightNodePtr pLightNode = HrMakeSharedPtr<HrLightNode>(pLight);
-
-	return pLightNode;
-}
+//HrLightNodePtr HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular)
+//{
+//	HrLightPtr pLight = HrCheckPointerCast<HrLight>(HrMakeSharedPtr<HrDirectionalLight>(direction, diffuse, specular));
+//	HrLightNodePtr pLightNode = HrMakeSharedPtr<HrLightNode>(pLight);
+//
+//	return pLightNode;
+//}
 
 //HrLightNode* HrSceneObjectFactory::CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular)
 //{
@@ -107,6 +106,18 @@ HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrPrefabModelPtr& pPrefabMo
 		pNode->SetSceneObject(pSceneObj);
 		pSceneNode->AddChild(pNode);
 	}
+
+	return pSceneNode;
+}
+
+HrSceneNodePtr HrSceneObjectFactory::CreateLightNode(const std::string& strName, HrLight::EnumLightType lightType)
+{
+	HrLightComponentPtr pLight = HrMakeSharedPtr<HrLightComponent>(strName, lightType);
+	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+	pSceneObj->AddComponent(pLight);
+
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+	pSceneNode->SetSceneObject(pSceneObj);
 
 	return pSceneNode;
 }

@@ -126,12 +126,10 @@ HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler(const std::string
 //	return pTexture2D;
 //}
 
-HrSamplerState* HrD3D11RenderFactory::CreateSamplerState()
+HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState()
 {
-	HrD3D11SamplerState* pSamplerState = HR_NEW HrD3D11SamplerState(HrD3D11Device::Instance()->GetD3DDevice().get()
-		, HrD3D11Device::Instance()->GetD3DDeviceContext().get());
-
-	return pSamplerState;
+	return HrMakeSharedPtr<HrD3D11SamplerState>(HrD3D11Device::Instance()->GetD3DDevice()
+		, HrD3D11Device::Instance()->GetD3DDeviceContext());
 }
 
 HrDepthStencilState* HrD3D11RenderFactory::CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc)

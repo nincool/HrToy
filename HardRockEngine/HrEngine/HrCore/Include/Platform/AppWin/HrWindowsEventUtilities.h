@@ -13,11 +13,11 @@
 
 namespace Hr
 {
-	class HrWin32WindowEventUtilities
+	class HrWindowsEventUtilities
 	{
 	public:
-		HrWin32WindowEventUtilities();
-		~HrWin32WindowEventUtilities();
+		HrWindowsEventUtilities();
+		~HrWindowsEventUtilities();
 		/**
 		 *	@Brief:  Call this once per frame [10/29/2015 By Hr]
 		 *	@Param:

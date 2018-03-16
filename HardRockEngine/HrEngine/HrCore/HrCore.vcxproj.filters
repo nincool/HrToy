@@ -38,14 +38,8 @@
     <Filter Include="Include\Platform">
       <UniqueIdentifier>{e6cb38f8-6fd1-42b6-a86b-43392eff2436}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Platform\AppWin32">
-      <UniqueIdentifier>{5ff74097-8ef4-4d5e-8191-a8458b7f11b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Platform">
       <UniqueIdentifier>{797d551c-36ef-4ea4-b3df-2469f5d41e1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Platform\AppWin32">
-      <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Include\Config">
       <UniqueIdentifier>{f58ee87a-f881-4788-a17a-7aaccb497729}</UniqueIdentifier>
@@ -73,6 +67,12 @@
     </Filter>
     <Filter Include="Effects">
       <UniqueIdentifier>{b6270a9c-91e1-4339-8719-3711011a75ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Platform\AppWin">
+      <UniqueIdentifier>{5ff74097-8ef4-4d5e-8191-a8458b7f11b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform\AppWin">
+      <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,12 +139,6 @@
     <ClInclude Include="Include\Render\HrViewPort.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Platform\AppWin32\HrWin32WindowEventUtilities.h">
-      <Filter>Include\Platform\AppWin32</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Platform\AppWin32\HrApplicationWin.h">
-      <Filter>Include\Platform\AppWin32</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderFactory.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -153,9 +147,6 @@
     </ClInclude>
     <ClInclude Include="Include\Config\HrContextConfig.h">
       <Filter>Include\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Platform\AppWin32\HrWindowWin.h">
-      <Filter>Include\Platform\AppWin32</Filter>
     </ClInclude>
     <ClInclude Include="Include\Render\HrGraphicsBuffer.h">
       <Filter>Include\Render</Filter>
@@ -274,9 +265,6 @@
     <ClInclude Include="Include\Render\HrLight.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Scene\HrEntityNode.h">
-      <Filter>Include\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrDepthStencilState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -309,6 +297,15 @@
     </ClInclude>
     <ClInclude Include="Include\Kernel\HrCoreComponentEvent.h">
       <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin\HrAppWindows.h">
+      <Filter>Include\Platform\AppWin</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin\HrWindowsEventUtilities.h">
+      <Filter>Include\Platform\AppWin</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin\HrWindowWin.h">
+      <Filter>Include\Platform\AppWin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -369,17 +366,8 @@
     <ClCompile Include="Source\Render\HrViewPort.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Platform\AppWin32\HrWin32WindowEventUtilities.cpp">
-      <Filter>Source\Platform\AppWin32</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Platform\AppWin32\HrApplicationWin.cpp">
-      <Filter>Source\Platform\AppWin32</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Config\HrContextConfig.cpp">
       <Filter>Source\Config</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Platform\AppWin32\HrWindowWin.cpp">
-      <Filter>Source\Platform\AppWin32</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp">
       <Filter>Source\Asset</Filter>
@@ -483,9 +471,6 @@
     <ClCompile Include="Source\Render\HrLight.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\HrEntityNode.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrDepthStencilState.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -524,6 +509,18 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrApplication.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin\HrAppWindows.cpp">
+      <Filter>Source\Platform\AppWin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin\HrWindowsEventUtilities.cpp">
+      <Filter>Source\Platform\AppWin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin\HrWindowWin.cpp">
+      <Filter>Source\Platform\AppWin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

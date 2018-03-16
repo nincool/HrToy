@@ -15,8 +15,7 @@ namespace Hr
 		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
 	protected:
-		virtual void UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters) override;
-		virtual void UpdateEffectParametersImpl() override;
+
 	protected:
 		HrSubMeshPtr m_pSubMesh;
 	};

@@ -16,7 +16,7 @@ namespace Hr
 		};
 
 	public:
-		HrTransform();
+		HrTransform(const std::function<void (void)>& funDirtyPos);
 
 		void SetParentTransform(const HrTransformPtr& pTrans);
 
@@ -37,7 +37,7 @@ namespace Hr
 		void SetScale(const Vector3& v3Scale);
 		const Vector3& GetScale();
 
-		virtual void Translate(const Vector3& v3, EnumTransformSpace relativeTo = TS_LOCAL);
+		void Translate(const Vector3& v3, EnumTransformSpace relativeTo = TS_LOCAL);
 
 		const Vector3& GetWorldScale();
 		const Quaternion& GetWorldOriention();
@@ -66,6 +66,8 @@ namespace Hr
 
 		bool GetTransformDirty();
 		void SetTransformDirty(bool bDirty);
+
+		void DirtyPosition();
 	protected:
 		void UpdateFromParent();
 	protected:
@@ -92,13 +94,9 @@ namespace Hr
 		bool m_bDirtyPosition;
 		Vector3 m_vWorldPosition;
 
-		//these members are derived by combining the local and those of theirs parents.
-		//Quaternion m_derivedOrientation;
-		//Vector3 m_derivedPosition;
-		//Vector3 m_derivedScale;
-
 		bool m_bDirtyTransform;
 
+		std::function<void(void)> m_funDirtyPos;
 	};
 }
 

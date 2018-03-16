@@ -3,12 +3,13 @@
 using namespace Hr;
 
 
-HrD3D11SamplerState::HrD3D11SamplerState(ID3D11Device* pD3D11Device, ID3D11DeviceContext* pContext):
+HrD3D11SamplerState::HrD3D11SamplerState(const ID3D11DevicePtr& pD3D11Device
+	, const ID3D11DeviceContextPtr& pContext) :
 	m_pD3D11Device(pD3D11Device), m_pImmediateContext(pContext)
 {
 }
 
-ID3D11SamplerState* HrD3D11SamplerState::GetD3D11SamplerState()
+const ID3D11SamplerStatePtr& HrD3D11SamplerState::GetD3D11SamplerState()
 {
 	if (m_pSamplerState == nullptr)
 	{
@@ -27,11 +28,13 @@ ID3D11SamplerState* HrD3D11SamplerState::GetD3D11SamplerState()
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = FLT_MAX;
 
-		HRESULT hr = m_pD3D11Device->CreateSamplerState(&samplerDesc, &m_pSamplerState);
+		ID3D11SamplerState* pSamplerState = nullptr;
+		HRESULT hr = m_pD3D11Device->CreateSamplerState(&samplerDesc, &pSamplerState);
 		if (FAILED(hr))
 		{
 			BOOST_ASSERT(false);
 		}
+		m_pSamplerState = MakeComPtr(pSamplerState);
 
 	}
 

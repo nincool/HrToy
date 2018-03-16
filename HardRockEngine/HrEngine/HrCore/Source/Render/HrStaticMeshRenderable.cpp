@@ -39,36 +39,3 @@ const HrRenderLayoutPtr& HrStaticMeshRenderable::GetRenderLayout()
 		TRE("HrStaticMeshRenderable::GerRenderLayout Error!");
 	}
 }
-
-void HrStaticMeshRenderable::UpdateRenderFrameParametersImpl(const HrRenderFrameParametersPtr& renderFrameParameters)
-{
-	//if (m_pSubMesh != nullptr)
-	//{
-	//	HrMaterial* pMaterial = m_pSubMesh->GetMaterial();
-	//	if (pMaterial != nullptr)
-	//	{
-	//		renderFrameParameters.SetCurrentMaterial(pMaterial);
-	//	}
-	//}
-}
-
-void HrStaticMeshRenderable::UpdateEffectParametersImpl()
-{
-	//if (m_pSubMesh != nullptr)
-	//{
-	//	if (m_pSubMesh->GetTexture() != nullptr)
-	//	{
-	//		HrRenderEffectParameter* pTexParam = m_pRenderEffect->GetParameterByName("g_tex");
-	//		if (pTexParam != nullptr)
-	//		{
-	//			HrTexture* pTexture = m_pSubMesh->GetTexture();
-	//			if (pTexture == nullptr)
-	//			{
-	//				pTexture = HrResourceManager::Instance()->GetDefaultTexture();
-	//			}
-	//			*pTexParam = pTexture;
-	//		}
-	//	}
-	//}
-}
-

@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrGeometryApp : public HrApplicationWin, 
+	class HrGeometryApp : public HrAppWindows, 
 		public HrSingleTon<HrGeometryApp>
 	{
 	public:

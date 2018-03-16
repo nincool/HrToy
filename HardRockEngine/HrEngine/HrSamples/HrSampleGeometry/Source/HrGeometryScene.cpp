@@ -43,7 +43,7 @@ void HrGeometryScene::OnEnter()
 	
 	CreateInputEvent();
 
-	HrDirector::Instance()->GetScheduler()->Schedule(HR_CALLBACK_1(HrGeometryScene::MouseUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
+	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrGeometryScene::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
 void HrGeometryScene::CreateSceneElements()
@@ -51,10 +51,14 @@ void HrGeometryScene::CreateSceneElements()
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
 	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
 	//设置环境光
 	//SetAmbientLight(HrMath::MakeColor(120.0f, 120.0f, 120.0f, 255.0f));
+
+	//创建直线光
+	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
+	AddNode(pDirectionLight);
 
 	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreatePlane(1000.0f, 1000.0f);
 	//AddNode(m_pTestSceneNode);
@@ -74,151 +78,136 @@ void HrGeometryScene::CreateSceneElements()
 	//AddNode(pLight);
 	//pLight->GetTransform()->SetPosition(Vector3(200, 0, 0));
 
-	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateSkyBox();
-	//AddNode(m_pTestSceneNode);
-	//m_pTestSceneNode->GetTransform()->Translate(Vector3(20, 0, 0));
+	auto pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
+	BOOST_ASSERT(pRenderEffect);
 
-	//m_pTestSceneNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab2.prefab");
-	//AddNode(m_pTestSceneNode);
-	//m_pTestSceneNode->GetTransform()->Translate(Vector3(0, 0, 0));
-
-	//m_pTestSceneNode2 = HrSceneObjectFactory::Instance()->CreateModel("tests/56Por1.FBX");
-	//m_pTestSceneNode->AddChild(m_pTestSceneNode2);
-	//m_pTestSceneNode2->GetTransform()->Translate(Vector3(30, 0, 0));
-	//AddNode(m_pTestSceneNode2);
-
-	//HrSceneNode* pBox = HrSceneObjectFactory::Instance()->CreateBox();
-	//AddNode(pBox);
-	HrSceneNodePtr pPlane = HrSceneObjectFactory::Instance()->CreatePlane(100, 100);
-	AddNode(pPlane);
+	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab3.prefab");
+	m_pTestNode->GetChildByName("Sphere01")->GetSceneObject()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	AddNode(m_pTestNode);
 }
 
 void HrGeometryScene::CreateInputEvent()
 {
-	//HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrGeometryScene::OnKeyPressed, this)
-	//	, HR_CALLBACK_2(HrGeometryScene::OnKeyReleased, this));
-	//HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerKeyboard));
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrGeometryScene::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrGeometryScene::OnKeyReleased, this));
+	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
 
 	//HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrGeometryScene::OnMousePressed, this)
 	//	, HR_CALLBACK_2(HrGeometryScene::OnMouseReleased, this), HR_CALLBACK_1(HrGeometryScene::OnMouseMove, this));
 	//HrEventDispatcher::Instance()->AddEventListener(HrCheckPointerCast<HrEventListener>(pEventListenerMouse));
 }
 
-void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent)
+void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
-	//ResetKeyFlag();
-	//switch (keyCode)
-	//{
-	//case HrEventKeyboard::EnumKeyCode::KEY_A:
-	//	m_bKeyAPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_D:
-	//	m_bKeyDPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_W:
-	//	m_bKeyWPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_S:
-	//	m_bKeySPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_0:
-	//	m_bKey0Pressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_1:
-	//	m_bKey1Pressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_F1:
-	//	m_bKeyF1Pressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_F2:
-	//	m_bKeyF2Pressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
-	//	m_bKeyLeftPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
-	//	m_bKeyRightPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
-	//	m_bKeyUpPressed = true;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
-	//	m_bKeyDownPressed = true;
-	//	break;
-	//default:
-	//	break;
-	//}
+	ResetKeyFlag();
+	switch (keyCode)
+	{
+	case HrEventKeyboard::EnumKeyCode::KEY_A:
+		m_bKeyAPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_D:
+		m_bKeyDPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_W:
+		m_bKeyWPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_S:
+		m_bKeySPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_F1:
+		m_bKeyF1Pressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_F2:
+		m_bKeyF2Pressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
+		m_bKeyLeftPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
+		m_bKeyRightPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
+		m_bKeyUpPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
+		m_bKeyDownPressed = true;
+		break;
+	default:
+		break;
+	}
 }
 
-void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, HrEvent* pEvent)
+void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
-	//switch (keyCode)
-	//{
-	//case HrEventKeyboard::EnumKeyCode::KEY_A:
-	//	m_bKeyAPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_D:
-	//	m_bKeyDPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_W:
-	//	m_bKeyWPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_S:
-	//	m_bKeySPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_0:
-	//	m_bKey0Pressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_1:
-	//	m_bKey1Pressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_F1:
-	//	m_bKeyF1Pressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_F2:
-	//	m_bKeyF2Pressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
-	//	m_bKeyLeftPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
-	//	m_bKeyRightPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
-	//	m_bKeyUpPressed = false;
-	//	break;
-	//case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
-	//	m_bKeyDownPressed = false;
-	//	break;
-	//default:
-	//	break;
-	//}
+	switch (keyCode)
+	{
+	case HrEventKeyboard::EnumKeyCode::KEY_A:
+		m_bKeyAPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_D:
+		m_bKeyDPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_W:
+		m_bKeyWPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_S:
+		m_bKeySPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_F1:
+		m_bKeyF1Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_F2:
+		m_bKeyF2Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_LEFT:
+		m_bKeyLeftPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_RIGHT:
+		m_bKeyRightPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_UP:
+		m_bKeyUpPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_KP_DOWN:
+		m_bKeyDownPressed = false;
+		break;
+	default:
+		break;
+	}
 }
 
-void HrGeometryScene::MouseUpdate(float fDelta)
+void HrGeometryScene::SceneUpdate(float fDelta)
 {
 	float fSpeed = 0.5f;
 	float fRotateSpeed = 5;
-	//if (m_bKeyAPressed)
-	//{
-	//	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(-fSpeed, 0, 0));
-	//	m_pTestSceneNode->GetTransform()->Translate(Vector3(-fSpeed, 0, 0));
-	//}
-	//else if (m_bKeyWPressed)
-	//{
-	//	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0, fSpeed, 0));
-	//	m_pTestSceneNode->GetTransform()->Translate(Vector3(0.0f, fSpeed, 0.0f));
-	//}
-	//else if (m_bKeySPressed)
-	//{
-	//	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, -fSpeed, 0));
-	//	m_pTestSceneNode->GetTransform()->Translate(Vector3(0.0f, -fSpeed, 0.0f));
-	//}
-	//else if (m_bKeyDPressed)
-	//{
-	//	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
-	//	m_pTestSceneNode->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
-	//}
+	if (m_bKeyAPressed)
+	{
+		m_pTestNode->GetTransform()->Translate(Vector3(-fSpeed, 0, 0));
+	}
+	else if (m_bKeyWPressed)
+	{
+		m_pTestNode->GetTransform()->Translate(Vector3(0.0f, fSpeed, 0.0f));
+	}
+	else if (m_bKeySPressed)
+	{
+		m_pTestNode->GetTransform()->Translate(Vector3(0.0f, -fSpeed, 0.0f));
+	}
+	else if (m_bKeyDPressed)
+	{
+		m_pTestNode->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
+	}
 	//else if (m_bKey0Pressed)
 	//{
 	//	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -fSpeed));

@@ -38,6 +38,11 @@ namespace Hr
 				uint32 rows;
 				uint32 columns;
 				uint32 elements;
+				//for test
+				uint32 nCBElementIndex;
+				uint32 nStructElementIndex;
+				std::vector<std::pair<size_t, std::pair<uint32, uint32> > > vecTestHashKey;
+
 				bool bUsed;
 
 				std::vector<VariableDesc> struct_desc;
@@ -117,15 +122,13 @@ namespace Hr
 
 		virtual HrStreamDataPtr StripCompiledCode(const HrStreamData& shaderBuffer) override;
 
-		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameterPtr>& vecParameter
-			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer) override;
-
-		virtual void BindParametersToShader(std::vector<HrRenderEffectParameterPtr>& vecParameter
-			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer
-			, std::unordered_map<std::string, HrShaderPtr>& vecShader) override;
-
+		virtual void CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters
+			, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer) override;
+		
+		virtual void BindParametersToShader(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapRenderEffectParameters
+			, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapRenderConstantBuffers
+			, std::unordered_map<std::string, HrShaderPtr>& mapShader) override;
+		
 		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
@@ -137,7 +140,6 @@ namespace Hr
 
 	protected:
 		std::unordered_map<std::string, std::tuple<HrShader::EnumShaderType, HrStreamDataPtr, HrStreamDataPtr, D3D11ShaderDesc> > m_mapCompileData;
-		//std::unordered_map<std::string, D3D11ShaderDesc> m_mapShaderDesc;
 
 		UINT m_nConstantBufferSize = 0;
 		UINT m_nConstantBufferNum = 0;

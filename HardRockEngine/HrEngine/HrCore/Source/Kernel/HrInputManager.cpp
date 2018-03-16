@@ -1,5 +1,6 @@
 #include "Kernel/HrInputManager.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentEvent.h"
 #include "Kernel/HrCoreComponentWin.h"
 #include "Event/HrEvent.h"
 #include "Event/HrEventDispatcher.h"
@@ -11,9 +12,9 @@ bool HrInputEventListener::keyPressed(const OIS::KeyEvent &arg)
 {
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
-	HrEventKeyboard event(keyCode, true);
-	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
-
+	HrEventPtr pEvent = HrMakeSharedPtr<HrEventKeyboard>(keyCode, true);
+	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	
 	return true;
 }
 
@@ -21,8 +22,8 @@ bool HrInputEventListener::keyReleased(const OIS::KeyEvent &arg)
 {
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
-	HrEventKeyboard event(keyCode, false);
-	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	HrEventPtr pEvent = HrMakeSharedPtr<HrEventKeyboard>(keyCode, false);
+	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
 
 	return true;
 }

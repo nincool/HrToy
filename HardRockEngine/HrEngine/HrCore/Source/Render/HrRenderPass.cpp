@@ -42,8 +42,8 @@ void HrRenderPass::BindPass(const HrRenderPtr& pRender)
 	//m_pBlendState->Bind(pRender);
 	//m_pRasterizerState->Bind(pRender);
 
-	m_pVertexShader->Bind(pRender);
-	m_pPixelShader->Bind(pRender);
+	m_pVertexShader->Accept(pRender);
+	m_pPixelShader->Accept(pRender);
 }
 
 void HrRenderPass::UnBindPass(const HrRenderPtr& pRender)
@@ -108,22 +108,6 @@ void HrRenderPass::SetBlendState(HrBlendState* pBlendState)
 {
 	m_pBlendState = pBlendState;
 }
-
-//void HrRenderPass::CollectShaderParameters(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct)
-//{
-//	std::vector<HrRenderEffectParameter*> vecShaderBindParameter;
-//	std::vector<HrRenderEffectStructParameter*> vecShaderBindStruct;
-//	if (m_pVertexShader)
-//	{
-//		//m_pVertexShader->GetBindRenderParameter(vecShaderBindParameter, vecShaderBindStruct);
-//		this->StorageShaderParameter(vecRenderEffectParameter, vecRenderEffectStruct, vecShaderBindParameter, vecShaderBindStruct);
-//	}
-//	if (m_pPixelShader)
-//	{
-//		//m_pPixelShader->GetBindRenderParameter(vecShaderBindParameter, vecShaderBindStruct);
-//		this->StorageShaderParameter(vecRenderEffectParameter, vecRenderEffectStruct, vecShaderBindParameter, vecShaderBindStruct);
-//	}
-//}
 
 void HrRenderPass::StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
 	, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct

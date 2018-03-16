@@ -3,6 +3,10 @@
 
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
+#include "HrCore/Include/Kernel/HrCoreComponentEvent.h"
+#include "HrCore/Include/Kernel/HrCoreComponentRender.h"
+#include "HrCore/Include/Kernel/HrCoreComponentScene.h"
+#include "HrCore/Include/Kernel/HrCoreComponentWin.h"
 
 #include "HrCore/Include/Event/HrEventDispatcher.h"
 #include "HrCore/Include/Event/HrEventListener.h"
@@ -16,12 +20,15 @@
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Scene/HrSceneImported.h"
 #include "HrCore/Include/Scene/HrSceneNode.h"
+#include "HrCore/Include/Scene/HrSceneObject.h"
 
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrCore/Include/Kernel/HrScheduler.h"
 
+#include "HrCore/Include/Render/HrRenderable.h"
+
 #ifdef HR_PLATFORM_WIN32
-#include "HrCore/Include/Platform/AppWin32/HrWindowWin.h"
+#include "HrCore/Include/Platform/AppWin/HrWindowWin.h"
 #endif // HR_PLATFORM_WIN32
 #include "HrUtilTools/Include/HrUtil.h"
 

@@ -19,14 +19,12 @@ namespace Hr
 
 		virtual HrStreamDataPtr StripCompiledCode(const HrStreamData& shaderBuffer) = 0;
 
-		virtual void CreateEffectParameters(std::vector<HrRenderEffectParameterPtr>& vecParameter
-			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer) = 0;
+		virtual void CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters
+			, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer) = 0;
 
-		virtual void BindParametersToShader(std::vector<HrRenderEffectParameterPtr>& vecParameter
-			, std::vector<HrRenderEffectStructParameterPtr>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectConstantBufferPtr>& vecConstantBuffer
-			, std::unordered_map<std::string, HrShaderPtr>& vecShader) = 0;
+		virtual void BindParametersToShader(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapRenderEffectParameters
+			, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapRenderConstantBuffers
+			, std::unordered_map<std::string, HrShaderPtr>& mapShader) = 0;
 
 		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) = 0;
 

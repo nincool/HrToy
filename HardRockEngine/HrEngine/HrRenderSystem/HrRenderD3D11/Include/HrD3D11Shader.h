@@ -9,15 +9,15 @@
 namespace Hr
 {
 
-	class HrD3D11Shader : public HrShader
+	class HrD3D11Shader : public HrShader, public std::enable_shared_from_this<HrD3D11Shader>
 	{
 	public:
 		HrD3D11Shader();
 		~HrD3D11Shader();
 
-		virtual void Bind(const HrRenderPtr& pRender) override;
+		virtual void Accept(const HrRenderPtr& pRender) override;
 
-		virtual void UnBind(const HrRenderPtr& pRender) override;
+		virtual void Unaccept(const HrRenderPtr& pRender) override;
 
 		virtual void StreamIn(const HrStreamDataPtr& pStreamBuf, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) override;
 
@@ -35,6 +35,11 @@ namespace Hr
 			return m_pPixelShader;
 		}
 
+		const ID3D11VertexShaderPtr& RetriveD3D11VertexShader();
+		const ID3D11PixelShaderPtr& RetriveD3D11PixelShader();
+
+		const std::vector<ID3D11Buffer*>& GetConstBuffers();
+		
 	protected:
 		virtual void BindRenderParameterImpl() override;
 	private:

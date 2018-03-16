@@ -93,20 +93,21 @@ namespace Hr
 
 		RPT_LIGHTS_NUM,
 		//方向光
-		RPT_DIRECTIONAL_LIGHT_DIRECTION_ARRAY,
-		RPT_DIRECTIONAL_DIFFUSE_COLOR_ARRAY,
-		RPT_DIRECTIONAL_SPECULAR_COLOR_ARRAY,
+		RPT_DIRECTIONAL_LIGHT_DIRECTION,
+		RPT_DIRECTIONAL_DIFFUSE_COLOR,
+		RPT_DIRECTIONAL_SPECULAR_COLOR,
 		//点光源
-		RPT_POINT_LIGHT_POSITION_ARRAY,
-		RPT_POINT_LIGHT_DIFFUSE_COLOR_ARRAY,
-		RPT_POINT_LIGHT_SPECULAR_COLOR_ARRAY,
-		RPT_POINT_LIGHT_ATTENUATION_ARRAY,
+		RPT_POINT_LIGHT_POSITION,
+		RPT_POINT_LIGHT_DIFFUSE_COLOR,
+		RPT_POINT_LIGHT_SPECULAR_COLOR,
+		RPT_POINT_LIGHT_ATTENUATION,
 
 		//材质属性
+		RPT_MATERIAL_GLOSSINESS,
 		RPT_AMBIENT_MATERIAL_COLOR,
 		RPT_DIFFUSE_MATERIAL_COLOR,
 		RPT_SPECULAR_MATERIAL_COLOR,
-		RPT_REFLECT_MATERIAL_COLOR,
+	
 
 		//纹理
 		RPT_TEXTURE,
@@ -203,7 +204,7 @@ namespace Hr
 		virtual void Value(float4& val) const;
 		virtual void Value(float4x4& val) const;
 		virtual void Value(HrTexture*& val) const;
-		virtual void Value(HrSamplerState*& val) const;
+		virtual void Value(HrSamplerStatePtr& val) const;
 		//virtual void Value(TextureSubresource& val) const;
 		//virtual void Value(SamplerStateObjectPtr& val) const;
 		//virtual void Value(GraphicsBufferPtr& value) const;
@@ -380,9 +381,9 @@ namespace Hr
 			return std::move(pRet);
 		}
 
-		virtual void Value(HrSamplerState*& val) const override;
+		virtual void Value(HrSamplerStatePtr& val) const override;
 	protected:
-		HrSamplerState* m_pSamplerState;
+		HrSamplerStatePtr m_pSamplerState;
 	};
 
 	typedef HrRenderVariableConcrete<bool> HrRenderVariableBool;
@@ -423,7 +424,7 @@ namespace Hr
 			REPBT_RESOURCE,
 		};
 	public:
-		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName);
+		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName, int nIndex1, int nIndex2);
 		~HrRenderEffectParameter();
 
 		template <typename T>
@@ -454,6 +455,9 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
 
+		int Index1() const { return m_nIndex1; }
+		int Index2() const { return m_nIndex2; }
+
 		void ParamInfo(EnumRenderParamType paramType
 			, EnumRenderEffectDataType dataType
 			, EnumRenderEffectParamBindType bindType
@@ -477,6 +481,9 @@ namespace Hr
 
 		std::string m_strName;
 		size_t m_nHashName;
+
+		int m_nIndex1;
+		int m_nIndex2;
 
 		HrRenderVariable* m_pRenderVariable;
 

@@ -50,7 +50,7 @@ bool HrD3D11Device::CreateD3DDXDevice()
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
 
 	UINT deviceFlags = 0;
-	//deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+	deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 
 	ID3D11Device* pD3DDevice;
 	ID3D11DeviceContext* pImmediateContext;

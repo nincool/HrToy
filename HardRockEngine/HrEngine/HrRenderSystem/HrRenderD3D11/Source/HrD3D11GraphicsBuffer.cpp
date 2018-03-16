@@ -33,7 +33,6 @@ HrD3D11GraphicsBuffer::HrD3D11GraphicsBuffer(HrD3D11GraphicsBuffer&& hardwareBuf
 
 HrD3D11GraphicsBuffer::~HrD3D11GraphicsBuffer()
 {
-	SAFE_RELEASE(m_pD3D11Buffer);
 }
 
 void HrD3D11GraphicsBuffer::BindStream(const char* pBuffer

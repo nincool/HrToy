@@ -10,16 +10,16 @@ namespace Hr
 	class HrD3D11SamplerState : public HrSamplerState
 	{
 	public:
-		HrD3D11SamplerState(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext);
+		HrD3D11SamplerState(const ID3D11DevicePtr& pD3D11Device
+			, const ID3D11DeviceContextPtr& pContext);
 		
-		ID3D11SamplerState* GetD3D11SamplerState();
+		const ID3D11SamplerStatePtr& GetD3D11SamplerState();
 
 	protected:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
+		ID3D11DevicePtr m_pD3D11Device;
+		ID3D11DeviceContextPtr m_pImmediateContext;
 
-		ID3D11SamplerState* m_pSamplerState;
+		ID3D11SamplerStatePtr m_pSamplerState;
 	};
 }
 

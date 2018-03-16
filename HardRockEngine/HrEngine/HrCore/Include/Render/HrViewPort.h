@@ -8,13 +8,13 @@ namespace Hr
 	class HR_CORE_API HrViewPort : public std::enable_shared_from_this<HrViewPort> 
 	{
 	public:
-		HrViewPort(uint32 nTopX, uint32 nTopY, uint32 nWidth, uint32 nHeight, int nZOrder);
+		HrViewPort(float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder);
 		~HrViewPort();
 
-		uint32 GetTopX() const;
-		uint32 GetTopY() const;
-		uint32 GetWidth() const;
-		uint32 GetHeight() const;
+		float GetTopX() const;
+		float GetTopY() const;
+		float GetWidth() const;
+		float GetHeight() const;
 		int GetZOrder() const;
 
 		void SetCamera(const HrCameraPtr& pCamera);
@@ -22,10 +22,10 @@ namespace Hr
 	private:
 		HrCameraPtr m_pCamera;
 
-		uint32 m_nTopX;
-		uint32 m_nTopY;
-		uint32 m_nWidth;
-		uint32 m_nHeight;
+		float m_fTopX;
+		float m_fTopY;
+		float m_fWidth;
+		float m_fHeight;
 
 		int m_nZOrder;
 	};

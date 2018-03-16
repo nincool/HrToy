@@ -46,6 +46,7 @@ namespace Hr
 		static HrColor Magenta;
 		static HrColor Silver;
 
+
 	};
 }
 

@@ -2,7 +2,9 @@
 #define _HR_RENDERFRAMEPARAMETERS_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Render/HrLight.h"
 #include "HrMath/Include/HrMath.h"
+
 
 namespace Hr
 {
@@ -12,41 +14,42 @@ namespace Hr
 		HrRenderFrameParameters();
 		~HrRenderFrameParameters();
 
-		void SetCurrentScene(const HrScenePtr& pScene);
+		//todo
+		void SetLightsData(const HrSceneLightDataPtr& pLightData);
 		void SetCurrentCamera(const HrCameraPtr& pCamera);
-		void SetCurrentRenderable(const HrRenderablePtr& rend);
 		void SetCurrentMaterial(const HrMaterialPtr& pMaterial);
+
+		void SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode);
 
 		const Matrix4& GetViewProjMatrix() const;
 
-		bool WorldMatrixDirty() const { return m_bWorldMatrixDirty; }
+
 		const Matrix4& GetWorldMatrix();
-		bool InverseWRoldMatrixDirty() const { return m_bInverseWorldMatrixDirty; }
 		const Matrix4& GetInverseWroldMatrix();
-		bool InverseTransposeWorldMatrixDirty() const { return m_bInverseTransposeWorldMatrix; }
 		const Matrix4& GetInverseTransposeWorldMatrix();
-		bool WorldViewProjMatrixDirty() const { return m_bWorldViewProjMatrixDirty; }
 		const Matrix4& GetWorldViewProjMatrix();
 
 		const float3& GetCameraPosition();
 
 		//lights
-		const float4& GetAmbientColor();
-		const int3& GetLightsNum();
-		const std::vector<float3>& GetDirectionalLightDirections();
-		const std::vector<float4>& GetDirectionalLightDiffuseColors();
-		const std::vector<float4>& GetDirectionalLightSpecularColors();
+		const float4 GetAmbientColor();
+		const uint4 GetLightsNum();
+		const int GetLightNum(HrLight::EnumLightType lightType);
+		const float4 GetDirectionalLightDirection(int nLightIndex);
+		const float4 GetDirectionalLightDiffuseColor(int nLightIndex);
+		const float4 GetDirectionalLightSpecularColor(int nLightIndex);
 
-		const std::vector<float4>& GetPointLightDiffuseColors();
-		const std::vector<float4>& GetPointLightSpecularColors();
-		const std::vector<float3>& GetPointLightPositions();
-		const std::vector<float4>& GetPointLightAttenuations();
+		const float4 GetPointLightDiffuseColor(int nLightIndex);
+		const float4 GetPointLightSpecularColor(int nLightIndex);
+		const float4 GetPointLightPosition(int nLightIndex);
+		const float4 GetPointLightAttenuation(int nLightIndex);
 
 		//fog
 		void SetFogParam(float4& fogColor, float fogStart, float fogRange);
 		const void GetFogParam(float4& fogColor, float& fogStart, float& fogRange);
 
 		//获取材质信息
+		float GetMaterialGlossiness() const;
 		float4 GetMaterialAmbient() const;
 		float4 GetMaterialDiffuse() const;
 		float4 GetMaterialSpecular() const;
@@ -66,27 +69,16 @@ namespace Hr
 		mutable float3 m_cameraPosition;
 		bool m_bCameraDirty = true;
 
-		//lights
-		float4 m_ambientColor;
-		int3 m_lightsNum;
-		std::vector<float3> m_vecDirectionalDirections;
-		std::vector<float4> m_vecDirectionalDiffuseColor;
-		std::vector<float4> m_vecDirectionalSpecularColor;
-
-		std::vector<float3> m_vecPointLightPositions;
-		std::vector<float4> m_vecPointLightRangeAttenuation;
-		std::vector<float4> m_vecPointLightDiffuseColors;
-		std::vector<float4> m_vecPointLightSpecularColors;
-
 		mutable float4 m_fogColor;
 		mutable float m_fogStart;
 		mutable float m_fogRange;
 	private:
-		HrScenePtr m_pCurrentScene;
+		HrSceneLightDataPtr m_pLightsData;
 		HrRenderablePtr m_pCurrentRenderable;
 		HrMaterialPtr m_pCurrentMaterial;
 		HrCameraPtr m_pCurrentCamera;
 	
+		HrSceneNodePtr m_pCurrentSceneNode;
 	};
 }
 

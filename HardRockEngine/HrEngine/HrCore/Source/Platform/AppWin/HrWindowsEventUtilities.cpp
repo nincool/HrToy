@@ -1,17 +1,17 @@
-﻿#include "Platform/AppWin32/HrWin32WindowEventUtilities.h"
+﻿#include "Platform/AppWin/HrWindowsEventUtilities.h"
 #include "Kernel/HrDirector.h"
 
 using namespace Hr;
 
-HrWin32WindowEventUtilities::HrWin32WindowEventUtilities()
+HrWindowsEventUtilities::HrWindowsEventUtilities()
 {
 }
 
-HrWin32WindowEventUtilities::~HrWin32WindowEventUtilities()
+HrWindowsEventUtilities::~HrWindowsEventUtilities()
 {
 }
 
-bool HrWin32WindowEventUtilities::MessagePump()
+bool HrWindowsEventUtilities::MessagePump()
 {
 	MSG msg;
 	while (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -30,7 +30,7 @@ bool HrWin32WindowEventUtilities::MessagePump()
 	return true;
 }
 
-LRESULT CALLBACK Hr::HrWin32WindowEventUtilities::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Hr::HrWindowsEventUtilities::WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{

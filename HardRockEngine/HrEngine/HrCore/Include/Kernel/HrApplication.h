@@ -18,10 +18,8 @@ namespace Hr
 	class HR_CORE_API HrApplication 
 	{
 	public:
-		HrApplication(){};
-		virtual ~HrApplication()
-		{
-		}
+		HrApplication();
+		virtual ~HrApplication();
 
 		enum class Platform
 		{
@@ -61,9 +59,9 @@ namespace Hr
 		*/
 		virtual Platform GetTargetPlatform() = 0;
 
-		virtual void Run() = 0;
+		virtual void Run();
 
-		virtual bool Destroy() = 0;
+		virtual bool Destroy();
 	};
 }
 

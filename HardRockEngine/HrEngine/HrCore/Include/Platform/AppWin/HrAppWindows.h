@@ -5,11 +5,11 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrApplicationWin : public HrApplication
+	class HR_CORE_API HrAppWindows : public HrApplication
 	{
 	public:
-		HrApplicationWin();
-		virtual ~HrApplicationWin();
+		HrAppWindows();
+		virtual ~HrAppWindows();
 
 		virtual bool ApplicationDidFinishLaunching() override;
 
@@ -21,11 +21,6 @@ namespace Hr
 		{
 			return HrApplication::Platform::OS_WINDOWS;
 		}
-
-		virtual void Run() override;
-
-		virtual bool Destroy() override;
-
 	};
 }
 
