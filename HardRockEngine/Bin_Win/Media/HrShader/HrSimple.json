@@ -1,13 +1,13 @@
 {
     "EFFECT_ROOT": {
-        "SHADER_FILE": "Media/HrShader/HrSimple.fx",
+        "SHADER_FILE": "Media/HrShader/HrSimple.hlsl",
         "TECHNIQUE_0": {
             "NAME": "Technique_0",
             "PASS_0": {
                 "NAME": "Technique_0_Pass_0",
                 "SHADER": {
-                    "VERTEX_SHADER": "VS_Main",
-                    "PIXEL_SHADER": "PS_Main"
+                    "VERTEX_SHADER": "Pass0_VS_Main",
+                    "PIXEL_SHADER": "Pass0_PS_Main"
                 },
                 "DEPTH_STENCIL": {
                     "DEPTH_ENABLE": true,
