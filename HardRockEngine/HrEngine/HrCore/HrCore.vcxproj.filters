@@ -253,9 +253,6 @@
     <ClInclude Include="Include\Scene\HrSceneImported.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrPrefabModel.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRasterizerState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -306,6 +303,24 @@
     </ClInclude>
     <ClInclude Include="Include\Platform\AppWin\HrWindowWin.h">
       <Filter>Include\Platform\AppWin</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrInstanceBatch.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrInstanceBatchShader.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrInstanceBatchManager.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrInstanceBatchHW.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrModel.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrCoreComponentResource.h">
+      <Filter>Include\Kernel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -456,9 +471,6 @@
     <ClCompile Include="Source\Scene\HrSceneImported.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrPrefabModel.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrRasterizerState.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -521,6 +533,24 @@
     </ClCompile>
     <ClCompile Include="Source\Platform\AppWin\HrWindowWin.cpp">
       <Filter>Source\Platform\AppWin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrInstanceBatch.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrInstanceBatchShader.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrInstanceBatchManager.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrInstanceBatchHW.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrModel.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrCoreComponentResource.cpp">
+      <Filter>Source\Kernel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

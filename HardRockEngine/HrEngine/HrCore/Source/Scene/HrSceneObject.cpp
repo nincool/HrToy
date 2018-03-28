@@ -122,6 +122,39 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 	}
 }
 
+const HrSceneObjectComponentPtr& HrSceneObject::AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
+{
+	auto iteCom = m_mapComponents.find(comType);
+	if (iteCom != m_mapComponents.end())
+	{
+		return iteCom->second;
+	}
+
+	switch (comType)
+	{
+	case HrSceneObjectComponent::SCT_NORMAL:
+		break;
+	case HrSceneObjectComponent::SCT_CAMERA:
+		break;
+	case HrSceneObjectComponent::SCT_LIGHT:
+		break;
+	case HrSceneObjectComponent::SCT_INSTANCEBATCH:
+	{
+		auto pInsBatchCom = HrMakeSharedPtr<HrInstanceBatchComponent>("InstanceBatch");
+		m_mapComponents[HrSceneObjectComponent::SCT_INSTANCEBATCH] = pInsBatchCom;
+
+		return pInsBatchCom;
+		break;
+	}
+	case HrSceneObjectComponent::SCT_COM_COUNT:
+		break;
+	default:
+		break;
+	}
+
+	return nullptr;
+}
+
 void HrSceneObject::AddCameraToScene(const HrCameraPtr& pCamera)
 {
 	if (!m_pContainerNode.expired())
@@ -144,5 +177,16 @@ void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
 			HrDirector::Instance()->GetSceneCoreComponent()->GetRunningScene()->GetLightsData()->AddLight(pLight);
 		}
 	}
+}
+
+const HrSceneObjectComponentPtr& HrSceneObject::GetComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
+{
+	auto iteCom = m_mapComponents.find(comType);
+	if (iteCom != m_mapComponents.end())
+	{
+		return iteCom->second;
+	}
+
+	return nullptr;
 }
 

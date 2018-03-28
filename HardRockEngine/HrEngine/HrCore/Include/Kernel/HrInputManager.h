@@ -126,6 +126,19 @@ namespace Hr
             return false;
         }
 
+		bool GetMouseWheelSlidingDistance(float& z)
+		{
+			if (mMouse)
+			{
+				z = (float)mMouse->getMouseState().Z.rel;
+
+				return true;
+			}
+
+			z = 0.0;
+			return false;
+		}
+
         OIS::Keyboard* mKeyboard;         // context keyboard device
         OIS::Mouse* mMouse;               // context mouse device
 #if OIS_WITH_MULTITOUCH

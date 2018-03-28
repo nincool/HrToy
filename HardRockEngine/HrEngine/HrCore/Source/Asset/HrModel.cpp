@@ -1,4 +1,4 @@
-#include "Asset/HrPrefabModel.h"
+#include "Asset/HrModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrTexture.h"
 #include "Asset/HrMaterial.h"
@@ -18,22 +18,22 @@
 using namespace Hr;
 using namespace std;
 
-HrPrefabModel::HrPrefabModel()
+HrModel::HrModel()
 {
 
 }
 
-HrPrefabModel::~HrPrefabModel()
+HrModel::~HrModel()
 {
 
 }
 
-size_t HrPrefabModel::CreateHashName(const std::string& strFullFilePath)
+size_t HrModel::CreateHashName(const std::string& strFullFilePath)
 {
 	return HrHashValue(strFullFilePath);
 }
 
-void HrPrefabModel::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
+void HrModel::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
 	m_strFilePath = strFilePath;
 	m_strFileName = strFileName;
@@ -43,7 +43,7 @@ void HrPrefabModel::DeclareResource(const std::string& strFileName, const std::s
 	m_nHashID = CreateHashName(m_strFilePath);
 }
 
-bool HrPrefabModel::LoadImpl()
+bool HrModel::LoadImpl()
 {
 	std::string strFullPath = HrFileUtils::Instance()->GetFullPathForFileName(m_strFilePath);
 	if (strFullPath.length() <= 0)
@@ -73,12 +73,12 @@ bool HrPrefabModel::LoadImpl()
 	return true;
 }
 
-bool HrPrefabModel::UnloadImpl()
+bool HrModel::UnloadImpl()
 {
 	return false;
 }
 
-const HrMeshPtr& HrPrefabModel::GetMesh() const
+const HrMeshPtr& HrModel::GetMesh() const
 {
 	return m_pMesh;
 }

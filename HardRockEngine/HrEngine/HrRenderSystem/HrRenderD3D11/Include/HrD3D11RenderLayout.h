@@ -18,12 +18,21 @@ namespace Hr
 		~HrD3D11RenderLayout();
 
 		const ID3D11InputLayoutPtr& GetInputLayout(const HrD3D11ShaderPtr& pShader);
-		const ID3D11BufferPtr& GetVertexBuffer();
-		const ID3D11BufferPtr& GetIndexBuffer();
+		const std::vector<ID3D11Buffer*>& GetD3DVertexBuffers();
+		const std::vector<UINT>& GetStrides();
+		const std::vector<UINT>& GetOffsets();
+
+		virtual void Active() override;
+
 	private:
-		D3D11_INPUT_ELEMENT_DESC* m_pD3DInputElementDesc;
 		ID3D11InputLayoutPtr m_pD3DInputLayout;
 		ID3D11Buffer* m_pD3DVertexBuffer;
+
+		std::vector<D3D11_INPUT_ELEMENT_DESC> m_vecInputElementDesc;
+		std::vector<std::pair<size_t, ID3D11InputLayoutPtr> > m_vecInputLayouts;
+		std::vector<ID3D11Buffer*> m_vecD3DVertexBuffer;
+		std::vector<UINT> m_vecStrides;
+		std::vector<UINT> m_vecOffsets;
 	};
 }
 

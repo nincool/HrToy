@@ -12,9 +12,9 @@ namespace Hr
 		HrSkinnedMeshRenderable();
 		~HrSkinnedMeshRenderable();
 
-		void AttachSubMesh(HrSubMeshPtr pSubMesh);
-
 		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
+
+		virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh) override;
 
 		virtual bool CanRender() override;
 
@@ -22,7 +22,6 @@ namespace Hr
 	protected:
 
 	private:
-		//³ÖÓÐµÄSubMesh
 		HrSubMeshPtr m_pSubMesh;
 	};
 }

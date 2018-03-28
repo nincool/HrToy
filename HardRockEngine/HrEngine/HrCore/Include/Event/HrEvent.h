@@ -245,15 +245,17 @@ namespace Hr
 			MEF_PRESSED,
 			MEF_RELEASED,
 			MEF_MOVE,
+			MEF_WHEELMOVE,
 		};
 	public:
-		HrEventMouse(EnumMouseButtonID id, EnumMouseEventFlag mouseEventFlag, float x, float y);
+		HrEventMouse(EnumMouseButtonID id, EnumMouseEventFlag mouseEventFlag, float x, float y, float z);
 		~HrEventMouse();
 
 		EnumMouseButtonID GetButtonID() { return m_buttonID; }
 		EnumMouseEventFlag GetMouseEventFlag() { return m_mouseEventFlag; }
 		float GetX() { return m_fX; }
 		float GetY() { return m_fY; }
+		float GetZ() { return m_fZ; }
 
 	public:
 		static const std::string m_s_strEventMouseID;
@@ -264,6 +266,7 @@ namespace Hr
 		EnumMouseEventFlag m_mouseEventFlag;
 		float m_fX;
 		float m_fY;
+		float m_fZ;
 	};
 
 	class HR_CORE_API HrEventCustom : public HrEvent

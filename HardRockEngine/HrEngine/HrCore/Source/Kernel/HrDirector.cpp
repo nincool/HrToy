@@ -9,6 +9,7 @@
 #include "Kernel/HrCoreComponentRender.h"
 #include "Kernel/HrCoreComponentWin.h"
 #include "Kernel/HrCoreComponentScene.h"
+#include "Kernel/HrCoreComponentResource.h"
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
@@ -39,16 +40,11 @@ bool HrDirector::Init()
 	CreateWindowComponent();
 	CreateSceneComponent();
 	CreateRenderComponent();
+	CreateResourceManager();
 	
 	if (!CreateRenderState())
 	{
 		HRERROR("CreateRenderState Error!");
-		return false;
-	}
-
-	if (!CreateResourceManager())
-	{
-		HRERROR("CreateResourceManager Error!");
 		return false;
 	}
 
@@ -80,17 +76,13 @@ void HrDirector::ReleaseRenderState()
 
 }
 
-bool HrDirector::CreateResourceManager()
-{
-	HrResourceManager::Instance()->InitResourceManager();
+//bool HrDirector::CreateResourceManager()
+//{
+//	HrResourceManager::Instance()->InitResourceManager();
+//
+//	return true;
+//}
 
-	return true;
-}
-
-void HrDirector::ReleaseResourceManager()
-{
-
-}
 
 bool HrDirector::CreateInputManager()
 {
@@ -185,6 +177,11 @@ void HrDirector::CreateSceneComponent()
 	m_pSceneManagerComponent = HrMakeSharedPtr<HrCoreComponentScene>();
 }
 
+void HrDirector::CreateResourceManager()
+{
+	m_pResManagerComponent = HrMakeSharedPtr<HrCoreComponentResource>();
+}
+
 const HrCoreComponentEventPtr& HrDirector::GetEventComponent()
 {
 	return m_pEventComponent;
@@ -203,6 +200,11 @@ const HrCoreComponentRenderPtr& HrDirector::GetRenderCoreComponent()
 const HrCoreComponentScenePtr& HrDirector::GetSceneCoreComponent()
 {
 	return m_pSceneManagerComponent;
+}
+
+const HrCoreComponentResourcePtr& HrDirector::GetResCoreComponent()
+{
+	return m_pResManagerComponent;
 }
 
 void HrDirector::Schedule(const std::function<void(float)>& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay)

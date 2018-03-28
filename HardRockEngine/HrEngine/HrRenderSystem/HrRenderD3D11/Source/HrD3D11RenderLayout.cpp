@@ -14,61 +14,92 @@ HrD3D11RenderLayout::HrD3D11RenderLayout()
 {
 	m_pD3DInputLayout = nullptr;
 	m_pD3DVertexBuffer = nullptr;
-
-	m_pD3DInputElementDesc = nullptr;
 }
 
-Hr::HrD3D11RenderLayout::~HrD3D11RenderLayout()
+HrD3D11RenderLayout::~HrD3D11RenderLayout()
 {
-	SAFE_DELETE_ARRAY(m_pD3DInputElementDesc);
+}
+
+void HrD3D11RenderLayout::Active()
+{
+	if (m_bStreamsDirty)
+	{
+		const uint32 nVertexStreams = GetVertexStreamSize();
+
+		m_vecD3DVertexBuffer.clear();
+		m_vecInputElementDesc.clear();
+		m_vecStrides.clear();
+		m_vecOffsets.clear();
+		for (uint32 i = 0; i < nVertexStreams; ++i)
+		{
+			const HrVertexDataPtr& pVertexData = m_vecVertexStreams[i];
+			for (uint32 nEleIndex = 0; nEleIndex < pVertexData->GetVertex()->GetVertexElementNum(); ++nEleIndex)
+			{
+				const HrVertexElement& vertexElement = pVertexData->GetVertex()->GetVertexElement(nEleIndex);
+				D3D11_INPUT_ELEMENT_DESC d3dInputELeDesc;
+				d3dInputELeDesc.SemanticName = HrD3D11Mapping::GetInputElementSemanticName(vertexElement.m_elementUsage);
+				d3dInputELeDesc.SemanticIndex = 0;
+				d3dInputELeDesc.Format = HrD3D11Mapping::GetInputElementFormat(vertexElement.m_elementType);
+				d3dInputELeDesc.InputSlot = 0;
+				d3dInputELeDesc.AlignedByteOffset = vertexElement.GetOffset();
+				d3dInputELeDesc.InputSlotClass = HrD3D11Mapping::GetInputELementClassType(vertexElement.m_elementClassType);
+				d3dInputELeDesc.InstanceDataStepRate = vertexElement.m_nInstanceStepRate;
+				m_vecInputElementDesc.emplace_back(d3dInputELeDesc);
+			}
+			const HrD3D11GraphicsBufferPtr & pVertexStream = HrCheckPointerCast<HrD3D11GraphicsBuffer>(pVertexData->GetVertexStream());
+			m_vecD3DVertexBuffer.push_back(pVertexStream->GetD3DGraphicsBuffer().get());
+			m_vecStrides.push_back(pVertexData->GetVertex()->GetVertexSize());
+			m_vecOffsets.push_back(0);
+		}
+		
+		m_bStreamsDirty = false;
+	}
 }
 
 const ID3D11InputLayoutPtr& HrD3D11RenderLayout::GetInputLayout(const HrD3D11ShaderPtr& pShader)
 {
-	if (m_pD3DInputLayout == nullptr)
+	for (const auto& iteLayout : m_vecInputLayouts)
 	{
-		size_t nVertexElementNum = m_pVertex->GetVertexElementNum();
-		m_pD3DInputElementDesc = new D3D11_INPUT_ELEMENT_DESC[nVertexElementNum];
-		memset(m_pD3DInputElementDesc, 0, sizeof(D3D11_INPUT_ELEMENT_DESC));
-		for (size_t i = 0; i < nVertexElementNum; ++i)
+		if (iteLayout.first == pShader->HashName())
 		{
-			const HrVertexElement& VertexElement = m_pVertex->GetVertexElement(i);
-			m_pD3DInputElementDesc[i].SemanticName = HrD3D11Mapping::GetInputElementSemanticName(VertexElement.m_elementUsage);
-			m_pD3DInputElementDesc[i].SemanticIndex = 0;
-			m_pD3DInputElementDesc[i].Format = HrD3D11Mapping::GetInputElementFormat(VertexElement.m_elementType);
-			m_pD3DInputElementDesc[i].InputSlot = 0;
-			m_pD3DInputElementDesc[i].AlignedByteOffset = VertexElement.GetOffset();
-			m_pD3DInputElementDesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-			m_pD3DInputElementDesc[i].InstanceDataStepRate = 0;
-		}
-
-		ID3D11InputLayout* pD3DInputLayout = nullptr;
-		HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateInputLayout(
-			m_pD3DInputElementDesc,
-			nVertexElementNum,
-			pShader->GetCodeData()->GetBufferPoint(),
-			pShader->GetCodeData()->GetBufferSize(),
-			&pD3DInputLayout);
-		if (FAILED(hr))
-		{
-			TRE("HrD3D11RenderLayout::GetInput Error!");
-		}
-		else
-		{
-			m_pD3DInputLayout = MakeComPtr(pD3DInputLayout);
+			return iteLayout.second;
 		}
 	}
-	return m_pD3DInputLayout;
+
+	ID3D11InputLayout* pD3DInputLayout = nullptr;
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateInputLayout(
+		&m_vecInputElementDesc[0],
+		m_vecInputElementDesc.size(),
+		pShader->GetCodeData()->GetBufferPoint(),
+		pShader->GetCodeData()->GetBufferSize(),
+		&pD3DInputLayout);
+	if (FAILED(hr))
+	{
+		TRE("HrD3D11RenderLayout::GetInput Error!");
+	}
+	else
+	{
+		ID3D11InputLayoutPtr pD3DIL = MakeComPtr(pD3DInputLayout);
+		m_vecInputLayouts.emplace_back(pShader->HashName(), pD3DIL);
+
+		return m_vecInputLayouts.back().second;
+	}
+
+	return nullptr;
 }
 
-const ID3D11BufferPtr& HrD3D11RenderLayout::GetVertexBuffer()
+const std::vector<ID3D11Buffer*>& HrD3D11RenderLayout::GetD3DVertexBuffers()
 {
-	return (HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_pVertexBuffer))->GetD3DGraphicsBuffer();
+	return m_vecD3DVertexBuffer;
 }
 
-const ID3D11BufferPtr& HrD3D11RenderLayout::GetIndexBuffer()
+const std::vector<UINT>& HrD3D11RenderLayout::GetStrides()
 {
-	return (HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_pIndexBuffer))->GetD3DGraphicsBuffer();
+	return m_vecStrides;
 }
 
+const std::vector<UINT>& HrD3D11RenderLayout::GetOffsets()
+{
+	return m_vecOffsets;
+}
 

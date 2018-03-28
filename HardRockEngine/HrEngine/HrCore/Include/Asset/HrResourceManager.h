@@ -10,7 +10,7 @@
 
 namespace Hr
 {
-	class HR_CORE_API HrResourceManager : public HrSingleTon<HrResourceManager>
+	class HR_CORE_API HrResourceManager
 	{
 	public:
 		HrResourceManager();
@@ -19,13 +19,12 @@ namespace Hr
 		void InitResourceManager();
 		
 		HrResourcePtr RetriveResource(const std::string& strFile, HrResource::EnumResourceType resType);
-		
 		HrResourcePtr RetriveOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResourcePtr RetriveOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
-		HrMaterialPtr CreateDefaultMaterial();
+		HrResourcePtr GetDefaultMaterial();
 		HrTexture* GetDefaultTexture();
-		HrRenderEffectPtr GetDefaultRenderEffect();
+		HrResourcePtr GetDefaultRenderEffect();
 
 
 		void ReleaseAllResources();
@@ -70,6 +69,7 @@ namespace Hr
 		HrRenderEffectPtr m_pDefaultRenderEffect;
 		HrMaterialPtr m_pDefaultMaterial;
 	};
+
 }
 
 #endif

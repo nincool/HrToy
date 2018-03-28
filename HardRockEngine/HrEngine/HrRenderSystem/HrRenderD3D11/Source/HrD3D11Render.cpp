@@ -149,34 +149,37 @@ void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const H
 	//1.IASetVertexBuffers
 	//2.Draw & DrawIndexed
 	HrD3D11RenderLayoutPtr pD3D11RenderLayout = HrCheckPointerCast<HrD3D11RenderLayout>(pRenderLayout);
-	unsigned int stride = pD3D11RenderLayout->GetVertexSize();
-	unsigned int offset = 0;
+	pD3D11RenderLayout->Active();
 
 	//todo renderLayout
 	HrD3D11ShaderPtr pVertexShader = HrCheckPointerCast<HrD3D11Shader>(pRenderTechnique->GetRenderPass(0)->GetShader(HrShader::ST_VERTEX_SHADER));
 	const ID3D11InputLayoutPtr& pInputLayout = pD3D11RenderLayout->GetInputLayout(pVertexShader);
 	GetD3D11DeviceContext()->IASetInputLayout(pInputLayout.get());
 	
-	ID3D11Buffer* pVertexBuffer = pD3D11RenderLayout->GetVertexBuffer().get();
-	GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+	uint32 nVertexStreams = pD3D11RenderLayout->GetVertexStreamSize();
+	const std::vector<ID3D11Buffer*>& vecD3DVertexBuffers = pD3D11RenderLayout->GetD3DVertexBuffers();
+	const std::vector<UINT>& vecStrides = pD3D11RenderLayout->GetStrides();
+	const std::vector<UINT>& vecOffsets = pD3D11RenderLayout->GetOffsets();
+
+	GetD3D11DeviceContext()->IASetVertexBuffers(0, nVertexStreams, &vecD3DVertexBuffers[0], &vecStrides[0], &vecOffsets[0]);
 	GetD3D11DeviceContext()->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
 
 	if (pD3D11RenderLayout->UseIndices())
 	{
-		const ID3D11BufferPtr& pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-		GetD3D11DeviceContext()->IASetIndexBuffer(pIndexBuffer.get(), HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
+		//const ID3D11BufferPtr& pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
+		//GetD3D11DeviceContext()->IASetIndexBuffer(pIndexBuffer.get(), HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
 	const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
 	if (pD3D11RenderLayout->UseIndices())
 	{
-		uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
-		for (uint32 i = 0; i < nPassNum; ++i)
-		{
-			pRenderTechnique->GetRenderPass(i)->BindPass(shared_from_this());
-			GetD3D11DeviceContext()->DrawIndexed(nNumIndices, 0, 0);
-			pRenderTechnique->GetRenderPass(i)->UnBindPass(shared_from_this());
-		}
+		//uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
+		//for (uint32 i = 0; i < nPassNum; ++i)
+		//{
+		//	pRenderTechnique->GetRenderPass(i)->BindPass(shared_from_this());
+		//	GetD3D11DeviceContext()->DrawIndexed(nNumIndices, 0, 0);
+		//	pRenderTechnique->GetRenderPass(i)->UnBindPass(shared_from_this());
+		//}
 	}
 	else
 	{

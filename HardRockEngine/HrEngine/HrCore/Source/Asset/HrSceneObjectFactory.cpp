@@ -1,8 +1,9 @@
 #include "Asset/HrSceneObjectFactory.h"
 #include "Asset/HrGeometryFactory.h"
 #include "Asset/HrResourceManager.h"
-#include "Asset/HrPrefabModel.h"
+#include "Asset/HrModel.h"
 #include "Asset/HrMesh.h"
+#include "Asset/HrRenderEffect.h"
 #include "Render/HrViewPort.h"
 #include "Render/HrSkinnedMeshRenderable.h"
 #include "Render/HrLight.h"
@@ -12,20 +13,22 @@
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrUtilTools/Include/HrModuleLoader.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentResource.h"
 
 using namespace Hr;
 
 
 HrSceneObjectFactory::HrSceneObjectFactory()
 {
-	m_pGeometryFactory = HrMakeSharedPtr<HrGeometryFactory>();
+	//m_pGeometryFactory = HrMakeSharedPtr<HrGeometryFactory>();
 }
 
 HrSceneObjectFactory::~HrSceneObjectFactory()
 {
 }
 
-HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, uint32 nTopX, uint32 nTopY, uint32 nWidth, uint32 nHeight, int nZOrder)
+HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, float nTopX, float nTopY, float nWidth, float nHeight, int nZOrder)
 {
 	HrCameraComponentPtr pCamera = HrMakeSharedPtr<HrCameraComponet>(strName);
 	HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(nTopX, nTopY, nWidth, nHeight, nZOrder);
@@ -64,25 +67,24 @@ HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, ui
 //	return pLightNode;
 //}
 
-HrSceneNodePtr HrSceneObjectFactory::CreatePlane(float fWidth, float fHeight)
-{
-	return m_pGeometryFactory->CreatePlane(fWidth, fHeight);
-}
-
-HrSceneNode* HrSceneObjectFactory::CreateBox(float fLength)
-{
-	return m_pGeometryFactory->CreateBox(fLength);
-}
-
-HrSceneNode* HrSceneObjectFactory::CreateSkyBox()
-{
-	return m_pGeometryFactory->CreateSkyBox();
-}
+//HrSceneNodePtr HrSceneObjectFactory::CreatePlane(float fWidth, float fHeight)
+//{
+//	return m_pGeometryFactory->CreatePlane(fWidth, fHeight);
+//}
+//
+//HrSceneNode* HrSceneObjectFactory::CreateBox(float fLength)
+//{
+//	return m_pGeometryFactory->CreateBox(fLength);
+//}
+//
+//HrSceneNode* HrSceneObjectFactory::CreateSkyBox()
+//{
+//	return m_pGeometryFactory->CreateSkyBox();
+//}
 
 HrSceneNodePtr HrSceneObjectFactory::CreateModel(const std::string& strName)
 {
-	HrResourcePtr pRes = HrResourceManager::Instance()->RetriveOrLoadResource(strName, HrResource::RT_MODEL);
-	HrPrefabModelPtr pPrefabModel = HrCheckPointerCast<HrPrefabModel>(pRes);
+	HrModelPtr pPrefabModel = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrModel>(strName, true, true);
 	if (pPrefabModel == nullptr)
 	{
 		BOOST_ASSERT(false);
@@ -92,14 +94,14 @@ HrSceneNodePtr HrSceneObjectFactory::CreateModel(const std::string& strName)
 	return CreateSceneNode(pPrefabModel);
 }
 
-HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrPrefabModelPtr& pPrefabModel)
+HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrModelPtr& pPrefabModel)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
 	for (size_t i = 0; i < pPrefabModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
 		HrSkinnedMeshRenderablePtr pSkinnedRenderable = HrMakeSharedPtr<HrSkinnedMeshRenderable>();
-		pSkinnedRenderable->AttachSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
-		pSkinnedRenderable->SetRenderEffect(HrResourceManager::Instance()->GetDefaultRenderEffect());
+		pSkinnedRenderable->SetSubMesh(pPrefabModel->GetMesh()->GetSubMesh(i));
+		pSkinnedRenderable->SetRenderEffect(HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>());
 
 		HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>(pSkinnedRenderable);
 		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pPrefabModel->GetMesh()->GetSubMesh(i)->GetName());

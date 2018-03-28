@@ -14,10 +14,8 @@ HrRenderFrameParameters::HrRenderFrameParameters()
 	m_pCurrentMaterial = nullptr;
 	m_pCurrentCamera = nullptr;
 
-	m_bWorldMatrixDirty = true;
-	m_bInverseWorldMatrixDirty = true;
-	m_bInverseTransposeWorldMatrix = true;
-	m_bWorldViewProjMatrixDirty = true;
+	DirtyWorldMatrix();
+	DirtyViewMatrix();
 
 	m_worldMatrix = Matrix4::Identity();
 }
@@ -26,17 +24,14 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 {
 }
 
-
 void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode)
 {
 	m_pCurrentSceneNode = pSceneNode;
 	m_pCurrentMaterial = pSceneNode->GetSceneObject()->GetRenderable()->GetMaterial();
 
 	//todo
-	m_bWorldMatrixDirty = true;
-	m_bWorldViewProjMatrixDirty = true;
+	DirtyWorldMatrix();
 }
-
 
 void HrRenderFrameParameters::SetLightsData(const HrSceneLightDataPtr& pLightData)
 {
@@ -48,13 +43,11 @@ void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
 	if (m_pCurrentCamera != pCamera)
 	{
 		m_pCurrentCamera = pCamera;
-		m_bCameraDirty = true;
-		m_bWorldViewProjMatrixDirty = true;
+		DirtyViewMatrix();
 	}
 	else if (m_pCurrentCamera->ViewProjDirty())
 	{
-		m_bCameraDirty = true;
-		m_bWorldViewProjMatrixDirty = true;
+		DirtyViewMatrix();
 	}
 }
 
@@ -220,5 +213,19 @@ const float4 HrRenderFrameParameters::GetPointLightAttenuation(int nLightIndex)
 		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuation1()
 		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuation2()
 		, m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetAttenuationRange());
+}
+
+void HrRenderFrameParameters::DirtyWorldMatrix()
+{
+	m_bWorldMatrixDirty = true;
+	m_bWorldViewProjMatrixDirty = true;
+	m_bInverseWorldMatrixDirty = true;
+	m_bInverseTransposeWorldMatrix = true;
+}
+
+void HrRenderFrameParameters::DirtyViewMatrix()
+{
+	m_bCameraDirty = true;
+	m_bWorldViewProjMatrixDirty = true;
 }
 

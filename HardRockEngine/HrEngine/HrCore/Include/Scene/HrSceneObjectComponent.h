@@ -15,6 +15,7 @@ namespace Hr
 			SCT_NORMAL,
 			SCT_CAMERA,
 			SCT_LIGHT,
+			SCT_INSTANCEBATCH,
 
 			SCT_COM_COUNT,
 		};
@@ -52,6 +53,18 @@ namespace Hr
 		const HrLightPtr& GetLight();
 	protected:
 		HrLightPtr m_pLight;
+	};
+
+	class HR_CORE_API HrInstanceBatchComponent : public HrSceneObjectComponent
+	{
+	public:
+		HrInstanceBatchComponent(const std::string& strName);
+		~HrInstanceBatchComponent();
+
+		HrSceneNodePtr CreateInstance(const std::string& strName = "Default_Instance");
+	protected:
+		HrInstanceBatchManagerPtr m_pInstanceBatchManager;
+
 	};
 }
 

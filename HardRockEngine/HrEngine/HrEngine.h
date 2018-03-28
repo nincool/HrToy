@@ -7,6 +7,7 @@
 #include "HrCore/Include/Kernel/HrCoreComponentRender.h"
 #include "HrCore/Include/Kernel/HrCoreComponentScene.h"
 #include "HrCore/Include/Kernel/HrCoreComponentWin.h"
+#include "HrCore/Include/Kernel/HrCoreComponentResource.h"
 
 #include "HrCore/Include/Event/HrEventDispatcher.h"
 #include "HrCore/Include/Event/HrEventListener.h"

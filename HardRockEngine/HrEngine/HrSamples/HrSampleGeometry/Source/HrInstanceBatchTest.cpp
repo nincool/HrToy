@@ -1,19 +1,21 @@
-#include "HrGeometryScene.h"
+#include "HrInstanceBatchTest.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
+#include "HrCore/Include/Render/HrInstanceBatchManager.h"
+#include "HrCore/Include/Render/HrInstanceBatch.h"
 
 using namespace Hr;
 
-HrGeometryScene::HrGeometryScene()
+HrInstanceBatchTest::HrInstanceBatchTest()
 {
 	ResetKeyFlag();
 }
 
-HrGeometryScene::~HrGeometryScene()
+HrInstanceBatchTest::~HrInstanceBatchTest()
 {
 
 }
 
-void HrGeometryScene::ResetKeyFlag()
+void HrInstanceBatchTest::ResetKeyFlag()
 {
 	m_bKeyAPressed = false;
 	m_bKeyWPressed = false;
@@ -21,18 +23,18 @@ void HrGeometryScene::ResetKeyFlag()
 	m_bKeyDPressed = false;
 }
 
-void HrGeometryScene::OnEnter()
+void HrInstanceBatchTest::OnEnter()
 {
 	HrScene::OnEnter();
 
 	CreateSceneElements();
-	
+
 	CreateInputEvent();
 
-	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrGeometryScene::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
+	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrInstanceBatchTest::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
-void HrGeometryScene::CreateSceneElements()
+void HrInstanceBatchTest::CreateSceneElements()
 {
 	//Ìí¼ÓÉãÏñ»ú
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
@@ -43,26 +45,29 @@ void HrGeometryScene::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	//auto pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
-	//BOOST_ASSERT(pRenderEffect);
+	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
+	BOOST_ASSERT(pRenderEffect);
 
-	//m_pTestNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab3.prefab");
-	//m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetRenderable()->SetRenderEffect(pRenderEffect);
-	//AddNode(m_pTestNode);
+	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModel("Model/HrPrefab3.model");
+	m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	AddNode(m_pTestNode);
+	auto pInstanceBatchCom = m_pTestNode->GetSceneObject()->AddComponent<HrInstanceBatchComponent>();
+	auto pInsNode = pInstanceBatchCom->CreateInstance();
+	
 }
 
-void HrGeometryScene::CreateInputEvent()
+void HrInstanceBatchTest::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrGeometryScene::OnKeyPressed, this)
-		, HR_CALLBACK_2(HrGeometryScene::OnKeyReleased, this));
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrInstanceBatchTest::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrInstanceBatchTest::OnKeyReleased, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
 
-	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrGeometryScene::OnMousePressed, this)
-		, HR_CALLBACK_2(HrGeometryScene::OnMouseReleased, this), HR_CALLBACK_1(HrGeometryScene::OnMouseMove, this));
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrInstanceBatchTest::OnMousePressed, this)
+		, HR_CALLBACK_2(HrInstanceBatchTest::OnMouseReleased, this), HR_CALLBACK_1(HrInstanceBatchTest::OnMouseMove, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerMouse, this);
 }
 
-void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrInstanceBatchTest::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	ResetKeyFlag();
 	switch (keyCode)
@@ -87,7 +92,7 @@ void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const H
 	}
 }
 
-void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrInstanceBatchTest::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	switch (keyCode)
 	{
@@ -109,7 +114,7 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const 
 	}
 }
 
-void HrGeometryScene::SceneUpdate(float fDelta)
+void HrInstanceBatchTest::SceneUpdate(float fDelta)
 {
 	float fSpeed = 0.2f;
 	float fRotateSpeed = 5;
@@ -129,45 +134,9 @@ void HrGeometryScene::SceneUpdate(float fDelta)
 	{
 		m_pTestNode->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
 	}
-	//else if (m_bKey0Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -fSpeed));
-	//}
-	//else if (m_bKey1Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, fSpeed));
-	//}
-	//else if (m_bKeyF1Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
-	//}
-	//else if (m_bKeyF2Pressed)
-	//{
-
-	//}
-	//else if (m_bKeyLeftPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, -fRotateSpeed, 0.0f));
-
-	//}
-	//else if (m_bKeyRightPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, fRotateSpeed, 0.0f));
-
-	//}
-	//else if (m_bKeyUpPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
-
-	//}
-	//else if (m_bKeyDownPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(-fRotateSpeed, 0.0f, 0.0f));
-
-	//}
 }
 
-void HrGeometryScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrInstanceBatchTest::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	//switch (mouseID)
 	//{
@@ -184,7 +153,7 @@ void HrGeometryScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, co
 	//}
 }
 
-void HrGeometryScene::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrInstanceBatchTest::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	//switch (mouseID)
 	//{
@@ -201,7 +170,7 @@ void HrGeometryScene::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, c
 	//}
 }
 
-void HrGeometryScene::OnMouseMove(const HrEventPtr& pEvent)
+void HrInstanceBatchTest::OnMouseMove(const HrEventPtr& pEvent)
 {
 	HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
 	static float s_floatX = 0;

@@ -141,7 +141,7 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
-    <ClInclude Include="Include\Asset\HrPrefabModel.h" />
+    <ClInclude Include="Include\Asset\HrModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
@@ -160,6 +160,7 @@
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\Kernel\HrApplication.h" />
     <ClInclude Include="Include\Kernel\HrCoreComponent.h" />
+    <ClInclude Include="Include\Kernel\HrCoreComponentResource.h" />
     <ClInclude Include="Include\Kernel\HrDirector.h" />
     <ClInclude Include="Include\Kernel\HrCoreComponentEvent.h" />
     <ClInclude Include="Include\Kernel\HrFileUtils.h" />
@@ -185,6 +186,10 @@
     <ClInclude Include="Include\Render\HrDepthStencilState.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataFormat.h" />
+    <ClInclude Include="Include\Render\HrInstanceBatch.h" />
+    <ClInclude Include="Include\Render\HrInstanceBatchHW.h" />
+    <ClInclude Include="Include\Render\HrInstanceBatchManager.h" />
+    <ClInclude Include="Include\Render\HrInstanceBatchShader.h" />
     <ClInclude Include="Include\Render\HrLight.h" />
     <ClInclude Include="Include\Render\HrRasterizerState.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
@@ -221,7 +226,7 @@
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
-    <ClCompile Include="Source\Asset\HrPrefabModel.cpp" />
+    <ClCompile Include="Source\Asset\HrModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
@@ -237,6 +242,7 @@
     <ClCompile Include="Source\Kernel\HrApplication.cpp" />
     <ClCompile Include="Source\Kernel\HrCoreComponent.cpp" />
     <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp" />
+    <ClCompile Include="Source\Kernel\HrCoreComponentResource.cpp" />
     <ClCompile Include="Source\Kernel\HrDirector.cpp" />
     <ClCompile Include="Source\Kernel\HrExport.cpp" />
     <ClCompile Include="Source\Kernel\HrFileUtils.cpp" />
@@ -260,6 +266,10 @@
     <ClCompile Include="Source\Render\HrDepthStencilState.cpp" />
     <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
+    <ClCompile Include="Source\Render\HrInstanceBatch.cpp" />
+    <ClCompile Include="Source\Render\HrInstanceBatchHW.cpp" />
+    <ClCompile Include="Source\Render\HrInstanceBatchManager.cpp" />
+    <ClCompile Include="Source\Render\HrInstanceBatchShader.cpp" />
     <ClCompile Include="Source\Render\HrLight.cpp" />
     <ClCompile Include="Source\Render\HrRasterizerState.cpp" />
     <ClCompile Include="Source\Render\HrRenderFactory.cpp" />

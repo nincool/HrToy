@@ -24,7 +24,7 @@ namespace Hr
 		uint64 GetBufferSizeWithoutNULLTerminator();
 
 		void ClearBuffer();
-		void AddBuffer(Byte* pData, uint32 nSize);
+		void AddBuffer(const Byte* pData, uint32 nSize);
 	private:
 		std::vector<Byte> m_vecStreamData;
 	};

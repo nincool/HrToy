@@ -22,6 +22,8 @@ namespace Hr
 	typedef class std::shared_ptr<HrCoreComponentScene> HrCoreComponentScenePtr;
 	class HrCoreComponentEvent;
 	typedef class std::shared_ptr<HrCoreComponentEvent> HrCoreComponentEventPtr;
+	class HrCoreComponentResource;
+	typedef class std::shared_ptr<HrCoreComponentResource> HrCoreComponentResourcePtr;
 
 	//Render
 	class HrRenderFactory;
@@ -42,6 +44,8 @@ namespace Hr
 	class HrVertexElement;
 	class HrVertex;
 	typedef std::shared_ptr<HrVertex> HrVertexPtr;
+	class HrVertexData;
+	typedef std::shared_ptr<HrVertexData> HrVertexDataPtr;
 	class HrGraphicsBuffer;
 	typedef std::shared_ptr<HrGraphicsBuffer> HrGraphicsBufferPtr;
 	class HrRenderQueue;
@@ -52,6 +56,14 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderable> HrRenderablePtr;
 	class HrSkinnedMeshRenderable;
 	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
+
+	//InstanceBatch
+	class HrInstanceBatch;
+	typedef std::shared_ptr<HrInstanceBatch> HrInstanceBatchPtr;
+	class HrInstanceBatchHW;
+	typedef std::shared_ptr<HrInstanceBatchHW> HrInstanceBatchHWPtr;
+	class HrInstanceBatchManager;
+	typedef std::shared_ptr<HrInstanceBatchManager> HrInstanceBatchManagerPtr;
 
 	class HrRenderPass;
 	typedef std::shared_ptr<HrRenderPass> HrRenderPassPtr;
@@ -133,8 +145,8 @@ namespace Hr
 	typedef std::shared_ptr<HrStreamData> HrStreamDataPtr;
 	class HrResource;
 	typedef std::shared_ptr<HrResource> HrResourcePtr;
-	class HrPrefabModel;
-	typedef std::shared_ptr<HrPrefabModel> HrPrefabModelPtr;
+	class HrModel;
+	typedef std::shared_ptr<HrModel> HrModelPtr;
 	class HrTexture;
 	typedef std::shared_ptr<HrTexture> HrTexturePtr;
 	class HrMesh;
@@ -145,14 +157,15 @@ namespace Hr
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
 	class HrMaterial;
 	typedef std::shared_ptr<HrMaterial> HrMaterialPtr;
-
-
-	//Asset
-	class HrTexture;
-	class HrResourceManager;
-
 	class HrShaderCompiler;
 	typedef std::shared_ptr<HrShaderCompiler> HrShaderCompilerPtr;
+
+	class HrResourceManager;
+	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
+
+	//Asset
+
+
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
 	class HrGeometryFactory;

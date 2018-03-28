@@ -4,7 +4,7 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
-#include "HrCore/Include/Asset/HrPrefabModel.h"
+#include "HrCore/Include/Asset/HrModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"

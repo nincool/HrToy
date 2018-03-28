@@ -27,6 +27,11 @@ const HrRenderTechniquePtr& HrRenderable::GetRenderTechnique()
 	return m_pCurTechnique;
 }
 
+void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
+{
+	m_pSubMesh = pSubMesh;
+}
+
 uint32 HrRenderable::GetSubRenderableNum() const
 {
 	return m_vecSubRenderable.size();

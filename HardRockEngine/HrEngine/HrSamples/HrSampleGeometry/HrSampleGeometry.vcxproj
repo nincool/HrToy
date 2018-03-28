@@ -138,12 +138,14 @@
     <ClInclude Include="Include\HrExport.h" />
     <ClInclude Include="Include\HrGeometryApp.h" />
     <ClInclude Include="Include\HrGeometryScene.h" />
+    <ClInclude Include="Include\HrInstanceBatchTest.h" />
     <ClInclude Include="Include\HrTestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
     <ClCompile Include="Source\HrGeometryApp.cpp" />
     <ClCompile Include="Source\HrGeometryScene.cpp" />
+    <ClCompile Include="Source\HrInstanceBatchTest.cpp" />
     <ClCompile Include="Source\HrTestScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

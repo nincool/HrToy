@@ -40,13 +40,14 @@ HrEventKeyboard::~HrEventKeyboard()
 const std::string HrEventMouse::m_s_strEventMouseID = "_HR_EVENT_MOUSE_";
 size_t HrEventMouse::m_s_nEventMouseHashID = HrHashValue(HrEventMouse::m_s_strEventMouseID);
 
-HrEventMouse::HrEventMouse(EnumMouseButtonID id, EnumMouseEventFlag mouseEventFlag, float x, float y) : HrEvent(m_s_strEventMouseID)
+HrEventMouse::HrEventMouse(EnumMouseButtonID id, EnumMouseEventFlag mouseEventFlag, float x, float y, float z) : HrEvent(m_s_strEventMouseID)
 {
 	m_nType = HrEvent::EnumEventType::MOUSE;
 	m_buttonID = id;
 	m_mouseEventFlag = mouseEventFlag;
 	m_fX = x;
 	m_fY = y;
+	m_fZ = z;
 }
 
 HrEventMouse::~HrEventMouse()

@@ -33,6 +33,7 @@ namespace Hr
 		const HrCoreComponentWinPtr& GetWinCoreComponent();
 		const HrCoreComponentRenderPtr& GetRenderCoreComponent();
 		const HrCoreComponentScenePtr& GetSceneCoreComponent();
+		const HrCoreComponentResourcePtr& GetResCoreComponent();
 
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
@@ -53,14 +54,14 @@ namespace Hr
 		void CreateWindowComponent();
 		void CreateSceneComponent();
 		void CreateRenderComponent();
-		
+		void CreateResourceManager();
 
 
 		bool CreateRenderState();
 		void ReleaseRenderState();
 
-		bool CreateResourceManager();
-		void ReleaseResourceManager();
+		//bool CreateResourceManager();
+		//void ReleaseResourceManager();
 
 		bool CreateInputManager();
 		void ReleaseInputManager();
@@ -87,6 +88,7 @@ namespace Hr
 		HrCoreComponentWinPtr m_pWindowComponet;
 		HrCoreComponentRenderPtr m_pRenderComponent;
 		HrCoreComponentScenePtr m_pSceneManagerComponent;
+		HrCoreComponentResourcePtr m_pResManagerComponent;
 
 	};
 

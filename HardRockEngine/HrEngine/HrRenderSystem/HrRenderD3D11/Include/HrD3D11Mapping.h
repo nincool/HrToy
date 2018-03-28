@@ -17,8 +17,13 @@ namespace Hr
 		static LPCSTR GetInputElementSemanticName(EnumVertexElementUsage usage);
 
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
+		
+		//D3D11_INPUT_CLASSIFICATION <=> EnumVertexElementClassType
+		static D3D11_INPUT_CLASSIFICATION GetInputELementClassType(EnumVertexElementClassType type);
+		
 		//topology
 		static D3D_PRIMITIVE_TOPOLOGY GetTopologyType(EnumTopologyType topologyType);
+		
 		//Ë÷Òý»º´æ¸ñÊ½
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 

@@ -1,15 +1,17 @@
-#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
-#include "HrCore/Include/Kernel/HrFileUtils.h"
-#include "HrCore/Include/Kernel/HrLog.h"
-#include "HrCore/Include/Asset/Loader/HrFBXLoader.h"
-#include "HrCore/Include/Asset/HrResourceManager.h"
-#include "HrCore/Include/Asset/HrMesh.h"
-#include "HrCore/Include/Asset/HrMaterial.h"
-#include "HrCore/Include/Asset/HrStreamData.h"
-#include "HrCore/Include/Asset/HrTexture.h"
-#include "HrCore/Include/Render/HrRenderLayout.h"
-#include "HrCore/Include/Render/HrGraphicsBuffer.h"
-#include "HrCore/Include/Render/HrVertex.h"
+#include "Asset/Loader/HrModelLoader.h"
+#include "Kernel/HrFileUtils.h"
+#include "Kernel/HrLog.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentResource.h"
+#include "Asset/Loader/HrFBXLoader.h"
+#include "Asset/HrResourceManager.h"
+#include "Asset/HrMesh.h"
+#include "Asset/HrMaterial.h"
+#include "Asset/HrStreamData.h"
+#include "Asset/HrTexture.h"
+#include "Render/HrRenderLayout.h"
+#include "Render/HrGraphicsBuffer.h"
+#include "Render/HrVertex.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrStringUtil.h"
 
@@ -49,9 +51,9 @@ void HrModelLoader::Load(std::string& strFile)
 	std::vector<HrVertexElement> vecVertexElement;
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
+	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 
-	m_pMesh = HrCheckPointerCast<HrMesh>(HrResourceManager::Instance()->RetriveOrAddResource(m_strFileName, HrResource::RT_MESH));
+	m_pMesh = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrMesh>(m_strFileName);
 	BOOST_ASSERT(!m_pMesh->IsLoaded());
 	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
@@ -63,7 +65,7 @@ void HrModelLoader::Load(std::string& strFile)
 		pSubMesh->GetRenderLayout()->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 
 		//todo material
-		HrMaterialPtr pMaterial = HrResourceManager::Instance()->CreateDefaultMaterial();
+		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrMaterial>("");
 		pSubMesh->SetMaterial(pMaterial);
 	}
 }
@@ -130,7 +132,7 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo
 				streamData.AddBuffer((Byte*)&(subMeshInfo.vecColor[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
-			case VEU_TEXTURECOORD:
+			case VEU_TEXTURE_COORDINATES:
 			{
 				streamData.AddBuffer((Byte*)&(subMeshInfo.vecUV[nIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;

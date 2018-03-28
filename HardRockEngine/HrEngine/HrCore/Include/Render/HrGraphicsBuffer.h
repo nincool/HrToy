@@ -78,6 +78,7 @@ namespace Hr
 		
 		virtual uint32 GetByteWidth();
 
+		HrGraphicsBuffer::EnumGraphicsBufferUsage GetUsage();
 	private:
 		virtual void* Map(HrGraphicsBuffer::EnumGraphicsBufferAccess accessFlag) = 0;
 		virtual void Unmap() = 0;

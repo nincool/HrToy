@@ -1,5 +1,7 @@
 #include "Scene/HrSceneObjectComponent.h"
 #include "Render/HrCamera.h"
+#include "Render/HrInstanceBatchManager.h"
+#include "Render/HrInstanceBatchHW.h"
 
 using namespace Hr;
 
@@ -84,3 +86,19 @@ const HrLightPtr& HrLightComponent::GetLight()
 	return m_pLight;
 }
 
+/////////////////////////////////////////////
+//
+/////////////////////////////////////////////
+HrInstanceBatchComponent::HrInstanceBatchComponent(const std::string& strName) : HrSceneObjectComponent(strName)
+{
+	m_pInstanceBatchManager = HrMakeSharedPtr<HrInstanceBatchManager>();
+}
+
+HrInstanceBatchComponent::~HrInstanceBatchComponent()
+{
+}
+
+HrSceneNodePtr HrInstanceBatchComponent::CreateInstance(const std::string& strName)
+{
+	return nullptr;
+}

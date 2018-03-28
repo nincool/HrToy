@@ -23,7 +23,6 @@ namespace Hr
 
 		const Matrix4& GetViewProjMatrix() const;
 
-
 		const Matrix4& GetWorldMatrix();
 		const Matrix4& GetInverseWroldMatrix();
 		const Matrix4& GetInverseTransposeWorldMatrix();
@@ -55,6 +54,10 @@ namespace Hr
 		float4 GetMaterialSpecular() const;
 		float4 GetMaterialEmissive() const;
 		float GetMaterialOpacity() const;
+
+	private:
+		void DirtyWorldMatrix();
+		void DirtyViewMatrix();
 	protected:
 		mutable Matrix4 m_worldMatrix;
 		bool m_bWorldMatrixDirty = true;

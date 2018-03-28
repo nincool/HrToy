@@ -30,3 +30,8 @@ uint32 HrGraphicsBuffer::GetByteWidth()
 	return m_nByteWidth;
 }
 
+HrGraphicsBuffer::EnumGraphicsBufferUsage Hr::HrGraphicsBuffer::GetUsage()
+{
+	return m_usage;
+}
+

@@ -3,7 +3,7 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFrameParameters.h"
 #include "HrCore/Include/Asset/HrRenderEffect.h"
-#include "HrCore/Include/Asset/HrPrefabModel.h"
+#include "HrCore/Include/Asset/HrModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
@@ -14,10 +14,6 @@ using namespace Hr;
 HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
 {
 	m_pSubMesh = nullptr;
-
-	//m_pRenderEffect = HrResourceManager::Instance()->GetDefaultRenderEffect();
-	//m_pRenderTechnique = m_pRenderEffect->GetTechniqueByName("Technique_1");
-	//BOOST_ASSERT(m_pRenderTechnique);
 }
 
 HrSkinnedMeshRenderable::~HrSkinnedMeshRenderable()
@@ -37,11 +33,6 @@ const HrRenderLayoutPtr& HrSkinnedMeshRenderable::GetRenderLayout()
 	}
 }
 
-void HrSkinnedMeshRenderable::AttachSubMesh(HrSubMeshPtr pSubMesh)
-{
-	m_pSubMesh = pSubMesh;
-}
-
 bool HrSkinnedMeshRenderable::CanRender()
 {
 	if (m_pSubMesh == nullptr)
@@ -54,5 +45,10 @@ bool HrSkinnedMeshRenderable::CanRender()
 const HrMaterialPtr& HrSkinnedMeshRenderable::GetMaterial()
 {
 	return m_pSubMesh->GetMaterial();
+}
+
+void HrSkinnedMeshRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
+{
+	m_pSubMesh = pSubMesh;
 }
 

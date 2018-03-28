@@ -259,6 +259,11 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 		*pRenderEffectParameter = pRenderFrameParameters->GetInverseTransposeWorldMatrix();
 		break;
 	}
+	case RPT_VIEW_PROJ_MATRIX:
+	{
+		*pRenderEffectParameter = pRenderFrameParameters->GetViewProjMatrix();
+		break;
+	}
 	case RPT_WORLD_VIEW_PROJ_MATRIX:
 	{
 		*pRenderEffectParameter = pRenderFrameParameters->GetWorldViewProjMatrix();

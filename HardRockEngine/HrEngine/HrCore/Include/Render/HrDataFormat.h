@@ -227,7 +227,7 @@ namespace Hr
 		// Vertex blend indices
 		VEU_BLENDINDEX = 1 << 5,
 		// at least one set of texture coords (exact number specified in class)
-		VEU_TEXTURECOORD = 1 << 6,
+		VEU_TEXTURE_COORDINATES = 1 << 6,
 		// Vertex tangent
 		VEU_TANGENT = 1 << 7,
 		// Vertex binormal
@@ -268,6 +268,12 @@ namespace Hr
 		VET_UINT2 = 25,
 		VET_UINT3 = 26,
 		VET_UINT4 = 27
+	};
+
+	enum EnumVertexElementClassType
+	{
+		VEC_INSTANCE,
+		VEC_GEOMETRY,
 	};
 
 	//ÍØÆËÀàÐÍ

@@ -1,4 +1,9 @@
 #include "Render/HrVertex.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentRender.h"
+#include "Render/HrGraphicsBuffer.h"
+#include "Render/HrRenderFactory.h"
+#include "Asset/HrStreamData.h"
 
 using namespace Hr;
 
@@ -92,13 +97,13 @@ void HrVertex::Clear()
 	m_vecVertexElement.clear();
 }
 
-void HrVertex::AddElementArray(std::vector<HrVertexElement>& vecVertexElement)
+void HrVertex::AddElementArray(const std::vector<HrVertexElement>& vecVertexElement)
 {
 	size_t nOffset = 0;
 	for (size_t i = 0; i < vecVertexElement.size(); ++i)
 	{
-		vecVertexElement[i].SetOffset(nOffset);
 		AddElement(vecVertexElement[i]);
+		m_vecVertexElement.back().SetOffset(nOffset);
 		nOffset += vecVertexElement[i].GetTypeSize();
 	}
 	m_nVertexSize = nOffset;
@@ -135,5 +140,58 @@ const HrVertexElement& HrVertex::GetVertexElement(uint32 nIndex)
 {
 	BOOST_ASSERT(nIndex < m_vecVertexElement.size());
 	return m_vecVertexElement[nIndex];
+}
+
+const std::vector<HrVertexElement>& HrVertex::GetVertexElement()
+{
+	return m_vecVertexElement;
+}
+
+///////////////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////////////
+
+HrVertexData::HrVertexData()
+{
+	m_pVertexStream = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pVertex = HrMakeSharedPtr<HrVertex>();
+	m_pVertexBaseData = HrMakeSharedPtr<HrStreamData>();
+}
+
+HrVertexData::~HrVertexData()
+{
+}
+
+void HrVertexData::BindVertexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nStart, uint32 nSize)
+{
+	m_pVertexStream->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_VERTEXT);
+	m_nVertexStart = nStart;
+	m_nVertexCount = nSize;
+	m_pVertexBaseData->AddBuffer(const_cast<Byte*>(pBuffer), nBufferSize);
+}
+
+uint32 HrVertexData::GetVertexStart()
+{
+	return m_nVertexStart;
+}
+
+uint32 HrVertexData::GetVertexCount()
+{
+	return m_nVertexCount;
+}
+
+const HrVertexPtr& HrVertexData::GetVertex()
+{
+	return m_pVertex;
+}
+
+const HrGraphicsBufferPtr& HrVertexData::GetVertexStream()
+{
+	return m_pVertexStream;
+}
+
+const HrStreamDataPtr& HrVertexData::GetVertexBaseData()
+{
+	return m_pVertexBaseData;
 }
 

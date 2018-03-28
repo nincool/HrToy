@@ -21,7 +21,7 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementUsage usage)
 		return "BLENDWEIGHT";
 	case VEU_BLENDINDEX:
 		return "BLENDINDICES";
-	case VEU_TEXTURECOORD:
+	case VEU_TEXTURE_COORDINATES:
 		return "TEXCOORD";
 	case VEU_TANGENT:
 		return "TANGENT";
@@ -58,6 +58,19 @@ DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(EnumVertexElementType type)
 	}
 	// to keep compiler happy
 	return DXGI_FORMAT_R32G32B32_FLOAT;
+}
+
+D3D11_INPUT_CLASSIFICATION HrD3D11Mapping::GetInputELementClassType(EnumVertexElementClassType type)
+{
+	switch (type)
+	{
+	case VEC_INSTANCE:
+		return D3D11_INPUT_PER_INSTANCE_DATA;
+	case VEC_GEOMETRY:
+		return D3D11_INPUT_PER_VERTEX_DATA;
+	default:
+		break;
+	}
 }
 
 D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topologyType)

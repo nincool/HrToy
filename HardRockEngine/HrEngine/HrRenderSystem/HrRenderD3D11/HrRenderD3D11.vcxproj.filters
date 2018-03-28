@@ -149,5 +149,8 @@
     <None Include="..\..\..\Bin_Win\Media\HrShader\HrSimple.hlsl">
       <Filter>HrShader</Filter>
     </None>
+    <None Include="..\..\..\Bin_Win\Media\HrShader\HrInstanceHW.hlsl">
+      <Filter>HrShader</Filter>
+    </None>
   </ItemGroup>
 </Project>

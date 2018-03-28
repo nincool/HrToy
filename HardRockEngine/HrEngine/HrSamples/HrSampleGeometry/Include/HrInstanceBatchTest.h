@@ -1,15 +1,14 @@
-#ifndef _HR_GEOMETRYSCENE_H_
-#define _HR_GEOMETRYSCENE_H_
+#pragma once
 
 #include "HrEngine.h"
 
 namespace Hr
 {
-	class HrGeometryScene : public HrScene
+	class HrInstanceBatchTest : public HrScene
 	{
 	public:
-		HrGeometryScene();
-		~HrGeometryScene();
+		HrInstanceBatchTest();
+		~HrInstanceBatchTest();
 
 		virtual void OnEnter() override;
 
@@ -36,10 +35,10 @@ namespace Hr
 		bool m_bKeySPressed;
 		bool m_bKeyDPressed;
 
-
+		//InstanceBatch
+		HrInstanceBatchManagerPtr m_pInstanceManager;
 	};
 }
 
-#endif
 
 

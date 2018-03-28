@@ -18,7 +18,10 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_VIEW_PROJ_MATRIX, "view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
+
+	HrRenderParamDefine(RPT_INSTANCE_WORLD_MATRIX_ARRAY, "world_matrix_array", REDT_MATRIX_4X4, 80, 64),
 
 	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 16),
 
@@ -578,6 +581,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 	{
 	case RPT_WORLD_MATRIX:
 	case RPT_WORLD_VIEW_PROJ_MATRIX:
+	case RPT_VIEW_PROJ_MATRIX:
 	case RPT_INVERSE_TRANSPOSE_WORLD_MATRIX:
 	{
 		BOOST_ASSERT(m_dataType == REDT_MATRIX_4X4 && m_nArraySize == 1);

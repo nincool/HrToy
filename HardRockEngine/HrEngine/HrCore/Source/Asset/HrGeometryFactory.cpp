@@ -30,50 +30,50 @@ HrGeometryPlane::~HrGeometryPlane()
 
 void HrGeometryPlane::GetBuildInPlaneMesh()
 {
-	HrMeshPtr pPlaneMesh = HrCheckPointerCast<HrMesh>(HrResourceManager::Instance()->RetriveOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "PLANEMESH", HrResource::RT_MESH));
-	if (!pPlaneMesh->IsLoaded())
-	{
-		CreatePlaneStaticMesh(pPlaneMesh);
-	}
+	//HrMeshPtr pPlaneMesh = HrCheckPointerCast<HrMesh>(HrResourceManager::Instance()->RetriveOrAddResource(std::string(HR_BUILDIN_RES_PATH) + "PLANEMESH", HrResource::RT_MESH));
+	//if (!pPlaneMesh->IsLoaded())
+	//{
+	//	CreatePlaneStaticMesh(pPlaneMesh);
+	//}
 }
 
 void HrGeometryPlane::CreatePlaneStaticMesh(const HrMeshPtr& pMesh)
 {
 	//todo
-	m_pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
-	BOOST_ASSERT(m_pRenderEffect);
-	m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
-	BOOST_ASSERT(m_pCurTechnique);
+	//m_pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
+	//BOOST_ASSERT(m_pRenderEffect);
+	//m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+	//BOOST_ASSERT(m_pCurTechnique);
 
-	float fHalfWidth = m_fWidth * 0.5f;
-	float fHalfHeight = m_fHeight * 0.5f;
-	Vertex1 vertices[6] =
-	{
-		{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
-		{ float3(-fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(0.0f, 0.0f) },
-		{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
+	//float fHalfWidth = m_fWidth * 0.5f;
+	//float fHalfHeight = m_fHeight * 0.5f;
+	//Vertex1 vertices[6] =
+	//{
+	//	{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
+	//	{ float3(-fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(0.0f, 0.0f) },
+	//	{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
 
-		{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
-		{ float3(fHalfWidth, -fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 1.0f) },
-		{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
+	//	{ float3(fHalfWidth, fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 0.0f) },
+	//	{ float3(fHalfWidth, -fHalfHeight, 1.0f), Vector3(0, 0, -1.0f), float2(1.0f, 1.0f) },
+	//	{ float3(-fHalfWidth, -fHalfHeight, 1.0f),  Vector3(0, 0, -1.0f),  float2(0, 1.0f) },
 
-	};
+	//};
 
-	std::vector<HrVertexElement> vecVertexElemet;
-	vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURECOORD, VET_FLOAT2));
+	//std::vector<HrVertexElement> vecVertexElemet;
+	//vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	//vecVertexElemet.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 
-	const HrSubMeshPtr& pSubMesh = pMesh->AddSubMesh("plane");
+	//const HrSubMeshPtr& pSubMesh = pMesh->AddSubMesh("plane");
 
-	pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
-		, sizeof(vertices)
-		, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-		, vecVertexElemet);
+	//pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertices
+	//	, sizeof(vertices)
+	//	, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+	//	, vecVertexElemet);
 
-	pSubMesh->SetMaterial(HrResourceManager::Instance()->CreateDefaultMaterial());
-	m_pSubMesh = pSubMesh;
-	pMesh->Load();
+	//pSubMesh->SetMaterial(HrResourceManager::Instance()->GetDefaultMaterial());
+	//m_pSubMesh = pSubMesh;
+	//pMesh->Load();
 }
 
 ////////////////////////////////////
@@ -427,7 +427,7 @@ HrSceneNode* HrGeometryFactory::CreateBox(float fLength)
 
 HrSceneNode* HrGeometryFactory::CreateSkyBox()
 {
-	//HrPrefabModel* pPrefabModel = static_cast<HrPrefabModel*>(HrResourceManager::Instance()->GetSkyBoxResource("SKYBOX", HrResource::RT_MODEL));
+	//HrModel* pPrefabModel = static_cast<HrModel*>(HrResourceManager::Instance()->GetSkyBoxResource("SKYBOX", HrResource::RT_MODEL));
 	//HRASSERT(pPrefabModel, "CreateSkyBox Error!");
 
 	//HrSceneNode* pSceneNode = HR_NEW HrSceneNode();

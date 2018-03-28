@@ -3,7 +3,7 @@
 
 #include "HrCore/Include/Render/HrStaticMeshRenderable.h"
 #include "HrCore/Include/Render/HrSkinnedMeshRenderable.h"
-#include "HrCore/Include/Asset/HrPrefabModel.h"
+#include "HrCore/Include/Asset/HrModel.h"
 
 namespace Hr
 {
@@ -53,7 +53,7 @@ namespace Hr
 		float m_fLength;
 	};
 
-	class HrGeometrySkyBox : public HrPrefabModel
+	class HrGeometrySkyBox : public HrModel
 	{
 	public:
 		enum EnumSkyPlaneSide

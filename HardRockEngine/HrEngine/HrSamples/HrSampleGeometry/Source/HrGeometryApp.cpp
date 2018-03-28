@@ -1,5 +1,6 @@
 #include "HrGeometryApp.h"
 #include "HrGeometryScene.h"
+#include "HrInstanceBatchTest.h"
 #include "HrTestScene.h"
 #include <sstream>
 #include "HrEngine.h"
@@ -45,7 +46,7 @@ void HrGeometryApp::LoadAssets()
 
 void HrGeometryApp::CreateScene()
 {
-	std::shared_ptr<HrGeometryScene> pTestScene = HrMakeSharedPtr<HrGeometryScene>();
+	auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
 	HrDirector::Instance()->GetSceneCoreComponent()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();

@@ -84,6 +84,11 @@
       </EntryPointName>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Bin_Win\Media\HrShader\HrInstanceHW.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{489A0806-F326-48DB-83DC-1575C3025D14}</ProjectGuid>
     <RootNamespace>HrRenderD3D11</RootNamespace>

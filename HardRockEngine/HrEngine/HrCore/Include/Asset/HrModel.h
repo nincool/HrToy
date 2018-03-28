@@ -5,11 +5,11 @@
 
 namespace Hr
 {
-	class HrPrefabModel : public HrResource
+	class HrModel : public HrResource
 	{
 	public:
-		HrPrefabModel();
-		~HrPrefabModel();
+		HrModel();
+		~HrModel();
 		
 		/**
 		 @Comment: Create HashName [2/20/2017 By Hr]

@@ -22,39 +22,28 @@ namespace Hr
 		void BindVertexBuffer(const char* pBuffer
 			, uint64 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
-			, std::vector<HrVertexElement>& vecVertexElement);
+			, const std::vector<HrVertexElement>& vecVertexElement);
 
-		 void BindIndexBuffer(const char* pBuffer
+		void BindIndexBuffer(const char* pBuffer
 			, uint32 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
 			, EnumIndexType indexType);
 
+		virtual void Active();
+
 		bool UseIndices();
-		
-		uint32 GetVertexSize();
 
-		uint32 GetIndicesNum() const;
-		uint32 GetVerticesNum() const;
+		size_t GetVertexStreamSize();
 
-		void SetStartVertexLocaltion(uint32 nStartLocation);
-		uint32 GetStartVertexLocaltion() const;
+		uint32 GetVerticesNum();
 
-		void SetStartIndexLocation(uint32 nStartLocation);
-		uint32 GetStartIndexLocation() const;
+		const std::vector<HrVertexDataPtr>& GetVertexStreams();
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;
 
-		HrVertexPtr m_pVertex;
-
-		HrGraphicsBufferPtr m_pVertexBuffer;
-		HrGraphicsBufferPtr m_pIndexBuffer;
-
-		uint32 m_nVertices;
-		uint32 m_nIndices;
-
-		uint32 m_nIndexStartLocation;
-		uint32 m_nVertexStartLocation;
+		bool m_bStreamsDirty;
+		std::vector<HrVertexDataPtr> m_vecVertexStreams;
 	};
 }
 

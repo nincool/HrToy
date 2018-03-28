@@ -1,7 +1,7 @@
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrStreamData.h"
 #include "Asset/HrResourceLoader.h"
-#include "Asset/HrPrefabModel.h"
+#include "Asset/HrModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
@@ -85,7 +85,7 @@ HrTexture* HrResourceManager::GetDefaultTexture()
 	return m_pDefaultTexture;
 }
 
-HrRenderEffectPtr HrResourceManager::GetDefaultRenderEffect()
+HrResourcePtr HrResourceManager::GetDefaultRenderEffect()
 {
 	if (m_pDefaultRenderEffect == nullptr)
 	{
@@ -95,7 +95,7 @@ HrRenderEffectPtr HrResourceManager::GetDefaultRenderEffect()
 	return m_pDefaultRenderEffect;
 }
 
-HrMaterialPtr HrResourceManager::CreateDefaultMaterial()
+HrResourcePtr HrResourceManager::GetDefaultMaterial()
 {
 	HrMaterialPtr pTempDefaultMaterial = HrMakeSharedPtr<HrMaterial>(m_pDefaultMaterial);
 	m_mapMaterials.insert(std::make_pair(pTempDefaultMaterial->GetHashID(), pTempDefaultMaterial));
@@ -193,7 +193,7 @@ HrResourcePtr HrResourceManager::AddModelResource(const std::string& strFile)
 {
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
 	
-	HrPrefabModelPtr pRes = HrMakeSharedPtr<HrPrefabModel>();
+	HrModelPtr pRes = HrMakeSharedPtr<HrModel>();
 	pRes->DeclareResource(strFileName, strFile);
 	if (m_mapPrefabModels.find(pRes->GetHashID()) != m_mapPrefabModels.end())
 	{
@@ -325,7 +325,7 @@ const HrResourcePtr& HrResourceManager::GetMaterial(const std::string& strMateri
 HrResourcePtr HrResourceManager::GetModel(const std::string& strModelName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strModelName);
-	size_t nHashID = HrPrefabModel::CreateHashName(strFullFileName);
+	size_t nHashID = HrModel::CreateHashName(strFullFileName);
 	auto item = m_mapPrefabModels.find(nHashID);
 	if (item != m_mapPrefabModels.end())
 	{

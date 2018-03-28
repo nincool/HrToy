@@ -97,7 +97,7 @@ bool HrMesh::UnloadImpl()
 
 const HrSubMeshPtr& HrMesh::AddSubMesh(const std::string& strName)
 {
-	HrSubMeshPtr pSubMesh = HrMakeSharedPtr<HrSubMesh>(m_vecSubMesh.size(), shared_from_this(), strName);
+	HrSubMeshPtr pSubMesh = HrMakeSharedPtr<HrSubMesh>(static_cast<int>(m_vecSubMesh.size()), shared_from_this(), strName);
 	m_vecSubMesh.push_back(pSubMesh);
 
 	return m_vecSubMesh.back();
