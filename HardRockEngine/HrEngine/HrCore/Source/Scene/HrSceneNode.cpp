@@ -3,9 +3,11 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderTarget.h"
+#include "Render/HrInstanceBatchHW.h"
 #include "Scene/HrTransform.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrSceneManager.h"
+#include "Scene/HrSceneObjectComponent.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrCoreComponentRender.h"
 #include "Kernel/HrCoreComponentEvent.h"
@@ -20,7 +22,6 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_strName = "NoName";
 	m_bEnable = true;
-	m_nodeType = NT_NORMAL;
 	m_bRunning = false;
 	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
 }
@@ -29,7 +30,6 @@ HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::Generate
 {
 	m_strName = strName;
 	m_bEnable = true;
-	m_nodeType = NT_NORMAL;
 	m_bRunning = false;
 	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
 }
@@ -116,9 +116,22 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
 	if (this->m_bEnable)
 	{
-		if (m_pSceneObject && m_pSceneObject->GetRenderable() && m_pSceneObject->GetRenderable()->CanRender())
+		if (m_pSceneObject)
 		{
-			pRenderQueue->AddRenderable(shared_from_this());
+			const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetComponent<HrRenderableComponent>();
+			if (pRenderableCom)
+			{
+				const HrInstanceBatchComponentPtr pBatchCom = m_pSceneObject->GetComponent<HrInstanceBatchComponent>();
+				if (pBatchCom)
+				{
+					HrRenderablePtr pRenderable = pBatchCom->GetInstanceBatch();
+					pRenderQueue->AddRenderable(pRenderable);
+				}
+				else
+				{
+					pRenderQueue->AddRenderable(pRenderableCom->GetRenderable());
+				}
+			}
 		}
 		for (auto& item : m_vecChildrenNode)
 		{

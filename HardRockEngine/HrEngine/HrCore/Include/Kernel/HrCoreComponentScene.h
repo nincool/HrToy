@@ -25,6 +25,8 @@ namespace Hr
 		void Destroy();
 
 		const HrScenePtr& GetRunningScene() const;
+
+		const HrRenderFrameParametersPtr& GetRenderFrameParameters();
 	private:
 		bool CreateSceneManager(EnumSceneManagerType sceneManagerType);
 	private:

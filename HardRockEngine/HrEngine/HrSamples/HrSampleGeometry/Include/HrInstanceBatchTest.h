@@ -34,9 +34,6 @@ namespace Hr
 		bool m_bKeyWPressed;
 		bool m_bKeySPressed;
 		bool m_bKeyDPressed;
-
-		//InstanceBatch
-		HrInstanceBatchManagerPtr m_pInstanceManager;
 	};
 }
 

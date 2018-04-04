@@ -15,28 +15,63 @@ namespace Hr
 			SCT_NORMAL,
 			SCT_CAMERA,
 			SCT_LIGHT,
+			SCT_RENDERABLE,
 			SCT_INSTANCEBATCH,
+			SCT_INSTANCEOBJ,
 
 			SCT_COM_COUNT,
 		};
 	public:
-		HrSceneObjectComponent(const std::string& strName);
+		HrSceneObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
 		~HrSceneObjectComponent();
 
 		virtual bool InitComponent() override;
 		virtual bool Update(float fDelta) override;
 
+		virtual bool IsMutex() = 0;
+
 		const std::string& GetName();
 		EnumSceneComponentType GetComType();
+
+		HrSceneObjectPtr GetAttachSceneObject();
 	protected:
 		std::string m_strName;
 		EnumSceneComponentType m_comType;
+		std::weak_ptr<HrSceneObject> m_pAttachSceneObj;
 	};
 
-	class HR_CORE_API HrCameraComponet : public HrSceneObjectComponent
+	class HR_CORE_API HrSceneObjectMutexCom : public HrSceneObjectComponent
 	{
 	public:
-		HrCameraComponet(const std::string& strName);
+		HrSceneObjectMutexCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		~HrSceneObjectMutexCom();
+
+		virtual bool IsMutex() override
+		{
+			return true;
+		}
+	};
+
+	class HR_CORE_API HrSceneObjectSharedCom : public HrSceneObjectComponent
+	{
+	public:
+		HrSceneObjectSharedCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		~HrSceneObjectSharedCom();
+
+		virtual bool IsMutex() override
+		{
+			return false;
+		}
+	};
+
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+
+	class HR_CORE_API HrCameraComponet : public HrSceneObjectMutexCom
+	{
+	public:
+		HrCameraComponet(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
 		~HrCameraComponet();
 
 		const HrCameraPtr& GetCamera();
@@ -44,10 +79,14 @@ namespace Hr
 		HrCameraPtr m_pCamera;
 	};
 
-	class HR_CORE_API HrLightComponent : public HrSceneObjectComponent
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+
+	class HR_CORE_API HrLightComponent : public HrSceneObjectMutexCom
 	{
 	public:
-		HrLightComponent(const std::string& strName, HrLight::EnumLightType lightType);
+		HrLightComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj, HrLight::EnumLightType lightType);
 		~HrLightComponent();
 
 		const HrLightPtr& GetLight();
@@ -55,17 +94,48 @@ namespace Hr
 		HrLightPtr m_pLight;
 	};
 
-	class HR_CORE_API HrInstanceBatchComponent : public HrSceneObjectComponent
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+
+	class HR_CORE_API HrRenderableComponent : public HrSceneObjectMutexCom
 	{
 	public:
-		HrInstanceBatchComponent(const std::string& strName);
+		HrRenderableComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		~HrRenderableComponent();
+
+		void SetRenderable(const HrRenderablePtr& pRenderable);
+		const HrRenderablePtr & GetRenderable() { return m_pRenderable; }
+	protected:
+		HrRenderablePtr m_pRenderable;
+	};
+
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+	class HR_CORE_API HrInstanceBatchComponent : public HrSceneObjectSharedCom
+	{
+	public:
+		HrInstanceBatchComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
 		~HrInstanceBatchComponent();
 
-		HrSceneNodePtr CreateInstance(const std::string& strName = "Default_Instance");
-	protected:
-		HrInstanceBatchManagerPtr m_pInstanceBatchManager;
+		void CreateInstanceBatch(const HrSubMeshPtr& pSubMesh);
 
+		const HrInstanceBatchPtr& GetInstanceBatch();
+		HrSceneNodePtr CreateInstance(const std::string& strName = "Default_Instance");
+
+	protected:
+		HrInstanceBatchPtr m_pInsBatch;
 	};
+
+	class HR_CORE_API HrInstanceObjectComponent : public HrSceneObjectMutexCom
+	{
+	public:
+		HrInstanceObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		~HrInstanceObjectComponent();
+	};
+
+
 }
 
 #endif

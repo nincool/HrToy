@@ -27,5 +27,8 @@
     <ClCompile Include="Source\HrModuleLoader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HrUtil.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

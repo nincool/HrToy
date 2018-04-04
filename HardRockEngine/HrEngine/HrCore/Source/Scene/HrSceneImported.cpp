@@ -151,7 +151,7 @@ void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::
 		}
 		case HrSceneInfo::ET_PREFAB:
 		{
-			pSceneNode = HrSceneObjectFactory::Instance()->CreateModel(itemSceneNode.strEntityResource);
+			pSceneNode = HrSceneObjectFactory::Instance()->CreateModelNode(itemSceneNode.strEntityResource);
 
 			break;
 		}

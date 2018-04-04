@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrModel : public HrResource
+	class HR_CORE_API HrModel : public HrResource
 	{
 	public:
 		HrModel();

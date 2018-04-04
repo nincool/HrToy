@@ -70,6 +70,7 @@ void HrD3D11GraphicsBuffer::CreateHardwareBuffer(const void* pResourceData)
 	if (FAILED(rt))
 	{
 		HRERROR("HrD3D11GraphicsBuffer CreateHardwareBuffer Error!");
+		TRE("HrD3D11GraphicsBuffer CreateHardwareBuffer Error!");
 		return;
 	}
 	m_pD3D11Buffer = MakeComPtr(pD3D11Buffer);

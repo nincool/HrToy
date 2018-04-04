@@ -6,7 +6,7 @@
 
 namespace Hr
 {
-	class HrSubMesh 
+	class HR_CORE_API HrSubMesh 
 	{
 	public:
 		HrSubMesh(int nSubIndex, const HrMeshPtr& pParent, const std::string& strName);
@@ -28,7 +28,7 @@ namespace Hr
 		HrMaterialPtr m_pMaterial;
 	};
 
-	class HrMesh : public HrResource, public std::enable_shared_from_this<HrMesh>
+	class HR_CORE_API HrMesh : public HrResource, public std::enable_shared_from_this<HrMesh>
 	{
 	public:
 		HrMesh();

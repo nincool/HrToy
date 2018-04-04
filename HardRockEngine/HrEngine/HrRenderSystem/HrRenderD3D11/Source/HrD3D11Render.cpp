@@ -146,12 +146,10 @@ void HrD3D11Render::BindShader(const HrShaderPtr& pShader)
 
 void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
 {
-	//1.IASetVertexBuffers
-	//2.Draw & DrawIndexed
+	//IASetVertexBuffers
 	HrD3D11RenderLayoutPtr pD3D11RenderLayout = HrCheckPointerCast<HrD3D11RenderLayout>(pRenderLayout);
 	pD3D11RenderLayout->Active();
 
-	//todo renderLayout
 	HrD3D11ShaderPtr pVertexShader = HrCheckPointerCast<HrD3D11Shader>(pRenderTechnique->GetRenderPass(0)->GetShader(HrShader::ST_VERTEX_SHADER));
 	const ID3D11InputLayoutPtr& pInputLayout = pD3D11RenderLayout->GetInputLayout(pVertexShader);
 	GetD3D11DeviceContext()->IASetInputLayout(pInputLayout.get());
@@ -164,6 +162,8 @@ void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const H
 	GetD3D11DeviceContext()->IASetVertexBuffers(0, nVertexStreams, &vecD3DVertexBuffers[0], &vecStrides[0], &vecOffsets[0]);
 	GetD3D11DeviceContext()->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
 
+	uint32 nInstanceCount = pRenderLayout->GetInstanceNum();
+	
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		//const ID3D11BufferPtr& pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
@@ -187,7 +187,7 @@ void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const H
 		for (uint32 i = 0; i < nPassNum; ++i)
 		{
 			pRenderTechnique->GetRenderPass(i)->BindPass(shared_from_this());
-			GetD3D11DeviceContext()->Draw(nNumVertices, 0);
+			GetD3D11DeviceContext()->DrawInstanced(nNumVertices, nInstanceCount, 0, 0);
 			pRenderTechnique->GetRenderPass(i)->UnBindPass(shared_from_this());
 		}
 	}

@@ -15,25 +15,28 @@ namespace Hr
 		virtual const HrRenderTechniquePtr& GetRenderTechnique();
 
 		virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh);
-		
-		uint32 GetSubRenderableNum() const;
-		const HrRenderablePtr GetSubRenderable(uint32 nIndex) const;
-
-		virtual bool CanRender();
+		const HrSubMeshPtr& GetSubMesh();
 
 		void SetRenderEffect(const HrRenderEffectPtr& pRenderEff);
 		const HrRenderEffectPtr& GetRenderEffect() const;
 
 		virtual const HrMaterialPtr& GetMaterial();
+
+		void SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj);
+		HrSceneObjectPtr GetAttachSceneObject();
+
+		virtual void OnRenderBegin();
+		virtual void Render();
+		virtual void OnRenderEnd();
+		
 	protected:
 
 	protected:
 		HrRenderEffectPtr m_pRenderEffect;
 		HrRenderTechniquePtr m_pCurTechnique;
-		HrSceneNodePtr m_pAttachSceneNode;
 		HrSubMeshPtr m_pSubMesh;
 
-		std::vector<HrRenderablePtr> m_vecSubRenderable;
+		std::weak_ptr<HrSceneObject> m_pAttachSceneObj;
 	};
 }
 

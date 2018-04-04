@@ -12,20 +12,22 @@ namespace Hr
 	class HR_CORE_API HrVertexElement
 	{
 	public:
-		HrVertexElement(EnumVertexElementUsage usage, EnumVertexElementType pixelFormat)
+		HrVertexElement(EnumVertexElementSemantic usage, EnumVertexElementType pixelFormat)
 		{
-			m_elementUsage = usage;
+			m_elementSemantic = usage;
 			m_elementType = pixelFormat;
 			m_elementClassType = VEC_GEOMETRY;
+			m_nSemanticIndex = 0;
 			m_nOffset = 0;
 			m_nInstanceStepRate = 0;
 		}
 
-		HrVertexElement(EnumVertexElementUsage usage, EnumVertexElementType pixelFormat, EnumVertexElementClassType classType, uint32 nInsStepRate)
+		HrVertexElement(EnumVertexElementSemantic usage, EnumVertexElementType pixelFormat, EnumVertexElementClassType classType, uint32 nSemanticIndex, uint32 nInsStepRate)
 		{
-			m_elementUsage = usage;
+			m_elementSemantic = usage;
 			m_elementType = pixelFormat;
 			m_elementClassType = classType;
+			m_nSemanticIndex = nSemanticIndex;
 			m_nOffset = 0;
 			m_nInstanceStepRate = nInsStepRate;
 		}
@@ -35,11 +37,13 @@ namespace Hr
 		uint32 GetOffset() const { return m_nOffset; }
 		void SetOffset(uint32 nOffset) { m_nOffset = nOffset; }
 		
-		EnumVertexElementUsage m_elementUsage;
+		EnumVertexElementSemantic m_elementSemantic;
 		EnumVertexElementType m_elementType;
 		EnumVertexElementClassType m_elementClassType;
+		uint32 m_nSemanticIndex;
 		uint32 m_nOffset;
 		uint32 m_nInstanceStepRate;
+
 	};
 
 	///////////////////////////////////////////////////////////

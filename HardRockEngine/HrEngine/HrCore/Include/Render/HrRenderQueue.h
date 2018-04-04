@@ -11,11 +11,11 @@ namespace Hr
 		~HrRenderQueue();
 
 		void PrepareRenderQueue();
-		void AddRenderable(const HrSceneNodePtr& pSceneNode);
+		void AddRenderable(const HrRenderablePtr& pRenderable);
 
-		const std::vector<HrSceneNodePtr>& GetRenderables();
+		const std::vector<HrRenderablePtr>& GetRenderables();
 	protected:
-		std::vector<HrSceneNodePtr> m_vecSceneNodes;
+		std::vector<HrRenderablePtr> m_vecRenderables;
 	};
 }
 

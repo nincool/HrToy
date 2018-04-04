@@ -3,7 +3,7 @@
 
 using namespace Hr;
 
-LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementUsage usage)
+LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementSemantic usage)
 {
 	switch (usage)
 	{
@@ -91,12 +91,16 @@ D3D_PRIMITIVE_TOPOLOGY HrD3D11Mapping::GetTopologyType(EnumTopologyType topology
 	return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }
 
-EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType)
+EnumRenderEffectDataType HrD3D11Mapping::GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType, int nRows, int nCols)
 {
 	switch (shaderVariableType)
 	{
 	case D3D_SVT_FLOAT:
+	{
+		if (nRows == 4 && nCols == 4)
+			return REDT_MATRIX_4X4;
 		return REDT_FLOAT1;
+	}
 	case D3D_SVT_UINT:
 		return REDT_UINT1;
 	default:
@@ -149,7 +153,7 @@ uint32 HrD3D11Mapping::GetRenderParamDataSize(EnumRenderEffectDataType shaderVar
 	case REDT_MATRIX_4X3:
 		break;
 	case REDT_MATRIX_4X4:
-		break;
+		return 64;
 	case REDT_INT1:
 		break;
 	case REDT_INT2:
@@ -167,24 +171,6 @@ uint32 HrD3D11Mapping::GetRenderParamDataSize(EnumRenderEffectDataType shaderVar
 	case REDT_DOUBLE3:
 		break;
 	case REDT_DOUBLE4:
-		break;
-	case REDT_MATRIX_DOUBLE_2X2:
-		break;
-	case REDT_MATRIX_DOUBLE_2X3:
-		break;
-	case REDT_MATRIX_DOUBLE_2X4:
-		break;
-	case REDT_MATRIX_DOUBLE_3X2:
-		break;
-	case REDT_MATRIX_DOUBLE_3X3:
-		break;
-	case REDT_MATRIX_DOUBLE_3X4:
-		break;
-	case REDT_MATRIX_DOUBLE_4X2:
-		break;
-	case REDT_MATRIX_DOUBLE_4X3:
-		break;
-	case REDT_MATRIX_DOUBLE_4X4:
 		break;
 	case REDT_UINT1:
 		return 4;

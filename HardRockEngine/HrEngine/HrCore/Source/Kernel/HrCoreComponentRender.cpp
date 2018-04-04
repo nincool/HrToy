@@ -4,6 +4,7 @@
 #include "Render/HrRenderTarget.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrame.h"
+#include "Render/HrRender.h"
 
 using namespace Hr;
 
@@ -92,5 +93,10 @@ void HrCoreComponentRender::CreateRenderSystem()
 void HrCoreComponentRender::AddViewPort(const HrViewPortPtr& pViewPort)
 {
 	m_pRenderSystem->GetBindFrameBuffer()->AddViewPort(pViewPort);
+}
+
+void HrCoreComponentRender::DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
+{
+	m_pRenderSystem->GetRender()->Render(pRenderTechnique, pRenderLayout);
 }
 

@@ -38,12 +38,20 @@ namespace Hr
 		uint32 GetVerticesNum();
 
 		const std::vector<HrVertexDataPtr>& GetVertexStreams();
+
+		uint32 GetNextVertexSemanticIndex(EnumVertexElementSemantic semantic);
+
+		//the count of instances
+		void SetInstanceNum(uint32 nInstance);
+		uint32 GetInstanceNum();
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;
 
 		bool m_bStreamsDirty;
 		std::vector<HrVertexDataPtr> m_vecVertexStreams;
+
+		uint32 m_nInstance;
 	};
 }
 

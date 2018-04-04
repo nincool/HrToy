@@ -40,12 +40,6 @@ namespace Hr
 
 		std::shared_ptr<HrSceneLightData>& GetLightsData();
 
-		//bool IsLightsDirty(HrLight::EnumLightType lightType);
-		//void GetDirectionalLightsParam(std::vector<float3>& vecDirectionalLightDirections, std::vector<float4>& vecDirectionalDiffuse, std::vector<float4>& vecDirectionalSpecular);
-		//void GetPointLightsParam(std::vector<float3>& vecPointLightPositions, std::vector<float4>& vecRangeAttenuation, std::vector<float4>& vecPointDiffuse, std::vector<float4>& vecPointSpecular);
-
-		//HrSceneNode* GetSceneNodeByName(const std::string& strNodeName);
-
 	protected:
 		HrSceneNodePtr m_pSceneRootNode;
 

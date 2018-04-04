@@ -6,6 +6,8 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMesh.h"
 #include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentScene.h"
+#include "Kernel/HrCoreComponentRender.h"
 
 using namespace Hr;
 
@@ -32,21 +34,6 @@ void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
 	m_pSubMesh = pSubMesh;
 }
 
-uint32 HrRenderable::GetSubRenderableNum() const
-{
-	return m_vecSubRenderable.size();
-}
-
-const HrRenderablePtr HrRenderable::GetSubRenderable(uint32 nIndex) const
-{
-	return m_vecSubRenderable[nIndex];
-}
-
-bool HrRenderable::CanRender()
-{
-	return true;
-}
-
 void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
 	m_pRenderEffect = pRenderEff;
@@ -61,5 +48,46 @@ const HrRenderEffectPtr& HrRenderable::GetRenderEffect() const
 
 const HrMaterialPtr& HrRenderable::GetMaterial()
 {
+	BOOST_ASSERT(m_pSubMesh);
+	return m_pSubMesh->GetMaterial();
+}
+
+const HrSubMeshPtr& HrRenderable::GetSubMesh()
+{
+	return m_pSubMesh;
+}
+
+void HrRenderable::SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj)
+{
+	m_pAttachSceneObj = pSceneObj;
+}
+
+HrSceneObjectPtr HrRenderable::GetAttachSceneObject()
+{
+	if (!m_pAttachSceneObj.expired())
+	{
+		return m_pAttachSceneObj.lock();
+	}
+
 	return nullptr;
+}
+
+void HrRenderable::Render()
+{
+	OnRenderBegin();
+
+	HrDirector::Instance()->GetRenderCoreComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
+
+	OnRenderEnd();
+}
+
+void HrRenderable::OnRenderBegin()
+{
+	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneCoreComponent()->GetRenderFrameParameters();
+	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
+}
+
+void HrRenderable::OnRenderEnd()
+{
+
 }

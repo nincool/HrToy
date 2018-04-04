@@ -19,15 +19,13 @@ namespace Hr
 
 		virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh) override;
 
-		bool IsBatchFull();
+		virtual HrSceneObjectPtr CreateInstance() = 0;
 	protected:
 		virtual void BuildVertices(const HrSubMeshPtr& pSubMesh);
 	protected:
-		HrMaterialPtr m_pMaterial;
-		
-		HrSubMeshPtr m_pSubMesh;
-
 		HrRenderLayoutPtr m_pBatchRenderLayout;
+
+		std::vector<HrSceneObjectPtr> m_vecInstanceObjects;
 	};
 }
 

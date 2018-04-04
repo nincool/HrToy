@@ -42,15 +42,15 @@ namespace Hr
 		REDT_DOUBLE2,
 		REDT_DOUBLE3,
 		REDT_DOUBLE4,
-		REDT_MATRIX_DOUBLE_2X2,
-		REDT_MATRIX_DOUBLE_2X3,
-		REDT_MATRIX_DOUBLE_2X4,
-		REDT_MATRIX_DOUBLE_3X2,
-		REDT_MATRIX_DOUBLE_3X3,
-		REDT_MATRIX_DOUBLE_3X4,
-		REDT_MATRIX_DOUBLE_4X2,
-		REDT_MATRIX_DOUBLE_4X3,
-		REDT_MATRIX_DOUBLE_4X4,
+		//REDT_MATRIX_DOUBLE_2X2,
+		//REDT_MATRIX_DOUBLE_2X3,
+		//REDT_MATRIX_DOUBLE_2X4,
+		//REDT_MATRIX_DOUBLE_3X2,
+		//REDT_MATRIX_DOUBLE_3X3,
+		//REDT_MATRIX_DOUBLE_3X4,
+		//REDT_MATRIX_DOUBLE_4X2,
+		//REDT_MATRIX_DOUBLE_4X3,
+		//REDT_MATRIX_DOUBLE_4X4,
 		REDT_UINT1,
 		REDT_UINT2,
 		REDT_UINT3,
@@ -85,9 +85,6 @@ namespace Hr
 		RPT_INVERSE_TRANSPOSE_WORLD_MATRIX,
 		RPT_VIEW_PROJ_MATRIX,
 		RPT_WORLD_VIEW_PROJ_MATRIX,
-
-		//Instance world matrix
-		RPT_INSTANCE_WORLD_MATRIX_ARRAY,
 
 		//Camera
 		RPT_CAMERA_POSITION,
@@ -146,6 +143,7 @@ namespace Hr
 		uint32 nStride;
 
 		static std::vector<HrRenderParamDefine> m_s_vecRenderParamDefine;
+		static HrRenderParamDefine* GetRenderParamDefineByType(EnumRenderParamType rpt);
 	};
 
 	//from klayge 
@@ -229,7 +227,7 @@ namespace Hr
 		virtual void Value(std::vector<float4>& val) const;
 		virtual void Value(std::vector<float4x4>& val) const;
 
-		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride);
+		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride, uint32 nMemorySize);
 		virtual void RebindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff);
 		//virtual bool InCBuffer() const
 		//{
@@ -250,6 +248,8 @@ namespace Hr
 
 		uint32 m_nBufferOffset;
 		uint32 m_nStride;
+		uint32 m_nArraySize;
+		uint32 m_nMemorySize;
 		Byte* m_pData;
 
 	};
@@ -271,6 +271,8 @@ namespace Hr
 			pRet->m_dataType = this->m_dataType;
 			pRet->m_semantic = this->m_semantic;
 			pRet->m_nBufferOffset = this->m_nBufferOffset;
+			pRet->m_nMemorySize = this->m_nMemorySize;
+			pRet->m_nArraySize = this->m_nArraySize;
 			pRet->m_nStride = this->m_nStride;
 			pRet->m_pData = this->m_pData;
 			return pRet;
@@ -289,10 +291,11 @@ namespace Hr
 			val = RetriveT();
 		}
 
-		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride) override
+		virtual void BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride, uint32 nMemorySize) override
 		{
 			m_nBufferOffset = offset;
 			m_nStride = stride;
+			m_nMemorySize = nMemorySize;
 			m_pData = cbuff->GetStreamDataPoint() + m_nBufferOffset;
 		}
 	protected:
@@ -333,14 +336,12 @@ namespace Hr
 		}
 		virtual void Value(std::vector<T>& val) const override
 		{
-			val.resize(m_nSize);
-			for (size_t i = 0; i < m_nSize; ++i)
+			val.resize(m_nArraySize);
+			for (size_t i = 0; i < m_nArraySize; ++i)
 			{
 				memcpy(&val[i], m_pData + i * m_nStride, sizeof(val[i]));
 			}
 		}
-	private:
-		uint32 m_nSize;
 	};
 
 	class HrRenderVariableFloat4x4 : public HrRenderVariableConcrete<float4x4>
@@ -348,6 +349,15 @@ namespace Hr
 	public:
 		virtual HrRenderVariable& operator=(const float4x4& value) override;
 		virtual void Value(float4x4& val) const override;
+	};
+
+	class HrRenderVariableFloat4x4Array : public HrRenderVariableConcrete<std::vector<float4x4> >
+	{
+	public:
+		HrRenderVariableFloat4x4Array();
+		virtual HrRenderVariable& operator=(const std::vector<float4x4>& value) override;
+		virtual void Value(std::vector<float4x4>& val) const override;
+
 	};
 
 	class HrRenderVariableTexture : public HrRenderVariable
@@ -428,7 +438,7 @@ namespace Hr
 			REPBT_RESOURCE,
 		};
 	public:
-		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName, int nIndex1, int nIndex2);
+		HrRenderEffectParameter(const std::string& strVarName, size_t nHashName);
 		~HrRenderEffectParameter();
 
 		template <typename T>
@@ -459,9 +469,6 @@ namespace Hr
 		size_t HashName() const { return m_nHashName; }
 		const std::string& Name() const { return m_strName; } 
 
-		int Index1() const { return m_nIndex1; }
-		int Index2() const { return m_nIndex2; }
-
 		void ParamInfo(EnumRenderParamType paramType
 			, EnumRenderEffectDataType dataType
 			, EnumRenderEffectParamBindType bindType
@@ -486,37 +493,9 @@ namespace Hr
 		std::string m_strName;
 		size_t m_nHashName;
 
-		int m_nIndex1;
-		int m_nIndex2;
-
 		HrRenderVariable* m_pRenderVariable;
 
 		HrRenderEffectConstantBufferPtr m_pBindConstBuffer;
-	};
-
-	class HR_CORE_API HrRenderEffectStructParameter : public boost::noncopyable
-	{
-	public:
-		HrRenderEffectStructParameter(const std::string& strTypeName, const std::string& strVarName, size_t nHashName);
-		~HrRenderEffectStructParameter();
-
-		const std::string& TypeName() { return m_strTypeName; }
-		size_t HashName() const { return m_nHashName; }
-		const std::string& Name() const { return m_strName; }
-
-		void AddRenderEffectParameter(const HrRenderEffectParameterPtr& pRenderParameter);
-
-		uint32 ElementNum() { return m_vecRenderEffectParameter.size(); }
-		const HrRenderEffectParameterPtr& ParameterByIndex(uint32 nIndex);
-		//HrRenderEffectParameter* ParameterByName(const std::string& strParameter);
-	private:
-		std::string m_strTypeName;
-		std::string m_strName;
-		size_t m_nHashName;
-
-		uint32 m_nStride;
-
-		std::vector<HrRenderEffectParameterPtr> m_vecRenderEffectParameter;
 	};
 
 	class HR_CORE_API HrRenderEffectConstantBuffer : public boost::noncopyable

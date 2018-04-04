@@ -37,10 +37,10 @@ void HrD3D11RenderLayout::Active()
 			{
 				const HrVertexElement& vertexElement = pVertexData->GetVertex()->GetVertexElement(nEleIndex);
 				D3D11_INPUT_ELEMENT_DESC d3dInputELeDesc;
-				d3dInputELeDesc.SemanticName = HrD3D11Mapping::GetInputElementSemanticName(vertexElement.m_elementUsage);
-				d3dInputELeDesc.SemanticIndex = 0;
+				d3dInputELeDesc.SemanticName = HrD3D11Mapping::GetInputElementSemanticName(vertexElement.m_elementSemantic);
+				d3dInputELeDesc.SemanticIndex = vertexElement.m_nSemanticIndex;
 				d3dInputELeDesc.Format = HrD3D11Mapping::GetInputElementFormat(vertexElement.m_elementType);
-				d3dInputELeDesc.InputSlot = 0;
+				d3dInputELeDesc.InputSlot = i;
 				d3dInputELeDesc.AlignedByteOffset = vertexElement.GetOffset();
 				d3dInputELeDesc.InputSlotClass = HrD3D11Mapping::GetInputELementClassType(vertexElement.m_elementClassType);
 				d3dInputELeDesc.InstanceDataStepRate = vertexElement.m_nInstanceStepRate;

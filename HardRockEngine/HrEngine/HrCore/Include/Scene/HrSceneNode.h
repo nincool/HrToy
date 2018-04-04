@@ -9,20 +9,10 @@ namespace Hr
 	class HR_CORE_API HrSceneNode : public HrIDObject, public std::enable_shared_from_this<HrSceneNode>
 	{
 	public:
-		enum EnumNodeType
-		{
-			NT_NORMAL,
-			NT_CAMERA,
-			NT_LIGHT,
-		};
-
-	public:
 		HrSceneNode();
 		HrSceneNode(const std::string& strName);
 		
 		virtual ~HrSceneNode();
-
-		EnumNodeType GetNodeType() { return m_nodeType; }
 
 		void SetName(const std::string& strName);
 		const std::string& GetName() const;
@@ -61,7 +51,6 @@ namespace Hr
 		void RemoveEventListeners();
 
 	protected:
-		EnumNodeType m_nodeType;
 		HrSceneObjectPtr m_pSceneObject;
 
 		std::string m_strName;

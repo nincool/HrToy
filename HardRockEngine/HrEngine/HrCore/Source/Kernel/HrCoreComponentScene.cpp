@@ -74,3 +74,8 @@ const HrScenePtr& HrCoreComponentScene::GetRunningScene() const
 	return m_pSceneManager->GetRunningScene();
 }
 
+const HrRenderFrameParametersPtr& Hr::HrCoreComponentScene::GetRenderFrameParameters()
+{
+	return m_pSceneManager->GetRenderFrameParamPtr();
+}
+

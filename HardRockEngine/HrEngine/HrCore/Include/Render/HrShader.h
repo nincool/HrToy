@@ -32,8 +32,7 @@ namespace Hr
 		std::string& Name() { return m_strName; }
 		size_t HashName() { return m_nHashName; }
 
-		virtual void BindRenderParameter(std::vector<HrRenderEffectParameterPtr>& vecRenderParameter
-			, std::vector<HrRenderEffectConstantBufferPtr>& vecRenderConstBuffer);
+		virtual void BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>& vecRenderConstBuffer);
 
 	protected:
 		virtual void BindRenderParameterImpl() = 0;

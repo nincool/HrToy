@@ -223,12 +223,6 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrSkinnedMeshRenderable.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Render\HrStaticMeshRenderable.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Asset\HrMaterial.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
@@ -310,9 +304,6 @@
     <ClInclude Include="Include\Render\HrInstanceBatchShader.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrInstanceBatchManager.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrInstanceBatchHW.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -321,6 +312,12 @@
     </ClInclude>
     <ClInclude Include="Include\Kernel\HrCoreComponentResource.h">
       <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrMeshRenderable.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrInstanceBatchObject.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -441,12 +438,6 @@
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrSkinnedMeshRenderable.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\HrStaticMeshRenderable.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Asset\HrMaterial.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
@@ -540,9 +531,6 @@
     <ClCompile Include="Source\Render\HrInstanceBatchShader.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Render\HrInstanceBatchManager.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrInstanceBatchHW.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -551,6 +539,12 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrCoreComponentResource.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrMeshRenderable.cpp">
+      <Filter>Source\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrInstanceBatchObject.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

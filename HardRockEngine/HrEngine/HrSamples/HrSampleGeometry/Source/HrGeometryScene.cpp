@@ -43,12 +43,12 @@ void HrGeometryScene::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	//auto pRenderEffect = HrCheckPointerCast<HrRenderEffect>(HrResourceManager::Instance()->RetriveOrLoadResource("Media/HrShader/HrSimple.json", HrResource::RT_EFFECT));
-	//BOOST_ASSERT(pRenderEffect);
+	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
+	BOOST_ASSERT(pRenderEffect);
 
-	//m_pTestNode = HrSceneObjectFactory::Instance()->CreateModel("PrefabModel/HrPrefab3.prefab");
-	//m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetRenderable()->SetRenderEffect(pRenderEffect);
-	//AddNode(m_pTestNode);
+	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrPrefab3.model");
+	m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	AddNode(m_pTestNode);
 }
 
 void HrGeometryScene::CreateInputEvent()

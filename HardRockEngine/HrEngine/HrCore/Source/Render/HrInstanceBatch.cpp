@@ -21,7 +21,6 @@ HrInstanceBatch::~HrInstanceBatch()
 
 void HrInstanceBatch::BuildVertices(const HrSubMeshPtr& pSubMesh)
 {
-
 }
 
 const HrRenderLayoutPtr& HrInstanceBatch::GetRenderLayout()
@@ -31,11 +30,8 @@ const HrRenderLayoutPtr& HrInstanceBatch::GetRenderLayout()
 
 void HrInstanceBatch::SetSubMesh(const HrSubMeshPtr& pSubMesh)
 {
+	m_pSubMesh = pSubMesh;
 	BuildVertices(pSubMesh);
 }
 
-bool HrInstanceBatch::IsBatchFull()
-{
-	return false;
-}
 

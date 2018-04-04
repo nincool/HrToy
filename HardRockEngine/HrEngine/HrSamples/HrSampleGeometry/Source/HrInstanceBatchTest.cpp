@@ -1,6 +1,5 @@
 #include "HrInstanceBatchTest.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
-#include "HrCore/Include/Render/HrInstanceBatchManager.h"
 #include "HrCore/Include/Render/HrInstanceBatch.h"
 
 using namespace Hr;
@@ -48,13 +47,83 @@ void HrInstanceBatchTest::CreateSceneElements()
 	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
 	BOOST_ASSERT(pRenderEffect);
 
-	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModel("Model/HrPrefab3.model");
-	m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetRenderable()->SetRenderEffect(pRenderEffect);
-	AddNode(m_pTestNode);
-	auto pInstanceBatchCom = m_pTestNode->GetSceneObject()->AddComponent<HrInstanceBatchComponent>();
-	auto pInsNode = pInstanceBatchCom->CreateInstance();
-	
+	//m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrPrefab3.model");
+	//m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	//AddNode(m_pTestNode);
+
+	//HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+	//HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
+	//const HrRenderablePtr& pRenderable = pRenderableCom->CreateRenderable();
+	//pRenderable->SetSubMesh(pModel->GetMesh()->GetSubMesh(i));
+	//pRenderable->SetRenderEffect(HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>());
+
+	//HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pModel->GetMesh()->GetSubMesh(i)->GetName());
+	//pNode->SetSceneObject(pSceneObj);
+	//pSceneNode->AddChild(pNode);
+
+	//尝试创建一个InstanceBatch节点
+	//SubMesh 限定只能有一个
+	HrModelPtr pModel = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrModel>("Model/HrPrefab3.model", true, true);
+	BOOST_ASSERT(pModel->GetMesh()->GetSubMeshNum() == 1);
+
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+	pSceneNode->SetSceneObject(pSceneObj);
+	HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
+	HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(pModel->GetMesh()->GetSubMesh(0));
+	pRenderableCom->SetRenderable(pRenderable);
+
+	HrInstanceBatchComponentPtr pInsBatchCom = pSceneObj->AddComponent<HrInstanceBatchComponent>();
+	auto pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(-5, 3.0, 0.0));
+	pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(5, 3.0, 0.0));
+	pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(-5, 0.0, 0.0));
+	pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(5, 0.0, 0.0));
+	pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(-5, -3.0, 0.0));
+	pInsSceneNode = pInsBatchCom->CreateInstance();
+	pInsSceneNode->GetTransform()->Translate(Vector3(5, -3.0, 0.0));
+	m_pTestNode = pInsSceneNode;
+
+	AddNode(pSceneNode);
 }
+
+//HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)
+//{
+//	HrModelPtr pPrefabModel = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrModel>(strName, true, true);
+//	if (pPrefabModel == nullptr)
+//	{
+//		BOOST_ASSERT(false);
+//		return nullptr;
+//	}
+//
+//	return CreateSceneNode(pPrefabModel);
+//}
+//
+//HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrModelPtr& pModel)
+//{
+//	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+//	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+//	pSceneNode->SetSceneObject(pSceneObj);
+//
+//	for (size_t i = 0; i < pModel->GetMesh()->GetSubMeshNum(); ++i)
+//	{
+//		HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+//		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
+//		const HrRenderablePtr& pRenderable = pRenderableCom->CreateRenderable();
+//		pRenderable->SetSubMesh(pModel->GetMesh()->GetSubMesh(i));
+//		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>());
+//
+//		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pModel->GetMesh()->GetSubMesh(i)->GetName());
+//		pNode->SetSceneObject(pSceneObj);
+//		pSceneNode->AddChild(pNode);
+//	}
+//
+//	return pSceneNode;
+//}
 
 void HrInstanceBatchTest::CreateInputEvent()
 {
@@ -181,6 +250,6 @@ void HrInstanceBatchTest::OnMouseMove(const HrEventPtr& pEvent)
 	float z = pMouseEvent->GetZ();
 
 	float fSpeed = 0.01f;
-	m_pTestNode->GetTransform()->Translate(Vector3(0, 0, fSpeed * z));
+	//m_pTestNode->GetTransform()->Translate(Vector3(0, 0, fSpeed * z));
 }
 

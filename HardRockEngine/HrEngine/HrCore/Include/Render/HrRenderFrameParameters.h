@@ -17,9 +17,9 @@ namespace Hr
 		//todo
 		void SetLightsData(const HrSceneLightDataPtr& pLightData);
 		void SetCurrentCamera(const HrCameraPtr& pCamera);
-		void SetCurrentMaterial(const HrMaterialPtr& pMaterial);
 
 		void SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode);
+		void SetCurrentRenderable(const HrRenderablePtr pRenderable);
 
 		const Matrix4& GetViewProjMatrix() const;
 
@@ -77,11 +77,11 @@ namespace Hr
 		mutable float m_fogRange;
 	private:
 		HrSceneLightDataPtr m_pLightsData;
-		HrRenderablePtr m_pCurrentRenderable;
-		HrMaterialPtr m_pCurrentMaterial;
+
 		HrCameraPtr m_pCurrentCamera;
-	
-		HrSceneNodePtr m_pCurrentSceneNode;
+		HrRenderablePtr m_pRenderable;
+		HrSceneNodePtr m_pSceneNode;
+		
 	};
 }
 

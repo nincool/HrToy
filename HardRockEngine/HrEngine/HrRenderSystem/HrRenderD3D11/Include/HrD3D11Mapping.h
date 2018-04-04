@@ -14,7 +14,7 @@ namespace Hr
 	{
 	public:
 		//InputElement SemanticName×ª»¯
-		static LPCSTR GetInputElementSemanticName(EnumVertexElementUsage usage);
+		static LPCSTR GetInputElementSemanticName(EnumVertexElementSemantic usage);
 
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
 		
@@ -28,7 +28,7 @@ namespace Hr
 		static DXGI_FORMAT GetIndexBufferFormat(EnumIndexType indexType);
 
 		//Shader Data type
-		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType);
+		static EnumRenderEffectDataType GetRenderParamDataType(D3D_SHADER_VARIABLE_TYPE shaderVariableType, int nRows, int nCols);
 		static uint32 GetRenderParamDataSize(EnumRenderEffectDataType shaderVariableType);
 		
 		//D3D11_USAGE <=> HrGraphicsBuffer::EnumGraphicsBufferUsage

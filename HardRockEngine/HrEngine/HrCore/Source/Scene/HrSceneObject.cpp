@@ -15,12 +15,6 @@ HrSceneObject::HrSceneObject()
 {
 }
 
-
-HrSceneObject::HrSceneObject(const HrRenderablePtr& pRenderable)
-{
-	m_pRenderable = pRenderable;
-}
-
 HrSceneObject::~HrSceneObject()
 {
 }
@@ -58,25 +52,16 @@ void HrSceneObject::Update(float fDelta, const HrTransformPtr& pTrans)
 	}
 }
 
-void HrSceneObject::SetRenderable(const HrRenderablePtr& pRenderable)
-{
-	if (!m_pRenderable)
-	{
-		BOOST_ASSERT(false);
-	}
-
-	m_pRenderable = pRenderable;
-}
-
-const HrRenderablePtr& HrSceneObject::GetRenderable()
-{
-	return m_pRenderable;
-}
-
 void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent)
 {
-	auto comType = pSceneObjComponent->GetComType();
+	if (pSceneObjComponent->IsMutex() && m_pSceneObjMutexCom)
+	{
+		TRE("Can't add mutex component again!");
+		return;
+	}
+	m_pSceneObjMutexCom = pSceneObjComponent->IsMutex() ? pSceneObjComponent : nullptr;
 
+	auto comType = pSceneObjComponent->GetComType();
 	switch (comType)
 	{
 	case HrSceneObjectComponent::SCT_NORMAL:
@@ -122,13 +107,15 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 	}
 }
 
-const HrSceneObjectComponentPtr& HrSceneObject::AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
+HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
 {
 	auto iteCom = m_mapComponents.find(comType);
 	if (iteCom != m_mapComponents.end())
 	{
 		return iteCom->second;
 	}
+
+	HrSceneObjectComponentPtr pSceneObjCom = nullptr;
 
 	switch (comType)
 	{
@@ -138,21 +125,31 @@ const HrSceneObjectComponentPtr& HrSceneObject::AddComponent(HrSceneObjectCompon
 		break;
 	case HrSceneObjectComponent::SCT_LIGHT:
 		break;
-	case HrSceneObjectComponent::SCT_INSTANCEBATCH:
-	{
-		auto pInsBatchCom = HrMakeSharedPtr<HrInstanceBatchComponent>("InstanceBatch");
-		m_mapComponents[HrSceneObjectComponent::SCT_INSTANCEBATCH] = pInsBatchCom;
-
-		return pInsBatchCom;
+	case HrSceneObjectComponent::SCT_RENDERABLE:
+		pSceneObjCom = HrMakeSharedPtr<HrRenderableComponent>("Renderable", shared_from_this());
 		break;
-	}
+	case HrSceneObjectComponent::SCT_INSTANCEBATCH:
+		pSceneObjCom = HrMakeSharedPtr<HrInstanceBatchComponent>("InstanceBatch", shared_from_this());
+		break;
+	case HrSceneObjectComponent::SCT_INSTANCEOBJ:
+		pSceneObjCom = HrMakeSharedPtr<HrInstanceObjectComponent>("InstanceObj", shared_from_this());
+		break;
 	case HrSceneObjectComponent::SCT_COM_COUNT:
 		break;
 	default:
 		break;
 	}
 
-	return nullptr;
+	if (pSceneObjCom->IsMutex() && m_pSceneObjMutexCom)
+	{
+		TRE("Can't add mutex component again!");
+		return nullptr;
+	}
+
+	m_mapComponents[comType] = pSceneObjCom;
+	m_pSceneObjMutexCom = pSceneObjCom->IsMutex() ? pSceneObjCom : nullptr;
+
+	return m_mapComponents[comType];
 }
 
 void HrSceneObject::AddCameraToScene(const HrCameraPtr& pCamera)
@@ -179,12 +176,22 @@ void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
 	}
 }
 
-const HrSceneObjectComponentPtr& HrSceneObject::GetComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
+HrSceneObjectComponentPtr HrSceneObject::GetComponent(HrSceneObjectComponent::EnumSceneComponentType comType)
 {
 	auto iteCom = m_mapComponents.find(comType);
 	if (iteCom != m_mapComponents.end())
 	{
 		return iteCom->second;
+	}
+
+	return nullptr;
+}
+
+HrSceneNodePtr HrSceneObject::GetSceneNode()
+{
+	if (!m_pContainerNode.expired())
+	{
+		return m_pContainerNode.lock();
 	}
 
 	return nullptr;

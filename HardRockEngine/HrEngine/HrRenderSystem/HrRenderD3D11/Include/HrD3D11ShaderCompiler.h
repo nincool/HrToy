@@ -38,11 +38,7 @@ namespace Hr
 				uint32 rows;
 				uint32 columns;
 				uint32 elements;
-				//for test
-				uint32 nCBElementIndex;
-				uint32 nStructElementIndex;
-				std::vector<std::pair<size_t, std::pair<uint32, uint32> > > vecTestHashKey;
-
+			
 				bool bUsed;
 
 				std::vector<VariableDesc> struct_desc;

@@ -39,13 +39,13 @@ namespace Hr
 		 @Param:
 		 @Return:
 		*/
-		HrSceneNodePtr CreateModel(const std::string& strName);
+		HrSceneNodePtr CreateModelNode(const std::string& strName);
 		/**
 		 @Comment: 创建场景节点 [12/29/2017 By Hr]
 		 @Param:   场景资源
 		 @Return:  场景节点对象
 		*/
-		HrSceneNodePtr CreateSceneNode(HrModelPtr& pPrefabModel);
+		HrSceneNodePtr CreateSceneNode(HrModelPtr& pModel);
 
 		/**
 		 @Comment: 创建灯光 [3/7/2018 By Hr]

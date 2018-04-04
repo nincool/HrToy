@@ -54,6 +54,8 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderLayout> HrRenderLayoutPtr;
 	class HrRenderable;
 	typedef std::shared_ptr<HrRenderable> HrRenderablePtr;
+	class HrStaticMeshRenderable;
+	typedef std::shared_ptr<HrStaticMeshRenderable> HrStaticMeshRenderablePtr;
 	class HrSkinnedMeshRenderable;
 	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
 
@@ -62,8 +64,8 @@ namespace Hr
 	typedef std::shared_ptr<HrInstanceBatch> HrInstanceBatchPtr;
 	class HrInstanceBatchHW;
 	typedef std::shared_ptr<HrInstanceBatchHW> HrInstanceBatchHWPtr;
-	class HrInstanceBatchManager;
-	typedef std::shared_ptr<HrInstanceBatchManager> HrInstanceBatchManagerPtr;
+	class HrInstanceBatchObject;
+	typedef std::shared_ptr<HrInstanceBatchObject> HrInstanceBatchObjectPtr;
 
 	class HrRenderPass;
 	typedef std::shared_ptr<HrRenderPass> HrRenderPassPtr;
@@ -120,7 +122,10 @@ namespace Hr
 	typedef std::shared_ptr<HrCameraComponet> HrCameraComponentPtr;
 	class HrLightComponent;
 	typedef std::shared_ptr<HrLightComponent> HrLightComponentPtr;
-
+	class HrRenderableComponent;
+	typedef std::shared_ptr<HrRenderableComponent> HrRenderableComponentPtr;
+	class HrInstanceBatchComponent;
+	typedef std::shared_ptr<HrInstanceBatchComponent> HrInstanceBatchComponentPtr;
 
 	//Event
 	class HrEvent;

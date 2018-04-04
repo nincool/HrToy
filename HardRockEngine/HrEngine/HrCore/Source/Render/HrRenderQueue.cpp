@@ -11,18 +11,16 @@ HrRenderQueue::~HrRenderQueue()
 
 void HrRenderQueue::PrepareRenderQueue()
 {
-	m_vecSceneNodes.clear();
+	m_vecRenderables.clear();
 }
 
-void HrRenderQueue::AddRenderable(const HrSceneNodePtr& pSceneNode)
+void HrRenderQueue::AddRenderable(const HrRenderablePtr& pRenderable)
 {
-	m_vecSceneNodes.push_back(pSceneNode);
+	m_vecRenderables.push_back(pRenderable);
 }
 
-const std::vector<HrSceneNodePtr>& HrRenderQueue::GetRenderables()
+const std::vector<HrRenderablePtr>& HrRenderQueue::GetRenderables()
 {
-	return m_vecSceneNodes;
+	return m_vecRenderables;
 }
-
-
 

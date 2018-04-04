@@ -115,7 +115,7 @@ void HrModelLoader::MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo
 	{
 		for (size_t nEleIndex = 0; nEleIndex < vecVertexElement.size(); ++nEleIndex)
 		{
-			switch (vecVertexElement[nEleIndex].m_elementUsage)
+			switch (vecVertexElement[nEleIndex].m_elementSemantic)
 			{
 			case VEU_POSITION:
 			{

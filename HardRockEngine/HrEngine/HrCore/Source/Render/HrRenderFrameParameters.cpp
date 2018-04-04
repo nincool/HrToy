@@ -11,7 +11,6 @@ using namespace Hr;
 
 HrRenderFrameParameters::HrRenderFrameParameters()
 {
-	m_pCurrentMaterial = nullptr;
 	m_pCurrentCamera = nullptr;
 
 	DirtyWorldMatrix();
@@ -26,10 +25,14 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 
 void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode)
 {
-	m_pCurrentSceneNode = pSceneNode;
-	m_pCurrentMaterial = pSceneNode->GetSceneObject()->GetRenderable()->GetMaterial();
 
-	//todo
+}
+
+void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr pRenderable)
+{
+	m_pRenderable = pRenderable;
+	m_pSceneNode = m_pRenderable->GetAttachSceneObject()->GetSceneNode();
+
 	DirtyWorldMatrix();
 }
 
@@ -51,18 +54,13 @@ void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
 	}
 }
 
-void HrRenderFrameParameters::SetCurrentMaterial(const HrMaterialPtr& pMaterial)
-{
-	m_pCurrentMaterial = pMaterial;
-	BOOST_ASSERT(m_pCurrentMaterial);
-}
 
 const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 {
 	if (m_bWorldMatrixDirty)
 	{
 		m_bWorldMatrixDirty = false;
-		m_worldMatrix = m_pCurrentSceneNode->GetTransform()->GetWorldMatrix();
+		m_worldMatrix = m_pSceneNode->GetTransform()->GetWorldMatrix();
 	}
 	return m_worldMatrix;
 }
@@ -103,37 +101,32 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 
 float HrRenderFrameParameters::GetMaterialGlossiness() const
 {
-	return m_pCurrentMaterial->GetGlossiness();
+	return m_pRenderable->GetMaterial()->GetGlossiness();
 }
 
 float4 HrRenderFrameParameters::GetMaterialAmbient() const
 {
-	BOOST_ASSERT(m_pCurrentMaterial);
-	return m_pCurrentMaterial->GetAmbient();
+	return m_pRenderable->GetMaterial()->GetAmbient();
 }
 
 float4 HrRenderFrameParameters::GetMaterialDiffuse() const
 {
-	BOOST_ASSERT(m_pCurrentMaterial);
-	return m_pCurrentMaterial->GetDiffuse();
+	return m_pRenderable->GetMaterial()->GetDiffuse();
 }
 
 float4 HrRenderFrameParameters::GetMaterialSpecular() const
 {
-	BOOST_ASSERT(m_pCurrentMaterial);
-	return m_pCurrentMaterial->GetSpecular();
+	return m_pRenderable->GetMaterial()->GetSpecular();
 }
 
 float4 HrRenderFrameParameters::GetMaterialEmissive() const
 {
-	BOOST_ASSERT(m_pCurrentMaterial);
-	return m_pCurrentMaterial->GetEmissive();
+	return m_pRenderable->GetMaterial()->GetEmissive();
 }
 
 float HrRenderFrameParameters::GetMaterialOpacity() const
 {
-	BOOST_ASSERT(m_pCurrentMaterial);
-	return m_pCurrentMaterial->GetOpacity();
+	return m_pRenderable->GetMaterial()->GetOpacity();
 }
 
 const float3& HrRenderFrameParameters::GetCameraPosition()

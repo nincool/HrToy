@@ -17,11 +17,8 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_WORLD_MATRIX, "world_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
-	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_VIEW_PROJ_MATRIX, "view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
-
-	HrRenderParamDefine(RPT_INSTANCE_WORLD_MATRIX_ARRAY, "world_matrix_array", REDT_MATRIX_4X4, 80, 64),
 
 	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 16),
 
@@ -43,21 +40,30 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 1, 16),
 
-
-	
-
-
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
 	HrRenderParamDefine(RPT_FOG_RANGE, "fog_range", REDT_FLOAT1, 1, 4),
 };
+
+HrRenderParamDefine* HrRenderParamDefine::GetRenderParamDefineByType(EnumRenderParamType rpt)
+{
+	for (size_t i = 0; i < HrRenderParamDefine::m_s_vecRenderParamDefine.size(); ++i)
+	{
+		if (m_s_vecRenderParamDefine[i].paramType == rpt)
+		{
+			return &m_s_vecRenderParamDefine[i];
+		}
+	}
+
+	return nullptr;
+}
 
 //////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////
 
 HrRenderVariable::HrRenderVariable()
-	:m_pData(nullptr), m_dataType(REDT_FLOAT1), m_semantic(RS_UNKNOW), m_nBufferOffset(0), m_nStride(0)
+	:m_pData(nullptr), m_dataType(REDT_FLOAT1), m_semantic(RS_UNKNOW), m_nBufferOffset(0), m_nStride(0), m_nArraySize(0), m_nMemorySize(0)
 {
 }
 
@@ -461,7 +467,7 @@ void HrRenderVariable::Value(HrSamplerStatePtr& val) const
 	BOOST_ASSERT(false);
 }
 
-void HrRenderVariable::BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride)
+void HrRenderVariable::BindToCBuffer(const HrRenderEffectConstantBufferPtr& cbuff, uint32_t offset, uint32_t stride, uint32 nMemorySize)
 {
 	HR_UNUSED(cbuff);
 	HR_UNUSED(offset);
@@ -488,6 +494,36 @@ void HrRenderVariableFloat4x4::Value(float4x4& val) const
 {
 	HrRenderVariableConcrete<float4x4>::Value(val);
 	val = HrMath::Transpose(val);
+}
+
+/////////////////////////////////= HrRenderVariableFloat4x4Array =/////////////////////////////////////
+
+HrRenderVariableFloat4x4Array::HrRenderVariableFloat4x4Array()
+{
+
+}
+
+HrRenderVariable& HrRenderVariableFloat4x4Array::operator=(const std::vector<float4x4>& value)
+{
+	BOOST_ASSERT(m_pData);
+	BOOST_ASSERT(value.size() * m_nStride <= m_nMemorySize);
+	for (size_t i = 0; i < value.size(); ++i)
+	{
+		*((float4x4*)(m_pData + m_nStride * i)) = HrMath::Transpose(value[i]);
+	}
+	m_nArraySize = value.size();
+
+	return *this;
+}
+
+void HrRenderVariableFloat4x4Array::Value(std::vector<float4x4>& val) const
+{
+	val.clear();
+	for (size_t i = 0; i < m_nArraySize; ++i)
+	{
+		float4x4 eleVal = *((float4x4*)(m_pData + m_nStride * i));
+		val.emplace_back(eleVal);
+	}
 }
 
 /////////////////////////////////= HrRenderVariableTexture =/////////////////////////////////////
@@ -538,7 +574,7 @@ void HrRenderVariableSamplerState::Value(HrSamplerStatePtr& val) const
 //
 ///////////////////////////////////////////
 
-HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName, int nIndex1, int nIndex2)
+HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, size_t nHashName)
 {
 	m_paramType = RPT_UNKNOWN;
 	m_bindType = REPBT_UNKNOWN;
@@ -550,9 +586,6 @@ HrRenderEffectParameter::HrRenderEffectParameter(const std::string& strVarName, 
 
 	m_strName = strVarName;
 	m_nHashName = nHashName;
-
-	m_nIndex1 = nIndex1;
-	m_nIndex2 = nIndex2;
 }
 
 HrRenderEffectParameter::~HrRenderEffectParameter()
@@ -707,6 +740,10 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		case Hr::REDT_MATRIX_4X3:
 			break;
 		case Hr::REDT_MATRIX_4X4:
+			if (m_nArraySize == 1)
+				m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
+			else
+				m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4Array();
 			break;
 		case Hr::REDT_INT1:
 			break;
@@ -725,24 +762,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		case Hr::REDT_DOUBLE3:
 			break;
 		case Hr::REDT_DOUBLE4:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_2X2:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_2X3:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_2X4:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_3X2:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_3X3:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_3X4:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_4X2:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_4X3:
-			break;
-		case Hr::REDT_MATRIX_DOUBLE_4X4:
+		
 			break;
 		case REDT_UINT1:
 			m_pRenderVariable = HR_NEW HrRenderVariableUInt();
@@ -779,7 +799,8 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		break;
 	}
 	default:
-		BOOST_ASSERT(nullptr);
+		//BOOST_ASSERT(nullptr);
+		break;
 	}
 }
 
@@ -787,34 +808,7 @@ void HrRenderEffectParameter::BindConstantBuffer(const HrRenderEffectConstantBuf
 {
 	BOOST_ASSERT(m_pRenderVariable);
 	m_pBindConstBuffer = pConstantBuffer;
-	m_pRenderVariable->BindToCBuffer(pConstantBuffer, nOffset, m_nMemorySize);
-}
-
-////////////////////////////////////////////
-//
-//
-////////////////////////////////////////////
-
-HrRenderEffectStructParameter::HrRenderEffectStructParameter(const std::string& strTypeName, const std::string& strVarName, size_t nHashName)
-{
-	m_strTypeName = strTypeName;
-	m_strName = strVarName;
-	m_nHashName = nHashName;
-}
-
-HrRenderEffectStructParameter::~HrRenderEffectStructParameter()
-{
-}
-
-void HrRenderEffectStructParameter::AddRenderEffectParameter(const HrRenderEffectParameterPtr& pRenderParameter)
-{
-	m_vecRenderEffectParameter.push_back(pRenderParameter);
-}
-
-const HrRenderEffectParameterPtr& HrRenderEffectStructParameter::ParameterByIndex(uint32 nIndex)
-{
-	BOOST_ASSERT(nIndex < m_vecRenderEffectParameter.size());
-	return m_vecRenderEffectParameter[nIndex];
+	m_pRenderVariable->BindToCBuffer(pConstantBuffer, nOffset, m_nStride, m_nMemorySize);
 }
 
 ////////////////////////////////////////////
@@ -869,3 +863,4 @@ void HrRenderEffectConstantBuffer::UpdateConstantBuffer()
 		m_bDirty = false;
 	}
 }
+

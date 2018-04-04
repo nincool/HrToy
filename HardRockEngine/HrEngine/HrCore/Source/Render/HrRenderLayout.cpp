@@ -12,6 +12,7 @@ HrRenderLayout::HrRenderLayout()
 	m_topologyType = TT_TRIANGLELIST;
 	m_indexBufferType = IT_16BIT;
 	m_bStreamsDirty = true;
+	m_nInstance = 1;
 }
 
 HrRenderLayout::~HrRenderLayout()
@@ -79,5 +80,33 @@ uint32 HrRenderLayout::GetVerticesNum()
 const std::vector<HrVertexDataPtr>& HrRenderLayout::GetVertexStreams()
 {
 	return m_vecVertexStreams;
+}
+
+uint32 HrRenderLayout::GetNextVertexSemanticIndex(EnumVertexElementSemantic semantic)
+{
+	uint32 nNexIndex = 0;
+	for (size_t i = 0; i < m_vecVertexStreams.size(); ++i)
+	{
+		const std::vector<HrVertexElement>& vecElement = m_vecVertexStreams[i]->GetVertex()->GetVertexElement();
+		for (auto& ele : vecElement)
+		{
+			if (ele.m_elementSemantic == semantic)
+			{
+				++nNexIndex;
+			}
+		}
+	}
+
+	return nNexIndex;
+}
+
+uint32 HrRenderLayout::GetInstanceNum()
+{
+	return m_nInstance;
+}
+
+void HrRenderLayout::SetInstanceNum(uint32 nInstance)
+{
+	m_nInstance = nInstance;
 }
 

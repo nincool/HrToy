@@ -16,11 +16,10 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		const HrRenderTechniquePtr& GetTechniqueByIndex(uint32 nIndex);
-		const HrRenderTechniquePtr& GetTechniqueByName(const std::string& strTechniqueName);
+		const HrRenderTechniquePtr GetTechniqueByIndex(uint32 nIndex);
+		const HrRenderTechniquePtr GetTechniqueByName(const std::string& strTechniqueName);
 
-		const HrRenderEffectParameterPtr& GetParameterByName(const std::string& strParamName);
-		const HrRenderEffectStructParameterPtr& GetStructParameterByName(const std::string& strStructName);
+		const HrRenderEffectParameterPtr GetParameterByName(const std::string& strParamName);
 
 		void UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 	protected:
@@ -28,7 +27,7 @@ namespace Hr
 		virtual bool UnloadImpl() override;
 
 		void UpdateOneEffectParameter(const HrRenderEffectParameterPtr& renderEffectParameter, const HrRenderFrameParametersPtr&  renderFrameParameters);
-
+		void UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 	private:
 		size_t m_nHashName;
 

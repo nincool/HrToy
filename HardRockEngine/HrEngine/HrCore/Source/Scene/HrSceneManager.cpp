@@ -103,3 +103,8 @@ bool HrSceneManager::CheckSceneRunning()
 	return m_bSceneRunning;
 }
 
+const HrRenderFrameParametersPtr& Hr::HrSceneManager::GetRenderFrameParamPtr()
+{
+	return m_pRenderParameters;
+}
+

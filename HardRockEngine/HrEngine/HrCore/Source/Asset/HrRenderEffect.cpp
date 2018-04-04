@@ -226,6 +226,8 @@ bool HrRenderEffect::UnloadImpl()
 
 void HrRenderEffect::UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pRenderFrameParameters)
 {
+	UpdateLightsEffectParameter(pRenderFrameParameters);
+
 	for (auto& item : m_mapRenderEffectParameters)
 	{
 		UpdateOneEffectParameter(item.second, pRenderFrameParameters);
@@ -235,6 +237,96 @@ void HrRenderEffect::UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pR
 	{
 		item.second->UpdateConstantBuffer();
 	}
+}
+
+void HrRenderEffect::UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters)
+{
+	//ambient
+	HrRenderParamDefine* pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_AMBIENT_COLOR);
+	if (pRenderParamDefine)
+	{
+		size_t nHashLightNumName = HrHashValue(pRenderParamDefine->strName);
+		auto iteEffParam = m_mapRenderEffectParameters.find(nHashLightNumName);
+		if (iteEffParam != m_mapRenderEffectParameters.end())
+		{
+			*(iteEffParam->second) = pRenderFrameParameters->GetAmbientColor();
+		}
+	}
+
+	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_LIGHTS_NUM);
+	if (pRenderParamDefine)
+	{
+		size_t nHashLightNumName = HrHashValue(pRenderParamDefine->strName);
+		auto iteEffParam = m_mapRenderEffectParameters.find(nHashLightNumName);
+		if (iteEffParam != m_mapRenderEffectParameters.end())
+		{
+			*(iteEffParam->second) = pRenderFrameParameters->GetLightsNum();
+		}
+	}
+
+	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_DIFFUSE_COLOR);
+	if (pRenderParamDefine)
+	{
+		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
+		for (uint32 i = 0; i < nDirectLightNum; ++i)
+		{
+			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashDirDiffuseName, i);
+			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
+			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
+			if (iteEffParam != m_mapRenderEffectParameters.end())
+			{
+				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_SPECULAR_COLOR);
+	if (pRenderParamDefine)
+	{
+		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
+		for (uint32 i = 0; i < nDirectLightNum; ++i)
+		{
+			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashDirDiffuseName, i);
+			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
+			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
+			if (iteEffParam != m_mapRenderEffectParameters.end())
+			{
+				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_DIRECTION);
+	if (pRenderParamDefine)
+	{
+		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
+		for (uint32 i = 0; i < nDirectLightNum; ++i)
+		{
+			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashDirDiffuseName, i);
+			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
+			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
+			if (iteEffParam != m_mapRenderEffectParameters.end())
+			{
+				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightDirection(i);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
 }
 
 void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& pRenderEffectParameter, const HrRenderFrameParametersPtr& pRenderFrameParameters)
@@ -279,65 +371,6 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	{
 		break;
 	}
-	case RPT_AMBIENT_COLOR:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetAmbientColor();
-		break;
-	}
-	case RPT_LIGHTS_NUM:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetLightsNum();
-		break;
-	}
-	case RPT_DIRECTIONAL_DIFFUSE_COLOR:
-	{
-		int nLightIndex = pRenderEffectParameter->Index1();
-		if (nLightIndex < pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL])
-		{
-			*pRenderEffectParameter = pRenderFrameParameters->GetDirectionalLightDiffuseColor(nLightIndex);
-		}
-
-		break;
-	}
-	case RPT_DIRECTIONAL_SPECULAR_COLOR:
-	{
-		int nLightIndex = pRenderEffectParameter->Index1();
-		if (nLightIndex < pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL])
-		{
-			*pRenderEffectParameter = pRenderFrameParameters->GetDirectionalLightSpecularColor(nLightIndex);
-		}
-		break;
-	}
-	case RPT_DIRECTIONAL_LIGHT_DIRECTION:
-	{
-		int nLightIndex = pRenderEffectParameter->Index1();
-		if (nLightIndex < pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL])
-		{
-			*pRenderEffectParameter = pRenderFrameParameters->GetDirectionalLightDirection(nLightIndex);
-		}
-		break;
-	}
-	//µã¹âÔ´
-	case RPT_POINT_LIGHT_DIFFUSE_COLOR:
-	{
-		//renderEffectParameter = renderFrameParameters.GetPointLightDiffuseColors();
-		break;
-	}
-	case RPT_POINT_LIGHT_SPECULAR_COLOR:
-	{
-		//renderEffectParameter = renderFrameParameters.GetPointLightSpecularColors();
-		break;
-	}
-	case RPT_POINT_LIGHT_POSITION:
-	{
-		//renderEffectParameter = renderFrameParameters.GetPointLightPositions();
-		break;
-	}
-	case RPT_POINT_LIGHT_ATTENUATION:
-	{
-		//renderEffectParameter = renderFrameParameters.GetPointLightAttenuations();
-		break;
-	}
 	case RPT_AMBIENT_MATERIAL_COLOR:
 	{
 		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialAmbient();
@@ -364,7 +397,7 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 
 }
 
-const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
+const HrRenderTechniquePtr HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
 {
 	if (0 <= nIndex && nIndex < m_vecRenderTechnique.size())
 	{
@@ -373,7 +406,7 @@ const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)
 	return nullptr;
 }
 
-const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByName(const std::string& strTechniqueName)
+const HrRenderTechniquePtr HrRenderEffect::GetTechniqueByName(const std::string& strTechniqueName)
 {
 	size_t const nHashName = HrHashValue(strTechniqueName);
 	for (const auto& item : m_vecRenderTechnique)
@@ -387,29 +420,17 @@ const HrRenderTechniquePtr& HrRenderEffect::GetTechniqueByName(const std::string
 	return nullptr;
 }
 
-const HrRenderEffectParameterPtr& HrRenderEffect::GetParameterByName(const std::string& strParamName)
+const HrRenderEffectParameterPtr HrRenderEffect::GetParameterByName(const std::string& strParamName)
 {
-	//size_t const nHashName = HrHashValue(strParamName);
-	//for (const auto& item : m_vecRenderEffectParameter)
-	//{
-	//	if (item->HashName() == nHashName)
-	//	{
-	//		return item;
-	//	}
-	//}
-	return nullptr;
-}
+	size_t const nHashName = HrHashValue(strParamName);
+	for (const auto& item : m_mapRenderEffectParameters)
+	{
+		if (item.first == nHashName)
+		{
+			return item.second;
+		}
+	}
 
-const HrRenderEffectStructParameterPtr& HrRenderEffect::GetStructParameterByName(const std::string& strStructName)
-{
-	//size_t const nHashName = HrHashValue(strStructName);
-	//for (const auto& item : m_vecRenderEffectStruct)
-	//{
-	//	if (item->HashName() == nHashName)
-	//	{
-	//		return item;
-	//	}
-	//}
 	return nullptr;
 }
 

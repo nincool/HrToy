@@ -214,7 +214,7 @@ namespace Hr
 		PF_COUNT = 95
 	};
 
-	enum EnumVertexElementUsage
+	enum EnumVertexElementSemantic
 	{
 		// vertex positions
 		VEU_POSITION = 1,

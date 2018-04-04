@@ -109,40 +109,4 @@ void HrRenderPass::SetBlendState(HrBlendState* pBlendState)
 	m_pBlendState = pBlendState;
 }
 
-void HrRenderPass::StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
-	, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-	, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter
-	, std::vector<HrRenderEffectStructParameter*>& vecShaderBindStruct)
-{
-	for (auto itemBind : vecShaderBindParameter)
-	{
-		auto posItem = std::find_if(vecRenderEffectParameter.begin(), vecRenderEffectParameter.end(), [&](HrRenderEffectParameter* pParam)
-		{
-			if (pParam->HashName() == itemBind->HashName())
-			{
-				return true;
-			}
-			return false;
-		});
-		if (posItem == vecRenderEffectParameter.end())
-		{
-			vecRenderEffectParameter.push_back(itemBind);
-		}
-	}
-	for (auto itemBind : vecShaderBindStruct)
-	{
-		auto posItem = std::find_if(vecRenderEffectStruct.begin(), vecRenderEffectStruct.end(), [&](HrRenderEffectStructParameter* pParam)
-		{
-			if (pParam->HashName() == itemBind->HashName())
-			{
-				return true;
-			}
-			return false;
-		});
-		if (posItem == vecRenderEffectStruct.end())
-		{
-			vecRenderEffectStruct.push_back(itemBind);
-		}
-	}
-}
 

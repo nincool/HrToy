@@ -26,6 +26,7 @@ namespace Hr
 
 		const HrRenderFactoryPtr& GetRenderFactory() const;
 
+		void DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout);
 		//todo ¡Ÿ ±
 		const HrRenderSystemPtr& GetRenderSystem()
 		{

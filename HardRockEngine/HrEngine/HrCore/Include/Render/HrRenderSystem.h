@@ -39,6 +39,8 @@ namespace Hr
 		
 		HrRenderFramePtr m_pScreenFrameBuffer;
 		std::unordered_map<std::string, HrRenderFramePtr> m_mapRenderFrames;
+
+		HrRenderFrameParametersPtr m_pRenderParameters;
 	};
 }
 

@@ -67,6 +67,7 @@ void HrResourceManager::CreateBuildInEffects()
 {
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
 	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
+	LoadResource("Media/HrShader/HrInstanceEffect.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -300,7 +301,7 @@ HrResourcePtr HrResourceManager::GetMesh(const std::string& strMeshName)
 HrResourcePtr HrResourceManager::GetEffect(const std::string& strEffectName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strEffectName);
-	size_t nHashID = HrHashValue(strFullFileName);
+	size_t nHashID = HrRenderEffect::CreateHashName(strFullFileName);
 	auto item = m_mapRenderEffects.find(nHashID);
 	if (item != m_mapRenderEffects.end())
 	{

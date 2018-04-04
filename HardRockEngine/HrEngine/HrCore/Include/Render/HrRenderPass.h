@@ -21,10 +21,7 @@ namespace Hr
 		void SetDepthStencilState(HrDepthStencilState* pDepthStencilState);
 		void SetBlendState(HrBlendState* pBlendState);
 	private:
-		void StorageShaderParameter(std::vector<HrRenderEffectParameter*>& vecRenderEffectParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecRenderEffectStruct
-			, std::vector<HrRenderEffectParameter*>& vecShaderBindParameter
-			, std::vector<HrRenderEffectStructParameter*>& vecShaderBindStruct);
+
 	private:
 		std::string m_strPassName;
 

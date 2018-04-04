@@ -19,9 +19,8 @@ namespace Hr
 		virtual void Destroy();
 	
 		const HrScenePtr& GetRunningScene();
-
+		const HrRenderFrameParametersPtr& GetRenderFrameParamPtr();
 	protected:
-		//void FlushScene();
 		bool CheckSceneRunning();
 	
 	private:

@@ -19,6 +19,7 @@ const std::string HrRenderSystem::m_sc_strScreenFrameBufferKey ="ScreenFrameBuff
 HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
 {
 	m_pRenderFactory = pRenderFactory;
+	m_pRenderParameters = HrMakeUniquePtr<HrRenderFrameParameters>();
 
 	CreateRender();
 	//默认先创建屏幕渲染
@@ -99,15 +100,12 @@ void HrRenderSystem::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue,
 			m_pRender->SetCurrentViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
 
-			const std::vector<HrSceneNodePtr>& vecSceneNodes = pRenderQueue->GetRenderables();
-			for (auto& iteSceneNode : vecSceneNodes)
+			const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
+			for (auto& iteRenderable : vecRenderables)
 			{
-				pRenderFrameParam->SetCurrentSceneNode(iteSceneNode);
+				pRenderFrameParam->SetCurrentRenderable(iteRenderable);
 
-				iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
-
-				m_pRender->Render(iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderTechnique()
-					, iteSceneNode->GetSceneObject()->GetRenderable()->GetRenderLayout());
+				iteRenderable->Render();
 			}
 		}
 	}
