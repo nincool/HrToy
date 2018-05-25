@@ -43,6 +43,7 @@ void HrInstanceBatchHW::BuildVertices(const HrSubMeshPtr& pSubMesh)
 			, pVertexData->GetVertex()->GetVertexElement());
 	}
 
+	//float instance : TEXCOORD1
 	std::vector<HrVertexElement> vecVertexElement;
 	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT1, VEC_INSTANCE, m_pBatchRenderLayout->GetNextVertexSemanticIndex(VEU_TEXTURE_COORDINATES), 1));
 

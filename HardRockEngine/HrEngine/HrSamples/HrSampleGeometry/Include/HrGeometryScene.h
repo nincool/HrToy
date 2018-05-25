@@ -36,6 +36,8 @@ namespace Hr
 		bool m_bKeySPressed;
 		bool m_bKeyDPressed;
 
+		bool m_bKey0Pressed;
+		bool m_bKey1Pressed;
 
 	};
 }

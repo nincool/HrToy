@@ -30,7 +30,7 @@ namespace Hr
 		virtual void OnRenderEnd();
 		
 	protected:
-
+		bool CheckRenderLayoutMatchShader();
 	protected:
 		HrRenderEffectPtr m_pRenderEffect;
 		HrRenderTechniquePtr m_pCurTechnique;

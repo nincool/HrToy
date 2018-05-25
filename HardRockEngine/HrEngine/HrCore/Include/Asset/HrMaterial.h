@@ -10,6 +10,7 @@ namespace Hr
 	public:
 		enum EnumMaterialTexSlot
 		{
+			//NormalTexture
 			TS_SLOT_0,
 			TS_SLOT_1,
 			TS_SLOT_2,

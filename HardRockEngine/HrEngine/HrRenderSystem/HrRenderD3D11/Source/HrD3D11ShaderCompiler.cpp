@@ -116,9 +116,14 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 	pCompiledData->ResizeBuffer(pD3DShaderBuffer->GetBufferSize());
 	memcpy(pCompiledData->GetBufferPoint(), pD3DShaderBuffer->GetBufferPointer(), pD3DShaderBuffer->GetBufferSize());
 
-	//auto pStripStreamData = StripCompiledCode(*pCompiledData.get());
-	
+#if (HR_DEBUG > 0)
 	m_mapCompileData.insert(std::make_pair(strEntryPoint, std::make_tuple(shaderType, pCompiledData, nullptr, D3D11ShaderDesc())));
+#else
+	auto pStripStreamData = StripCompiledCode(*pCompiledData.get());
+	m_mapCompileData.insert(std::make_pair(strEntryPoint, std::make_tuple(shaderType, pCompiledData, pStripStreamData, D3D11ShaderDesc())));
+#endif
+	
+	
 
 	pD3DShaderBuffer->Release();
 
@@ -190,9 +195,6 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 	
 	D3D11_SHADER_DESC shaderDesc;
 	TIF(pShaderReflection->GetDesc(&shaderDesc));
-
-	m_nConstantBufferNum = shaderDesc.ConstantBuffers;
-	m_nNumSlots = pShaderReflection->GetNumInterfaceSlots();
 
 	auto& desc = std::get<3>(iteCompileData->second);
 
@@ -283,7 +285,6 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 								+ constantVariableDesc.start_offset;
 						}
 					}
-					
 				}
 
 				cbDesc.var_desc.push_back(constantVariableDesc);
@@ -359,19 +360,23 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 	desc.num_uavs = static_cast<uint16>(nUavs + 1);
 
 	//get the input parameters
-	m_vecD3D11ShaderInputParameters.resize(shaderDesc.InputParameters);
+	desc.verInput_desc.resize(shaderDesc.InputParameters);
 	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
 	{
-		D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderInputParameters[i];
+		D3D11_SIGNATURE_PARAMETER_DESC curParam;
 		pShaderReflection->GetInputParameterDesc(i, &curParam);
+		desc.verInput_desc[i].strSimantic = curParam.SemanticName;
+		desc.verInput_desc[i].nSimanticIndex = curParam.SemanticIndex;
 	}
 
 	//get the output parameters
-	m_vecD3D11ShaderOutputParamters.resize(shaderDesc.OutputParameters);
+	desc.verOutput_desc.resize(shaderDesc.OutputParameters);
 	for (UINT i = 0; i < shaderDesc.OutputParameters; ++i)
 	{
-		D3D11_SIGNATURE_PARAMETER_DESC& curParam = m_vecD3D11ShaderOutputParamters[i];
+		D3D11_SIGNATURE_PARAMETER_DESC curParam;
 		pShaderReflection->GetOutputParameterDesc(i, &curParam);
+		desc.verOutput_desc[i].strSimantic = curParam.SemanticName;
+		desc.verOutput_desc[i].nSimanticIndex = curParam.SemanticIndex;
 	}
 
 	SAFE_RELEASE(pShaderReflection);
@@ -592,4 +597,29 @@ const HrRenderParamDefine* HrD3D11ShaderCompiler::GetRenderParamDefine(const std
 	}
 
 	return nullptr;
+}
+
+void HrD3D11ShaderCompiler::GetVertexInputOutputSimantic(std::string strVSEnterPoint
+	, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecInputSimaintic
+	, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecOutputSimantic)
+{
+	for (auto& itShaderData : m_mapCompileData)
+	{
+		if (itShaderData.first == strVSEnterPoint)
+		{
+			const D3D11ShaderDesc& desc = std::get<3>(itShaderData.second);
+			vecInputSimaintic.reserve(desc.verInput_desc.size());
+			for (size_t i = 0; i < desc.verInput_desc.size(); ++i)
+			{
+				vecInputSimaintic.push_back(std::make_pair(HrD3D11Mapping::GetInputElementSemanticName(desc.verInput_desc[i].strSimantic), desc.verInput_desc[i].nSimanticIndex));
+			}
+			vecOutputSimantic.reserve(desc.verInput_desc.size());
+			for (size_t i = 0; i < desc.verOutput_desc.size(); ++i)
+			{
+				vecOutputSimantic.push_back(std::make_pair(HrD3D11Mapping::GetInputElementSemanticName(desc.verOutput_desc[i].strSimantic), desc.verOutput_desc[i].nSimanticIndex));
+			}
+
+			break;
+		}
+	}
 }

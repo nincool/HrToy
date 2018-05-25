@@ -13,8 +13,9 @@ namespace Hr
 	class HrD3D11Mapping
 	{
 	public:
-		//InputElement SemanticName×ª»¯
+		//InputElement SemanticName <=> EnumVertexElementSemantic
 		static LPCSTR GetInputElementSemanticName(EnumVertexElementSemantic usage);
+		static EnumVertexElementSemantic GetInputElementSemanticName(const std::string& strSemantic);
 
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
 		

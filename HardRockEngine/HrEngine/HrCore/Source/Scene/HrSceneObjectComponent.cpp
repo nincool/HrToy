@@ -179,7 +179,6 @@ HrSceneNodePtr HrInstanceBatchComponent::CreateInstance(const std::string& strNa
 	{
 		HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
 		HrSceneObjectPtr pSceneObj = m_pInsBatch->CreateInstance();
-		//pSceneObj->AddComponent<HrInstanceObjectComponent>();
 		pSceneNode->SetSceneObject(pSceneObj);
 
 		HrSceneObjectPtr pParentObj = m_pAttachSceneObj.lock();

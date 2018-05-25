@@ -65,6 +65,20 @@ namespace Hr
 		};
 		std::vector<BoundResourceDesc> res_desc;
 
+		struct VertexInputParamDesc
+		{
+			std::string strSimantic;
+			uint32 nSimanticIndex;
+		};
+		std::vector<VertexInputParamDesc> verInput_desc;
+
+		struct VertexOutputParamDesc
+		{
+			std::string strSimantic;
+			uint32 nSimanticIndex;
+		};
+		std::vector<VertexOutputParamDesc> verOutput_desc;
+
 		HrShader::EnumShaderType shaderType;
 	};
 
@@ -126,26 +140,19 @@ namespace Hr
 			, std::unordered_map<std::string, HrShaderPtr>& mapShader) override;
 		
 		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) override;
+
+		virtual void GetVertexInputOutputSimantic(std::string strVSEnterPoint
+			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecInputSimaintic
+			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecOutputSimantic) override;
 	private:
 		void GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType);
 
 		HrRenderEffectConstantBufferPtr GetConstantBuffer(std::vector<HrRenderEffectConstantBufferPtr>& vecConstBuffer, size_t nHashName);
-		HrRenderEffectStructParameterPtr GetEffectStruct(std::vector<HrRenderEffectStructParameterPtr>& renderEffectStruct, size_t nHashName);
 		HrRenderEffectParameterPtr GetEffectParameter(std::vector<HrRenderEffectParameterPtr>& renderEffectParameter, size_t nHashName);
 		const HrRenderParamDefine* GetRenderParamDefine(const std::string& strParamName);
 
 	protected:
 		std::unordered_map<std::string, std::tuple<HrShader::EnumShaderType, HrStreamDataPtr, HrStreamDataPtr, D3D11ShaderDesc> > m_mapCompileData;
-
-		UINT m_nConstantBufferSize = 0;
-		UINT m_nConstantBufferNum = 0;
-		UINT m_nNumSlots = 0;
-
-		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderInputParameters;
-		std::vector<D3D11_SIGNATURE_PARAMETER_DESC> m_vecD3D11ShaderOutputParamters;
-
-	
-		//std::array < D3D11ShaderDesc, HrShader::ST_NUMSHADERTYPES> m_arrShaderDesc;
 	};
 }
 

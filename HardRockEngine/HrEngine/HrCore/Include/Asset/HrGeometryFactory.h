@@ -6,12 +6,12 @@
 
 namespace Hr
 {
-	struct Vertex1
-	{
-		float3 position;
-		float3 normal;
-		float2 uv;
-	};
+	//struct Vertex1
+	//{
+	//	float3 position;
+	//	float3 normal;
+	//	float2 uv;
+	//};
 	/************************************************************************
 	*
 	* @Comment£º  A plane is defined in 3D space by the equation

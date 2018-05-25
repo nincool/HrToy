@@ -19,6 +19,8 @@ void HrGeometryScene::ResetKeyFlag()
 	m_bKeyWPressed = false;
 	m_bKeySPressed = false;
 	m_bKeyDPressed = false;
+	m_bKey0Pressed = false;
+	m_bKey1Pressed = false;
 }
 
 void HrGeometryScene::OnEnter()
@@ -37,7 +39,7 @@ void HrGeometryScene::CreateSceneElements()
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
 	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -10.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
@@ -46,8 +48,8 @@ void HrGeometryScene::CreateSceneElements()
 	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
 	BOOST_ASSERT(pRenderEffect);
 
-	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrPrefab3.model");
-	m_pTestNode->GetChildByName("Box01")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestBox.model");
+	m_pTestNode->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pRenderEffect);
 	AddNode(m_pTestNode);
 }
 
@@ -82,6 +84,12 @@ void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const H
 	case HrEventKeyboard::EnumKeyCode::KEY_Z:
 
 		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = true;
+		break;
 	default:
 		break;
 	}
@@ -103,7 +111,12 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const 
 	case HrEventKeyboard::EnumKeyCode::KEY_S:
 		m_bKeySPressed = false;
 		break;
-
+	case HrEventKeyboard::EnumKeyCode::KEY_0:
+		m_bKey0Pressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_1:
+		m_bKey1Pressed = false;
+		break;
 	default:
 		break;
 	}
@@ -111,7 +124,7 @@ void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const 
 
 void HrGeometryScene::SceneUpdate(float fDelta)
 {
-	float fSpeed = 0.2f;
+	float fSpeed = 1.0f;
 	float fRotateSpeed = 5;
 	if (m_bKeyAPressed)
 	{
@@ -129,14 +142,14 @@ void HrGeometryScene::SceneUpdate(float fDelta)
 	{
 		m_pTestNode->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
 	}
-	//else if (m_bKey0Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -fSpeed));
-	//}
-	//else if (m_bKey1Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, fSpeed));
-	//}
+	else if (m_bKey0Pressed)
+	{
+		m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -fSpeed));
+	}
+	else if (m_bKey1Pressed)
+	{
+		m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, fSpeed));
+	}
 	//else if (m_bKeyF1Pressed)
 	//{
 	//	m_pSceneMainCamera->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));

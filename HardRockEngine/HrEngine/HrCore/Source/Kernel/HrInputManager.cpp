@@ -222,13 +222,13 @@ HrEventKeyboard::EnumKeyCode HrInputEventListener::GetKeyCodeMap(OIS::KeyCode ke
 	case OIS::KC_ADD:
 		break;
 	case OIS::KC_NUMPAD1:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_1;
 	case OIS::KC_NUMPAD2:
 		break;
 	case OIS::KC_NUMPAD3:
 		break;
 	case OIS::KC_NUMPAD0:
-		break;
+		return HrEventKeyboard::EnumKeyCode::KEY_0;
 	case OIS::KC_DECIMAL:
 		break;
 	case OIS::KC_OEM_102:

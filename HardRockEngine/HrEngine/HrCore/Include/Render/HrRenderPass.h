@@ -20,6 +20,8 @@ namespace Hr
 
 		void SetDepthStencilState(HrDepthStencilState* pDepthStencilState);
 		void SetBlendState(HrBlendState* pBlendState);
+
+	
 	private:
 
 	private:
@@ -31,8 +33,7 @@ namespace Hr
 
 		HrShaderPtr m_pVertexShader;
 		HrShaderPtr m_pPixelShader;
-
-		std::array<uint32, HrShader::ST_NUMSHADERTYPES> m_arrShaderIndex;
+		
 
 
 	};

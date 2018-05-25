@@ -37,3 +37,36 @@ HrRenderPassPtr HrRenderTechnique::AddPass(const std::string& strPassName)
 	return pRenderPass;
 }
 
+void HrRenderTechnique::SetVertexInputSimantic(std::vector<std::pair<EnumVertexElementSemantic, uint32> >&& vecVertexInputSimantic)
+{
+	m_vecVertexInputSimantic.swap(vecVertexInputSimantic);
+}
+
+void HrRenderTechnique::SetVertexOutputSimantic(std::vector<std::pair<EnumVertexElementSemantic, uint32> >&& vecVertexOutputSimantic)
+{
+	m_vecVertexOutputSimantic.swap(vecVertexOutputSimantic);
+}
+
+bool HrRenderTechnique::IsVertexInputSimanticInit()
+{
+	return m_vecVertexInputSimantic.size() > 0;
+}
+
+bool HrRenderTechnique::IsVertexInputSimanticSame(const std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecVertexInputSimantic)
+{
+	if (m_vecVertexInputSimantic.size() == vecVertexInputSimantic.size())
+	{
+		for (size_t i = 0; i < m_vecVertexInputSimantic.size(); ++i)
+		{
+			if ((m_vecVertexInputSimantic[i].first != vecVertexInputSimantic[i].first) || (m_vecVertexInputSimantic[i].second != vecVertexInputSimantic[i].second))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+}
+

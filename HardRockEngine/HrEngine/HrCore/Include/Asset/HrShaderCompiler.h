@@ -4,6 +4,7 @@
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Render/HrShader.h"
+#include "HrCore/Include/Render/HrDataFormat.h"
 
 namespace Hr
 {
@@ -28,6 +29,9 @@ namespace Hr
 
 		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) = 0;
 
+		virtual void GetVertexInputOutputSimantic(std::string strVSEnterPoint
+			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecInputSimaintic
+			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecOutputSimantic) = 0;
 	protected:
 		std::string m_strFileName;
 

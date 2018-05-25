@@ -1,5 +1,6 @@
 #include "Kernel/HrFileUtils.h"
 #include "Asset/HrStreamData.h"
+#include "Kernel/HrLog.h"
 #include <fstream>
 
 using namespace Hr;
@@ -16,13 +17,14 @@ HrFileUtils::HrFileUtils()
 	m_strAppPath = strAppPath.substr(0, strAppPath.rfind(m_s_strSeparator));
 	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind(m_s_strSeparator));
 
-	AddSearchPath(m_strAppPath += "\\");
-	AddSearchPath(strAssetPath + "\\");
-	AddSearchPath(strAssetPath + "\\Media\\");
-	AddSearchPath(strAssetPath + "\\Media\\Material\\");
-	AddSearchPath(strAssetPath + "\\Media\\HrShader\\");
-	AddSearchPath(strAssetPath + "\\Media\\Model\\");
-	AddSearchPath(strAssetPath + "\\Media\\Scene\\");
+	AddSearchDirectory(m_strAppPath += "\\");
+	AddSearchDirectory(strAssetPath + "\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\Material\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\HrShader\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\Model\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\Scene\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\Effect\\");
 }
 
 bool HrFileUtils::IsFileExist(const std::string& strFile) const
@@ -54,7 +56,7 @@ std::string HrFileUtils::GetFullPathForFileName(const std::string& strFileName) 
 	if (!filePath.is_absolute())
 	{
 		filesystem::path fileFullPath;
-		for (auto& item : m_vecSearchPaths)
+		for (auto& item : m_vecSearchDirectorys)
 		{
 			fileFullPath = item / filePath;
 			if (filesystem::exists(fileFullPath))
@@ -106,9 +108,16 @@ HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 	return pFileStream;
 }
 
-void HrFileUtils::AddSearchPath(const std::string& strPath)
+void HrFileUtils::AddSearchDirectory(const std::string& strPath)
 {
-	m_vecSearchPaths.emplace_back(filesystem::path(strPath));
+	if (filesystem::exists(strPath))
+	{
+		m_vecSearchDirectorys.emplace_back(filesystem::path(strPath));
+	}
+	else
+	{
+		HRERROR("HrFileUtil AddSearchDirectory Error! [%s]", strPath.c_str());
+	}
 }
 
 std::string HrFileUtils::GetFileSuffix(const std::string& strFile) const

@@ -13,10 +13,6 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementSemantic usa
 		return "NORMAL";
 	case VEU_COLOR:
 		return "COLOR";
-	//case VEU_DIFFUSE:
-		//return "COLOR"; // NB index will differentiat
-	//case VEU_SPECULAR:
-		//return "COLOR"; // NB index will differentiate
 	case VEU_BLENDWEIGHT:
 		return "BLENDWEIGHT";
 	case VEU_BLENDINDEX:
@@ -31,6 +27,29 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementSemantic usa
 		break;
 	}
 	return "";
+}
+
+EnumVertexElementSemantic Hr::HrD3D11Mapping::GetInputElementSemanticName(const std::string& strSemantic)
+{
+
+	if (strSemantic.compare("POSITION"))
+	{
+		return VEU_POSITION;
+	}
+	else if (strSemantic.compare("NORMAL"))
+	{
+		return VEU_NORMAL;
+	}
+	else if (strSemantic.compare("COLOR"))
+	{
+		return VEU_COLOR;
+	}
+	else if (strSemantic.compare("TEXCOORD"))
+	{
+		return VEU_TEXTURE_COORDINATES;
+	}
+
+	return VEU_POSITION;
 }
 
 DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(EnumVertexElementType type)

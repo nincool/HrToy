@@ -3,6 +3,7 @@
 
 #include "HrResource.h"
 #include "HrCore/Include/Render/HrDataFormat.h"
+#include "ThirdParty/rapidjson/include/rapidjson/document.h"
 
 namespace Hr
 {
@@ -25,6 +26,13 @@ namespace Hr
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
+
+		void LoadTechniques(const rapidjson::Value& sceneRootInfo, const HrShaderCompilerPtr& pShaderCompiler);
+		void LoadPasses(const rapidjson::Value& techniqueInfo, const HrShaderCompilerPtr& pShaderCompiler, const HrRenderTechniquePtr& pRenderTechnique);
+		void LoadShaders(const rapidjson::Value& shaderInfo
+			, const HrShaderCompilerPtr& pShaderCompiler
+			, const HrRenderTechniquePtr& pRenderTechnique
+			, const HrRenderPassPtr& pRenderPass);
 
 		void UpdateOneEffectParameter(const HrRenderEffectParameterPtr& renderEffectParameter, const HrRenderFrameParametersPtr&  renderFrameParameters);
 		void UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters);

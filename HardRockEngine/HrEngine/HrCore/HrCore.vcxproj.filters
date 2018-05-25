@@ -548,17 +548,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.effectxml">
+    <None Include="..\..\Bin_Win\Media\Effect\HrStandardEffect.json">
       <Filter>Effects</Filter>
     </None>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.fx">
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonInput.hlsl">
       <Filter>Effects</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLightingCommon.fx">
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonLights.hlsl">
       <Filter>Effects</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrPhong.fx">
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonOutput.hlsl">
       <Filter>Effects</Filter>
-    </None>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrStandard0.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
   </ItemGroup>
 </Project>

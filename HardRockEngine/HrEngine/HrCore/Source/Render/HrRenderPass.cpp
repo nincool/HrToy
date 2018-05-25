@@ -109,4 +109,3 @@ void HrRenderPass::SetBlendState(HrBlendState* pBlendState)
 	m_pBlendState = pBlendState;
 }
 
-

@@ -301,20 +301,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.fx">
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonLights.hlsl">
       <FileType>Document</FileType>
-    </None>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLightingCommon.fx">
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonOutput.hlsl">
       <FileType>Document</FileType>
-    </None>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrStandard0.hlsl">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrLambert.effectxml" />
+    <None Include="..\..\Bin_Win\Media\Effect\HrStandardEffect.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\HrShader\HrPhong.fx">
-      <FileType>Document</FileType>
-    </None>
+    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonInput.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

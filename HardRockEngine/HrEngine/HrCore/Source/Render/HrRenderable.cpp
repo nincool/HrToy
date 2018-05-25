@@ -3,6 +3,7 @@
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrVertex.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMesh.h"
 #include "Kernel/HrDirector.h"
@@ -90,4 +91,22 @@ void HrRenderable::OnRenderBegin()
 void HrRenderable::OnRenderEnd()
 {
 
+}
+
+bool HrRenderable::CheckRenderLayoutMatchShader()
+{
+	if (m_pSubMesh && m_pCurTechnique)
+	{
+		std::vector<std::pair<std::string, uint32> > vecInputSemantics;
+		auto vecVertexStreams = m_pSubMesh->GetRenderLayout()->GetVertexStreams();
+		for (size_t i = 0; i < vecVertexStreams.size(); ++i)
+		{
+			auto vecVertexElement = vecVertexStreams[i]->GetVertex()->GetVertexElement();
+			
+		}
+
+		return true;
+	}
+
+	return false;
 }
