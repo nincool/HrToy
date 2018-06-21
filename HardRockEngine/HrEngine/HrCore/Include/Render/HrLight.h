@@ -11,8 +11,8 @@ namespace Hr
 		enum EnumLightType
 		{
 			LT_AMBIENT = 0,
-			LT_POINT,
 			LT_DIRECTIONAL,
+			LT_POINT,
 			LT_SPOTLIGHT,
 
 			LT_LIGHTTYPE_NUM,

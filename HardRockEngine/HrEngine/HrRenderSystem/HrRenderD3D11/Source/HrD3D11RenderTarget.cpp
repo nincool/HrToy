@@ -17,6 +17,7 @@ HrD3D11RenderTarget::HrD3D11RenderTarget(const ID3D11Texture2DPtr& pBackBuffer)
 void HrD3D11RenderTarget::CreateRenderTargetView(const ID3D11Texture2DPtr& pBackBuffer)
 {
 	m_pTexRenderTargetView = HrMakeSharedPtr<HrD3D11Texture2D>(pBackBuffer, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW);
+	m_pTexRenderTargetView->CreateRenderTargetView();
 }
 
 const ID3D11RenderTargetViewPtr& HrD3D11RenderTarget::GetRenderTargetView()
@@ -24,3 +25,4 @@ const ID3D11RenderTargetViewPtr& HrD3D11RenderTarget::GetRenderTargetView()
 	BOOST_ASSERT(m_pTexRenderTargetView);
 	return m_pTexRenderTargetView->GetD3DRenderTargetView();
 }
+

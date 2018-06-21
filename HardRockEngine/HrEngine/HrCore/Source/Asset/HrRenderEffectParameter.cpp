@@ -22,8 +22,8 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	HrRenderParamDefine(RPT_CAMERA_POSITION, "camera_position", REDT_FLOAT3, 1, 16),
 
+	////////////////////////////////////-- light --///////////////////////////////////////////
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
-
 	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_UINT4, 1, 16),
 
 	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR, "diffuse_light_color", REDT_FLOAT4, 1, 16),
@@ -34,6 +34,7 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_POINT_LIGHT_SPECULAR_COLOR, "point_light_specular_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION, "point_light_range_attenuation", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION, "point_light_position", REDT_FLOAT4, 1, 16),
+	//////////////////////////////////////////////////////////////////////////////////////////
 
 	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "glossiness_material", REDT_FLOAT1, 1, 4),
 	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 1, 16),
@@ -63,7 +64,7 @@ HrRenderParamDefine* HrRenderParamDefine::GetRenderParamDefineByType(EnumRenderP
 //////////////////////////////////////////////////////////
 
 HrRenderVariable::HrRenderVariable()
-	:m_pData(nullptr), m_dataType(REDT_FLOAT1), m_semantic(RS_UNKNOW), m_nBufferOffset(0), m_nStride(0), m_nArraySize(0), m_nMemorySize(0)
+	:m_pData(nullptr), m_dataType(REDT_FLOAT1), m_nBufferOffset(0), m_nStride(0), m_nArraySize(0), m_nMemorySize(0)
 {
 }
 

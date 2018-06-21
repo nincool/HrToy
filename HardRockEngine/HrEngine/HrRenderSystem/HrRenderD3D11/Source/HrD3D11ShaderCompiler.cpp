@@ -281,8 +281,7 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 									constantVariableDesc.struct_desc[nStructVariableIndex + 1].start_offset - constantVariableDesc.struct_desc[nStructVariableIndex].start_offset;
 							}
 							constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].size =
-								constantVariableDesc.size - constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].start_offset
-								+ constantVariableDesc.start_offset;
+								constantVariableDesc.size / constantVariableDesc.elements - constantVariableDesc.struct_desc[constantVariableDesc.struct_desc.size() - 1].start_offset;
 						}
 					}
 				}
@@ -299,6 +298,21 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 		}
 	}
 
+	//dimension
+	/*typedef enum D3D_SRV_DIMENSION { 
+		D3D_SRV_DIMENSION_UNKNOWN = 0,
+		D3D_SRV_DIMENSION_BUFFER = 1,
+		D3D_SRV_DIMENSION_TEXTURE1D = 2,
+		D3D_SRV_DIMENSION_TEXTURE1DARRAY = 3,
+		D3D_SRV_DIMENSION_TEXTURE2D = 4,
+		D3D_SRV_DIMENSION_TEXTURE2DARRAY = 5,
+		D3D_SRV_DIMENSION_TEXTURE2DMS = 6,
+		D3D_SRV_DIMENSION_TEXTURE2DMSARRAY = 7,
+		D3D_SRV_DIMENSION_TEXTURE3D = 8,
+		D3D_SRV_DIMENSION_TEXTURECUBE = 9,
+		D3D_SRV_DIMENSION_TEXTURECUBEARRAY = 10,
+		D3D_SRV_DIMENSION_BUFFEREX = 11,
+	}*/
 	int nSamplers = -1;
 	int nSrvs = -1;
 	int nUavs = -1;
@@ -367,6 +381,7 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 		pShaderReflection->GetInputParameterDesc(i, &curParam);
 		desc.verInput_desc[i].strSimantic = curParam.SemanticName;
 		desc.verInput_desc[i].nSimanticIndex = curParam.SemanticIndex;
+		desc.verInput_desc[i].nVariableDataType = GetVertexInputVariableDataType(curParam.ComponentType, curParam.Mask);
 	}
 
 	//get the output parameters
@@ -377,6 +392,7 @@ bool HrD3D11ShaderCompiler::ReflectEffectParameters(const std::string& strEntryP
 		pShaderReflection->GetOutputParameterDesc(i, &curParam);
 		desc.verOutput_desc[i].strSimantic = curParam.SemanticName;
 		desc.verOutput_desc[i].nSimanticIndex = curParam.SemanticIndex;
+		desc.verOutput_desc[i].nVariableDataType = GetVertexInputVariableDataType(curParam.ComponentType, curParam.Mask);
 	}
 
 	SAFE_RELEASE(pShaderReflection);
@@ -396,7 +412,10 @@ HrStreamDataPtr HrD3D11ShaderCompiler::StripCompiledCode(const HrStreamData& sha
 	return pStripStreamData;
 }
 
-void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer)
+void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters
+	, std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapConstBufferParameters
+	, std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapShaderResources
+	, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer)
 {
 	for (auto shaderDescItem : m_mapCompileData)
 	{
@@ -425,6 +444,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 				D3D11ShaderDesc::ConstantBufferDesc::VariableDesc& varDesc = shaderDesc.cb_desc[nCBIndex].var_desc[nVarIndex];
 				if (varDesc.varClass == D3D_SVC_STRUCT)
 				{
+					int nVarElementSize = varDesc.size / varDesc.elements;
 					for (size_t nEleIndex = 0; nEleIndex < varDesc.elements; ++nEleIndex)
 					{
 						for (uint32 nStructMemIndex = 0; nStructMemIndex < varDesc.struct_desc.size(); ++nStructMemIndex)
@@ -444,7 +464,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 									, varStructMen.size / varStructMen.elements
 									, varStructMen.elements);
 
-								pEffectParameter->BindConstantBuffer(pConstBuffer, varStructMen.start_offset + varDesc.start_offset + varDesc.size * nEleIndex);
+								pEffectParameter->BindConstantBuffer(pConstBuffer, varDesc.start_offset + varStructMen.start_offset + nVarElementSize * nEleIndex);
 							}
 							else
 							{
@@ -459,6 +479,7 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 							}
 
 							mapParameters[varStructMen.name_hash] = pEffectParameter;
+							mapConstBufferParameters[varStructMen.name_hash] = pEffectParameter;
 							
 						}
 					}
@@ -489,33 +510,76 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 					}
 
 					mapParameters[varDesc.name_hash] = pEffectParameter;
+					mapConstBufferParameters[varDesc.name_hash] = pEffectParameter;
 				}
 			}
 		}
 
-		// shader resource desc
-		//uint32 nResBindCount = shaderDesc.res_desc.size();
-		//for (uint32 nResIndex = 0; nResIndex < nResBindCount; ++nResIndex)
-		//{
-		//	D3D11ShaderDesc::BoundResourceDesc& bindResDesc = shaderDesc.res_desc[nResIndex];
-		//	switch (bindResDesc.type)
-		//	{
-		//	case D3D_SIT_TEXTURE:
-		//	{
-		//		HrRenderEffectParameter* pEffectParameter = HR_NEW HrRenderEffectParameter(bindResDesc.name, bindResDesc.name_hash);
-		//		pEffectParameter->ParamInfo(RPT_TEXTURE, REDT_TEXTURE2D, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
-		//		vecParameter.push_back(pEffectParameter);
-		//		break;
-		//	}
-		//	case D3D_SIT_SAMPLER:
-		//	{
-		//		HrRenderEffectParameter* pEffectParameter = HR_NEW HrRenderEffectParameter(bindResDesc.name, bindResDesc.name_hash);
-		//		pEffectParameter->ParamInfo(RPT_SAMPLER, REDT_SAMPLER2D, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
-		//		vecParameter.push_back(pEffectParameter);
-		//		break;
-		//	}
-		//	}
+		//typedef enum D3D_SRV_DIMENSION {
+		//	D3D_SRV_DIMENSION_UNKNOWN = 0,
+		//	D3D_SRV_DIMENSION_BUFFER = 1,
+		//	D3D_SRV_DIMENSION_TEXTURE1D = 2,
+		//	D3D_SRV_DIMENSION_TEXTURE1DARRAY = 3,
+		//	D3D_SRV_DIMENSION_TEXTURE2D = 4,
+		//	D3D_SRV_DIMENSION_TEXTURE2DARRAY = 5,
+		//	D3D_SRV_DIMENSION_TEXTURE2DMS = 6,
+		//	D3D_SRV_DIMENSION_TEXTURE2DMSARRAY = 7,
+		//	D3D_SRV_DIMENSION_TEXTURE3D = 8,
+		//	D3D_SRV_DIMENSION_TEXTURECUBE = 9,
+		//	D3D_SRV_DIMENSION_TEXTURECUBEARRAY = 10,
+		//	D3D_SRV_DIMENSION_BUFFEREX = 11,
 		//}
+
+		// shader resource desc
+		uint32 nResBindCount = shaderDesc.res_desc.size();
+		for (uint32 nResIndex = 0; nResIndex < nResBindCount; ++nResIndex)
+		{
+			D3D11ShaderDesc::BoundResourceDesc& bindResDesc = shaderDesc.res_desc[nResIndex];
+			switch (bindResDesc.type)
+			{
+			case D3D_SIT_TEXTURE:
+			{
+				switch (bindResDesc.dimension)
+				{
+				case D3D_SRV_DIMENSION_TEXTURE1D:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURE1DARRAY:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURE2D:
+				{
+					HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(bindResDesc.name, bindResDesc.name_hash);
+					pEffectParameter->ParamInfo(RPT_TEXTURE, REDT_TEXTURE2D, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
+					mapParameters[bindResDesc.name_hash] = pEffectParameter;
+					mapShaderResources[bindResDesc.name_hash] = pEffectParameter;
+					break;
+				}
+				case D3D_SRV_DIMENSION_TEXTURE2DARRAY:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURE2DMS:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURE2DMSARRAY:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURE3D:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURECUBE:
+					break;
+				case D3D_SRV_DIMENSION_TEXTURECUBEARRAY:
+					break;
+				default:
+					break;
+				}
+
+				break;
+			}
+			case D3D_SIT_SAMPLER:
+			{
+				HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(bindResDesc.name, bindResDesc.name_hash);
+				pEffectParameter->ParamInfo(RPT_SAMPLER, REDT_SAMPLER2D, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
+				mapParameters[bindResDesc.name_hash] = pEffectParameter;
+				break;
+			}
+			}
+		}
 	}
 }
 
@@ -524,8 +588,13 @@ void HrD3D11ShaderCompiler::BindParametersToShader(std::unordered_map<size_t, Hr
 	, std::unordered_map<std::string, HrShaderPtr>& mapShader)
 {
 	std::vector<HrRenderEffectConstantBufferPtr> vecShaderBindConstantBuffers;
+	std::vector<HrRenderEffectParameterPtr> vecShaderResources;
+
 	for (auto itemShader : mapShader)
 	{
+		vecShaderBindConstantBuffers.clear();
+		vecShaderResources.clear();
+		
 		for (auto itemDesc : m_mapCompileData)
 		{
 			if (itemShader.first == itemDesc.first)
@@ -539,10 +608,21 @@ void HrD3D11ShaderCompiler::BindParametersToShader(std::unordered_map<size_t, Hr
 					vecShaderBindConstantBuffers.push_back(iteConstantBuff->second);
 				}
 
+				for (uint32 nResIndex = 0; nResIndex < d3dDescShader.res_desc.size(); ++nResIndex)
+				{
+					const D3D11ShaderDesc::BoundResourceDesc& bindResDesc = d3dDescShader.res_desc[nResIndex];
+					auto iteRes = mapRenderEffectParameters.find(bindResDesc.name_hash);
+					BOOST_ASSERT(iteRes != mapRenderEffectParameters.end());
+					if (iteRes->second->ParamType() == RPT_TEXTURE)
+					{
+						vecShaderResources.push_back(iteRes->second);
+					}
+				}
+
 				break;
 			}
 		}
-		itemShader.second->BindRenderParameter(vecShaderBindConstantBuffers);
+		itemShader.second->BindRenderParameter(std::move(vecShaderBindConstantBuffers), std::move(vecShaderResources));
 	}
 }
 
@@ -600,8 +680,8 @@ const HrRenderParamDefine* HrD3D11ShaderCompiler::GetRenderParamDefine(const std
 }
 
 void HrD3D11ShaderCompiler::GetVertexInputOutputSimantic(std::string strVSEnterPoint
-	, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecInputSimaintic
-	, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecOutputSimantic)
+	, std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >& vecInputSimaintic
+	, std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >& vecOutputSimantic)
 {
 	for (auto& itShaderData : m_mapCompileData)
 	{
@@ -611,15 +691,49 @@ void HrD3D11ShaderCompiler::GetVertexInputOutputSimantic(std::string strVSEnterP
 			vecInputSimaintic.reserve(desc.verInput_desc.size());
 			for (size_t i = 0; i < desc.verInput_desc.size(); ++i)
 			{
-				vecInputSimaintic.push_back(std::make_pair(HrD3D11Mapping::GetInputElementSemanticName(desc.verInput_desc[i].strSimantic), desc.verInput_desc[i].nSimanticIndex));
+				vecInputSimaintic.push_back(std::make_tuple(HrD3D11Mapping::GetInputElementSemanticName(desc.verInput_desc[i].strSimantic), desc.verInput_desc[i].nSimanticIndex, desc.verInput_desc[i].nVariableDataType));
 			}
 			vecOutputSimantic.reserve(desc.verInput_desc.size());
 			for (size_t i = 0; i < desc.verOutput_desc.size(); ++i)
 			{
-				vecOutputSimantic.push_back(std::make_pair(HrD3D11Mapping::GetInputElementSemanticName(desc.verOutput_desc[i].strSimantic), desc.verOutput_desc[i].nSimanticIndex));
+				vecOutputSimantic.push_back(std::make_tuple(HrD3D11Mapping::GetInputElementSemanticName(desc.verOutput_desc[i].strSimantic), desc.verOutput_desc[i].nSimanticIndex, desc.verOutput_desc[i].nVariableDataType));
 			}
 
 			break;
 		}
 	}
+}
+
+EnumVertexElementType HrD3D11ShaderCompiler::GetVertexInputVariableDataType(D3D_REGISTER_COMPONENT_TYPE rct, UINT nMask)
+{
+	switch (rct)
+	{
+	case D3D_REGISTER_COMPONENT_UNKNOWN:
+		break;
+	case D3D_REGISTER_COMPONENT_UINT32:
+		if (nMask == 1)
+			return VET_UINT1;
+		else if (nMask == 3)
+			return VET_UINT2;
+		else if (nMask == 7)
+			return VET_UINT3;
+	case D3D_REGISTER_COMPONENT_SINT32:
+		if (nMask == 1)
+			return VET_INT1;
+		else if (nMask == 3)
+			return VET_INT2;
+		else if (nMask == 7)
+			return VET_INT3;
+	case D3D_REGISTER_COMPONENT_FLOAT32:
+		if (nMask == 1)
+			return VET_FLOAT1;
+		else if (nMask == 3)
+			return VET_FLOAT2;
+		else if (nMask == 7)
+			return VET_FLOAT3;
+	default:
+		break;
+	}
+
+	return VET_FLOAT1;
 }

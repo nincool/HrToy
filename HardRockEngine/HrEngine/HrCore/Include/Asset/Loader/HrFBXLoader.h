@@ -13,7 +13,12 @@ namespace fbxsdk
 	class FbxNode;
 	class FbxMesh;
 	class FbxAMatrix;
+	class FbxAnimLayer;
+	class FbxTime;
+	class FbxPose;
 }
+
+
 
 namespace Hr
 {
@@ -30,16 +35,6 @@ namespace Hr
 		void DestroySdkObjects(bool pExitStatus);
 
 		bool LoadScene(const char* pFilename);
-
-		void ParseFBXSdkScene(HrModelDescInfo& modelDesc);
-		
-		void ParseFBXSdkNode(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
-		void ReadMaterial(fbxsdk::FbxNode* pNode, HrModelDescInfo::HrSubMeshInfo& meshInfo);
-		void ReadMaterialConnections(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-
-
-		void ReadMesh(fbxsdk::FbxNode* pNode, HrModelDescInfo& modelDesc);
-
 		/**
 		* Compute the global matrix for Fbx Node
 		*
@@ -51,28 +46,40 @@ namespace Hr
 		* Check if there are negative scale in the transform matrix and its number is odd.
 		* @return bool True if there are negative scale and its number is 1 or 3.
 		*/
-		bool IsOddNegativeScale(const fbxsdk::FbxAMatrix& TotalMatrix);
+		bool IsOddNegativeScale(fbxsdk::FbxAMatrix& TotalMatrix);
 
-		void ReadVertexInfo(fbxsdk::FbxMesh* pMesh
-			, fbxsdk::FbxAMatrix& totalMatrix
-			, fbxsdk::FbxAMatrix& totalMatrixForNormal
-			, HrModelDescInfo::HrSubMeshInfo& subMeshInfo
-			, bool bAllByControlPoint
-			, bool bHasNormal
-			, bool bHasUV);
+		bool IsAllIndices(HrModelDescInfo::HrSubMeshInfo& meshInfo);
 
+		void LoadCacheRecursive(fbxsdk::FbxScene * pScene, fbxsdk::FbxAnimLayer * pAnimLayer, const char * pFbxFileName, bool pSupportVBO, HrModelDescInfo& modelDesc);
+		void LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLayer * pAnimLayer, bool pSupportVBO, HrModelDescInfo& modelDesc);
+		bool InitializeSubMesh(fbxsdk::FbxMesh* pMesh, HrModelDescInfo& modelDesc);
 
-		//void ReadVertexNormal(fbxsdk::FbxMesh* pMesh, fbxsdk::FbxAMatrix& totalMatrixForNormal, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		//void ReadVertexColor(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		//void ReadVertexUV(fbxsdk::FbxMesh* pMesh, HrModelDescInfo::HrSubMeshInfo& subMeshInfo);
-		
-		
-		//void CalculateAverageNormals(HrModelDescInfo::HrMeshInfo& meshInfo);
+		//get mesh smoothing info
+		//set pCompute true to compute smoothing from normals by default 
+		//set pConvertToSmoothingGroup true to convert hard/soft edge info to smoothing group info by default
+		void GetSmoothing(fbxsdk::FbxMesh* pMesh);
 
-		//void BuildSubMeshInfo(HrModelDescInfo::HrMeshInfo& modelDesc);
+		fbxsdk::FbxAMatrix GetGlobalPosition(fbxsdk::FbxNode* pNode, const fbxsdk::FbxTime& pTime, fbxsdk::FbxPose* pPose = NULL, fbxsdk::FbxAMatrix* pParentGlobalPosition = NULL);
+		fbxsdk::FbxAMatrix GetPoseMatrix(fbxsdk::FbxPose* pPose, int pNodeIndex);
 	private:
 		fbxsdk::FbxManager* m_pFbxManager;
 		fbxsdk::FbxScene* m_pScene;
+		fbxsdk::FbxAnimLayer * m_pCurrentAnimLayer;
+
+		std::unordered_map<int, int> m_mapIndexCached;
+
+		bool mHasNormal = false;
+		bool mHasUV = false;
+		bool mAllByControlPoint = false;
+
+		const int TRIANGLE_VERTEX_COUNT = 3;
+
+		// Four floats for every position.
+		const int VERTEX_STRIDE = 3;
+		// Three floats for every normal.
+		const int NORMAL_STRIDE = 3;
+		// Two floats for every UV.
+		const int UV_STRIDE = 2;
 	};
 }
 

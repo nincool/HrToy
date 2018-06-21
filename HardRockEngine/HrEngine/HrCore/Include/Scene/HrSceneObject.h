@@ -76,13 +76,21 @@ namespace Hr
 		{
 			pSceneObjCom = GetComponent(HrSceneObjectComponent::SCT_RENDERABLE);
 		}
+		else if (typeid(T) == typeid(HrCameraComponet))
+		{
+			pSceneObjCom = GetComponent(HrSceneObjectComponent::SCT_CAMERA);
+		}
+		else if (typeid(T) == typeid(HrLightComponent))
+		{
+			pSceneObjCom = GetComponent(HrSceneObjectComponent::SCT_LIGHT);
+		}
 		else
 		{
 			TRE("invalid component!");
 		}
 
 		if (pSceneObjCom)
-			return HrCheckPointerCast<T>(GetComponent(HrSceneObjectComponent::SCT_RENDERABLE));
+			return HrCheckPointerCast<T>(pSceneObjCom);
 		else
 			return nullptr;
 	}

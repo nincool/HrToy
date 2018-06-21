@@ -2,10 +2,12 @@
 #include "Render/HrRenderLayout.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderFactory.h"
-#include "Render/HrRenderFrameParameters.h"
 #include "Render/HrVertex.h"
+#include "Render/HrRenderFrameParameters.h"
+#include "Asset/HrMaterial.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMesh.h"
+#include "Asset/HrRenderEffectParameter.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrCoreComponentScene.h"
 #include "Kernel/HrCoreComponentRender.h"
@@ -38,8 +40,10 @@ void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
 void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
 	m_pRenderEffect = pRenderEff;
-	//todo Ñ°ÕÒ×îºÏÊÊµÄ
-	m_pCurTechnique = m_pRenderEffect->GetTechniqueByIndex(0);
+
+	const std::vector<HrVertexDataPtr>& vecVertexData = m_pSubMesh->GetRenderLayout()->GetVertexStreams();
+	m_pCurTechnique = m_pRenderEffect->GetBestTechnique(vecVertexData);
+	BOOST_ASSERT(m_pCurTechnique);
 }
 
 const HrRenderEffectPtr& HrRenderable::GetRenderEffect() const
@@ -85,7 +89,16 @@ void HrRenderable::Render()
 void HrRenderable::OnRenderBegin()
 {
 	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneCoreComponent()->GetRenderFrameParameters();
-	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
+	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam); 
+
+	HrRenderEffectParameterPtr pDiffuseTexParam = GetRenderEffect()->GetParameterByName("gDiffuseTexure");
+	if (pDiffuseTexParam)
+	{
+		const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_SLOT_0);
+		if (pDiffuseTex)
+			pDiffuseTexParam->operator =(pDiffuseTex.get());
+	}
+
 }
 
 void HrRenderable::OnRenderEnd()

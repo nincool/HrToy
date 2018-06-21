@@ -17,6 +17,7 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
+		const HrRenderTechniquePtr GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData);
 		const HrRenderTechniquePtr GetTechniqueByIndex(uint32 nIndex);
 		const HrRenderTechniquePtr GetTechniqueByName(const std::string& strTechniqueName);
 
@@ -36,6 +37,8 @@ namespace Hr
 
 		void UpdateOneEffectParameter(const HrRenderEffectParameterPtr& renderEffectParameter, const HrRenderFrameParametersPtr&  renderFrameParameters);
 		void UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters);
+		void UpdateDirectionalLightEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters);
+		void UpdatePointLightEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 	private:
 		size_t m_nHashName;
 
@@ -51,6 +54,8 @@ namespace Hr
 		std::vector<HrRenderTechniquePtr> m_vecRenderTechnique;
 
 		std::unordered_map<size_t, HrRenderEffectParameterPtr> m_mapRenderEffectParameters;
+		std::unordered_map<size_t, HrRenderEffectParameterPtr> m_mapConstBufferParameters;
+		std::unordered_map<size_t, HrRenderEffectParameterPtr> m_mapShaderResources;
 		std::unordered_map<size_t, HrRenderEffectConstantBufferPtr> m_mapRenderConstantBuffers;
 
 	};

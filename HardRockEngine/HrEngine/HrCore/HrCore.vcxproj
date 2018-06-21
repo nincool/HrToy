@@ -150,6 +150,7 @@
     <ClInclude Include="Include\Asset\HrStreamData.h" />
     <ClInclude Include="Include\Asset\HrTexture.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
+    <ClInclude Include="Include\Asset\Loader\HrFBXUtilsImport.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
     <ClInclude Include="Include\Config\HrContextConfig.h" />
     <ClInclude Include="Include\Event\HrEvent.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="Source\Asset\HrStreamData.cpp" />
     <ClCompile Include="Source\Asset\HrTexture.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
+    <ClCompile Include="Source\Asset\Loader\HrFBXUtilsImport.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
     <ClCompile Include="Source\Event\HrEvent.cpp" />
@@ -301,21 +303,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonLights.hlsl">
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
       <FileType>Document</FileType>
     </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonOutput.hlsl">
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
       <FileType>Document</FileType>
     </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrStandard0.hlsl">
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonOutput.hlsl">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\Effect\HrStandardEffect.json" />
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json" />
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.json" />
+    <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonInput.hlsl" />
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.hlsl">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.hlsl">
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

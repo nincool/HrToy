@@ -99,7 +99,7 @@ const Vector3& HrLight::GetPosition() const
 HrAmbientLight::HrAmbientLight()
 {
 	m_lightType = HrLight::LT_AMBIENT;
-	m_diffuse = HrColor(0.5f, 0.5f, 0.5f, 1.0f);
+	m_diffuse = HrColor(0.3f, 0.3f, 0.3f, 1.0f);
 }
 
 HrAmbientLight::HrAmbientLight(const HrColor& ambient)
@@ -141,6 +141,14 @@ HrDirectionalLight::~HrDirectionalLight()
 HrPointLight::HrPointLight()
 {
 	m_lightType = HrLight::LT_POINT;
+	
+	m_diffuse = HrMath::MakeColor(200.0f, 200.0f, 200.0f, 255.0f);
+	m_specular = HrMath::MakeColor(255.0f, 244.0f, 215.0f, 255.0f);
+	m_fRange = 200;
+	m_fAttenuation0 = 0.1;
+	m_fAttenuation1 = 0.01;
+	m_fAttenuation2 = 0.0005;
+	m_v3Position = Vector3(0.0f, 0.0f, -60.0f);
 }
 
 HrPointLight::HrPointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2)

@@ -4,7 +4,7 @@
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
 #include "HrCore/Include/Render/HrShader.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrVertex.h"
 
 namespace Hr
 {
@@ -21,6 +21,8 @@ namespace Hr
 		virtual HrStreamDataPtr StripCompiledCode(const HrStreamData& shaderBuffer) = 0;
 
 		virtual void CreateEffectParameters(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapParameters
+			, std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapConstBufferParameters
+			, std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapShaderResources
 			, std::unordered_map<size_t, HrRenderEffectConstantBufferPtr>& mapConstantBuffer) = 0;
 
 		virtual void BindParametersToShader(std::unordered_map<size_t, HrRenderEffectParameterPtr>& mapRenderEffectParameters
@@ -30,8 +32,8 @@ namespace Hr
 		virtual HrStreamDataPtr GetCompiledData(const std::string& strEntryPoint) = 0;
 
 		virtual void GetVertexInputOutputSimantic(std::string strVSEnterPoint
-			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecInputSimaintic
-			, std::vector<std::pair<EnumVertexElementSemantic, uint32> >& vecOutputSimantic) = 0;
+			, std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >& vecInputSimaintic
+			, std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >& vecOutputSimantic) = 0;
 	protected:
 		std::string m_strFileName;
 

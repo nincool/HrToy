@@ -20,8 +20,15 @@ const ID3D11DepthStencilViewPtr& HrD3D11DepthStencil::GetDepthStencilView()
 
 bool HrD3D11DepthStencil::CreateDepthStencilView()
 {
-	m_pTexDepthStencilView = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth, m_nHeight, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
-
+	m_pTexDepthStencilView = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+		, m_nHeight
+		, 1
+		, 1
+		, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, PF_D24S8
+		, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
+	m_pTexDepthStencilView->CreateDepthStencilView();
 	return true;
 }
 

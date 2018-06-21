@@ -38,7 +38,8 @@ void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr pRender
 
 void HrRenderFrameParameters::SetLightsData(const HrSceneLightDataPtr& pLightData)
 {
-	m_pLightsData = pLightData;
+	if (m_pLightsData != pLightData)
+		m_pLightsData = pLightData;
 }
 
 void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
@@ -160,7 +161,7 @@ const float4 HrRenderFrameParameters::GetAmbientColor()
 
 const uint4 HrRenderFrameParameters::GetLightsNum()
 {
-	return uint4(m_pLightsData->GetLightsNum(HrLight::LT_AMBIENT), m_pLightsData->GetLightsNum(HrLight::LT_POINT), m_pLightsData->GetLightsNum(HrLight::LT_DIRECTIONAL), 0);
+	return uint4(m_pLightsData->GetLightsNum(HrLight::LT_AMBIENT), m_pLightsData->GetLightsNum(HrLight::LT_DIRECTIONAL), m_pLightsData->GetLightsNum(HrLight::LT_POINT), 0);
 }
 
 const int HrRenderFrameParameters::GetLightNum(HrLight::EnumLightType lightType)

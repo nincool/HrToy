@@ -42,12 +42,12 @@ void HrSceneObject::OnExist()
 
 void HrSceneObject::Update(float fDelta, const HrTransformPtr& pTrans)
 {
+	//这里更新各个组件的位置信息
 	if (pTrans->GetTransformDirty())
 	{
-		if (m_pCachedCamera)
+		for (auto& iteCom : m_mapComponents)
 		{
-			const HrCameraPtr& pCamera = m_pCachedCamera->GetCamera();
-			pCamera->ViewParams(pTrans->GetWorldPosition(), pCamera->GetLookAt(), pCamera->GetUp());
+			iteCom.second->UpdateTransform(pTrans);
 		}
 	}
 }

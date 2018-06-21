@@ -42,20 +42,22 @@ bool HrInputEventListener::mouseMoved(const OIS::MouseEvent &arg)
 bool HrInputEventListener::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
-	float x, y;
+	float x, y, z;
 	HrInputManager::Instance()->GetCursorPosition(x, y);
-	//HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y);
-	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	HrInputManager::Instance()->GetMouseWheelSlidingDistance(z);
+	HrEventPtr pEvent = HrMakeSharedPtr<HrEventMouse>(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y, z);
+	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
 	return true;
 }
 
 bool HrInputEventListener::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	HrEventMouse::EnumMouseButtonID mouseID = GetMouseButtonMap(id);
-	float x, y;
+	float x, y, z;
 	HrInputManager::Instance()->GetCursorPosition(x, y);
-	//HrEventMouse event(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y);
-	//HrEventDispatcher::Instance()->DispatcherEvent(&event);
+	HrInputManager::Instance()->GetMouseWheelSlidingDistance(z);
+	HrEventPtr pEvent = HrMakeSharedPtr<HrEventMouse>(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y, z);
+	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
 	return true;
 }
 

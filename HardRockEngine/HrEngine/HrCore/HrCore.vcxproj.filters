@@ -74,6 +74,9 @@
     <Filter Include="Source\Platform\AppWin">
       <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{ac2e9c91-c2de-4314-8e39-a79d2060883a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
@@ -319,6 +322,9 @@
     <ClInclude Include="Include\Render\HrInstanceBatchObject.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\Loader\HrFBXUtilsImport.h">
+      <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -546,24 +552,36 @@
     <ClCompile Include="Source\Render\HrInstanceBatchObject.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Asset\Loader\HrFBXUtilsImport.cpp">
+      <Filter>Source\Asset\Loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\Effect\HrStandardEffect.json">
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonOutput.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json">
       <Filter>Effects</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonInput.hlsl">
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.json">
       <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonLights.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrCommonOutput.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\HrStandard0.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
+      <Filter>Material</Filter>
+    </None>
   </ItemGroup>
 </Project>

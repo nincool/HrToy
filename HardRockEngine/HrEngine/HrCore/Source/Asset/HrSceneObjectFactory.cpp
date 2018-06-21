@@ -97,6 +97,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrModelPtr& pModel)
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
 	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
 	pSceneNode->SetSceneObject(pSceneObj);
+	pSceneNode->SetName(pModel->GetFileName());
 
 	for (size_t i = 0; i < pModel->GetMesh()->GetSubMeshNum(); ++i)
 	{

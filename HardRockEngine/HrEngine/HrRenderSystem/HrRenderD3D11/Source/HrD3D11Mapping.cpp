@@ -32,19 +32,19 @@ LPCSTR HrD3D11Mapping::GetInputElementSemanticName(EnumVertexElementSemantic usa
 EnumVertexElementSemantic Hr::HrD3D11Mapping::GetInputElementSemanticName(const std::string& strSemantic)
 {
 
-	if (strSemantic.compare("POSITION"))
+	if (strSemantic.compare("POSITION") == 0)
 	{
 		return VEU_POSITION;
 	}
-	else if (strSemantic.compare("NORMAL"))
+	else if (strSemantic.compare("NORMAL") == 0)
 	{
 		return VEU_NORMAL;
 	}
-	else if (strSemantic.compare("COLOR"))
+	else if (strSemantic.compare("COLOR") == 0)
 	{
 		return VEU_COLOR;
 	}
-	else if (strSemantic.compare("TEXCOORD"))
+	else if (strSemantic.compare("TEXCOORD") == 0)
 	{
 		return VEU_TEXTURE_COORDINATES;
 	}
@@ -330,6 +330,8 @@ DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
 {
 	switch (pixelFormat)
 	{
+	case PF_D24S8:
+		return DXGI_FORMAT_D24_UNORM_S8_UINT;
 	case PF_B8G8R8A8:
 		return DXGI_FORMAT_B8G8R8A8_UNORM;
 	default:

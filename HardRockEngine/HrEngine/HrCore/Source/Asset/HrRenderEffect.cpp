@@ -76,7 +76,7 @@ bool HrRenderEffect::LoadImpl()
 		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
 		LoadTechniques(sceneRootInfo, pShaderCompiler);
 
-		pShaderCompiler->CreateEffectParameters(m_mapRenderEffectParameters, m_mapRenderConstantBuffers);
+		pShaderCompiler->CreateEffectParameters(m_mapRenderEffectParameters, m_mapConstBufferParameters, m_mapShaderResources, m_mapRenderConstantBuffers);
 		pShaderCompiler->BindParametersToShader(m_mapRenderEffectParameters, m_mapRenderConstantBuffers, m_mapVertexShaders);
 		pShaderCompiler->BindParametersToShader(m_mapRenderEffectParameters, m_mapRenderConstantBuffers, m_mapPixelShaders);
 	}
@@ -86,6 +86,8 @@ bool HrRenderEffect::LoadImpl()
 
 void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const HrShaderCompilerPtr& pShaderCompiler)
 {
+	m_vecRenderTechnique.clear();
+
 	int nTempTechniqueIndex = 0;
 	while (true)
 	{
@@ -93,7 +95,7 @@ void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const
 		if (sceneRootInfo.HasMember(strTechniqueItem.c_str()))
 		{
 			const rapidjson::Value& techniqueInfo = sceneRootInfo[strTechniqueItem.c_str()];
-			HrRenderTechniquePtr pRenderTechnique = HrMakeSharedPtr<HrRenderTechnique>(techniqueInfo["NAME"].GetString());
+			HrRenderTechniquePtr pRenderTechnique = HrMakeSharedPtr<HrRenderTechnique>(techniqueInfo["NAME"].GetString(), techniqueInfo["LOD"].GetInt());
 			m_vecRenderTechnique.push_back(pRenderTechnique);
 
 			LoadPasses(techniqueInfo, pShaderCompiler, pRenderTechnique);
@@ -104,6 +106,12 @@ void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const
 		}
 		++nTempTechniqueIndex;
 	}
+
+	std::sort(m_vecRenderTechnique.begin(), m_vecRenderTechnique.end(), [&](const HrRenderTechniquePtr& pA, const HrRenderTechniquePtr& pB) {
+		if (pA->LOD() > pB->LOD())
+			return true;
+		return false;
+	});
 }
 
 void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrShaderCompilerPtr& pShaderCompiler, const HrRenderTechniquePtr& pRenderTechnique)
@@ -203,48 +211,66 @@ void HrRenderEffect::LoadShaders(const rapidjson::Value& shaderInfo
 	//shader
 	{
 		std::string strVertexEnterPoint = shaderInfo["VERTEX_SHADER"].GetString();
-		if (pShaderCompiler->CompileShaderFromCode(strVertexEnterPoint, HrShader::ST_VERTEX_SHADER))
+		auto iteVertexShader = m_mapVertexShaders.find(strVertexEnterPoint);
+		if (iteVertexShader != m_mapVertexShaders.end())
 		{
-			HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
-			pVertexShader->StreamIn(pShaderCompiler->GetCompiledData(strVertexEnterPoint), m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
-
-			pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
-			m_mapVertexShaders.insert(std::make_pair(strVertexEnterPoint, pVertexShader));
-
-			std::vector<std::pair<EnumVertexElementSemantic, uint32> > vecInputSimantic, vecOutputSimantic;
-			pShaderCompiler->GetVertexInputOutputSimantic(strVertexEnterPoint, vecInputSimantic, vecOutputSimantic);
-
-			if (pRenderTechnique->IsVertexInputSimanticInit())
+			pRenderPass->SetShader(iteVertexShader->second, HrShader::ST_VERTEX_SHADER);
+		}
+		else
+		{
+			if (pShaderCompiler->CompileShaderFromCode(strVertexEnterPoint, HrShader::ST_VERTEX_SHADER))
 			{
-				if (!pRenderTechnique->IsVertexInputSimanticSame(vecInputSimantic))
+				HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+				pVertexShader->StreamIn(pShaderCompiler->GetCompiledData(strVertexEnterPoint), m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
+
+				pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
+				m_mapVertexShaders.insert(std::make_pair(strVertexEnterPoint, pVertexShader));
+
+				std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> > vecInputSimantic, vecOutputSimantic;
+				pShaderCompiler->GetVertexInputOutputSimantic(strVertexEnterPoint, vecInputSimantic, vecOutputSimantic);
+
+				//±£Ö¤InputVertexElementÒ»ÖÂ
+				if (pRenderTechnique->IsVertexInputSimanticInit())
 				{
-					TRE("compiling shader error!");
+					if (!pRenderTechnique->IsVertexInputSimanticSame(vecInputSimantic))
+					{
+						TRE("compiling shader error!");
+					}
+				}
+				else
+				{
+					pRenderTechnique->SetVertexInputSimantic(std::move(vecInputSimantic));
+					pRenderTechnique->SetVertexOutputSimantic(std::move(vecOutputSimantic));
 				}
 			}
 			else
 			{
-				pRenderTechnique->SetVertexInputSimantic(std::move(vecInputSimantic));
-				pRenderTechnique->SetVertexOutputSimantic(std::move(vecOutputSimantic));
+				TRE("compiling shader error!");
 			}
 		}
-		else
-		{
-			TRE("compiling shader error!");
-		}
 	}
+
 	{
 		std::string strPixelEnterPoint = shaderInfo["PIXEL_SHADER"].GetString();
-		if (pShaderCompiler->CompileShaderFromCode(strPixelEnterPoint, HrShader::ST_PIXEL_SHADER))
+		auto itePixShader = m_mapPixelShaders.find(strPixelEnterPoint);
+		if (itePixShader != m_mapPixelShaders.end())
 		{
-			HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
-			pPixelShader->StreamIn(pShaderCompiler->GetCompiledData(strPixelEnterPoint), m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
-
-			pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
-			m_mapPixelShaders.insert(std::make_pair(strPixelEnterPoint, pPixelShader));
+			pRenderPass->SetShader(itePixShader->second, HrShader::ST_PIXEL_SHADER);
 		}
 		else
 		{
-			TRE("compiler shader error!");
+			if (pShaderCompiler->CompileShaderFromCode(strPixelEnterPoint, HrShader::ST_PIXEL_SHADER))
+			{
+				HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+				pPixelShader->StreamIn(pShaderCompiler->GetCompiledData(strPixelEnterPoint), m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
+
+				pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
+				m_mapPixelShaders.insert(std::make_pair(strPixelEnterPoint, pPixelShader));
+			}
+			else
+			{
+				TRE("compiler shader error!");
+			}
 		}
 	}
 }
@@ -263,10 +289,10 @@ void HrRenderEffect::UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pR
 		UpdateOneEffectParameter(item.second, pRenderFrameParameters);
 	}
 
-	for (auto& item : m_mapRenderConstantBuffers)
-	{
-		item.second->UpdateConstantBuffer();
-	}
+	//for (auto& item : m_mapRenderConstantBuffers)
+	//{
+	//	item.second->UpdateConstantBuffer();
+	//}
 }
 
 void HrRenderEffect::UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters)
@@ -284,79 +310,114 @@ void HrRenderEffect::UpdateLightsEffectParameter(const HrRenderFrameParametersPt
 	}
 
 	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_LIGHTS_NUM);
-	if (pRenderParamDefine)
+	BOOST_ASSERT(pRenderParamDefine);
 	{
 		size_t nHashLightNumName = HrHashValue(pRenderParamDefine->strName);
 		auto iteEffParam = m_mapRenderEffectParameters.find(nHashLightNumName);
 		if (iteEffParam != m_mapRenderEffectParameters.end())
 		{
 			*(iteEffParam->second) = pRenderFrameParameters->GetLightsNum();
+			//*(iteEffParam->second) = uint4(0, 0, 1, 0);
 		}
 	}
 
-	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_DIFFUSE_COLOR);
-	if (pRenderParamDefine)
+	//director light
 	{
-		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
-		for (uint32 i = 0; i < nDirectLightNum; ++i)
-		{
-			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
-			HrHashCombine(nHashDirDiffuseName, i);
-			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
-			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
-			if (iteEffParam != m_mapRenderEffectParameters.end())
-			{
-				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
-			}
-			else
-			{
-				break;
-			}
-		}
+		UpdateDirectionalLightEffectParameter(pRenderFrameParameters);
+		UpdatePointLightEffectParameter(pRenderFrameParameters);
 	}
 
-	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_SPECULAR_COLOR);
-	if (pRenderParamDefine)
+}
+
+void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters)
+{
+	uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
+	for (uint32 i = 0; i < nDirectLightNum; ++i)
 	{
-		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
-		for (uint32 i = 0; i < nDirectLightNum; ++i)
+		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_DIFFUSE_COLOR);
+		BOOST_ASSERT(pRenderParamDefine);
 		{
-			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
-			HrHashCombine(nHashDirDiffuseName, i);
-			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
-			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
-			if (iteEffParam != m_mapRenderEffectParameters.end())
-			{
-				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
-			}
-			else
-			{
-				break;
-			}
+			size_t nHashParamName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
+		}
+
+		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_SPECULAR_COLOR);
+		BOOST_ASSERT(pRenderParamDefine);
+		{
+			size_t nHashParamName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
+		}
+
+		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_DIRECTION);
+		BOOST_ASSERT(pRenderParamDefine);
+		{
+			size_t nHashParamName = HrHashValue(std::string("directLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetDirectionalLightDirection(i);
 		}
 	}
+}
 
-	pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_DIRECTION);
-	if (pRenderParamDefine)
+void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters)
+{
+	uint32 nPointLightNum = pRenderFrameParameters->GetLightNum(HrLight::LT_POINT);
+	for (uint32 i = 0; i < nPointLightNum; ++i)
 	{
-		uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
-		for (uint32 i = 0; i < nDirectLightNum; ++i)
+		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_DIFFUSE_COLOR);
+		BOOST_ASSERT(pRenderParamDefine);
 		{
-			size_t nHashDirDiffuseName = HrHashValue(std::string("directLight"));
-			HrHashCombine(nHashDirDiffuseName, i);
-			HrHashCombine(nHashDirDiffuseName, pRenderParamDefine->strName);
-			auto iteEffParam = m_mapRenderEffectParameters.find(nHashDirDiffuseName);
-			if (iteEffParam != m_mapRenderEffectParameters.end())
-			{
-				*(iteEffParam->second) = pRenderFrameParameters->GetDirectionalLightDirection(i);
-			}
-			else
-			{
-				break;
-			}
+			size_t nHashParamName = HrHashValue(std::string("pointLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
 		}
-	}
+		
+		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_SPECULAR_COLOR);
+		BOOST_ASSERT(pRenderParamDefine);
+		{
+			size_t nHashParamName = HrHashValue(std::string("pointLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+		}
 
+		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_ATTENUATION);
+		BOOST_ASSERT(pRenderParamDefine);
+		{
+			size_t nHashParamName = HrHashValue(std::string("pointLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetPointLightAttenuation(i);
+		}
+
+		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_POSITION);
+		BOOST_ASSERT(pRenderParamDefine);
+		{
+			size_t nHashParamName = HrHashValue(std::string("pointLight"));
+			HrHashCombine(nHashParamName, i);
+			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
+			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
+			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+			*pEffParam = pRenderFrameParameters->GetPointLightPosition(i);
+		}
+	}	
 }
 
 void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& pRenderEffectParameter, const HrRenderFrameParametersPtr& pRenderFrameParameters)
@@ -425,6 +486,19 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 		break;
 	}
 
+}
+
+const HrRenderTechniquePtr HrRenderEffect::GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData)
+{
+	for (size_t i = 0; i < m_vecRenderTechnique.size(); ++i)
+	{
+		if (m_vecRenderTechnique[i]->IsVertexElementMatch(vecVertexData))
+		{
+			return m_vecRenderTechnique[i];
+		}
+	}
+
+	return nullptr;
 }
 
 const HrRenderTechniquePtr HrRenderEffect::GetTechniqueByIndex(uint32 nIndex)

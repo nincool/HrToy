@@ -88,9 +88,7 @@ void HrTransform::Translate(const Vector3& v3, EnumTransformSpace relativeTo /*=
 	DirtyPosition();
 
 	if (m_funDirtyPos)
-	{
 		m_funDirtyPos();
-	}
 }
 
 void HrTransform::Roll(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)

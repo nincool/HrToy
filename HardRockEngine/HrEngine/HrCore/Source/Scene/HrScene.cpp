@@ -52,7 +52,7 @@ HrScene::HrScene()
 {
 	m_pLightsData = HrMakeSharedPtr<HrSceneLightData>();
 
-	m_pSceneRootNode = HrMakeSharedPtr<HrSceneNode>();
+	m_pSceneRootNode = HrMakeSharedPtr<HrSceneNode>("Hr_Root");
 }
 
 HrScene::~HrScene()

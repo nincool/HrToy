@@ -18,7 +18,7 @@ namespace Hr
 	private:
 		bool CreateDepthStencilView();
 	private:
-		HrD3D11TexturePtr m_pTexDepthStencilView;
+		HrD3D11Texture2DPtr m_pTexDepthStencilView;
 	};
 }
 

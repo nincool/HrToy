@@ -35,18 +35,24 @@ namespace Hr
 		struct HrSubMeshInfo
 		{
 			std::string strMeshName;
-
-			std::vector<uint32> vecIndices;
-			std::vector<Vector3> vecVertexPos;
-			std::vector<Vector3> vecNormal;
-			std::vector<float4> vecColor;
-			std::vector<float2> vecUV;
+			bool bAllIndices;
+			bool bIndexDataType16bit;
 
 			HrMaterialInfo materialInfo;
-			std::vector<std::string> vecTextureFileName;
+			//std::vector<std::string> vecTextureFileName;
+
+			int nTriangleCount;
+			int nIndexOffset;
 		};
 
 	public:
+		std::vector<uint32> vecIndices;
+		std::vector<Vector3> vecVertexPos;
+		std::vector<Vector3> vecTangent;
+		std::vector<Vector3> vecBinormal;
+		std::vector<Vector3> vecNormal;
+		std::vector<float4> vecColor;
+		std::vector<float2> vecUV;
 
 		std::vector<HrSubMeshInfo> vecSubMeshInfo;
 	};
@@ -69,10 +75,10 @@ namespace Hr
 		void Load(std::string& strFile);
 
 	private:
-		void FillEmptyModelInfo();
 		HrMaterial* MakeMaterialResource(HrModelDescInfo::HrMaterialInfo& materialInfo);
 		std::vector<HrTexture*> MakeTextureResource(std::vector<std::string>& vecTextureFile);
-		void MakeVertexStream(HrModelDescInfo::HrSubMeshInfo& subMeshInfo, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
+		void MakeVertexElements(const HrModelDescInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement);
+		void MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
 
 	protected:
 		std::string m_strFileName;

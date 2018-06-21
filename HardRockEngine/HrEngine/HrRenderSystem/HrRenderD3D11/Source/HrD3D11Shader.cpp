@@ -15,6 +15,21 @@
 
 using namespace Hr;
 
+void CHrD3D11SRVShaderParamRelationShip::UpdateShaderResourceView()
+{
+	HrTexture* pTex = nullptr;
+	m_pTextureParam->Value(pTex);
+	if (pTex)
+	{
+		*m_pD3D11SRV = HrCheckPointerCast<HrD3D11Texture2D>(pTex)->GetD3D11ShaderResourceView().get();
+	}
+}
+
+
+////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////
+
 HrD3D11Shader::HrD3D11Shader()
 {
 	m_pVertexShader = nullptr;
@@ -31,6 +46,16 @@ HrD3D11Shader::~HrD3D11Shader()
 
 void HrD3D11Shader::Accept(const HrRenderPtr& pRender)
 {
+	for (size_t i = 0; i < m_vecBindRenderConstantBuffer.size(); ++i)
+	{
+		m_vecBindRenderConstantBuffer[i]->UpdateConstantBuffer();
+	}
+
+	for (size_t i = 0; i < m_vecSRVParamRelationships.size(); ++i)
+	{
+		m_vecSRVParamRelationships[i].UpdateShaderResourceView();
+	}
+
 	pRender->BindShader(shared_from_this());
 }
 
@@ -94,6 +119,14 @@ void HrD3D11Shader::BindRenderParameterImpl()
 		HrD3D11GraphicsBufferPtr pGraphicsBuffer = HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_vecBindRenderConstantBuffer[i]->GetGraphicsBuffer());
 		m_vecD3D11ConstBuffer.push_back(pGraphicsBuffer->GetD3DGraphicsBuffer().get());
 	}
+
+	BOOST_ASSERT(m_vecD3D11SRV.empty());
+	m_vecSRVParamRelationships.clear();
+	m_vecD3D11SRV.assign(m_vecBindRenderResources.size(), nullptr);
+	for (size_t i = 0; i < m_vecBindRenderResources.size(); ++i)
+	{
+		m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV[i]);
+	}
 }
 
 const ID3D11VertexShaderPtr& HrD3D11Shader::RetriveD3D11VertexShader()
@@ -109,5 +142,10 @@ const ID3D11PixelShaderPtr& HrD3D11Shader::RetriveD3D11PixelShader()
 const std::vector<ID3D11Buffer*>& HrD3D11Shader::GetConstBuffers()
 {
 	return m_vecD3D11ConstBuffer;
+}
+
+const std::vector<ID3D11ShaderResourceView*>& Hr::HrD3D11Shader::GetSRVs()
+{
+	return m_vecD3D11SRV;
 }
 

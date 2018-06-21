@@ -34,6 +34,8 @@ namespace Hr
 		EnumSceneComponentType GetComType();
 
 		HrSceneObjectPtr GetAttachSceneObject();
+
+		virtual void UpdateTransform(const HrTransformPtr& pTransform);
 	protected:
 		std::string m_strName;
 		EnumSceneComponentType m_comType;
@@ -75,6 +77,8 @@ namespace Hr
 		~HrCameraComponet();
 
 		const HrCameraPtr& GetCamera();
+
+		virtual void UpdateTransform(const HrTransformPtr& pTransform) override;
 	protected:
 		HrCameraPtr m_pCamera;
 	};
@@ -90,6 +94,13 @@ namespace Hr
 		~HrLightComponent();
 
 		const HrLightPtr& GetLight();
+
+		void SetDiffuse(const HrColor& diffuse);
+		const HrColor& GetDiffuse() const;
+		void SetSpecular(const HrColor& specular);
+		const HrColor& GetSpecular() const;
+
+		virtual void UpdateTransform(const HrTransformPtr& pTransform) override;
 	protected:
 		HrLightPtr m_pLight;
 	};

@@ -8,6 +8,23 @@
 
 namespace Hr
 {
+	class CHrD3D11SRVShaderParamRelationShip
+	{
+	public:
+		CHrD3D11SRVShaderParamRelationShip(HrRenderEffectParameter* pTexParam, ID3D11ShaderResourceView** pD3D11SRV)
+			: m_pTextureParam(pTexParam), m_pD3D11SRV(pD3D11SRV)
+		{}
+
+		void UpdateShaderResourceView();
+	protected:
+		HrRenderEffectParameter* m_pTextureParam;
+		ID3D11ShaderResourceView** m_pD3D11SRV;
+	};
+
+	////////////////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////////////////
+	
 
 	class HrD3D11Shader : public HrShader, public std::enable_shared_from_this<HrD3D11Shader>
 	{
@@ -39,7 +56,7 @@ namespace Hr
 		const ID3D11PixelShaderPtr& RetriveD3D11PixelShader();
 
 		const std::vector<ID3D11Buffer*>& GetConstBuffers();
-		
+		const std::vector<ID3D11ShaderResourceView*>& GetSRVs();
 	protected:
 		virtual void BindRenderParameterImpl() override;
 	private:
@@ -57,6 +74,8 @@ namespace Hr
 		std::vector<ID3D11Buffer*> m_vecD3D11ConstBuffer;
 		std::vector<ID3D11ShaderResourceView*> m_vecD3D11SRV;
 		std::vector<ID3D11SamplerState*> m_vecSamplerState;
+
+		std::vector<CHrD3D11SRVShaderParamRelationShip> m_vecSRVParamRelationships;
 	};
 }
 

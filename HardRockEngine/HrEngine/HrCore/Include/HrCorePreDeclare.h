@@ -76,8 +76,6 @@ namespace Hr
 	class HrRenderParamDefine;
 	class HrRenderEffectParameter;
 	typedef std::shared_ptr<HrRenderEffectParameter> HrRenderEffectParameterPtr;
-	class HrRenderEffectStructParameter;
-	typedef std::shared_ptr<HrRenderEffectStructParameter> HrRenderEffectStructParameterPtr;
 	class HrRenderEffectConstantBuffer;
 	typedef std::shared_ptr<HrRenderEffectConstantBuffer> HrRenderEffectConstantBufferPtr;
 	

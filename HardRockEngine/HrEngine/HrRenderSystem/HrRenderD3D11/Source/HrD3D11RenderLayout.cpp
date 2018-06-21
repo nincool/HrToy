@@ -30,6 +30,7 @@ void HrD3D11RenderLayout::Active()
 		m_vecInputElementDesc.clear();
 		m_vecStrides.clear();
 		m_vecOffsets.clear();
+
 		for (uint32 i = 0; i < nVertexStreams; ++i)
 		{
 			const HrVertexDataPtr& pVertexData = m_vecVertexStreams[i];

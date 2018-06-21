@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\HrExport.h" />
+    <ClInclude Include="Include\HrForwardLighting.h" />
     <ClInclude Include="Include\HrGeometryApp.h" />
     <ClInclude Include="Include\HrGeometryScene.h" />
     <ClInclude Include="Include\HrInstanceBatchTest.h" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp" />
+    <ClCompile Include="Source\HrForwardLighting.cpp" />
     <ClCompile Include="Source\HrGeometryApp.cpp" />
     <ClCompile Include="Source\HrGeometryScene.cpp" />
     <ClCompile Include="Source\HrInstanceBatchTest.cpp" />

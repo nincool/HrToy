@@ -60,14 +60,15 @@ void HrResourceManager::InitResourceManager()
 void HrResourceManager::CreateBuildInTexture()
 {
 	HRLOG("HrResourceManager::CreateBuildTexture Start to create buildin textures!");
-	LoadResource("Media/Model/Buildin/Texture/defaulttexture.png", HrResource::RT_TEXTURE);
+	LoadResource("Media/Model/Buildin/Texture/defaulttexture.png", HrResource::RT_TEXTURE_2D);
 }
 
 void HrResourceManager::CreateBuildInEffects()
 {
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
-	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/HrShader/HrBasicEffect.json", HrResource::RT_EFFECT));
-	LoadResource("Media/HrShader/HrInstanceEffect.json", HrResource::RT_EFFECT);
+	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/Effect/Hlsl/HrStandard.json", HrResource::RT_EFFECT));
+	LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
+	
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -126,8 +127,8 @@ HrResourcePtr HrResourceManager::RetriveResource(const std::string& strFile, HrR
 {
 	switch (resType)
 	{
-	//case HrResource::RT_TEXTURE:
-	//	return GetTexture(strFile);
+	case HrResource::RT_TEXTURE_2D:
+		return GetTexture2D(strFile);
 	case HrResource::RT_MESH:
 		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
@@ -173,8 +174,8 @@ HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResou
 {
 	switch (resType)
 	{
-		//case HrResource::RT_TEXTURE:
-		//	return GetTexture(strFile);
+	case HrResource::RT_TEXTURE_2D:
+		return AddTesture2DResource(strFile);
 	case HrResource::RT_MESH:
 		return AddMeshResource(strFile);
 	case HrResource::RT_EFFECT:
@@ -255,33 +256,35 @@ HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 	return pMaterial;
 }
 
-HrResource* HrResourceManager::AddTextureResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	size_t nHashID = HrTexture::CreateHashName(strFullFileName);
-	if (m_mapTextures.find(nHashID) != m_mapTextures.end())
+	if (m_mapTextures2D.find(nHashID) != m_mapTextures2D.end())
 	{
 		HRASSERT(nullptr, "AddMeshResource Error!");
 		return nullptr;
 	}
 
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	//HrTexture* pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture(HrTexture::TEX_TYPE_2D, 1, 1);
-	//pTexture->DeclareResource(strFileName, strFile);
-	//m_mapMesh.insert(std::make_pair(pTexture->GetHashID(), pTexture));
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE);
+	pTexture->DeclareResource(strFileName, strFile);
+	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
+	m_mapTextures2D.insert(std::make_pair(pTexture->GetHashID(), pTexture));
 
-	return nullptr;
+	return pTexture;
 }
 
-HrResource* HrResourceManager::GetTexture(const std::string& strTextureName)
+HrResourcePtr HrResourceManager::GetTexture2D(const std::string& strTextureName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strTextureName);
 	size_t nHashID = HrTexture::CreateHashName(strFullFileName);
-	auto item = m_mapTextures.find(nHashID);
-	if (item != m_mapTextures.end())
+	auto item = m_mapTextures2D.find(nHashID);
+	if (item != m_mapTextures2D.end())
 	{
 		return item->second;
 	}
+
 	return nullptr;
 }
 

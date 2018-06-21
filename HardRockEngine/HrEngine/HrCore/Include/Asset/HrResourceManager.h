@@ -44,13 +44,14 @@ namespace Hr
 		HrResourcePtr AddEffectResource(const std::string& strFile);
 		HrResourcePtr AddMeshResource(const std::string& strFile);
 		HrResourcePtr AddMaterialResource(const std::string& strFile);
-		HrResource* AddTextureResource(const std::string& strFile);
+
+		HrResourcePtr AddTesture2DResource(const std::string& strFile);
 
 		void CreateBuildInTexture();
 		void CreateBuildInEffects();
 		void CreateBuildInMaterial();
 
-		HrResource* GetTexture(const std::string& strTextureName);
+		HrResourcePtr GetTexture2D(const std::string& strTextureName);
 		HrResourcePtr GetMesh(const std::string& strMeshName);
 		HrResourcePtr GetEffect(const std::string& strEffectName);
 		const HrResourcePtr& GetMaterial(const std::string& strMaterialName);
@@ -61,7 +62,7 @@ namespace Hr
 		std::unordered_map<size_t, HrResourcePtr> m_mapPrefabModels;
 		std::unordered_map<size_t, HrResourcePtr> m_mapMesh;
 		std::unordered_map<size_t, HrResourcePtr> m_mapMaterials;
-		std::unordered_map<size_t, HrResource*> m_mapTextures;
+		std::unordered_map<size_t, HrResourcePtr> m_mapTextures2D;
 		
 		std::unordered_map<size_t, HrResourcePtr> m_mapRenderEffects;
 

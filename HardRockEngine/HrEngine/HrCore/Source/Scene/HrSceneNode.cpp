@@ -257,6 +257,7 @@ void HrSceneNode::DirtyPosition()
 {
 	for (auto& iteChild : m_vecChildrenNode)
 	{
+		iteChild->DirtyPosition();
 		iteChild->GetTransform()->DirtyPosition();
 	}
 }

@@ -16,8 +16,9 @@ HrShader::~HrShader()
 
 }
 
-void HrShader::BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>& vecRenderConstBuffer)
+void HrShader::BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>&& vecRenderConstBuffer, std::vector<HrRenderEffectParameterPtr>&& vecShaderResouces)
 {
+	m_vecBindRenderResources.swap(vecShaderResouces);
 	m_vecBindRenderConstantBuffer.swap(vecRenderConstBuffer);
 
 	BindRenderParameterImpl();

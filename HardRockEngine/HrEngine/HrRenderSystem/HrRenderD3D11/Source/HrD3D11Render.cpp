@@ -62,41 +62,6 @@ void HrD3D11Render::ReleaseRenderEngine()
 
 void HrD3D11Render::BindShader(const HrShaderPtr& pShader)
 {
-	//HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
-	//ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11DeviceContext().get();
-
-	////汗。。。。todo
-	//m_vecD3D11SRV.clear();
-	//m_vecSamplerState.clear();
-	//for (size_t i = 0; i < m_vecBindRenderParameter.size(); ++i)
-	//{
-	//	if (m_vecBindRenderParameter[i]->BindType() == HrRenderEffectParameter::REPBT_RESOURCE)
-	//	{
-	//		switch (m_vecBindRenderParameter[i]->DataType())
-	//		{
-	//		case REDT_TEXTURE2D:
-	//		{
-	//			HrTexture* pTex = nullptr;
-	//			m_vecBindRenderParameter[i]->Value(pTex);
-	//			HrD3D11Texture2D* pTex2D = HrCheckPointerCast<HrD3D11Texture2D>(pTex);
-	//			//if (pTex2D != nullptr)
-	//			//	m_vecD3D11SRV.push_back(pTex2D->GetD3D11SRV());
-	//			break;
-	//		}
-	//		case REDT_SAMPLER2D:
-	//		{
-	//			HrSamplerState* pSampler = nullptr;
-	//			m_vecBindRenderParameter[i]->Value(pSampler);
-	//			HrD3D11SamplerState* pSampler2D = HrCheckPointerCast<HrD3D11SamplerState>(pSampler);
-	//			if (pSampler2D != nullptr)
-	//				m_vecSamplerState.push_back(pSampler2D->GetD3D11SamplerState());
-	//			break;
-	//		}
-	//		}
-
-	//	}
-	//}
-
 	HrD3D11ShaderPtr pD3D11Shader = HrCheckPointerCast<HrD3D11Shader>(pShader);
 	auto shaderType = pD3D11Shader->ShaderType();
 	switch (shaderType)
@@ -133,8 +98,9 @@ void HrD3D11Render::BindShader(const HrShaderPtr& pShader)
 				m_arrCachedBindShaderBuffers[shaderType] = &vecConstBuffers;
 			}
 		}
-		//if (!m_vecD3D11SRV.empty())
-		//	pD3D11ImmediateContext->PSSetShaderResources(0, m_vecD3D11SRV.size(), &m_vecD3D11SRV[0]);
+		const std::vector<ID3D11ShaderResourceView*>& vecSRV = pD3D11Shader->GetSRVs();
+		if (!vecSRV.empty())
+			GetD3D11DeviceContext()->PSSetShaderResources(0, vecSRV.size(), &vecSRV[0]);
 		//if (!m_vecSamplerState.empty())
 		//	pD3D11ImmediateContext->PSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
 		break;

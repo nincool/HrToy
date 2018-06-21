@@ -7,14 +7,42 @@
 
 using namespace Hr;
 
-HrTexture::HrTexture(EnumTextureType texType, uint32 nWidth, uint32 nHeight, uint32 nSampleCount, uint32 nSampleQuality):
-	m_textureType(texType)
-	, m_nWidth(nWidth)
-	, m_nHeight(nHeight)
+HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint):
+	m_nWidth(0)
+	, m_nHeight(0)
+	, m_nDepth(0)
+	, m_nMipMapsNum(1)
+	, m_nArraySize(1)
+	, m_textureType(texType)
 	, m_nSampleCount(nSampleCount)
 	, m_nSampleQuality(nSampleQuality)
+	, m_nAccessHint(nAccessHint)
+	, m_format(PF_R8G8B8A8)
+	, m_textureUsage(TU_GPUREAD_IMMUTABLE)
 	, m_pTexData(HrMakeSharedPtr<HrStreamData>())
 {
+	if (m_nAccessHint & EAH_GPU_READ)
+	{
+		if (m_nAccessHint & EAH_CPU_WRITE)
+		{
+			if ((m_nAccessHint & EAH_GPU_WRITE) && (m_nAccessHint & EAH_GPU_WRITE))
+			{
+				m_textureUsage = HrTexture::TU_GPUREAD_GPUWRITE_CPUREAD_CPUWRITE;
+			}
+			else
+			{
+				m_textureUsage = HrTexture::TU_GPUREAD_CPUWRITE;
+			}
+		}
+		else if (m_nAccessHint & EAH_GPU_WRITE)
+		{
+			m_textureUsage = HrTexture::TU_GPUREAD_GPUWRITE;
+		}
+		else
+		{
+			m_textureUsage = HrTexture::TU_GPUREAD_IMMUTABLE;
+		}
+	}
 }
 
 HrTexture::~HrTexture()
@@ -31,22 +59,30 @@ void HrTexture::DeclareResource(const std::string& strFileName, const std::strin
 	m_strFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFilePath);
 	HRASSERT(!m_strFilePath.empty(), "HrTexture::DeclareResource");
 	m_strFileName = strFileName;
-	m_resType = HrResource::RT_TEXTURE;
+	m_resStatus = HrResource::RS_DECLARED;
 
 	m_nHashID = CreateHashName(m_strFilePath);
 }
 
+void HrTexture::SetTextureType(EnumTextureType type)
+{
+	m_textureType = type;
+}
+
 bool HrTexture::LoadImpl()
 {
+	//todo
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 
+	//获取图片类型
 	fif = FreeImage_GetFileType(m_strFilePath.c_str());
 
 	if (fif == FIF_UNKNOWN)
 	{
 		fif = FreeImage_GetFIFFromFilename(m_strFilePath.c_str());
 	}
-	else if (FreeImage_FIFSupportsReading(fif))
+	
+	if (FreeImage_FIFSupportsReading(fif))
 	{
 		FIBITMAP* dib = FreeImage_Load(fif, m_strFilePath.c_str());
 
@@ -72,16 +108,27 @@ bool HrTexture::LoadImpl()
 		m_nSrcPitch = FreeImage_GetPitch(dib);
 
 		m_pTexData->ClearBuffer();
-		for (size_t y = 0; y < m_nHeight; ++y)
+		bool bLittelEndian = FreeImage_IsLittleEndian();
+		if (bLittelEndian)
 		{
-			unsigned char* pSrc = pSrcData + (m_nHeight - y - 1) * m_nSrcPitch;
-			m_pTexData->AddBuffer((Byte*)pSrc, m_nSrcPitch);
+			for (size_t y = 0; y < m_nHeight; ++y)
+			{
+				unsigned char* pSrc = pSrcData + (m_nHeight - y - 1) * m_nSrcPitch;
+				m_pTexData->AddBuffer((Byte*)pSrc, m_nSrcPitch);
+			}
 		}
-
+		else
+		{
+			m_pTexData->AddBuffer((Byte*)pSrcData, m_nHeight * m_nSrcPitch);
+		}
+		
 		FreeImage_Unload(dib);
 
-		//CreateTexture();
-		//CreateSRV();
+		CreateHWResource();
+	}
+	else
+	{
+		HRERROR("Can not load the image [%s]", m_strFilePath.c_str());
 	}
 
 	return true;
@@ -90,5 +137,9 @@ bool HrTexture::LoadImpl()
 bool HrTexture::UnloadImpl()
 {
 	return true;
+}
+
+void HrTexture::CreateHWResource()
+{
 }
 

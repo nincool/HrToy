@@ -67,15 +67,6 @@ namespace Hr
 		REDT_UNKNOWN = 99
 	};
 
-
-	enum EnumRenderSemantic
-	{
-		RS_UNKNOW = 0,
-		RS_POSITION = 1,
-		RS_NORMAL = 2,
-		RS_COLOR = 3,
-	};
-
 	//from ogre
 	enum EnumRenderParamType
 	{
@@ -244,7 +235,6 @@ namespace Hr
 
 	protected:
 		EnumRenderEffectDataType m_dataType;
-		EnumRenderSemantic m_semantic;
 
 		uint32 m_nBufferOffset;
 		uint32 m_nStride;
@@ -269,7 +259,6 @@ namespace Hr
 		{
 			auto pRet = HrMakeUniquePtr< HrRenderVariableConcrete<T> >();
 			pRet->m_dataType = this->m_dataType;
-			pRet->m_semantic = this->m_semantic;
 			pRet->m_nBufferOffset = this->m_nBufferOffset;
 			pRet->m_nMemorySize = this->m_nMemorySize;
 			pRet->m_nArraySize = this->m_nArraySize;

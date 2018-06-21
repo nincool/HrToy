@@ -6,6 +6,8 @@
 #include "Asset/Loader/HrModelLoader.h"
 #include "Asset/Loader/HrFBXLoader.h"
 #include "Asset/HrStreamData.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentResource.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -65,10 +67,22 @@ bool HrModel::LoadImpl()
 	const rapidjson::Value& sceneRootInfo = d["ASSET_ROOT"];
 
 	//Mesh only fbx
-	std::string strFileName = sceneRootInfo["RESOURCE_FILE"].GetString();
-	HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
-	pModelLoader->Load(strFileName);
-	m_pMesh = pModelLoader->GetMesh();
+	{
+		std::string strFileName = sceneRootInfo["RESOURCE_FILE"].GetString();
+		HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
+		pModelLoader->Load(strFileName);
+		m_pMesh = pModelLoader->GetMesh();
+	}
+
+	//todo submesh fbx还是不行
+	{
+		if (sceneRootInfo.HasMember("TEXTURE_SAMPLER"))
+		{
+			std::string strTextureFile = sceneRootInfo["TEXTURE_SAMPLER"].GetString();
+			HrTexturePtr pTexSampler = HrDirector::Instance()->GetResCoreComponent()->RetriveTexture(strTextureFile, HrTexture::TEX_TYPE_2D);
+			m_pMesh->GetSubMesh(0)->GetMaterial()->SetTexture(HrMaterial::TS_SLOT_0, pTexSampler);
+		}
+	}
 	
 	return true;
 }

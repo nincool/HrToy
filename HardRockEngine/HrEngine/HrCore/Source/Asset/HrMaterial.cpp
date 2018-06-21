@@ -13,6 +13,7 @@ HrMaterial::HrMaterial()
 {
 	m_fOpacity = 0.0f;
 	m_fGlossiness = 0.0f;
+	m_arrTextures.assign(nullptr);
 }
 
 HrMaterial::HrMaterial(const HrMaterial& material)

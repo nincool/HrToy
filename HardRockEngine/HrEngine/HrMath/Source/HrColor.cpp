@@ -5,7 +5,7 @@ using namespace Hr;
 HrColor HrColor::Black(0.0f, 0.0f, 0.0f, 1.0f);
 HrColor HrColor::White(1.0f, 1.0f, 1.0f, 1.0f);
 HrColor HrColor::Red(1.0f, 0.0f, 0.0f, 1.0f);
-HrColor HrColor::Green(1.0f, 1.0f, 0.0f, 1.0f);
+HrColor HrColor::Green(0.0f, 1.0f, 0.0f, 1.0f);
 HrColor HrColor::Blue(0.0f, 0.0f, 1.0f, 1.0f);
 HrColor HrColor::Yellow(1.0f, 1.0f, 0.0f, 1.0f);
 HrColor HrColor::Cyan(0.0f, 1.0f, 1.0f, 1.0f);

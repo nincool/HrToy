@@ -110,3 +110,8 @@ void HrRenderLayout::SetInstanceNum(uint32 nInstance)
 	m_nInstance = nInstance;
 }
 
+void HrRenderLayout::CreateVertexElementHashValue()
+{
+
+}
+

@@ -3,6 +3,7 @@
 
 #include "HrCore/Include/Kernel/HrCoreComponent.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
+#include "HrCore/Include/Asset/HrTexture.h"
 
 namespace Hr
 {
@@ -14,6 +15,8 @@ namespace Hr
 
 		template <typename T>
 		std::shared_ptr<T> RetriveResource(const std::string& strFile = "", bool bAdd = true, bool bLoad = true);
+
+		HrTexturePtr RetriveTexture(const std::string& strFile, HrTexture::EnumTextureType type);
 
 	private:
 		HrResourceManagerPtr m_pResourceManager;

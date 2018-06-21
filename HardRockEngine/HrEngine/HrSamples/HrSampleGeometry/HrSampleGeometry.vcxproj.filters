@@ -28,6 +28,9 @@
     <ClInclude Include="Include\HrInstanceBatchTest.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrForwardLighting.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -43,6 +46,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrInstanceBatchTest.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrForwardLighting.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -49,34 +49,36 @@ HrRenderFramePtr HrD3D11RenderFactory::CreateScreenRenderFrameBuffer(uint32 nWid
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11ScreenFrameBuffer>(nWidth, nHeight));
 }
 
-HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
-	, uint32 nWidth
-	, uint32 nHeight
-	, uint32 nSampleCount
-	, uint32 nSampleQuality)
-{
-	switch (texType)
-	{
-	case HrTexture::TEX_TYPE_1D:
-		break;
-	case HrTexture::TEX_TYPE_2D:
-		return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth
-			, nHeight
-			, nSampleCount
-			, nSampleQuality
-			, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW);
-	case HrTexture::TEX_TYPE_3D:
-		break;
-	case HrTexture::TEX_TYPE_CUBE_MAP:
-		break;
-	case HrTexture::TEX_TYPE_2D_ARRAY:
-		break;
-	case HrTexture::TEX_TYPE_2D_RECT:
-		break;
-	default:
-		return HrTexturePtr(nullptr);
-	}
-}
+//HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
+//	, uint32 nWidth
+//	, uint32 nHeight
+//	, uint32 nSampleCount
+//	, uint32 nSampleQuality
+//	, EnumPixelFormat format)
+//{
+//	switch (texType)
+//	{
+//	case HrTexture::TEX_TYPE_1D:
+//		break;
+//	case HrTexture::TEX_TYPE_2D:
+//		return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth
+//			, nHeight
+//			, nSampleCount
+//			, nSampleQuality
+//			, format
+//			, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW);
+//	case HrTexture::TEX_TYPE_3D:
+//		break;
+//	case HrTexture::TEX_TYPE_CUBE_MAP:
+//		break;
+//	case HrTexture::TEX_TYPE_2D_ARRAY:
+//		break;
+//	case HrTexture::TEX_TYPE_2D_RECT:
+//		break;
+//	default:
+//		return HrTexturePtr(nullptr);
+//	}
+//}
 
 HrRenderLayoutPtr HrD3D11RenderFactory::CreateRenderLayout()
 {
@@ -114,17 +116,16 @@ HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler(const std::string
 	return pShaderCompiler;
 }
 
-//HrTexture* HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
-//	, uint32 nSampleCount
-//	, uint32 nSampleQuality)
-//{
-//	HrD3D11Texture2D* pTexture2D = HR_NEW HrD3D11Texture2D(HrD3D11Device::Instance()->GetD3DDevice().get()
-//		, HrD3D11Device::Instance()->GetD3DDeviceContext().get()
-//		, texType
-//		, nSampleCount
-//		, nSampleQuality);
-//	return pTexture2D;
-//}
+HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
+	, uint32 nHeight
+	, uint32 nNumMipMaps
+	, uint32 nArraySize
+	, uint32 nSampleCount
+	, uint32 nSampleQuality
+	, uint32 nAccessHint)
+{
+	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint);
+}
 
 HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState()
 {
@@ -173,3 +174,5 @@ HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState
 
 	return pRasterizer;
 }
+
+

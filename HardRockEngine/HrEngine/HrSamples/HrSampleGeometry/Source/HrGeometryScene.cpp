@@ -45,11 +45,9 @@ void HrGeometryScene::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
-	BOOST_ASSERT(pRenderEffect);
-
-	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestBox.model");
-	m_pTestNode->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pRenderEffect);
+	m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestPlan.model");
+	//auto pEffSampler = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
+	//m_pTestNode->GetChildByName("Plane001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
 	AddNode(m_pTestNode);
 }
 

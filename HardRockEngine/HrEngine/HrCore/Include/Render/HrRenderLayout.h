@@ -2,7 +2,7 @@
 #define _HR_RENDERLATOUT_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Render/HrGraphicsBuffer.h"
 
 namespace Hr
@@ -34,7 +34,6 @@ namespace Hr
 		bool UseIndices();
 
 		size_t GetVertexStreamSize();
-
 		uint32 GetVerticesNum();
 
 		const std::vector<HrVertexDataPtr>& GetVertexStreams();
@@ -44,6 +43,8 @@ namespace Hr
 		//the count of instances
 		void SetInstanceNum(uint32 nInstance);
 		uint32 GetInstanceNum();
+	private:
+		void CreateVertexElementHashValue();
 	protected:
 		EnumTopologyType m_topologyType;
 		EnumIndexType m_indexBufferType;

@@ -210,88 +210,30 @@ namespace Hr
 		PF_ATC_RGBA_EXPLICIT_ALPHA = 93,
 		/// ATC (AMD_compressed_ATC_texture)
 		PF_ATC_RGBA_INTERPOLATED_ALPHA = 94,
+
+		// 16-bit element format, 16 bits depth
+		PF_D16,
+		// 32-bit element format, 24 bits depth and 8 bits stencil
+		PF_D24S8,
+		// 32-bit element format, 32 bits depth
+		PF_D32F,
+
 		// Number of pixel formats currently defined
-		PF_COUNT = 95
+		PF_COUNT
 	};
 
-	enum EnumVertexElementSemantic
-	{
-		// vertex positions
-		VEU_POSITION = 1,
-		// vertex normals included (for lighting)
-		VEU_NORMAL = 1 << 1,
-		// Vertex -color
-		VEU_COLOR = 1 << 9,
-		// Vertex blend weights
-		VEU_BLENDWEIGHT = 1 << 4,
-		// Vertex blend indices
-		VEU_BLENDINDEX = 1 << 5,
-		// at least one set of texture coords (exact number specified in class)
-		VEU_TEXTURE_COORDINATES = 1 << 6,
-		// Vertex tangent
-		VEU_TANGENT = 1 << 7,
-		// Vertex binormal
-		VEU_BINORMAL = 1 << 8,
-	};
 
-	/// Vertex element type, used to identify the base types of the vertex contents
-	enum EnumVertexElementType
-	{
-		VET_FLOAT1 = 0,
-		VET_FLOAT2 = 1,
-		VET_FLOAT3 = 2,
-		VET_FLOAT4 = 3,
-		/// alias to more specific colour type - use the current rendersystem's colour packing
-		VET_COLOUR = 4,
-		VET_SHORT1 = 5,
-		VET_SHORT2 = 6,
-		VET_SHORT3 = 7,
-		VET_SHORT4 = 8,
-		VET_UBYTE4 = 9,
-		/// D3D style compact colour
-		VET_COLOUR_ARGB = 10,
-		/// GL style compact colour
-		VET_COLOUR_ABGR = 11,
-		VET_DOUBLE1 = 12,
-		VET_DOUBLE2 = 13,
-		VET_DOUBLE3 = 14,
-		VET_DOUBLE4 = 15,
-		VET_USHORT1 = 16,
-		VET_USHORT2 = 17,
-		VET_USHORT3 = 18,
-		VET_USHORT4 = 19,
-		VET_INT1 = 20,
-		VET_INT2 = 21,
-		VET_INT3 = 22,
-		VET_INT4 = 23,
-		VET_UINT1 = 24,
-		VET_UINT2 = 25,
-		VET_UINT3 = 26,
-		VET_UINT4 = 27
-	};
 
-	enum EnumVertexElementClassType
-	{
-		VEC_INSTANCE,
-		VEC_GEOMETRY,
-	};
 
-	//拓扑类型
-	enum EnumTopologyType
-	{
-		TT_POINTLIST,
-		TT_LINELIST,
-		TT_LINETRIP,
-		TT_TRIANGLELIST,
-		TT_TRIANGLETRIP,
-	};
 
-	//indice索引数据类型
-	enum EnumIndexType
-	{
-		IT_16BIT,
-		IT_32BIT,
-	};
+
+
+
+
+
+
+
+
 
 	//RasterizerFillMode
 	enum EnumRasterizerFillModel

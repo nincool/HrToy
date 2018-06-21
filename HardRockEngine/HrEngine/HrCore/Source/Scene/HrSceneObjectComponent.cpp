@@ -7,6 +7,7 @@
 #include "Render/HrMeshRenderable.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
+#include "Scene/HrTransform.h"
 #include "Scene/HrSceneObjectComponent.h"
 #include "Asset/HrRenderEffect.h"
 
@@ -52,6 +53,11 @@ HrSceneObjectPtr HrSceneObjectComponent::GetAttachSceneObject()
 	return nullptr;
 }
 
+void HrSceneObjectComponent::UpdateTransform(const HrTransformPtr& pTransform)
+{
+
+}
+
 HrSceneObjectMutexCom::HrSceneObjectMutexCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
 {
 }
@@ -88,6 +94,11 @@ const HrCameraPtr& HrCameraComponet::GetCamera()
 	return m_pCamera;
 }
 
+void HrCameraComponet::UpdateTransform(const HrTransformPtr& pTransform)
+{
+	m_pCamera->ViewParams(pTransform->GetWorldPosition(), m_pCamera->GetLookAt(), m_pCamera->GetUp());
+}
+
 /////////////////////////////////////////////
 //
 /////////////////////////////////////////////
@@ -104,6 +115,7 @@ HrLightComponent::HrLightComponent(const std::string& strName, const HrSceneObje
 		m_pLight = HrMakeSharedPtr<HrDirectionalLight>();
 		break;
 	case HrLight::LT_POINT:
+		m_pLight = HrMakeSharedPtr<HrPointLight>();
 		break;
 	case HrLight::LT_SPOTLIGHT:
 		break;
@@ -120,6 +132,31 @@ const HrLightPtr& HrLightComponent::GetLight()
 	return m_pLight;
 }
 
+
+void Hr::HrLightComponent::SetDiffuse(const HrColor& diffuse)
+{
+	m_pLight->SetDiffuse(diffuse);
+}
+
+const HrColor& HrLightComponent::GetDiffuse() const
+{
+	return m_pLight->GetDiffuse();
+}
+
+void HrLightComponent::SetSpecular(const HrColor& specular)
+{
+	m_pLight->SetSpecular(specular);
+}
+
+const HrColor& HrLightComponent::GetSpecular() const
+{
+	return m_pLight->GetSpecular();
+}
+
+void HrLightComponent::UpdateTransform(const HrTransformPtr& pTransform)
+{
+	m_pLight->SetPosition(pTransform->GetPosition());
+}
 
 /////////////////////////////////////////////
 //

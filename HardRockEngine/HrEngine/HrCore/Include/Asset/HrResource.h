@@ -5,17 +5,20 @@
 
 namespace Hr
 {
-	class HrResource
+	class HrResource : boost::noncopyable
 	{
 	public:
 		enum EnumResourceType
 		{
 			RT_UNKNOWN,
-			RT_TEXTURE,
 			RT_MESH,
 			RT_EFFECT,
 			RT_MATERIAL,
 			RT_MODEL,
+			RT_TEXTURE_1D,
+			RT_TEXTURE_2D,
+			RT_TEXTURE_3D,
+			RT_TEXTURE_CUBE
 		};
 
 		enum EnumResourceStatus
