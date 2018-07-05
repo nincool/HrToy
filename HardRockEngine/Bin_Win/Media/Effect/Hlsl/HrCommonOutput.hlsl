@@ -3,7 +3,7 @@ struct HrVertexOutputStandard1
 {
 	float4 posWorldViewProj : SV_POSITION;
     float4 posWorld : POSITION;
-    float3 pixWorldNormal : TEXCOORD0;
+    float3 pixWorldNormal : NORMAL;
 };
 
 struct HrVertexOutputStandard2

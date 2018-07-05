@@ -1,0 +1,57 @@
+{
+	"EFFECT_ROOT": {
+		"SHADER_FILE": "Media/Effect/Hlsl/HrShadowMapDepth.hlsl",
+		"TECHNIQUE_0": {
+			"NAME": "TecShadowMap",
+			"PASS_0": {
+				"NAME": "Pass_TecShadowMap",
+				"SHADER": {
+					"VERTEX_SHADER": "ShadowMapDepthVS",
+					"PIXEL_SHADER": "ShadowMapDepthPS"
+				},
+				"RASTERIZER":
+				{
+					"FILL_MODE":"solid",
+					"CULL_MODE":"front",
+					"FRONT_CCW" : false,
+					"DEPTH_BIAS" : 0,
+					"DEPTH_BIAS_CLAMP" : 0.0,
+					"SLOPSCALEDEPTHBIAS":0.0,
+					"DEPTH_CLIP_ENABLE" : true,
+					"SCISSOR_ENABLE" : false,
+					"MULTISAMPLE_ENABLE" : false,
+					"ANTIALIASEDLINE_ENABLE" : false
+				},
+				"DEPTH_STENCIL": {
+					"DEPTH_ENABLE": true,
+					"DEPTH_WRITE_MASK": "all",
+					"COMPARISON_FUNC": "less",
+					"STENCIL_ENABLE": true,
+					"STENCIL_READ_MASK": 255,
+					"STENCIL_WRITE_MASK": 255,
+					"FRONT_FACE_COMPARE_FUNC": "always",
+					"FRONT_FACE_STENCIL_FAILED_OP": "keep",
+					"FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+					"FRONT_FACE_PASS_OP": "replace",
+					"BACK_FACE_COMPARE_FUNC": "always",
+					"BACK_FACE_STENCIL_FAILED_OP": "keep",
+					"BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+					"BACK_FACE_PASS_OP": "keep",
+					"STENCIL_REF":"0xffffffff"
+				},
+				"BLEND": {
+					"BLEND_ENABLE": true,
+					"SRC_BLEND": "one",
+					"DEST_BLEND": "zero",
+					"BLEND_OP": "add",
+					"SRC_BLEND_ALPHA": "one",
+					"DEST_BLEND_ALPHA": "zero",
+					"BLEND_OP_ALPHA": "add",
+					"RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+					"BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+					"SAMPLE_MASK": "0xffffffff"
+				}
+			}
+		}
+	}
+}
