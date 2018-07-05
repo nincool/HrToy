@@ -10,10 +10,7 @@ using namespace Hr;
 
 HrCoreComponentRender::HrCoreComponentRender(const std::string& strRenderModule)
 {
-	if (this->CreateRenderFactory(strRenderModule))
-	{
-		CreateRenderSystem();
-	}
+	this->CreateRenderFactory(strRenderModule);
 }
 
 HrCoreComponentRender::~HrCoreComponentRender()
@@ -23,6 +20,8 @@ HrCoreComponentRender::~HrCoreComponentRender()
 
 bool HrCoreComponentRender::InitComponent()
 {
+	CreateRenderSystem();
+
 	//初始化默认渲染到屏幕
 	m_pRenderSystem->BindScreenFrameBuffer();
 
@@ -43,9 +42,14 @@ void HrCoreComponentRender::OnRenderFrameEnd()
 {
 }
 
+void HrCoreComponentRender::RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	m_pRenderSystem->RenderSceneToShadowMap(pRenderQueue, pLightData, pRenderFrameParam);
+}
+
 void HrCoreComponentRender::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
 {
-	m_pRenderSystem->RenderBindFrameBuffer(pRenderQueue, pRenderFrameParam);
+	m_pRenderSystem->RenderBasicRenderQueue(pRenderQueue, pRenderFrameParam);
 }
 
 void HrCoreComponentRender::ClearRenderFame()
@@ -84,7 +88,7 @@ const HrRenderFactoryPtr& HrCoreComponentRender::GetRenderFactory() const
 
 void HrCoreComponentRender::CreateRenderSystem()
 {
-	if (m_pRenderFactory)
+	if (m_pRenderFactory && !m_pRenderSystem)
 	{
 		m_pRenderSystem = HrMakeSharedPtr<HrRenderSystem>(m_pRenderFactory);
 	}

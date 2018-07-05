@@ -67,8 +67,9 @@ void HrResourceManager::CreateBuildInEffects()
 {
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
 	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/Effect/Hlsl/HrStandard.json", HrResource::RT_EFFECT));
-	LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
-	
+	//LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
+	LoadResource("Media/Effect/Hlsl/HrShadowMapDepth.json", HrResource::RT_EFFECT);
+	LoadResource("Media/Effect/Hlsl/HrShadowMap.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -267,7 +268,8 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 	}
 
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE);
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
 	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
 	m_mapTextures2D.insert(std::make_pair(pTexture->GetHashID(), pTexture));

@@ -12,6 +12,15 @@ namespace Hr
 		HrRenderTarget(const HrTexturePtr& pBackBuff);
 		virtual ~HrRenderTarget();
 	};
+
+	class HR_CORE_API HrRenderTextureTarget : public HrRenderTarget
+	{
+	public:
+		HrRenderTextureTarget();
+		~HrRenderTextureTarget();
+
+
+	};
 }
 
 #endif

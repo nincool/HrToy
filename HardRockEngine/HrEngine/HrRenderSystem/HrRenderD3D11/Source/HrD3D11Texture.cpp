@@ -8,12 +8,11 @@ HrD3D11Texture::HrD3D11Texture(EnumTextureType texType
 	, uint32 nSampleCount
 	, uint32 nSampleQuality
 	, uint32 nAccessHint
-	, EnumD3DTEXTURE_USED texUsage) : HrTexture(texType, nSampleCount, nSampleQuality, nAccessHint)
-	, m_texUsedType(texUsage)
+	, uint32 texD3DUsage) : HrTexture(texType, nSampleCount, nSampleQuality, nAccessHint)
+	, m_texD3DUsedType(texD3DUsage)
 {
 	m_pD3D11Device = HrD3D11Device::Instance()->GetD3DDevice();
 	m_pD3D11Context = HrD3D11Device::Instance()->GetD3DDeviceContext();
-
 }
 
 HrD3D11Texture::~HrD3D11Texture()
@@ -44,26 +43,19 @@ const ID3D11ResourcePtr& HrD3D11Texture::GetD3D11Resource()
 UINT HrD3D11Texture::GetD3DTextureBindFlags()
 {
 	UINT nBindFlags = 0;
-	if (m_texUsedType == HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW)
+	if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW)
 	{
-		nBindFlags = D3D11_BIND_DEPTH_STENCIL;
-	}
-	else
-	{
-		if ((m_nAccessHint & EAH_GPU_READ) || (m_textureUsage == TU_GPUREAD_CPUWRITE))
+		nBindFlags |= D3D11_BIND_DEPTH_STENCIL;
+		if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW)
 		{
 			nBindFlags |= D3D11_BIND_SHADER_RESOURCE;
 		}
-		if (m_nAccessHint & EAH_GPU_WRITE)
-		{
-			nBindFlags |= D3D11_BIND_RENDER_TARGET;
-		}
 	}
-	if (m_nAccessHint & EAH_GPU_UNORDERED)
+	else if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW)
 	{
-		nBindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+		nBindFlags |= D3D11_BIND_RENDER_TARGET;
 	}
-	
+
 	return nBindFlags;
 }
 
@@ -92,7 +84,7 @@ HrD3D11Texture2D::HrD3D11Texture2D(uint32 nWidth
 	, uint32 nSampleQuality
 	, uint32 nAccessHint
 	, EnumPixelFormat format
-	, EnumD3DTEXTURE_USED texUsage) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, nSampleCount, nSampleQuality, nAccessHint, texUsage)
+	, uint32 texUsage) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, nSampleCount, nSampleQuality, nAccessHint, texUsage)
 {
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
@@ -124,7 +116,7 @@ HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DT
 		m_textureUsage = TU_GPUREAD_GPUWRITE;
 		break;
 	case D3D11_USAGE_IMMUTABLE:
-		m_nAccessHint |= EAH_IMMUTABLE;
+		m_nAccessHint |= EAH_GPU_READ | EAH_CPU_WRITE;
 		m_textureUsage = TU_GPUREAD_IMMUTABLE;
 		break;
 	case D3D11_USAGE_DYNAMIC:
@@ -144,10 +136,10 @@ HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DT
 		break;
 	}
 
-	if (bindFlags & D3D11_BIND_UNORDERED_ACCESS)
-		m_nAccessHint |= EAH_GPU_UNORDERED;
-	if (desc.MiscFlags & D3D11_RESOURCE_MISC_GENERATE_MIPS)
-		m_nAccessHint |= EAH_GENERATE_MIPS;
+	//if (bindFlags & D3D11_BIND_UNORDERED_ACCESS)
+		//m_nAccessHint |= EAH_GPU_UNORDERED;
+	//if (desc.MiscFlags & D3D11_RESOURCE_MISC_GENERATE_MIPS)
+		//m_nAccessHint |= EAH_GENERATE_MIPS;
 
 	m_pD3DTexture = pD3DTex2D;
 }
@@ -201,9 +193,22 @@ bool HrD3D11Texture2D::CreateDepthStencilView()
 
 bool HrD3D11Texture2D::CreateShaderResourceView()
 {
+	if (m_pShaderResourceView)
+	{
+		return true;
+	}
+
 	D3D11_SHADER_RESOURCE_VIEW_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
-	desc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+	switch (m_format)
+	{
+	case PF_D24S8:
+		desc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		break;
+	default:
+		desc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+		break;
+	}
 	if (m_nArraySize > 1)
 	{
 		
@@ -247,7 +252,15 @@ void HrD3D11Texture2D::CreateHWResource()
 	depthStencilDesc.Height = m_nHeight;
 	depthStencilDesc.MipLevels = m_nMipMapsNum;
 	depthStencilDesc.ArraySize = m_nArraySize;
-	depthStencilDesc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+	switch (m_format)
+	{
+	case PF_D24S8:
+		depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		break;
+	default:
+		depthStencilDesc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+		break;
+	}
 
 	depthStencilDesc.SampleDesc.Count = m_nSampleCount;
 	depthStencilDesc.SampleDesc.Quality = m_nSampleQuality;

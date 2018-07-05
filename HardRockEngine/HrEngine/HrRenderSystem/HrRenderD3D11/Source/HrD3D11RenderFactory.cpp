@@ -39,14 +39,14 @@ HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget(const HrTexturePtr& p
 	return nullptr;
 }
 
-HrRenderFramePtr HrD3D11RenderFactory::CreateRenderFrameBuffer()
-{
-	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11FrameBuffer>());
-}
-
 HrRenderFramePtr HrD3D11RenderFactory::CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight)
 {
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11ScreenFrameBuffer>(nWidth, nHeight));
+}
+
+HrRenderFramePtr HrD3D11RenderFactory::CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight)
+{
+	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11DepthStencilFrameBuffer>(nWidth, nHeight));
 }
 
 //HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
@@ -122,9 +122,10 @@ HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
 	, uint32 nArraySize
 	, uint32 nSampleCount
 	, uint32 nSampleQuality
-	, uint32 nAccessHint)
+	, uint32 nAccessHint
+	, EnumPixelFormat format)
 {
-	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint);
+	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, format);
 }
 
 HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState()
@@ -133,46 +134,52 @@ HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState()
 		, HrD3D11Device::Instance()->GetD3DDeviceContext());
 }
 
-HrDepthStencilState* HrD3D11RenderFactory::CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc)
+HrDepthStencilStatePtr HrD3D11RenderFactory::CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc)
 {
-	auto itemBlend = m_mapDepthStencilStatePool.find(depthStencilStateDesc.hashName);
-	if (itemBlend != m_mapDepthStencilStatePool.end())
+	auto itemDSState = m_mapDepthStencilStatePool.find(depthStencilStateDesc.hashName);
+	if (itemDSState != m_mapDepthStencilStatePool.end())
 	{
-		return static_cast<HrDepthStencilState*>(itemBlend->second);
+		return itemDSState->second;
 	}
 	else
 	{
-		HrDepthStencilState* pDepthStencilStawte = HR_NEW HrD3D11DepthStencilState(HrD3D11Device::Instance()->GetD3DDevice().get()
-			, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), depthStencilStateDesc);
-		m_mapDepthStencilStatePool[depthStencilStateDesc.hashName] = pDepthStencilStawte;
+		HrDepthStencilStatePtr pDepthStencilState = HrMakeSharedPtr<HrD3D11DepthStencilState>(depthStencilStateDesc);
+		m_mapDepthStencilStatePool[depthStencilStateDesc.hashName] = pDepthStencilState;
 
-		return pDepthStencilStawte;
+		return pDepthStencilState;
 	}
 }
 
-HrBlendState* HrD3D11RenderFactory::CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc)
+HrBlendStatePtr HrD3D11RenderFactory::CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc)
 {
 	auto itemBlend = m_mapBlendStatePool.find(blendDesc.hashName);
 	if (itemBlend != m_mapBlendStatePool.end())
 	{
-		return static_cast<HrD3D11BlendState*>(itemBlend->second);
+		return HrCheckPointerCast<HrD3D11BlendState>(itemBlend->second);
 	}
 	else
 	{
-		HrD3D11BlendState* pBlendState = HR_NEW HrD3D11BlendState(HrD3D11Device::Instance()->GetD3DDevice().get()
-			, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), blendDesc);
+		auto pBlendState = HrMakeSharedPtr<HrD3D11BlendState>(blendDesc);
 		m_mapBlendStatePool[blendDesc.hashName] = pBlendState;
 
 		return pBlendState;
 	}
 }
 
-HrRasterizerState* HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc)
+HrRasterizerStatePtr HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerState::HrRasterizerStateDesc& desc)
 {
-	HrD3D11RasterizerState* pRasterizer = HR_NEW HrD3D11RasterizerState(HrD3D11Device::Instance()->GetD3DDevice().get()
-		, HrD3D11Device::Instance()->GetD3DDeviceContext().get(), desc);
+	auto itemRState = m_mapRasterizerStatePool.find(desc.hashName);
+	if (itemRState != m_mapRasterizerStatePool.end())
+	{
+		return HrCheckPointerCast<HrD3D11RasterizerState>(itemRState->second);
+	}
+	else
+	{
+		auto pRasterizerState = HrMakeSharedPtr<HrD3D11RasterizerState>(desc);
+		m_mapRasterizerStatePool[desc.hashName] = pRasterizerState;
 
-	return pRasterizer;
+		return pRasterizerState;
+	}	
 }
 
 

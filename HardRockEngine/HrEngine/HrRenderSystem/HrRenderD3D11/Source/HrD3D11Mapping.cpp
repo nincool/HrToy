@@ -750,7 +750,22 @@ D3D11_STENCIL_OP HrD3D11Mapping::GetDepthStencilOperation(EnumStencilOperation s
 	}
 }
 
-D3D11_USAGE Hr::HrD3D11Mapping::GetTextureUsage(HrTexture::EnumTextureUsage usage)
+UINT8 HrD3D11Mapping::GetRenderTargetWriteMask(uint8 colorMask)
+{
+	UINT8 ret = 0;
+	if (colorMask & CMASK_RED)
+		ret |= D3D11_COLOR_WRITE_ENABLE_RED;
+	if (colorMask & CMASK_GREEN)
+		ret |= D3D11_COLOR_WRITE_ENABLE_GREEN;
+	if (colorMask & CMASK_BLUE)
+		ret |= D3D11_COLOR_WRITE_ENABLE_BLUE;
+	if (colorMask & CMASK_ALPHA)
+		ret |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
+
+	return ret;
+}
+
+D3D11_USAGE HrD3D11Mapping::GetTextureUsage(HrTexture::EnumTextureUsage usage)
 {
 	switch (usage)
 	{

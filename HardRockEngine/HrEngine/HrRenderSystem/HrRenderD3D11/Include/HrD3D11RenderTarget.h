@@ -19,6 +19,8 @@ namespace Hr
 		HrD3D11Texture2DPtr m_pRenderTargetBuff;
 		HrD3D11Texture2DPtr m_pTexRenderTargetView;
 	};
+
+
 }
 
 #endif

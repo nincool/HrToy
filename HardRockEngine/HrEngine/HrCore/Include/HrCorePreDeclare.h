@@ -38,9 +38,15 @@ namespace Hr
 	typedef std::shared_ptr<HrViewPort> HrViewPortPtr;
 	class HrRenderTarget;
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
+	class HrRenderTextureTarget;
+	typedef std::shared_ptr<HrRenderTextureTarget> HrRenderTextureTargetPtr;
+
 	class HrDepthStencil;
 	typedef std::shared_ptr<HrDepthStencil> HrDepthStencilPtr;
+
+
 	
+	//renderable
 	class HrVertexElement;
 	class HrVertex;
 	typedef std::shared_ptr<HrVertex> HrVertexPtr;
@@ -59,14 +65,7 @@ namespace Hr
 	class HrSkinnedMeshRenderable;
 	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
 
-	//InstanceBatch
-	class HrInstanceBatch;
-	typedef std::shared_ptr<HrInstanceBatch> HrInstanceBatchPtr;
-	class HrInstanceBatchHW;
-	typedef std::shared_ptr<HrInstanceBatchHW> HrInstanceBatchHWPtr;
-	class HrInstanceBatchObject;
-	typedef std::shared_ptr<HrInstanceBatchObject> HrInstanceBatchObjectPtr;
-
+	//effect
 	class HrRenderPass;
 	typedef std::shared_ptr<HrRenderPass> HrRenderPassPtr;
 	class HrRenderTechnique;
@@ -78,20 +77,8 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderEffectParameter> HrRenderEffectParameterPtr;
 	class HrRenderEffectConstantBuffer;
 	typedef std::shared_ptr<HrRenderEffectConstantBuffer> HrRenderEffectConstantBufferPtr;
-	
 	class HrCamera;
 	typedef std::shared_ptr<HrCamera> HrCameraPtr;
-	
-	class HrSamplerState;
-	typedef std::shared_ptr<HrSamplerState> HrSamplerStatePtr;
-
-	class HrDepthStencilState;
-	class HrBlendState;
-	class HrRasterizerState;
-	class HrLight;
-	typedef std::shared_ptr<HrLight> HrLightPtr;
-	class HrDirectionalLight;
-	typedef std::shared_ptr<HrLight> HrDirectionalLightPtr;
 	class HrShader;
 	typedef std::shared_ptr<HrShader> HrShaderPtr;
 	class HrRenderFrameParameters;
@@ -99,7 +86,25 @@ namespace Hr
 	class HrRenderParamDefine;
 	typedef std::shared_ptr<HrRenderParamDefine> HrRenderParamDefinePtr;
 
+	//renderstate;
+	class HrBlendState;
+	typedef std::shared_ptr<HrBlendState> HrBlendStatePtr;
+	class HrDepthStencilState;
+	typedef std::shared_ptr<HrDepthStencilState> HrDepthStencilStatePtr;
+	class HrSamplerState;
+	typedef std::shared_ptr<HrSamplerState> HrSamplerStatePtr;
+	class HrRasterizerState;
+	typedef std::shared_ptr<HrRasterizerState> HrRasterizerStatePtr;
 
+	//light
+	class HrLight;
+	typedef std::shared_ptr<HrLight> HrLightPtr;
+	class HrDirectionalLight;
+	typedef std::shared_ptr<HrLight> HrDirectionalLightPtr;
+
+	//shadow
+	class HrShadowMap;
+	typedef std::shared_ptr<HrShadowMap> HrShadowMapPtr;
 
 	//Scene
 	class HrSceneLightData;
@@ -167,13 +172,19 @@ namespace Hr
 	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
 
 	//Asset
-
-
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
 	class HrGeometryFactory;
 	typedef std::shared_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 	class HrGeometryBox;
+
+	//InstanceBatch
+	class HrInstanceBatch;
+	typedef std::shared_ptr<HrInstanceBatch> HrInstanceBatchPtr;
+	class HrInstanceBatchHW;
+	typedef std::shared_ptr<HrInstanceBatchHW> HrInstanceBatchHWPtr;
+	class HrInstanceBatchObject;
+	typedef std::shared_ptr<HrInstanceBatchObject> HrInstanceBatchObjectPtr;
 }
 
 

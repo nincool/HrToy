@@ -18,22 +18,22 @@ namespace Hr
 		const HrShaderPtr& GetShader(HrShader::EnumShaderType shaderType);
 		void SetShader(const HrShaderPtr& pShader, HrShader::EnumShaderType shaderType);
 
-		void SetDepthStencilState(HrDepthStencilState* pDepthStencilState);
-		void SetBlendState(HrBlendState* pBlendState);
+		void SetRasterizerState(const HrRasterizerStatePtr& pRasterizerState);
+		void SetDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState);
+		void SetBlendState(const HrBlendStatePtr& pBlendState);
 
-	
 	private:
 
 	private:
 		std::string m_strPassName;
 
-		HrDepthStencilState* m_pDepthStencilState;
-		HrBlendState* m_pBlendState;
-		HrRasterizerState* m_pRasterizerState;
-
 		HrShaderPtr m_pVertexShader;
 		HrShaderPtr m_pPixelShader;
 		
+		//BlendState
+		HrBlendStatePtr m_pBlendState;
+		HrDepthStencilStatePtr m_pDepthStencilState;
+		HrRasterizerStatePtr m_pRasterizerState;
 
 
 	};

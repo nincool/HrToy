@@ -3,13 +3,20 @@
 
 using namespace Hr;
 
-HrD3D11DepthStencil::HrD3D11DepthStencil(uint32 nWidth, uint32 nHeight) : HrDepthStencil(nWidth, nHeight)
+HrD3D11DepthStencil::HrD3D11DepthStencil(uint32 nWidth, uint32 nHeight, EnumPixelFormat format, uint32 texD3DUsage) : HrDepthStencil(nWidth, nHeight, format)
 {
+	m_texD3DUsage = texD3DUsage;
 	CreateDepthStencilView();
 }
 
 HrD3D11DepthStencil::~HrD3D11DepthStencil()
 {
+}
+
+
+HrTexturePtr HrD3D11DepthStencil::GetDepthStencilSRV()
+{
+	return m_pTexDepthStencilView;
 }
 
 const ID3D11DepthStencilViewPtr& HrD3D11DepthStencil::GetDepthStencilView()
@@ -26,9 +33,20 @@ bool HrD3D11DepthStencil::CreateDepthStencilView()
 		, 1
 		, 0
 		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, PF_D24S8
-		, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
+		, m_format
+		, m_texD3DUsage);
 	m_pTexDepthStencilView->CreateDepthStencilView();
+
 	return true;
+}
+
+const ID3D11ShaderResourceViewPtr& HrD3D11DepthStencil::GetDepthStencilShaderResouceView()
+{
+	if (!m_pTexDepthStencilView->GetD3D11ShaderResourceView())
+	{
+		m_pTexDepthStencilView->CreateShaderResourceView();
+	}
+
+	return m_pTexDepthStencilView->GetD3D11ShaderResourceView();
 }
 

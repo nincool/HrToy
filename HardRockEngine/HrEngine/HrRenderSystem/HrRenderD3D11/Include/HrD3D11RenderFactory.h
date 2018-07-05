@@ -17,9 +17,9 @@ namespace Hr
 		
 		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
 
-		virtual HrRenderFramePtr CreateRenderFrameBuffer() override;
-		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 
+		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
+		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		//virtual HrTexturePtr CreateTexture(HrTexture::EnumTextureType texType
 		//	, uint32 nWidth
 		//	, uint32 nHeight
@@ -42,16 +42,17 @@ namespace Hr
 			, uint32 nArraySize
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
-			, uint32 nAccessHint) override;
+			, uint32 nAccessHint
+			, EnumPixelFormat format) override;
 
 
 		virtual HrSamplerStatePtr CreateSamplerState() override;
 
-		virtual HrDepthStencilState* CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) override;
+		virtual HrDepthStencilStatePtr CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) override;
 
-		virtual HrBlendState* CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc) override;
+		virtual HrBlendStatePtr CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc) override;
 
-		virtual HrRasterizerState* CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc) override;
+		virtual HrRasterizerStatePtr CreateRasterizerState(HrRasterizerState::HrRasterizerStateDesc& desc) override;
 	};
 }
 

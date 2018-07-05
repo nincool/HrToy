@@ -9,12 +9,10 @@ namespace Hr
 	class HR_CORE_API HrRenderTechnique
 	{
 	public:
-		HrRenderTechnique(std::string strTechniqueName, int nLod);
+		HrRenderTechnique(std::string strTechniqueName);
 		~HrRenderTechnique();
 
 		size_t HashName();
-		int LOD();
-		
 		size_t GetRenderPassNum() { return m_vecPass.size(); }
 		const HrRenderPassPtr& GetRenderPass(uint32 nIndex);
 
@@ -32,7 +30,6 @@ namespace Hr
 	protected:
 		size_t m_nHashName;
 		std::string m_strTechniqueName;
-		int m_nLod;
 		std::vector<HrRenderPassPtr> m_vecPass;
 
 		std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> > m_vecVertexInputSimantic;

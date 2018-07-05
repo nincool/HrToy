@@ -86,11 +86,6 @@ void HrInstanceBatchHW::OnRenderBegin()
 	
 }
 
-void HrInstanceBatchHW::Render()
-{
-	HrInstanceBatch::Render();
-}
-
 void HrInstanceBatchHW::OnRenderEnd()
 {
 	HrInstanceBatch::OnRenderEnd();

@@ -1,22 +1,22 @@
-#include "HrForwardLighting.h"
+#include "HrRenderQueue.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrCore/Include/Render/HrInstanceBatch.h"
 
 using namespace Hr;
 
-HrForwardLighting::HrForwardLighting()
+HrRenderQueue::HrRenderQueue()
 {
 	m_bMoving = false;
 
 	ResetKeyFlag();
 }
 
-HrForwardLighting::~HrForwardLighting()
+HrRenderQueue::~HrRenderQueue()
 {
 
 }
 
-void HrForwardLighting::ResetKeyFlag()
+void HrRenderQueue::ResetKeyFlag()
 {
 	m_bKeyAPressed = false;
 	m_bKeyWPressed = false;
@@ -30,7 +30,7 @@ void HrForwardLighting::ResetKeyFlag()
 	m_bRightMousePressed = false;
 }
 
-void HrForwardLighting::OnEnter()
+void HrRenderQueue::OnEnter()
 {
 	HrScene::OnEnter();
 
@@ -38,10 +38,10 @@ void HrForwardLighting::OnEnter()
 
 	CreateInputEvent();
 
-	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrForwardLighting::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
+	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrRenderQueue::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
-void HrForwardLighting::CreateSceneElements()
+void HrRenderQueue::CreateSceneElements()
 {
 	//Ìí¼ÓÉãÏñ»ú
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
@@ -93,18 +93,18 @@ void HrForwardLighting::CreateSceneElements()
 	m_pTestRoot->GetTransform()->SetPosition(Vector3(0.0f, -50.0f, 0.0f));
 }
 
-void HrForwardLighting::CreateInputEvent()
+void HrRenderQueue::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrForwardLighting::OnKeyPressed, this)
-		, HR_CALLBACK_2(HrForwardLighting::OnKeyReleased, this));
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrRenderQueue::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrRenderQueue::OnKeyReleased, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
 
-	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrForwardLighting::OnMousePressed, this)
-		, HR_CALLBACK_2(HrForwardLighting::OnMouseReleased, this), HR_CALLBACK_1(HrForwardLighting::OnMouseMove, this));
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrRenderQueue::OnMousePressed, this)
+		, HR_CALLBACK_2(HrRenderQueue::OnMouseReleased, this), HR_CALLBACK_1(HrRenderQueue::OnMouseMove, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerMouse, this);
 }
 
-void HrForwardLighting::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrRenderQueue::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	ResetKeyFlag();
 	switch (keyCode)
@@ -134,7 +134,7 @@ void HrForwardLighting::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const
 	}
 }
 
-void HrForwardLighting::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrRenderQueue::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	switch (keyCode)
 	{
@@ -162,7 +162,7 @@ void HrForwardLighting::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, cons
 	}
 }
 
-void HrForwardLighting::SceneUpdate(float fDelta)
+void HrRenderQueue::SceneUpdate(float fDelta)
 {
 	float fSpeed = 1.0f;
 	float fRotateSpeed = 5;
@@ -207,7 +207,7 @@ void HrForwardLighting::SceneUpdate(float fDelta)
 
 }
 
-void HrForwardLighting::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrRenderQueue::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -224,7 +224,7 @@ void HrForwardLighting::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, 
 	}
 }
 
-void HrForwardLighting::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrRenderQueue::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -241,7 +241,7 @@ void HrForwardLighting::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID,
 	}
 }
 
-void HrForwardLighting::OnMouseMove(const HrEventPtr& pEvent)
+void HrRenderQueue::OnMouseMove(const HrEventPtr& pEvent)
 {
 	HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
 	static float s_floatX = 0;

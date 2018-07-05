@@ -3,6 +3,8 @@
 #include "HrForwardLighting.h"
 #include "HrInstanceBatchTest.h"
 #include "HrTestScene.h"
+#include "HrRenderQueue.h"
+#include "HrShadowMapScene.h"
 #include <sstream>
 #include "HrEngine.h"
 
@@ -48,7 +50,7 @@ void HrGeometryApp::LoadAssets()
 void HrGeometryApp::CreateScene()
 {
 	//auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
-	auto pTestScene = HrMakeSharedPtr<HrForwardLighting>();
+	auto pTestScene = HrMakeSharedPtr<HrShadowMapScene>();
 	HrDirector::Instance()->GetSceneCoreComponent()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();

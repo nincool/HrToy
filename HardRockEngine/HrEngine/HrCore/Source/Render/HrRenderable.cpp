@@ -77,11 +77,14 @@ HrSceneObjectPtr HrRenderable::GetAttachSceneObject()
 	return nullptr;
 }
 
-void HrRenderable::Render()
+void HrRenderable::Render(const HrRenderTechniquePtr& pRenderTech)
 {
 	OnRenderBegin();
 
-	HrDirector::Instance()->GetRenderCoreComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
+	if (pRenderTech)
+		HrDirector::Instance()->GetRenderCoreComponent()->DoRender(pRenderTech, GetRenderLayout());
+	else
+		HrDirector::Instance()->GetRenderCoreComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
 
 	OnRenderEnd();
 }
@@ -96,7 +99,7 @@ void HrRenderable::OnRenderBegin()
 	{
 		const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_SLOT_0);
 		if (pDiffuseTex)
-			pDiffuseTexParam->operator =(pDiffuseTex.get());
+			pDiffuseTexParam->operator = (pDiffuseTex.get());
 	}
 
 }

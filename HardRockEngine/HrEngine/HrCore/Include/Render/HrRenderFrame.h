@@ -23,7 +23,7 @@ namespace Hr
 		virtual void AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget);
 		virtual void DetachRenderTarget(EnumRenderTargetLayer attachLayer);
 
-		virtual void OnBind() = 0;
+		virtual void OnBind(const HrRenderPtr& pRender) = 0;
 		virtual void OnUnBind() = 0;
 
 		virtual void ClearTarget() = 0;
@@ -38,7 +38,7 @@ namespace Hr
 		const HrViewPortPtr& GetViewPort(uint32 zOrder) const;
 		const std::map<uint32, HrViewPortPtr>& GetAllViewPorts();
 
-
+		HrDepthStencilPtr GetDepthStencil();
 	protected:
 		HrColor m_clearColor;
 		float m_clearDepth;

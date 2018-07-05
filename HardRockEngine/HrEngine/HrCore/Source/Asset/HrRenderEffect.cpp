@@ -2,26 +2,29 @@
 #include "Asset/HrResourceLoader.h"
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrShaderCompiler.h"
+#include "Asset/HrStreamData.h"
+#include "Asset/HrRenderEffectParameter.h"
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderTechnique.h"
 #include "Render/HrRenderPass.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrDepthStencilState.h"
 #include "Render/HrBlendState.h"
+#include "Render/HrRasterizerState.h"
 #include "Render/HrLight.h"
-#include "Asset/HrStreamData.h"
-#include "Asset/HrRenderEffectParameter.h"
+#include "Render/HrRenderSystem.h"
 #include "Kernel/HrLog.h"
+#include "Kernel/HrCoreComponentRender.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "HrUtilTools/Include/HrStringUtil.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrDirector.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-
 #include <boost/format.hpp>
 #include <boost/functional/hash.hpp>
-#include "Kernel/HrCoreComponentRender.h"
-#include "Render/HrRenderSystem.h"
+
+
 
 
 using namespace Hr;
@@ -95,7 +98,7 @@ void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const
 		if (sceneRootInfo.HasMember(strTechniqueItem.c_str()))
 		{
 			const rapidjson::Value& techniqueInfo = sceneRootInfo[strTechniqueItem.c_str()];
-			HrRenderTechniquePtr pRenderTechnique = HrMakeSharedPtr<HrRenderTechnique>(techniqueInfo["NAME"].GetString(), techniqueInfo["LOD"].GetInt());
+			HrRenderTechniquePtr pRenderTechnique = HrMakeSharedPtr<HrRenderTechnique>(techniqueInfo["NAME"].GetString());
 			m_vecRenderTechnique.push_back(pRenderTechnique);
 
 			LoadPasses(techniqueInfo, pShaderCompiler, pRenderTechnique);
@@ -106,12 +109,6 @@ void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const
 		}
 		++nTempTechniqueIndex;
 	}
-
-	std::sort(m_vecRenderTechnique.begin(), m_vecRenderTechnique.end(), [&](const HrRenderTechniquePtr& pA, const HrRenderTechniquePtr& pB) {
-		if (pA->LOD() > pB->LOD())
-			return true;
-		return false;
-	});
 }
 
 void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrShaderCompilerPtr& pShaderCompiler, const HrRenderTechniquePtr& pRenderTechnique)
@@ -128,7 +125,42 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				const rapidjson::Value& shaderInfo = passInfo["SHADER"];
 				LoadShaders(shaderInfo, pShaderCompiler, pRenderTechnique, pRenderPass);
 			}
+			//Rasterizer
+			{
+				if (passInfo.HasMember("RASTERIZER"))
+				{
+					const rapidjson::Value& rasterizerInfo = passInfo["RASTERIZER"];
+					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
+					if (rasterizerInfo.HasMember("FILL_MODE")) rasterizerDesc.fillMode = RasterizerFillMode(rasterizerInfo["FILL_MODE"].GetString());
+					if (rasterizerInfo.HasMember("CULL_MODE")) rasterizerDesc.cullMode = RasterizerCullMode(rasterizerInfo["CULL_MODE"].GetString());
+					if (rasterizerInfo.HasMember("FRONT_CCW")) rasterizerDesc.bfrontCounterClockWise = rasterizerInfo["FRONT_CCW"].GetBool();
+					if (rasterizerInfo.HasMember("DEPTH_BIAS")) rasterizerDesc.nDepthBias = rasterizerInfo["DEPTH_BIAS"].GetInt();
+					if (rasterizerInfo.HasMember("DEPTH_BIAS_CLAMP")) rasterizerDesc.fDepthBiasClamp = rasterizerInfo["DEPTH_BIAS_CLAMP"].GetFloat();
+					if (rasterizerInfo.HasMember("SLOPSCALEDEPTHBIAS")) rasterizerDesc.fSlopScaleDepthBias = rasterizerInfo["SLOPSCALEDEPTHBIAS"].GetFloat();
+					if (rasterizerInfo.HasMember("DEPTH_CLIP_ENABLE")) rasterizerDesc.bScissorEnable = rasterizerInfo["SCISSOR_ENABLE"].GetBool();
+					if (rasterizerInfo.HasMember("MULTISAMPLE_ENABLE")) rasterizerDesc.bMultisampleEnalbe = rasterizerInfo["MULTISAMPLE_ENABLE"].GetBool();
+					if (rasterizerInfo.HasMember("ANTIALIASEDLINE_ENABLE")) rasterizerDesc.bAntialiaseLineEnable = rasterizerInfo["ANTIALIASEDLINE_ENABLE"].GetBool();
 
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fillMode);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.cullMode);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bfrontCounterClockWise);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.nDepthBias);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fDepthBiasClamp);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fSlopScaleDepthBias);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bScissorEnable);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bMultisampleEnalbe);
+					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bAntialiaseLineEnable);
+
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					pRenderPass->SetRasterizerState(pRasterizerState);
+				}
+				else
+				{
+					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					pRenderPass->SetRasterizerState(pRasterizerState);
+				}
+			}
 			//DepthStencil
 			{
 				const rapidjson::Value& depthStencil = passInfo["DEPTH_STENCIL"];
@@ -148,6 +180,7 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				depthStencilDesc.backFaceStencilFailOp = StencilOperation(depthStencil["BACK_FACE_STENCIL_FAILED_OP"].GetString());
 				depthStencilDesc.backFaceStencilDepthFailOp = StencilOperation(depthStencil["BACK_FACE_STENCILDEPTH_FAIL_OP"].GetString());
 				depthStencilDesc.backFaceStencilPassOp = StencilOperation(depthStencil["BACK_FACE_PASS_OP"].GetString());
+				depthStencilDesc.nStencilRef = std::stoul(depthStencil["STENCIL_REF"].GetString());
 
 				depthStencilDesc.hashName = 0;
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bDepthEnable);
@@ -164,8 +197,9 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilFailOp);
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilDepthFailOp);
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
+				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.nStencilRef);
 
-				HrDepthStencilState* pDepthStencilState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
 				pRenderPass->SetDepthStencilState(pDepthStencilState);
 			}
 			//Blend
@@ -180,6 +214,14 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				blendDesc.blendOperationAlpha = BlendOperation(blendInfo["BLEND_OP_ALPHA"].GetString());
 				blendDesc.srcBlendAlpha = AlphaBlendFactor(blendInfo["SRC_BLEND_ALPHA"].GetString());
 				blendDesc.dstBlendAlpha = AlphaBlendFactor(blendInfo["DEST_BLEND_ALPHA"].GetString());
+				std::vector<std::string> vecMaskColor = HrStringUtil::GetVector(blendInfo["RENDER_TARGET_WRITE_MASK"].GetString(), "|");
+				blendDesc.colorMask = ColorMask(vecMaskColor);
+				float4 blendFactorColor = HrStringUtil::GetFloat4FromString(blendInfo["BLEND_FACTOR_COLOR"].GetString(), "|");
+				blendDesc.blendFactor = HrColor(blendFactorColor[0], blendFactorColor[1], blendFactorColor[2], blendFactorColor[3]);
+
+				std::string strTemp = blendInfo["SAMPLE_MASK"].GetString();
+				blendDesc.nSampleMask = std::stoul(blendInfo["SAMPLE_MASK"].GetString(), nullptr, 16);
+
 				blendDesc.hashName = 0;
 				boost::hash_combine(blendDesc.hashName, blendDesc.bBlendEnable);
 				boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
@@ -189,8 +231,9 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(blendDesc.hashName, blendDesc.blendOperationAlpha);
 				boost::hash_combine(blendDesc.hashName, blendDesc.srcBlendAlpha);
 				boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
+				boost::hash_combine(blendDesc.hashName, blendDesc.nSampleMask);
 
-				HrBlendState* pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState(blendDesc);
+				auto pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState(blendDesc);
 				pRenderPass->SetBlendState(pBlendState);
 			}
 		}
@@ -380,9 +423,11 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 			size_t nHashParamName = HrHashValue(std::string("pointLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
+			{
+				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+				*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+			}
 		}
 		
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_SPECULAR_COLOR);
@@ -391,9 +436,11 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 			size_t nHashParamName = HrHashValue(std::string("pointLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
+			{
+				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+				*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+			}
 		}
 
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_ATTENUATION);
@@ -402,9 +449,11 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 			size_t nHashParamName = HrHashValue(std::string("pointLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetPointLightAttenuation(i);
+			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
+			{
+				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+				*pEffParam = pRenderFrameParameters->GetPointLightAttenuation(i);
+			}
 		}
 
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_POSITION);
@@ -413,9 +462,11 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 			size_t nHashParamName = HrHashValue(std::string("pointLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetPointLightPosition(i);
+			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
+			{
+				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
+				*pEffParam = pRenderFrameParameters->GetPointLightPosition(i);
+			}
 		}
 	}	
 }
@@ -490,7 +541,7 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 
 const HrRenderTechniquePtr HrRenderEffect::GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData)
 {
-	for (size_t i = 0; i < m_vecRenderTechnique.size(); ++i)
+	for (size_t i = m_vecRenderTechnique.size()-1; i >= 0; --i) 
 	{
 		if (m_vecRenderTechnique[i]->IsVertexElementMatch(vecVertexData))
 		{

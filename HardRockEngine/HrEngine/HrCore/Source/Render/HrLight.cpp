@@ -145,9 +145,9 @@ HrPointLight::HrPointLight()
 	m_diffuse = HrMath::MakeColor(200.0f, 200.0f, 200.0f, 255.0f);
 	m_specular = HrMath::MakeColor(255.0f, 244.0f, 215.0f, 255.0f);
 	m_fRange = 200;
-	m_fAttenuation0 = 0.1;
-	m_fAttenuation1 = 0.01;
-	m_fAttenuation2 = 0.0005;
+	m_fAttenuation0 = 0.01;	//常数衰减
+	m_fAttenuation1 = 0.001; //线性衰减系数
+	m_fAttenuation2 = 0.00001; //2次方 急速衰减
 	m_v3Position = Vector3(0.0f, 0.0f, -60.0f);
 }
 

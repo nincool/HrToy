@@ -18,7 +18,12 @@ namespace Hr
 		
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() = 0;
 
-		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) = 0;
+		virtual void SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, const HrDepthStencilPtr& pDepthStencil) = 0;
+		virtual void SetViewPort(const HrViewPortPtr& pViewPort) = 0;
+
+		virtual void BindRasterizerState(const HrRasterizerStatePtr& pRasterizerState) = 0;
+		virtual void BindBlendState(const HrBlendStatePtr& pBlendState) = 0;
+		virtual void BindDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState) = 0;
 
 		virtual void BindShader(const HrShaderPtr& pShader) = 0;
 

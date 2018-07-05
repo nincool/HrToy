@@ -7,22 +7,21 @@
 
 namespace Hr
 {
-	class HrD3D11RasterizerState : public HrRasterizerState
+	class HrD3D11RasterizerState : public HrRasterizerState, public std::enable_shared_from_this<HrD3D11RasterizerState>
 	{
 	public:
-		HrD3D11RasterizerState(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext
-			, HrRasterizerState::RasterizerStateDesc& desc);
+		HrD3D11RasterizerState(HrRasterizerState::HrRasterizerStateDesc& desc);
 		~HrD3D11RasterizerState();
 
-		virtual void Bind(HrRender* pRender) override;
+		virtual void Accept(const HrRenderPtr& pRender) override;
 
-		ID3D11RasterizerState* CreateD3D11RasterizerState(HrRasterizerState::RasterizerStateDesc& desc);
+		const ID3D11RasterizerStatePtr& RetriveD3D11RasterizerState();
+
 	protected:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
+		void CreateD3D11RasterizerState(HrRasterizerState::HrRasterizerStateDesc& desc);
+	protected:
 
-		ID3D11RasterizerState* m_pRasterizerState;
+		ID3D11RasterizerStatePtr m_pRasterizerState;
 	};
 }
 

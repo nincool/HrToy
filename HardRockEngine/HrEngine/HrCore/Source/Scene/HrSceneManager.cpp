@@ -87,6 +87,8 @@ void HrSceneManager::RenderScene()
 	m_pRunningScene->FillRenderQueue(m_pRenderQueue);
 
 	//äÖÈ¾
+	pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
+	
 	pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
 	pRenderComponent->Present();
 

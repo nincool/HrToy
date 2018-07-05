@@ -13,16 +13,17 @@ namespace Hr
 	public:
 		enum EnumD3DTEXTURE_USED
 		{
-			D3D_TEX_DEFAULT,
-			D3D_TEX_RENDERTARGETVIEW,
-			D3D_TEX_DEPTHSTENCILVIEW,
+			D3D_TEX_DEFAULT = 1 << 0,
+			D3D_TEX_RENDERTARGETVIEW = 1 << 1,
+			D3D_TEX_DEPTHSTENCILVIEW = 1 << 2,
+			D3D_TEX_SHADERRESOURCEVIEW = 1 << 3
 		};
 	public:
 		HrD3D11Texture(EnumTextureType texType
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
 			, uint32 nAccessHint
-			, EnumD3DTEXTURE_USED texUsage);
+			, uint32 texD3DUsage);
 
 		~HrD3D11Texture();
 
@@ -39,7 +40,7 @@ namespace Hr
 		ID3D11DevicePtr m_pD3D11Device;
 		ID3D11DeviceContextPtr m_pD3D11Context;
 
-		EnumD3DTEXTURE_USED m_texUsedType;
+		uint32 m_texD3DUsedType;
 
 		ID3D11ResourcePtr m_pD3DTexture;
 
@@ -58,7 +59,7 @@ namespace Hr
 			, uint32 nSampleQuality
 			, uint32 nAccessHint
 			, EnumPixelFormat format = PF_R8G8B8A8
-			, EnumD3DTEXTURE_USED texUsage = D3D_TEX_DEFAULT);
+			, uint32 texUsage = D3D_TEX_DEFAULT);
 		HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DTEXTURE_USED texUsage);
 
 		~HrD3D11Texture2D();

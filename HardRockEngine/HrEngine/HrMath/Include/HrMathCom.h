@@ -10,7 +10,7 @@ namespace Hr
 	namespace HrMath
 	{
 		inline float PI() { return KlayGE::PI; }
-		inline float PI2() { return KlayGE::PIdiv2; }
+		inline float PIDIV2() { return KlayGE::PIdiv2; }
 		inline float DEG90() { return KlayGE::DEG90; }
 
 		inline float DEG2RAD() {

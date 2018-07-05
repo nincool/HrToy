@@ -18,11 +18,9 @@ HrRenderPass::HrRenderPass(const std::string& strPassName)
 	m_pVertexShader = nullptr;
 	m_pPixelShader = nullptr;
 
-	//TODO!!!to release
-	//m_pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState();
 	m_pDepthStencilState = nullptr;
 	m_pBlendState = nullptr;
-	m_pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->GetDefualtRasterizerState();
+	m_pRasterizerState = nullptr;
 }
 
 HrRenderPass::~HrRenderPass()
@@ -31,18 +29,20 @@ HrRenderPass::~HrRenderPass()
 
 void HrRenderPass::BindPass(const HrRenderPtr& pRender)
 {
-	BOOST_ASSERT(m_pDepthStencilState);
+	
 	BOOST_ASSERT(m_pBlendState);
+	m_pBlendState->Accept(pRender);
+	
+	BOOST_ASSERT(m_pDepthStencilState);
+	m_pDepthStencilState->Accept(pRender);
+	
 	BOOST_ASSERT(m_pRasterizerState);
-
+	m_pRasterizerState->Accept(pRender);
+	
 	BOOST_ASSERT(m_pVertexShader);
-	BOOST_ASSERT(m_pPixelShader);
-
-	//m_pDepthStencilState->Bind(pRender);
-	//m_pBlendState->Bind(pRender);
-	//m_pRasterizerState->Bind(pRender);
-
 	m_pVertexShader->Accept(pRender);
+
+	BOOST_ASSERT(m_pPixelShader);
 	m_pPixelShader->Accept(pRender);
 }
 
@@ -72,6 +72,8 @@ const HrShaderPtr& HrRenderPass::GetShader(HrShader::EnumShaderType shaderType)
 	default:
 		break;
 	}
+
+	return nullptr;
 }
 
 void HrRenderPass::SetShader(const HrShaderPtr& pShader, HrShader::EnumShaderType shaderType)
@@ -99,12 +101,17 @@ void HrRenderPass::SetShader(const HrShaderPtr& pShader, HrShader::EnumShaderTyp
 	}
 }
 
-void HrRenderPass::SetDepthStencilState(HrDepthStencilState* pDepthStencilState)
+void HrRenderPass::SetRasterizerState(const HrRasterizerStatePtr& pRasterizerState)
+{
+	m_pRasterizerState = pRasterizerState;
+}
+
+void HrRenderPass::SetDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState)
 {
 	m_pDepthStencilState = pDepthStencilState;
 }
 
-void HrRenderPass::SetBlendState(HrBlendState* pBlendState)
+void HrRenderPass::SetBlendState(const HrBlendStatePtr& pBlendState)
 {
 	m_pBlendState = pBlendState;
 }

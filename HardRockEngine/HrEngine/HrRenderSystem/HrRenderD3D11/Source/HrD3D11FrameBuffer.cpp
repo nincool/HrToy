@@ -32,7 +32,7 @@ void HrD3D11FrameBuffer::DetachRenderTarget(EnumRenderTargetLayer attachLayer)
 	HrRenderFrame::DetachRenderTarget(attachLayer);
 }
 
-void HrD3D11FrameBuffer::OnBind()
+void HrD3D11FrameBuffer::OnBind(const HrRenderPtr& pRender)
 {
 }
 
@@ -59,11 +59,13 @@ const ID3D11DepthStencilViewPtr& HrD3D11FrameBuffer::D3D11DepthStencilView()
 
 void HrD3D11FrameBuffer::ClearTarget()
 {
-
+	XMVECTORF32 Blue = { m_clearColor.r(), m_clearColor.g(), m_clearColor.b(), m_clearColor.a() };
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearRenderTargetView(D3D11RenderTargetView(RTL_0).get(), reinterpret_cast<const float*>(&Blue));
 }
 
 void HrD3D11FrameBuffer::ClearDepthStencil()
 {
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearDepthStencilView(D3D11DepthStencilView().get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, m_clearDepth, m_clearStencil);
 }
 
 void HrD3D11FrameBuffer::Present()
@@ -196,18 +198,15 @@ void HrD3D11ScreenFrameBuffer::CreateDepthStencilView()
 {
 	if (!m_pDepthStencil)
 	{
-		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight);
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
 	}
 }
 
-void HrD3D11ScreenFrameBuffer::OnBind()
+void HrD3D11ScreenFrameBuffer::OnBind(const HrRenderPtr& pRender)
 {
 	if (m_arrRenderTargets[RTL_0])
 	{
-		HrD3D11RenderTargetPtr pD3D11RenderTarget = HrCheckPointerCast<HrD3D11RenderTarget>(m_arrRenderTargets[RTL_0]);
-		ID3D11RenderTargetView* pRenderTarget = pD3D11RenderTarget->GetRenderTargetView().get();
-		HrD3D11DepthStencilPtr pD3D11DepthStencil = HrCheckPointerCast<HrD3D11DepthStencil>(m_pDepthStencil);
-		HrD3D11Device::Instance()->GetD3DDeviceContext()->OMSetRenderTargets(1, &pRenderTarget, pD3D11DepthStencil->GetDepthStencilView().get());
+		pRender->SetRenderTarget(m_arrRenderTargets[RTL_0], m_pDepthStencil);
 	}
 }
 
@@ -238,4 +237,53 @@ void HrD3D11ScreenFrameBuffer::Present()
 		m_pSwapChain->Present(0, 0);
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////
+//HrD3D11DepthStencilFrameBuffer
+///////////////////////////////////////////////////////////////////////////
+HrD3D11DepthStencilFrameBuffer::HrD3D11DepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) : m_nWidth(nWidth), m_nHeight(nHeight)
+{
+	//1.创建DepthTexture
+	//2.创建DepthStencil
+	//3.创建关联DepthStencil的ShaderResourceView
+	//4.忽略RenderTarget
+	CreateDepthStencilView();
+}
+
+HrD3D11DepthStencilFrameBuffer::~HrD3D11DepthStencilFrameBuffer()
+{
+
+}
+
+void HrD3D11DepthStencilFrameBuffer::CreateDepthStencilView()
+{
+	if (!m_pDepthStencil)
+	{
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+		HrCheckPointerCast<HrD3D11DepthStencil>(m_pDepthStencil)->GetDepthStencilShaderResouceView();
+	}
+}
+
+void HrD3D11DepthStencilFrameBuffer::ClearTarget()
+{
+}
+
+void HrD3D11DepthStencilFrameBuffer::ClearDepthStencil()
+{
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearDepthStencilView(D3D11DepthStencilView().get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, m_clearDepth, m_clearStencil);
+}
+
+void HrD3D11DepthStencilFrameBuffer::OnBind(const HrRenderPtr& pRender)
+{
+	pRender->SetRenderTarget(nullptr, m_pDepthStencil);
+}
+
+void HrD3D11DepthStencilFrameBuffer::OnUnBind()
+{
+
+}
+
+
+
+
 

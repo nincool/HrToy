@@ -1,22 +1,22 @@
-#include "HrForwardLighting.h"
+#include "HrShadowMapScene.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrCore/Include/Render/HrInstanceBatch.h"
 
 using namespace Hr;
 
-HrForwardLighting::HrForwardLighting()
+HrShadowMapScene::HrShadowMapScene()
 {
 	m_bMoving = false;
 
 	ResetKeyFlag();
 }
 
-HrForwardLighting::~HrForwardLighting()
+HrShadowMapScene::~HrShadowMapScene()
 {
 
 }
 
-void HrForwardLighting::ResetKeyFlag()
+void HrShadowMapScene::ResetKeyFlag()
 {
 	m_bKeyAPressed = false;
 	m_bKeyWPressed = false;
@@ -30,7 +30,7 @@ void HrForwardLighting::ResetKeyFlag()
 	m_bRightMousePressed = false;
 }
 
-void HrForwardLighting::OnEnter()
+void HrShadowMapScene::OnEnter()
 {
 	HrScene::OnEnter();
 
@@ -38,73 +38,58 @@ void HrForwardLighting::OnEnter()
 
 	CreateInputEvent();
 
-	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrForwardLighting::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
+	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrShadowMapScene::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
-void HrForwardLighting::CreateSceneElements()
+void HrShadowMapScene::CreateSceneElements()
 {
+
+
 	//添加摄像机
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
 	AddNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
+	//auto pCamera = m_pSceneMainCamera->GetSceneObject()->GetComponent<HrCameraComponet>()->GetCamera();
+	//pCamera->ProjectParams(HrMath::PI() / 2, pCamera->Apsect(), 0.3, 1000);
+	//m_pSceneMainCamera->GetTransform()->SetPosition(Vector3(0.0f, 120.0f, 0.0f));
+	//m_pSceneMainCamera->GetTransform()->SetOrientation(HrMath::RotationQuaternionYawPitchRoll(Vector3(90.0, 0.0, 0.0)));
 
 	//创建直线光
-	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
-	AddNode(pDirectionLight);
+	//auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
+	//AddNode(pDirectionLight);
 
 	m_pPointLight1 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight1", HrLight::LT_POINT);
 	AddNode(m_pPointLight1);
-	m_pPointLight1->GetTransform()->SetPosition(Vector3(-50.0f, 0.0f, -60.0f));
-	m_pPointLight1->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Red);
-	m_pPointLight1->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Red);
-
-	m_pPointLight2 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight2", HrLight::LT_POINT);
-	AddNode(m_pPointLight2);
-	m_pPointLight2->GetTransform()->SetPosition(Vector3(50.0f, 0.0f, -60.0f));
-	m_pPointLight2->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Blue);
-	m_pPointLight2->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Blue);
-
-	m_pPointLight3 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
-	AddNode(m_pPointLight3);
-	m_pPointLight3->GetTransform()->SetPosition(Vector3(50.0f, -50.0f, -60.0f));
-	m_pPointLight3->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Green);
-	m_pPointLight3->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Green);
-
-	m_pPointLight4 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
-	AddNode(m_pPointLight4);
-	m_pPointLight4->GetTransform()->SetPosition(Vector3(-50.0f, -50.0f, -60.0f));
-	m_pPointLight4->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Yellow);
-	m_pPointLight4->GetSceneObject()->GetComponent<HrLightComponent>()->SetDiffuse(HrColor::Yellow);
+	m_pPointLight1->GetTransform()->SetPosition(Vector3(0.0f, 120.0, 0.0f));
 
 	m_pTestRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pTestRoot);
 
 	m_pPlane = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestPlan.model");
-	m_pPlane->GetTransform()->SetPosition(Vector3(0.0f, -50.0f, 0.0f));
+	m_pPlane->GetTransform()->SetPosition(Vector3(0.0f, -100.0f, 0.0f));
 	m_pTestRoot->AddChild(m_pPlane);
 
 	m_pBox = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestSphere.model");
+	m_pBox->GetTransform()->SetPosition(Vector3(0.0f, -30.0f, 0.0f));
 	//auto pEffSampler = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
 	//m_pBox->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
 	m_pTestRoot->AddChild(m_pBox);
 
-
-
-	m_pTestRoot->GetTransform()->SetPosition(Vector3(0.0f, -50.0f, 0.0f));
+	//m_pTestRoot->GetTransform()->SetPosition(Vector3(0.0f, -50.0f, 0.0f));
 }
 
-void HrForwardLighting::CreateInputEvent()
+void HrShadowMapScene::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrForwardLighting::OnKeyPressed, this)
-		, HR_CALLBACK_2(HrForwardLighting::OnKeyReleased, this));
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrShadowMapScene::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrShadowMapScene::OnKeyReleased, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
 
-	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrForwardLighting::OnMousePressed, this)
-		, HR_CALLBACK_2(HrForwardLighting::OnMouseReleased, this), HR_CALLBACK_1(HrForwardLighting::OnMouseMove, this));
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrShadowMapScene::OnMousePressed, this)
+		, HR_CALLBACK_2(HrShadowMapScene::OnMouseReleased, this), HR_CALLBACK_1(HrShadowMapScene::OnMouseMove, this));
 	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerMouse, this);
 }
 
-void HrForwardLighting::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrShadowMapScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	ResetKeyFlag();
 	switch (keyCode)
@@ -134,7 +119,7 @@ void HrForwardLighting::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const
 	}
 }
 
-void HrForwardLighting::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrShadowMapScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	switch (keyCode)
 	{
@@ -162,7 +147,7 @@ void HrForwardLighting::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, cons
 	}
 }
 
-void HrForwardLighting::SceneUpdate(float fDelta)
+void HrShadowMapScene::SceneUpdate(float fDelta)
 {
 	float fSpeed = 1.0f;
 	float fRotateSpeed = 5;
@@ -207,7 +192,7 @@ void HrForwardLighting::SceneUpdate(float fDelta)
 
 }
 
-void HrForwardLighting::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrShadowMapScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -224,7 +209,7 @@ void HrForwardLighting::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, 
 	}
 }
 
-void HrForwardLighting::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrShadowMapScene::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -241,7 +226,7 @@ void HrForwardLighting::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID,
 	}
 }
 
-void HrForwardLighting::OnMouseMove(const HrEventPtr& pEvent)
+void HrShadowMapScene::OnMouseMove(const HrEventPtr& pEvent)
 {
 	HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
 	static float s_floatX = 0;

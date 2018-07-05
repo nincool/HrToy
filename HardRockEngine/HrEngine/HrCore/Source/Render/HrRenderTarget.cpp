@@ -16,3 +16,16 @@ HrRenderTarget::~HrRenderTarget()
 {
 }
 
+/////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////
+
+HrRenderTextureTarget::HrRenderTextureTarget()
+{
+
+}
+
+HrRenderTextureTarget::~HrRenderTextureTarget()
+{
+
+}

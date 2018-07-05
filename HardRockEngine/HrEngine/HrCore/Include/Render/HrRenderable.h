@@ -20,13 +20,15 @@ namespace Hr
 		void SetRenderEffect(const HrRenderEffectPtr& pRenderEff);
 		const HrRenderEffectPtr& GetRenderEffect() const;
 
+
+
 		virtual const HrMaterialPtr& GetMaterial();
 
 		void SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj);
 		HrSceneObjectPtr GetAttachSceneObject();
 
 		virtual void OnRenderBegin();
-		virtual void Render();
+		virtual void Render(const HrRenderTechniquePtr& pRenderTech = nullptr);
 		virtual void OnRenderEnd();
 		
 	protected:

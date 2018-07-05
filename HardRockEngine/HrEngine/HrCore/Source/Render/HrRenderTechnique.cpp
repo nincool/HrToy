@@ -7,10 +7,9 @@
 
 using namespace Hr;
 
-HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName, int nLod)
+HrRenderTechnique::HrRenderTechnique(std::string strTechniqueName)
 {
 	m_strTechniqueName = strTechniqueName;
-	m_nLod = nLod;
 	m_nHashName = HrHashValue(strTechniqueName);
 	m_nInputSimanticHash = 0;
 }
@@ -25,10 +24,6 @@ size_t HrRenderTechnique::HashName()
 	return m_nHashName;
 }
 
-int HrRenderTechnique::LOD()
-{
-	return m_nLod;
-}
 
 const HrRenderPassPtr& HrRenderTechnique::GetRenderPass(uint32 nIndex)
 {
@@ -112,5 +107,7 @@ bool HrRenderTechnique::IsVertexElementMatch(const std::vector<HrVertexDataPtr>&
 	NEXT_INPUT_SIMANTIC:
 		continue;
 	}
+
+	return true;
 }
 

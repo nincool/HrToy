@@ -29,6 +29,7 @@
 #include "HrCore/Include/Kernel/HrScheduler.h"
 
 #include "HrCore/Include/Render/HrRenderable.h"
+#include "HrCore/Include/Render/HrCamera.h"
 
 #ifdef HR_PLATFORM_WIN32
 #include "HrCore/Include/Platform/AppWin/HrWindowWin.h"

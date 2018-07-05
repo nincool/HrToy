@@ -6,25 +6,37 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrShadowMap.h"
+#include "Render/HrCamera.h"
+#include "Render/HrDepthStencil.h"
 #include "Asset/HrRenderEffect.h"
+#include "Asset/HrRenderEffectParameter.h"
+#include "Render/HrRenderTechnique.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrCoreComponentWin.h"
+#include "Kernel/HrCoreComponentResource.h"
+#include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 
 using namespace Hr;
 
+//默认的FrameBuffer
 const std::string HrRenderSystem::m_sc_strScreenFrameBufferKey ="ScreenFrameBufferKey";
 
 HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
 {
 	m_pRenderFactory = pRenderFactory;
 	m_pRenderParameters = HrMakeUniquePtr<HrRenderFrameParameters>();
+	m_pShadowMap = HrMakeSharedPtr<HrShadowMap>();
 
 	CreateRender();
 	//默认先创建屏幕渲染
 	CreateScreenFrameBuffer(HrDirector::Instance()->GetWinCoreComponent()->GetWindowWidth()
 		, HrDirector::Instance()->GetWinCoreComponent()->GetWindowHeight());
+
+	//todo shadowmap 先创建一个2048 * 2048的深度图
+	m_pShadowMap->CreateShadowTexture(2048, 2048);
 }
 
 HrRenderSystem::~HrRenderSystem()
@@ -88,7 +100,43 @@ void HrRenderSystem::Present()
 	GetBindFrameBuffer()->Present();
 }
 
-void HrRenderSystem::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
+void HrRenderSystem::RenderSceneToShadowMap(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	//设置RenderTarget
+	m_pRender->BindFrameBuffer(m_pShadowMap->GetDepthStencilFrame());
+	this->ClearRenderTarget();
+	this->ClearDepthStencil();
+
+	//1.设置ShadowMap视口
+	m_pShadowMap->OnStartRenderFrame();
+
+	HrCameraPtr pShadowMapCamera = m_pShadowMap->GetShadowMapCamera();
+	m_pRender->SetViewPort(pShadowMapCamera->GetViewPort());
+	pRenderFrameParam->SetCurrentCamera(pShadowMapCamera);
+
+	const HrLightPtr& pPointLight = pLightData->GetLight(HrLight::LT_POINT, 0);
+	//Vector3 v3LookAt = pPointLight->GetDirection() + pPointLight->GetPosition();
+	//todo 先随便写死角度
+	pShadowMapCamera->ViewParams(pPointLight->GetPosition(), Vector3::Zero(), Vector3(1.0f, 0.0f, 0.0f));
+	pShadowMapCamera->ProjectParams(HrMath::PIDIV2(), pShadowMapCamera->Apsect(), 0.3f, 1000.0f);
+
+	auto pEffShadowMapDepth = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrShadowMapDepth.json");
+
+	const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
+	for (auto& iteRenderable : vecRenderables)
+	{
+		pRenderFrameParam->SetCurrentRenderable(iteRenderable);
+		iteRenderable->SetRenderEffect(pEffShadowMapDepth);
+		iteRenderable->Render();
+	}
+
+	//重新设置回来
+	this->BindScreenFrameBuffer();
+	this->ClearRenderTarget();
+	this->ClearDepthStencil();
+}
+
+void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
 {
 	const HrRenderFramePtr& pBindFrameBuffer = m_pRender->GetBindFrameBuffer();
 	if (pBindFrameBuffer)
@@ -97,13 +145,35 @@ void HrRenderSystem::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue,
 		for (auto& itemViewPort : mapAllViewPorts)
 		{
 			const HrViewPortPtr& pViewPort = itemViewPort.second;
-			m_pRender->SetCurrentViewPort(pViewPort);
+			m_pRender->SetViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
+
+			auto pEffShadowMapDepth = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
+			HrRenderEffectParameterPtr pDiffuseTexParam = pEffShadowMapDepth->GetParameterByName("texShadowMap");
+			if (pDiffuseTexParam)
+			{
+				HrTexturePtr pDepthTex = m_pShadowMap->GetDepthStencilFrame()->GetDepthStencil()->GetDepthStencilSRV();
+				pDiffuseTexParam->operator = (pDepthTex.get());
+			}
+			HrRenderEffectParameterPtr pViewProjMatrix = pEffShadowMapDepth->GetParameterByName("point_view_proj_matrix");
+			if (pViewProjMatrix)
+			{
+				*pViewProjMatrix = m_pShadowMap->GetShadowMapCamera()->GetViewProjMatrix();
+			}
+
+			auto pTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
+
+			auto pTestEff = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrStandard.json");
+			auto pTestTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 
 			const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
 			for (auto& iteRenderable : vecRenderables)
 			{
 				pRenderFrameParam->SetCurrentRenderable(iteRenderable);
+
+				//auto pTTT = iteRenderable->GetRenderEffect()->GetTechniqueByIndex(0);
+				//auto pTTT = iteRenderable->GetRenderTechnique();
+				iteRenderable->SetRenderEffect(pEffShadowMapDepth);
 
 				iteRenderable->Render();
 			}

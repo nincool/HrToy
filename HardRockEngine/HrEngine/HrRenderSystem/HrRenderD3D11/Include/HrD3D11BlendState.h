@@ -4,24 +4,25 @@
 #include "HrCore/Include/Render/HrBlendState.h"
 #include "HrD3D11RenderPrerequisite.h"
 #include "HrD3D11Device.h"
+#include "HrMath/Include/HrColor.h"
 
 namespace Hr
 {
-	class HrD3D11BlendState : public HrBlendState
+	class HrD3D11BlendState : public HrBlendState, public std::enable_shared_from_this<HrD3D11BlendState>
 	{
 	public:
-		HrD3D11BlendState(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext
-			, const HrBlendState::HrBlendStateDesc& blendDesc);
+		HrD3D11BlendState(const HrBlendState::HrBlendStateDesc& blendDesc);
 		virtual ~HrD3D11BlendState();
 
-		virtual void Bind(HrRender* pRender) override;
+		virtual void Accept(const HrRenderPtr& pRender) override;
 
+		const ID3D11BlendStatePtr& RetriveD3D11BlendState();
+		const HrColor& GetBlendFactor();
+		uint32 GetSampleMask();
 	protected:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
-
-		ID3D11BlendState* m_pD3D11BlendState;
+		ID3D11BlendStatePtr m_pD3D11BlendState;
+		HrColor m_blendFactorColor;
+		uint32 m_nSampleMask;
 	};
 }
 

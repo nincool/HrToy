@@ -20,8 +20,10 @@ struct ID3D11Buffer;
 struct ID3D11VertexShader;
 struct ID3D11PixelShader;
 struct ID3D11InputLayout;
-
+struct ID3D11BlendState;
 struct ID3D11SamplerState;
+struct ID3D11DepthStencilState;
+struct ID3D11RasterizerState;
 
 namespace Hr
 {
@@ -43,7 +45,11 @@ namespace Hr
 	typedef std::shared_ptr<ID3D11PixelShader>          ID3D11PixelShaderPtr;
 	typedef std::shared_ptr<ID3D11InputLayout>          ID3D11InputLayoutPtr;
 
+	typedef std::shared_ptr<ID3D11RasterizerState>      ID3D11RasterizerStatePtr;
+	typedef std::shared_ptr<ID3D11BlendState>           ID3D11BlendStatePtr;
+	typedef std::shared_ptr<ID3D11DepthStencilState>    ID3D11DepthStencilStatePtr;
 	typedef std::shared_ptr<ID3D11SamplerState>         ID3D11SamplerStatePtr;
+	
 
 	class HrD3D11Device;
 	typedef std::unique_ptr<HrD3D11Device> HrD3D11DevicePtr;
@@ -76,7 +82,12 @@ namespace Hr
 	class HrD3D11ShaderCompiler;
 	typedef std::shared_ptr<HrD3D11ShaderCompiler> HrD3D11ShaderCompilerPtr;
 
+	class HrD3D11RasterizerState;
+	typedef std::shared_ptr<HrD3D11RasterizerState> HrD3D11RasterizerStatePtr;
 	class HrD3D11BlendState;
+	typedef std::shared_ptr<HrD3D11BlendState> HrD3D11BlendStatePtr;
+	class HrD3D11DepthStencilState;
+	typedef std::shared_ptr<HrD3D11DepthStencilState> HrD3D11DepthStencilStatePtr;
 }
 
 #endif

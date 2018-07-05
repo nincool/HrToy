@@ -27,8 +27,13 @@ namespace Hr
 		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
 		
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
+		
+		virtual void SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, const HrDepthStencilPtr& pDepthStencil) override;
+		virtual void SetViewPort(const HrViewPortPtr& pViewPort) override;
 
-		virtual void SetCurrentViewPort(const HrViewPortPtr& pViewPort) override;
+		virtual void BindRasterizerState(const HrRasterizerStatePtr& pRasterizerState) override;
+		virtual void BindBlendState(const HrBlendStatePtr& pBlendState) override;
+		virtual void BindDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState) override;
 
 		virtual void BindShader(const HrShaderPtr& pShader) override;
 
@@ -41,6 +46,9 @@ namespace Hr
 		const ID3D11DevicePtr& GetD3D11Device();
 		const ID3D11DeviceContextPtr& GetD3D11DeviceContext();
 	private:
+		HrRasterizerStatePtr m_pCachedRasterizerState;
+		HrBlendStatePtr m_pCachedBindBlendState;
+		HrDepthStencilStatePtr m_pCachedDepthStencilState;
 		std::array<const std::vector<ID3D11Buffer*>*, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindShaderBuffers;
 	private:
 		HrRenderFramePtr m_pCurFrameBuffer;

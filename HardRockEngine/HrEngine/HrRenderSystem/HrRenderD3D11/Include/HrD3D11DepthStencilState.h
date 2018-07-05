@@ -7,21 +7,21 @@
 
 namespace Hr
 {
-	class HrD3D11DepthStencilState : public HrDepthStencilState
+	class HrD3D11DepthStencilState : public HrDepthStencilState, public std::enable_shared_from_this<HrD3D11DepthStencilState>
 	{
 	public:
-		HrD3D11DepthStencilState(ID3D11Device* pD3D11Device
-			, ID3D11DeviceContext* pContext
-			, const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilDesc);
+		HrD3D11DepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilDesc);
 		virtual ~HrD3D11DepthStencilState();
 
-		virtual void Bind(HrRender* pRender) override;
+		virtual void Accept(const HrRenderPtr& pRender) override;
 
+		const ID3D11DepthStencilStatePtr& RetriveD3D11DepthStencil();
+
+		uint32 GetStencilRef();
 	protected:
-		ID3D11Device* m_pD3D11Device;
-		ID3D11DeviceContext* m_pImmediateContext;
+		ID3D11DepthStencilStatePtr m_pD3D11DepthStencilState;
 
-		ID3D11DepthStencilState* m_pD3D11DepthStencilState;
+		uint32 m_nStencilRef;
 	};
 }
 

@@ -325,6 +325,9 @@
     <ClInclude Include="Include\Asset\Loader\HrFBXUtilsImport.h">
       <Filter>Include\Asset\Loader</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Render\HrShadowMap.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -554,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\Loader\HrFBXUtilsImport.cpp">
       <Filter>Source\Asset\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrShadowMap.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,14 +14,13 @@ namespace Hr
 	public:
 		virtual ~HrRenderFactory();
 
-		void ReleaseRenderStatePool();
 	public:
 		virtual HrRenderPtr CreateRender() = 0;
 		
 		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) = 0;
 
-		virtual HrRenderFramePtr CreateRenderFrameBuffer() = 0;
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
+		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
 
 		virtual HrRenderLayoutPtr CreateRenderLayout() = 0;
 
@@ -39,30 +38,23 @@ namespace Hr
 			, uint32 nArraySize
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
-			, uint32 nAccessHint) = 0;
+			, uint32 nAccessHint
+			, EnumPixelFormat format) = 0;
 
 		virtual HrSamplerStatePtr CreateSamplerState() = 0;
 
-		virtual HrDepthStencilState* CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) = 0;
+		virtual HrDepthStencilStatePtr CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) = 0;
 
-		virtual HrBlendState* CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc) = 0;
+		virtual HrBlendStatePtr CreateBlendState(const HrBlendState::HrBlendStateDesc& blendDesc) = 0;
 
-		virtual HrRasterizerState* CreateRasterizerState(HrRasterizerState::RasterizerStateDesc& desc) = 0;
+		virtual HrRasterizerStatePtr CreateRasterizerState(HrRasterizerState::HrRasterizerStateDesc& desc) = 0;
 
 		void CreateBuildInRasterizerState();
-		HrRasterizerState* GetDefualtRasterizerState();
-
 		void CreateBuildInBlendState();
-		HrBlendState* GetDefaultBuildInBlendState();
 	protected:
-		HrRasterizerState* m_pDefaultRasterizerState;
-		std::unordered_map<size_t, HrRasterizerState*> m_mapRasterizerStatePool;
-
-		HrDepthStencilState* m_pDefaultDepthStencilState;
-		std::unordered_map<size_t, HrDepthStencilState*> m_mapDepthStencilStatePool;
-
-		HrBlendState* m_pDefaultBlendState;
-		std::unordered_map<size_t, HrBlendState*> m_mapBlendStatePool;
+		std::unordered_map<size_t, HrRasterizerStatePtr> m_mapRasterizerStatePool;
+		std::unordered_map<size_t, HrDepthStencilStatePtr> m_mapDepthStencilStatePool;
+		std::unordered_map<size_t, HrBlendStatePtr> m_mapBlendStatePool;
 	};
 }
 

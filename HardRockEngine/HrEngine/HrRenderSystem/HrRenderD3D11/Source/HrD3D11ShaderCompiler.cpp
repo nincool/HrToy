@@ -128,6 +128,8 @@ bool HrD3D11ShaderCompiler::CompileShaderFromCode(const std::string& strEntryPoi
 	pD3DShaderBuffer->Release();
 
 	ReflectEffectParameters(strEntryPoint);
+
+	return true;
 }
 
 void HrD3D11ShaderCompiler::GetShaderMacros(std::vector<D3D_SHADER_MACRO>& defines, HrShader::EnumShaderType shaderType)

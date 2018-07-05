@@ -18,7 +18,7 @@ namespace Hr
 		virtual void AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget) override;
 		virtual void DetachRenderTarget(EnumRenderTargetLayer attachLayer) override;
 
-		virtual void OnBind() override;
+		virtual void OnBind(const HrRenderPtr& pRender) override;
 		virtual void OnUnBind() override;
 
 		virtual void ClearTarget() override;
@@ -27,13 +27,15 @@ namespace Hr
 		virtual void Present() override;
 	};
 
+	/////////////////////////////////////////////////////////////////
+
 	class HrD3D11ScreenFrameBuffer : public HrD3D11FrameBuffer
 	{
 	public:
 		HrD3D11ScreenFrameBuffer(uint32 nWidth, uint32 nHeight);
 		~HrD3D11ScreenFrameBuffer();
 
-		virtual void OnBind() override;
+		virtual void OnBind(const HrRenderPtr& pRender) override;
 		virtual void OnUnBind() override;
 
 		virtual void ClearTarget() override;
@@ -54,6 +56,30 @@ namespace Hr
 		IDXGISwapChain1Ptr m_pSwapChain1;
 
 	};
+
+	/////////////////////////////////////////////////////////////////
+
+	class HrD3D11DepthStencilFrameBuffer : public HrD3D11FrameBuffer
+	{
+	public:
+		HrD3D11DepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight);
+		~HrD3D11DepthStencilFrameBuffer();
+
+		virtual void OnBind(const HrRenderPtr& pRender) override;
+		virtual void OnUnBind() override;
+
+		virtual void ClearTarget() override;
+		virtual void ClearDepthStencil() override;
+	protected:
+		void CreateDepthStencilView();
+		
+	protected:
+		uint32 m_nWidth;
+		uint32 m_nHeight;
+
+		
+	};
+
 }
 
 

@@ -1,12 +1,10 @@
 #include "HrD3D11DepthStencilState.h"
 #include "HrD3D11Mapping.h"
+#include "HrD3D11Render.h"
 
 using namespace Hr;
 
-HrD3D11DepthStencilState::HrD3D11DepthStencilState(ID3D11Device* pD3D11Device
-	, ID3D11DeviceContext* pContext
-	, const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilDesc)
-	:m_pD3D11Device(pD3D11Device), m_pImmediateContext(pContext)
+HrD3D11DepthStencilState::HrD3D11DepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilDesc)
 {
 	D3D11_DEPTH_STENCIL_DESC d3d11DepthStencilDesc;
 	d3d11DepthStencilDesc.DepthEnable = depthStencilDesc.bDepthEnable;
@@ -23,17 +21,30 @@ HrD3D11DepthStencilState::HrD3D11DepthStencilState(ID3D11Device* pD3D11Device
 	d3d11DepthStencilDesc.BackFace.StencilFailOp = HrD3D11Mapping::GetDepthStencilOperation(depthStencilDesc.backFaceStencilFailOp);
 	d3d11DepthStencilDesc.BackFace.StencilDepthFailOp = HrD3D11Mapping::GetDepthStencilOperation(depthStencilDesc.backFaceStencilDepthFailOp);
 	d3d11DepthStencilDesc.BackFace.StencilPassOp = HrD3D11Mapping::GetDepthStencilOperation(depthStencilDesc.backFaceStencilPassOp);
+	m_nStencilRef = depthStencilDesc.nStencilRef;
 
-	TIF(m_pD3D11Device->CreateDepthStencilState(&d3d11DepthStencilDesc, &m_pD3D11DepthStencilState));
+	ID3D11DepthStencilState* pD3D11DepthStencilState = nullptr;
+	TIF(HrD3D11Device::Instance()->GetD3DDevice()->CreateDepthStencilState(&d3d11DepthStencilDesc, &pD3D11DepthStencilState));
+	m_pD3D11DepthStencilState = MakeComPtr(pD3D11DepthStencilState);
 }
 
 HrD3D11DepthStencilState::~HrD3D11DepthStencilState()
 {
-	m_pD3D11DepthStencilState->Release();
 }
 
-void HrD3D11DepthStencilState::Bind(HrRender* pRender)
+const ID3D11DepthStencilStatePtr& HrD3D11DepthStencilState::RetriveD3D11DepthStencil()
 {
-	m_pImmediateContext->OMSetDepthStencilState(m_pD3D11DepthStencilState, 0xffffffff);
+	return m_pD3D11DepthStencilState;
 }
+
+uint32 HrD3D11DepthStencilState::GetStencilRef()
+{
+	return m_nStencilRef;
+}
+
+void HrD3D11DepthStencilState::Accept(const HrRenderPtr& pRender)
+{
+	pRender->BindDepthStencilState(shared_from_this());
+}
+
 

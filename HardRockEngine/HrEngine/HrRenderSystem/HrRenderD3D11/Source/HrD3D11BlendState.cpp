@@ -6,11 +6,9 @@
 
 using namespace Hr;
 
-HrD3D11BlendState::HrD3D11BlendState(ID3D11Device* pD3D11Device
-	, ID3D11DeviceContext* pContext
-	, const HrBlendState::HrBlendStateDesc& blendDesc):
-	m_pD3D11Device(pD3D11Device), m_pImmediateContext(pContext)
+HrD3D11BlendState::HrD3D11BlendState(const HrBlendState::HrBlendStateDesc& blendDesc)
 {
+	m_nHashName = blendDesc.hashName;
 
 	D3D11_BLEND_DESC d3d11BlendDesc;
 	d3d11BlendDesc.AlphaToCoverageEnable = false;
@@ -22,21 +20,35 @@ HrD3D11BlendState::HrD3D11BlendState(ID3D11Device* pD3D11Device
 	d3d11BlendDesc.RenderTarget[0].SrcBlendAlpha = HrD3D11Mapping::GetBlend(blendDesc.srcBlendAlpha);
 	d3d11BlendDesc.RenderTarget[0].DestBlendAlpha = HrD3D11Mapping::GetBlend(blendDesc.dstBlendAlpha);
 	d3d11BlendDesc.RenderTarget[0].BlendOpAlpha = HrD3D11Mapping::GetBlendOperation(blendDesc.blendOperationAlpha);
-	d3d11BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	TIF(m_pD3D11Device->CreateBlendState(&d3d11BlendDesc, &m_pD3D11BlendState));
+	d3d11BlendDesc.RenderTarget[0].RenderTargetWriteMask = HrD3D11Mapping::GetRenderTargetWriteMask(blendDesc.colorMask);
+	ID3D11BlendState* pD3D11BlendState = nullptr;
+	TIF(HrD3D11Device::Instance()->GetD3DDevice()->CreateBlendState(&d3d11BlendDesc, &pD3D11BlendState));
+	m_pD3D11BlendState = MakeComPtr(pD3D11BlendState);
+
+	m_blendFactorColor = blendDesc.blendFactor;
+	m_nSampleMask = blendDesc.nSampleMask;
 }
 
 HrD3D11BlendState::~HrD3D11BlendState()
 {
-	m_pD3D11BlendState->Release();
 }
 
-void HrD3D11BlendState::Bind(HrRender* pRender)
+void HrD3D11BlendState::Accept(const HrRenderPtr& pRender)
 {
-	HrD3D11Render* pD3D11Render = boost::polymorphic_cast<HrD3D11Render*>(pRender);
-	ID3D11DeviceContext* pD3D11ImmediateContext = pD3D11Render->GetD3D11DeviceContext().get();
+	pRender->BindBlendState(shared_from_this());
+}
 
-	float blendFactor[4] = { 0.f,0.f,0.f,0.f };
-	//开启“透明”效果
-	pD3D11ImmediateContext->OMSetBlendState(m_pD3D11BlendState, blendFactor, 0xffffffff);
+const ID3D11BlendStatePtr& HrD3D11BlendState::RetriveD3D11BlendState()
+{
+	return m_pD3D11BlendState;
+}
+
+const HrColor& HrD3D11BlendState::GetBlendFactor()
+{
+	return m_blendFactorColor;
+}
+
+uint32 HrD3D11BlendState::GetSampleMask()
+{
+	return m_nSampleMask;
 }

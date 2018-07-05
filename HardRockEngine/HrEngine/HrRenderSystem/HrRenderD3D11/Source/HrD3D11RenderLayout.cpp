@@ -11,10 +11,7 @@
 using namespace Hr;
 
 HrD3D11RenderLayout::HrD3D11RenderLayout()
-{
-	m_pD3DInputLayout = nullptr;
-	m_pD3DVertexBuffer = nullptr;
-}
+{}
 
 HrD3D11RenderLayout::~HrD3D11RenderLayout()
 {

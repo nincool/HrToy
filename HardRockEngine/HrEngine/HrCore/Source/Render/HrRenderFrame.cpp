@@ -65,3 +65,8 @@ const std::map<uint32, Hr::HrViewPortPtr>& HrRenderFrame::GetAllViewPorts()
 	return m_mapViewPorts;
 }
 
+Hr::HrDepthStencilPtr Hr::HrRenderFrame::GetDepthStencil()
+{
+	return m_pDepthStencil;
+}
+

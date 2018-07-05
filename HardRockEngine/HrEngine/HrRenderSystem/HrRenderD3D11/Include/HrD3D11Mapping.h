@@ -6,6 +6,9 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Texture.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
+#include "HrCore/Include/Render/HrBlendState.h"
+#include "HrCore/Include/Render/HrDepthStencilState.h"
+#include "HrCore/Include/Render/HrRasterizerState.h"
 #include "HrD3D11Device.h"
 
 namespace Hr
@@ -43,8 +46,6 @@ namespace Hr
 		static DXGI_FORMAT GetPixelFormat(EnumPixelFormat pixelFormat);
 		static EnumPixelFormat GetPixelFormat(DXGI_FORMAT dxPixelFormat);
 		
-
-	
 		static D3D11_FILL_MODE GetFillMode(EnumRasterizerFillModel fillMode);
 		static D3D11_CULL_MODE GetCullMode(EnumRasterizerCullModel cullMode);
 
@@ -53,9 +54,12 @@ namespace Hr
 		static D3D11_COMPARISON_FUNC GetComparisonFunc(EnumComparisonFunc comFunc);
 		static D3D11_STENCIL_OP GetDepthStencilOperation(EnumStencilOperation stencilOp);
 
-		//Blend
+		//D3D11_BLEND <=> EnumAlphaBlendFactor
 		static D3D11_BLEND GetBlend(EnumAlphaBlendFactor blendFactor);
+		//D3D11_BLEND_OP <=> EnumBlendOperation
 		static D3D11_BLEND_OP GetBlendOperation(EnumBlendOperation blendOp);
+		//D3D11WriteMask
+		static UINT8 GetRenderTargetWriteMask(uint8 colorMask);
 
 		//HrTexture::EnumTextureUsage <=> D3D11_USAGE
 		static D3D11_USAGE GetTextureUsage(HrTexture::EnumTextureUsage usage);

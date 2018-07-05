@@ -202,6 +202,7 @@
     <ClInclude Include="Include\Render\HrShader.h" />
     <ClInclude Include="Include\Render\HrRenderQueue.h" />
     <ClInclude Include="Include\Render\HrRenderTarget.h" />
+    <ClInclude Include="Include\Render\HrShadowMap.h" />
     <ClInclude Include="Include\Render\HrSkyBox.h" />
     <ClInclude Include="Include\Render\HrVertex.h" />
     <ClInclude Include="Include\Render\HrViewPort.h" />
@@ -285,6 +286,7 @@
     <ClCompile Include="Source\Render\HrRenderLayout.cpp" />
     <ClCompile Include="Source\Render\HrRenderPass.cpp" />
     <ClCompile Include="Source\Render\HrRenderQueue.cpp" />
+    <ClCompile Include="Source\Render\HrShadowMap.cpp" />
     <ClCompile Include="Source\Render\HrSkyBox.cpp" />
     <ClCompile Include="Source\Render\HrVertex.cpp" />
     <ClCompile Include="Source\Render\HrViewPort.cpp" />

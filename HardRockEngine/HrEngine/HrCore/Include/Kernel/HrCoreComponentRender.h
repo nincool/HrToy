@@ -20,6 +20,7 @@ namespace Hr
 		void OnRenderFrameBegin();
 		void OnRenderFrameEnd();
 
+		void RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
 		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
 
 		void Present();

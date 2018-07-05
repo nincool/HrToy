@@ -46,14 +46,6 @@ namespace Hr
 			EAH_CPU_WRITE = 1 << 2,
 			EAH_GPU_READ = 1 << 3,
 			EAH_GPU_WRITE = 1 << 4,
-			EAH_GPU_UNORDERED = 1 << 5,
-			EAH_GPU_STRUCTURED = 1 << 6,
-			EAH_GENERATE_MIPS = 1 << 7,
-			EAH_IMMUTABLE = 1 << 8,
-			EAH_RAW = 1 << 9,
-			EAH_APPEND = 1 << 10,
-			EAH_COUNTER = 1 << 11,
-			EAH_DRAWINDIRECTARGS = 1 << 12
 		};
 	public:
 		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint);

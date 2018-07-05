@@ -18,7 +18,8 @@ namespace Hr
 		void BindFrameBuffer(const HrRenderFramePtr& pRenderFrame);
 		void BindScreenFrameBuffer();
 
-		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
+		void RenderSceneToShadowMap(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
+		void RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
 
 		const HrRenderFramePtr& GetBindFrameBuffer();
 		
@@ -36,6 +37,7 @@ namespace Hr
 	private:
 		HrRenderFactoryPtr m_pRenderFactory;
 		HrRenderPtr m_pRender;
+		HrShadowMapPtr m_pShadowMap;
 		
 		HrRenderFramePtr m_pScreenFrameBuffer;
 		std::unordered_map<std::string, HrRenderFramePtr> m_mapRenderFrames;
