@@ -32,12 +32,12 @@ HrDirector::~HrDirector()
 	HRLOG("HrDirector Destroy");
 }
 
-bool HrDirector::Init()
+bool HrDirector::Init(void* pHwnd)
 {
 	HRLOG(_T("HrDirector Init!"));
 
 	CreateEventComponent();
-	CreateWindowComponent();
+	CreateWindowComponent(pHwnd);
 	CreateSceneComponent();
 	CreateRenderComponent();
 	CreateResourceManager();
@@ -48,10 +48,13 @@ bool HrDirector::Init()
 		return false;
 	}
 
-	if (!CreateInputManager())
+	if (!pHwnd)
 	{
-		HRERROR("CreateInputManager Error!");
-		return false;
+		if (!CreateInputManager())
+		{
+			HRERROR("CreateInputManager Error!");
+			return false;
+		}
 	}
 
 	m_fDeltaTime = 0;
@@ -65,7 +68,7 @@ bool HrDirector::CreateRenderState()
 	//todo
 	if (true)
 	{
-		m_pRenderComponent->GetRenderSystem()->GetRenderFactory()->CreateBuildInRasterizerState();
+		m_pRenderComponent->GetRenderFactory()->CreateBuildInRasterizerState();
 		return true;
 	}
 	return false;
@@ -107,9 +110,14 @@ void HrDirector::StartMainLoop()
 			break;
 		}
 
-		Update();
-		Render();
+		LoopOnce();
 	}
+}
+
+void HrDirector::LoopOnce()
+{
+	Update();
+	Render();
 }
 
 void HrDirector::Update()
@@ -118,11 +126,11 @@ void HrDirector::Update()
 
 	HrInputManager::Instance()->Capture();
 
-	m_pScheduler->Update(m_fDeltaTime);
-
 	m_pWindowComponet->Update(m_fDeltaTime);
 	m_pSceneManagerComponent->Update(m_fDeltaTime);
 	m_pRenderComponent->Update(m_fDeltaTime);
+
+	m_pScheduler->Update(m_fDeltaTime);
 }
 
 bool HrDirector::Render()
@@ -161,9 +169,9 @@ void HrDirector::CreateEventComponent()
 	m_pEventComponent = HrMakeSharedPtr<HrCoreComponentEvent>();
 }
 
-void HrDirector::CreateWindowComponent()
+void HrDirector::CreateWindowComponent(void* pHwnd)
 {
-	m_pWindowComponet = HrMakeSharedPtr<HrCoreComponentWin>();
+	m_pWindowComponet = HrMakeSharedPtr<HrCoreComponentWin>(pHwnd);
 }
 
 void HrDirector::CreateRenderComponent()
@@ -187,22 +195,22 @@ const HrCoreComponentEventPtr& HrDirector::GetEventComponent()
 	return m_pEventComponent;
 }
 
-const HrCoreComponentWinPtr& HrDirector::GetWinCoreComponent()
+const HrCoreComponentWinPtr& HrDirector::GetWindowComponent()
 {
 	return m_pWindowComponet;
 }
 
-const HrCoreComponentRenderPtr& HrDirector::GetRenderCoreComponent()
+const HrCoreComponentRenderPtr& HrDirector::GetRenderComponent()
 {
 	return m_pRenderComponent;
 }
 
-const HrCoreComponentScenePtr& HrDirector::GetSceneCoreComponent()
+const HrCoreComponentScenePtr& HrDirector::GetSceneComponent()
 {
 	return m_pSceneManagerComponent;
 }
 
-const HrCoreComponentResourcePtr& HrDirector::GetResCoreComponent()
+const HrCoreComponentResourcePtr& HrDirector::GetResourceComponent()
 {
 	return m_pResManagerComponent;
 }

@@ -44,7 +44,7 @@ void HrInstanceBatchTest::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
+	HrRenderEffectPtr pRenderEffect = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrSimple.json", true, true);
 	BOOST_ASSERT(pRenderEffect);
 
 	//m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrPrefab3.model");
@@ -55,7 +55,7 @@ void HrInstanceBatchTest::CreateSceneElements()
 	//HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
 	//const HrRenderablePtr& pRenderable = pRenderableCom->CreateRenderable();
 	//pRenderable->SetSubMesh(pModel->GetMesh()->GetSubMesh(i));
-	//pRenderable->SetRenderEffect(HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>());
+	//pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>());
 
 	//HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pModel->GetMesh()->GetSubMesh(i)->GetName());
 	//pNode->SetSceneObject(pSceneObj);
@@ -63,7 +63,7 @@ void HrInstanceBatchTest::CreateSceneElements()
 
 	//尝试创建一个InstanceBatch节点
 	//SubMesh 限定只能有一个
-	HrModelPtr pModel = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrModel>("Model/HrPrefab3.model", true, true);
+	HrModelPtr pModel = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrModel>("Model/HrPrefab3.model", true, true);
 	BOOST_ASSERT(pModel->GetMesh()->GetSubMeshNum() == 1);
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
@@ -93,7 +93,7 @@ void HrInstanceBatchTest::CreateSceneElements()
 
 //HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)
 //{
-//	HrModelPtr pPrefabModel = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrModel>(strName, true, true);
+//	HrModelPtr pPrefabModel = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrModel>(strName, true, true);
 //	if (pPrefabModel == nullptr)
 //	{
 //		BOOST_ASSERT(false);
@@ -115,7 +115,7 @@ void HrInstanceBatchTest::CreateSceneElements()
 //		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
 //		const HrRenderablePtr& pRenderable = pRenderableCom->CreateRenderable();
 //		pRenderable->SetSubMesh(pModel->GetMesh()->GetSubMesh(i));
-//		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>());
+//		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>());
 //
 //		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pModel->GetMesh()->GetSubMesh(i)->GetName());
 //		pNode->SetSceneObject(pSceneObj);

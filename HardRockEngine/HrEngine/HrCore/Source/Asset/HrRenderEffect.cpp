@@ -76,7 +76,7 @@ bool HrRenderEffect::LoadImpl()
 		std::string strShaderFile = sceneRootInfo["SHADER_FILE"].GetString();
 		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShaderFile);
 
-		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
+		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
 		LoadTechniques(sceneRootInfo, pShaderCompiler);
 
 		pShaderCompiler->CreateEffectParameters(m_mapRenderEffectParameters, m_mapConstBufferParameters, m_mapShaderResources, m_mapRenderConstantBuffers);
@@ -151,13 +151,13 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bMultisampleEnalbe);
 					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bAntialiaseLineEnable);
 
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
 					pRenderPass->SetRasterizerState(pRasterizerState);
 				}
 				else
 				{
 					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
 					pRenderPass->SetRasterizerState(pRasterizerState);
 				}
 			}
@@ -199,7 +199,7 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.nStencilRef);
 
-				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
 				pRenderPass->SetDepthStencilState(pDepthStencilState);
 			}
 			//Blend
@@ -233,7 +233,7 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
 				boost::hash_combine(blendDesc.hashName, blendDesc.nSampleMask);
 
-				auto pBlendState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateBlendState(blendDesc);
+				auto pBlendState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateBlendState(blendDesc);
 				pRenderPass->SetBlendState(pBlendState);
 			}
 		}
@@ -263,7 +263,7 @@ void HrRenderEffect::LoadShaders(const rapidjson::Value& shaderInfo
 		{
 			if (pShaderCompiler->CompileShaderFromCode(strVertexEnterPoint, HrShader::ST_VERTEX_SHADER))
 			{
-				HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+				HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShader();
 				pVertexShader->StreamIn(pShaderCompiler->GetCompiledData(strVertexEnterPoint), m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 
 				pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
@@ -304,7 +304,7 @@ void HrRenderEffect::LoadShaders(const rapidjson::Value& shaderInfo
 		{
 			if (pShaderCompiler->CompileShaderFromCode(strPixelEnterPoint, HrShader::ST_PIXEL_SHADER))
 			{
-				HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateShader();
+				HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShader();
 				pPixelShader->StreamIn(pShaderCompiler->GetCompiledData(strPixelEnterPoint), m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
 
 				pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
@@ -383,9 +383,9 @@ void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFramePa
 			size_t nHashParamName = HrHashValue(std::string("directLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
+			auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
+			if (iteRenderParam != m_mapRenderEffectParameters.end())
+				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
 		}
 
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_SPECULAR_COLOR);
@@ -394,9 +394,9 @@ void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFramePa
 			size_t nHashParamName = HrHashValue(std::string("directLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
+			auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
+			if (iteRenderParam != m_mapRenderEffectParameters.end())
+				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
 		}
 
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_DIRECTION);
@@ -405,9 +405,9 @@ void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFramePa
 			size_t nHashParamName = HrHashValue(std::string("directLight"));
 			HrHashCombine(nHashParamName, i);
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			BOOST_ASSERT(m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end());
-			auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-			*pEffParam = pRenderFrameParameters->GetDirectionalLightDirection(i);
+			auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
+			if (iteRenderParam != m_mapRenderEffectParameters.end())
+				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightDirection(i);
 		}
 	}
 }

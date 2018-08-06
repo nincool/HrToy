@@ -25,7 +25,7 @@ namespace Hr
 	template <typename T>
 	std::shared_ptr<T> HrCoreComponentResource::RetriveResource(const std::string& strFile, bool bAdd /*= false*/, bool bLoad /*= false*/)
 	{
-		HrResource::EnumResourceType resType;
+		HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN;
 		auto pTypeName = typeid(T).name();
 		if (pTypeName == typeid(HrModel).name())
 		{
@@ -46,6 +46,10 @@ namespace Hr
 		else if (pTypeName == typeid(HrMesh).name())
 		{
 			resType = HrResource::RT_MESH;
+		}
+		else if (pTypeName == typeid(HrMeshModel).name())
+		{
+			resType = HrResource::RT_MESHMODEL;
 		}
 
 

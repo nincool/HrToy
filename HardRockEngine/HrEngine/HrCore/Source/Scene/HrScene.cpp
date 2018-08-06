@@ -83,9 +83,9 @@ void HrScene::AddNode(const HrSceneNodePtr& pSceneNode)
 	m_pSceneRootNode->AddChild(pSceneNode);
 }
 
-void HrScene::Update()
+void HrScene::Update(float fDelta)
 {
-	m_pSceneRootNode->UpdateNode();
+	m_pSceneRootNode->UpdateNode(fDelta);
 }
 
 void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)

@@ -22,6 +22,7 @@ namespace Hr
 		 @Param:   视口参数
 		 @Return:  摄像机节点
 		*/
+		HrSceneNodePtr CreateCamera(const std::string& strName);
 		HrSceneNodePtr CreateCamera(const std::string& strName, float nTopX, float nTopY, float nWidth, float nHeight, int nZOrder);
 
 		//HrLightNodePtr CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular);
@@ -53,8 +54,12 @@ namespace Hr
 		 @Return:  灯光场景节点
 		*/
 		HrSceneNodePtr CreateLightNode(const std::string& strName, HrLight::EnumLightType lightType);
-	private:
-		//HrGeometryFactoryPtr m_pGeometryFactory;
+
+
+		/////////////////////////////////////////////////////////
+		//
+		/////////////////////////////////////////////////////////
+		HrSceneNodePtr CreateGridPlan();
 	};
 }
 

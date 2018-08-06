@@ -15,11 +15,11 @@ HrShadowMap::~HrShadowMap()
 
 void HrShadowMap::CreateShadowTexture(uint32 nWidth, uint32 nHeight)
 {
-	m_pDepthStencilFrameBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateDepthStencilFrameBuffer(nWidth, nHeight);
+	m_pDepthStencilFrameBuffer = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateDepthStencilFrameBuffer(nWidth, nHeight);
 	
 	m_pShadowMapCamera = HrMakeSharedPtr<HrCamera>("ShadowMapTextureCamera");
-	HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(0.0f, 0.0f, static_cast<float>(nWidth), static_cast<float>(nHeight), 0);
-	pViewPort->SetCamera(m_pShadowMapCamera);
+	//HrViewPortPtr pViewPort = HrMakeSharedPtr<HrViewPort>(0.0f, 0.0f, static_cast<float>(nWidth), static_cast<float>(nHeight), 0);
+	//pViewPort->SetCamera(m_pShadowMapCamera);
 }
 
 const HrRenderFramePtr& HrShadowMap::GetDepthStencilFrame()

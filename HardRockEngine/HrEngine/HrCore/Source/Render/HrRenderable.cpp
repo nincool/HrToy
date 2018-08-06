@@ -82,16 +82,16 @@ void HrRenderable::Render(const HrRenderTechniquePtr& pRenderTech)
 	OnRenderBegin();
 
 	if (pRenderTech)
-		HrDirector::Instance()->GetRenderCoreComponent()->DoRender(pRenderTech, GetRenderLayout());
+		HrDirector::Instance()->GetRenderComponent()->DoRender(pRenderTech, GetRenderLayout());
 	else
-		HrDirector::Instance()->GetRenderCoreComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
+		HrDirector::Instance()->GetRenderComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
 
 	OnRenderEnd();
 }
 
 void HrRenderable::OnRenderBegin()
 {
-	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneCoreComponent()->GetRenderFrameParameters();
+	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneComponent()->GetRenderFrameParameters();
 	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam); 
 
 	HrRenderEffectParameterPtr pDiffuseTexParam = GetRenderEffect()->GetParameterByName("gDiffuseTexure");

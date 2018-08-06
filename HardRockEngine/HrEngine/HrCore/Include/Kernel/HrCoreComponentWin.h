@@ -9,6 +9,7 @@ namespace Hr
 	{
 	public:
 		HrCoreComponentWin();
+		HrCoreComponentWin(void* pWnd);
 		~HrCoreComponentWin();
 
 		virtual bool Update(float fDelta) override;

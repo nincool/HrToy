@@ -30,15 +30,16 @@ namespace Hr
 		}
 
 		const HrCoreComponentEventPtr& GetEventComponent();
-		const HrCoreComponentWinPtr& GetWinCoreComponent();
-		const HrCoreComponentRenderPtr& GetRenderCoreComponent();
-		const HrCoreComponentScenePtr& GetSceneCoreComponent();
-		const HrCoreComponentResourcePtr& GetResCoreComponent();
+		const HrCoreComponentWinPtr& GetWindowComponent();
+		const HrCoreComponentRenderPtr& GetRenderComponent();
+		const HrCoreComponentScenePtr& GetSceneComponent();
+		const HrCoreComponentResourcePtr& GetResourceComponent();
 
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
-		virtual bool Init();
+		virtual bool Init(void* pHwnd);
 		virtual void StartMainLoop();
+		virtual void LoopOnce();
 		virtual void End();
 		virtual void Destroy();
 
@@ -51,7 +52,7 @@ namespace Hr
 
 	protected:
 		void CreateEventComponent();
-		void CreateWindowComponent();
+		void CreateWindowComponent(void* pHwnd);
 		void CreateSceneComponent();
 		void CreateRenderComponent();
 		void CreateResourceManager();

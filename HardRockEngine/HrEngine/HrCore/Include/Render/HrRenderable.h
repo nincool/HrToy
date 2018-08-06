@@ -19,14 +19,18 @@ namespace Hr
 
 		void SetRenderEffect(const HrRenderEffectPtr& pRenderEff);
 		const HrRenderEffectPtr& GetRenderEffect() const;
-
-
-
+		
 		virtual const HrMaterialPtr& GetMaterial();
 
+		/**
+		 @Comment: attach sceneobject [7/12/2018 By Hr]
+		*/
 		void SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj);
 		HrSceneObjectPtr GetAttachSceneObject();
 
+		/**
+		 @Comment: rendering [7/12/2018 By Hr]
+		*/
 		virtual void OnRenderBegin();
 		virtual void Render(const HrRenderTechniquePtr& pRenderTech = nullptr);
 		virtual void OnRenderEnd();

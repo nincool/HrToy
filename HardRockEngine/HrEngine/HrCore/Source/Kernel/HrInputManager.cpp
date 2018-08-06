@@ -397,7 +397,7 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	const HrCoreComponentWinPtr& pWindowComponet = HrDirector::Instance()->GetWinCoreComponent();
+	const HrCoreComponentWinPtr& pWindowComponet = HrDirector::Instance()->GetWindowComponent();
 	size_t nWinHandle = (size_t)(pWindowComponet->GetWindowHWnd());
 	winHandleStr << nWinHandle;
 

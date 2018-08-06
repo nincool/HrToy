@@ -3,12 +3,12 @@
 
 using namespace Hr;
 
-HrTransform::HrTransform(const std::function<void(void)>& funDirtyPos)
+HrTransform::HrTransform(const std::function<void(bool, bool, bool)>& funDirtyTrans)
 {
 	m_bDirtyTransform 
 		= m_bDirtyWorldScale 
-		= m_bDirtyOriention 
-		= m_bDirtyPosition  
+		= m_bDirtyWorldOriention 
+		= m_bDirtyWorldPosition  
 		= m_bDirtyWorldMatrix = true;
 
 	m_vPosition = Vector3(0.0f, 0.0f, 0.0f);
@@ -17,7 +17,7 @@ HrTransform::HrTransform(const std::function<void(void)>& funDirtyPos)
 
 	Rotate(m_orientation);
 
-	m_funDirtyPos = funDirtyPos;
+	m_funDirtyTrans = funDirtyTrans;
 
 }
 
@@ -29,7 +29,7 @@ void HrTransform::SetParentTransform(const HrTransformPtr& pTrans)
 void HrTransform::SetPosition(const Vector3& v3Pos)
 {
 	m_vPosition = v3Pos;
-	DirtyPosition();
+	DirtyTransform(true);
 }
 
 void HrTransform::SetPosition(REAL x, REAL y, REAL z)
@@ -54,8 +54,20 @@ const Quaternion& HrTransform::GetOrientation() const
 
 void HrTransform::SetOrientation(const Quaternion& orientation)
 {
-	m_orientation = orientation;
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyOriention = true;
+	m_orientation = HrMath::Normalize(orientation);
+
+	Matrix4 matOrientation = HrMath::ToMatrix(m_orientation);
+
+	Vector4 vRight = matOrientation.Row(0);
+	m_vRight = Vector3(vRight.x(), vRight.y(), vRight.z());
+
+	Vector4 vUp = matOrientation.Row(1);
+	m_vUp = Vector3(vUp.x(), vUp.y(), vUp.z());
+
+	Vector4 vForward = matOrientation.Row(2);
+	m_vForward = Vector3(vForward.x(), vForward.y(), vForward.z());
+
+	DirtyTransform(false, false, true);
 }
 
 const Vector3& HrTransform::GetForward() const
@@ -78,17 +90,14 @@ void HrTransform::Translate(const Vector3& v3, EnumTransformSpace relativeTo /*=
 	switch (relativeTo)
 	{
 	case TS_LOCAL:
-		m_vPosition += v3;
+		m_vPosition += HrMath::TransformQuat(v3, m_orientation);
 		break;
 	case TS_WORLD:
 		break;
 	case TS_PARENT:
 		break;
 	}
-	DirtyPosition();
-
-	if (m_funDirtyPos)
-		m_funDirtyPos();
+	DirtyTransform(true);
 }
 
 void HrTransform::Roll(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
@@ -129,19 +138,7 @@ void HrTransform::Rotate(const Quaternion& q, EnumTransformSpace relativeTo /*= 
 		break;
 	}
 
-	m_orientation = HrMath::Normalize(m_orientation);
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyOriention = true;
-
-	Matrix4 matOrientation = HrMath::ToMatrix(m_orientation);
-	
-	Vector4 vRight = matOrientation.Row(0);
-	m_vRight = Vector3(vRight.x(), vRight.y(), vRight.z());
-	
-	Vector4 vUp = matOrientation.Row(1);
-	m_vUp = Vector3(vUp.x(), vUp.y(), vUp.z());
-
-	Vector4 vForward = matOrientation.Row(2);
-	m_vForward = Vector3(vForward.x(), vForward.y(), vForward.z());
+	SetOrientation(m_orientation);
 }
 
 const Vector3& HrTransform::GetWorldScale()
@@ -166,7 +163,7 @@ const Vector3& HrTransform::GetWorldScale()
 
 const Quaternion& HrTransform::GetWorldOriention()
 {
-	if (m_bDirtyOriention)
+	if (m_bDirtyWorldOriention)
 	{
 		if (m_pParentTransform)
 		{
@@ -178,7 +175,7 @@ const Quaternion& HrTransform::GetWorldOriention()
 			m_worldOriention = m_orientation;
 		}
 
-		m_bDirtyOriention = false;
+		m_bDirtyWorldOriention = false;
 	}
 
 	return m_worldOriention;
@@ -186,7 +183,7 @@ const Quaternion& HrTransform::GetWorldOriention()
 
 const Vector3& HrTransform::GetWorldPosition()
 {
-	if (m_bDirtyPosition)
+	if (m_bDirtyWorldPosition)
 	{
 		if (m_pParentTransform)
 		{
@@ -199,7 +196,7 @@ const Vector3& HrTransform::GetWorldPosition()
 			m_vWorldPosition = m_vPosition;
 		}
 
-		m_bDirtyPosition = false;
+		m_bDirtyWorldPosition = false;
 	}
 
 	return m_vWorldPosition;
@@ -229,7 +226,7 @@ void HrTransform::UpdateFromParent()
 void HrTransform::SetScale(const Vector3& v3Scale)
 {
 	m_vScale = v3Scale;
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldScale = true;
+	DirtyTransform(false, true);
 }
 
 const Vector3& HrTransform::GetScale()
@@ -250,12 +247,18 @@ void HrTransform::SetTransformDirty(bool bDirty)
 void HrTransform::UpdateTransform(float fDelta)
 {
 	HR_UNUSED(fDelta);
-
-	GetWorldMatrix();	
 }
 
-void HrTransform::DirtyPosition()
+void HrTransform::DirtyTransform(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation)
 {
-	m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyPosition = true;
+	if (bDirtyPos)
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldPosition = true;
+	if (bDirtyScale)
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldScale = true;
+	if (bDirtyOrientation)
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldOriention = true;
+
+	if (m_funDirtyTrans)
+		m_funDirtyTrans(bDirtyPos, bDirtyScale, bDirtyOrientation);
 }
 

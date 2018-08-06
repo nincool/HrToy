@@ -153,7 +153,7 @@ const std::vector<HrVertexElement>& HrVertex::GetVertexElement()
 
 HrVertexData::HrVertexData()
 {
-	m_pVertexStream = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pVertexStream = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pVertex = HrMakeSharedPtr<HrVertex>();
 	m_pVertexBaseData = HrMakeSharedPtr<HrStreamData>();
 }
@@ -195,3 +195,51 @@ const HrStreamDataPtr& HrVertexData::GetVertexBaseData()
 	return m_pVertexBaseData;
 }
 
+//////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////
+
+HrIndexData::HrIndexData()
+{
+	m_indexBufferType = IT_16BIT;
+
+	m_pIndexStream = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pIndexBaseData = HrMakeSharedPtr<HrStreamData>();
+
+	m_nIndexCount = 0;
+	m_nIndexStartLocation = 0;
+	m_nBaseVertexLocation = 0;
+}
+
+HrIndexData::~HrIndexData()
+{
+
+}
+
+void HrIndexData::BindIndexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nStart, uint32 nSize, uint32 nBaseVertex)
+{
+	m_pIndexStream->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_INDEX);
+	m_nIndexCount = nSize;
+	m_nIndexStartLocation = nStart;
+	m_nBaseVertexLocation = nBaseVertex;
+}
+
+const HrGraphicsBufferPtr& HrIndexData::GetIndexStream()
+{
+	return m_pIndexStream;
+}
+
+EnumIndexType HrIndexData::GetIndexBufferType()
+{
+	return m_indexBufferType;
+}
+
+uint32 HrIndexData::GetIndexStart()
+{
+	return m_nIndexStartLocation;
+}
+
+uint32 HrIndexData::GetIndexCount()
+{
+	return m_nIndexCount;
+}

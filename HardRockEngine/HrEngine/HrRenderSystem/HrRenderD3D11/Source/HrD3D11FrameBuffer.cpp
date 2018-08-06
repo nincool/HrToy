@@ -12,7 +12,7 @@
 using namespace Hr;
 using namespace DirectX;
 
-HrD3D11FrameBuffer::HrD3D11FrameBuffer()
+HrD3D11FrameBuffer::HrD3D11FrameBuffer(uint32 nWidth, uint32 nHeight) : HrRenderFrame(nWidth, nHeight)
 {
 
 }
@@ -76,7 +76,7 @@ void HrD3D11FrameBuffer::Present()
 ///////////////////////////////////////////////////////////////////////////
 //HrD3D11ScreenFrameBuffer
 ///////////////////////////////////////////////////////////////////////////
-HrD3D11ScreenFrameBuffer::HrD3D11ScreenFrameBuffer(uint32 nWidth, uint32 nHeight) : m_nWidth(nWidth), m_nHeight(nHeight)
+HrD3D11ScreenFrameBuffer::HrD3D11ScreenFrameBuffer(uint32 nWidth, uint32 nHeight) : HrD3D11FrameBuffer(nWidth, nHeight)
 {
 	CreateSwapChain();
 	CreateRenderTargetView();
@@ -119,7 +119,7 @@ bool HrD3D11ScreenFrameBuffer::CreateSwapChain()
 		swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 		swapChainFullScreenDesc.Windowed = true;
 
-		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWinCoreComponent();
+		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWindowComponent();
 		IDXGISwapChain1* pSwapChain = nullptr;
 		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory2()->CreateSwapChainForHwnd(HrD3D11Device::Instance()->GetD3DDevice().get(), pWindowComponent->GetWindowHWnd()
 			, &swapChainDesc1
@@ -158,7 +158,7 @@ bool HrD3D11ScreenFrameBuffer::CreateSwapChain()
 
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
-		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWinCoreComponent();
+		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWindowComponent();
 		swapChainDesc.OutputWindow = pWindowComponent->GetWindowHWnd();
 		swapChainDesc.Windowed = true;
 
@@ -241,7 +241,7 @@ void HrD3D11ScreenFrameBuffer::Present()
 ///////////////////////////////////////////////////////////////////////////
 //HrD3D11DepthStencilFrameBuffer
 ///////////////////////////////////////////////////////////////////////////
-HrD3D11DepthStencilFrameBuffer::HrD3D11DepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) : m_nWidth(nWidth), m_nHeight(nHeight)
+HrD3D11DepthStencilFrameBuffer::HrD3D11DepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) : HrD3D11FrameBuffer(nWidth, nHeight)
 {
 	//1.创建DepthTexture
 	//2.创建DepthStencil

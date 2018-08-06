@@ -9,7 +9,7 @@ namespace Hr
 	class HrD3D11FrameBuffer : public HrRenderFrame, public std::enable_shared_from_this<HrD3D11FrameBuffer>
 	{
 	public:
-		HrD3D11FrameBuffer();
+		HrD3D11FrameBuffer(uint32 nWidth, uint32 nHeight);
 		~HrD3D11FrameBuffer();
 
 		const ID3D11RenderTargetViewPtr& D3D11RenderTargetView(EnumRenderTargetLayer renderTargetLayer);
@@ -49,9 +49,6 @@ namespace Hr
 		void CreateRenderTargetView();
 		void CreateDepthStencilView();
 	protected:
-		uint32 m_nWidth;
-		uint32 m_nHeight;
-
 		IDXGISwapChainPtr m_pSwapChain;
 		IDXGISwapChain1Ptr m_pSwapChain1;
 
@@ -73,10 +70,6 @@ namespace Hr
 	protected:
 		void CreateDepthStencilView();
 		
-	protected:
-		uint32 m_nWidth;
-		uint32 m_nHeight;
-
 		
 	};
 

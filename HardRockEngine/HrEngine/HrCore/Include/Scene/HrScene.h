@@ -35,7 +35,7 @@ namespace Hr
 		virtual void AddNode(const HrSceneNodePtr& pSceneNode);
 		virtual void ClearSceneNode();
 
-		virtual void Update();
+		virtual void Update(float fDelta);
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
 
 		std::shared_ptr<HrSceneLightData>& GetLightsData();

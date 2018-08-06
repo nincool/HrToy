@@ -15,6 +15,7 @@ namespace Hr
 			RT_EFFECT,
 			RT_MATERIAL,
 			RT_MODEL,
+			RT_MESHMODEL,
 			RT_TEXTURE_1D,
 			RT_TEXTURE_2D,
 			RT_TEXTURE_3D,

@@ -51,7 +51,7 @@ void HrGeometryApp::CreateScene()
 {
 	//auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
 	auto pTestScene = HrMakeSharedPtr<HrShadowMapScene>();
-	HrDirector::Instance()->GetSceneCoreComponent()->RunScene(pTestScene);
+	HrDirector::Instance()->GetSceneComponent()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();
 	//pTestScene->LoadScene("PlayerScene.json");

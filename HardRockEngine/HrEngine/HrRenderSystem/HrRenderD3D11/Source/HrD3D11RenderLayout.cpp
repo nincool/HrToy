@@ -101,3 +101,9 @@ const std::vector<UINT>& HrD3D11RenderLayout::GetOffsets()
 	return m_vecOffsets;
 }
 
+ID3D11Buffer* HrD3D11RenderLayout::GetD3DIndexBuffer()
+{
+	const HrD3D11GraphicsBufferPtr & pIndexStream = HrCheckPointerCast<HrD3D11GraphicsBuffer>(m_pIndexData->GetIndexStream());
+	return pIndexStream->GetD3DGraphicsBuffer().get();
+}
+

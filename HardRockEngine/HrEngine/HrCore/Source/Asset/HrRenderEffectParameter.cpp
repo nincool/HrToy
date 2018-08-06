@@ -553,7 +553,7 @@ void HrRenderVariableTexture::Value(HrTexture*& val) const
 HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 {
 	//TODO!!!!!!!!!!!!!!!!!
-	m_pSamplerState = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateSamplerState();
+	m_pSamplerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateSamplerState();
 }
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
@@ -825,7 +825,7 @@ HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& st
 	m_nSize = nSize;
 
 	m_pConstantBufferData = HrMakeSharedPtr<HrStreamData>(static_cast<uint32>(m_nSize));
-	m_pConstantBuffer = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pConstantBuffer = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pConstantBuffer->BindStream(nullptr, m_nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 

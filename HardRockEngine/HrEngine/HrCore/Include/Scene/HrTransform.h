@@ -16,7 +16,7 @@ namespace Hr
 		};
 
 	public:
-		HrTransform(const std::function<void (void)>& funDirtyPos);
+		HrTransform(const std::function<void (bool, bool, bool)>& funDirtyTrans);
 
 		void SetParentTransform(const HrTransformPtr& pTrans);
 
@@ -50,11 +50,11 @@ namespace Hr
 		*/
 		void Roll(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
 		/*
-		@brief	Rotate the node around the z-axis [11/1/2016 By Hr]
+		@brief	Rotate the node around the x-axis [11/1/2016 By Hr]
 		*/
 		void Pitch(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
 		/*
-		@brief	Rotate the node around the z-axis [11/1/2016 By Hr]
+		@brief	Rotate the node around the y-axis [11/1/2016 By Hr]
 		*/
 		void Yaw(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
 
@@ -67,7 +67,7 @@ namespace Hr
 		bool GetTransformDirty();
 		void SetTransformDirty(bool bDirty);
 
-		void DirtyPosition();
+		void DirtyTransform(bool bDirtyPos = false, bool bDirtyScale = false, bool bDirtyOrientation = false);
 	protected:
 		void UpdateFromParent();
 	protected:
@@ -89,14 +89,14 @@ namespace Hr
 
 		bool m_bDirtyWorldScale;
 		Vector3 m_vWorldScale;
-		bool m_bDirtyOriention;
+		bool m_bDirtyWorldOriention;
 		Quaternion m_worldOriention;
-		bool m_bDirtyPosition;
+		bool m_bDirtyWorldPosition;
 		Vector3 m_vWorldPosition;
 
 		bool m_bDirtyTransform;
 
-		std::function<void(void)> m_funDirtyPos;
+		std::function<void(bool, bool, bool)> m_funDirtyTrans;
 	};
 }
 

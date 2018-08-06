@@ -79,7 +79,7 @@ bool HrModel::LoadImpl()
 		if (sceneRootInfo.HasMember("TEXTURE_SAMPLER"))
 		{
 			std::string strTextureFile = sceneRootInfo["TEXTURE_SAMPLER"].GetString();
-			HrTexturePtr pTexSampler = HrDirector::Instance()->GetResCoreComponent()->RetriveTexture(strTextureFile, HrTexture::TEX_TYPE_2D);
+			HrTexturePtr pTexSampler = HrDirector::Instance()->GetResourceComponent()->RetriveTexture(strTextureFile, HrTexture::TEX_TYPE_2D);
 			m_pMesh->GetSubMesh(0)->GetMaterial()->SetTexture(HrMaterial::TS_SLOT_0, pTexSampler);
 		}
 	}

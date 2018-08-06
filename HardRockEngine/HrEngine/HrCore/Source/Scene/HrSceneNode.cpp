@@ -23,7 +23,7 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_strName = "NoName";
 	m_bEnable = true;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
+	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyTransfrom, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::GenerateID<HrSceneNode>())
@@ -31,7 +31,7 @@ HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::Generate
 	m_strName = strName;
 	m_bEnable = true;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyPosition, this));
+	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyTransfrom, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 HrSceneNode::~HrSceneNode()
@@ -155,7 +155,7 @@ void HrSceneNode::UpdateNode(float fDt)
 
 	if (m_pSceneObject)
 	{
-		m_pSceneObject->Update(fDt, m_pTransform);
+		m_pSceneObject->Update(fDt);
 	}
 
 	for (auto& iteChild : m_vecChildrenNode)
@@ -253,12 +253,12 @@ const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 	return m_pSceneObject;
 }
 
-void HrSceneNode::DirtyPosition()
+void HrSceneNode::DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation)
 {
+	m_pSceneObject->OnNodeTransformDirty(m_pTransform);
 	for (auto& iteChild : m_vecChildrenNode)
 	{
-		iteChild->DirtyPosition();
-		iteChild->GetTransform()->DirtyPosition();
+		iteChild->GetTransform()->DirtyTransform(bDirtyPos, bDirtyScale, bDirtyOrientation);
 	}
 }
 

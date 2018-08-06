@@ -3,8 +3,11 @@
 
 using namespace Hr;
 
-HrRenderFrame::HrRenderFrame()
+HrRenderFrame::HrRenderFrame(uint32 nWidth, uint32 nHeight)
 {
+	m_nWidth = nWidth;
+	m_nHeight = nHeight;
+
 	m_clearDepth = 1.0f;
 	m_clearStencil = 0.0f;
 
@@ -13,6 +16,16 @@ HrRenderFrame::HrRenderFrame()
 
 HrRenderFrame::~HrRenderFrame()
 {
+}
+
+uint32 HrRenderFrame::GetFrameWidth()
+{
+	return m_nWidth;
+}
+
+uint32 HrRenderFrame::GetFrameHeight()
+{
+	return m_nHeight;
 }
 
 void HrRenderFrame::SetClearColor(const HrColor& color)
@@ -64,6 +77,7 @@ const std::map<uint32, Hr::HrViewPortPtr>& HrRenderFrame::GetAllViewPorts()
 {
 	return m_mapViewPorts;
 }
+
 
 Hr::HrDepthStencilPtr Hr::HrRenderFrame::GetDepthStencil()
 {

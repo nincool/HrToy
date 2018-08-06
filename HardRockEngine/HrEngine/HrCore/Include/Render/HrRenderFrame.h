@@ -17,8 +17,11 @@ namespace Hr
 			RTL_MAX = 8,
 		};
 	public:
-		HrRenderFrame();
+		HrRenderFrame(uint32 nWidth, uint32 nHeight);
 		virtual ~HrRenderFrame();
+
+		uint32 GetFrameWidth();
+		uint32 GetFrameHeight();
 
 		virtual void AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget);
 		virtual void DetachRenderTarget(EnumRenderTargetLayer attachLayer);
@@ -40,6 +43,9 @@ namespace Hr
 
 		HrDepthStencilPtr GetDepthStencil();
 	protected:
+		uint32 m_nWidth;
+		uint32 m_nHeight;
+
 		HrColor m_clearColor;
 		float m_clearDepth;
 		float m_clearStencil;

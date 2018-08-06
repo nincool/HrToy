@@ -17,7 +17,7 @@ void HrApplication::Run()
 {
 	HRLOG(_T("Application_win32 run"));
 
-	if (!HrDirector::Instance()->Init())
+	if (!HrDirector::Instance()->Init(nullptr))
 	{
 		HRERROR(_T("Application Run Error!"));
 	}

@@ -184,6 +184,34 @@ namespace Hr
 		uint32 m_nVertexStart;
 		uint32 m_nVertexCount;
 	};
+
+	///////////////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////////////
+
+	class HR_CORE_API HrIndexData
+	{
+	public:
+		HrIndexData();
+		~HrIndexData();
+
+		void BindIndexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nStart, uint32 nSize, uint32 nBaseVertex);
+
+		uint32 GetIndexStart();
+		uint32 GetIndexCount();
+		const HrGraphicsBufferPtr& GetIndexStream();
+
+		EnumIndexType GetIndexBufferType();
+	private:
+		EnumIndexType m_indexBufferType;
+
+		HrGraphicsBufferPtr m_pIndexStream;
+		HrStreamDataPtr m_pIndexBaseData;
+
+		uint32 m_nIndexCount;
+		uint32 m_nIndexStartLocation;
+		uint32 m_nBaseVertexLocation;
+	};
 }
 
 #endif

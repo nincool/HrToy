@@ -39,7 +39,7 @@ const HrRenderLayoutPtr& HrSubMesh::GetRenderLayout()
 {
 	if (!m_pRenderLayout) 
 	{
-		m_pRenderLayout = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderFactory()->CreateRenderLayout();
+		m_pRenderLayout = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRenderLayout();
 	}
 
 	return m_pRenderLayout;

@@ -104,3 +104,8 @@ void HrCoreComponentRender::DoRender(const HrRenderTechniquePtr& pRenderTechniqu
 	m_pRenderSystem->GetRender()->Render(pRenderTechnique, pRenderLayout);
 }
 
+const HrRenderFramePtr& HrCoreComponentRender::GetRenderFrameBuffer() const
+{
+	return m_pRenderSystem->GetScreenFrameBuffer();
+}
+

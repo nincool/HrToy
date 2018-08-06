@@ -9,6 +9,8 @@ namespace Hr
 {
 	namespace HrMath
 	{
+		const float EPSILON = 0.0001f;
+
 		inline float PI() { return KlayGE::PI; }
 		inline float PIDIV2() { return KlayGE::PIdiv2; }
 		inline float DEG90() { return KlayGE::DEG90; }
@@ -35,6 +37,14 @@ namespace Hr
 		{
 			return std::fabs(value);
 		}
+		
+		//取符号
+		template <typename T>
+		inline T Sgn(T const& x)
+		{
+			return KlayGE::MathLib::sgn(x);
+		}
+
 		//开方
 		inline float Sqrt(float x)
 		{
@@ -155,6 +165,11 @@ namespace Hr
 			return KlayGE::MathLib::length(rhs);
 		}
 
+		inline float SqrLength(Vector3 const& rhs)
+		{
+			return KlayGE::MathLib::length_sq(rhs);
+		}
+
 		inline Vector3 Cross(Vector3 const& lhs, Vector3 const& rhs)
 		{
 			return KlayGE::MathLib::cross(lhs, rhs);
@@ -176,6 +191,11 @@ namespace Hr
 			return KlayGE::MathLib::to_matrix(lhs);
 		}
 
+		inline Quaternion ToQuaternion(const Matrix4& mat)
+		{
+			return KlayGE::MathLib::to_quaternion(mat);
+		}
+
 		inline Quaternion RotationQuaternionYawPitchRoll(Vector3 const& angle)
 		{
 			return KlayGE::MathLib::rotation_quat_yaw_pitch_roll(angle);
@@ -185,6 +205,15 @@ namespace Hr
 		{
 			return KlayGE::MathLib::rotation_quat_yaw_pitch_roll(angle.y(), angle.x(), angle.z());
 		}
+
+		inline Quaternion RotationAxis(const Vector3& axis, const float& angle)
+		{
+			return KlayGE::MathLib::rotation_axis(axis, angle);
+		}
+
+
+
+
 
 		// 4D 矩阵
 		///////////////////////////////////////////////////////////////////////////////
@@ -219,6 +248,39 @@ namespace Hr
 			return KlayGE::MathLib::translation(pos);
 		}
 
+		inline Matrix4 OrthoNormalBasic(const Vector3& x, const Vector3& y, const Vector3& z)
+		{
+			return Matrix4(x[0], x[1], x[2], 0,
+				y[0], y[1], y[2], 0,
+				z[0], z[1], z[2], 0,
+				0, 0, 0, 1);
+		}
+
+		inline Matrix4 LookRotationToMatrix(const Vector3& viewVec, const Vector3& upVec)
+		{
+			const float fEpsilon = 0.00001f;
+
+			Vector3 z = viewVec;
+			float fLegth = Length(z);
+			if (fLegth < fEpsilon)
+			{
+				return Matrix4::Identity();
+			}
+			z /= fLegth;
+
+			Vector3 x = Cross(upVec, z);
+			fLegth = Length(x);
+			if (fLegth < fEpsilon)
+			{
+				return Matrix4::Identity();
+			}
+			x / fLegth;
+
+			Vector3 y = Cross(z, x);
+
+			return OrthoNormalBasic(x, y, z);
+		}
+
 		inline Matrix4 MakeTransform(const Vector3& pos, const Vector3& scale, const Quaternion& orientation)
 		{
 			// Ordering:
@@ -231,6 +293,53 @@ namespace Hr
 
 			return matScale * matRotate * matTranslation;
 		}
+
+		//变换
+		inline Vector3 TransformCoord(const Vector3& vPos, const Matrix4& mat)
+		{
+			Vector3 vTransPos = KlayGE::MathLib::transform_coord(vPos, mat);
+			
+			return vTransPos;
+		}
+
+		inline Matrix4 Transformation(const Vector3* pScalingCenter
+			, const Quaternion* pScalingRotation
+			, const Vector3* pScale
+			, const Vector3* pRotationCenter
+			, const Quaternion* pRotation
+			, const Vector3* pTrans)
+		{
+			return KlayGE::MathLib::transformation(pScalingCenter, pScalingRotation, pScale, pRotationCenter, pRotation, pTrans);
+		}
+
+		inline Vector3 TransformQuat(const Vector3& v, const Quaternion& quat)
+		{
+			return KlayGE::MathLib::transform_quat(v, quat);
+		}
+
+		//inline Vector3 Mul(const Quaternion& lhs, const Vector3& rhs)
+		//{
+		//	//from ogre
+		//	// nVidia SDK implementation
+		//	Vector3 uv, uuv;
+		//	Vector3 qvec(lhs.x(), lhs.y(), lhs.z());
+		//	uv = Cross(qvec, rhs);
+		//	uuv = Cross(qvec, uv);
+		//	uv *= (2.0f * lhs.w());
+		//	uuv *= 2.0f;
+
+		//	return rhs + uv + uuv;
+		//}
+
+		inline Matrix4 RotationAroundTarget(const Vector3& vTarget, const Quaternion& q)
+		{
+			Matrix4 mat1 = Translation(-vTarget);
+			Matrix4 mat2 = ToMatrix(q);
+			Matrix4 mat3 = Translation(vTarget);
+
+			return mat1 * mat2 * mat3;
+		}
+
 		// Color
 		///////////////////////////////////////////////////////////////////////////////
 		inline HrColor MakeColor(uint8 r, uint8 g, uint8 b, uint8 a)
@@ -242,6 +351,12 @@ namespace Hr
 		{
 			BOOST_ASSERT(rgba.size() == 4);
 			return HrColor(rgba[0] / 255.0f, rgba[1] / 255.0f, rgba[2] / 255.0f, rgba[3] / 255.0f);
+		}
+
+		///////////////////////////////////////////////////////////////////////////////
+		inline bool CompareApproximately(const Vector3& v0, const Vector3& v1, const float fMaxDist = EPSILON)
+		{
+			return SqrLength(v1 - v0) < fMaxDist * fMaxDist;
 		}
 	}
 }

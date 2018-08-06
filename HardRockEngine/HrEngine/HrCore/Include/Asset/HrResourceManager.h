@@ -6,8 +6,6 @@
 #include "HrCore/Include/Render/HrShader.h"
 #include "HrCommon/include/HrSingleton.h"
 
-#define HR_BUILDIN_RES_PATH "HR_BUILDIN_RESOURCE\\"
-
 namespace Hr
 {
 	class HR_CORE_API HrResourceManager
@@ -31,8 +29,6 @@ namespace Hr
 	protected:
 		/**
 		 @Comment: º”‘ÿ◊ ‘¥ [1/30/2018 By Hr]
-		 @Param:
-		 @Return:
 		*/
 		HrResourcePtr LoadResource(const std::string& strFile, HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN);
 		/*
@@ -41,6 +37,7 @@ namespace Hr
 		HrResourcePtr AddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
 		HrResourcePtr AddModelResource(const std::string& strFile);
+		HrResourcePtr AddMeshModelResource(const std::string& strFile);
 		HrResourcePtr AddEffectResource(const std::string& strFile);
 		HrResourcePtr AddMeshResource(const std::string& strFile);
 		HrResourcePtr AddMaterialResource(const std::string& strFile);
@@ -54,12 +51,15 @@ namespace Hr
 		HrResourcePtr GetTexture2D(const std::string& strTextureName);
 		HrResourcePtr GetMesh(const std::string& strMeshName);
 		HrResourcePtr GetEffect(const std::string& strEffectName);
-		const HrResourcePtr& GetMaterial(const std::string& strMaterialName);
 		HrResourcePtr GetModel(const std::string& strModelName);
+		HrResourcePtr GetMeshModel(const std::string& strModelName);
+
+		const HrResourcePtr& GetMaterial(const std::string& strMaterialName);
 
 		void ReleaseResourceCache(std::unordered_map<size_t, HrResourcePtr>& mapRes);
 	protected:
-		std::unordered_map<size_t, HrResourcePtr> m_mapPrefabModels;
+		std::unordered_map<size_t, HrResourcePtr> m_mapPrefabModels; //depre
+		std::unordered_map<size_t, HrResourcePtr> m_mapMeshModels;
 		std::unordered_map<size_t, HrResourcePtr> m_mapMesh;
 		std::unordered_map<size_t, HrResourcePtr> m_mapMaterials;
 		std::unordered_map<size_t, HrResourcePtr> m_mapTextures2D;

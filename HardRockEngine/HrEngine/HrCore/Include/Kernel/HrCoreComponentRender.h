@@ -25,15 +25,15 @@ namespace Hr
 
 		void Present();
 
-		const HrRenderFactoryPtr& GetRenderFactory() const;
-
 		void DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout);
-		//todo 临时
-		const HrRenderSystemPtr& GetRenderSystem()
-		{
-			return m_pRenderSystem;
-		}
 
+		///////////////////////////////////////////////////////////////////
+		/**
+		 @Comment: 获取渲染组件工厂 [7/11/2018 By Hr]
+		 @Return:  HrRenderFactoryPtr
+		*/
+		const HrRenderFactoryPtr& GetRenderFactory() const;
+		const HrRenderFramePtr& GetRenderFrameBuffer() const;
 	private:
 		bool CreateRenderFactory(const std::string& strRenderModule);
 

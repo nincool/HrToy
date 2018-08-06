@@ -166,9 +166,6 @@
     <ClInclude Include="Include\Asset\HrResourceManager.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrGeometryFactory.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Event\HrEvent.h">
       <Filter>Include\Event</Filter>
     </ClInclude>
@@ -328,6 +325,12 @@
     <ClInclude Include="Include\Render\HrShadowMap.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Platform\AppWin\HrWrapperWin.h">
+      <Filter>Include\Platform\AppWin</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrMeshModel.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -397,9 +400,6 @@
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\HrResourceManager.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\HrGeometryFactory.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Event\HrEvent.cpp">
@@ -561,6 +561,12 @@
     <ClCompile Include="Source\Render\HrShadowMap.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Platform\AppWin\HrWrapperWin.cpp">
+      <Filter>Source\Platform\AppWin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrMeshModel.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
@@ -578,6 +584,9 @@
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.hlsl">
       <Filter>Effects</Filter>
     </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json">
@@ -588,6 +597,9 @@
     </None>
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
       <Filter>Material</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.json">
+      <Filter>Effects</Filter>
     </None>
   </ItemGroup>
 </Project>

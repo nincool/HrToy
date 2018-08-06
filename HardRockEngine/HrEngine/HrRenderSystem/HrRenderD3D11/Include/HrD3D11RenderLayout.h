@@ -22,6 +22,8 @@ namespace Hr
 		const std::vector<UINT>& GetStrides();
 		const std::vector<UINT>& GetOffsets();
 
+		ID3D11Buffer* GetD3DIndexBuffer();
+
 		virtual void Active() override;
 
 	private:
@@ -30,6 +32,8 @@ namespace Hr
 		std::vector<ID3D11Buffer*> m_vecD3DVertexBuffer;
 		std::vector<UINT> m_vecStrides;
 		std::vector<UINT> m_vecOffsets;
+
+
 	};
 }
 

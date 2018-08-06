@@ -44,12 +44,11 @@ namespace Hr
 		void OnBeginRenderScene(const HrEventPtr& pEvent);
 		void OnEndRenderScene(const HrEventPtr& pEvent);
 
-		void DirtyPosition();
-
 	private:
 		void AddEventListeners();
 		void RemoveEventListeners();
 
+		void DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation);
 	protected:
 		HrSceneObjectPtr m_pSceneObject;
 

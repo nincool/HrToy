@@ -17,7 +17,8 @@ namespace Hr
 
 		void OnEnter();
 		void OnExist();
-		void Update(float fDelta, const HrTransformPtr& pTrans);
+		void Update(float fDelta);
+		void OnNodeTransformDirty(const HrTransformPtr& pTrans);
 
 		void AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent);
 		HrSceneObjectComponentPtr AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType);
@@ -30,7 +31,7 @@ namespace Hr
 
 		HrSceneNodePtr GetSceneNode();
 	private:
-		void AddCameraToScene(const HrCameraPtr& pCamera);
+		void AddCameraToScene();
 		void AddLightToScene(const HrLightPtr& pLight);
 	protected:
 		std::weak_ptr<HrSceneNode> m_pContainerNode;
@@ -46,17 +47,26 @@ namespace Hr
 	template <typename T>
 	std::shared_ptr<T> HrSceneObject::AddComponent()
 	{
-		if (typeid(T) == typeid(HrInstanceBatchComponent))
+		const std::type_info &typeInfo = typeid(T);
+		if (typeInfo == typeid(HrInstanceBatchComponent))
 		{
 			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_INSTANCEBATCH));
 		}
-		else if (typeid(T) == typeid(HrInstanceObjectComponent))
+		else if (typeInfo == typeid(HrInstanceObjectComponent))
 		{
 			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_INSTANCEOBJ));
 		}
-		else if (typeid(T) == typeid(HrRenderableComponent))
+		else if (typeInfo == typeid(HrRenderableComponent))
 		{
 			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_RENDERABLE));
+		}
+		else if (typeInfo == typeid(HrCameraComponet))
+		{
+			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_CAMERA));
+		}
+		else if (typeInfo == typeid(HrTrackBallCameraController))
+		{
+			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_TRACKBALLCAMERA));
 		}
 		else
 		{

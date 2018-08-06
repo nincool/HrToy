@@ -18,6 +18,7 @@ namespace Hr
 			SCT_RENDERABLE,
 			SCT_INSTANCEBATCH,
 			SCT_INSTANCEOBJ,
+			SCT_TRACKBALLCAMERA,
 
 			SCT_COM_COUNT,
 		};
@@ -27,8 +28,11 @@ namespace Hr
 
 		virtual bool InitComponent() override;
 		virtual bool Update(float fDelta) override;
-
+		
+		virtual void OnEnter() {};
+		virtual void OnExist() {};
 		virtual bool IsMutex() = 0;
+		
 
 		const std::string& GetName();
 		EnumSceneComponentType GetComType();
@@ -73,14 +77,45 @@ namespace Hr
 	class HR_CORE_API HrCameraComponet : public HrSceneObjectMutexCom
 	{
 	public:
+
 		HrCameraComponet(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
 		~HrCameraComponet();
 
-		const HrCameraPtr& GetCamera();
-
+		virtual void OnEnter() override;
 		virtual void UpdateTransform(const HrTransformPtr& pTransform) override;
+
+		const HrCameraPtr& GetCamera();
+		const HrViewPortPtr& GetViewPort();
+
+		void SetFov(float fFov);
+		void SetAspect(float fAspect);
+		void SetNearPlane(float fNear);
+		void SetFarPlane(float fFar);
 	protected:
+		HrViewPortPtr m_pViewPort;
 		HrCameraPtr m_pCamera;
+	};
+
+	class HR_CORE_API HrTrackBallCameraController : public HrSceneObjectSharedCom
+	{
+	public:
+		HrTrackBallCameraController(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		~HrTrackBallCameraController();
+
+		virtual void OnEnter() override;
+
+		void Move() {};
+		void Rotate(const Vector3& v);
+		void Zoom(float fZ);
+	protected:
+		HrCameraComponentPtr m_pCameraCom;
+
+		Vector3 m_vTarget;
+		Vector3 m_vRight;
+
+		float m_fRotationScaler;
+		float m_fMoveScaler;
+		float m_fZoomScaler;
 	};
 
 	///////////////////////////////////////////////////

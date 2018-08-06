@@ -19,7 +19,7 @@ namespace Hr
 
 		virtual Platform GetTargetPlatform() override
 		{
-			return HrApplication::Platform::OS_WINDOWS;
+			return HrApplication::Platform::PLAT_OS_WINDOWS;
 		}
 	};
 }

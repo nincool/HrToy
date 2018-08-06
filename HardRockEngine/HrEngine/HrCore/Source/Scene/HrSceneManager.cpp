@@ -65,7 +65,7 @@ void HrSceneManager::UpdateScene(float fDeltaTime)
 	{
 		return;
 	}
-	m_pRunningScene->Update();
+	m_pRunningScene->Update(fDeltaTime);
 }
 
 void HrSceneManager::RenderScene()
@@ -75,7 +75,7 @@ void HrSceneManager::RenderScene()
 		return;
 	}
 	
-	const HrCoreComponentRenderPtr& pRenderComponent = HrDirector::Instance()->GetRenderCoreComponent();
+	const HrCoreComponentRenderPtr& pRenderComponent = HrDirector::Instance()->GetRenderComponent();
 	
 	pRenderComponent->OnRenderFrameBegin();
 
@@ -86,8 +86,8 @@ void HrSceneManager::RenderScene()
 	m_pRenderQueue->PrepareRenderQueue();
 	m_pRunningScene->FillRenderQueue(m_pRenderQueue);
 
-	//äÖÈ¾
-	pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
+	//äÖÈ¾ ÏÈÆÁ±ÎµôäÖÈ¾µ½Éî¶È»º´æ
+	//pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
 	
 	pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
 	pRenderComponent->Present();

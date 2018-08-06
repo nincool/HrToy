@@ -52,6 +52,8 @@ namespace Hr
 	typedef std::shared_ptr<HrVertex> HrVertexPtr;
 	class HrVertexData;
 	typedef std::shared_ptr<HrVertexData> HrVertexDataPtr;
+	class HrIndexData;
+	typedef std::shared_ptr<HrIndexData> HrIndexDataPtr;
 	class HrGraphicsBuffer;
 	typedef std::shared_ptr<HrGraphicsBuffer> HrGraphicsBufferPtr;
 	class HrRenderQueue;
@@ -123,6 +125,8 @@ namespace Hr
 	typedef std::shared_ptr<HrSceneObjectComponent> HrSceneObjectComponentPtr;
 	class HrCameraComponet;
 	typedef std::shared_ptr<HrCameraComponet> HrCameraComponentPtr;
+	class HrTrackBallCameraController;
+	typedef std::shared_ptr<HrTrackBallCameraController> HrTrackBallCameraComponentPtr;
 	class HrLightComponent;
 	typedef std::shared_ptr<HrLightComponent> HrLightComponentPtr;
 	class HrRenderableComponent;
@@ -155,6 +159,8 @@ namespace Hr
 	typedef std::shared_ptr<HrResource> HrResourcePtr;
 	class HrModel;
 	typedef std::shared_ptr<HrModel> HrModelPtr;
+	class HrMeshModel;
+	typedef std::shared_ptr<HrMeshModel> HrMeshModelPtr;
 	class HrTexture;
 	typedef std::shared_ptr<HrTexture> HrTexturePtr;
 	class HrMesh;
@@ -174,8 +180,6 @@ namespace Hr
 	//Asset
 	class HrComponentFactory;
 	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
-	class HrGeometryFactory;
-	typedef std::shared_ptr<HrGeometryFactory> HrGeometryFactoryPtr;
 	class HrGeometryBox;
 
 	//InstanceBatch

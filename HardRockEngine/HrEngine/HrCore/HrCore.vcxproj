@@ -139,7 +139,7 @@
     <ClInclude Include="Include\Asset\HrMaterial.h" />
     <ClInclude Include="Include\Asset\HrRenderEffectParameter.h" />
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
-    <ClInclude Include="Include\Asset\HrGeometryFactory.h" />
+    <ClInclude Include="Include\Asset\HrMeshModel.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
     <ClInclude Include="Include\Asset\HrModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
@@ -181,6 +181,7 @@
     <ClInclude Include="Include\Platform\AppWin\HrAppWindows.h" />
     <ClInclude Include="Include\Platform\AppWin\HrWindowsEventUtilities.h" />
     <ClInclude Include="Include\Platform\AppWin\HrWindowWin.h" />
+    <ClInclude Include="Include\Platform\AppWin\HrWrapperWin.h" />
     <ClInclude Include="Include\Render\HrBlendState.h" />
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrDepthStencil.h" />
@@ -225,7 +226,7 @@
     <ClCompile Include="Source\Asset\HrRenderEffectParameter.cpp" />
     <ClCompile Include="Source\Asset\HrResource.cpp" />
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
-    <ClCompile Include="Source\Asset\HrGeometryFactory.cpp" />
+    <ClCompile Include="Source\Asset\HrMeshModel.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
     <ClCompile Include="Source\Asset\HrModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
@@ -262,6 +263,7 @@
     <ClCompile Include="Source\Platform\AppWin\HrAppWindows.cpp" />
     <ClCompile Include="Source\Platform\AppWin\HrWindowsEventUtilities.cpp" />
     <ClCompile Include="Source\Platform\AppWin\HrWindowWin.cpp" />
+    <ClCompile Include="Source\Platform\AppWin\HrWrapperWin.cpp" />
     <ClCompile Include="Source\Render\HrBlendState.cpp" />
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrDepthStencil.cpp" />
@@ -316,6 +318,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.json" />
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json" />
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.json" />
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material" />
@@ -327,6 +330,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.hlsl">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.hlsl">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>

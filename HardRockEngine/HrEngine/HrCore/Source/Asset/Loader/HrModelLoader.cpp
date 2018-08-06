@@ -51,7 +51,7 @@ void HrModelLoader::Load(std::string& strFile)
 	MakeVertexElements(m_modelDesc, vecVertexElement);
 
 	//construct default vertexelement
-	m_pMesh = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrMesh>(m_strFileName);
+	m_pMesh = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMesh>(m_strFileName);
 	BOOST_ASSERT(!m_pMesh->IsLoaded());
 	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
@@ -64,7 +64,7 @@ void HrModelLoader::Load(std::string& strFile)
 		pSubMesh->GetRenderLayout()->BindVertexBuffer(streamVertexBuffer.GetBufferPoint(), streamVertexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, vecVertexElement);
 
 		//todo material
-		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrMaterial>("");
+		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMaterial>("");
 		pSubMesh->SetMaterial(pMaterial);
 	}
 }

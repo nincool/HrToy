@@ -26,10 +26,13 @@ void HrSceneObject::AttachSceneNode(const HrSceneNodePtr& pSceneNode)
 
 void HrSceneObject::OnEnter()
 {
-	if (m_pCachedCamera)
+	for (auto& item : m_mapComponents)
 	{
-		AddCameraToScene(m_pCachedCamera->GetCamera());
+		item.second->OnEnter();
 	}
+
+	AddCameraToScene();
+	
 	if (m_pCachedLight)
 	{
 		AddLightToScene(m_pCachedLight->GetLight());
@@ -40,15 +43,15 @@ void HrSceneObject::OnExist()
 {
 }
 
-void HrSceneObject::Update(float fDelta, const HrTransformPtr& pTrans)
+void HrSceneObject::Update(float fDelta)
 {
-	//这里更新各个组件的位置信息
-	if (pTrans->GetTransformDirty())
+}
+
+void HrSceneObject::OnNodeTransformDirty(const HrTransformPtr& pTrans)
+{
+	for (auto& iteCom : m_mapComponents)
 	{
-		for (auto& iteCom : m_mapComponents)
-		{
-			iteCom.second->UpdateTransform(pTrans);
-		}
+		iteCom.second->UpdateTransform(pTrans);
 	}
 }
 
@@ -72,7 +75,6 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 		{
 			m_mapComponents[comType] = pSceneObjComponent;
 			m_pCachedCamera = HrCheckPointerCast<HrCameraComponet>(pSceneObjComponent);
-			AddCameraToScene(m_pCachedCamera->GetCamera());
 			break;
 		}
 		else
@@ -86,7 +88,6 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 		{
 			m_mapComponents[comType] = pSceneObjComponent;
 			m_pCachedLight = HrCheckPointerCast<HrLightComponent>(pSceneObjComponent);
-			AddLightToScene(m_pCachedLight->GetLight());
 		}
 		else
 		{
@@ -122,6 +123,7 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 	case HrSceneObjectComponent::SCT_NORMAL:
 		break;
 	case HrSceneObjectComponent::SCT_CAMERA:
+		pSceneObjCom = HrMakeSharedPtr<HrCameraComponet>("Camera", shared_from_this());
 		break;
 	case HrSceneObjectComponent::SCT_LIGHT:
 		break;
@@ -133,6 +135,9 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 		break;
 	case HrSceneObjectComponent::SCT_INSTANCEOBJ:
 		pSceneObjCom = HrMakeSharedPtr<HrInstanceObjectComponent>("InstanceObj", shared_from_this());
+		break;
+	case HrSceneObjectComponent::SCT_TRACKBALLCAMERA:
+		pSceneObjCom = HrMakeSharedPtr<HrTrackBallCameraController>("TrackBallCameraController", shared_from_this());
 		break;
 	case HrSceneObjectComponent::SCT_COM_COUNT:
 		break;
@@ -146,22 +151,35 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 		return nullptr;
 	}
 
+	if (!pSceneObjCom->InitComponent())
+	{
+		TRE("component construct failed");
+		return nullptr;
+	}
+
+	if (!m_pContainerNode.expired())
+	{
+		if (m_pContainerNode.lock()->IsRunning())
+			pSceneObjCom->OnEnter();
+	}
+
 	m_mapComponents[comType] = pSceneObjCom;
 	m_pSceneObjMutexCom = pSceneObjCom->IsMutex() ? pSceneObjCom : nullptr;
+
+	switch (comType)
+	{
+	case HrSceneObjectComponent::SCT_CAMERA:
+		m_pCachedCamera = HrCheckPointerCast<HrCameraComponet>(pSceneObjCom);
+		break;
+	}
 
 	return m_mapComponents[comType];
 }
 
-void HrSceneObject::AddCameraToScene(const HrCameraPtr& pCamera)
+void HrSceneObject::AddCameraToScene()
 {
-	if (!m_pContainerNode.expired())
-	{
-		HrSceneNodePtr pSceneNode = m_pContainerNode.lock();
-		if (pSceneNode->GetEnable())
-		{
-			HrDirector::Instance()->GetRenderCoreComponent()->AddViewPort(pCamera->GetViewPort());
-		}
-	}
+	if (m_pCachedCamera)
+		HrDirector::Instance()->GetRenderComponent()->AddViewPort(m_pCachedCamera->GetViewPort());
 }
 
 void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
@@ -171,7 +189,7 @@ void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
 		HrSceneNodePtr pSceneNode = m_pContainerNode.lock();
 		if (pSceneNode->GetEnable())
 		{
-			HrDirector::Instance()->GetSceneCoreComponent()->GetRunningScene()->GetLightsData()->AddLight(pLight);
+			HrDirector::Instance()->GetSceneComponent()->GetRunningScene()->GetLightsData()->AddLight(pLight);
 		}
 	}
 }
@@ -189,11 +207,6 @@ HrSceneObjectComponentPtr HrSceneObject::GetComponent(HrSceneObjectComponent::En
 
 HrSceneNodePtr HrSceneObject::GetSceneNode()
 {
-	if (!m_pContainerNode.expired())
-	{
-		return m_pContainerNode.lock();
-	}
-
-	return nullptr;
+	return m_pContainerNode.lock();
 }
 

@@ -23,18 +23,18 @@ namespace Hr
 
 		enum class Platform
 		{
-			OS_WINDOWS,/** Windows */
-			OS_LINUX,/** Linux */
-			OS_MAC,/** Mac*/
-			OS_ANDROID,/** Android */
-			OS_IPHONE,/** Iphone */
-			OS_IPAD,/** Ipad */
-			OS_BLACKBERRY,/** BLACKBERRY */
-			OS_NACL,/** Nacl */
-			OS_EMSCRIPTEN,/** Emscripten */
-			OS_TIZEN,/** Tizen */
-			OS_WINRT,/** Winrt */
-			OS_WP8/** WP8 */
+			PLAT_OS_WINDOWS,/** Windows */
+			PLAT_OS_LINUX,/** Linux */
+			PLAT_OS_MAC,/** Mac*/
+			PLAT_OS_ANDROID,/** Android */
+			PLAT_OS_IPHONE,/** Iphone */
+			PLAT_OS_IPAD,/** Ipad */
+			PLAT_OS_BLACKBERRY,/** BLACKBERRY */
+			PLAT_OS_NACL,/** Nacl */
+			PLAT_OS_EMSCRIPTEN,/** Emscripten */
+			PLAT_OS_TIZEN,/** Tizen */
+			PLAT_OS_WINRT,/** Winrt */
+			PLAT_OS_WP8/** WP8 */
 		};
 
 		/**

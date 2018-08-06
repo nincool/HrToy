@@ -16,9 +16,6 @@ namespace Hr
 		void SetTopologyType(EnumTopologyType topologyType);
 		EnumTopologyType GetTopologyType();
 		
-		void SetIndexBufferType(EnumIndexType indexType);
-		 EnumIndexType GetIndexBufferType();
-		
 		void BindVertexBuffer(const char* pBuffer
 			, uint64 nBufferSize
 			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
@@ -31,26 +28,27 @@ namespace Hr
 
 		virtual void Active();
 
-		bool UseIndices();
-
 		size_t GetVertexStreamSize();
 		uint32 GetVerticesNum();
-
 		const std::vector<HrVertexDataPtr>& GetVertexStreams();
+		
+		bool UseIndices();
+		uint32 GetIndicesNum();
+		const HrIndexDataPtr& GetIndexStream();
+		EnumIndexType GetIndexBufferType();
 
 		uint32 GetNextVertexSemanticIndex(EnumVertexElementSemantic semantic);
 
-		//the count of instances
 		void SetInstanceNum(uint32 nInstance);
 		uint32 GetInstanceNum();
 	private:
 		void CreateVertexElementHashValue();
 	protected:
 		EnumTopologyType m_topologyType;
-		EnumIndexType m_indexBufferType;
-
 		bool m_bStreamsDirty;
+
 		std::vector<HrVertexDataPtr> m_vecVertexStreams;
+		HrIndexDataPtr m_pIndexData;
 
 		uint32 m_nInstance;
 	};

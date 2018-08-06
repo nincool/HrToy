@@ -84,7 +84,7 @@ void HrRenderQueue::CreateSceneElements()
 	m_pTestRoot->AddChild(m_pPlane);
 
 	m_pBox = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestSphere.model");
-	//auto pEffSampler = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
+	//auto pEffSampler = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
 	//m_pBox->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
 	m_pTestRoot->AddChild(m_pBox);
 

@@ -6,7 +6,7 @@
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
 #include "Asset/HrTexture.h"
-#include "Asset/HrGeometryFactory.h"
+#include "Asset/HrMeshModel.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
@@ -138,6 +138,8 @@ HrResourcePtr HrResourceManager::RetriveResource(const std::string& strFile, HrR
 		return GetMaterial(strFile);
 	case HrResource::RT_MODEL:
 		return GetModel(strFile);
+	case HrResource::RT_MESHMODEL:
+		return GetMeshModel(strFile);
 	default:
 		break;
 	}
@@ -185,6 +187,8 @@ HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResou
 		return AddMaterialResource(strFile);
 	case HrResource::RT_MODEL:
 		return AddModelResource(strFile);
+	case HrResource::RT_MESHMODEL:
+		return AddMeshModelResource(strFile);
 	default:
 		break;
 	}
@@ -210,6 +214,29 @@ HrResourcePtr HrResourceManager::AddModelResource(const std::string& strFile)
 	return pRes;
 }
 
+HrResourcePtr HrResourceManager::AddMeshModelResource(const std::string& strFile)
+{
+	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+	
+	HrMeshModelPtr pRes;
+	if (strFile == "BuildIn_Grid")
+		 pRes = HrMakeSharedPtr<HrMeshModelGrid>();
+	else
+		HrMeshModelPtr pRes = HrMakeSharedPtr<HrMeshModel>();
+
+	pRes->DeclareResource(strFileName, strFile);
+	if (m_mapMeshModels.find(pRes->GetHashID()) != m_mapMeshModels.end())
+	{
+		pRes = nullptr;
+		HRASSERT(nullptr, "AddMeshModelResource Error!");
+
+		return nullptr;
+	}
+	m_mapMeshModels.insert(std::make_pair(pRes->GetHashID(), pRes));
+
+	return pRes;
+}
+
 HrResourcePtr HrResourceManager::AddEffectResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
@@ -231,6 +258,8 @@ HrResourcePtr HrResourceManager::AddEffectResource(const std::string& strFile)
 HrResourcePtr HrResourceManager::AddMeshResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+	if (strFullFileName.empty())
+		strFullFileName = strFile;
 	size_t nHashID = HrMesh::CreateHashName(strFullFileName);
 	if (m_mapMesh.find(nHashID) != m_mapMesh.end())
 	{
@@ -245,6 +274,7 @@ HrResourcePtr HrResourceManager::AddMeshResource(const std::string& strFile)
 
 	return pMesh;
 }
+
 
 HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 {
@@ -268,7 +298,7 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 	}
 
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderCoreComponent()->GetRenderSystem()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
 		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
 	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
@@ -334,6 +364,18 @@ HrResourcePtr HrResourceManager::GetModel(const std::string& strModelName)
 	size_t nHashID = HrModel::CreateHashName(strFullFileName);
 	auto item = m_mapPrefabModels.find(nHashID);
 	if (item != m_mapPrefabModels.end())
+	{
+		return item->second;
+	}
+	return nullptr;
+}
+
+HrResourcePtr HrResourceManager::GetMeshModel(const std::string& strModelName)
+{
+	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strModelName);
+	size_t nHashID = HrMeshModel::CreateHashName(strFullFileName);
+	auto item = m_mapMeshModels.find(nHashID);
+	if (item != m_mapMeshModels.end())
 	{
 		return item->second;
 	}

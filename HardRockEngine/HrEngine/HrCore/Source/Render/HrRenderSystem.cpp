@@ -32,8 +32,8 @@ HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
 
 	CreateRender();
 	//默认先创建屏幕渲染
-	CreateScreenFrameBuffer(HrDirector::Instance()->GetWinCoreComponent()->GetWindowWidth()
-		, HrDirector::Instance()->GetWinCoreComponent()->GetWindowHeight());
+	CreateScreenFrameBuffer(HrDirector::Instance()->GetWindowComponent()->GetWindowWidth()
+		, HrDirector::Instance()->GetWindowComponent()->GetWindowHeight());
 
 	//todo shadowmap 先创建一个2048 * 2048的深度图
 	m_pShadowMap->CreateShadowTexture(2048, 2048);
@@ -111,16 +111,16 @@ void HrRenderSystem::RenderSceneToShadowMap(const HrRenderQueuePtr& pRenderQueue
 	m_pShadowMap->OnStartRenderFrame();
 
 	HrCameraPtr pShadowMapCamera = m_pShadowMap->GetShadowMapCamera();
-	m_pRender->SetViewPort(pShadowMapCamera->GetViewPort());
+	//m_pRender->SetViewPort(pShadowMapCamera->GetViewPort());
 	pRenderFrameParam->SetCurrentCamera(pShadowMapCamera);
 
 	const HrLightPtr& pPointLight = pLightData->GetLight(HrLight::LT_POINT, 0);
 	//Vector3 v3LookAt = pPointLight->GetDirection() + pPointLight->GetPosition();
 	//todo 先随便写死角度
 	pShadowMapCamera->ViewParams(pPointLight->GetPosition(), Vector3::Zero(), Vector3(1.0f, 0.0f, 0.0f));
-	pShadowMapCamera->ProjectParams(HrMath::PIDIV2(), pShadowMapCamera->Apsect(), 0.3f, 1000.0f);
+	pShadowMapCamera->ProjectParams(HrMath::PIDIV2(), pShadowMapCamera->Aspect(), 0.3f, 1000.0f);
 
-	auto pEffShadowMapDepth = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrShadowMapDepth.json");
+	auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMapDepth.json");
 
 	const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
 	for (auto& iteRenderable : vecRenderables)
@@ -148,7 +148,7 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 			m_pRender->SetViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
 
-			auto pEffShadowMapDepth = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
+			auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
 			HrRenderEffectParameterPtr pDiffuseTexParam = pEffShadowMapDepth->GetParameterByName("texShadowMap");
 			if (pDiffuseTexParam)
 			{
@@ -161,10 +161,10 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 				*pViewProjMatrix = m_pShadowMap->GetShadowMapCamera()->GetViewProjMatrix();
 			}
 
-			auto pTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
+			//auto pTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 
-			auto pTestEff = HrDirector::Instance()->GetResCoreComponent()->RetriveResource<HrRenderEffect>("HrStandard.json");
-			auto pTestTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
+			//auto pTestEff = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrStandard.json");
+			//auto pTestTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 
 			const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
 			for (auto& iteRenderable : vecRenderables)
@@ -173,7 +173,9 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 
 				//auto pTTT = iteRenderable->GetRenderEffect()->GetTechniqueByIndex(0);
 				//auto pTTT = iteRenderable->GetRenderTechnique();
-				iteRenderable->SetRenderEffect(pEffShadowMapDepth);
+				
+				//先屏蔽掉阴影渲染
+				//iteRenderable->SetRenderEffect(pEffShadowMapDepth);
 
 				iteRenderable->Render();
 			}

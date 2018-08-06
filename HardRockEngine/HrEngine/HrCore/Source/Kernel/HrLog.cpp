@@ -7,11 +7,11 @@ using namespace Hr;
 HrLog::HrLog()
 {
 #if (HR_TARGET_PLATFORM == HR_PLATFORM_WIN32)
-	AllocConsole();
+	//AllocConsole();
 	//freopen("CONOUT$", "w+t", stdout);
 	//freopen("CONIN$", "r+t", stdin);
 
-	std::wcout.imbue(std::locale("chs"));
+	//std::wcout.imbue(std::locale("chs"));
 	//::system("chcp 65001");
 #endif
 }

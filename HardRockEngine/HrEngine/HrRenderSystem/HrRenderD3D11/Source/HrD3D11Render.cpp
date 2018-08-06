@@ -181,20 +181,19 @@ void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const H
 	
 	if (pD3D11RenderLayout->UseIndices())
 	{
-		//const ID3D11BufferPtr& pIndexBuffer = pD3D11RenderLayout->GetIndexBuffer();
-		//GetD3D11DeviceContext()->IASetIndexBuffer(pIndexBuffer.get(), HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
+		GetD3D11DeviceContext()->IASetIndexBuffer(pD3D11RenderLayout->GetD3DIndexBuffer(), HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
 	const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
 	if (pD3D11RenderLayout->UseIndices())
 	{
-		//uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
-		//for (uint32 i = 0; i < nPassNum; ++i)
-		//{
-		//	pRenderTechnique->GetRenderPass(i)->BindPass(shared_from_this());
-		//	GetD3D11DeviceContext()->DrawIndexed(nNumIndices, 0, 0);
-		//	pRenderTechnique->GetRenderPass(i)->UnBindPass(shared_from_this());
-		//}
+		uint32 nNumIndices = pD3D11RenderLayout->GetIndicesNum();
+		for (uint32 i = 0; i < nPassNum; ++i)
+		{
+			pRenderTechnique->GetRenderPass(i)->BindPass(shared_from_this());
+			GetD3D11DeviceContext()->DrawIndexedInstanced(nNumIndices, nInstanceCount, 0, 0, 0);
+			pRenderTechnique->GetRenderPass(i)->UnBindPass(shared_from_this());
+		}
 	}
 	else
 	{

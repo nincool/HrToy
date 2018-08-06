@@ -3,7 +3,7 @@
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "Config/HrContextConfig.h"
-#include "HrCore/Include/Asset/HrGeometryFactory.h"
+#include "HrCore/Include/Asset/HrMeshModel.h"
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Scene/HrSceneNode.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"

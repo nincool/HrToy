@@ -16,9 +16,10 @@
 #include "HrCore/Include/Asset/HrRenderEffectParameter.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
-#include "HrCore/Include/Asset/HrGeometryFactory.h"
+#include "HrCore/Include/Asset/HrMeshModel.h"
 #include "HrCore/Include/Asset/HrModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
+#include "HrCore/Include/Asset/HrMaterial.h"
 
 #include "HrCore/Include/Scene/HrTransform.h"
 #include "HrCore/Include/Scene/HrSceneImported.h"
@@ -30,6 +31,9 @@
 
 #include "HrCore/Include/Render/HrRenderable.h"
 #include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Render/HrVertex.h"
+#include "HrCore/Include/Render/HrRenderLayout.h"
+#include "HrCore/Include/Render/HrRenderFrame.h"
 
 #ifdef HR_PLATFORM_WIN32
 #include "HrCore/Include/Platform/AppWin/HrWindowWin.h"

@@ -1,5 +1,6 @@
 #include "Kernel/HrCoreComponentWin.h"
 #include "Platform/AppWin/HrWindowWin.h"
+#include "Platform/AppWin/HrWrapperWin.h"
 #include "Config/HrContextConfig.h"
 
 using namespace Hr;
@@ -7,6 +8,14 @@ using namespace Hr;
 HrCoreComponentWin::HrCoreComponentWin()
 {
 	CreateAppWindow();
+}
+
+HrCoreComponentWin::HrCoreComponentWin(void* pWnd)
+{
+	if (pWnd)
+		m_pWindow = HrMakeSharedPtr<HrWrapperWin>(static_cast<HWND>(pWnd));
+	else
+		CreateAppWindow();
 }
 
 HrCoreComponentWin::~HrCoreComponentWin()
