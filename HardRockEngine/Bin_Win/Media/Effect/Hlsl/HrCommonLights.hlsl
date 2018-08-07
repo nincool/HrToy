@@ -24,16 +24,15 @@ struct Material
 
 float4 CalcDirectionLight(DirectionLight directLight, float4 cameraWorldPos, float4 pixWorldPos, float3 pixNormal, Material mat)
 {
-    //Phong diffuse
+    //Lambert diffuse
     //float fNDotL = saturate(dot(normalize(-directLight.light_direction.xyz), pixNormal)); 
 	float fNDotL = dot(normalize(-directLight.light_direction.xyz), pixNormal) * 0.5 + 0.5;
     float4 finalColor = directLight.diffuse_light_color * saturate(fNDotL) * mat.diffuse_material_color;
 
-    //Blinn specular
+	//Blinn-Phong specular
     float3 toCameraDir = normalize(cameraWorldPos - pixWorldPos).xyz;
     float3 halfWay = normalize(toCameraDir + -directLight.light_direction.xyz);
-    //float fNDotH = saturate(dot(halfWay, pixNormal));
-	float fNDotH = dot(halfWay, pixNormal) * 0.5 + 0.5;
+    float fNDotH = saturate(dot(halfWay, pixNormal));
     finalColor += directLight.specular_light_color * pow(fNDotH, mat.glossiness_material) * mat.specular_material_color;
 
     return finalColor;
@@ -45,13 +44,13 @@ float4 CalcPointLight(PointLight pointLight, float4 cameraWorldPos, float4 pixWo
     float3 toCameraDir = (cameraWorldPos - pixWorldPos).xyz;
     float fDistToLight = length(toLightDir);
 
-    //phong diffuse
+    //Lambert diffuse
     toLightDir /= fDistToLight; //Normalize
     //float fNDotL = saturate(dot(toLightDir, pixNormal));
     float fNDotL = dot(toLightDir, pixNormal) * 0.5 + 0.5;
     float4 finalColor = pointLight.point_light_diffuse_color * mat.diffuse_material_color * fNDotL;
 
-    //Blinn specular
+    //Blinn-Phong specular
     toCameraDir = normalize(toCameraDir);
     float3 halfWay = normalize(toCameraDir + toLightDir);
     float fNDotH = saturate(dot(halfWay, pixNormal));

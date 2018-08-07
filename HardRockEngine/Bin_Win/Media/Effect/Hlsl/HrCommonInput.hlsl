@@ -4,6 +4,12 @@ struct HrVertexInputP
 	float3 vertexPosition : POSITION;
 };
 
+struct HrVertexInputPC
+{
+	float3 vertexPosition : POSITION;
+	float3 color : COLOR;
+};
+
 struct HrVertexInputPN
 {
 	float3 vertexPosition : POSITION;
