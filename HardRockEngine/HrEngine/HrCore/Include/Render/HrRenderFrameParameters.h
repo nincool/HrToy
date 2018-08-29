@@ -35,11 +35,9 @@ namespace Hr
 		const uint4 GetLightsNum();
 		const int GetLightNum(HrLight::EnumLightType lightType);
 		const float4 GetDirectionalLightDirection(int nLightIndex);
-		const float4 GetDirectionalLightDiffuseColor(int nLightIndex);
-		const float4 GetDirectionalLightSpecularColor(int nLightIndex);
+		const float4 GetDirectionalLightColor(int nLightIndex);
 
-		const float4 GetPointLightDiffuseColor(int nLightIndex);
-		const float4 GetPointLightSpecularColor(int nLightIndex);
+		const float4 GetPointLightColor(int nLightIndex);
 		const float4 GetPointLightPosition(int nLightIndex);
 		const float4 GetPointLightAttenuation(int nLightIndex);
 
@@ -49,9 +47,7 @@ namespace Hr
 
 		//获取材质信息
 		float GetMaterialGlossiness() const;
-		float4 GetMaterialAmbient() const;
-		float4 GetMaterialDiffuse() const;
-		float4 GetMaterialSpecular() const;
+		float4 GetMaterialAlbedo() const;
 		float4 GetMaterialEmissive() const;
 		float GetMaterialOpacity() const;
 

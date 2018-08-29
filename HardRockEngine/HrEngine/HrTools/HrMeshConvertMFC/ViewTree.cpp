@@ -11,6 +11,7 @@
 
 #include "stdafx.h"
 #include "ViewTree.h"
+#include "HrMeshView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,6 +22,15 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree
 
+BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
+{
+	WM_NOTIFY + WM_REFLECT_BASE, (WORD)(int)NM_CLICK, 0, 0, AfxSigNotify_v, \
+		(AFX_PMSG) \
+		(static_cast<void (AFX_MSG_CALL CCmdTarget::*)(NMHDR*, LRESULT*)> \
+		(&CViewTree::OnClkTree))
+},
+END_MESSAGE_MAP()
+
 CViewTree::CViewTree()
 {
 }
@@ -29,8 +39,18 @@ CViewTree::~CViewTree()
 {
 }
 
-BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
-END_MESSAGE_MAP()
+void CViewTree::OnClkTree(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	CPoint point;
+	GetCursorPos(&point);//获得鼠标点击的位置
+	ScreenToClient(&point);//转化为客户坐标
+	UINT uFlags;
+
+	HTREEITEM CurrentItem;
+	CurrentItem = HitTest(point, &uFlags);//获得当前点击节点的ITEM
+
+	m_pMeshView->OnLBtnDown(CurrentItem);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree message handlers

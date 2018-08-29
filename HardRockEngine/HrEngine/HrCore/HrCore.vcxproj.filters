@@ -331,6 +331,9 @@
     <ClInclude Include="Include\Asset\HrMeshModel.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\Loader\HrJsonLoader.h">
+      <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -566,6 +569,9 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\HrMeshModel.cpp">
       <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\Loader\HrJsonLoader.cpp">
+      <Filter>Source\Asset\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

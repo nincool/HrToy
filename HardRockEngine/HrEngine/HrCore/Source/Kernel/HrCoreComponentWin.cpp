@@ -2,6 +2,7 @@
 #include "Platform/AppWin/HrWindowWin.h"
 #include "Platform/AppWin/HrWrapperWin.h"
 #include "Config/HrContextConfig.h"
+#include "HrMath/Include/HrRect.h"
 
 using namespace Hr;
 
@@ -46,6 +47,22 @@ HWND HrCoreComponentWin::GetWindowHWnd()
 	return 0;
 }
 
+uint32 HrCoreComponentWin::GetWindowX()
+{
+	if(m_pWindow)
+	{
+		return m_pWindow->GetTopX();
+	}
+}
+
+uint32 HrCoreComponentWin::GetWindowY()
+{
+	if (m_pWindow)
+	{
+		return m_pWindow->GetTopY();
+	}
+}
+
 uint32 HrCoreComponentWin::GetWindowWidth()
 {
 	if (m_pWindow)
@@ -81,4 +98,11 @@ void HrCoreComponentWin::UpdateWindowMsg()
 		m_pWindow->UpdateMsg();
 	}
 }
+
+
+
+
+
+
+
 

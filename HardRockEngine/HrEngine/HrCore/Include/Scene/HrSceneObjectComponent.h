@@ -130,10 +130,12 @@ namespace Hr
 
 		const HrLightPtr& GetLight();
 
-		void SetDiffuse(const HrColor& diffuse);
-		const HrColor& GetDiffuse() const;
-		void SetSpecular(const HrColor& specular);
-		const HrColor& GetSpecular() const;
+		//void SetDiffuse(const HrColor& diffuse);
+		//const HrColor& GetDiffuse() const;
+		//void SetSpecular(const HrColor& specular);
+		//const HrColor& GetSpecular() const;
+		void SetColor(const HrColor& color);
+		const HrColor& GetColor() const;
 
 		virtual void UpdateTransform(const HrTransformPtr& pTransform) override;
 	protected:

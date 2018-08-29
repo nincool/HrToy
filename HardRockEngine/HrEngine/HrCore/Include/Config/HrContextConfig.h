@@ -12,10 +12,16 @@ namespace Hr
 		HrContextConfig();
 		~HrContextConfig();
 
+		void SetWindowWidth(uint32 nWidth);
 		uint32 GetWindowWidth() { return m_nWindowWidth; }
+		void SetWindowHeight(uint32 nHeight);
 		uint32 GetWindowHeight() { return m_nWindowHeight; }
+		void SetRenderTargetViewWidth(uint32 nWidth);
 		uint32 GetRenderTargetViewWidth() { return m_nRenderTargetViewWidth; }
+		void SetRenderTargetViewHeight(uint32 nHeight);
 		uint32 GetRenderTargetViewHeight() { return m_nRenderTargetViewHeight; }
+
+		
 	protected:
 		uint32 m_nWindowHeight;
 		uint32 m_nWindowWidth;

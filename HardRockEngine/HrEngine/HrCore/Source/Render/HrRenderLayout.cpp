@@ -40,8 +40,8 @@ void HrRenderLayout::BindIndexBuffer(const char* pBuffer, uint32 nBufferSize, Hr
 	if (m_pIndexData)
 		return;
 	m_pIndexData = HrMakeSharedPtr<HrIndexData>();
-	uint32 nSize = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
-	m_pIndexData->BindIndexStream(pBuffer, nBufferSize, usage, 0, nSize, 0);
+	uint32 nIndexCount = nBufferSize / (indexType == IT_16BIT ? 2 : 4);
+	m_pIndexData->BindIndexStream(pBuffer, nBufferSize, usage, nIndexCount);
 	
 }
 

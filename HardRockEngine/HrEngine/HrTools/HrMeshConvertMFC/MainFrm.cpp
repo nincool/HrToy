@@ -17,8 +17,10 @@
 
 #include "MainFrm.h"
 
-#include "HrRenderView.h"
+#include "HrEngine.h"
+#include "HrRenderApp.h"
 #include "HrUIDefine.h"
+#include "HrRenderViewDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,12 +35,17 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SIZING()
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
-	ON_COMMAND(ID_FILE_PRINT, &CMainFrame::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CMainFrame::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnFilePrintPreview)
-	ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnUpdateFilePrintPreview)
+	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileOpen)
+	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileSave)
+	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileSaveAs)
+	//ON_COMMAND(ID_FILE_PRINT_DIRECT, &CMainFrame::OnFilePrint)
+	//ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnFilePrintPreview)
+	//ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnUpdateFilePrintPreview)
 	
 	ON_WM_SETTINGCHANGE()
+	ON_COMMAND(ID_BTN_HRSAVE, &CMainFrame::OnButtonSave)
+	ON_COMMAND(ID_BTN_HROPEN, &CMainFrame::OnButtonOpen)
+	ON_COMMAND(ID_BTN_HRSAVEBINARY, &CMainFrame::OnBtnHrSaveBinary)
 END_MESSAGE_MAP()
 
 // CMainFrame construction/destruction
@@ -98,9 +105,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndFileView.EnableDocking(CBRS_ALIGN_LEFT);
 	m_wndClassView.EnableDocking(CBRS_ALIGN_LEFT);
+	m_wndMeshView.EnableDocking(CBRS_ALIGN_LEFT);
 	DockPane(&m_wndFileView);
 	CDockablePane* pTabbedBar = NULL;
 	m_wndClassView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
+	m_wndMeshView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
 	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndOutput);
 	m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
@@ -109,10 +118,19 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// set the visual manager and style based on persisted value
 	OnApplicationLook(theApp.m_nAppLook);
 
-	m_pRenderViewDlg = new HrRenderView();
-	m_pRenderViewDlg->Create(IDD_RENDERVIEW, this);
+	m_pRenderViewDlg = std::make_shared<HrRenderViewDlg>(&m_wndMeshView);
+	m_pRenderViewDlg->Create(IDD_RENDERVIEW_DLG, this);
+	//m_pRenderViewDlg->MoveWindow(rvPos);
 	m_pRenderViewDlg->ShowWindow(SW_SHOW);
 
+	m_wndMeshView.SetMainFrame(this);
+	m_wndProperties.SetMainFrame(this);
+	//RECT rc;
+	//::GetClientRect(m_hWnd, &rc);
+	//m_nLeft = rc.left;
+	//m_nTop = rc.top;
+	//m_nWidth = rc.right - rc.left;
+	//m_nHeight = rc.bottom - rc.top;
 	return 0;
 }
 
@@ -137,7 +155,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 	//禁止最大最小化
 	//cs.style &= ~WS_THICKFRAME;
-	cs.style &= ~WS_MAXIMIZEBOX;
+	//cs.style &= ~WS_MAXIMIZEBOX;
 
 	return TRUE;
 }
@@ -151,6 +169,14 @@ BOOL CMainFrame::CreateDockingWindows()
 	bNameValid = strClassView.LoadString(IDS_CLASS_VIEW);
 	ASSERT(bNameValid);
 	if (!m_wndClassView.Create(strClassView, this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_CLASSVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("Failed to create Class View window\n");
+		return FALSE; // failed to create
+	}
+
+	CString strMeshView;
+	strMeshView = L"MeshView";
+	if (!m_wndMeshView.Create(strMeshView, this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_CLASSVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
 	{
 		TRACE0("Failed to create Class View window\n");
 		return FALSE; // failed to create
@@ -198,12 +224,23 @@ void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 	HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndClassView.SetIcon(hClassViewIcon, FALSE);
 
+	HICON hMeshViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	m_wndMeshView.SetIcon(hMeshViewIcon, FALSE);
+
 	HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
 
 	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
 
+}
+
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
+{
+	bool rt = CFrameWndEx::PreTranslateMessage(pMsg);
+	//m_pRenderApp->RenderOnce();
+
+	return rt;
 }
 
 // CMainFrame diagnostics
@@ -308,29 +345,96 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 }
 
 
-void CMainFrame::OnFilePrint()
+void CMainFrame::OnFileOpen()
 {
-	if (IsPrintPreview())
-	{
-		PostMessage(WM_COMMAND, AFX_ID_PREVIEW_PRINT);
-	}
+	std::cout << "CMainFrame::OnFileOpen " << std::endl;
+
+
 }
 
-void CMainFrame::OnFilePrintPreview()
+void CMainFrame::OnFileSave()
 {
-	if (IsPrintPreview())
-	{
-		PostMessage(WM_COMMAND, AFX_ID_PREVIEW_CLOSE);  // force Print Preview mode closed
-	}
+	std::cout << "CMainFrame::OnFileSave " << std::endl;
 }
 
-void CMainFrame::OnUpdateFilePrintPreview(CCmdUI* pCmdUI)
+void CMainFrame::OnFileSaveAs()
 {
-	pCmdUI->SetCheck(IsPrintPreview());
+	std::cout << "CMainFrame::OnFileSaveAs " << std::endl;
 }
 
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
+}
+
+
+
+void CMainFrame::OnButtonSave()
+{
+	// TODO: Add your command handler code here
+	// szFilters is a text string that includes two file name filters:
+	// "*.my" for "MyType Files" and "*.*' for "All Files."
+	TCHAR szFilters[] = _T("MyType Files (*.hrmesh)|*.hrmesh|All Files (*.*)|*.*||");
+
+	// Create an Open dialog; the default file name extension is ".my".
+	CFileDialog fileDlg(FALSE, _T("hrmesh"), Hr::HrStringUtil::Utf8ToWstring(m_strCurrentOpenFile).c_str(),
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString pathName = fileDlg.GetPathName();
+		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
+
+		m_pRenderViewDlg->OnSaveFile(strFile);
+	}
+}
+
+
+void CMainFrame::OnButtonOpen()
+{
+	// TODO: Add your command handler code here
+	// szFilters is a text string that includes two file name filters:
+	// "*.my" for "MyType Files" and "*.*' for "All Files."
+	
+	//TCHAR szFilters[] = _T("HrMesh Files (*.hrmesh)|*.hrmesh|Fbx Files (*.fbx)|*.fbx|All Files (*.*)|*.*||");
+	TCHAR szFilters[] = _T("HrMesh Files (*.fbx)|*.fbx|Fbx Files (*.hrmesh)|*.hrmesh|All Files (*.*)|*.*||");
+
+	// Create an Open dialog; the default file name extension is ".my".
+	
+	CFileDialog fileDlg(TRUE, _T("hrmesh"), _T(".hrmesh"),
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString pathName = fileDlg.GetPathName();
+		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
+		m_strCurrentOpenFile = Hr::HrFileUtils::Instance()->GetFileName(strFile);
+		m_pRenderViewDlg->OnOpenFile(strFile);
+	}
+}
+
+
+void CMainFrame::OnBtnHrSaveBinary()
+{
+	// TODO: Add your command handler code here
+	TCHAR szFilters[] = _T("MyType Files (*.hrmb)|*.hrmb||");
+
+	// Create an Open dialog; the default file name extension is ".my".
+	CFileDialog fileDlg(FALSE, _T("hrmb"), Hr::HrStringUtil::Utf8ToWstring(m_strCurrentOpenFile).c_str(),
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString pathName = fileDlg.GetPathName();
+		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
+
+		m_pRenderViewDlg->OnSaveFile(strFile);
+	}
 }

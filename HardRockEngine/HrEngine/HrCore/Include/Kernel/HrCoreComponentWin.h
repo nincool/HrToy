@@ -18,6 +18,8 @@ namespace Hr
 		void DestroyWindow();
 
 		HWND GetWindowHWnd();
+		uint32 GetWindowX();
+		uint32 GetWindowY();
 		uint32 GetWindowWidth();
 		uint32 GetWindowHeight();
 

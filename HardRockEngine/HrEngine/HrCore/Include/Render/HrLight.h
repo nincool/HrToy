@@ -29,10 +29,8 @@ namespace Hr
 		void SetPosition(const Vector3& vPosition);
 		const Vector3& GetPosition() const;
 
-		void SetDiffuse(const HrColor& diffuse);
-		const HrColor& GetDiffuse() const;
-		void SetSpecular(const HrColor& specular);
-		const HrColor& GetSpecular() const;
+		void SetColor(const HrColor& color);
+		const HrColor& GetColor() const;
 
 		void SetAttenuation(float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
 		float GetAttenuationRange() const;
@@ -44,9 +42,8 @@ namespace Hr
 		Vector3 m_v3Direction;
 		Vector3 m_v3Position;
 
-		HrColor m_diffuse;
-		HrColor m_specular;
-
+		HrColor m_lightColor;
+		
 		float m_fRange;
 		float m_fAttenuation0;
 		float m_fAttenuation1;
@@ -64,7 +61,7 @@ namespace Hr
 	{
 	public:
 		HrDirectionalLight();
-		HrDirectionalLight(const Vector3 v3Direction, const HrColor& diffuse, const HrColor& specular);
+		HrDirectionalLight(const Vector3 v3Direction, const HrColor& lightColor);
 		virtual ~HrDirectionalLight();
 	};
 
@@ -72,7 +69,7 @@ namespace Hr
 	{
 	public:
 		HrPointLight();
-		HrPointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
+		HrPointLight(const HrColor& lightColor, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
 		virtual ~HrPointLight();
 
 

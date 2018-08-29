@@ -48,6 +48,9 @@ namespace Hr
 		*/
 		HrSceneNodePtr CreateSceneNode(HrModelPtr& pModel);
 
+		HrSceneNodePtr CreateMeshModelNode(HrMeshModelPtr& pMeshModel);
+
+
 		/**
 		 @Comment: 创建灯光 [3/7/2018 By Hr]
 		 @Param:   lightType 灯光类型

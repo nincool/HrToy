@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include "HrEngine.h"
-
+#include "HrConvertUtil.h"
 
 using namespace Hr;
 
@@ -107,12 +107,34 @@ void HrEditorScene::CreateSceneElements()
 	m_pEleRoot->AddChild(pGridNode);
 	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
-	m_pBox = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestSphere.model");
-	m_pBox->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-	m_pBox->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 0.1f));
-	m_pEleRoot->AddChild(m_pBox);
-
 	UpdateAxisPos();
+}
+
+void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
+{
+	if (m_pModel)
+	{
+		m_pEleRoot->RemoveChild(m_pModel);
+	}
+
+	if (HrFileUtils::Instance()->GetFileSuffix(strFileName) == "hrmesh")
+	{
+		m_pModel = HrSceneObjectFactory::Instance()->CreateModelNode(strFileName);
+	}
+	else
+	{
+		m_pConvertUtil = std::make_shared<HrConvertUtil>();
+		m_pConvertUtil->LoadOriginalData(strFileName);
+		m_pModel = m_pConvertUtil->CreateSceneNode();
+	}
+
+	if (m_pModel)
+	{
+		m_pModel->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+		m_pModel->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 0.1f));
+		m_pEleRoot->AddChild(m_pModel);
+	}
+
 }
 
 void HrEditorScene::CreateAxisNode()
@@ -159,6 +181,10 @@ void HrEditorScene::Update(float fDelta)
 
 void HrEditorScene::UpdateAxisPos()
 {
+	if (!m_pAxisNode)
+	{
+		return;
+	}
 	HrRenderFramePtr pRenderFrame = HrDirector::Instance()->GetRenderComponent()->GetRenderFrameBuffer();
 	uint32 nFrameWidth = pRenderFrame->GetFrameWidth();
 	uint32 nFrameHeight = pRenderFrame->GetFrameHeight();
@@ -174,7 +200,7 @@ void HrEditorScene::UpdateAxisPos()
 	float fAxisZOrigin = 0.1f;
 	Vector3 vWorldOrigin = HrMath::TransformCoord(Vector3(fAxisXOrigin, fAxisYPos, fAxisZOrigin), m_pCameraCom->GetCamera()->GetInverseViewProjMatrix());
 
-	float fLength = HrMath::Length(vWorldOrigin - vWorldPos);
+	float fLength = HrMath::Length(vWorldOrigin - vWorldPos) * 0.3;
 	m_pAxisNode->GetTransform()->SetScale(Vector3(fLength, fLength, fLength));
 }
 
@@ -236,6 +262,11 @@ void HrEditorScene::OnMouseWheel(float fDelta)
 	m_bCameraMatrixDirty = true;
 }
 
+void HrEditorScene::SaveConvertMeshData(const std::string& strFileName)
+{
+	m_pConvertUtil->WriteModelDataToFile(strFileName);
+}
+
 ////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////
@@ -243,14 +274,6 @@ void HrEditorScene::OnMouseWheel(float fDelta)
 HrRenderApp::HrRenderApp(HWND hWnd)
 {
 	m_hWnd = hWnd;
-
-
-
-#pragma warning(push)
-#pragma warning(disable: 4996) 
-	if (!AllocConsole() || !freopen("CONOUT$", "w", stdout))
-		AfxMessageBox(_T("InitConsoleWindow Failed!")); //分配控制台在重定向输出流至控制台
-#pragma warning(pop)
 }
 
 HrRenderApp::~HrRenderApp()
@@ -327,5 +350,13 @@ void HrRenderApp::OnMouseWheel(float fDelta)
 	m_pEditorScene->OnMouseWheel(fDelta);
 }
 
+void HrRenderApp::LoadOriginalMeshData(const std::string& strFileName)
+{
+	m_pEditorScene->LoadOriginalMeshData(strFileName);
+}
 
+void HrRenderApp::SaveConvertMeshData(const std::string& strFileName)
+{
+	m_pEditorScene->SaveConvertMeshData(strFileName);
+}
 

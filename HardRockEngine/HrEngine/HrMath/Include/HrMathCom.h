@@ -32,6 +32,11 @@ namespace Hr
 			return Vector3(angle * RAD2DEG());
 		}
 
+		inline float Clamp(float value, float fLow, float fHeight)
+		{
+			return (std::max)(fLow, (std::min)(fHeight, value));
+		}
+
 		//Çó¾ø¶ÔÖµ
 		inline float Abs(float value)
 		{

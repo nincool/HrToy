@@ -16,10 +16,11 @@ HrFileUtils::HrFileUtils()
 
 	m_strAppPath = strAppPath.substr(0, strAppPath.rfind(m_s_strSeparator));
 	std::string strAssetPath = m_strAppPath.substr(0, m_strAppPath.rfind(m_s_strSeparator));
+	m_strMediaPath = strAssetPath + "\\Media\\";
 
 	AddSearchDirectory(m_strAppPath += "\\");
 	AddSearchDirectory(strAssetPath + "\\");
-	AddSearchDirectory(strAssetPath + "\\Media\\");
+	AddSearchDirectory(m_strMediaPath);
 	AddSearchDirectory(strAssetPath + "\\Media\\Material\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Model\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Scene\\");
@@ -74,7 +75,7 @@ std::string HrFileUtils::GetFullPathForFileName(const std::string& strFileName) 
 
 std::string HrFileUtils::GetWritablePath() const
 {
-	return "";
+	return m_strAppPath;
 }
 
 std::string HrFileUtils::GetAppPath() const
@@ -141,6 +142,20 @@ std::string HrFileUtils::ReplaceFileName(const std::string& strFile, const std::
 	return std::string(strFile.substr(0, nFildPos) + "\\" + strName);
 }
 
+std::string HrFileUtils::GetFileNameWithSuffix(const std::string& strFile) const
+{
+	size_t nFileNamePos = strFile.rfind("\\");
+
+	if (nFileNamePos == std::string::npos)
+	{
+		return strFile;
+	}
+	else
+	{
+		return strFile.substr(nFileNamePos + 1, strFile.size()-1);
+	}
+}
+
 std::string HrFileUtils::GetFilePath(const std::string& strFile) const
 {
 	size_t nFilePos = strFile.rfind("\\");
@@ -177,5 +192,25 @@ std::string HrFileUtils::GetFileName(const std::string& strFile) const
 			return strFile.substr(nFileNamePos + 1, nSuffixPos - nFileNamePos-1);
 		}
 	}
+}
+
+bool HrFileUtils::WriteDataToFile(const std::string& strFile, const std::string& strData)
+{
+	std::fstream fileStream(strFile.c_str(), std::ios::out | std::ios::trunc);
+	fileStream.write(strData.c_str(), strData.size());
+	bool bGood = fileStream.good();
+	fileStream.close();
+
+	return bGood;
+}
+
+bool HrFileUtils::WriteDataToFile(const std::string& strFile, const HrStreamDataPtr& pStreamData)
+{
+	return true;
+}
+
+std::string HrFileUtils::GetMediaPath() const
+{
+	return m_strMediaPath;
 }
 

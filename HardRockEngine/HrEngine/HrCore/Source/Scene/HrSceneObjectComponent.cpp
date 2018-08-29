@@ -265,25 +265,14 @@ const HrLightPtr& HrLightComponent::GetLight()
 	return m_pLight;
 }
 
-
-void Hr::HrLightComponent::SetDiffuse(const HrColor& diffuse)
+void HrLightComponent::SetColor(const HrColor& color)
 {
-	m_pLight->SetDiffuse(diffuse);
+	m_pLight->SetColor(color);
 }
 
-const HrColor& HrLightComponent::GetDiffuse() const
+const HrColor& HrLightComponent::GetColor() const
 {
-	return m_pLight->GetDiffuse();
-}
-
-void HrLightComponent::SetSpecular(const HrColor& specular)
-{
-	m_pLight->SetSpecular(specular);
-}
-
-const HrColor& HrLightComponent::GetSpecular() const
-{
-	return m_pLight->GetSpecular();
+	return m_pLight->GetColor();
 }
 
 void HrLightComponent::UpdateTransform(const HrTransformPtr& pTransform)

@@ -216,12 +216,14 @@ HrIndexData::~HrIndexData()
 
 }
 
-void HrIndexData::BindIndexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nStart, uint32 nSize, uint32 nBaseVertex)
+void HrIndexData::BindIndexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nIndexCount, uint32 nStart, uint32 nBaseVertex)
 {
 	m_pIndexStream->BindStream(pBuffer, nBufferSize, usage, HrGraphicsBuffer::HBB_INDEX);
-	m_nIndexCount = nSize;
+	m_nIndexCount = nIndexCount;
 	m_nIndexStartLocation = nStart;
 	m_nBaseVertexLocation = nBaseVertex;
+
+	m_indexBufferType = nBufferSize / nIndexCount == 2 ? IT_16BIT : IT_32BIT;
 }
 
 const HrGraphicsBufferPtr& HrIndexData::GetIndexStream()

@@ -97,7 +97,7 @@ void HrRenderable::OnRenderBegin()
 	HrRenderEffectParameterPtr pDiffuseTexParam = GetRenderEffect()->GetParameterByName("gDiffuseTexure");
 	if (pDiffuseTexParam)
 	{
-		const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_SLOT_0);
+		const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_EMISSIVE);
 		if (pDiffuseTex)
 			pDiffuseTexParam->operator = (pDiffuseTex.get());
 	}

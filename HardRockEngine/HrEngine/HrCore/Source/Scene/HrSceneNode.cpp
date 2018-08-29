@@ -140,6 +140,22 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 	}
 }
 
+bool HrSceneNode::RemoveChild(const HrSceneNodePtr& pChild)
+{
+	for (size_t i = 0; i < m_vecChildrenNode.size(); ++i)
+	{
+		if (m_vecChildrenNode[i] == pChild)
+		{
+			pChild->OnExist();
+			m_vecChildrenNode.erase(m_vecChildrenNode.begin() + i);
+			
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void HrSceneNode::RemoveChildren()
 {
 	for (size_t i = 0; i < m_vecChildrenNode.size(); ++i)
@@ -260,5 +276,20 @@ void HrSceneNode::DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOr
 	{
 		iteChild->GetTransform()->DirtyTransform(bDirtyPos, bDirtyScale, bDirtyOrientation);
 	}
+}
+
+const HrSceneNodePtr& HrSceneNode::GetChildByIndex(int nNodeIndex)
+{
+	if (0 <= nNodeIndex && nNodeIndex < m_vecChildrenNode.size())
+	{
+		return m_vecChildrenNode[nNodeIndex];
+	}
+
+	return nullptr;
+}
+
+size_t HrSceneNode::GetChildrenCount()
+{
+	return m_vecChildrenNode.size();
 }
 

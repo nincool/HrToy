@@ -151,6 +151,7 @@
     <ClInclude Include="Include\Asset\HrTexture.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXUtilsImport.h" />
+    <ClInclude Include="Include\Asset\Loader\HrJsonLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
     <ClInclude Include="Include\Config\HrContextConfig.h" />
     <ClInclude Include="Include\Event\HrEvent.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Source\Asset\HrTexture.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXUtilsImport.cpp" />
+    <ClCompile Include="Source\Asset\Loader\HrJsonLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
     <ClCompile Include="Source\Event\HrEvent.cpp" />

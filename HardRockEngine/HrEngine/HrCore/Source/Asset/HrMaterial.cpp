@@ -1,5 +1,8 @@
 #include "Asset/HrMaterial.h"
 #include "Asset/HrStreamData.h"
+#include "Asset/HrTexture.h"
+#include "Kernel/HrDirector.h"
+#include "Kernel/HrCoreComponentResource.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -19,9 +22,8 @@ HrMaterial::HrMaterial()
 HrMaterial::HrMaterial(const HrMaterial& material)
 {
 	m_strMaterialName = material.m_strMaterialName;
-	m_ambient = material.m_ambient;
-	m_diffuse = material.m_diffuse;
-	m_specular = material.m_specular;
+
+	m_albedo = material.m_albedo;
 	m_emissive = material.m_emissive;
 	m_fGlossiness = material.m_fGlossiness;
 	m_fOpacity = material.m_fOpacity;
@@ -33,9 +35,8 @@ HrMaterial::HrMaterial(const HrMaterial& material)
 HrMaterial::HrMaterial(const HrMaterialPtr& pMaterial)
 {
 	m_strMaterialName = pMaterial->m_strMaterialName;
-	m_ambient = pMaterial->m_ambient;
-	m_diffuse = pMaterial->m_diffuse;
-	m_specular = pMaterial->m_specular;
+
+	m_albedo = pMaterial->m_albedo;
 	m_emissive = pMaterial->m_emissive;
 	m_fGlossiness = pMaterial->m_fGlossiness;
 	m_fOpacity = pMaterial->m_fOpacity;
@@ -85,13 +86,9 @@ bool HrMaterial::LoadImpl()
 
 	const rapidjson::Value& sceneRootInfo = d["MATERIAL_ROOT"];
 
-	std::vector<uint8> vAmbient = HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["AMBIENT"].GetString());
 	std::vector<uint8> vDiffuse = HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["DIFFUSE"].GetString());
-	std::vector<uint8> vSpecular = HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["SPECULAR"].GetString());
 	std::vector<uint8> vEmissive = HrStringUtil::GetUInt8VectorFromString(sceneRootInfo["EMISSIVE"].GetString());
-	m_ambient = HrMath::MakeColor(vAmbient).Value();
-	m_diffuse = HrMath::MakeColor(vDiffuse).Value();
-	m_specular = HrMath::MakeColor(vSpecular).Value();
+	m_albedo = HrMath::MakeColor(vDiffuse).Value();
 	m_emissive = HrMath::MakeColor(vEmissive).Value();
 	m_fGlossiness = sceneRootInfo["GLOSSINESS"].GetFloat();
 	
@@ -105,28 +102,27 @@ bool HrMaterial::UnloadImpl()
 	return true;
 }
 
-void HrMaterial::FillMaterialInfo(const float4& ambient, const float4& diffuse, const float4& specular, const float4& emissive, float fOpacity)
+void HrMaterial::FillMaterialInfo(const HrModelDataInfo::HrMaterialDataInfo& materialDataInfo)
 {
-	m_ambient = ambient;
-	m_diffuse = diffuse;
-	m_specular = specular;
-	m_emissive = emissive;
-	m_fOpacity = fOpacity;
+	m_albedo = materialDataInfo.v4Albedo;
+	m_emissive = materialDataInfo.v4Emissive;
+	m_fOpacity = materialDataInfo.fOpacity;
+	m_fGlossiness = materialDataInfo.fGlossiness;
+
+	//m_arrTextures = materialDataInfo.m_arrTexNames;
+	for (size_t i = 0; i < materialDataInfo.m_arrTexNames.size(); ++i)
+	{
+		std::string strTextureName = materialDataInfo.m_arrTexNames[i];
+		if (strTextureName.size() > 0)
+		{
+			m_arrTextures[i] = HrDirector::Instance()->GetResourceComponent()->RetriveTexture(strTextureName, HrTexture::TEX_TYPE_2D);
+		}
+	}
 }
 
-const float4& HrMaterial::GetAmbient() const
+const float4& HrMaterial::GetAlebdo() const
 {
-	return m_ambient;
-}
-
-const float4& HrMaterial::GetDiffuse() const
-{
-	return m_diffuse;
-}
-
-const float4& HrMaterial::GetSpecular() const
-{
-	return m_specular;
+	return m_albedo;
 }
 
 const float4& HrMaterial::GetEmissive() const
@@ -152,4 +148,9 @@ void HrMaterial::SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTex
 const HrTexturePtr& HrMaterial::GetTexture(EnumMaterialTexSlot tsSlot)
 {
 	return m_arrTextures[tsSlot];
+}
+
+void HrMaterial::SetGlossiness(float fGls)
+{
+	m_fGlossiness = fGls;
 }

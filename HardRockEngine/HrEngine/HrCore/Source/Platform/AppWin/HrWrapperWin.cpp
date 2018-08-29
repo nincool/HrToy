@@ -24,10 +24,6 @@ LRESULT HrWrapperWin::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 HrWrapperWin::HrWrapperWin(HWND hWnd)
 {
 	m_hWnd = hWnd;
-	m_nLeft = 0;
-	m_nTop = 0;
-	m_nWidth = 0;
-	m_nHeight = 0;
 
 	CreateAppWidnow();
 }
@@ -126,4 +122,14 @@ LRESULT HrWrapperWin::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	}
 
 	return default_wnd_proc_(hWnd, uMsg, wParam, lParam);
+}
+
+uint32 HrWrapperWin::GetTopX()
+{
+	return m_nLeft;
+}
+
+uint32 HrWrapperWin::GetTopY()
+{
+	return m_nTop;
 }

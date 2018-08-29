@@ -19,6 +19,8 @@ namespace Hr
 
 		virtual HWND GetHWnd() = 0;
 
+		virtual uint32 GetTopX() = 0;
+		virtual uint32 GetTopY() = 0;
 		virtual uint32 GetWidth() = 0;
 		virtual uint32 GetHeight() = 0;
 	};

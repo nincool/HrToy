@@ -4,7 +4,8 @@
 #include "HrMath/Include/HrMathCom.h"
 #include "HrMath/Include/HrColor.h"
 #include "HrMath/Include/HrAngle.h"
-
+#include "HrMath/Include/HrRect.h"
+#include "HrMath/Include/HrMathRender.h"
 
 #endif
 

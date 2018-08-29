@@ -195,7 +195,12 @@ namespace Hr
 		HrIndexData();
 		~HrIndexData();
 
-		void BindIndexStream(const char* pBuffer, uint64 nBufferSize, HrGraphicsBuffer::EnumGraphicsBufferUsage usage, uint32 nStart, uint32 nSize, uint32 nBaseVertex);
+		void BindIndexStream(const char* pBuffer
+			, uint64 nBufferSize
+			, HrGraphicsBuffer::EnumGraphicsBufferUsage usage
+			, uint32 nIndexCount
+			, uint32 nStart = 0
+			, uint32 nBaseVertex = 0);
 
 		uint32 GetIndexStart();
 		uint32 GetIndexCount();

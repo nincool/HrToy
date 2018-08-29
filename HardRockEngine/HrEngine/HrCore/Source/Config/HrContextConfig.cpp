@@ -16,3 +16,23 @@ HrContextConfig::~HrContextConfig()
 
 }
 
+void HrContextConfig::SetWindowWidth(uint32 nWidth)
+{
+	m_nWindowWidth = nWidth;
+}
+
+void HrContextConfig::SetWindowHeight(uint32 nHeight)
+{
+	m_nWindowHeight = nHeight;
+}
+
+void HrContextConfig::SetRenderTargetViewWidth(uint32 nWidth)
+{
+	m_nRenderTargetViewWidth = nWidth;
+}
+
+void HrContextConfig::SetRenderTargetViewHeight(uint32 nHeight)
+{
+	m_nRenderTargetViewHeight = nHeight;
+}
+

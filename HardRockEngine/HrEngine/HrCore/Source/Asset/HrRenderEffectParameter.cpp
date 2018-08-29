@@ -26,20 +26,16 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_UINT4, 1, 16),
 
-	HrRenderParamDefine(RPT_DIRECTIONAL_DIFFUSE_COLOR, "diffuse_light_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_DIRECTIONAL_SPECULAR_COLOR, "specular_light_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION, "light_direction", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_COLOR, "directional_light_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION, "directional_light_direction", REDT_FLOAT4, 1, 16),
 
-	HrRenderParamDefine(RPT_POINT_LIGHT_DIFFUSE_COLOR, "point_light_diffuse_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_POINT_LIGHT_SPECULAR_COLOR, "point_light_specular_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_POINT_LIGHT_COLOR, "point_light_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION, "point_light_range_attenuation", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION, "point_light_position", REDT_FLOAT4, 1, 16),
 	//////////////////////////////////////////////////////////////////////////////////////////
 
-	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "glossiness_material", REDT_FLOAT1, 1, 4),
-	HrRenderParamDefine(RPT_AMBIENT_MATERIAL_COLOR, "ambient_material_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_DIFFUSE_MATERIAL_COLOR, "diffuse_material_color", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_SPECULAR_MATERIAL_COLOR, "specular_material_color", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "material_glossiness", REDT_FLOAT1, 1, 4),
+	HrRenderParamDefine(RPT_MATERIAL_ALBEDO, "material_albedo", REDT_FLOAT4, 1, 16),
 
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
@@ -622,10 +618,8 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat4x4();
 		break;
 	}
-	case RPT_DIRECTIONAL_DIFFUSE_COLOR:
-	case RPT_DIRECTIONAL_SPECULAR_COLOR:
-	case RPT_POINT_LIGHT_DIFFUSE_COLOR:
-	case RPT_POINT_LIGHT_SPECULAR_COLOR:
+	case RPT_DIRECTIONAL_LIGHT_COLOR:
+	case RPT_POINT_LIGHT_COLOR:
 	case RPT_POINT_LIGHT_ATTENUATION:
 	case RPT_DIRECTIONAL_LIGHT_DIRECTION:
 	case RPT_POINT_LIGHT_POSITION:
@@ -641,9 +635,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		break;
 	}
 	case RPT_AMBIENT_COLOR:
-	case RPT_AMBIENT_MATERIAL_COLOR:
-	case RPT_DIFFUSE_MATERIAL_COLOR:
-	case RPT_SPECULAR_MATERIAL_COLOR:
+	case RPT_MATERIAL_ALBEDO:
 	case RPT_FOG_COLOR:
 	{
 		BOOST_ASSERT(m_dataType == REDT_FLOAT4 && m_nArraySize == 1);

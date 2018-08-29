@@ -119,12 +119,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\;..\..\ThirdParty\assimp\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(OutDir);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>HrCoreD.lib;HrMathD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>HrCoreD.lib;HrMathD.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>
+      </StackReserveSize>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -195,11 +198,14 @@
   <ItemGroup>
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
+    <ClInclude Include="HrConvertUtil.h" />
     <ClInclude Include="HrMeshConvertMFC.h" />
     <ClInclude Include="HrMeshConvertMFCDoc.h" />
     <ClInclude Include="HrMeshConvertMFCView.h" />
+    <ClInclude Include="HrMeshView.h" />
     <ClInclude Include="HrRenderApp.h" />
     <ClInclude Include="HrRenderView.h" />
+    <ClInclude Include="HrRenderViewDlg.h" />
     <ClInclude Include="HrUIDefine.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OutputWnd.h" />
@@ -212,15 +218,18 @@
   <ItemGroup>
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
+    <ClCompile Include="HrConvertUtil.cpp" />
     <ClCompile Include="HrMeshConvertMFC.cpp" />
     <ClCompile Include="HrMeshConvertMFCDoc.cpp" />
     <ClCompile Include="HrMeshConvertMFCView.cpp" />
+    <ClCompile Include="HrMeshView.cpp" />
     <ClCompile Include="HrRenderApp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="HrRenderView.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="HrRenderViewDlg.cpp" />
     <ClCompile Include="HrUIDefine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
@@ -237,6 +246,7 @@
     <ResourceCompile Include="HrMeshConvertMFC.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\buttons.bmp" />
     <Image Include="res\classview.bmp" />
     <Image Include="res\classview_hc.bmp" />
@@ -252,6 +262,7 @@
     <Image Include="res\file_view_hc.ico" />
     <Image Include="res\HrMeshConvertMFC.ico" />
     <Image Include="res\HrMeshConvertMFCDoc.ico" />
+    <Image Include="res\HrRibbonIcon1.bmp" />
     <Image Include="res\main.bmp" />
     <Image Include="res\menuimages.bmp" />
     <Image Include="res\menuimages_hc.bmp" />
@@ -275,4 +286,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="HrMeshConvertMFC.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

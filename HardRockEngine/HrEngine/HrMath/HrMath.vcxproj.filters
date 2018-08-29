@@ -163,6 +163,12 @@
     <ClInclude Include="Include\HrMurmurHash3.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrRect.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HrMathRender.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\KFL\Kernel\CpuInfo.cpp">
@@ -244,6 +250,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrMurmurHash3.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrRect.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

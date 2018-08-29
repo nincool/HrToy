@@ -10,6 +10,9 @@
 // All rights reserved.
 
 #pragma once
+#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
+
+class CMainFrame;
 
 class CPropertiesToolBar : public CMFCToolBar
 {
@@ -30,6 +33,9 @@ public:
 
 	void AdjustLayout();
 
+	void SetMainFrame(CMainFrame* pMainFrame);
+
+	void OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo);
 // Attributes
 public:
 	void SetVSDotNetLook(BOOL bSet)
@@ -44,6 +50,21 @@ protected:
 	CPropertiesToolBar m_wndToolBar;
 	CMFCPropertyGridCtrl m_wndPropList;
 
+	int m_nMeshIndex = 0;
+
+	CMFCPropertyGridProperty* m_pHrSettingGroup;
+	CMFCPropertyGridProperty* m_pMateiralSetting;
+	
+	std::string m_strCachedMaterialName;
+	CMFCPropertyGridProperty* m_pMaterialGroup;
+	CMFCPropertyGridProperty* m_pMaterialName;
+	CMFCPropertyGridColorProperty* m_pMaterialAlbedo;
+	CMFCPropertyGridColorProperty* m_pMaterialEmissive;
+	CMFCPropertyGridProperty* m_pMaterialShininess;
+
+	std::array<CMFCPropertyGridProperty*, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> m_arrMaterialTexture;
+
+	CMainFrame* m_pMainFrame;
 // Implementation
 public:
 	virtual ~CPropertiesWnd();
@@ -61,6 +82,8 @@ protected:
 	afx_msg void OnUpdateProperties2(CCmdUI* pCmdUI);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
+
+	afx_msg LRESULT OnPropertyChanged(__in WPARAM wparam, __in LPARAM lparam);
 
 	DECLARE_MESSAGE_MAP()
 

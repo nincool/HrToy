@@ -45,10 +45,12 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+
 protected:
 
 // Generated message map functions
 protected:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);

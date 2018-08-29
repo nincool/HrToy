@@ -85,7 +85,7 @@ BOOL CHrMeshConvertMFCApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinAppEx::InitInstance();
-
+	InitConsoleWindow();
 
 	// Initialize OLE libraries
 	if (!AfxOleInit())
@@ -151,7 +151,6 @@ BOOL CHrMeshConvertMFCApp::InitInstance()
 	m_pMainWnd->MoveWindow(0, 0, Hr::HrUIDefine::m_s_nFrameWidth, Hr::HrUIDefine::m_s_nFrameHeight);
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
-
 
 	return TRUE;
 }

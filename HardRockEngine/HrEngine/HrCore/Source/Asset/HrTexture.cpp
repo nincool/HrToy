@@ -124,6 +124,8 @@ bool HrTexture::LoadImpl()
 		
 		FreeImage_Unload(dib);
 
+		m_textureUsage = HrTexture::TU_GPUREAD_GPUWRITE;
+
 		CreateHWResource();
 	}
 	else

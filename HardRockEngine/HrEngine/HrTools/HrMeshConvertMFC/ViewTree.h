@@ -13,6 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree window
+class HrMeshView;
 
 class CViewTree : public CTreeCtrl
 {
@@ -20,6 +21,10 @@ class CViewTree : public CTreeCtrl
 public:
 	CViewTree();
 
+	void SetMeshView(HrMeshView* pMeshView)
+	{
+		m_pMeshView = pMeshView;
+	}
 // Overrides
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
@@ -29,5 +34,9 @@ public:
 	virtual ~CViewTree();
 
 protected:
+	afx_msg void OnClkTree(NMHDR* pNMHDR, LRESULT* pResult);
+
 	DECLARE_MESSAGE_MAP()
+
+	HrMeshView* m_pMeshView;
 };

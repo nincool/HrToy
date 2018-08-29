@@ -5,56 +5,67 @@
 
 namespace Hr
 {
-	class HrModelDescInfo
+	class HrModelDataInfo
 	{
 	public:
-		struct HrMaterialInfo
+		struct HrMaterialDataInfo
 		{
-			HrMaterialInfo()
+			enum EnumTextureSlot
+			{
+				TS_ALBEDO,
+				TS_METALNESS,
+				TS_GLOSSINESS,
+				TS_EMISSIVE,
+				TS_NORMAL,
+				TS_HEIGHT,
+				TS_BUMP,
+				TS_NUMTEXTURESLOTS,
+			};
+
+			HrMaterialDataInfo()
 				: strMaterialName("")
 				, nMaterialIndex(0)
+				, v4Albedo(Vector4::Zero())
 				, v4Emissive(Vector4::Zero())
-				, v4Ambient(Vector4::Zero())
-				, v4Diffuse(Vector4::Zero())
-				, v4Specular(Vector4::Zero())
 				, fOpacity(1.0f)
 				, fShininess(1.0f)
-				, fReflectivity(1.0f)
+				, fGlossiness(1.0f)
+				, bTwoSided(false)
 			{}
 			int nMaterialIndex;
 			std::string strMaterialName;
+			Vector4 v4Albedo;
 			Vector4 v4Emissive;
-			Vector4 v4Ambient;
-			Vector4 v4Diffuse;
-			Vector4 v4Specular;
+
 			float fOpacity;
 			float fShininess;
-			float fReflectivity;
+			float fGlossiness;
+			bool bTwoSided;
+
+			std::array<std::string, TS_NUMTEXTURESLOTS> m_arrTexNames;
 		};
 
-		struct HrSubMeshInfo
+		struct HrSubMeshDataInfo
 		{
 			std::string strMeshName;
 			bool bAllIndices;
 			bool bIndexDataType16bit;
-
-			HrMaterialInfo materialInfo;
-			//std::vector<std::string> vecTextureFileName;
-
 			int nTriangleCount;
-			int nIndexOffset;
+
+			std::vector<uint32> vecIndices;
+			std::vector<Vector3> vecVertexPos;
+			std::vector<Vector3> vecTangent;
+			std::vector<Vector3> vecBinormal;
+			std::vector<Vector3> vecNormal;
+			std::vector<float4> vecColor;
+			std::vector<float2> vecUV;
 		};
 
 	public:
-		std::vector<uint32> vecIndices;
-		std::vector<Vector3> vecVertexPos;
-		std::vector<Vector3> vecTangent;
-		std::vector<Vector3> vecBinormal;
-		std::vector<Vector3> vecNormal;
-		std::vector<float4> vecColor;
-		std::vector<float2> vecUV;
+		std::vector<HrSubMeshDataInfo> vecSubMeshInfo;
+		std::vector<HrMaterialDataInfo> vecMaterialDataInfo;
 
-		std::vector<HrSubMeshInfo> vecSubMeshInfo;
+		std::string strFileName;
 	};
 
 	class HrModelLoader
@@ -75,16 +86,14 @@ namespace Hr
 		void Load(std::string& strFile);
 
 	private:
-		HrMaterial* MakeMaterialResource(HrModelDescInfo::HrMaterialInfo& materialInfo);
-		std::vector<HrTexture*> MakeTextureResource(std::vector<std::string>& vecTextureFile);
-		void MakeVertexElements(const HrModelDescInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement);
+		void MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement);
 		void MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
-
+		void MakeIndexStream(int nSubMeshIndex, HrStreamData& indexData);
 	protected:
 		std::string m_strFileName;
 		HrMeshPtr m_pMesh;
 
-		HrModelDescInfo m_modelDesc;
+		HrModelDataInfo m_modelDesc;
 
 	};
 }

@@ -15,12 +15,20 @@
 #include "Resource.h"
 #include "MainFrm.h"
 #include "HrMeshConvertMFC.h"
+#include "HrUtilTools/Include/HrStringUtil.h"
+#include "HrMeshView.h"
+#include "HrRenderApp.h"
+#include "HrConvertUtil.h"
+
+#include <iostream>
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+using namespace Hr;
 
 /////////////////////////////////////////////////////////////////////////////
 // CResourceViewBar
@@ -47,6 +55,7 @@ BEGIN_MESSAGE_MAP(CPropertiesWnd, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_PROPERTIES2, OnUpdateProperties2)
 	ON_WM_SETFOCUS()
 	ON_WM_SETTINGCHANGE()
+	ON_REGISTERED_MESSAGE(AFX_WM_PROPERTY_CHANGED, CPropertiesWnd::OnPropertyChanged)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,6 +76,44 @@ void CPropertiesWnd::AdjustLayout()
 	m_wndObjectCombo.SetWindowPos(NULL, rectClient.left, rectClient.top, rectClient.Width(), m_nComboHeight, SWP_NOACTIVATE | SWP_NOZORDER);
 	m_wndToolBar.SetWindowPos(NULL, rectClient.left, rectClient.top + m_nComboHeight, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
 	m_wndPropList.SetWindowPos(NULL, rectClient.left, rectClient.top + m_nComboHeight + cyTlb, rectClient.Width(), rectClient.Height() -(m_nComboHeight+cyTlb), SWP_NOACTIVATE | SWP_NOZORDER);
+}
+
+void CPropertiesWnd::SetMainFrame(CMainFrame* pMainFrame)
+{
+	m_pMainFrame = pMainFrame;
+}
+
+void CPropertiesWnd::OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo)
+{
+	if (m_strCachedMaterialName == materialInfo.strMaterialName)
+	{
+		return;
+	}
+	m_nMeshIndex = nMeshIndex;
+
+	m_pMateiralSetting->SetValue((_variant_t)(Hr::HrStringUtil::Utf8ToWstring(materialInfo.strMaterialName).c_str()));
+
+	m_pMaterialName->SetValue((_variant_t)(Hr::HrStringUtil::Utf8ToWstring(materialInfo.strMaterialName).c_str()));
+	COLORREF albedoValue = RGB(materialInfo.v4Albedo[0] * 255, materialInfo.v4Albedo[1] * 255, materialInfo.v4Albedo[2] * 255);
+	m_pMaterialAlbedo->SetColor(albedoValue);
+	COLORREF emissiveValue = RGB(materialInfo.v4Emissive[0] * 255, materialInfo.v4Emissive[1] * 255, materialInfo.v4Emissive[2] * 255);
+	m_pMaterialEmissive->SetColor(emissiveValue);
+	short nGlossiness = materialInfo.fGlossiness;
+	auto variantValue = _variant_t((short)nGlossiness, VT_I2);
+	m_pMaterialShininess->SetValue(variantValue);
+
+	for (int i = 0; i < m_arrMaterialTexture.size(); ++i)
+	{
+		if (!materialInfo.m_arrTexNames[i].empty())
+		{
+			std::wstring strTextureName = Hr::HrStringUtil::Utf8ToWstring(materialInfo.m_arrTexNames[i]);
+			m_arrMaterialTexture[i]->SetValue((_variant_t)strTextureName.c_str());
+		}
+		else
+		{
+			m_arrMaterialTexture[i]->SetValue((_variant_t)(_T("")));
+		}
+	}
 }
 
 int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -147,6 +194,7 @@ void CPropertiesWnd::OnUpdateSortProperties(CCmdUI* pCmdUI)
 void CPropertiesWnd::OnProperties1()
 {
 	// TODO: Add your command handler code here
+	std::cout << "OnProperties1" << std::endl;
 }
 
 void CPropertiesWnd::OnUpdateProperties1(CCmdUI* /*pCmdUI*/)
@@ -157,6 +205,7 @@ void CPropertiesWnd::OnUpdateProperties1(CCmdUI* /*pCmdUI*/)
 void CPropertiesWnd::OnProperties2()
 {
 	// TODO: Add your command handler code here
+	std::cout << "OnProperties2" << std::endl;
 }
 
 void CPropertiesWnd::OnUpdateProperties2(CCmdUI* /*pCmdUI*/)
@@ -172,6 +221,64 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.EnableDescriptionArea();
 	m_wndPropList.SetVSDotNetLook();
 	m_wndPropList.MarkModifiedProperties();
+
+	m_pHrSettingGroup = new CMFCPropertyGridProperty(_T("HrSetting"));
+	{
+		{
+			static const TCHAR szFilter[] = _T("Texture Files(*.png)|*.png|All Files(*.*)|*.*||");
+			m_pHrSettingGroup->AddSubItem(new CMFCPropertyGridFileProperty(_T("Texture"), TRUE, _T(""), _T("ico"), 0, szFilter, _T("Specifies the texture")));
+		}
+		{
+			static const TCHAR szFilter[] = _T("Material Files(*.material)|*.material|All Files(*.*)|*.*||");
+			m_pMateiralSetting = new CMFCPropertyGridProperty(_T("Material"), _T("Default"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
+			m_pMateiralSetting->AddOption(_T("Default"));
+			m_pMateiralSetting->AddOption(_T("Standard"));
+			m_pMateiralSetting->AddOption(_T("Thin"));
+			m_pMateiralSetting->AddOption(_T("Resizable"));
+			m_pMateiralSetting->AddOption(_T("Dialog Frame"));
+			m_pMateiralSetting->AllowEdit(FALSE);
+			m_pHrSettingGroup->AddSubItem(m_pMateiralSetting);
+		}
+	}
+	m_wndPropList.AddProperty(m_pHrSettingGroup);
+
+	m_pMaterialGroup = new CMFCPropertyGridProperty(_T("Material"));
+	{
+		m_pMaterialName = new CMFCPropertyGridProperty(_T("Name"), (_variant_t)_T(""), _T("Specifies the text that will be displayed in the window's title bar"));
+		m_pMaterialGroup->AddSubItem(m_pMaterialName);
+		
+		m_pMaterialAlbedo = new CMFCPropertyGridColorProperty(_T("Albedo"), RGB(210, 192, 254), NULL, _T("Specifies the default window color"));
+		m_pMaterialAlbedo->EnableOtherButton(_T("Other..."));
+		m_pMaterialAlbedo->EnableAutomaticButton(_T("Default"), ::GetSysColor(COLOR_3DFACE));
+		m_pMaterialGroup->AddSubItem(m_pMaterialAlbedo);
+
+		m_pMaterialEmissive = new CMFCPropertyGridColorProperty(_T("Emissive"), RGB(210, 192, 254), NULL, _T("Specifies the default window color"));
+		m_pMaterialEmissive->EnableOtherButton(_T("Other..."));
+		m_pMaterialEmissive->EnableAutomaticButton(_T("Default"), ::GetSysColor(COLOR_3DFACE));
+		m_pMaterialGroup->AddSubItem(m_pMaterialEmissive);
+
+		short nTempZero = 1;
+		auto variantValue = _variant_t((short)nTempZero, VT_I2);
+		m_pMaterialShininess = new CMFCPropertyGridProperty(_T("Glossiness"), variantValue, _T("Specifies the window's width"));
+		m_pMaterialShininess->EnableSpinControl(TRUE, 0, 20);
+		m_pMaterialGroup->AddSubItem(m_pMaterialShininess);
+
+		std::array<std::wstring, HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> arrTextureTypeName;
+		arrTextureTypeName[0] = _T("TEX_ALBEDO");
+		arrTextureTypeName[1] = _T("TEX_METALNESS");
+		arrTextureTypeName[2] = _T("TEX_GLOSSINESS");
+		arrTextureTypeName[3] = _T("TEX_EMISSIVE");
+		arrTextureTypeName[4] = _T("TEX_NORMAL");
+		arrTextureTypeName[5] = _T("TEX_HEIGHT");
+		arrTextureTypeName[6] = _T("TEX_BUMP");
+		for (size_t i = 0; i < arrTextureTypeName.size(); ++i)
+		{
+			m_arrMaterialTexture[i] = new CMFCPropertyGridProperty(arrTextureTypeName[i].c_str(), (_variant_t)(_T("")), _T("Specifies the text that will be displayed in the window's title bar"));
+			m_pMaterialGroup->AddSubItem(m_arrMaterialTexture[i]);
+		}
+		
+	}
+	m_wndPropList.AddProperty(m_pMaterialGroup);
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Appearance"));
 
@@ -257,6 +364,39 @@ void CPropertiesWnd::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CDockablePane::OnSettingChange(uFlags, lpszSection);
 	SetPropListFont();
+}
+
+LRESULT CPropertiesWnd::OnPropertyChanged(__in WPARAM wParam, __in LPARAM lParam)
+{
+	CMFCPropertyGridProperty* pProp = (CMFCPropertyGridProperty*)lParam;
+	//is the property ctrl
+	if ((long)wParam == 2)
+	{
+
+	}
+
+	int pID = pProp->GetData();
+	CString str = pProp->GetName();
+	if (str == _T("Material"))
+	{
+		COleVariant var = pProp->GetValue();
+		std::wstring strValue = var.bstrVal;
+		if (strValue == _T("Standard"))
+		{
+			std::string strMaterialName = HrStringUtil::WstringToUtf8(var.bstrVal);
+			m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->ChangeMaterial(m_nMeshIndex, strMaterialName);
+			auto& modelDataInfo = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
+			OnSelectMeshDisplaMaterial(m_nMeshIndex, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
+		}
+	}
+	else if (str == _T("Glossiness"))
+	{
+		COleVariant var = pProp->GetValue();
+		int nGlossiness = var.iVal;
+		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialGlossiness(m_nMeshIndex, nGlossiness);
+	}
+
+	return 0;
 }
 
 void CPropertiesWnd::SetPropListFont()

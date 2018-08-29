@@ -42,3 +42,54 @@ private:
 
 	std::shared_ptr<Hr::HrRenderApp> m_pRenderApp;
 };
+
+//class CHrMeshConvertMFCView : public CView
+//{
+//protected: // create from serialization only
+//	CHrMeshConvertMFCView();
+//	DECLARE_DYNCREATE(CHrMeshConvertMFCView)
+//
+//	// Attributes
+//public:
+//	CHrMeshConvertMFCDoc* GetDocument() const;
+//
+//	// Operations
+//public:
+//
+//	// Overrides
+//public:
+//	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+//	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+//protected:
+//	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+//	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+//	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+//
+//	// Implementation
+//public:
+//	virtual ~CHrMeshConvertMFCView();
+//#ifdef _DEBUG
+//	virtual void AssertValid() const;
+//	virtual void Dump(CDumpContext& dc) const;
+//#endif
+//
+//	HrRenderView* m_pRenderViewDlg;
+//
+//protected:
+//
+//	// Generated message map functions
+//protected:
+//	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+//	afx_msg void OnFilePrintPreview();
+//	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+//	DECLARE_MESSAGE_MAP()
+//};
+//
+//#ifndef _DEBUG  // debug version in HrMeshConvertMFCView.cpp
+//inline CHrMeshConvertMFCDoc* CHrMeshConvertMFCView::GetDocument() const
+//{
+//	return reinterpret_cast<CHrMeshConvertMFCDoc*>(m_pDocument);
+//}
+//#endif
+

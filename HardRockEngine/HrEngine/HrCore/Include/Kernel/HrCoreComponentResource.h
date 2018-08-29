@@ -4,6 +4,7 @@
 #include "HrCore/Include/Kernel/HrCoreComponent.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrTexture.h"
+#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 
 namespace Hr
 {
@@ -18,6 +19,7 @@ namespace Hr
 
 		HrTexturePtr RetriveTexture(const std::string& strFile, HrTexture::EnumTextureType type);
 
+		HrMaterialPtr MakeMaterial(const std::string& strFile, const HrModelDataInfo::HrMaterialDataInfo& materialInfo);
 	private:
 		HrResourceManagerPtr m_pResourceManager;
 	};
@@ -51,7 +53,6 @@ namespace Hr
 		{
 			resType = HrResource::RT_MESHMODEL;
 		}
-
 
 		if (!bAdd && !bLoad)
 		{

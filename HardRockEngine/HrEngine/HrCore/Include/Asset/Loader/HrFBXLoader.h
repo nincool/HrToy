@@ -22,13 +22,65 @@ namespace fbxsdk
 
 namespace Hr
 {
+	class HrFBXModelDescInfo
+	{
+	public:
+		struct HrMaterialInfo
+		{
+			HrMaterialInfo()
+				: strMaterialName("")
+				, nMaterialIndex(0)
+				, v4Emissive(Vector4::Zero())
+				, v4Ambient(Vector4::Zero())
+				, v4Diffuse(Vector4::Zero())
+				, v4Specular(Vector4::Zero())
+				, fOpacity(1.0f)
+				, fShininess(1.0f)
+				, fReflectivity(1.0f)
+			{}
+			int nMaterialIndex;
+			std::string strMaterialName;
+			Vector4 v4Emissive;
+			Vector4 v4Ambient;
+			Vector4 v4Diffuse;
+			Vector4 v4Specular;
+			float fOpacity;
+			float fShininess;
+			float fReflectivity;
+		};
+
+		struct HrSubMeshInfo
+		{
+			std::string strMeshName;
+			bool bAllIndices;
+			bool bIndexDataType16bit;
+
+			HrMaterialInfo materialInfo;
+			//std::vector<std::string> vecTextureFileName;
+
+			int nTriangleCount;
+			int nIndexOffset;
+		};
+
+	public:
+		std::vector<uint32> vecIndices;
+		std::vector<Vector3> vecVertexPos;
+		std::vector<Vector3> vecTangent;
+		std::vector<Vector3> vecBinormal;
+		std::vector<Vector3> vecNormal;
+		std::vector<float4> vecColor;
+		std::vector<float2> vecUV;
+
+		std::vector<HrSubMeshInfo> vecSubMeshInfo;
+	};
+
 	class HrFBXLoader 
 	{
 	public:
 		HrFBXLoader();
 		~HrFBXLoader();
 
-		void Load(std::string& strFile, HrModelDescInfo& modelDesc);
+		void Load(std::string& strFile, HrFBXModelDescInfo& modelDesc);
 
 	private:
 		void InitializeSDKObjects();
@@ -48,11 +100,11 @@ namespace Hr
 		*/
 		bool IsOddNegativeScale(fbxsdk::FbxAMatrix& TotalMatrix);
 
-		bool IsAllIndices(HrModelDescInfo::HrSubMeshInfo& meshInfo);
+		bool IsAllIndices(HrFBXModelDescInfo::HrSubMeshInfo& meshInfo);
 
-		void LoadCacheRecursive(fbxsdk::FbxScene * pScene, fbxsdk::FbxAnimLayer * pAnimLayer, const char * pFbxFileName, bool pSupportVBO, HrModelDescInfo& modelDesc);
-		void LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLayer * pAnimLayer, bool pSupportVBO, HrModelDescInfo& modelDesc);
-		bool InitializeSubMesh(fbxsdk::FbxMesh* pMesh, HrModelDescInfo& modelDesc);
+		void LoadCacheRecursive(fbxsdk::FbxScene * pScene, fbxsdk::FbxAnimLayer * pAnimLayer, const char * pFbxFileName, bool pSupportVBO, HrFBXModelDescInfo& modelDesc);
+		void LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLayer * pAnimLayer, bool pSupportVBO, HrFBXModelDescInfo& modelDesc);
+		bool InitializeSubMesh(fbxsdk::FbxMesh* pMesh, HrFBXModelDescInfo& modelDesc);
 
 		//get mesh smoothing info
 		//set pCompute true to compute smoothing from normals by default 

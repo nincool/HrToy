@@ -3,8 +3,10 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Asset/HrResource.h"
+#include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 #include "HrCore/Include/Render/HrShader.h"
 #include "HrCommon/include/HrSingleton.h"
+
 
 namespace Hr
 {
@@ -19,6 +21,13 @@ namespace Hr
 		HrResourcePtr RetriveResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResourcePtr RetriveOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResourcePtr RetriveOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
+
+		/**
+		 @Comment: 创建材质 [8/27/2018 By Hr]
+		 @Param: 从模型文件中读取的材质信息
+		 @Return: 材质指针
+		*/
+		HrMaterialPtr MakeMaterial(const HrModelDataInfo::HrMaterialDataInfo& materialDataInfo);
 
 		HrResourcePtr GetDefaultMaterial();
 		HrTexture* GetDefaultTexture();
@@ -53,8 +62,7 @@ namespace Hr
 		HrResourcePtr GetEffect(const std::string& strEffectName);
 		HrResourcePtr GetModel(const std::string& strModelName);
 		HrResourcePtr GetMeshModel(const std::string& strModelName);
-
-		const HrResourcePtr& GetMaterial(const std::string& strMaterialName);
+		HrResourcePtr GetMaterial(const std::string& strMaterialName);
 
 		void ReleaseResourceCache(std::unordered_map<size_t, HrResourcePtr>& mapRes);
 	protected:

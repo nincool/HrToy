@@ -16,6 +16,8 @@ namespace Hr
 		virtual void Destroy() override;
 
 		virtual HWND GetHWnd() override;
+		virtual uint32 GetTopX() override;
+		virtual uint32 GetTopY() override;
 		virtual uint32 GetWidth() override;
 		virtual uint32 GetHeight() override;
 

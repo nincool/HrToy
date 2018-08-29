@@ -61,36 +61,37 @@ int HrRenderView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_nWidth = rc.right - rc.left;
 	m_nHeight = rc.bottom - rc.top;
 
-	HWND hWnd = GetSafeHwnd();
-	m_pRenderApp = std::make_shared<HrRenderApp>(hWnd);
-	m_pRenderApp->Run();
+	//HWND hWnd = GetSafeHwnd();
+	//m_pRenderApp = std::make_shared<HrRenderApp>(hWnd);
+	//m_pRenderApp->Run();
 
 	return TRUE;
 }
 
 void HrRenderView::OnPaint()
 {
-	m_pRenderApp->RenderOnce();
+	//m_pRenderApp->RenderOnce();
+	UpdateWindow();
 }
 
 void HrRenderView::OnMouseMove(UINT nHitTest, CPoint point)
 {
-	m_pRenderApp->OnMouseMove(point.x, point.y);
+	//m_pRenderApp->OnMouseMove(point.x, point.y);
 }
 
 void HrRenderView::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	m_pRenderApp->OnRMouseButtonDown(point.x, point.y);
+	//m_pRenderApp->OnRMouseButtonDown(point.x, point.y);
 }
 
 void HrRenderView::OnRButtonUp(UINT nFlags, CPoint point)
 {
-	m_pRenderApp->OnRMouseButtonUp(point.x, point.y);
+	//m_pRenderApp->OnRMouseButtonUp(point.x, point.y);
 }
 
 BOOL HrRenderView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	m_pRenderApp->OnMouseWheel(static_cast<float>(zDelta));
+	//m_pRenderApp->OnMouseWheel(static_cast<float>(zDelta));
 
 	return true;
 }

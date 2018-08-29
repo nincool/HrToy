@@ -25,12 +25,16 @@ namespace Hr
 
 		void SetParent(const HrSceneNodePtr& pParent);
 		HrSceneNodePtr GetParent() const;
+
+		size_t GetChildrenCount();
+		const HrSceneNodePtr& GetChildByIndex(int nNodeIndex);
 		const HrSceneNodePtr& GetChildByName(const std::string& strName) const;
 		const HrSceneNodePtr& GetNodeByNameFromHierarchy(const std::string& strName);
 		
 		const HrTransformPtr& GetTransform() const;
 
 		void AddChild(const HrSceneNodePtr& pSceneNode);
+		bool RemoveChild(const HrSceneNodePtr& pChild);
 		void RemoveChildren();
 
 		bool IsRunning() const;

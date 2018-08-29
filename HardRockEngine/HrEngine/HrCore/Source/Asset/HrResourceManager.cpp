@@ -68,8 +68,8 @@ void HrResourceManager::CreateBuildInEffects()
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
 	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/Effect/Hlsl/HrStandard.json", HrResource::RT_EFFECT));
 	//LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
-	LoadResource("Media/Effect/Hlsl/HrShadowMapDepth.json", HrResource::RT_EFFECT);
-	LoadResource("Media/Effect/Hlsl/HrShadowMap.json", HrResource::RT_EFFECT);
+	//LoadResource("Media/Effect/Hlsl/HrShadowMapDepth.json", HrResource::RT_EFFECT);
+	//LoadResource("Media/Effect/Hlsl/HrShadowMap.json", HrResource::RT_EFFECT); 
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -220,9 +220,9 @@ HrResourcePtr HrResourceManager::AddMeshModelResource(const std::string& strFile
 	
 	HrMeshModelPtr pRes;
 	if (strFile == "BuildIn_Grid")
-		 pRes = HrMakeSharedPtr<HrMeshModelGrid>();
+		pRes = HrMakeSharedPtr<HrMeshModelGrid>();
 	else
-		HrMeshModelPtr pRes = HrMakeSharedPtr<HrMeshModel>();
+		pRes = HrMakeSharedPtr<HrMeshModelObject>();
 
 	pRes->DeclareResource(strFileName, strFile);
 	if (m_mapMeshModels.find(pRes->GetHashID()) != m_mapMeshModels.end())
@@ -346,7 +346,7 @@ HrResourcePtr HrResourceManager::GetEffect(const std::string& strEffectName)
 	return nullptr;
 }
 
-const HrResourcePtr& HrResourceManager::GetMaterial(const std::string& strMaterialName)
+HrResourcePtr HrResourceManager::GetMaterial(const std::string& strMaterialName)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strMaterialName);
 	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
@@ -380,5 +380,15 @@ HrResourcePtr HrResourceManager::GetMeshModel(const std::string& strModelName)
 		return item->second;
 	}
 	return nullptr;
+}
+
+HrMaterialPtr HrResourceManager::MakeMaterial(const HrModelDataInfo::HrMaterialDataInfo& materialDataInfo)
+{
+	auto& pRes = AddMaterialResource(materialDataInfo.strMaterialName);
+	pRes->Load();
+	HrMaterialPtr pMaterial = HrCheckPointerCast<HrMaterial>(pRes);
+	pMaterial->FillMaterialInfo(materialDataInfo);
+
+	return pMaterial;
 }
 

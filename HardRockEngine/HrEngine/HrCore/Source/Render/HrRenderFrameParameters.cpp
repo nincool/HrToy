@@ -105,19 +105,9 @@ float HrRenderFrameParameters::GetMaterialGlossiness() const
 	return m_pRenderable->GetMaterial()->GetGlossiness();
 }
 
-float4 HrRenderFrameParameters::GetMaterialAmbient() const
+float4 HrRenderFrameParameters::GetMaterialAlbedo() const
 {
-	return m_pRenderable->GetMaterial()->GetAmbient();
-}
-
-float4 HrRenderFrameParameters::GetMaterialDiffuse() const
-{
-	return m_pRenderable->GetMaterial()->GetDiffuse();
-}
-
-float4 HrRenderFrameParameters::GetMaterialSpecular() const
-{
-	return m_pRenderable->GetMaterial()->GetSpecular();
+	return m_pRenderable->GetMaterial()->GetAlebdo();
 }
 
 float4 HrRenderFrameParameters::GetMaterialEmissive() const
@@ -156,7 +146,7 @@ const void HrRenderFrameParameters::GetFogParam(float4& fogColor, float& fogStar
 
 const float4 HrRenderFrameParameters::GetAmbientColor()
 {
-	return m_pLightsData->GetLight(HrLight::LT_AMBIENT, 0)->GetDiffuse().Value();
+	return m_pLightsData->GetLight(HrLight::LT_AMBIENT, 0)->GetColor().Value();
 }
 
 const uint4 HrRenderFrameParameters::GetLightsNum()
@@ -175,24 +165,15 @@ const float4 HrRenderFrameParameters::GetDirectionalLightDirection(int nLightInd
 	return float4(v3Direction.x(), v3Direction.y(), v3Direction.z(), 0.0f);
 }
 
-const float4 HrRenderFrameParameters::GetDirectionalLightDiffuseColor(int nLightIndex)
+const float4 HrRenderFrameParameters::GetDirectionalLightColor(int nLightIndex)
 {
-	return m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetDiffuse().Value();
+	return m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetColor().Value();
 }
 
-const float4 HrRenderFrameParameters::GetDirectionalLightSpecularColor(int nLightIndex)
-{
-	return m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetSpecular().Value();
-}
 
-const float4 HrRenderFrameParameters::GetPointLightDiffuseColor(int nLightIndex)
+const float4 HrRenderFrameParameters::GetPointLightColor(int nLightIndex)
 {
-	return m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetDiffuse().Value();
-}
-
-const float4 HrRenderFrameParameters::GetPointLightSpecularColor(int nLightIndex)
-{
-	return m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetSpecular().Value();
+	return m_pLightsData->GetLight(HrLight::LT_POINT, nLightIndex)->GetColor().Value();
 }
 
 const float4 HrRenderFrameParameters::GetPointLightPosition(int nLightIndex)

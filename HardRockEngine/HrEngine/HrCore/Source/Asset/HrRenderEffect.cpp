@@ -377,7 +377,7 @@ void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFramePa
 	uint32 nDirectLightNum = pRenderFrameParameters->GetLightsNum()[HrLight::LT_DIRECTIONAL];
 	for (uint32 i = 0; i < nDirectLightNum; ++i)
 	{
-		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_DIFFUSE_COLOR);
+		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_COLOR);
 		BOOST_ASSERT(pRenderParamDefine);
 		{
 			size_t nHashParamName = HrHashValue(std::string("directLight"));
@@ -385,18 +385,7 @@ void HrRenderEffect::UpdateDirectionalLightEffectParameter(const HrRenderFramePa
 			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
 			auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
 			if (iteRenderParam != m_mapRenderEffectParameters.end())
-				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightDiffuseColor(i);
-		}
-
-		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_SPECULAR_COLOR);
-		BOOST_ASSERT(pRenderParamDefine);
-		{
-			size_t nHashParamName = HrHashValue(std::string("directLight"));
-			HrHashCombine(nHashParamName, i);
-			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
-			if (iteRenderParam != m_mapRenderEffectParameters.end())
-				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightSpecularColor(i);
+				*(iteRenderParam->second) = pRenderFrameParameters->GetDirectionalLightColor(i);
 		}
 
 		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_DIRECTIONAL_LIGHT_DIRECTION);
@@ -417,7 +406,7 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 	uint32 nPointLightNum = pRenderFrameParameters->GetLightNum(HrLight::LT_POINT);
 	for (uint32 i = 0; i < nPointLightNum; ++i)
 	{
-		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_DIFFUSE_COLOR);
+		auto pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_COLOR);
 		BOOST_ASSERT(pRenderParamDefine);
 		{
 			size_t nHashParamName = HrHashValue(std::string("pointLight"));
@@ -426,20 +415,7 @@ void HrRenderEffect::UpdatePointLightEffectParameter(const HrRenderFrameParamete
 			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
 			{
 				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-				*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
-			}
-		}
-		
-		pRenderParamDefine = HrRenderParamDefine::GetRenderParamDefineByType(RPT_POINT_LIGHT_SPECULAR_COLOR);
-		BOOST_ASSERT(pRenderParamDefine);
-		{
-			size_t nHashParamName = HrHashValue(std::string("pointLight"));
-			HrHashCombine(nHashParamName, i);
-			HrHashCombine(nHashParamName, pRenderParamDefine->strName);
-			if (m_mapRenderEffectParameters.find(nHashParamName) != m_mapRenderEffectParameters.end())
-			{
-				auto pEffParam = m_mapRenderEffectParameters[nHashParamName];
-				*pEffParam = pRenderFrameParameters->GetPointLightDiffuseColor(i);
+				*pEffParam = pRenderFrameParameters->GetPointLightColor(i);
 			}
 		}
 
@@ -513,19 +489,9 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	{
 		break;
 	}
-	case RPT_AMBIENT_MATERIAL_COLOR:
+	case RPT_MATERIAL_ALBEDO:
 	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialAmbient();
-		break;
-	}
-	case RPT_DIFFUSE_MATERIAL_COLOR:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialDiffuse();
-		break;
-	}
-	case RPT_SPECULAR_MATERIAL_COLOR:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialSpecular();
+		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialAlbedo();
 		break;
 	}
 	case RPT_MATERIAL_GLOSSINESS:

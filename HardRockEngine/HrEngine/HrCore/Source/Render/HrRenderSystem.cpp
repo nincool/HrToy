@@ -148,18 +148,18 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 			m_pRender->SetViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
 
-			auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
-			HrRenderEffectParameterPtr pDiffuseTexParam = pEffShadowMapDepth->GetParameterByName("texShadowMap");
-			if (pDiffuseTexParam)
-			{
-				HrTexturePtr pDepthTex = m_pShadowMap->GetDepthStencilFrame()->GetDepthStencil()->GetDepthStencilSRV();
-				pDiffuseTexParam->operator = (pDepthTex.get());
-			}
-			HrRenderEffectParameterPtr pViewProjMatrix = pEffShadowMapDepth->GetParameterByName("point_view_proj_matrix");
-			if (pViewProjMatrix)
-			{
-				*pViewProjMatrix = m_pShadowMap->GetShadowMapCamera()->GetViewProjMatrix();
-			}
+			//auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
+			//HrRenderEffectParameterPtr pDiffuseTexParam = pEffShadowMapDepth->GetParameterByName("texShadowMap");
+			//if (pDiffuseTexParam)
+			//{
+			//	HrTexturePtr pDepthTex = m_pShadowMap->GetDepthStencilFrame()->GetDepthStencil()->GetDepthStencilSRV();
+			//	pDiffuseTexParam->operator = (pDepthTex.get());
+			//}
+			//HrRenderEffectParameterPtr pViewProjMatrix = pEffShadowMapDepth->GetParameterByName("point_view_proj_matrix");
+			//if (pViewProjMatrix)
+			//{
+			//	*pViewProjMatrix = m_pShadowMap->GetShadowMapCamera()->GetViewProjMatrix();
+			//}
 
 			//auto pTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 

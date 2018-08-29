@@ -23,6 +23,10 @@
 #include "HrMeshConvertMFCView.h"
 
 #include "HrCore/Include/Kernel/HrDirector.h"
+#include "HrUIDefine.h"
+
+#include "HrRenderView.h"
+#include "HrRenderApp.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +39,7 @@ IMPLEMENT_DYNCREATE(CHrMeshConvertMFCView, CView)
 
 BEGIN_MESSAGE_MAP(CHrMeshConvertMFCView, CView)
 	// Standard printing commands
+	ON_WM_CREATE()
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CHrMeshConvertMFCView::OnFilePrintPreview)
@@ -61,14 +66,6 @@ BOOL CHrMeshConvertMFCView::PreCreateWindow(CREATESTRUCT& cs)
 
 	if (CView::PreCreateWindow(cs))
 	{
-		//HWND hWnd = GetSafeHwnd();
-		//if (!Hr::HrDirector::Instance()->Init(hWnd))
-		//{
-		//	throw std::runtime_error("error");
-
-		//	return FALSE;
-		//}
-
 		return TRUE;
 	}
 	else
@@ -90,6 +87,13 @@ void CHrMeshConvertMFCView::OnDraw(CDC* /*pDC*/)
 	// TODO: add draw code for native data here
 }
 
+
+int CHrMeshConvertMFCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	CView::OnCreate(lpCreateStruct);
+
+	return 0;
+}
 
 // CHrMeshConvertMFCView printing
 

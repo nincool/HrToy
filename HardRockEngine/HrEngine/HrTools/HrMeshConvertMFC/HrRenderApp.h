@@ -3,6 +3,7 @@
 #include "HrCore/Include/Platform/AppWin/HrAppWindows.h"
 #include "HrEngine.h"
 #include "HrCommon/include/HrSingleton.h"
+#include "HrConvertUtil.h"
 
 namespace Hr
 {
@@ -41,6 +42,14 @@ namespace Hr
 		void OnRMouseButtonDown(float fX, float fY);
 		void OnRMouseButtonUp(float fX, float fY);
 		void OnMouseWheel(float fDelta);
+
+		void LoadOriginalMeshData(const std::string& strFileName);
+		void SaveConvertMeshData(const std::string& strFileName);
+
+		std::shared_ptr<HrConvertUtil> GetConvertUtil()
+		{
+			return m_pConvertUtil;
+		}
 	private:
 		void CreateSceneElements();
 		void CreateAxisNode();
@@ -58,6 +67,8 @@ namespace Hr
 
 		bool m_bRButtonDown;
 
+		std::shared_ptr<HrConvertUtil> m_pConvertUtil;
+
 		HrSceneNodePtr m_pGodCamera;
 		HrCameraComponentPtr m_pCameraCom;
 		HrTrackBallCameraComponentPtr m_pTrackBallCameraCtrl;
@@ -66,8 +77,8 @@ namespace Hr
 		std::shared_ptr<HrRenderAxis> m_pAxisModel;
 
 		HrSceneNodePtr m_pPlane;
-		HrSceneNodePtr m_pBox;
 		HrSceneNodePtr m_pAxisNode;
+		HrSceneNodePtr m_pModel;
 
 		HrSceneNodePtr m_pPointLight1;
 		HrSceneNodePtr m_pPointLight2;
@@ -98,19 +109,27 @@ namespace Hr
 
 		void RenderOnce();
 
+		void LoadOriginalMeshData(const std::string& strFileName);
+		void SaveConvertMeshData(const std::string& strFileName);
+
 		void OnMouseMove(float fX, float fY);
 		void OnRMouseButtonDown(float fX, float fY);
 		void OnRMouseButtonUp(float fX, float fY);
 		void OnMouseWheel(float fDelta);
+
+		std::shared_ptr<HrEditorScene> GetEditorScene()
+		{
+			return m_pEditorScene;
+		}
 	private:
 		void LoadAssets();
 		void CreateScene();
 
 	private:
 		HWND m_hWnd;
+		HrRect m_displayRect;
 
 		std::shared_ptr<HrEditorScene> m_pEditorScene;
-
 	};
 
 

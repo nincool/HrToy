@@ -1,5 +1,6 @@
 #include "Kernel/HrCoreComponentResource.h"
 #include "Asset/HrResourceManager.h"
+#include "Asset/HrMaterial.h"
 
 using namespace Hr;
 
@@ -24,5 +25,18 @@ HrTexturePtr HrCoreComponentResource::RetriveTexture(const std::string& strFile,
 	}
 
 	return nullptr;
+}
+
+HrMaterialPtr HrCoreComponentResource::MakeMaterial(const std::string& strFile, const HrModelDataInfo::HrMaterialDataInfo& materialInfo)
+{
+	HrResourcePtr pMat = m_pResourceManager->RetriveResource(strFile, HrResource::RT_MATERIAL);
+	if (!pMat)
+	{
+		HrMaterialPtr pNewMat = m_pResourceManager->MakeMaterial(materialInfo);
+
+		return pNewMat;
+	}
+
+	return HrCheckPointerCast<HrMaterial>(pMat);
 }
 

@@ -4,7 +4,10 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
-
+#include <locale>
+#include <codecvt>
+#include <memory>
+#include <HrMath/Include/HrMath.h>
 #include <boost/lexical_cast.hpp> 
 
 namespace Hr
@@ -12,6 +15,38 @@ namespace Hr
 	class HrStringUtil
 	{
 	public:
+		static std::string StringFormat(const std::string fmt_str, ...)
+		{
+			int final_n, n = ((int)fmt_str.size()) * 2; /* Reserve two times as much as the length of the fmt_str */
+			std::unique_ptr<char[]> formatted;
+			va_list ap;
+			while (1)
+			{
+				formatted.reset(new char[n]); /* Wrap the plain char array into the unique_ptr */
+				strcpy(&formatted[0], fmt_str.c_str());
+				va_start(ap, fmt_str);
+				final_n = vsnprintf(&formatted[0], n, fmt_str.c_str(), ap);
+				va_end(ap);
+				if (final_n < 0 || final_n >= n)
+					n += abs(final_n - n + 1);
+				else
+					break;
+			}
+			return std::string(formatted.get());
+		}
+
+		static std::string WstringToUtf8(const std::wstring& str)
+		{
+			std::wstring_convert<std::codecvt_utf8<wchar_t> > strCnv;
+			return strCnv.to_bytes(str);
+		}
+
+		static std::wstring Utf8ToWstring(const std::string& str)
+		{
+			std::wstring_convert< std::codecvt_utf8<wchar_t> > strCnv;
+			return strCnv.from_bytes(str);
+		}
+
 		static void ToLowerCase(std::string& s)
 		{
 			std::transform(s.begin(), s.end(), s.begin(),
@@ -26,14 +61,26 @@ namespace Hr
 
 		static float3 GetFloat3FromString(const std::string& strContent, const char* p1 = "|")
 		{
-			std::vector<float> vecElement = GetFloatVectorFromString(strContent);
+			std::vector<float> vecElement = GetFloatVectorFromString(strContent, p1);
 			return float3(vecElement[0], vecElement[1], vecElement[2]);
 		}
 
 		static float4 GetFloat4FromString(const std::string& strContent, const char* p1 = "|")
 		{
-			std::vector<float> vecElement = GetFloatVectorFromString(strContent);
+			std::vector<float> vecElement = GetFloatVectorFromString(strContent, p1);
 			return float4(vecElement[0], vecElement[1], vecElement[2], vecElement[3]);
+		}
+		
+		template<typename T>
+		static std::vector<T> GetTVectorFromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<T> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (int i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(boost::lexical_cast<T>(temp[i].c_str()));
+			}
+			return result;
 		}
 
 		static std::vector<float> GetFloatVectorFromString(const std::string& strContent, const char* p1 = "|")
@@ -43,18 +90,6 @@ namespace Hr
 			for (int i = 0; i < temp.size(); ++i)
 			{
 				result.push_back(boost::lexical_cast<float>(temp[i].c_str()));
-			}
-			return result;
-		}
-
-		template<typename T>
-		static std::vector<T> GetTVectorFromString(const std::string& strContent, const char* p1 = "|")
-		{
-			std::vector<T> result;
-			std::vector<std::string> temp = GetVector(strContent, p1);
-			for (int i = 0; i < temp.size(); ++i)
-			{
-				result.push_back(boost::lexical_cast<T>(temp[i].c_str()));
 			}
 			return result;
 		}
@@ -92,6 +127,17 @@ namespace Hr
 			return result;
 		}
 
+		static std::vector<Vector3> GetVectorVector3FromString(const std::string& strContent, const char* p1, const char* p2)
+		{
+			std::vector<Vector3> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (size_t i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(GetFloat3FromString(temp[i], p2));
+			}
+			return result;
+		}
+
 		static std::vector<std::string> GetVector(const std::string& strContent, const char* p1)
 		{
 			std::vector<std::string> result;
@@ -100,7 +146,7 @@ namespace Hr
 				return result;
 			}
 
-			char c[20480];
+			char* c = new char[strContent.length()+1];
 			char *resource = const_cast<char*>(strContent.data());
 			strcpy(c, resource);
 
@@ -110,9 +156,57 @@ namespace Hr
 			while ((p = strtok(NULL, p1)))
 				result.push_back(p);
 
+			delete c;
+
 			return result;
 		}
 		
+		//static std::vector<std::string> GetVector(const std::string& strContent, const std::string& strDelim)
+		//{
+		//	std::string strReDelim = "[" + strDelim + "]";
+		//	std::regex re{ strReDelim };
+		//	// 调用 std::vector::vector (InputIterator first, InputIterator last,const allocator_type& alloc = allocator_type())
+		//	// 构造函数,完成字符串分割
+		//	return std::vector<std::string> {
+		//		std::sregex_token_iterator(strContent.begin(), strContent.end(), re, -1),
+		//			std::sregex_token_iterator()
+		//	};
+		//}
+
+		static std::string& ReplaceAll(std::string& str, const std::string& strOldValue, const std::string& strNewValue)
+		{
+			while (true)
+			{
+				std::string::size_type pos(0);
+				if ((pos = str.find(strOldValue)) != std::string::npos)
+				{
+					str.replace(pos, strOldValue.length(), strNewValue);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return str;
+		}
+
+		static std::string& ReplaceAllDistinct(std::string& str, const std::string& strOldValue, const std::string& strNewValue)
+		{
+			for (std::string::size_type pos(0); pos != std::string::npos; pos += strNewValue.length())
+			{
+				if ((pos = str.find(strOldValue, pos)) != std::string::npos)
+				{
+					str.replace(pos, strOldValue.length(), strNewValue);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return str;
+		}
 	};
 
 }

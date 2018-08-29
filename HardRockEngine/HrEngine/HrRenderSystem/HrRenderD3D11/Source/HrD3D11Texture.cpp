@@ -46,14 +46,15 @@ UINT HrD3D11Texture::GetD3DTextureBindFlags()
 	if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW)
 	{
 		nBindFlags |= D3D11_BIND_DEPTH_STENCIL;
-		if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW)
-		{
-			nBindFlags |= D3D11_BIND_SHADER_RESOURCE;
-		}
 	}
 	else if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW)
 	{
 		nBindFlags |= D3D11_BIND_RENDER_TARGET;
+	}
+
+	if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW)
+	{
+		nBindFlags |= D3D11_BIND_SHADER_RESOURCE;
 	}
 
 	return nBindFlags;
@@ -246,30 +247,30 @@ void HrD3D11Texture2D::CreateHWResource()
 		return;
 	}
 
-	D3D11_TEXTURE2D_DESC depthStencilDesc;
-	ZeroMemory(&depthStencilDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	depthStencilDesc.Width = m_nWidth;
-	depthStencilDesc.Height = m_nHeight;
-	depthStencilDesc.MipLevels = m_nMipMapsNum;
-	depthStencilDesc.ArraySize = m_nArraySize;
+	D3D11_TEXTURE2D_DESC textureDesc;
+	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	textureDesc.Width = m_nWidth;
+	textureDesc.Height = m_nHeight;
+	textureDesc.MipLevels = m_nMipMapsNum;
+	textureDesc.ArraySize = m_nArraySize;
 	switch (m_format)
 	{
 	case PF_D24S8:
-		depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 		break;
 	default:
-		depthStencilDesc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+		textureDesc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
 		break;
 	}
 
-	depthStencilDesc.SampleDesc.Count = m_nSampleCount;
-	depthStencilDesc.SampleDesc.Quality = m_nSampleQuality;
+	textureDesc.SampleDesc.Count = m_nSampleCount;
+	textureDesc.SampleDesc.Quality = m_nSampleQuality;
 
-	depthStencilDesc.Usage = HrD3D11Mapping::GetTextureUsage(m_textureUsage);
+	textureDesc.Usage = HrD3D11Mapping::GetTextureUsage(m_textureUsage);
 	
-	depthStencilDesc.BindFlags = GetD3DTextureBindFlags();
-	depthStencilDesc.CPUAccessFlags = GetD3DCPUAccessFlags();
-	depthStencilDesc.MiscFlags = 0;
+	textureDesc.BindFlags = GetD3DTextureBindFlags();
+	textureDesc.CPUAccessFlags = GetD3DCPUAccessFlags();
+	textureDesc.MiscFlags = 0;
 
 	std::vector<D3D11_SUBRESOURCE_DATA> vecSubRes;
 	if (m_pTexData->GetBufferSize() > 0)
@@ -283,7 +284,7 @@ void HrD3D11Texture2D::CreateHWResource()
 	}
 
 	ID3D11Texture2D* pDepthStencil = nullptr;
-	HRESULT hr = m_pD3D11Device->CreateTexture2D(&depthStencilDesc, vecSubRes.data(), &pDepthStencil);
+	HRESULT hr = m_pD3D11Device->CreateTexture2D(&textureDesc, vecSubRes.data(), &pDepthStencil);
 	if (FAILED(hr))
 	{
 		TRE("HrD3D11Texture2D::CreateDepthStencilView create texture Error!");
@@ -294,8 +295,10 @@ void HrD3D11Texture2D::CreateHWResource()
 
 bool HrD3D11Texture2D::LoadImpl()
 {
-	HrD3D11Texture::LoadImpl();
+	//加载纹理资源 作为Resource只存在加载纹理
+	m_texD3DUsedType = D3D_TEX_RENDERTARGETVIEW | D3D_TEX_SHADERRESOURCEVIEW;
 
+	HrD3D11Texture::LoadImpl();
 	CreateShaderResourceView();
 
 	return true;

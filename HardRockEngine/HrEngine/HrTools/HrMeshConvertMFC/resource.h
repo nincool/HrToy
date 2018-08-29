@@ -5,7 +5,6 @@
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
 #define IDD_FORMVIEW                    101
-#define IDD_RENDERVIEW                  101
 #define IDB_WRITESMALL                  110
 #define IDB_WRITELARGE                  111
 #define IDB_MAIN                        112
@@ -28,6 +27,8 @@
 #define ID_OPEN_WITH                    137
 #define ID_DUMMY_COMPILE                138
 #define ID_CLASS_ADD_MEMBER_FUNCTION    139
+#define ID_BTN                          139
+#define ID_BTN_HRSAVEBINARY             139
 #define ID_CLASS_ADD_MEMBER_VARIABLE    140
 #define ID_CLASS_DEFINITION             141
 #define ID_CLASS_PROPERTIES             142
@@ -92,15 +93,19 @@
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
 #define IDR_RIBBON                      307
+#define IDD_RENDERVIEW_DLG              313
+#define IDB_HRRIBBON1                   316
 #define ID_WRITE_PASTEASHYPERLINK       32770
+#define ID_BTN_HROPEN                   32775
+#define ID_BTN_HRSAVE                   32776
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32772
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_RESOURCE_VALUE        317
+#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

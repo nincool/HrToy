@@ -17,8 +17,15 @@
 #include "ClassView.h"
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
+#include "HrRenderViewDlg.h"
+#include "HrMeshView.h"
 
-class HrRenderView;
+#include <memory>
+namespace Hr
+{
+	class HrRenderApp;
+}
+
 
 class CMainFrame : public CFrameWndEx
 {
@@ -45,6 +52,15 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+	CPropertiesWnd& GetPropertiesWnd()
+	{
+		return m_wndProperties;
+	}
+
+	std::shared_ptr<HrRenderViewDlg> GetRenderViewDlg()
+	{
+		return m_pRenderViewDlg;
+	}
 protected:  // control bar embedded members
 	CMFCRibbonBar     m_wndRibbonBar;
 	CMFCRibbonApplicationButton m_MainButton;
@@ -52,10 +68,11 @@ protected:  // control bar embedded members
 	CMFCRibbonStatusBar  m_wndStatusBar;
 	CFileView         m_wndFileView;
 	CClassView        m_wndClassView;
+	HrMeshView        m_wndMeshView;
+	
 	COutputWnd        m_wndOutput;
 	CPropertiesWnd    m_wndProperties;
 
-	HrRenderView* m_pRenderViewDlg;
 
 // Generated message map functions
 protected:
@@ -64,14 +81,33 @@ protected:
 
 	afx_msg void OnApplicationLook(UINT id);
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
-	afx_msg void OnFilePrint();
-	afx_msg void OnFilePrintPreview();
-	afx_msg void OnUpdateFilePrintPreview(CCmdUI* pCmdUI);
+	afx_msg void OnFileOpen();
+	afx_msg void OnFileSave();
+	afx_msg void OnFileSaveAs();
+	//afx_msg void OnFilePrintPreview();
+	//afx_msg void OnUpdateFilePrintPreview(CCmdUI* pCmdUI);
 	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
+
 	DECLARE_MESSAGE_MAP()
 
 	BOOL CreateDockingWindows();
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+private:
+	int m_nLeft;
+	int m_nTop;
+
+	int m_nWidth;
+	int m_nHeight;
+
+	std::string m_strCurrentOpenFile;
+
+	std::shared_ptr<HrRenderViewDlg> m_pRenderViewDlg;
+public:
+	afx_msg void OnViewStatusBar();
+	afx_msg void OnButtonSave();
+	afx_msg void OnButtonOpen();
+	afx_msg void OnBtnHrSaveBinary();
 };
 
 

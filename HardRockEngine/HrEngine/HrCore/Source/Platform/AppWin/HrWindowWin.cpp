@@ -68,6 +68,16 @@ HWND HrWindowWin::GetHWnd()
 	return m_hWnd;
 }
 
+uint32 HrWindowWin::GetTopX()
+{
+	return 0;
+}
+
+uint32 HrWindowWin::GetTopY()
+{
+	return 0;
+}
+
 uint32 HrWindowWin::GetWidth()
 {
 	return m_nWidth;

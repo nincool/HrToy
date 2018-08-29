@@ -21,7 +21,7 @@ HrFBXLoader::~HrFBXLoader()
 	
 }
 
-void HrFBXLoader::Load(std::string& strFile, HrModelDescInfo& modelDesc)
+void HrFBXLoader::Load(std::string& strFile, HrFBXModelDescInfo& modelDesc)
 {
 	FbxString fbxFilePath(strFile.c_str());
 
@@ -218,7 +218,7 @@ bool HrFBXLoader::IsOddNegativeScale(FbxAMatrix& TotalMatrix)
 }
 
 
-bool HrFBXLoader::IsAllIndices(HrModelDescInfo::HrSubMeshInfo& meshInfo)
+bool HrFBXLoader::IsAllIndices(HrFBXModelDescInfo::HrSubMeshInfo& meshInfo)
 {
 	//int nVertexPosSize = meshInfo.vecVertexPos.size();
 	//bool bIndexNormal = ((meshInfo.vecNormal.size() > 0 && meshInfo.vecNormal.size() == nVertexPosSize) || meshInfo.vecNormal.size() == 0);
@@ -238,7 +238,7 @@ bool HrFBXLoader::IsAllIndices(HrModelDescInfo::HrSubMeshInfo& meshInfo)
 	return false;
 }
 
-void Hr::HrFBXLoader::LoadCacheRecursive(fbxsdk::FbxScene * pScene, fbxsdk::FbxAnimLayer * pAnimLayer, const char * pFbxFileName, bool pSupportVBO, HrModelDescInfo& modelDesc)
+void Hr::HrFBXLoader::LoadCacheRecursive(fbxsdk::FbxScene * pScene, fbxsdk::FbxAnimLayer * pAnimLayer, const char * pFbxFileName, bool pSupportVBO, HrFBXModelDescInfo& modelDesc)
 {
 	// Load the textures into GPU, only for file texture now
 	const int lTextureCount = pScene->GetTextureCount();
@@ -365,7 +365,7 @@ fbxsdk::FbxAMatrix HrFBXLoader::GetPoseMatrix(fbxsdk::FbxPose* pPose, int pNodeI
 	return lPoseMatrix;
 }
 
-void HrFBXLoader::LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLayer * pAnimLayer, bool pSupportVBO, HrModelDescInfo& modelDesc)
+void HrFBXLoader::LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLayer * pAnimLayer, bool pSupportVBO, HrFBXModelDescInfo& modelDesc)
 {
 	// Bake material and hook as user data.
 	const int lMaterialCount = pNode->GetMaterialCount();
@@ -417,7 +417,7 @@ void HrFBXLoader::LoadCacheRecursive(fbxsdk::FbxNode * pNode, fbxsdk::FbxAnimLay
 }
 
 
-bool HrFBXLoader::InitializeSubMesh(fbxsdk::FbxMesh* pMesh, HrModelDescInfo& modelDesc)
+bool HrFBXLoader::InitializeSubMesh(fbxsdk::FbxMesh* pMesh, HrFBXModelDescInfo& modelDesc)
 {
 	if (!pMesh->GetNode())
 		return false;
