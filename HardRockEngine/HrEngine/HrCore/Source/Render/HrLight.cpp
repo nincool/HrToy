@@ -90,7 +90,7 @@ const HrColor& HrLight::GetColor() const
 HrAmbientLight::HrAmbientLight()
 {
 	m_lightType = HrLight::LT_AMBIENT;
-	m_lightColor = HrColor(0.3f, 0.3f, 0.3f, 1.0f);
+	m_lightColor = HrColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 HrAmbientLight::HrAmbientLight(const HrColor& ambient)
@@ -108,7 +108,7 @@ HrDirectionalLight::HrDirectionalLight()
 {
 	m_lightType = HrLight::LT_DIRECTIONAL;
 	m_v3Direction = Vector3(1.0f, -1.0f, 1.0f);
-	m_lightColor = HrMath::MakeColor(200.0f, 200.0f, 200.0f, 255.0f);
+	m_lightColor = HrMath::MakeColor(240.0f, 240.0f, 240.0f, 255.0f);
 
 }
 

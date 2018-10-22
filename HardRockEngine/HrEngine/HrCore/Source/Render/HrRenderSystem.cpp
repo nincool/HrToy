@@ -13,8 +13,9 @@
 #include "Asset/HrRenderEffectParameter.h"
 #include "Render/HrRenderTechnique.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentWin.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrWindowModule.h"
+#include "Kernel/HrResourceModule.h"
+#include "Kernel/HrSceneModule.h"
 #include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
@@ -32,11 +33,13 @@ HrRenderSystem::HrRenderSystem(HrRenderFactoryPtr& pRenderFactory)
 
 	CreateRender();
 	//默认先创建屏幕渲染
-	CreateScreenFrameBuffer(HrDirector::Instance()->GetWindowComponent()->GetWindowWidth()
-		, HrDirector::Instance()->GetWindowComponent()->GetWindowHeight());
+	CreateScreenFrameBuffer(HrDirector::Instance()->GetWindowModule()->GetWindowWidth()
+		, HrDirector::Instance()->GetWindowModule()->GetWindowHeight());
 
 	//todo shadowmap 先创建一个2048 * 2048的深度图
 	m_pShadowMap->CreateShadowTexture(2048, 2048);
+
+	m_pDeferredRender = HrMakeSharedPtr<HrDeferredRender>();
 }
 
 HrRenderSystem::~HrRenderSystem()
@@ -100,6 +103,78 @@ void HrRenderSystem::Present()
 	GetBindFrameBuffer()->Present();
 }
 
+void HrRenderSystem::RenderSceneToGBuffers(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	//设置RenderTarget
+	BindFrameBuffer(m_pDeferredRender->GetDeferredFrameBuffer());
+	ClearRenderTarget();
+	ClearDepthStencil();
+
+	
+	auto pEffMakeGBuffer = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrMakeGBuffer.json");
+	auto pStandEff = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>();
+
+	auto& mapAllViewPorts = m_pScreenFrameBuffer->GetAllViewPorts();
+	for (auto& itemViewPort : mapAllViewPorts)
+	{
+		const HrViewPortPtr& pViewPort = itemViewPort.second;
+		m_pRender->SetViewPort(pViewPort);
+		pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
+
+		const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
+		for (auto& iteRenderable : vecRenderables)
+		{
+			pRenderFrameParam->SetCurrentRenderable(iteRenderable);
+			iteRenderable->SetRenderEffect(pEffMakeGBuffer);
+			iteRenderable->Render();
+		}
+	}
+
+	m_pRender->UnbindShader(nullptr);
+
+	RenderGBuffers(pRenderFrameParam);
+	//const HrRenderFramePtr& pBindFrameBuffer = m_pRender->GetBindFrameBuffer();
+	//if (pBindFrameBuffer)
+	//{
+	//	auto mapAllViewPorts = pBindFrameBuffer->GetAllViewPorts();
+	//	for (auto& itemViewPort : mapAllViewPorts)
+	//	{
+	//		const HrViewPortPtr& pViewPort = itemViewPort.second;
+	//		m_pRender->SetViewPort(pViewPort);
+	//		pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
+
+	//		const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
+	//		for (auto& iteRenderable : vecRenderables)
+	//		{
+	//			pRenderFrameParam->SetCurrentRenderable(iteRenderable);
+	//			iteRenderable->Render();
+	//		}
+	//	}
+	//}
+}
+
+void HrRenderSystem::RenderGBuffers(const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	this->BindScreenFrameBuffer();
+	this->ClearRenderTarget();
+	this->ClearDepthStencil();
+
+	auto pEffMakeGBuffer = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrDeferredShading.json");
+	auto& pScreenQuadRenderable = m_pDeferredRender->GetScreenQuadRenderable();
+	auto& pSceneNode = m_pDeferredRender->GetSceneQuadNode();
+	HrDirector::Instance()->GetSceneModule()->GetRunningScene()->AddNode(pSceneNode);
+	auto& mapAllViewPorts = m_pRender->GetBindFrameBuffer()->GetAllViewPorts();
+	for (auto& itemViewPort : mapAllViewPorts)
+	{
+		const HrViewPortPtr& pViewPort = itemViewPort.second;
+		m_pRender->SetViewPort(pViewPort);
+		pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
+		pRenderFrameParam->SetCurrentRenderable(pScreenQuadRenderable);
+		pScreenQuadRenderable->Render();
+	}
+	pSceneNode->RemoveFromParent();
+}
+
 void HrRenderSystem::RenderSceneToShadowMap(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
 {
 	//设置RenderTarget
@@ -120,7 +195,7 @@ void HrRenderSystem::RenderSceneToShadowMap(const HrRenderQueuePtr& pRenderQueue
 	pShadowMapCamera->ViewParams(pPointLight->GetPosition(), Vector3::Zero(), Vector3(1.0f, 0.0f, 0.0f));
 	pShadowMapCamera->ProjectParams(HrMath::PIDIV2(), pShadowMapCamera->Aspect(), 0.3f, 1000.0f);
 
-	auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMapDepth.json");
+	auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrShadowMapDepth.json");
 
 	const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
 	for (auto& iteRenderable : vecRenderables)
@@ -148,7 +223,7 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 			m_pRender->SetViewPort(pViewPort);
 			pRenderFrameParam->SetCurrentCamera(pViewPort->GetCamera());
 
-			//auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
+			//auto pEffShadowMapDepth = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrShadowMap.json");
 			//HrRenderEffectParameterPtr pDiffuseTexParam = pEffShadowMapDepth->GetParameterByName("texShadowMap");
 			//if (pDiffuseTexParam)
 			//{
@@ -163,7 +238,7 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 
 			//auto pTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 
-			//auto pTestEff = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrStandard.json");
+			//auto pTestEff = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrStandard.json");
 			//auto pTestTech = pEffShadowMapDepth->GetTechniqueByIndex(0);
 
 			const std::vector<HrRenderablePtr>& vecRenderables = pRenderQueue->GetRenderables();
@@ -182,3 +257,4 @@ void HrRenderSystem::RenderBasicRenderQueue(const HrRenderQueuePtr& pRenderQueue
 		}
 	}
 }
+

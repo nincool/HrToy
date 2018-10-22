@@ -49,6 +49,11 @@ HrRenderFramePtr HrD3D11RenderFactory::CreateDepthStencilFrameBuffer(uint32 nWid
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11DepthStencilFrameBuffer>(nWidth, nHeight));
 }
 
+HrRenderFramePtr HrD3D11RenderFactory::CreateDeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData)
+{
+	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11DeferredFrameBuffer>(nWidth, nHeight, pDeferredGBufferData));
+}
+
 //HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
 //	, uint32 nWidth
 //	, uint32 nHeight

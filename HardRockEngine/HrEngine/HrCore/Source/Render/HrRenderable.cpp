@@ -9,8 +9,9 @@
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffectParameter.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentScene.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrSceneModule.h"
+#include "Kernel/HrRenderModule.h"
+#include "Kernel/HrResourceModule.h"
 
 using namespace Hr;
 
@@ -82,31 +83,20 @@ void HrRenderable::Render(const HrRenderTechniquePtr& pRenderTech)
 	OnRenderBegin();
 
 	if (pRenderTech)
-		HrDirector::Instance()->GetRenderComponent()->DoRender(pRenderTech, GetRenderLayout());
+		HrDirector::Instance()->GetRenderModule()->DoRender(pRenderTech, GetRenderLayout());
 	else
-		HrDirector::Instance()->GetRenderComponent()->DoRender(GetRenderTechnique(), GetRenderLayout());
+		HrDirector::Instance()->GetRenderModule()->DoRender(GetRenderTechnique(), GetRenderLayout());
 
 	OnRenderEnd();
 }
 
 void HrRenderable::OnRenderBegin()
 {
-	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneComponent()->GetRenderFrameParameters();
-	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam); 
-
-	HrRenderEffectParameterPtr pDiffuseTexParam = GetRenderEffect()->GetParameterByName("gDiffuseTexure");
-	if (pDiffuseTexParam)
-	{
-		const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_EMISSIVE);
-		if (pDiffuseTex)
-			pDiffuseTexParam->operator = (pDiffuseTex.get());
-	}
-
+	UpdateRenderEffectParam();
 }
 
 void HrRenderable::OnRenderEnd()
 {
-
 }
 
 bool HrRenderable::CheckRenderLayoutMatchShader()
@@ -125,4 +115,36 @@ bool HrRenderable::CheckRenderLayoutMatchShader()
 	}
 
 	return false;
+}
+
+void HrRenderable::UpdateRenderEffectParam()
+{
+	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters();
+	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
+
+	uint32 nUseBaseTex = 0u;
+	const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_ALBEDO);
+	if (pDiffuseTex)
+	{
+		auto& pDiffuseTexParam = GetRenderEffect()->GetParameterByName("texAlbedo");
+		if (pDiffuseTexParam)
+			pDiffuseTexParam->operator=(pDiffuseTex.get());
+		nUseBaseTex = 1u;
+	}
+	auto& pFlagUseBaseTex = GetRenderEffect()->GetParameterByName("flag_use_basetex");
+	if (pFlagUseBaseTex)
+		*pFlagUseBaseTex = nUseBaseTex;
+
+	uint32 nUseNormalMap = 0u;
+	const HrTexturePtr& pNormalmapTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_NORMAL);
+	if (pNormalmapTex)
+	{
+		auto& pNormalmapTexParam = GetRenderEffect()->GetParameterByName("texNormal");
+		if (pNormalmapTexParam)
+			pNormalmapTexParam->operator=(pNormalmapTex.get());
+		nUseNormalMap = 1u;
+	}
+	auto& pFlagUseNormalTex = GetRenderEffect()->GetParameterByName("flag_use_normalmap");
+	if (pFlagUseNormalTex)
+		*pFlagUseNormalTex = nUseNormalMap;
 }

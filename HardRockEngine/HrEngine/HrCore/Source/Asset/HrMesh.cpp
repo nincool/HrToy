@@ -6,7 +6,8 @@
 #include "HrCore/Include/Kernel/HrDirector.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
+#include "Kernel/HrResourceModule.h"
 
 #include "Render/HrRenderSystem.h"
 
@@ -17,7 +18,7 @@ using namespace Hr;
 HrSubMesh::HrSubMesh(int nSubIndex, const HrMeshPtr& pParent, const std::string& strName)
 {
 	m_nSubIndex = nSubIndex;
-	m_pParentMesh = pParent;
+	m_pParentMesh = &(*pParent);
 	m_strName = strName;
 }
 
@@ -39,7 +40,7 @@ const HrRenderLayoutPtr& HrSubMesh::GetRenderLayout()
 {
 	if (!m_pRenderLayout) 
 	{
-		m_pRenderLayout = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRenderLayout();
+		m_pRenderLayout = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRenderLayout();
 	}
 
 	return m_pRenderLayout;
@@ -53,6 +54,14 @@ void HrSubMesh::SetMaterial(const HrMaterialPtr& pMaterial)
 const HrMaterialPtr& HrSubMesh::GetMaterial()
 {
 	return m_pMaterial;
+}
+
+void HrSubMesh::Destroy()
+{
+	if (m_pMaterial)
+	{
+		HrDirector::Instance()->GetResourceModule()->RemoveResource<HrMaterial>(m_pMaterial->GetFilePath());
+	}
 }
 
 ///////////////////////////////////////////////////
@@ -79,6 +88,7 @@ void HrMesh::DeclareResource(const std::string& strFileName, const std::string& 
 	m_strFilePath = strFilePath;
 	m_strFileName = strFileName;
 	m_resType = HrResource::RT_MESH;
+	m_resStatus = HrResource::RS_DECLARED;
 
 	m_nHashID = CreateHashName(m_strFilePath);
 }
@@ -91,6 +101,11 @@ bool HrMesh::LoadImpl()
 
 bool HrMesh::UnloadImpl()
 {
+	for (auto& subMesh : m_vecSubMesh)
+	{
+		subMesh->Destroy();
+	}
+
 	m_resStatus = HrResource::RS_DECLARED;
 	return true;
 }

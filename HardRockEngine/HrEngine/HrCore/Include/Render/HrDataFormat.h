@@ -210,7 +210,10 @@ namespace Hr
 		PF_ATC_RGBA_EXPLICIT_ALPHA = 93,
 		/// ATC (AMD_compressed_ATC_texture)
 		PF_ATC_RGBA_INTERPOLATED_ALPHA = 94,
-
+		
+		//128-bit pixel format, 32 bits red , 32 bits blue, 32 bits green  32 bits alpha .
+		PF_R32G32B32A32_FLOAT,
+		
 		// 16-bit element format, 16 bits depth
 		PF_D16,
 		// 32-bit element format, 24 bits depth and 8 bits stencil

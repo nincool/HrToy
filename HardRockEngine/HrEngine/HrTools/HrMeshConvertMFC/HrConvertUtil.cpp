@@ -5,7 +5,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-
+#include <experimental/filesystem>
 #include <iostream>
 #include <fstream>
 
@@ -15,6 +15,7 @@ using namespace std::experimental;
 HrConvertUtil::HrConvertUtil()
 {
 	m_bLoadSuccess = false;
+	m_fUnitScale = 1.0f;
 }
 
 HrConvertUtil::~HrConvertUtil()
@@ -71,9 +72,13 @@ bool HrConvertUtil::LoadOriginalData(std::string const & in_name)
 	//meshml_obj.WriteMeshML(ofs, vertex_export_settings, 0);
 	m_bLoadSuccess = true;
 
+	m_modelDesc.vecSubMeshInfo.clear();
+	m_modelDesc.vecMaterialDataInfo.clear();
 	m_modelDesc.strFileName = Hr::HrFileUtils::Instance()->GetFileName(in_name);
 
+
 	BuildMeshData(scene);
+	RecursiveTransformMesh(float4x4::Identity(), scene->mRootNode, m_modelDesc.vecSubMeshInfo);
 	BuildMaterialData(scene);
 	
 	aiReleaseImport(scene);
@@ -215,6 +220,7 @@ void HrConvertUtil::BuildMaterialData(const aiScene* pAssimpScene)
 		float4 emissive(0, 0, 0, 0);
 		float opacity = 1;
 		float shininess = 1;
+		float reflective = 1;
 		bool transparent = false;
 		bool two_sided = false;
 
@@ -223,6 +229,7 @@ void HrConvertUtil::BuildMaterialData(const aiScene* pAssimpScene)
 		aiColor4D aiEmissive;
 		float aiOpacity;
 		float aiShininess;
+		float aiReflective;
 		int aiTwosided;
 
 		if (AI_SUCCESS == aiGetMaterialString(pMaterial, AI_MATKEY_NAME, &aiName))
@@ -259,15 +266,26 @@ void HrConvertUtil::BuildMaterialData(const aiScene* pAssimpScene)
 			{
 				shininess *= strength;
 			}
+
+			shininess = HrMath::Clamp(shininess, 1.0f, HrMath::MAX_SHININESS);
+			materialDataInfo.fShininess = shininess;
+			materialDataInfo.fGlossiness = HrMath::Shininess2Glossiness(shininess);
+
 		}
-		shininess = HrMath::Clamp(shininess, 1.0f, HrMath::MAX_SHININESS);
-		materialDataInfo.fShininess = shininess;
-		materialDataInfo.fGlossiness = HrMath::Shininess2Glossiness(shininess);
+		
 
 		if ((opacity < 1) || (aiGetMaterialTextureCount(pMaterial, aiTextureType_OPACITY) > 0))
 		{
 			transparent = true;
 		}
+
+		max = 1;
+		if (AI_SUCCESS == aiGetMaterialFloatArray(pMaterial, AI_MATKEY_REFLECTIVITY, &aiReflective, &max))
+		{
+			reflective = aiReflective;
+			materialDataInfo.fReflective = reflective;
+		}
+		
 
 		max = 1;
 		if (AI_SUCCESS == aiGetMaterialIntegerArray(pMaterial, AI_MATKEY_TWOSIDED, &aiTwosided, &max))
@@ -328,6 +346,23 @@ void HrConvertUtil::CombineMesh()
 
 }
 
+std::string HrConvertUtil::MakeFloat3String(float3 v)
+{
+	std::string strRet;
+	char cTemp[50];
+	std::sprintf(cTemp, "%.2f", v[0]);
+	strRet += cTemp;
+	strRet += ",";
+	std::sprintf(cTemp, "%.2f", v[1]);
+	strRet += cTemp;
+	strRet += ",";
+	std::sprintf(cTemp, "%.2f", v[2]);
+	strRet += cTemp;
+	strRet += "|";
+
+	return strRet;
+}
+
 void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 {
 	rapidjson::Value meshesObj(rapidjson::kObjectType);
@@ -374,18 +409,8 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			std::string strVertices;
 			for (int nVerticeIndex = 0; nVerticeIndex < subMeshInfo.vecVertexPos.size(); ++nVerticeIndex)
 			{
-				Vector3 vecPos = subMeshInfo.vecVertexPos[nVerticeIndex];
-
-				char cTemp[50];
-				std::sprintf(cTemp, "%.2f", vecPos[0]);
-				strVertices += cTemp;
-				strVertices += ",";
-				std::sprintf(cTemp, "%.2f", vecPos[1]);
-				strVertices += cTemp;
-				strVertices += ",";
-				std::sprintf(cTemp, "%.2f", vecPos[2]);
-				strVertices += cTemp;
-				strVertices += "|";
+				Vector3 vPos = subMeshInfo.vecVertexPos[nVerticeIndex];
+				strVertices += MakeFloat3String(vPos);
 			}
 			rapidjson::Value verticesValueObj(rapidjson::kStringType);
 			verticesValueObj.SetString(strVertices.c_str(), doc.GetAllocator());
@@ -393,25 +418,59 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 		}
 
 		{
+			std::string strTangents;
+			for (int nTangentIndex = 0; nTangentIndex < subMeshInfo.vecTangent.size(); ++nTangentIndex)
+			{
+				Vector3 vTangent = subMeshInfo.vecTangent[nTangentIndex];
+				strTangents += MakeFloat3String(vTangent);
+			}
+			rapidjson::Value tangentsValueObj(rapidjson::kStringType);
+			tangentsValueObj.SetString(strTangents.c_str(), doc.GetAllocator());
+			subMeshValueObj.AddMember(rapidjson::StringRef("Tangents"), tangentsValueObj, doc.GetAllocator());
+		}
+
+		{
+			std::string strBinormals;
+			for (int nBinormalIndex = 0; nBinormalIndex < subMeshInfo.vecBinormal.size(); ++nBinormalIndex)
+			{
+				Vector3 vBinormal = subMeshInfo.vecBinormal[nBinormalIndex];
+				strBinormals += MakeFloat3String(vBinormal);
+			}
+			rapidjson::Value binormalValueObj(rapidjson::kStringType);
+			binormalValueObj.SetString(strBinormals.c_str(), doc.GetAllocator());
+			subMeshValueObj.AddMember(rapidjson::StringRef("Binormals"), binormalValueObj, doc.GetAllocator());
+		}
+
+		{
 			std::string strNormals;
 			for (int nNormalIndex = 0; nNormalIndex < subMeshInfo.vecNormal.size(); ++nNormalIndex)
 			{
-				Vector3 vecPos = subMeshInfo.vecNormal[nNormalIndex];
-				char cTemp[50];
-				std::sprintf(cTemp, "%.2f", vecPos[0]);
-				strNormals += cTemp;
-				strNormals += ",";
-				std::sprintf(cTemp, "%.2f", vecPos[1]);
-				strNormals += cTemp;
-				strNormals += ",";
-				std::sprintf(cTemp, "%.2f", vecPos[2]);
-				strNormals += cTemp;
-				strNormals += "|";
+				Vector3 vecNormal = subMeshInfo.vecNormal[nNormalIndex];
+				strNormals += MakeFloat3String(vecNormal);
 			}
 			rapidjson::Value normalsValueObj(rapidjson::kStringType);
 			normalsValueObj.SetString(strNormals.c_str(), doc.GetAllocator());
 			subMeshValueObj.AddMember(rapidjson::StringRef("Normals"), normalsValueObj, doc.GetAllocator());
 		}
+
+		{
+			std::string strUVs;
+			for (int nUVIndex = 0; nUVIndex < subMeshInfo.vecUV.size(); ++nUVIndex)
+			{
+				float2 uv = subMeshInfo.vecUV[nUVIndex];
+				char cTemp[30];
+				std::sprintf(cTemp, "%.2f", uv[0]);
+				strUVs += cTemp;
+				strUVs += ",";
+				std::sprintf(cTemp, "%.2f", uv[1]);
+				strUVs += cTemp;
+				strUVs += "|";
+			}
+			rapidjson::Value uvsValueObj(rapidjson::kStringType);
+			uvsValueObj.SetString(strUVs.c_str(), doc.GetAllocator());
+			subMeshValueObj.AddMember(rapidjson::StringRef("UVs"), uvsValueObj, doc.GetAllocator());
+		}
+
 		meshesObj.AddMember(subMeshKeyObj, subMeshValueObj, doc.GetAllocator());
 	}
 
@@ -460,8 +519,12 @@ void HrConvertUtil::WriteMaterialData(rapidjson::Document& doc)
 		subMaterialObj.AddMember(rapidjson::StringRef("Opacity"), opacityValue, doc.GetAllocator());
 
 		rapidjson::Value shininessValue(rapidjson::kNumberType);
-		shininessValue.SetFloat(m_modelDesc.vecMaterialDataInfo[nMaterialIndex].fShininess);
-		subMaterialObj.AddMember(rapidjson::StringRef("Shininess"), shininessValue, doc.GetAllocator());
+		shininessValue.SetFloat(m_modelDesc.vecMaterialDataInfo[nMaterialIndex].fGlossiness);
+		subMaterialObj.AddMember(rapidjson::StringRef("Glossiness"), shininessValue, doc.GetAllocator());
+
+		rapidjson::Value reflectiveValue(rapidjson::kNumberType);
+		reflectiveValue.SetFloat(m_modelDesc.vecMaterialDataInfo[nMaterialIndex].fReflective);
+		subMaterialObj.AddMember(rapidjson::StringRef("Reflective"), reflectiveValue, doc.GetAllocator());
 		
 		rapidjson::Value twoSidedValue(rapidjson::kNumberType);
 		if (m_modelDesc.vecMaterialDataInfo[nMaterialIndex].bTwoSided)
@@ -476,7 +539,18 @@ void HrConvertUtil::WriteMaterialData(rapidjson::Document& doc)
 			rapidjson::Value textureKey(rapidjson::kStringType);
 			textureKey.SetString(strTextKey.c_str(), doc.GetAllocator());
 			rapidjson::Value textureValue(rapidjson::kStringType);
-			textureValue.SetString(m_modelDesc.vecMaterialDataInfo[nMaterialIndex].m_arrTexNames[nTexIndex].c_str(), doc.GetAllocator());
+			
+			std::string strTexturePath = m_modelDesc.vecMaterialDataInfo[nMaterialIndex].m_arrTexNames[nTexIndex];
+			if (strTexturePath.size() > 0)
+			{
+				std::string strTexFileName = Hr::HrFileUtils::Instance()->GetFileNameWithSuffix(strTexturePath);
+				std::string strTexPath = "Texture\\" + strTexFileName;
+				textureValue.SetString(strTexPath.c_str(), doc.GetAllocator());
+			}
+			else
+			{
+				textureValue.SetString(rapidjson::StringRef(""), doc.GetAllocator());
+			}
 			subMaterialObj.AddMember(textureKey, textureValue, doc.GetAllocator());
 		}
 
@@ -493,9 +567,41 @@ void HrConvertUtil::FlushDataToFile(const std::string& strOutputFile, rapidjson:
 	doc.Accept(writer);
 	std::string strJsonContent = std::string(buffer.GetString());
 	strJsonContent = FormatJsonData(strJsonContent);
-	//strJsonContent = HrStringUtil::ReplaceAllDistinct(strJsonContent, "{", "{\r\n");
+	
+	std::string strRootPath = HrFileUtils::Instance()->GetFilePath(strOutputFile);
+	std::string strFileName = HrFileUtils::Instance()->GetFileName(strOutputFile);
+	std::string strSuffix = HrFileUtils::Instance()->GetFileSuffix(strOutputFile);
+	filesystem::path filePath(strRootPath);
+	filePath = filePath / strFileName;
+	if (!filesystem::exists(filePath))
+	{
+		filesystem::create_directories(filePath);
+	}
+	auto outputFilePath = filePath / (strFileName + "." + strSuffix);
+	std::string strRealOutputFilePath = outputFilePath.string();
+	HrFileUtils::Instance()->WriteDataToFile(strRealOutputFilePath, strJsonContent);
 
-	HrFileUtils::Instance()->WriteDataToFile(strOutputFile, strJsonContent);
+
+	auto fileTexturePath = filePath / "Texture\\";
+	if (!filesystem::exists(fileTexturePath))
+	{
+		filesystem::create_directories(fileTexturePath);
+	}
+	//¿½±´Í¼Æ¬µ½TextureÎÄ¼þ¼Ð
+	for (size_t nMatIndex = 0; nMatIndex < m_modelDesc.vecMaterialDataInfo.size(); ++nMatIndex)
+	{
+		for (int nTexIndex = 0; nTexIndex < HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS; ++nTexIndex)
+		{
+			if (filesystem::exists(m_modelDesc.vecMaterialDataInfo[nMatIndex].m_arrTexNames[nTexIndex]))
+			{
+				std::string strFileName = HrFileUtils::Instance()->GetFileNameWithSuffix(m_modelDesc.vecMaterialDataInfo[nMatIndex].m_arrTexNames[nTexIndex]);
+				filesystem::path dstFilePath = fileTexturePath / strFileName;
+				if (filesystem::exists(dstFilePath))
+					filesystem::remove(dstFilePath);
+				filesystem::copy_file(m_modelDesc.vecMaterialDataInfo[nMatIndex].m_arrTexNames[nTexIndex], dstFilePath);
+			}
+		}
+	}
 }
 
 std::string HrConvertUtil::FormatJsonData(const std::string& strContent)
@@ -558,7 +664,12 @@ std::string HrConvertUtil::FormatJsonData(const std::string& strContent)
 HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 {
 	BOOST_ASSERT(m_modelDesc.vecSubMeshInfo.size() == m_modelDesc.vecMaterialDataInfo.size());
-	m_pLoadedMesh = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMesh>(m_strOriginalFile, true, false);
+	if (m_pLoadedMesh)
+	{
+		HrDirector::Instance()->GetResourceModule()->RemoveResource<HrMesh>(m_pLoadedMesh->GetFilePath());
+	}
+	m_pLoadedMesh = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMesh>(m_strOriginalFile, true, false);
+	m_pLoadedMesh->Load();
 
 	for (size_t nMeshInfoIndex = 0; nMeshInfoIndex < m_modelDesc.vecSubMeshInfo.size(); ++nMeshInfoIndex)
 	{
@@ -596,7 +707,7 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 			}
 		}
 
-		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceComponent()->MakeMaterial(materialInfo.strMaterialName, materialInfo);
+		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(materialInfo.strMaterialName, materialInfo);
 		pSubMesh->SetMaterial(pMaterial);
 	}
 
@@ -612,7 +723,7 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
 		pRenderableCom->SetRenderable(pRenderable);
 		pRenderable->SetSubMesh(m_pLoadedMesh->GetSubMesh(i));
-		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>());
+		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 
 		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(m_pLoadedMesh->GetSubMesh(i)->GetName());
 		pNode->SetSceneObject(pSubRenderObj);
@@ -645,14 +756,14 @@ void HrConvertUtil::MoveTextures()
 void HrConvertUtil::MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement)
 {
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-	//if (m_modelDesc.vecTangent.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_TANGENT, VET_FLOAT3));
-	//if (m_modelDesc.vecBinormal.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_BINORMAL, VET_FLOAT3));
+	if (subMeshInfo.vecTangent.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_TANGENT, VET_FLOAT3));
+	if (subMeshInfo.vecBinormal.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_BINORMAL, VET_FLOAT3));
 	if (subMeshInfo.vecNormal.size() > 0)
 		vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	//if (m_modelDesc.vecUV.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+	if (subMeshInfo.vecUV.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 
 }
 
@@ -671,15 +782,16 @@ void HrConvertUtil::MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData
 			case VEU_POSITION:
 			{
 				streamData.AddBuffer((Byte*)(&subMeshInfo.vecVertexPos[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
-
 				break;
 			}
 			case VEU_TANGENT:
 			{
+				streamData.AddBuffer((Byte*)(&subMeshInfo.vecTangent[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_BINORMAL:
 			{
+				streamData.AddBuffer((Byte*)(&subMeshInfo.vecBinormal[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_NORMAL:
@@ -741,13 +853,14 @@ void HrConvertUtil::ChangeMaterial(int nMeshIndex, const std::string& strMateria
 			m_modelDesc.vecMaterialDataInfo[nMeshIndex].v4Emissive = float4(0, 0, 0, 0);
 
 			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fOpacity = 1.0f;
-			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fShininess = HrMath::Glossiness2Shininess(5.0f);
-			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fGlossiness = 10.0f;
+			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fShininess = 1;
+			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fGlossiness = 2.0f;
+			m_modelDesc.vecMaterialDataInfo[nMeshIndex].fReflective = 0.1f;
 			m_modelDesc.vecMaterialDataInfo[nMeshIndex].bTwoSided = false;
 
 			m_modelDesc.vecMaterialDataInfo[nMeshIndex].m_arrTexNames.assign("");
 
-			HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceComponent()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
+			HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
 			if (m_pSceneNode)
 			{
 				for (int i = 0; i < m_pSceneNode->GetChildrenCount(); ++i)
@@ -767,7 +880,7 @@ void HrConvertUtil::SetMaterialGlossiness(int nMeshIndex, float fGlo)
 {
 	if (nMeshIndex < m_modelDesc.vecSubMeshInfo.size())
 	{
-		//HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceComponent()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
+		//HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
 		if (m_pSceneNode)
 		{
 			for (int i = 0; i < m_pSceneNode->GetChildrenCount(); ++i)
@@ -784,8 +897,76 @@ void HrConvertUtil::SetMaterialGlossiness(int nMeshIndex, float fGlo)
 	}
 }
 
+void HrConvertUtil::SetMaterialReflective(int nMeshIndex, float fReflective)
+{
+	if (nMeshIndex < m_modelDesc.vecSubMeshInfo.size())
+	{
+		//HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
+		if (m_pSceneNode)
+		{
+			for (int i = 0; i < m_pSceneNode->GetChildrenCount(); ++i)
+			{
+				auto& pChildNode = m_pSceneNode->GetChildByIndex(i);
+				if (pChildNode->GetName() == m_modelDesc.vecSubMeshInfo[nMeshIndex].strMeshName)
+				{
+					auto pMaterial = pChildNode->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->GetSubMesh()->GetMaterial();
+					pMaterial->SetReflective(fReflective);
+				}
+			}
+		}
+		m_modelDesc.vecMaterialDataInfo[nMeshIndex].fReflective = fReflective;
+	}
+}
+
 void HrConvertUtil::SetMaterialTexture(int nMeshIndex, int nTexIndex, const std::string& strTextureName)
 {
-
+	if (nMeshIndex < m_modelDesc.vecSubMeshInfo.size())
+	{
+		//HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(m_modelDesc.vecMaterialDataInfo[nMeshIndex].strMaterialName, m_modelDesc.vecMaterialDataInfo[nMeshIndex]);
+		if (m_pSceneNode)
+		{
+			for (int i = 0; i < m_pSceneNode->GetChildrenCount(); ++i)
+			{
+				auto& pChildNode = m_pSceneNode->GetChildByIndex(i);
+				if (pChildNode->GetName() == m_modelDesc.vecSubMeshInfo[nMeshIndex].strMeshName)
+				{
+					auto pMaterial = pChildNode->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->GetSubMesh()->GetMaterial();
+					auto pTexture = HrDirector::Instance()->GetResourceModule()->RetriveTexture(strTextureName, HrTexture::TEX_TYPE_2D);
+					pMaterial->SetTexture((HrMaterial::EnumMaterialTexSlot)nTexIndex, pTexture);
+				}
+			}
+		}
+		m_modelDesc.vecMaterialDataInfo[nMeshIndex].m_arrTexNames[nTexIndex] = strTextureName;
+	}
 }
+
+void HrConvertUtil::RecursiveTransformMesh(const float4x4& matParent, const aiNode* pNode, std::vector<HrModelDataInfo::HrSubMeshDataInfo>& vecMeshes)
+{
+	const auto matTrans = HrMath::Transpose(float4x4(&pNode->mTransformation.a1)) * matParent;
+	const auto quatTrans = HrMath::ToQuaternion(matTrans);
+
+	for (uint32 nMeshIndex = 0; nMeshIndex < pNode->mNumMeshes; ++nMeshIndex)
+	{
+		auto& mesh = vecMeshes[pNode->mMeshes[nMeshIndex]];
+
+		for (size_t nVertexIndex = 0; nVertexIndex < mesh.vecVertexPos.size(); ++nVertexIndex)
+		{
+			Vector3 vPos = HrMath::TransformCoord(mesh.vecVertexPos[nVertexIndex], matTrans) * m_fUnitScale;
+			mesh.vecVertexPos[nVertexIndex].swap(vPos);
+			Vector3 vNormal = HrMath::TransformNormal(mesh.vecNormal[nVertexIndex], matTrans);
+			mesh.vecNormal[nVertexIndex].swap(vNormal);
+		}
+	}
+
+	for (uint32 nChildIndex = 0; nChildIndex < pNode->mNumChildren; ++nChildIndex)
+	{
+		RecursiveTransformMesh(matTrans, pNode->mChildren[nChildIndex], vecMeshes);
+	}
+}
+
+void HrConvertUtil::SetUnitScale(float fUnitScale)
+{
+	m_fUnitScale = fUnitScale;
+}
+
 

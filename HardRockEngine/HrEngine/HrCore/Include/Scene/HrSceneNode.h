@@ -36,6 +36,7 @@ namespace Hr
 		void AddChild(const HrSceneNodePtr& pSceneNode);
 		bool RemoveChild(const HrSceneNodePtr& pChild);
 		void RemoveChildren();
+		bool RemoveFromParent();
 
 		bool IsRunning() const;
 

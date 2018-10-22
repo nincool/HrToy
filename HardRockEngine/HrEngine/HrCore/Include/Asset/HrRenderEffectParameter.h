@@ -95,6 +95,7 @@ namespace Hr
 		//≤ƒ÷  Ù–‘
 		RPT_MATERIAL_GLOSSINESS,
 		RPT_MATERIAL_ALBEDO,
+		RPT_MATERIAL_REFLECTIVE,
 	
 
 		//Œ∆¿Ì
@@ -193,7 +194,7 @@ namespace Hr
 		virtual void Value(float4& val) const;
 		virtual void Value(float4x4& val) const;
 		virtual void Value(HrTexture*& val) const;
-		virtual void Value(HrSamplerStatePtr& val) const;
+		virtual void Value(HrSamplerState*& val) const;
 		//virtual void Value(TextureSubresource& val) const;
 		//virtual void Value(SamplerStateObjectPtr& val) const;
 		//virtual void Value(GraphicsBufferPtr& value) const;
@@ -380,7 +381,7 @@ namespace Hr
 			return std::move(pRet);
 		}
 
-		virtual void Value(HrSamplerStatePtr& val) const override;
+		virtual void Value(HrSamplerState*& val) const override;
 	protected:
 		HrSamplerStatePtr m_pSamplerState;
 	};

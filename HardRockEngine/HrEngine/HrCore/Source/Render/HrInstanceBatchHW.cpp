@@ -1,6 +1,6 @@
 #include "Render/HrInstanceBatchHW.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderLayout.h"
 #include "Render/HrVertex.h"
@@ -29,7 +29,7 @@ HrInstanceBatchHW::~HrInstanceBatchHW()
 
 void HrInstanceBatchHW::BuildVertices(const HrSubMeshPtr& pSubMesh)
 {
-	m_pBatchRenderLayout = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRenderLayout();
+	m_pBatchRenderLayout = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRenderLayout();
 	const HrRenderLayoutPtr& pBaseRenderLayout = pSubMesh->GetRenderLayout();
 	m_pBatchRenderLayout->SetTopologyType(pBaseRenderLayout->GetTopologyType());
 

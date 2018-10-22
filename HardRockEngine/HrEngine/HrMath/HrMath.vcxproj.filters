@@ -255,5 +255,8 @@
     <ClCompile Include="Source\HrRect.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HrMath.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -307,6 +307,13 @@ namespace Hr
 			return vTransPos;
 		}
 
+		inline Vector3 TransformNormal(const Vector3& vNormal, const Matrix4& mat)
+		{
+			Vector3 vTransPos = KlayGE::MathLib::transform_normal(vNormal, mat);
+
+			return vTransPos;
+		}
+
 		inline Matrix4 Transformation(const Vector3* pScalingCenter
 			, const Quaternion* pScalingRotation
 			, const Vector3* pScale

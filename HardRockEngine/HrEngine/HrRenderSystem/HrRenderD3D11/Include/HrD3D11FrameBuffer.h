@@ -73,6 +73,30 @@ namespace Hr
 		
 	};
 
+	//////////////////////////////////////////////////////////////////
+
+	class HrD3D11DeferredFrameBuffer : public HrD3D11FrameBuffer
+	{
+	public:
+		HrD3D11DeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData);
+		~HrD3D11DeferredFrameBuffer();
+
+		virtual void OnBind(const HrRenderPtr& pRender) override;
+		virtual void OnUnBind() override;
+
+		virtual void ClearTarget() override;
+		virtual void ClearDepthStencil() override;
+	protected:
+		void CreateGBuffers();
+		void CreateDepthStencilView();
+	private:
+		//g_buffers
+		HrD3D11Texture2DPtr m_pPositionSRV;
+		HrD3D11Texture2DPtr m_pNormalSRV;
+		HrD3D11Texture2DPtr m_pAlbedoSRV;
+
+		HrDeferredGBufferDataPtr m_pGBufferData;
+	};
 }
 
 

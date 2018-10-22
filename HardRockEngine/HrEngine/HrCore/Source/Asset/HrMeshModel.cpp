@@ -15,11 +15,55 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrResourceModule.h"
 #include "Kernel/HrFileUtils.h"
 
 using namespace Hr;
 
+std::vector<HrVertexElement> SVertexStructP::m_s_vecVertexElementP;
+std::vector<HrVertexElement> SVertexStructPC::m_s_vecVertexElementPC;
+std::vector<HrVertexElement> SVertexStructPN::m_s_vecVertexElementPN;
+std::vector<HrVertexElement> SVertexStructPNC::m_s_vecVertexElementPNC;
+
+SVertexStructP::SVertexStructP() : m_position(float3::Zero())
+{
+	if (m_s_vecVertexElementP.empty())
+	{
+		m_s_vecVertexElementP.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+	}
+}
+
+SVertexStructPC::SVertexStructPC() : m_tex(float2::Zero())
+{
+	if (m_s_vecVertexElementPC.empty())
+	{
+		m_s_vecVertexElementPC.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElementPC.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+	}
+}
+
+SVertexStructPN::SVertexStructPN() : m_normal(float3::Zero())
+{
+	if (m_s_vecVertexElementPN.empty())
+	{
+		m_s_vecVertexElementPN.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElementPN.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+	}
+}
+
+SVertexStructPNC::SVertexStructPNC() : m_tex(float2(0.0f, 0.0f))
+{
+	if (m_s_vecVertexElementPNC.empty())
+	{
+		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+	}
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////
 
 size_t HrMeshModel::CreateHashName(const std::string& strFullFilePath)
 {
@@ -28,8 +72,11 @@ size_t HrMeshModel::CreateHashName(const std::string& strFullFilePath)
 
 void HrMeshModel::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
-	m_strFilePath = strFilePath;
 	m_strFileName = strFileName;
+	if (strFilePath.empty())
+		m_strFilePath = strFileName;
+	else
+		m_strFilePath = strFilePath;
 	m_resType = HrResource::RT_MODEL;
 	m_resStatus = HrResource::RS_DECLARED;
 
@@ -53,6 +100,65 @@ bool HrMeshModel::UnloadImpl()
 	//todo
 
 	return true;
+}
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
+HrMeshModelQuadP::HrMeshModelQuadP(float fWidth, float fHeight)
+{
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
+
+	CreateQuadMesh();
+}
+
+HrMeshModelQuadP::~HrMeshModelQuadP()
+{
+}
+
+void HrMeshModelQuadP::CreateQuadMesh()
+{
+	auto pResCom = HrDirector::Instance()->GetResourceModule();
+
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	{
+		//why 0? because i want to sign the submesh's pos in the array
+		const HrSubMeshPtr& pSubMesh = m_pMesh->AddSubMesh("0_Quad");
+		{
+			float fHalfWidth = m_fWidth / 2;
+			float fHalfHeight = m_fHeight / 2;
+
+			SVertexStructP vertexData[4];
+			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
+			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
+			vertexData[2].m_position = float3(fHalfWidth, -fHalfHeight, 0);
+			vertexData[3].m_position = float3(-fHalfWidth, -fHalfHeight, 0);
+			
+			//Build vertexbuffer
+			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
+				, sizeof(vertexData) 
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, SVertexStructP::m_s_vecVertexElementP);
+		}
+
+		{
+			//Build indexbuffer
+			unsigned short indices[6] = { 0, 1, 2, 0, 2, 3 };
+			
+			pSubMesh->GetRenderLayout()->BindIndexBuffer(reinterpret_cast<char*>(indices)
+				, sizeof(indices)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, IT_16BIT);
+		}
+		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
+
+		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
+		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
+		//todo
+		pSubMesh->SetMaterial(pMaterial);
+	}
 }
 
 ///////////////////////////////////////////////////
@@ -83,7 +189,7 @@ bool HrMeshModelGrid::LoadImpl()
 
 void HrMeshModelGrid::CreateGridMesh()
 {
-	auto pResCom = HrDirector::Instance()->GetResourceComponent();
+	auto pResCom = HrDirector::Instance()->GetResourceModule();
 
 	m_pMesh = pResCom->RetriveResource<HrMesh>("BuildIn_GridMesh", true, false);
 	if (!m_pMesh->IsLoaded())
@@ -194,10 +300,18 @@ bool HrMeshModelObject::LoadImpl()
 		HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
 		pModelLoader->Load(strFullPath);
 		m_pMesh = pModelLoader->GetMesh();
+		m_pMesh->Retain(); //add Referrence
 	}
 }
 
 bool HrMeshModelObject::UnloadImpl()
 {
+	if (m_pMesh)
+	{
+		HrDirector::Instance()->GetResourceModule()->RemoveResource<HrMesh>(m_pMesh->GetFilePath());
+	}
+
+	m_pMesh = nullptr;
+
 	return true;
 }

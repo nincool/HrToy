@@ -6,11 +6,13 @@
 
 namespace Hr
 {
-#ifdef HR_MATH_SIMD
+//#ifdef HR_MATH_SIMD
 	//选定基本类型
 	typedef KlayGE::float2 Vector2;
 	typedef KlayGE::float3 Vector3;
+	
 	typedef KlayGE::float4 Vector4;
+	
 
 	typedef Vector2 float2;
 	typedef Vector3 float4float3;
@@ -36,7 +38,7 @@ namespace Hr
 	typedef KlayGE::float3 float3;
 	typedef KlayGE::float4 float4;
 
-#endif // HR_MATH_SIMD
+//#endif // HR_MATH_SIMD
 
 	class Radian;
 	class Degree;

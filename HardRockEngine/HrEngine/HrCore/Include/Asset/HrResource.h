@@ -2,10 +2,11 @@
 #define _HR_RESOURCE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Kernel/HrIDObject.h"
 
 namespace Hr
 {
-	class HrResource : boost::noncopyable
+	class HR_CORE_API HrResource : public HrIDObject, public boost::noncopyable
 	{
 	public:
 		enum EnumResourceType

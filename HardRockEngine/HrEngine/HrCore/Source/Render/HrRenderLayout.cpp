@@ -2,7 +2,7 @@
 #include "Render/HrVertex.h"
 #include "Render/HrRenderFactory.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderSystem.h"
 
 using namespace Hr;

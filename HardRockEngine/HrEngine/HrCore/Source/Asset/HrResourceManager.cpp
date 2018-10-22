@@ -16,7 +16,7 @@
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrStringUtil.h"
 
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderSystem.h"
 
 
@@ -66,10 +66,12 @@ void HrResourceManager::CreateBuildInTexture()
 void HrResourceManager::CreateBuildInEffects()
 {
 	HRLOG("HrResourceManager::CreateBuildInEffects Start to create buildin effects!");
-	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/Effect/Hlsl/HrStandard.json", HrResource::RT_EFFECT));
+	m_pDefaultRenderEffect = HrCheckPointerCast<HrRenderEffect>(LoadResource("Media/Effect/Hlsl/HrStandardPro.json", HrResource::RT_EFFECT));
 	//LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
 	//LoadResource("Media/Effect/Hlsl/HrShadowMapDepth.json", HrResource::RT_EFFECT);
 	//LoadResource("Media/Effect/Hlsl/HrShadowMap.json", HrResource::RT_EFFECT); 
+	LoadResource("Media/Effect/Hlsl/HrMakeGBuffer.json", HrResource::RT_EFFECT);
+	LoadResource("Media/Effect/Hlsl/HrDeferredShading.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
@@ -98,28 +100,46 @@ HrResourcePtr HrResourceManager::GetDefaultRenderEffect()
 	return m_pDefaultRenderEffect;
 }
 
-HrResourcePtr HrResourceManager::GetDefaultMaterial()
-{
-	HrMaterialPtr pTempDefaultMaterial = HrMakeSharedPtr<HrMaterial>(m_pDefaultMaterial);
-	m_mapMaterials.insert(std::make_pair(pTempDefaultMaterial->GetHashID(), pTempDefaultMaterial));
-
-	return pTempDefaultMaterial;
-}
-
 HrResourcePtr HrResourceManager::LoadResource(const std::string& strFile, HrResource::EnumResourceType resType)
 {
 	HrResourcePtr pReturnRes = nullptr;
 
-	std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
-	if (!strFullFilePath.empty())
+	switch (resType)
 	{
-		pReturnRes = AddResource(strFullFilePath, resType);
+	case Hr::HrResource::RT_UNKNOWN:
+		break;
+	case Hr::HrResource::RT_MESH:
+	case Hr::HrResource::RT_EFFECT:
+	case Hr::HrResource::RT_MODEL:
+	case Hr::HrResource::RT_MESHMODEL:
+	case Hr::HrResource::RT_TEXTURE_1D:
+	case Hr::HrResource::RT_TEXTURE_2D:
+	case Hr::HrResource::RT_TEXTURE_3D:
+	case Hr::HrResource::RT_TEXTURE_CUBE:
+	{
+		std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
+		if (!strFullFilePath.empty())
+		{
+			pReturnRes = AddResource(strFullFilePath, resType);
+			pReturnRes->Load();
+		}
+		else
+		{
+			HRERROR("HrResourceManager::LoadResource Error! FileName[%s]", strFile.c_str());
+		}
+		break;
+	}
+	case Hr::HrResource::RT_MATERIAL:
+	{
+		pReturnRes = AddResource(strFile, resType);
 		pReturnRes->Load();
+
+		break;
 	}
-	else
-	{
-		HRERROR("HrResourceManager::LoadResource Error! FileName[%s]", strFile.c_str());
+	default:
+		break;
 	}
+
 
 	return pReturnRes;
 }
@@ -279,12 +299,28 @@ HrResourcePtr HrResourceManager::AddMeshResource(const std::string& strFile)
 HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
-	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	HrMaterialPtr pMaterial = HrMakeSharedPtr<HrMaterial>();
-	pMaterial->DeclareResource(strFileName, strFile);
-	m_mapMaterials.insert(std::make_pair(pMaterial->GetHashID(), pMaterial));
+	if (strFullFileName.empty())
+	{
+		std::string strMaterialName = "Material_" + strFile;
+		HrMaterialPtr pDefaultMaterial = HrMakeSharedPtr<HrMaterial>();
+		pDefaultMaterial->DeclareResource(strMaterialName, strMaterialName);
+		m_mapMaterials.insert(std::make_pair(pDefaultMaterial->GetHashID(), pDefaultMaterial));
 
-	return pMaterial;
+		pDefaultMaterial->CopyFrom(m_pDefaultMaterial);
+
+		return pDefaultMaterial;
+
+	}
+	else
+	{
+		std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
+		HrMaterialPtr pMaterial = HrMakeSharedPtr<HrMaterial>();
+		pMaterial->DeclareResource(strFileName, strFile);
+		m_mapMaterials.insert(std::make_pair(pMaterial->GetHashID(), pMaterial));
+
+		return pMaterial;
+	}
+
 }
 
 HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile)
@@ -298,7 +334,7 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 	}
 
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
 		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
 	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
@@ -390,5 +426,65 @@ HrMaterialPtr HrResourceManager::MakeMaterial(const HrModelDataInfo::HrMaterialD
 	pMaterial->FillMaterialInfo(materialDataInfo);
 
 	return pMaterial;
+}
+
+bool HrResourceManager::RemoveResource(const std::string& strFile, HrResource::EnumResourceType resType)
+{
+	switch (resType)
+	{
+	case HrResource::RT_MESHMODEL:
+		return RemoveMeshModel(strFile);
+	case HrResource::RT_MESH:
+		return RemoveMesh(strFile);
+	case HrResource::RT_MATERIAL:
+		return RemoveMaterial(strFile);
+	default:
+		break;
+	}
+}
+
+bool HrResourceManager::RemoveMeshModel(const std::string& strModelName)
+{
+	size_t nHashID = HrMeshModel::CreateHashName(strModelName);
+	auto item = m_mapMeshModels.find(nHashID);
+	if (item != m_mapMeshModels.end())
+	{
+		if (item->second->Unload())
+			m_mapMeshModels.erase(item);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool HrResourceManager::RemoveMesh(const std::string& strMeshName)
+{
+	size_t nHashID = HrMesh::CreateHashName(strMeshName);
+	auto item = m_mapMesh.find(nHashID);
+	if (item != m_mapMesh.end())
+	{
+		if (item->second->Unload())
+			m_mapMesh.erase(item);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool HrResourceManager::RemoveMaterial(const std::string& strMaterialName)
+{
+	size_t nHashID = HrMaterial::CreateHashName(strMaterialName);
+	auto item = m_mapMaterials.find(nHashID);
+	if (item != m_mapMaterials.end())
+	{
+		if (item->second->Unload())
+			m_mapMaterials.erase(item);
+
+		return true;
+	}
+
+	return false;
 }
 

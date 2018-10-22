@@ -9,30 +9,17 @@
 #include <memory>
 #include <HrMath/Include/HrMath.h>
 #include <boost/lexical_cast.hpp> 
+#include "HrUtilTools/Include/HrTinyFormat.h"
 
 namespace Hr
 {
 	class HrStringUtil
 	{
 	public:
-		static std::string StringFormat(const std::string fmt_str, ...)
+		template<typename... Args>
+		static std::string StringFormat(const char* formatString, Args&&... args)
 		{
-			int final_n, n = ((int)fmt_str.size()) * 2; /* Reserve two times as much as the length of the fmt_str */
-			std::unique_ptr<char[]> formatted;
-			va_list ap;
-			while (1)
-			{
-				formatted.reset(new char[n]); /* Wrap the plain char array into the unique_ptr */
-				strcpy(&formatted[0], fmt_str.c_str());
-				va_start(ap, fmt_str);
-				final_n = vsnprintf(&formatted[0], n, fmt_str.c_str(), ap);
-				va_end(ap);
-				if (final_n < 0 || final_n >= n)
-					n += abs(final_n - n + 1);
-				else
-					break;
-			}
-			return std::string(formatted.get());
+			return tfm::format(formatString, std::forward<Args>(args)...);
 		}
 
 		static std::string WstringToUtf8(const std::wstring& str)
@@ -49,14 +36,22 @@ namespace Hr
 
 		static void ToLowerCase(std::string& s)
 		{
+			std::locale loc;
 			std::transform(s.begin(), s.end(), s.begin(),
-				[](unsigned char c) { return std::tolower(c); });
+				[&](unsigned char c) { return std::tolower(c, loc); });
 		}
 
 		static void ToUpperCase(std::string& s)
 		{
+			std::locale loc;
 			std::transform(s.begin(), s.end(), s.begin(),
-				[](unsigned char c) { return std::toupper(c); });
+				[&](unsigned char c) { return std::toupper(c, loc); });
+		}
+
+		static float2 GetFloat2FromString(const std::string& strContent, const char* p1 = "|")
+		{
+			std::vector<float> vecElement = GetFloatVectorFromString(strContent, p1);
+			return float2(vecElement[0], vecElement[1]);
 		}
 
 		static float3 GetFloat3FromString(const std::string& strContent, const char* p1 = "|")
@@ -100,7 +95,7 @@ namespace Hr
 			std::vector<std::string> temp = GetVector(strContent, p1);
 			for (int i = 0; i < temp.size(); ++i)
 			{
-				result.push_back(boost::lexical_cast<unsigned int>(temp[i].c_str()));
+				result.push_back(static_cast<uint8>(boost::lexical_cast<unsigned int>(temp[i].c_str())));
 			}
 			return result;
 		}
@@ -127,7 +122,18 @@ namespace Hr
 			return result;
 		}
 
-		static std::vector<Vector3> GetVectorVector3FromString(const std::string& strContent, const char* p1, const char* p2)
+		static std::vector<Vector2> GetVectorFloat2FromString(const std::string& strContent, const char* p1, const char* p2)
+		{
+			std::vector<float2> result;
+			std::vector<std::string> temp = GetVector(strContent, p1);
+			for (size_t i = 0; i < temp.size(); ++i)
+			{
+				result.push_back(GetFloat2FromString(temp[i], p2));
+			}
+			return result;
+		}
+
+		static std::vector<Vector3> GetVectorFloat3FromString(const std::string& strContent, const char* p1, const char* p2)
 		{
 			std::vector<Vector3> result;
 			std::vector<std::string> temp = GetVector(strContent, p1);

@@ -14,7 +14,7 @@
 #include "Render/HrLight.h"
 #include "Render/HrRenderSystem.h"
 #include "Kernel/HrLog.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrUtilTools/Include/HrStringUtil.h"
 #include "Kernel/HrFileUtils.h"
@@ -76,7 +76,7 @@ bool HrRenderEffect::LoadImpl()
 		std::string strShaderFile = sceneRootInfo["SHADER_FILE"].GetString();
 		m_strShaderFile = HrFileUtils::Instance()->GetFullPathForFileName(strShaderFile);
 
-		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
+		HrShaderCompilerPtr pShaderCompiler = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateShaderCompiler(m_strShaderFile);
 		LoadTechniques(sceneRootInfo, pShaderCompiler);
 
 		pShaderCompiler->CreateEffectParameters(m_mapRenderEffectParameters, m_mapConstBufferParameters, m_mapShaderResources, m_mapRenderConstantBuffers);
@@ -151,13 +151,13 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bMultisampleEnalbe);
 					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bAntialiaseLineEnable);
 
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
 					pRenderPass->SetRasterizerState(pRasterizerState);
 				}
 				else
 				{
 					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
 					pRenderPass->SetRasterizerState(pRasterizerState);
 				}
 			}
@@ -199,7 +199,7 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
 				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.nStencilRef);
 
-				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
 				pRenderPass->SetDepthStencilState(pDepthStencilState);
 			}
 			//Blend
@@ -233,7 +233,7 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
 				boost::hash_combine(blendDesc.hashName, blendDesc.nSampleMask);
 
-				auto pBlendState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateBlendState(blendDesc);
+				auto pBlendState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateBlendState(blendDesc);
 				pRenderPass->SetBlendState(pBlendState);
 			}
 		}
@@ -263,7 +263,7 @@ void HrRenderEffect::LoadShaders(const rapidjson::Value& shaderInfo
 		{
 			if (pShaderCompiler->CompileShaderFromCode(strVertexEnterPoint, HrShader::ST_VERTEX_SHADER))
 			{
-				HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShader();
+				HrShaderPtr pVertexShader = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateShader();
 				pVertexShader->StreamIn(pShaderCompiler->GetCompiledData(strVertexEnterPoint), m_strShaderFile, strVertexEnterPoint, HrShader::ST_VERTEX_SHADER);
 
 				pRenderPass->SetShader(pVertexShader, HrShader::ST_VERTEX_SHADER);
@@ -304,7 +304,7 @@ void HrRenderEffect::LoadShaders(const rapidjson::Value& shaderInfo
 		{
 			if (pShaderCompiler->CompileShaderFromCode(strPixelEnterPoint, HrShader::ST_PIXEL_SHADER))
 			{
-				HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateShader();
+				HrShaderPtr pPixelShader = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateShader();
 				pPixelShader->StreamIn(pShaderCompiler->GetCompiledData(strPixelEnterPoint), m_strShaderFile, strPixelEnterPoint, HrShader::ST_PIXEL_SHADER);
 
 				pRenderPass->SetShader(pPixelShader, HrShader::ST_PIXEL_SHADER);
@@ -494,6 +494,11 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialAlbedo();
 		break;
 	}
+	case RPT_MATERIAL_REFLECTIVE:
+	{
+		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialReflective();
+		break;
+	}
 	case RPT_MATERIAL_GLOSSINESS:
 	{
 		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialGlossiness();
@@ -507,7 +512,8 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 
 const HrRenderTechniquePtr HrRenderEffect::GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData)
 {
-	for (size_t i = m_vecRenderTechnique.size()-1; i >= 0; --i) 
+	//for (size_t i = m_vecRenderTechnique.size()-1; i >= 0; --i) 
+	for (size_t i = 0; i < m_vecRenderTechnique.size(); ++i)
 	{
 		if (m_vecRenderTechnique[i]->IsVertexElementMatch(vecVertexData))
 		{

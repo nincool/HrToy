@@ -5,7 +5,7 @@
 #include "Render/HrGraphicsBuffer.h"
 #include "Render/HrSamplerState.h"
 
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 
 #include "Render/HrRenderSystem.h"
 
@@ -17,6 +17,7 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_WORLD_MATRIX, "world_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_INVERSE_WROLD_MATRIX, "inverse_world_matrix",  REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_TRANSPOSE_WORLD_MATRIX, "transpose_world_matrix",  REDT_MATRIX_4X4, 1, 64),
+	HrRenderParamDefine(RPT_INVERSE_TRANSPOSE_WORLD_MATRIX, "inverse_transpose_world_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_VIEW_PROJ_MATRIX, "view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
 	HrRenderParamDefine(RPT_WORLD_VIEW_PROJ_MATRIX, "world_view_proj_matrix", REDT_MATRIX_4X4, 1, 64),
 
@@ -36,6 +37,7 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "material_glossiness", REDT_FLOAT1, 1, 4),
 	HrRenderParamDefine(RPT_MATERIAL_ALBEDO, "material_albedo", REDT_FLOAT4, 1, 16),
+	HrRenderParamDefine(RPT_MATERIAL_REFLECTIVE, "material_reflective", REDT_FLOAT1, 1, 4),
 
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
@@ -459,7 +461,7 @@ void HrRenderVariable::Value(HrTexture*& val) const
 	BOOST_ASSERT(false);
 }
 
-void HrRenderVariable::Value(HrSamplerStatePtr& val) const
+void HrRenderVariable::Value(HrSamplerState*& val) const
 {
 	BOOST_ASSERT(false);
 }
@@ -548,8 +550,8 @@ void HrRenderVariableTexture::Value(HrTexture*& val) const
 ////////////////////////////////= HrRenderVarialbeSampler=////////////////////////////////////////
 HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 {
-	//TODO!!!!!!!!!!!!!!!!!
-	m_pSamplerState = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateSamplerState();
+	//create defualt
+	m_pSamplerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateSamplerState();
 }
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()
@@ -561,9 +563,9 @@ HrRenderVariable& HrRenderVariableSamplerState::operator=(const HrSamplerState* 
 	return *this;
 }
 
-void HrRenderVariableSamplerState::Value(HrSamplerStatePtr& val) const
+void HrRenderVariableSamplerState::Value(HrSamplerState*& val) const
 {
-	val = m_pSamplerState;
+	val = m_pSamplerState.get();
 }
 
 ///////////////////////////////////////////
@@ -649,6 +651,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		break;
 	}
 	case RPT_MATERIAL_GLOSSINESS:
+	case RPT_MATERIAL_REFLECTIVE:
 	case RPT_FOG_START:
 	case RPT_FOG_RANGE:
 	{
@@ -672,7 +675,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 	{
 		switch (dataType)
 		{
-		case REDT_SAMPLER2D:
+		case REDT_SAMPLER_STATE:
 		{
 			m_pRenderVariable = HR_NEW HrRenderVariableSamplerState();
 			break;
@@ -687,6 +690,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		switch (dataType)
 		{
 		case Hr::REDT_FLOAT1:
+			m_pRenderVariable = HR_NEW HrRenderVariableFloat();
 			break;
 		case Hr::REDT_FLOAT2:
 			break;
@@ -783,6 +787,7 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		case Hr::REDT_SAMPLER_WRAPPERCUBE:
 			break;
 		case Hr::REDT_SAMPLER_STATE:
+		
 			break;
 		case Hr::REDT_UNKNOWN:
 			break;
@@ -817,7 +822,7 @@ HrRenderEffectConstantBuffer::HrRenderEffectConstantBuffer(const std::string& st
 	m_nSize = nSize;
 
 	m_pConstantBufferData = HrMakeSharedPtr<HrStreamData>(static_cast<uint32>(m_nSize));
-	m_pConstantBuffer = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pConstantBuffer = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pConstantBuffer->BindStream(nullptr, m_nSize, HrGraphicsBuffer::HBU_GPUREAD_CPUWRITE, HrGraphicsBuffer::HBB_CONST);
 }
 

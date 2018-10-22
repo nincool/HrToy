@@ -56,6 +56,20 @@ void HrD3D11Render::SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, cons
 	GetD3D11DeviceContext()->OMSetRenderTargets(1, pD3DRenderTargetView, pD3DDepthStencilView);
 }
 
+void HrD3D11Render::SetRenderTarget(int nRenderTargetCounts, const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil)
+{
+	//todo cached
+	std::vector<ID3D11RenderTargetView*> vecD3DRenderTargets;
+	vecD3DRenderTargets.reserve(nRenderTargetCounts);
+	for (size_t i = 0; i < nRenderTargetCounts; ++i)
+	{
+		vecD3DRenderTargets.push_back(HrCheckPointerCast<HrD3D11RenderTarget>(vecRenderTargers[i])->GetRenderTargetView().get());
+	}
+	ID3D11DepthStencilView* pD3DDepthStencilView = HrCheckPointerCast<HrD3D11DepthStencil>(pDepthStencil)->GetDepthStencilView().get();
+
+	GetD3D11DeviceContext()->OMSetRenderTargets(vecD3DRenderTargets.size(), &vecD3DRenderTargets[0], pD3DDepthStencilView);
+}
+
 void HrD3D11Render::SetViewPort(const HrViewPortPtr& pViewPort)
 {
 	D3D11_VIEWPORT vp;
@@ -116,46 +130,111 @@ void HrD3D11Render::BindShader(const HrShaderPtr& pShader)
 	switch (shaderType)
 	{
 	case HrShader::ST_VERTEX_SHADER:
-	{
-		GetD3D11DeviceContext()->VSSetShader(pD3D11Shader->RetriveD3D11VertexShader().get(), nullptr, 0);
-		const std::vector<ID3D11Buffer*>& vecConstBuffers = pD3D11Shader->GetConstBuffers();
-		if (!vecConstBuffers.empty())
-		{
-			if (m_arrCachedBindShaderBuffers[shaderType] != &vecConstBuffers)
-			{
-				GetD3D11DeviceContext()->VSSetConstantBuffers(0, vecConstBuffers.size(), &vecConstBuffers[0]);
-				m_arrCachedBindShaderBuffers[shaderType] = &vecConstBuffers;
-			}
-
-			//if (!m_vecD3D11SRV.empty())
-			//	pContext->VSSetShaderResources(0, m_vecD3D11SRV.size(), &m_vecD3D11SRV[0]);
-			//if (!m_vecSamplerState.empty())
-			//	pContext->VSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
-			break;
-		}
+		BindVertexShader(pD3D11Shader);
 		break;
-	}
 	case HrShader::ST_PIXEL_SHADER:
-	{
-		GetD3D11DeviceContext()->PSSetShader(pD3D11Shader->RetriveD3D11PixelShader().get(), nullptr, 0);
-		const std::vector<ID3D11Buffer*>& vecConstBuffers = pD3D11Shader->GetConstBuffers();
-		if (!vecConstBuffers.empty())
-		{
-			if (m_arrCachedBindShaderBuffers[shaderType] != &vecConstBuffers)
-			{
-				GetD3D11DeviceContext()->PSSetConstantBuffers(0, vecConstBuffers.size(), &vecConstBuffers[0]);
-				m_arrCachedBindShaderBuffers[shaderType] = &vecConstBuffers;
-			}
-		}
-		const std::vector<ID3D11ShaderResourceView*>& vecSRV = pD3D11Shader->GetSRVs();
-		if (!vecSRV.empty())
-			GetD3D11DeviceContext()->PSSetShaderResources(0, vecSRV.size(), &vecSRV[0]);
-		//if (!m_vecSamplerState.empty())
-		//	pD3D11ImmediateContext->PSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
+		BindPixelShader(pD3D11Shader);
 		break;
-	}
 	default:
 		break;
+	}
+}
+
+void HrD3D11Render::UnbindShader(const HrShaderPtr& pShader)
+{
+	//HrD3D11ShaderPtr pD3D11Shader = HrCheckPointerCast<HrD3D11Shader>(pShader);
+	//auto shaderType = pD3D11Shader->ShaderType();
+	//switch (shaderType)
+	//{
+	//case HrShader::ST_VERTEX_SHADER:
+	//	UnbindVertexShader();
+	//	break;
+	//case HrShader::ST_PIXEL_SHADER:
+		UnbindPixelShader();
+	//	break;
+	//default:
+	//	break;
+	//}
+}
+
+void HrD3D11Render::BindVertexShader(const HrD3D11ShaderPtr& pD3D11Shader)
+{
+	GetD3D11DeviceContext()->VSSetShader(pD3D11Shader->RetriveD3D11VertexShader().get(), nullptr, 0);
+	const std::vector<ID3D11Buffer*>& vecConstBuffers = pD3D11Shader->GetConstBuffers();
+	if (!vecConstBuffers.empty())
+	{
+		if (m_arrCachedBindShaderBuffers[HrShader::ST_VERTEX_SHADER] != vecConstBuffers)
+		{
+			GetD3D11DeviceContext()->VSSetConstantBuffers(0, vecConstBuffers.size(), &vecConstBuffers[0]);
+			m_arrCachedBindShaderBuffers[HrShader::ST_VERTEX_SHADER] = vecConstBuffers;
+		}
+		//if (!m_vecD3D11SRV.empty())
+		//	pContext->VSSetShaderResources(0, m_vecD3D11SRV.size(), &m_vecD3D11SRV[0]);
+		//if (!m_vecSamplerState.empty())
+		//	pContext->VSSetSamplers(0, m_vecSamplerState.size(), &m_vecSamplerState[0]);
+	}
+}
+void HrD3D11Render::UnbindVertexShader()
+{
+
+}
+
+void HrD3D11Render::BindPixelShader(const HrD3D11ShaderPtr& pD3D11Shader)
+{
+	GetD3D11DeviceContext()->PSSetShader(pD3D11Shader->RetriveD3D11PixelShader().get(), nullptr, 0);
+	const std::vector<ID3D11Buffer*>& vecConstBuffers = pD3D11Shader->GetConstBuffers();
+	if (!vecConstBuffers.empty())
+	{
+		if (m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER] != vecConstBuffers)
+		{
+			GetD3D11DeviceContext()->PSSetConstantBuffers(0, vecConstBuffers.size(), &vecConstBuffers[0]);
+			m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER] = vecConstBuffers;
+		}
+	}
+
+	//todo
+	const std::vector<ID3D11ShaderResourceView*>& vecSRV = pD3D11Shader->GetShaderResourceViews();
+	if (!vecSRV.empty())
+	{
+		if (m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER] != vecSRV)
+		{
+			GetD3D11DeviceContext()->PSSetShaderResources(0, vecSRV.size(), &vecSRV[0]);
+			m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER] = vecSRV;
+		}
+	}
+		
+	const std::vector<ID3D11SamplerState*>& vecSSs = pD3D11Shader->GetSamplerStates();
+	if (!vecSSs.empty())
+	{
+		if (m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER] != vecSSs)
+		{
+			GetD3D11DeviceContext()->PSSetSamplers(0, vecSSs.size(), &vecSSs[0]);
+			m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER] = vecSSs;
+		}
+	}
+}
+
+void HrD3D11Render::UnbindPixelShader()
+{
+	if (!m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER].empty())
+	{
+		m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER].assign(m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER].size(), nullptr);
+		GetD3D11DeviceContext()->PSSetConstantBuffers(0, (m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER]).size(), &(m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER][0]));
+		m_arrCachedBindShaderBuffers[HrShader::ST_PIXEL_SHADER].clear();
+	}
+
+	if (!m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER].empty())
+	{
+		m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER].assign(m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER].size(), nullptr);
+		GetD3D11DeviceContext()->PSSetShaderResources(0, (m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER]).size(), &(m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER][0]));
+		m_arrCachedBindSRVs[HrShader::ST_PIXEL_SHADER].clear();
+	}
+
+	if (!m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER].empty())
+	{
+		m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER].assign(m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER].size(), nullptr);
+		GetD3D11DeviceContext()->PSSetSamplers(0, (m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER]).size(), &(m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER][0]));
+		m_arrCachedBindSSs[HrShader::ST_PIXEL_SHADER].clear();
 	}
 }
 
@@ -221,3 +300,4 @@ const ID3D11DeviceContextPtr& HrD3D11Render::GetD3D11DeviceContext()
 {
 	return HrD3D11Device::Instance()->GetD3DDeviceContext();
 }
+

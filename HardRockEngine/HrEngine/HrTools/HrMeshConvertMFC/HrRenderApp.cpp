@@ -13,7 +13,6 @@ using namespace Hr;
 ///////////////////////////////////////////////////////////////////////////
 HrRenderAxis::HrRenderAxis()
 {
-	CreateAxisMesh();
 }
 
 HrRenderAxis::~HrRenderAxis()
@@ -53,9 +52,17 @@ void HrRenderAxis::CreateAxisMesh()
 
 	pSubMesh->GetRenderLayout()->SetTopologyType(TT_LINELIST);
 
-	auto pMaterial = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMaterial>();
+	auto pMaterial = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMaterial>(m_strFileName, true, true);
 	m_mapMaterials[pSubMesh->GetName()] = pMaterial;
 	pSubMesh->SetMaterial(pMaterial);
+}
+
+bool HrRenderAxis::LoadImpl()
+{
+	CreateAxisMesh();
+	m_resStatus = RS_LOADED;
+
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -65,6 +72,7 @@ void HrRenderAxis::CreateAxisMesh()
 HrEditorScene::HrEditorScene() 
 {
 	m_bCameraMatrixDirty = false;
+	m_pConvertUtil = std::make_shared<HrConvertUtil>();
 }
 
 HrEditorScene::~HrEditorScene()
@@ -76,8 +84,8 @@ void HrEditorScene::OnEnter()
 {
 	HrScene::OnEnter();
 
-	m_fFrameWidth = HrDirector::Instance()->GetRenderComponent()->GetRenderFrameBuffer()->GetFrameWidth();
-	m_fFrameHeight = HrDirector::Instance()->GetRenderComponent()->GetRenderFrameBuffer()->GetFrameHeight();
+	m_fFrameWidth = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer()->GetFrameWidth();
+	m_fFrameHeight = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer()->GetFrameHeight();
 	m_bRButtonDown = false;
 
 	CreateSceneElements();
@@ -88,8 +96,7 @@ void HrEditorScene::CreateSceneElements()
 	//Ìí¼ÓÉãÏñ»ú
 	m_pGodCamera = HrSceneObjectFactory::Instance()->CreateCamera("GodCamera");
 	AddNode(m_pGodCamera);
-	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -30.0f));
-	m_pGodCamera->GetTransform()->SetRotation(Vector3(20.0f, 0.0f, 0.0f));
+	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 	m_pCameraCom = m_pGodCamera->GetSceneObject()->GetComponent<HrCameraComponet>();
 	m_pCameraCom->SetFarPlane(300.0f);
 	m_pTrackBallCameraCtrl = m_pGodCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
@@ -98,14 +105,14 @@ void HrEditorScene::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 	
-	CreateAxisNode();
+	//CreateAxisNode();
 
 	m_pEleRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pEleRoot);
 
-	auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
-	m_pEleRoot->AddChild(pGridNode);
-	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	//auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
+	//m_pEleRoot->AddChild(pGridNode);
+	//pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
 	UpdateAxisPos();
 }
@@ -123,7 +130,6 @@ void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 	}
 	else
 	{
-		m_pConvertUtil = std::make_shared<HrConvertUtil>();
 		m_pConvertUtil->LoadOriginalData(strFileName);
 		m_pModel = m_pConvertUtil->CreateSceneNode();
 	}
@@ -131,7 +137,7 @@ void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 	if (m_pModel)
 	{
 		m_pModel->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-		m_pModel->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 0.1f));
+		//m_pModel->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 0.1f));
 		m_pEleRoot->AddChild(m_pModel);
 	}
 
@@ -139,9 +145,12 @@ void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 
 void HrEditorScene::CreateAxisNode()
 {
-	auto pRenderEffect = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("Media/Effect/Hlsl/HrMeshConvert.json");
+	auto pRenderEffect = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/Effect/Hlsl/HrMeshConvert.json");
 
 	m_pAxisModel = std::make_shared<HrRenderAxis>();
+	m_pAxisModel->DeclareResource("AxisRoot");
+	m_pAxisModel->Load();
+
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
 	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
@@ -185,7 +194,7 @@ void HrEditorScene::UpdateAxisPos()
 	{
 		return;
 	}
-	HrRenderFramePtr pRenderFrame = HrDirector::Instance()->GetRenderComponent()->GetRenderFrameBuffer();
+	HrRenderFramePtr pRenderFrame = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer();
 	uint32 nFrameWidth = pRenderFrame->GetFrameWidth();
 	uint32 nFrameHeight = pRenderFrame->GetFrameHeight();
 
@@ -310,7 +319,7 @@ void HrRenderApp::LoadAssets()
 void HrRenderApp::CreateScene()
 {
 	m_pEditorScene = HrMakeSharedPtr<HrEditorScene>();
-	HrDirector::Instance()->GetSceneComponent()->RunScene(m_pEditorScene);
+	HrDirector::Instance()->GetSceneModule()->RunScene(m_pEditorScene);
 }
 
 void HrRenderApp::Run()

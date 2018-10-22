@@ -36,6 +36,14 @@ EnumVertexElementSemantic Hr::HrD3D11Mapping::GetInputElementSemanticName(const 
 	{
 		return VEU_POSITION;
 	}
+	else if (strSemantic.compare("TANGENT") == 0)
+	{
+		return VEU_TANGENT;
+	}
+	else if (strSemantic.compare("BINORMAL") == 0)
+	{
+		return VEU_BINORMAL;
+	}
 	else if (strSemantic.compare("NORMAL") == 0)
 	{
 		return VEU_NORMAL;
@@ -334,6 +342,10 @@ DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
 		return DXGI_FORMAT_D24_UNORM_S8_UINT;
 	case PF_B8G8R8A8:
 		return DXGI_FORMAT_B8G8R8A8_UNORM;
+	case PF_R32G32B32A32_SINT:
+		return DXGI_FORMAT_R32G32B32A32_SINT;
+	case PF_R32G32B32A32_FLOAT:
+		return DXGI_FORMAT_R32G32B32A32_FLOAT;
 	default:
 		return DXGI_FORMAT_UNKNOWN;
 	}

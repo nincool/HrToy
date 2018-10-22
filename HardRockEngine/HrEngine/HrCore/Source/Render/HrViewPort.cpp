@@ -3,6 +3,20 @@
 
 using namespace Hr;
 
+HrViewPortDeferredInfo::HrViewPortDeferredInfo()
+{
+
+}
+
+HrViewPortDeferredInfo::~HrViewPortDeferredInfo()
+{
+
+}
+
+//////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////
+
 HrViewPort::HrViewPort(const HrCameraPtr& pCamera)
 {
 	m_fTopX = m_fTopY = 0;
@@ -10,7 +24,7 @@ HrViewPort::HrViewPort(const HrCameraPtr& pCamera)
 	m_nZOrder = 0;
 
 	m_pCamera = pCamera;
-	m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_fWidth / m_fHeight, 0.1f, 300.0f);
+	m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_fWidth / m_fHeight, 0.1f, 1000.0f);
 }
 
 HrViewPort::HrViewPort(const HrCameraPtr& pCamera, float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)

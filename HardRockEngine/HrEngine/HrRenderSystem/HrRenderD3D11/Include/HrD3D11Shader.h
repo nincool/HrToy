@@ -8,17 +8,32 @@
 
 namespace Hr
 {
-	class CHrD3D11SRVShaderParamRelationShip
+	class HrD3D11SRVShaderParamRelationShip
 	{
 	public:
-		CHrD3D11SRVShaderParamRelationShip(HrRenderEffectParameter* pTexParam, ID3D11ShaderResourceView** pD3D11SRV)
-			: m_pTextureParam(pTexParam), m_pD3D11SRV(pD3D11SRV)
+		HrD3D11SRVShaderParamRelationShip(HrRenderEffectParameter* pTexParam, std::vector<ID3D11ShaderResourceView*>* pVecD3D11SRV, size_t nIndex)
+			: m_pTextureParam(pTexParam), m_pVecD3D11SRV(pVecD3D11SRV), m_nPosIndex(nIndex)
 		{}
 
 		void UpdateShaderResourceView();
 	protected:
 		HrRenderEffectParameter* m_pTextureParam;
-		ID3D11ShaderResourceView** m_pD3D11SRV;
+		std::vector<ID3D11ShaderResourceView*>* m_pVecD3D11SRV;
+		size_t m_nPosIndex;
+	};
+
+	class HrD3D11SSShaderParamRelationShip
+	{
+	public:
+		HrD3D11SSShaderParamRelationShip(HrRenderEffectParameter* pSamplerParam, std::vector<ID3D11SamplerState*>* pVecD3D11SS, size_t nIndex)
+			: m_pSamplerParam(pSamplerParam), m_pVecD3D11SS(pVecD3D11SS), m_nPosIndex(nIndex)
+		{}
+
+		void UpdateSamplerState();
+	protected:
+		HrRenderEffectParameter* m_pSamplerParam;
+		std::vector<ID3D11SamplerState*>* m_pVecD3D11SS;
+		size_t m_nPosIndex;
 	};
 
 	////////////////////////////////////////////////////////////////////
@@ -56,7 +71,8 @@ namespace Hr
 		const ID3D11PixelShaderPtr& RetriveD3D11PixelShader();
 
 		const std::vector<ID3D11Buffer*>& GetConstBuffers();
-		const std::vector<ID3D11ShaderResourceView*>& GetSRVs();
+		const std::vector<ID3D11ShaderResourceView*>& GetShaderResourceViews();
+		const std::vector<ID3D11SamplerState*>& GetSamplerStates();
 	protected:
 		virtual void BindRenderParameterImpl() override;
 	private:
@@ -73,9 +89,10 @@ namespace Hr
 
 		std::vector<ID3D11Buffer*> m_vecD3D11ConstBuffer;
 		std::vector<ID3D11ShaderResourceView*> m_vecD3D11SRV;
-		std::vector<ID3D11SamplerState*> m_vecSamplerState;
+		std::vector<ID3D11SamplerState*> m_vecD3D11SamplerState;
 
-		std::vector<CHrD3D11SRVShaderParamRelationShip> m_vecSRVParamRelationships;
+		std::vector<HrD3D11SRVShaderParamRelationShip> m_vecSRVParamRelationships;
+		std::vector<HrD3D11SSShaderParamRelationShip> m_vecSSParamRelationships;
 	};
 }
 

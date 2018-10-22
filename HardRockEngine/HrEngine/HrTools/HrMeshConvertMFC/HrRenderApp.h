@@ -13,6 +13,8 @@ namespace Hr
 		HrRenderAxis();
 		~HrRenderAxis();
 
+
+
 	protected:
 		struct SAxisVertex
 		{
@@ -24,6 +26,9 @@ namespace Hr
 				color = Vector4::Zero();
 			}
 		};
+	protected:
+		virtual bool LoadImpl() override;
+
 	private:
 		void CreateAxisMesh();
 	};

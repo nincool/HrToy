@@ -5,6 +5,7 @@
 #include "HrTestScene.h"
 #include "HrRenderQueue.h"
 #include "HrShadowMapScene.h"
+#include "HrDeferredShading.h"
 #include <sstream>
 #include "HrEngine.h"
 
@@ -50,8 +51,8 @@ void HrGeometryApp::LoadAssets()
 void HrGeometryApp::CreateScene()
 {
 	//auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
-	auto pTestScene = HrMakeSharedPtr<HrShadowMapScene>();
-	HrDirector::Instance()->GetSceneComponent()->RunScene(pTestScene);
+	auto pTestScene = HrMakeSharedPtr<HrGeometryScene>();
+	HrDirector::Instance()->GetSceneModule()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();
 	//pTestScene->LoadScene("PlayerScene.json");

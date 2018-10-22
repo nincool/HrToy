@@ -6,24 +6,25 @@
 namespace Hr
 {
 	//kernel
-	class HrCoreComponentRender;
-	typedef class std::shared_ptr<HrCoreComponentRender> HrCoreComponentRenderPtr;
+
 	class HrApplication;
 	typedef std::unique_ptr<HrApplication> HrApplicationPtr;
 	class HrWindow;
 	typedef std::shared_ptr<HrWindow> HrWindowPtr;
 	class HrWindowWin;
 	typedef std::shared_ptr<HrWindowWin> HrWindowWinPtr;
-	class HrCoreComponentWin;
-	typedef class std::shared_ptr<HrCoreComponentWin> HrCoreComponentWinPtr;
+	class HrWindowModule;
+	typedef class std::shared_ptr<HrWindowModule> HrWindowModulePtr;;
 	class HrScheduler;
 	typedef std::shared_ptr<HrScheduler> HrSchedulerPtr;
-	class HrCoreComponentScene;
-	typedef class std::shared_ptr<HrCoreComponentScene> HrCoreComponentScenePtr;
-	class HrCoreComponentEvent;
-	typedef class std::shared_ptr<HrCoreComponentEvent> HrCoreComponentEventPtr;
-	class HrCoreComponentResource;
-	typedef class std::shared_ptr<HrCoreComponentResource> HrCoreComponentResourcePtr;
+	class HrSceneModule;
+	typedef class std::shared_ptr<HrSceneModule> HrSceneModulePtr;
+	class HrEventSystemModule;
+	typedef class std::shared_ptr<HrEventSystemModule> HrEventSystemModulePtr;
+	class HrResourceModule;
+	typedef class std::shared_ptr<HrResourceModule> HrResourceModulePtr;
+	class HrRenderModule;
+	typedef class std::shared_ptr<HrRenderModule> HrRenderModulePtr;
 
 	//Render
 	class HrRenderFactory;
@@ -44,8 +45,9 @@ namespace Hr
 	class HrDepthStencil;
 	typedef std::shared_ptr<HrDepthStencil> HrDepthStencilPtr;
 
+	class HrDeferredGBufferData;
+	typedef std::shared_ptr<HrDeferredGBufferData> HrDeferredGBufferDataPtr;
 
-	
 	//renderable
 	class HrVertexElement;
 	class HrVertex;
@@ -107,6 +109,8 @@ namespace Hr
 	//shadow
 	class HrShadowMap;
 	typedef std::shared_ptr<HrShadowMap> HrShadowMapPtr;
+	class HrDeferredRender;
+	typedef std::shared_ptr<HrDeferredRender> HrDeferredRenderPtr;
 
 	//Scene
 	class HrSceneLightData;
@@ -177,10 +181,6 @@ namespace Hr
 	class HrResourceManager;
 	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
 
-	//Asset
-	class HrComponentFactory;
-	typedef std::shared_ptr<HrComponentFactory> HrComponentFactoryPtr;
-	class HrGeometryBox;
 
 	//InstanceBatch
 	class HrInstanceBatch;

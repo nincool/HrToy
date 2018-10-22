@@ -576,8 +576,9 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 			case D3D_SIT_SAMPLER:
 			{
 				HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(bindResDesc.name, bindResDesc.name_hash);
-				pEffectParameter->ParamInfo(RPT_SAMPLER, REDT_SAMPLER2D, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
+				pEffectParameter->ParamInfo(RPT_SAMPLER, REDT_SAMPLER_STATE, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
 				mapParameters[bindResDesc.name_hash] = pEffectParameter;
+				mapShaderResources[bindResDesc.name_hash] = pEffectParameter;
 				break;
 			}
 			}
@@ -615,10 +616,8 @@ void HrD3D11ShaderCompiler::BindParametersToShader(std::unordered_map<size_t, Hr
 					const D3D11ShaderDesc::BoundResourceDesc& bindResDesc = d3dDescShader.res_desc[nResIndex];
 					auto iteRes = mapRenderEffectParameters.find(bindResDesc.name_hash);
 					BOOST_ASSERT(iteRes != mapRenderEffectParameters.end());
-					if (iteRes->second->ParamType() == RPT_TEXTURE)
-					{
-						vecShaderResources.push_back(iteRes->second);
-					}
+					vecShaderResources.push_back(iteRes->second);
+					
 				}
 
 				break;

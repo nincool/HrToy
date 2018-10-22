@@ -7,7 +7,7 @@
 #include "Asset/Loader/HrFBXLoader.h"
 #include "Asset/HrStreamData.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrResourceModule.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -59,7 +59,7 @@ bool HrModel::LoadImpl()
 	if (d.HasParseError())
 	{
 		int nErrorCode = d.GetParseError();
-		int nOffset = d.GetErrorOffset();
+		size_t nOffset = d.GetErrorOffset();
 		HRERROR("HrSceneImported::LoadScene Error! ParseJsonFile Error! ErrorCode[%d] Offset[%d]", nErrorCode, nOffset);
 		return false;
 	}
@@ -79,7 +79,7 @@ bool HrModel::LoadImpl()
 		//if (sceneRootInfo.HasMember("TEXTURE_SAMPLER"))
 		//{
 		//	std::string strTextureFile = sceneRootInfo["TEXTURE_SAMPLER"].GetString();
-		//	HrTexturePtr pTexSampler = HrDirector::Instance()->GetResourceComponent()->RetriveTexture(strTextureFile, HrTexture::TEX_TYPE_2D);
+		//	HrTexturePtr pTexSampler = HrDirector::Instance()->GetResourceModule()->RetriveTexture(strTextureFile, HrTexture::TEX_TYPE_2D);
 		//	m_pMesh->GetSubMesh(0)->GetMaterial()->SetTexture(HrMaterial::TS_SLOT_0, pTexSampler);
 		//}
 	}

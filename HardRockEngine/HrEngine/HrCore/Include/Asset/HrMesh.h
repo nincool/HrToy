@@ -19,11 +19,13 @@ namespace Hr
 		const HrMaterialPtr& GetMaterial();
 
 		const HrRenderLayoutPtr& GetRenderLayout();
+
+		void Destroy();
 	protected:
 		int m_nSubIndex;
 		std::string m_strName;
 
-		HrMeshPtr m_pParentMesh;
+		HrMesh* m_pParentMesh;
 		HrRenderLayoutPtr m_pRenderLayout;
 		HrMaterialPtr m_pMaterial;
 	};

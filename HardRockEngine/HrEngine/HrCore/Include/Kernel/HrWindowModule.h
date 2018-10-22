@@ -1,16 +1,16 @@
 #ifndef _HR_WINCORECOMPONENT_H_
 #define _HR_WINCORECOMPONENT_H_
 
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrCoreComponentWin : public HrCoreComponent
+	class HR_CORE_API HrWindowModule : public HrModule
 	{
 	public:
-		HrCoreComponentWin();
-		HrCoreComponentWin(void* pWnd);
-		~HrCoreComponentWin();
+		HrWindowModule();
+		HrWindowModule(void* pWnd);
+		~HrWindowModule();
 
 		virtual bool Update(float fDelta) override;
 		

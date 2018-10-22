@@ -25,16 +25,6 @@ namespace Hr
 		HrSceneNodePtr CreateCamera(const std::string& strName);
 		HrSceneNodePtr CreateCamera(const std::string& strName, float nTopX, float nTopY, float nWidth, float nHeight, int nZOrder);
 
-		//HrLightNodePtr CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular);
-
-		//deprecated
-		//HrLightNode* CreateDirectionalLight(const Vector3& direction, const HrColor& diffuse, const HrColor& specular);
-		//HrLightNode* CreatePointLight(const HrColor& diffuse, const HrColor& specular, float fRange, float fAttenuation0, float fAttenuation1, float fAttenuation2);
-		
-		//HrSceneNodePtr CreatePlane(float fWidth, float fHeight);
-		//HrSceneNode* CreateBox(float fLength);
-		//HrSceneNode* CreateSkyBox();
-
 		/**
 		 @Comment: 创建Pefab配置文件模型节点 [3/27/2018 By Hr]
 		 @Param:
@@ -63,6 +53,12 @@ namespace Hr
 		//
 		/////////////////////////////////////////////////////////
 		HrSceneNodePtr CreateGridPlan();
+
+
+		HrSceneNodePtr CreateQuadNodeP(const std::string& strName, float fWidth, float fHeight);
+
+	private:
+		HrSceneNodePtr CreateSceneNode(const std::string& strName);
 	};
 }
 

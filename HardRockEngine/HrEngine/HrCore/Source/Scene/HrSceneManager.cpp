@@ -12,7 +12,7 @@
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
 #include "Render/HrRenderSystem.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -75,7 +75,7 @@ void HrSceneManager::RenderScene()
 		return;
 	}
 	
-	const HrCoreComponentRenderPtr& pRenderComponent = HrDirector::Instance()->GetRenderComponent();
+	const HrRenderModulePtr& pRenderComponent = HrDirector::Instance()->GetRenderModule();
 	
 	pRenderComponent->OnRenderFrameBegin();
 
@@ -86,10 +86,13 @@ void HrSceneManager::RenderScene()
 	m_pRenderQueue->PrepareRenderQueue();
 	m_pRunningScene->FillRenderQueue(m_pRenderQueue);
 
+	//ÑÓ³ÙäÖÈ¾
+	pRenderComponent->RenderDeferredFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
+
 	//äÖÈ¾ ÏÈÆÁ±ÎµôäÖÈ¾µ½Éî¶È»º´æ
 	//pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
 	
-	pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
+	//pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
 	pRenderComponent->Present();
 
 	pRenderComponent->OnRenderFrameEnd();

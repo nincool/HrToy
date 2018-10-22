@@ -29,7 +29,8 @@ namespace Hr
 				, v4Emissive(Vector4::Zero())
 				, fOpacity(1.0f)
 				, fShininess(1.0f)
-				, fGlossiness(1.0f)
+				, fGlossiness(10.0f)
+				, fReflective(1.0f)
 				, bTwoSided(false)
 			{}
 			int nMaterialIndex;
@@ -40,6 +41,7 @@ namespace Hr
 			float fOpacity;
 			float fShininess;
 			float fGlossiness;
+			float fReflective;
 			bool bTwoSided;
 
 			std::array<std::string, TS_NUMTEXTURESLOTS> m_arrTexNames;

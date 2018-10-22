@@ -1,7 +1,7 @@
 #include "Kernel/HrInputManager.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentEvent.h"
-#include "Kernel/HrCoreComponentWin.h"
+#include "Kernel/HrEventSystemModule.h"
+#include "Kernel/HrWindowModule.h"
 #include "Event/HrEvent.h"
 #include "Event/HrEventDispatcher.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -13,7 +13,7 @@ bool HrInputEventListener::keyPressed(const OIS::KeyEvent &arg)
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
 	HrEventPtr pEvent = HrMakeSharedPtr<HrEventKeyboard>(keyCode, true);
-	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(pEvent);
 	
 	return true;
 }
@@ -23,7 +23,7 @@ bool HrInputEventListener::keyReleased(const OIS::KeyEvent &arg)
 	HrEventKeyboard::EnumKeyCode keyCode = GetKeyCodeMap(arg.key);
 
 	HrEventPtr pEvent = HrMakeSharedPtr<HrEventKeyboard>(keyCode, false);
-	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(pEvent);
 
 	return true;
 }
@@ -34,7 +34,7 @@ bool HrInputEventListener::mouseMoved(const OIS::MouseEvent &arg)
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrInputManager::Instance()->GetMouseWheelSlidingDistance(z);
 	HrEventPtr pEvent = HrMakeSharedPtr<HrEventMouse>(HrEventMouse::EnumMouseButtonID::MBI_UNKNOW, HrEventMouse::EnumMouseEventFlag::MEF_MOVE, x, y, z);
-	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(pEvent);
 
 	return true;
 }
@@ -46,7 +46,7 @@ bool HrInputEventListener::mousePressed(const OIS::MouseEvent &arg, OIS::MouseBu
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrInputManager::Instance()->GetMouseWheelSlidingDistance(z);
 	HrEventPtr pEvent = HrMakeSharedPtr<HrEventMouse>(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_PRESSED, x, y, z);
-	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(pEvent);
 	return true;
 }
 
@@ -57,7 +57,7 @@ bool HrInputEventListener::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseB
 	HrInputManager::Instance()->GetCursorPosition(x, y);
 	HrInputManager::Instance()->GetMouseWheelSlidingDistance(z);
 	HrEventPtr pEvent = HrMakeSharedPtr<HrEventMouse>(mouseID, HrEventMouse::EnumMouseEventFlag::MEF_RELEASED, x, y, z);
-	HrDirector::Instance()->GetEventComponent()->DispatcherEvent(pEvent);
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(pEvent);
 	return true;
 }
 
@@ -397,7 +397,7 @@ void HrInputManager::CreateInputSystem()
 	size_t winHandle = 0;
 	std::ostringstream winHandleStr;
 
-	const HrCoreComponentWinPtr& pWindowComponet = HrDirector::Instance()->GetWindowComponent();
+	const HrWindowModulePtr& pWindowComponet = HrDirector::Instance()->GetWindowModule();
 	size_t nWinHandle = (size_t)(pWindowComponet->GetWindowHWnd());
 	winHandleStr << nWinHandle;
 

@@ -1,6 +1,6 @@
 #include "Render/HrInstanceBatchShader.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderLayout.h"
 #include "Render/HrVertex.h"

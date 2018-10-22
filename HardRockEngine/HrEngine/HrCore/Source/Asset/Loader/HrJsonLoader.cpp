@@ -42,8 +42,9 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		const rapidjson::Value& subMeshInfo = meshesInfo[HrStringUtil::StringFormat("SubMesh_%d", nSubMeshIndex).c_str()];
 		
 		subMeshData.vecIndices = HrStringUtil::GetTVectorFromString<uint32>(subMeshInfo["Indices"].GetString(), ",");
-		subMeshData.vecVertexPos = HrStringUtil::GetVectorVector3FromString(subMeshInfo["Vertices"].GetString(), "|", ",");
-		subMeshData.vecNormal = HrStringUtil::GetVectorVector3FromString(subMeshInfo["Normals"].GetString(), "|", ",");
+		subMeshData.vecVertexPos = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Vertices"].GetString(), "|", ",");
+		subMeshData.vecNormal = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Normals"].GetString(), "|", ",");
+		subMeshData.vecUV = HrStringUtil::GetVectorFloat2FromString(subMeshInfo["UVs"].GetString(), "|", ",");
 	}
 
 	const rapidjson::Value& materialsInfo = d["Materials"];
@@ -59,15 +60,19 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		materialData.v4Albedo = HrStringUtil::GetFloat4FromString(materialInfo["Albedo"].GetString());
 		materialData.v4Emissive = HrStringUtil::GetFloat4FromString(materialInfo["Emissibe"].GetString());
 		materialData.fOpacity = materialInfo["Opacity"].GetFloat();
-		materialData.fShininess = materialInfo["Shininess"].GetFloat();
-		materialData.fGlossiness = HrMath::Shininess2Glossiness(materialData.fShininess);
+		materialData.fShininess = 0;
+		materialData.fGlossiness = materialInfo["Glossiness"].GetFloat();
+		materialData.fReflective = materialInfo["Reflective"].GetFloat();
 		materialData.bTwoSided = materialInfo["TwoSided"].GetInt() == 0;
 		for (int nTexIndex = 0; nTexIndex < HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS; ++nTexIndex)
 		{
 			std::string strTextureKey = "Texture_" + std::to_string(nTexIndex);
 			std::string strTexture = materialInfo[strTextureKey.c_str()].GetString();
-
-			materialData.m_arrTexNames[nTexIndex] = strTexture;
+			if (strTexture.length() > 0)
+			{
+				strTexture = strTexturePath + "\\" + strTexture;
+				materialData.m_arrTexNames[nTexIndex] = strTexture;
+			}
 		}
 	}
 

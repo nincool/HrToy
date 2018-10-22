@@ -39,7 +39,6 @@ namespace Hr
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
 
 		std::shared_ptr<HrSceneLightData>& GetLightsData();
-
 	protected:
 		HrSceneNodePtr m_pSceneRootNode;
 

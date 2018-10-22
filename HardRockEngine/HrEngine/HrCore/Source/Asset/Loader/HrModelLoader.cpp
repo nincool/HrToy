@@ -2,7 +2,7 @@
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrResourceModule.h"
 #include "Asset/Loader/HrJsonLoader.h"
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrMesh.h"
@@ -49,7 +49,7 @@ void HrModelLoader::Load(std::string& strFile)
 
 
 	//construct default vertexelement
-	m_pMesh = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMesh>(m_strFileName);
+	m_pMesh = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMesh>(m_strFileName, true, false);
 	BOOST_ASSERT(!m_pMesh->IsLoaded());
 
 	BOOST_ASSERT(m_modelDesc.vecSubMeshInfo.size() == m_modelDesc.vecMaterialDataInfo.size());
@@ -75,9 +75,10 @@ void HrModelLoader::Load(std::string& strFile)
 		
 
 		//todo material
-
-		//HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrMaterial>("");
-		//pSubMesh->SetMaterial(pMaterial);
+		const HrModelDataInfo::HrMaterialDataInfo& materialInfo = m_modelDesc.vecMaterialDataInfo[nMeshInfoIndex];
+		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMaterial>(subMeshInfo.strMeshName, true, true);
+		pMaterial->FillMaterialInfo(materialInfo);
+		pSubMesh->SetMaterial(pMaterial);
 	}
 }
 
@@ -90,8 +91,8 @@ void HrModelLoader::MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo&
 	//	vecVertexElement.push_back(HrVertexElement(VEU_BINORMAL, VET_FLOAT3));
 	if (subMeshInfo.vecNormal.size() > 0)
 		vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-	//if (m_modelDesc.vecUV.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+	if (subMeshInfo.vecUV.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 	
 }
 

@@ -1,21 +1,29 @@
 #ifndef _HR_CORECOMPONENTEVENT_H_
 #define _HR_CORECOMPONENTEVENT_H_
 
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrTexture.h"
 #include "HrCore/Include/Asset/Loader/HrModelLoader.h"
 
+#include "HrCore/Include/Asset/HrMaterial.h"
+#include "HrCore/Include/Asset/HrRenderEffect.h"
+#include "HrCore/Include/Asset/HrMesh.h"
+#include "HrCore/Include/Asset/HrMeshModel.h"
+
 namespace Hr
 {
-	class HR_CORE_API HrCoreComponentResource : public HrCoreComponent
+	class HR_CORE_API HrResourceModule : public HrModule
 	{
 	public:
-		HrCoreComponentResource();
-		~HrCoreComponentResource();
+		HrResourceModule();
+		~HrResourceModule();
 
 		template <typename T>
 		std::shared_ptr<T> RetriveResource(const std::string& strFile = "", bool bAdd = true, bool bLoad = true);
+		
+		template <typename T>
+		bool RemoveResource(const std::string& strFile);
 
 		HrTexturePtr RetriveTexture(const std::string& strFile, HrTexture::EnumTextureType type);
 
@@ -25,19 +33,13 @@ namespace Hr
 	};
 
 	template <typename T>
-	std::shared_ptr<T> HrCoreComponentResource::RetriveResource(const std::string& strFile, bool bAdd /*= false*/, bool bLoad /*= false*/)
+	std::shared_ptr<T> HrResourceModule::RetriveResource(const std::string& strFile, bool bAdd /*= false*/, bool bLoad /*= false*/)
 	{
 		HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN;
 		auto pTypeName = typeid(T).name();
-		if (pTypeName == typeid(HrModel).name())
-		{
-			resType = HrResource::RT_MODEL;
-		}
-		else if (pTypeName == typeid(HrMaterial).name())
+		if (pTypeName == typeid(HrMaterial).name())
 		{
 			resType = HrResource::RT_MATERIAL;
-			if (strFile.empty())
-				return HrCheckPointerCast<T>(m_pResourceManager->GetDefaultMaterial());
 		}
 		else if (pTypeName == typeid(HrRenderEffect).name())
 		{
@@ -68,6 +70,31 @@ namespace Hr
 		}
 
 		return nullptr;
+	}
+
+	template <typename T>
+	bool HrResourceModule::RemoveResource(const std::string& strFile)
+	{
+		HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN;
+		auto pTypeName = typeid(T).name();
+		if (pTypeName == typeid(HrMaterial).name())
+		{
+			resType = HrResource::RT_MATERIAL;
+		}
+		else if (pTypeName == typeid(HrRenderEffect).name())
+		{
+			resType = HrResource::RT_EFFECT;
+		}
+		else if (pTypeName == typeid(HrMesh).name())
+		{
+			resType = HrResource::RT_MESH;
+		}
+		else if (pTypeName == typeid(HrMeshModel).name())
+		{
+			resType = HrResource::RT_MESHMODEL;
+		}
+
+		return m_pResourceManager->RemoveResource(strFile, resType);
 	}
 
 }

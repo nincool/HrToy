@@ -76,7 +76,7 @@ void HrRenderQueue::CreateSceneElements()
 	m_pTestRoot->AddChild(m_pPlane);
 
 	m_pBox = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestSphere.model");
-	//auto pEffSampler = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
+	//auto pEffSampler = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
 	//m_pBox->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
 	m_pTestRoot->AddChild(m_pBox);
 
@@ -89,11 +89,11 @@ void HrRenderQueue::CreateInputEvent()
 {
 	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrRenderQueue::OnKeyPressed, this)
 		, HR_CALLBACK_2(HrRenderQueue::OnKeyReleased, this));
-	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerKeyboard, this);
 
 	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrRenderQueue::OnMousePressed, this)
 		, HR_CALLBACK_2(HrRenderQueue::OnMouseReleased, this), HR_CALLBACK_1(HrRenderQueue::OnMouseMove, this));
-	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerMouse, this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerMouse, this);
 }
 
 void HrRenderQueue::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)

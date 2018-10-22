@@ -259,9 +259,6 @@
     <ClInclude Include="Include\Render\HrDepthStencilState.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponent.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderSystem.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -276,18 +273,6 @@
     </ClInclude>
     <ClInclude Include="Include\Render\HrDepthStencil.h">
       <Filter>Include\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponentRender.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponentScene.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponentWin.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponentEvent.h">
-      <Filter>Include\Kernel</Filter>
     </ClInclude>
     <ClInclude Include="Include\Platform\AppWin\HrAppWindows.h">
       <Filter>Include\Platform\AppWin</Filter>
@@ -310,9 +295,6 @@
     <ClInclude Include="Include\Asset\HrModel.h">
       <Filter>Include\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Kernel\HrCoreComponentResource.h">
-      <Filter>Include\Kernel</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrMeshRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -333,6 +315,24 @@
     </ClInclude>
     <ClInclude Include="Include\Asset\Loader\HrJsonLoader.h">
       <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrModule.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrEventSystemModule.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrRenderModule.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrResourceModule.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrSceneModule.h">
+      <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Kernel\HrWindowModule.h">
+      <Filter>Include\Kernel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -492,9 +492,6 @@
     <ClCompile Include="Source\Event\HrEventListener.cpp">
       <Filter>Source\Event</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponent.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrRenderSystem.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -512,18 +509,6 @@
     </ClCompile>
     <ClCompile Include="Source\Asset\HrResource.cpp">
       <Filter>Source\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponentRender.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponentScene.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponentWin.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponentEvent.cpp">
-      <Filter>Source\Kernel</Filter>
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrApplication.cpp">
       <Filter>Source\Kernel</Filter>
@@ -549,9 +534,6 @@
     <ClCompile Include="Source\Asset\HrModel.cpp">
       <Filter>Source\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Kernel\HrCoreComponentResource.cpp">
-      <Filter>Source\Kernel</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrMeshRenderable.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -573,6 +555,24 @@
     <ClCompile Include="Source\Asset\Loader\HrJsonLoader.cpp">
       <Filter>Source\Asset\Loader</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Kernel\HrModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrEventSystemModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrRenderModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrResourceModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrSceneModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Kernel\HrWindowModule.cpp">
+      <Filter>Source\Kernel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
@@ -593,6 +593,15 @@
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.hlsl">
       <Filter>Effects</Filter>
     </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json">
@@ -605,6 +614,15 @@
       <Filter>Material</Filter>
     </None>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.json">
       <Filter>Effects</Filter>
     </None>
   </ItemGroup>

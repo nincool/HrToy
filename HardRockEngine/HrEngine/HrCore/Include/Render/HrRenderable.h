@@ -37,6 +37,8 @@ namespace Hr
 		
 	protected:
 		bool CheckRenderLayoutMatchShader();
+
+		virtual void UpdateRenderEffectParam();
 	protected:
 		HrRenderEffectPtr m_pRenderEffect;
 		HrRenderTechniquePtr m_pCurTechnique;

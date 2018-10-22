@@ -30,6 +30,7 @@
 
 #include <KFL/KFL.hpp>
 #include <KFL/SIMDMath.hpp>
+#include <emmintrin.h>
 
 namespace KlayGE
 {

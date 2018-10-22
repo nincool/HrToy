@@ -5,6 +5,20 @@
 
 namespace Hr
 {
+	class HrViewPortDeferredInfo
+	{
+	public:
+		HrViewPortDeferredInfo();
+		~HrViewPortDeferredInfo();
+
+	private:
+		HrTexturePtr m_pPositionSRV;
+		HrTexturePtr m_pNormalSRV;
+		HrTexturePtr m_pAlbedoSRV;
+
+		
+	};
+
 	class HR_CORE_API HrViewPort : public std::enable_shared_from_this<HrViewPort> 
 	{
 	public:
@@ -30,7 +44,13 @@ namespace Hr
 		float m_fHeight;
 
 		int m_nZOrder;
+
+
+		//deferred
+		
 	};
+
+
 }
 
 #endif

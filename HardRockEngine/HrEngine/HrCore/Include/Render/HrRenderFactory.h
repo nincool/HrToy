@@ -21,6 +21,7 @@ namespace Hr
 
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
 		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
+		virtual HrRenderFramePtr CreateDeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData) = 0;
 
 		virtual HrRenderLayoutPtr CreateRenderLayout() = 0;
 

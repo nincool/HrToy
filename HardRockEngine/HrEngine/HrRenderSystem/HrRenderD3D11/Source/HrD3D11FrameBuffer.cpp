@@ -4,9 +4,10 @@
 #include "HrD3D11Render.h"
 #include "HrD3D11Texture.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
-#include "HrCore/Include/Kernel/HrCoreComponentRender.h"
-#include "HrCore/Include/Kernel/HrCoreComponentWin.h"
+#include "HrCore/Include/Kernel/HrRenderModule.h"
+#include "HrCore/Include/Kernel/HrWindowModule.h"
 #include "HrCore/Include/Render/HrRenderSystem.h"
+#include "HrCore/Include/Render/HrShadowMap.h"
 #include <DirectXMath.h>
 
 using namespace Hr;
@@ -119,7 +120,7 @@ bool HrD3D11ScreenFrameBuffer::CreateSwapChain()
 		swapChainFullScreenDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 		swapChainFullScreenDesc.Windowed = true;
 
-		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWindowComponent();
+		const HrWindowModulePtr& pWindowComponent = HrDirector::Instance()->GetWindowModule();
 		IDXGISwapChain1* pSwapChain = nullptr;
 		HRESULT hr = HrD3D11Device::Instance()->GetDXGIFactory2()->CreateSwapChainForHwnd(HrD3D11Device::Instance()->GetD3DDevice().get(), pWindowComponent->GetWindowHWnd()
 			, &swapChainDesc1
@@ -158,7 +159,7 @@ bool HrD3D11ScreenFrameBuffer::CreateSwapChain()
 
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
-		const HrCoreComponentWinPtr& pWindowComponent = HrDirector::Instance()->GetWindowComponent();
+		const HrWindowModulePtr& pWindowComponent = HrDirector::Instance()->GetWindowModule();
 		swapChainDesc.OutputWindow = pWindowComponent->GetWindowHWnd();
 		swapChainDesc.Windowed = true;
 
@@ -217,8 +218,8 @@ void HrD3D11ScreenFrameBuffer::OnUnBind()
 
 void HrD3D11ScreenFrameBuffer::ClearTarget()
 {
-	XMVECTORF32 Blue = { m_clearColor.r(), m_clearColor.g(), m_clearColor.b(), m_clearColor.a() };
-	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearRenderTargetView(D3D11RenderTargetView(RTL_0).get(), reinterpret_cast<const float*>(&Blue));
+	XMVECTORF32 clearColor = { m_clearColor.r(), m_clearColor.g(), m_clearColor.b(), m_clearColor.a() };
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearRenderTargetView(D3D11RenderTargetView(RTL_0).get(), reinterpret_cast<const float*>(&clearColor));
 }
 
 void HrD3D11ScreenFrameBuffer::ClearDepthStencil()
@@ -283,7 +284,93 @@ void HrD3D11DepthStencilFrameBuffer::OnUnBind()
 
 }
 
+///////////////////////////////////////////////////////////////////////////
+//HrD3D11DepthStencilFrameBuffer
+///////////////////////////////////////////////////////////////////////////
+HrD3D11DeferredFrameBuffer::HrD3D11DeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData) : HrD3D11FrameBuffer(nWidth, nHeight)
+{
+	m_pGBufferData = pDeferredGBufferData;
+
+	CreateGBuffers();
+	CreateDepthStencilView();
+
+	m_clearColor = HrColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+}
+
+HrD3D11DeferredFrameBuffer::~HrD3D11DeferredFrameBuffer()
+{
+}
+
+void HrD3D11DeferredFrameBuffer::OnBind(const HrRenderPtr& pRender)
+{
+	pRender->SetRenderTarget(3, m_arrRenderTargets, m_pDepthStencil);
+}
+
+void HrD3D11DeferredFrameBuffer::OnUnBind()
+{
+
+}
+
+void HrD3D11DeferredFrameBuffer::ClearTarget()
+{
+	XMVECTORF32 clearColor = { m_clearColor.r(), m_clearColor.g(), m_clearColor.b(), m_clearColor.a() };
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearRenderTargetView(D3D11RenderTargetView(RTL_0).get(), reinterpret_cast<const float*>(&clearColor));
+	for (int i = 0; i < RTL_MAX; ++i)
+	{
+		if (m_arrRenderTargets[i])
+			HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearRenderTargetView(D3D11RenderTargetView((EnumRenderTargetLayer)i).get(), reinterpret_cast<const float*>(&clearColor));
+	}
+}
+
+void HrD3D11DeferredFrameBuffer::ClearDepthStencil()
+{
+	HrD3D11Device::Instance()->GetD3DDeviceContext()->ClearDepthStencilView(D3D11DepthStencilView().get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, m_clearDepth, m_clearStencil);
+}
 
 
+void HrD3D11DeferredFrameBuffer::CreateGBuffers()
+{
+	m_pPositionSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+		, m_nHeight
+		, 1, 1, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	m_pPositionSRV->CreateRenderTargetView();
+	m_arrRenderTargets[RTL_0] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pPositionSRV->GetD3D11Texture());
+	m_pPositionSRV->CreateShaderResourceView();
 
+	m_pNormalSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+		, m_nHeight
+		, 1, 1, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	m_pNormalSRV->CreateRenderTargetView();
+	m_arrRenderTargets[RTL_1] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pNormalSRV->GetD3D11Texture()); //m_pPositionSRV->GetD3DRenderTargetView();
+	m_pNormalSRV->CreateShaderResourceView();
+
+	m_pAlbedoSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+		, m_nHeight
+		, 1, 1, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	m_pAlbedoSRV->CreateRenderTargetView();
+	m_arrRenderTargets[RTL_2] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pAlbedoSRV->GetD3D11Texture()); //m_pAlbedoSRV->GetD3DRenderTargetView();
+	m_pAlbedoSRV->CreateShaderResourceView();
+
+	m_pGBufferData->m_pGBufferPosition = m_pPositionSRV;
+	m_pGBufferData->m_pGBufferNormal = m_pNormalSRV;
+	m_pGBufferData->m_pGBufferAlbedo = m_pAlbedoSRV;
+}
+
+void HrD3D11DeferredFrameBuffer::CreateDepthStencilView()
+{
+	if (!m_pDepthStencil)
+	{
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
+	}
+}
 

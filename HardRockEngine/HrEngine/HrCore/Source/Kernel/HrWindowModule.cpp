@@ -1,4 +1,4 @@
-#include "Kernel/HrCoreComponentWin.h"
+#include "Kernel/HrWindowModule.h"
 #include "Platform/AppWin/HrWindowWin.h"
 #include "Platform/AppWin/HrWrapperWin.h"
 #include "Config/HrContextConfig.h"
@@ -6,12 +6,12 @@
 
 using namespace Hr;
 
-HrCoreComponentWin::HrCoreComponentWin()
+HrWindowModule::HrWindowModule()
 {
 	CreateAppWindow();
 }
 
-HrCoreComponentWin::HrCoreComponentWin(void* pWnd)
+HrWindowModule::HrWindowModule(void* pWnd)
 {
 	if (pWnd)
 		m_pWindow = HrMakeSharedPtr<HrWrapperWin>(static_cast<HWND>(pWnd));
@@ -19,12 +19,12 @@ HrCoreComponentWin::HrCoreComponentWin(void* pWnd)
 		CreateAppWindow();
 }
 
-HrCoreComponentWin::~HrCoreComponentWin()
+HrWindowModule::~HrWindowModule()
 {
 
 }
 
-void HrCoreComponentWin::CreateAppWindow()
+void HrWindowModule::CreateAppWindow()
 {
 	uint32 nWidth = HrContextConfig::Instance()->GetWindowWidth();
 	uint32 nHeight = HrContextConfig::Instance()->GetWindowHeight();
@@ -32,12 +32,12 @@ void HrCoreComponentWin::CreateAppWindow()
 	m_pWindow = HrCheckPointerCast<HrWindow>(HrMakeSharedPtr<HrWindowWin>(nWidth, nHeight));
 }
 
-bool HrCoreComponentWin::Update(float fDelta)
+bool HrWindowModule::Update(float fDelta)
 {
 	return true;
 }
 
-HWND HrCoreComponentWin::GetWindowHWnd()
+HWND HrWindowModule::GetWindowHWnd()
 {
 	if (m_pWindow)
 	{
@@ -47,7 +47,7 @@ HWND HrCoreComponentWin::GetWindowHWnd()
 	return 0;
 }
 
-uint32 HrCoreComponentWin::GetWindowX()
+uint32 HrWindowModule::GetWindowX()
 {
 	if(m_pWindow)
 	{
@@ -55,7 +55,7 @@ uint32 HrCoreComponentWin::GetWindowX()
 	}
 }
 
-uint32 HrCoreComponentWin::GetWindowY()
+uint32 HrWindowModule::GetWindowY()
 {
 	if (m_pWindow)
 	{
@@ -63,7 +63,7 @@ uint32 HrCoreComponentWin::GetWindowY()
 	}
 }
 
-uint32 HrCoreComponentWin::GetWindowWidth()
+uint32 HrWindowModule::GetWindowWidth()
 {
 	if (m_pWindow)
 	{
@@ -73,7 +73,7 @@ uint32 HrCoreComponentWin::GetWindowWidth()
 	return 0;
 }
 
-uint32 HrCoreComponentWin::GetWindowHeight()
+uint32 HrWindowModule::GetWindowHeight()
 {
 	if (m_pWindow)
 	{
@@ -83,7 +83,7 @@ uint32 HrCoreComponentWin::GetWindowHeight()
 	return 0;
 }
 
-void HrCoreComponentWin::DestroyWindow()
+void HrWindowModule::DestroyWindow()
 {
 	if (m_pWindow)
 	{
@@ -91,7 +91,7 @@ void HrCoreComponentWin::DestroyWindow()
 	}
 }
 
-void HrCoreComponentWin::UpdateWindowMsg()
+void HrWindowModule::UpdateWindowMsg()
 {
 	if (m_pWindow)
 	{

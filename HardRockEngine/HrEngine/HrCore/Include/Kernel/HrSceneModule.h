@@ -1,11 +1,11 @@
 #ifndef _HR_SCENECORECOMPONENT_H_
 #define _HR_SCENECORECOMPONENT_H_
 
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrCoreComponentScene : public HrCoreComponent
+	class HR_CORE_API HrSceneModule : public HrModule
 	{
 	public:
 		enum class EnumSceneManagerType
@@ -13,8 +13,8 @@ namespace Hr
 			SMT_NORMAL,
 		};
 	public:
-		HrCoreComponentScene(EnumSceneManagerType sceneManagerType = EnumSceneManagerType::SMT_NORMAL);
-		~HrCoreComponentScene();
+		HrSceneModule(EnumSceneManagerType sceneManagerType = EnumSceneManagerType::SMT_NORMAL);
+		~HrSceneModule();
 
 		bool Update(float fDelta) override;
 

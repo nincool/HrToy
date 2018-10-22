@@ -9,6 +9,7 @@
 #include "ThirdParty/assimp/include/assimp/color4.h"
 
 class aiScene;
+class aiNode;
 
 namespace Hr
 {
@@ -28,10 +29,14 @@ namespace Hr
 
 		void ChangeMaterial(int nMeshIndex, const std::string& strMaterialName);
 		void SetMaterialGlossiness(int nMeshIndex, float fGlo);
+		void SetMaterialReflective(int nMeshIndex, float fReflective);
 		void SetMaterialTexture(int nMeshIndex, int nTexIndex, const std::string& strTextureName);
+		void SetUnitScale(float fUnitScale);
 	private:
 		void BuildMeshData(const aiScene* pAssimpScene);
 		void BuildMaterialData(const aiScene* pAssimpScene);
+
+		void RecursiveTransformMesh(const float4x4& matParent, const aiNode* pNode, std::vector<HrModelDataInfo::HrSubMeshDataInfo>& vecMeshes);
 
 		void CombineMesh();
 
@@ -42,6 +47,7 @@ namespace Hr
 
 		std::string FormatJsonData(const std::string& strContent);
 
+		std::string MakeFloat3String(float3 v);
 	private:
 		void MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement);
 		void MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
@@ -60,6 +66,8 @@ namespace Hr
 
 		HrMeshPtr m_pLoadedMesh;
 		HrSceneNodePtr m_pSceneNode;
+
+		float m_fUnitScale;
 	};
 }
 

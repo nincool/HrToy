@@ -1,6 +1,6 @@
 #include "Render/HrVertex.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrGraphicsBuffer.h"
 #include "Render/HrRenderFactory.h"
 #include "Asset/HrStreamData.h"
@@ -153,7 +153,7 @@ const std::vector<HrVertexElement>& HrVertex::GetVertexElement()
 
 HrVertexData::HrVertexData()
 {
-	m_pVertexStream = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pVertexStream = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pVertex = HrMakeSharedPtr<HrVertex>();
 	m_pVertexBaseData = HrMakeSharedPtr<HrStreamData>();
 }
@@ -203,7 +203,7 @@ HrIndexData::HrIndexData()
 {
 	m_indexBufferType = IT_16BIT;
 
-	m_pIndexStream = HrDirector::Instance()->GetRenderComponent()->GetRenderFactory()->CreateGraphicsBuffer();
+	m_pIndexStream = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateGraphicsBuffer();
 	m_pIndexBaseData = HrMakeSharedPtr<HrStreamData>();
 
 	m_nIndexCount = 0;

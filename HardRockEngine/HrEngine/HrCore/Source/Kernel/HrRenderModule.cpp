@@ -1,4 +1,4 @@
-#include "Kernel/HrCoreComponentRender.h"
+#include "Kernel/HrRenderModule.h"
 #include "Kernel/HrLog.h"
 #include "Render/HrRenderSystem.h"
 #include "Render/HrRenderTarget.h"
@@ -8,17 +8,17 @@
 
 using namespace Hr;
 
-HrCoreComponentRender::HrCoreComponentRender(const std::string& strRenderModule)
+HrRenderModule::HrRenderModule(const std::string& strRenderModule)
 {
 	this->CreateRenderFactory(strRenderModule);
 }
 
-HrCoreComponentRender::~HrCoreComponentRender()
+HrRenderModule::~HrRenderModule()
 {
 
 }
 
-bool HrCoreComponentRender::InitComponent()
+bool HrRenderModule::InitComponent()
 {
 	CreateRenderSystem();
 
@@ -28,42 +28,48 @@ bool HrCoreComponentRender::InitComponent()
 	return true;
 }
 
-void HrCoreComponentRender::BindFrameBuffer(const HrRenderFramePtr& pRenderFrame)
+void HrRenderModule::BindFrameBuffer(const HrRenderFramePtr& pRenderFrame)
 {
 	m_pRenderSystem->BindFrameBuffer(pRenderFrame);
 }
 
-void HrCoreComponentRender::OnRenderFrameBegin()
+void HrRenderModule::OnRenderFrameBegin()
 {
 	ClearRenderFame();
 }
 
-void HrCoreComponentRender::OnRenderFrameEnd()
+void HrRenderModule::OnRenderFrameEnd()
 {
 }
 
-void HrCoreComponentRender::RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
+void HrRenderModule::RenderDeferredFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
+{
+	m_pRenderSystem->RenderSceneToGBuffers(pRenderQueue, pLightData, pRenderFrameParam);
+	//m_pRenderSystem->RenderGBuffers(pRenderFrameParam);
+}
+
+void HrRenderModule::RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam)
 {
 	m_pRenderSystem->RenderSceneToShadowMap(pRenderQueue, pLightData, pRenderFrameParam);
 }
 
-void HrCoreComponentRender::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
+void HrRenderModule::RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam)
 {
 	m_pRenderSystem->RenderBasicRenderQueue(pRenderQueue, pRenderFrameParam);
 }
 
-void HrCoreComponentRender::ClearRenderFame()
+void HrRenderModule::ClearRenderFame()
 {
 	m_pRenderSystem->ClearRenderTarget();
 	m_pRenderSystem->ClearDepthStencil();
 }
 
-void HrCoreComponentRender::Present()
+void HrRenderModule::Present()
 {
 	m_pRenderSystem->Present();
 }
 
-bool HrCoreComponentRender::CreateRenderFactory(const std::string& strRenderModule)
+bool HrRenderModule::CreateRenderFactory(const std::string& strRenderModule)
 {
 	m_pRenderModuleLoader = HrMakeUniquePtr<HrModuleLoader>(strRenderModule);
 	if (m_pRenderModuleLoader->HrLoadModule())
@@ -81,12 +87,12 @@ bool HrCoreComponentRender::CreateRenderFactory(const std::string& strRenderModu
 	return false;
 }
 
-const HrRenderFactoryPtr& HrCoreComponentRender::GetRenderFactory() const
+const HrRenderFactoryPtr& HrRenderModule::GetRenderFactory() const
 {
 	return m_pRenderFactory;
 }
 
-void HrCoreComponentRender::CreateRenderSystem()
+void HrRenderModule::CreateRenderSystem()
 {
 	if (m_pRenderFactory && !m_pRenderSystem)
 	{
@@ -94,18 +100,17 @@ void HrCoreComponentRender::CreateRenderSystem()
 	}
 }
 
-void HrCoreComponentRender::AddViewPort(const HrViewPortPtr& pViewPort)
+void HrRenderModule::AddViewPort(const HrViewPortPtr& pViewPort)
 {
 	m_pRenderSystem->GetBindFrameBuffer()->AddViewPort(pViewPort);
 }
 
-void HrCoreComponentRender::DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
+void HrRenderModule::DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
 {
 	m_pRenderSystem->GetRender()->Render(pRenderTechnique, pRenderLayout);
 }
 
-const HrRenderFramePtr& HrCoreComponentRender::GetRenderFrameBuffer() const
+const HrRenderFramePtr& HrRenderModule::GetRenderFrameBuffer() const
 {
 	return m_pRenderSystem->GetScreenFrameBuffer();
 }
-

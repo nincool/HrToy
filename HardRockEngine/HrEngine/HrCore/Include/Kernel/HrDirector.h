@@ -24,16 +24,13 @@ namespace Hr
 		~HrDirector();
 
 
-		const HrSchedulerPtr& GetScheduler()
-		{
-			return m_pScheduler;
-		}
+		const HrSchedulerPtr& GetScheduler();
 
-		const HrCoreComponentEventPtr& GetEventComponent();
-		const HrCoreComponentWinPtr& GetWindowComponent();
-		const HrCoreComponentRenderPtr& GetRenderComponent();
-		const HrCoreComponentScenePtr& GetSceneComponent();
-		const HrCoreComponentResourcePtr& GetResourceComponent();
+		const HrEventSystemModulePtr& GetEventSystemModule();
+		const HrWindowModulePtr& GetWindowModule();
+		const HrRenderModulePtr& GetRenderModule();
+		const HrSceneModulePtr& GetSceneModule();
+		const HrResourceModulePtr& GetResourceModule();
 
 
 		/////////////////////////////--- 生命周期 ---/////////////////////////////////
@@ -51,18 +48,15 @@ namespace Hr
 		void UnSchedule(size_t nTargetHashKeyID, size_t nHashID);
 
 	protected:
-		void CreateEventComponent();
-		void CreateWindowComponent(void* pHwnd);
-		void CreateSceneComponent();
-		void CreateRenderComponent();
-		void CreateResourceManager();
+		void CreateEventSystemModule();
+		void CreateWindowModule(void* pHwnd);
+		void CreateSceneModule();
+		void CreateRenderModule();
+		void CreateResourceModule();
 
 
 		bool CreateRenderState();
 		void ReleaseRenderState();
-
-		//bool CreateResourceManager();
-		//void ReleaseResourceManager();
 
 		bool CreateInputManager();
 		void ReleaseInputManager();
@@ -82,14 +76,11 @@ namespace Hr
 		/* last time the main loop was updated */
 		std::chrono::steady_clock::time_point m_lastUpdate;
 		
-		//渲染模块加载
-		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
-
-		HrCoreComponentEventPtr m_pEventComponent;
-		HrCoreComponentWinPtr m_pWindowComponet;
-		HrCoreComponentRenderPtr m_pRenderComponent;
-		HrCoreComponentScenePtr m_pSceneManagerComponent;
-		HrCoreComponentResourcePtr m_pResManagerComponent;
+		HrEventSystemModulePtr m_pEventSystemModule;
+		HrWindowModulePtr m_pWindowModule;
+		HrRenderModulePtr m_pRenderModule;
+		HrSceneModulePtr m_pSceneModule;
+		HrResourceModulePtr m_pResourceModule;
 
 	};
 

@@ -105,6 +105,11 @@ float HrRenderFrameParameters::GetMaterialGlossiness() const
 	return m_pRenderable->GetMaterial()->GetGlossiness();
 }
 
+float HrRenderFrameParameters::GetMaterialReflective() const
+{
+	return m_pRenderable->GetMaterial()->GetReflective();
+}
+
 float4 HrRenderFrameParameters::GetMaterialAlbedo() const
 {
 	return m_pRenderable->GetMaterial()->GetAlebdo();

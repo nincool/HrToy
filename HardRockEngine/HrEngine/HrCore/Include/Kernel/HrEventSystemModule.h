@@ -1,15 +1,15 @@
 #ifndef _HR_EVENTCORECOMPONENT_H_
 #define _HR_EVENTCORECOMPONENT_H_
 
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrCoreComponentEvent : public HrCoreComponent
+	class HR_CORE_API HrEventSystemModule : public HrModule
 	{
 	public:
-		HrCoreComponentEvent();
-		~HrCoreComponentEvent();
+		HrEventSystemModule();
+		~HrEventSystemModule();
 
 		void AddEventCustomListener(const std::string& strEvent, const std::function<void(const HrEventPtr&)> &onEvent, void* pTarget);
 		

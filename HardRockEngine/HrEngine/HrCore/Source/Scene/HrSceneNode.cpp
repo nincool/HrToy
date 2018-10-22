@@ -9,8 +9,8 @@
 #include "Scene/HrSceneManager.h"
 #include "Scene/HrSceneObjectComponent.h"
 #include "Kernel/HrDirector.h"
-#include "Kernel/HrCoreComponentRender.h"
-#include "Kernel/HrCoreComponentEvent.h"
+#include "Kernel/HrRenderModule.h"
+#include "Kernel/HrEventSystemModule.h"
 #include "Kernel/HrLog.h"
 #include "Event/HrEvent.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -93,8 +93,8 @@ void HrSceneNode::OnExist()
 
 void HrSceneNode::AddEventListeners()
 {
-	HrDirector::Instance()->GetEventComponent()->AddEventCustomListener(HrEvent::scEventBeginUpdateScene, std::bind(&HrSceneNode::OnBeginRenderScene, this, std::placeholders::_1), this);
-	HrDirector::Instance()->GetEventComponent()->AddEventCustomListener(HrEvent::scEventEndUpdateScene, std::bind(&HrSceneNode::OnEndRenderScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventBeginUpdateScene, std::bind(&HrSceneNode::OnBeginRenderScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventEndUpdateScene, std::bind(&HrSceneNode::OnEndRenderScene, this, std::placeholders::_1), this);
 }
 
 void HrSceneNode::RemoveEventListeners()
@@ -163,6 +163,17 @@ void HrSceneNode::RemoveChildren()
 		m_vecChildrenNode[i]->OnExist();
 	}
 	m_vecChildrenNode.clear();
+}
+
+bool HrSceneNode::RemoveFromParent()
+{
+	auto pParent = GetParent();
+	if (pParent)
+	{
+		return pParent->RemoveChild(shared_from_this());
+	}
+
+	return false;
 }
 
 void HrSceneNode::UpdateNode(float fDt)

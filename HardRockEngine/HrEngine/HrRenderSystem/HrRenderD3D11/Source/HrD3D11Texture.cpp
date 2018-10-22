@@ -37,7 +37,7 @@ const ID3D11ShaderResourceViewPtr& HrD3D11Texture::GetD3D11ShaderResourceView()
 
 const ID3D11ResourcePtr& HrD3D11Texture::GetD3D11Resource()
 {
-	return m_pD3DTexture;
+	return m_pD3DResource;
 }
 
 UINT HrD3D11Texture::GetD3DTextureBindFlags()
@@ -142,7 +142,8 @@ HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DT
 	//if (desc.MiscFlags & D3D11_RESOURCE_MISC_GENERATE_MIPS)
 		//m_nAccessHint |= EAH_GENERATE_MIPS;
 
-	m_pD3DTexture = pD3DTex2D;
+	m_pD3D11Texture2D = pD3DTex2D;
+	m_pD3DResource = m_pD3D11Texture2D;
 }
 
 HrD3D11Texture2D::~HrD3D11Texture2D()
@@ -152,8 +153,10 @@ HrD3D11Texture2D::~HrD3D11Texture2D()
 
 bool HrD3D11Texture2D::CreateRenderTargetView()
 {
+	CreateHWResource();
+
 	ID3D11RenderTargetView* pRenderTargetView = nullptr;
-	HRESULT hr = m_pD3D11Device->CreateRenderTargetView(m_pD3DTexture.get(), 0, &pRenderTargetView);
+	HRESULT hr = m_pD3D11Device->CreateRenderTargetView(m_pD3DResource.get(), 0, &pRenderTargetView);
 	if (FAILED(hr))
 	{
 		TRE("HrD3D11Texture2D::CreateRenderTargetView Error!");
@@ -183,7 +186,7 @@ bool HrD3D11Texture2D::CreateDepthStencilView()
 	descDSV.Texture2D.MipSlice = 0;
 	
 	ID3D11DepthStencilView* pDepthStencilView = nullptr;
-	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateDepthStencilView(m_pD3DTexture.get(), &descDSV, &pDepthStencilView);
+	HRESULT hr = HrD3D11Device::Instance()->GetD3DDevice()->CreateDepthStencilView(m_pD3DResource.get(), &descDSV, &pDepthStencilView);
 	if (FAILED(hr))
 	{
 		TRE("HrD3D11Texture2D::CreateDepthStencilView  Error!");
@@ -229,7 +232,7 @@ bool HrD3D11Texture2D::CreateShaderResourceView()
 	}
 
 	ID3D11ShaderResourceView* pShaderResourceView = nullptr;
-	HRESULT hr = m_pD3D11Device->CreateShaderResourceView(m_pD3DTexture.get(), &desc, &pShaderResourceView);
+	HRESULT hr = m_pD3D11Device->CreateShaderResourceView(m_pD3DResource.get(), &desc, &pShaderResourceView);
 	if (FAILED(hr))
 	{
 		TRE("HrD3D11Texture2D::CreateShaderResourceView error!");
@@ -242,7 +245,7 @@ bool HrD3D11Texture2D::CreateShaderResourceView()
 
 void HrD3D11Texture2D::CreateHWResource()
 {
-	if (m_pD3DTexture)
+	if (m_pD3D11Texture2D)
 	{
 		return;
 	}
@@ -283,14 +286,15 @@ void HrD3D11Texture2D::CreateHWResource()
 		vecSubRes[0].SysMemSlicePitch = 0;
 	}
 
-	ID3D11Texture2D* pDepthStencil = nullptr;
-	HRESULT hr = m_pD3D11Device->CreateTexture2D(&textureDesc, vecSubRes.data(), &pDepthStencil);
+	ID3D11Texture2D* pTempTexture2D = nullptr;
+	HRESULT hr = m_pD3D11Device->CreateTexture2D(&textureDesc, vecSubRes.data(), &pTempTexture2D);
 	if (FAILED(hr))
 	{
 		TRE("HrD3D11Texture2D::CreateDepthStencilView create texture Error!");
 		return;
 	}
-	m_pD3DTexture = MakeComPtr(pDepthStencil);
+	m_pD3D11Texture2D = MakeComPtr(pTempTexture2D);
+	m_pD3DResource = m_pD3D11Texture2D;
 }
 
 bool HrD3D11Texture2D::LoadImpl()
@@ -302,4 +306,9 @@ bool HrD3D11Texture2D::LoadImpl()
 	CreateShaderResourceView();
 
 	return true;
+}
+
+ID3D11Texture2DPtr HrD3D11Texture2D::GetD3D11Texture()
+{
+	return m_pD3D11Texture2D;
 }

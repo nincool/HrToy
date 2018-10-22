@@ -5,8 +5,8 @@
 #include "Scene/HrScene.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
-#include "Kernel/HrCoreComponentRender.h"
-#include "Kernel/HrCoreComponentScene.h"
+#include "Kernel/HrRenderModule.h"
+#include "Kernel/HrSceneModule.h"
 #include "Render/HrCamera.h"
 
 using namespace Hr;
@@ -179,7 +179,7 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 void HrSceneObject::AddCameraToScene()
 {
 	if (m_pCachedCamera)
-		HrDirector::Instance()->GetRenderComponent()->AddViewPort(m_pCachedCamera->GetViewPort());
+		HrDirector::Instance()->GetRenderModule()->AddViewPort(m_pCachedCamera->GetViewPort());
 }
 
 void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
@@ -189,7 +189,7 @@ void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
 		HrSceneNodePtr pSceneNode = m_pContainerNode.lock();
 		if (pSceneNode->GetEnable())
 		{
-			HrDirector::Instance()->GetSceneComponent()->GetRunningScene()->GetLightsData()->AddLight(pLight);
+			HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetLightsData()->AddLight(pLight);
 		}
 	}
 }

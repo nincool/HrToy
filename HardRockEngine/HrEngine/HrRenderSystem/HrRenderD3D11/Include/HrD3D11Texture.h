@@ -42,7 +42,7 @@ namespace Hr
 
 		uint32 m_texD3DUsedType;
 
-		ID3D11ResourcePtr m_pD3DTexture;
+		ID3D11ResourcePtr m_pD3DResource;
 
 		ID3D11RenderTargetViewPtr m_pRenderTargetView;
 		ID3D11DepthStencilViewPtr m_pDepthStencilView;
@@ -72,8 +72,10 @@ namespace Hr
 		bool CreateRenderTargetView();
 		bool CreateDepthStencilView();
 		bool CreateShaderResourceView();
+
+		ID3D11Texture2DPtr GetD3D11Texture();
 	protected:
-	
+		ID3D11Texture2DPtr m_pD3D11Texture2D;
 	};
 }
 

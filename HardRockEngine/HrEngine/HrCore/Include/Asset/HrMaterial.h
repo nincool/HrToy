@@ -33,10 +33,20 @@ namespace Hr
 
 		void FillMaterialInfo(const HrModelDataInfo::HrMaterialDataInfo& materialDataInfo);
 
+		void CopyFrom(const HrMaterialPtr& pMaterial);
+
+		void SetAlbedo(const float4& albedo);
 		const float4& GetAlebdo() const;
+
+		void SetEmissive(const float4& emissive);
 		const float4& GetEmissive() const;
+		
 		void SetGlossiness(float fGls);
 		float GetGlossiness() const;
+		
+		void SetReflective(float fReflective);
+		float GetReflective() const;
+
 		float GetOpacity() const;
 
 
@@ -55,6 +65,8 @@ namespace Hr
 		float4 m_emissive;
 
 		float m_fGlossiness;
+
+		float m_fReflective;
 
 		float m_fOpacity;
 

@@ -72,7 +72,7 @@ void HrShadowMapScene::CreateSceneElements()
 	m_pBox = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestSphere.model");
 	m_pBox->GetTransform()->Rotate(Vector3(90, 0, 0));
 	m_pBox->GetTransform()->SetPosition(Vector3(0.0f, -30.0f, 0.0f));
-	//auto pEffSampler = HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
+	//auto pEffSampler = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
 	//m_pBox->GetChildByName("Box001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
 	m_pTestRoot->AddChild(m_pBox);
 
@@ -83,11 +83,11 @@ void HrShadowMapScene::CreateInputEvent()
 {
 	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrShadowMapScene::OnKeyPressed, this)
 		, HR_CALLBACK_2(HrShadowMapScene::OnKeyReleased, this));
-	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerKeyboard, this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerKeyboard, this);
 
 	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrShadowMapScene::OnMousePressed, this)
 		, HR_CALLBACK_2(HrShadowMapScene::OnMouseReleased, this), HR_CALLBACK_1(HrShadowMapScene::OnMouseMove, this));
-	HrDirector::Instance()->GetEventComponent()->AddEventListener(pEventListenerMouse, this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerMouse, this);
 }
 
 void HrShadowMapScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)

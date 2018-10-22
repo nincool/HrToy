@@ -5,11 +5,11 @@
 #include "Scene/HrSceneManager.h"
 
 #include "Render/HrRenderSystem.h"
-#include "Kernel/HrCoreComponentEvent.h"
-#include "Kernel/HrCoreComponentRender.h"
-#include "Kernel/HrCoreComponentWin.h"
-#include "Kernel/HrCoreComponentScene.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrEventSystemModule.h"
+#include "Kernel/HrRenderModule.h"
+#include "Kernel/HrWindowModule.h"
+#include "Kernel/HrSceneModule.h"
+#include "Kernel/HrResourceModule.h"
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11Render.h"
@@ -36,11 +36,11 @@ bool HrDirector::Init(void* pHwnd)
 {
 	HRLOG(_T("HrDirector Init!"));
 
-	CreateEventComponent();
-	CreateWindowComponent(pHwnd);
-	CreateSceneComponent();
-	CreateRenderComponent();
-	CreateResourceManager();
+	CreateEventSystemModule();
+	CreateWindowModule(pHwnd);
+	CreateSceneModule();
+	CreateRenderModule();
+	CreateResourceModule();
 	
 	if (!CreateRenderState())
 	{
@@ -68,7 +68,7 @@ bool HrDirector::CreateRenderState()
 	//todo
 	if (true)
 	{
-		m_pRenderComponent->GetRenderFactory()->CreateBuildInRasterizerState();
+		m_pRenderModule->GetRenderFactory()->CreateBuildInRasterizerState();
 		return true;
 	}
 	return false;
@@ -78,14 +78,6 @@ void HrDirector::ReleaseRenderState()
 {
 
 }
-
-//bool HrDirector::CreateResourceManager()
-//{
-//	HrResourceManager::Instance()->InitResourceManager();
-//
-//	return true;
-//}
-
 
 bool HrDirector::CreateInputManager()
 {
@@ -103,7 +95,7 @@ void HrDirector::StartMainLoop()
 {
 	while (!m_bEndMainLoop)
 	{
-		m_pWindowComponet->UpdateWindowMsg();
+		m_pWindowModule->UpdateWindowMsg();
 
 		if (m_bEndMainLoop)
 		{
@@ -126,16 +118,16 @@ void HrDirector::Update()
 
 	HrInputManager::Instance()->Capture();
 
-	m_pWindowComponet->Update(m_fDeltaTime);
-	m_pSceneManagerComponent->Update(m_fDeltaTime);
-	m_pRenderComponent->Update(m_fDeltaTime);
+	m_pWindowModule->Update(m_fDeltaTime);
+	m_pSceneModule->Update(m_fDeltaTime);
+	m_pRenderModule->Update(m_fDeltaTime);
 
 	m_pScheduler->Update(m_fDeltaTime);
 }
 
 bool HrDirector::Render()
 {
-	m_pSceneManagerComponent->RenderScene();
+	m_pSceneModule->RenderScene();
 	return true;
 }
 
@@ -151,11 +143,11 @@ void HrDirector::End()
 {
 	m_bEndMainLoop = true;
 
-	m_pSceneManagerComponent->Destroy();
+	m_pSceneModule->Destroy();
 
-	if (m_pWindowComponet)
+	if (m_pWindowModule)
 	{
-		m_pWindowComponet->DestroyWindow();
+		m_pWindowModule->DestroyWindow();
 	}
 }
 
@@ -164,55 +156,55 @@ void HrDirector::Destroy()
 
 } 
 
-void HrDirector::CreateEventComponent()
+void HrDirector::CreateEventSystemModule()
 {
-	m_pEventComponent = HrMakeSharedPtr<HrCoreComponentEvent>();
+	m_pEventSystemModule = HrMakeSharedPtr<HrEventSystemModule>();
 }
 
-void HrDirector::CreateWindowComponent(void* pHwnd)
+void HrDirector::CreateWindowModule(void* pHwnd)
 {
-	m_pWindowComponet = HrMakeSharedPtr<HrCoreComponentWin>(pHwnd);
+	m_pWindowModule = HrMakeSharedPtr<HrWindowModule>(pHwnd);
 }
 
-void HrDirector::CreateRenderComponent()
+void HrDirector::CreateRenderModule()
 {
-	m_pRenderComponent = HrMakeSharedPtr<HrCoreComponentRender>("HrRenderD3D11");
-	m_pRenderComponent->InitComponent();
+	m_pRenderModule = HrMakeSharedPtr<HrRenderModule>("HrRenderD3D11");
+	m_pRenderModule->InitComponent();
 }
 
-void HrDirector::CreateSceneComponent()
+void HrDirector::CreateSceneModule()
 {
-	m_pSceneManagerComponent = HrMakeSharedPtr<HrCoreComponentScene>();
+	m_pSceneModule = HrMakeSharedPtr<HrSceneModule>();
 }
 
-void HrDirector::CreateResourceManager()
+void HrDirector::CreateResourceModule()
 {
-	m_pResManagerComponent = HrMakeSharedPtr<HrCoreComponentResource>();
+	m_pResourceModule = HrMakeSharedPtr<HrResourceModule>();
 }
 
-const HrCoreComponentEventPtr& HrDirector::GetEventComponent()
+const HrEventSystemModulePtr& HrDirector::GetEventSystemModule()
 {
-	return m_pEventComponent;
+	return m_pEventSystemModule;
 }
 
-const HrCoreComponentWinPtr& HrDirector::GetWindowComponent()
+const HrWindowModulePtr& HrDirector::GetWindowModule()
 {
-	return m_pWindowComponet;
+	return m_pWindowModule;
 }
 
-const HrCoreComponentRenderPtr& HrDirector::GetRenderComponent()
+const HrRenderModulePtr& HrDirector::GetRenderModule()
 {
-	return m_pRenderComponent;
+	return m_pRenderModule;
 }
 
-const HrCoreComponentScenePtr& HrDirector::GetSceneComponent()
+const HrSceneModulePtr& HrDirector::GetSceneModule()
 {
-	return m_pSceneManagerComponent;
+	return m_pSceneModule;
 }
 
-const HrCoreComponentResourcePtr& HrDirector::GetResourceComponent()
+const HrResourceModulePtr& HrDirector::GetResourceModule()
 {
-	return m_pResManagerComponent;
+	return m_pResourceModule;
 }
 
 void HrDirector::Schedule(const std::function<void(float)>& callBack, void* pTarget, const std::string& strKey, float fInterval, uint32 nRepeat, float fDelay)
@@ -223,4 +215,9 @@ void HrDirector::Schedule(const std::function<void(float)>& callBack, void* pTar
 void HrDirector::UnSchedule(size_t nTargetHashKeyID, size_t nHashID)
 {
 	m_pScheduler->UnSchedule(nTargetHashKeyID, nHashID);
+}
+
+const HrSchedulerPtr& HrDirector::GetScheduler()
+{
+	return m_pScheduler;
 }

@@ -15,16 +15,25 @@
 
 using namespace Hr;
 
-void CHrD3D11SRVShaderParamRelationShip::UpdateShaderResourceView()
+void HrD3D11SRVShaderParamRelationShip::UpdateShaderResourceView()
 {
 	HrTexture* pTex = nullptr;
 	m_pTextureParam->Value(pTex);
 	if (pTex)
-	{
-		*m_pD3D11SRV = HrCheckPointerCast<HrD3D11Texture2D>(pTex)->GetD3D11ShaderResourceView().get();
-	}
+		(*m_pVecD3D11SRV)[m_nPosIndex] = HrCheckPointerCast<HrD3D11Texture2D>(pTex)->GetD3D11ShaderResourceView().get();
+	else
+		(*m_pVecD3D11SRV)[m_nPosIndex] = nullptr;
 }
 
+void HrD3D11SSShaderParamRelationShip::UpdateSamplerState()
+{
+	HrSamplerState* pSamplerState = nullptr;
+	m_pSamplerParam->Value(pSamplerState);
+	if (pSamplerState)
+		(*m_pVecD3D11SS)[m_nPosIndex] = HrCheckPointerCast<HrD3D11SamplerState>(pSamplerState)->GetD3D11SamplerState().get();
+	else
+		(*m_pVecD3D11SS)[m_nPosIndex] = nullptr;
+}
 
 ////////////////////////////////////////////////////////////////
 //
@@ -40,8 +49,6 @@ HrD3D11Shader::HrD3D11Shader()
 
 HrD3D11Shader::~HrD3D11Shader()
 {
-
-
 }
 
 void HrD3D11Shader::Accept(const HrRenderPtr& pRender)
@@ -54,6 +61,11 @@ void HrD3D11Shader::Accept(const HrRenderPtr& pRender)
 	for (size_t i = 0; i < m_vecSRVParamRelationships.size(); ++i)
 	{
 		m_vecSRVParamRelationships[i].UpdateShaderResourceView();
+	}
+
+	for (size_t i = 0; i < m_vecSSParamRelationships.size(); ++i)
+	{
+		m_vecSSParamRelationships[i].UpdateSamplerState();
 	}
 
 	pRender->BindShader(shared_from_this());
@@ -122,10 +134,21 @@ void HrD3D11Shader::BindRenderParameterImpl()
 
 	BOOST_ASSERT(m_vecD3D11SRV.empty());
 	m_vecSRVParamRelationships.clear();
-	m_vecD3D11SRV.assign(m_vecBindRenderResources.size(), nullptr);
+	BOOST_ASSERT(m_vecD3D11SamplerState.empty());
+	m_vecSSParamRelationships.clear();
+
 	for (size_t i = 0; i < m_vecBindRenderResources.size(); ++i)
 	{
-		m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV[i]);
+		if (m_vecBindRenderResources[i]->DataType() == REDT_TEXTURE2D)
+		{
+			m_vecD3D11SRV.push_back(nullptr);
+			m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV, m_vecD3D11SRV.size()-1);
+		}
+		else if (m_vecBindRenderResources[i]->DataType() == REDT_SAMPLER_STATE)
+		{
+			m_vecD3D11SamplerState.push_back(nullptr);
+			m_vecSSParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SamplerState, m_vecD3D11SamplerState.size()-1);
+		}
 	}
 }
 
@@ -144,8 +167,13 @@ const std::vector<ID3D11Buffer*>& HrD3D11Shader::GetConstBuffers()
 	return m_vecD3D11ConstBuffer;
 }
 
-const std::vector<ID3D11ShaderResourceView*>& Hr::HrD3D11Shader::GetSRVs()
+const std::vector<ID3D11ShaderResourceView*>& HrD3D11Shader::GetShaderResourceViews()
 {
 	return m_vecD3D11SRV;
+}
+
+const std::vector<ID3D11SamplerState*>& Hr::HrD3D11Shader::GetSamplerStates()
+{
+	return m_vecD3D11SamplerState;
 }
 

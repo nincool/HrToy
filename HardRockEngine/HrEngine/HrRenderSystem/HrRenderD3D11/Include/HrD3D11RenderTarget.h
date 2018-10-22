@@ -16,18 +16,9 @@ namespace Hr
 	private:
 		void CreateRenderTargetView(const ID3D11Texture2DPtr& pBackBuffer);
 	private:
-		HrD3D11Texture2DPtr m_pRenderTargetBuff;
 		HrD3D11Texture2DPtr m_pTexRenderTargetView;
 	};
-
-
 }
 
 #endif
-
-
-
-
-
-
 

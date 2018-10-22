@@ -64,8 +64,11 @@ void HrRenderViewDlg::OnOpenFile(const std::string& strFile)
 	m_pRenderApp->LoadOriginalMeshData(strFile);
 
 	auto pConvertUtil = m_pRenderApp->GetEditorScene()->GetConvertUtil();
-	auto& modelDataInfo = pConvertUtil->GetModelDataInfo();
-	m_pMeshView->FillClassView(modelDataInfo);
+	if (pConvertUtil)
+	{
+		auto& modelDataInfo = pConvertUtil->GetModelDataInfo();
+		m_pMeshView->FillClassView(modelDataInfo);
+	}
 }
 
 void HrRenderViewDlg::OnSaveFile(const std::string& strFile)

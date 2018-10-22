@@ -29,6 +29,7 @@ namespace Hr
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
 		
 		virtual void SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, const HrDepthStencilPtr& pDepthStencil) override;
+		virtual void SetRenderTarget(int nRenderTargetCounts, const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil) override;
 		virtual void SetViewPort(const HrViewPortPtr& pViewPort) override;
 
 		virtual void BindRasterizerState(const HrRasterizerStatePtr& pRasterizerState) override;
@@ -36,6 +37,7 @@ namespace Hr
 		virtual void BindDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState) override;
 
 		virtual void BindShader(const HrShaderPtr& pShader) override;
+		virtual void UnbindShader(const HrShaderPtr& pShader) override;
 
 		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) override;
 
@@ -45,16 +47,25 @@ namespace Hr
 
 		const ID3D11DevicePtr& GetD3D11Device();
 		const ID3D11DeviceContextPtr& GetD3D11DeviceContext();
+
+	protected:
+		void BindVertexShader(const HrD3D11ShaderPtr& pD3D11Shader);
+		void UnbindVertexShader();
+		void BindPixelShader(const HrD3D11ShaderPtr& pD3D11Shader);
+		void UnbindPixelShader();
+		
 	private:
 		HrRasterizerStatePtr m_pCachedRasterizerState;
 		HrBlendStatePtr m_pCachedBindBlendState;
 		HrDepthStencilStatePtr m_pCachedDepthStencilState;
-		std::array<const std::vector<ID3D11Buffer*>*, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindShaderBuffers;
+		std::array<std::vector<ID3D11Buffer*>, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindShaderBuffers;
+		std::array<std::vector<ID3D11ShaderResourceView*>, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindSRVs;
+		std::array<std::vector<ID3D11SamplerState*>, HrShader::ST_NUMSHADERTYPES> m_arrCachedBindSSs;
+
 	private:
 		HrRenderFramePtr m_pCurFrameBuffer;
 	};
 }
-
 
 #endif
 

@@ -22,6 +22,8 @@ namespace Hr
 		HrResourcePtr RetriveOrLoadResource(const std::string& strFile, HrResource::EnumResourceType resType);
 		HrResourcePtr RetriveOrAddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
+		bool RemoveResource(const std::string& strFile, HrResource::EnumResourceType resType);
+
 		/**
 		 @Comment: 创建材质 [8/27/2018 By Hr]
 		 @Param: 从模型文件中读取的材质信息
@@ -29,7 +31,6 @@ namespace Hr
 		*/
 		HrMaterialPtr MakeMaterial(const HrModelDataInfo::HrMaterialDataInfo& materialDataInfo);
 
-		HrResourcePtr GetDefaultMaterial();
 		HrTexture* GetDefaultTexture();
 		HrResourcePtr GetDefaultRenderEffect();
 
@@ -63,6 +64,10 @@ namespace Hr
 		HrResourcePtr GetModel(const std::string& strModelName);
 		HrResourcePtr GetMeshModel(const std::string& strModelName);
 		HrResourcePtr GetMaterial(const std::string& strMaterialName);
+
+		bool RemoveMeshModel(const std::string& strModelName);
+		bool RemoveMesh(const std::string& strMeshName);
+		bool RemoveMaterial(const std::string& strMaterialName);
 
 		void ReleaseResourceCache(std::unordered_map<size_t, HrResourcePtr>& mapRes);
 	protected:

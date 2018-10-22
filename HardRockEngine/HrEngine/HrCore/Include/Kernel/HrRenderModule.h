@@ -1,15 +1,15 @@
 #ifndef _HR_HRRENDERCORECOMPONENT_H_
 #define _HR_HRRENDERCORECOMPONENT_H_
 
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 
 namespace Hr
 {
-	class HR_CORE_API HrCoreComponentRender : public HrCoreComponent
+	class HR_CORE_API HrRenderModule : public HrModule
 	{
 	public:
-		HrCoreComponentRender(const std::string& strRenderModule);
-		~HrCoreComponentRender();
+		HrRenderModule(const std::string& strRenderModule);
+		~HrRenderModule();
 
 		virtual bool InitComponent() override;
 
@@ -20,6 +20,7 @@ namespace Hr
 		void OnRenderFrameBegin();
 		void OnRenderFrameEnd();
 
+		void RenderDeferredFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
 		void RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
 		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
 

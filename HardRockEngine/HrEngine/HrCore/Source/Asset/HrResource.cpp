@@ -5,7 +5,9 @@
 
 using namespace Hr;
 
-HrResource::HrResource() : m_resType(RT_UNKNOWN), m_resStatus(RS_UNKNOWN)
+HrResource::HrResource() : HrIDObject(HrID::GenerateID<HrSceneNode>())
+	, m_resType(RT_UNKNOWN)
+	, m_resStatus(RS_UNKNOWN)
 {
 	boost::uuids::random_generator rGenUUID;
 	boost::uuids::uuid ranUUID = rGenUUID();
@@ -38,9 +40,16 @@ bool HrResource::Unload()
 	{
 		return true;
 	}
-	UnloadImpl();
-	m_resStatus = RS_DECLARED;
 
-	return true;
+	this->Release();
+	if (this->GetReferenceCount() <= 0)
+	{
+		UnloadImpl();
+		m_resStatus = RS_DECLARED;
+
+		return true;
+	}
+
+	return false;
 }
 

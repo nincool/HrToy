@@ -1,9 +1,9 @@
-#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderTarget.h"
+#include "HrD3D11RenderTarget.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 #include "HrCore/Include/Kernel/HrDirector.h"
-#include "HrCore/Include/Kernel/HrCoreComponentWin.h"
-#include "HrCore/Include/Kernel/HrCoreComponentRender.h"
+#include "HrCore/Include/Kernel/HrWindowModule.h"
+#include "HrCore/Include/Kernel/HrRenderModule.h"
 #include "HrUtilTools/Include/HrUtil.h"
 #include "HrD3D11Texture.h"
 

@@ -61,6 +61,7 @@ protected:
 	CMFCPropertyGridColorProperty* m_pMaterialAlbedo;
 	CMFCPropertyGridColorProperty* m_pMaterialEmissive;
 	CMFCPropertyGridProperty* m_pMaterialShininess;
+	CMFCPropertyGridProperty* m_pMaterialReflective;
 
 	std::array<CMFCPropertyGridProperty*, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> m_arrMaterialTexture;
 

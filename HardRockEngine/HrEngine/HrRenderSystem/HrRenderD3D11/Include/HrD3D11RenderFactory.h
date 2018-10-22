@@ -20,11 +20,7 @@ namespace Hr
 
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) override;
-		//virtual HrTexturePtr CreateTexture(HrTexture::EnumTextureType texType
-		//	, uint32 nWidth
-		//	, uint32 nHeight
-		//	, uint32 nSampleCount
-		//	, uint32 nSampleQuality) override;
+		virtual HrRenderFramePtr CreateDeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData) override;
 
 		virtual HrRenderLayoutPtr CreateRenderLayout() override;
 

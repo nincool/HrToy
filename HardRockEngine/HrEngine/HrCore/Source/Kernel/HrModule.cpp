@@ -1,4 +1,4 @@
-#include "HrCore/Include/Kernel/HrCoreComponent.h"
+#include "HrCore/Include/Kernel/HrModule.h"
 #include "HrCore/Include/Kernel/HrLog.h"
 
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RenderFactory.h"
@@ -6,22 +6,22 @@
 
 using namespace Hr;
 
-HrCoreComponent::HrCoreComponent()
+HrModule::HrModule()
 {
 
 }
 
-HrCoreComponent::~HrCoreComponent()
+HrModule::~HrModule()
 {
 
 }
 
-bool HrCoreComponent::InitComponent()
+bool HrModule::InitComponent()
 {
 	return true;
 }
 
-bool HrCoreComponent::Update(float fDelta)
+bool HrModule::Update(float fDelta)
 {
 	return true;
 }

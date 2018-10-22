@@ -1,7 +1,7 @@
 #include "Scene/HrSceneObjectComponent.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
-#include "Kernel/HrCoreComponentResource.h"
+#include "Kernel/HrResourceModule.h"
 #include "Render/HrCamera.h"
 #include "Render/HrInstanceBatchHW.h"
 #include "Render/HrInstanceBatchObject.h"
@@ -204,6 +204,7 @@ void HrTrackBallCameraController::Rotate(const Vector3& v)
 	float fDist = HrMath::Length(vLookDir);
 
 	Vector3 vUpDir = HrMath::Cross(vLookDir, m_vRight);
+	vUpDir = HrMath::Normalize(vUpDir);
 
 	if (!m_pAttachSceneObj.expired())
 	{
@@ -328,7 +329,7 @@ void HrInstanceBatchComponent::CreateInstanceBatch(const HrSubMeshPtr& pSubMesh)
 
 	m_pInsBatch = HrMakeSharedPtr<HrInstanceBatchHW>();
 	m_pInsBatch->SetSubMesh(pSubMesh);
-	m_pInsBatch->SetRenderEffect(HrDirector::Instance()->GetResourceComponent()->RetriveResource<HrRenderEffect>("Media/HrShader/HrInstanceEffect.json"));
+	m_pInsBatch->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/HrShader/HrInstanceEffect.json"));
 	m_pInsBatch->SetAttachSceneObject(GetAttachSceneObject());
 }
 
