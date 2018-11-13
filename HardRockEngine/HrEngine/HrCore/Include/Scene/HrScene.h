@@ -38,6 +38,8 @@ namespace Hr
 		virtual void Update(float fDelta);
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
 
+		const HrSceneNodePtr& GetRootNode();
+
 		std::shared_ptr<HrSceneLightData>& GetLightsData();
 	protected:
 		HrSceneNodePtr m_pSceneRootNode;

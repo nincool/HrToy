@@ -18,17 +18,14 @@ namespace Hr
 	protected:
 		struct SAxisVertex
 		{
-			float4 position;
+			float3 position;
 			float4 color;
 			SAxisVertex()
 			{
-				position = Vector4::Zero();
+				position = Vector3::Zero();
 				color = Vector4::Zero();
 			}
 		};
-	protected:
-		virtual bool LoadImpl() override;
-
 	private:
 		void CreateAxisMesh();
 	};
@@ -48,7 +45,7 @@ namespace Hr
 		void OnRMouseButtonUp(float fX, float fY);
 		void OnMouseWheel(float fDelta);
 
-		void LoadOriginalMeshData(const std::string& strFileName);
+		const HrModelDataInfo& LoadOriginalMeshData(const std::string& strFileName);
 		void SaveConvertMeshData(const std::string& strFileName);
 
 		std::shared_ptr<HrConvertUtil> GetConvertUtil()
@@ -114,7 +111,7 @@ namespace Hr
 
 		void RenderOnce();
 
-		void LoadOriginalMeshData(const std::string& strFileName);
+		const HrModelDataInfo& LoadOriginalMeshData(const std::string& strFileName);
 		void SaveConvertMeshData(const std::string& strFileName);
 
 		void OnMouseMove(float fX, float fY);

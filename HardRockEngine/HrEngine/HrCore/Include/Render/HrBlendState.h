@@ -2,7 +2,7 @@
 #define _HR_BLENDSTATE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 
 namespace Hr
@@ -102,8 +102,6 @@ namespace Hr
 
 		return nColorMask;
 	}
-
-
 
 	class HR_CORE_API HrBlendState
 	{

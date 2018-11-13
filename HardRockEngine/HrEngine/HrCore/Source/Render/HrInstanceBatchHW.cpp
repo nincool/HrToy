@@ -62,11 +62,13 @@ void HrInstanceBatchHW::BuildVertices(const HrSubMeshPtr& pSubMesh)
 
 HrSceneObjectPtr HrInstanceBatchHW::CreateInstance()
 {
-	HrSceneObjectPtr pInsBatchObj = HrMakeSharedPtr<HrSceneObject>();
-	m_vecInstanceObjects.emplace_back(pInsBatchObj);
-	m_pBatchRenderLayout->SetInstanceNum(m_vecInstanceObjects.size());
+	//HrSceneObjectPtr pInsBatchObj = HrMakeSharedPtr<HrSceneObject>();
+	//m_vecInstanceObjects.emplace_back(pInsBatchObj);
+	//m_pBatchRenderLayout->SetInstanceNum(m_vecInstanceObjects.size());
 
-	return pInsBatchObj;
+	//return pInsBatchObj;
+
+	return nullptr;
 }
 
 void HrInstanceBatchHW::OnRenderBegin()

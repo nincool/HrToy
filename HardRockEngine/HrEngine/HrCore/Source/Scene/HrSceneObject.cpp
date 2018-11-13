@@ -11,18 +11,19 @@
 
 using namespace Hr;
 
-HrSceneObject::HrSceneObject()
+HrSceneObject::HrSceneObject(HrSceneNode* pSceneNode)
 {
+	m_pContainerNode = pSceneNode;
 }
 
 HrSceneObject::~HrSceneObject()
 {
 }
 
-void HrSceneObject::AttachSceneNode(const HrSceneNodePtr& pSceneNode)
-{
-	m_pContainerNode = pSceneNode;
-}
+//void HrSceneObject::AttachSceneNode(HrSceneNode* pContainerNode)
+//{
+//	m_pContainerNode = pContainerNode;
+//}
 
 void HrSceneObject::OnEnter()
 {
@@ -123,21 +124,21 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 	case HrSceneObjectComponent::SCT_NORMAL:
 		break;
 	case HrSceneObjectComponent::SCT_CAMERA:
-		pSceneObjCom = HrMakeSharedPtr<HrCameraComponet>("Camera", shared_from_this());
+		pSceneObjCom = HrMakeSharedPtr<HrCameraComponet>("Camera", this);
 		break;
 	case HrSceneObjectComponent::SCT_LIGHT:
 		break;
 	case HrSceneObjectComponent::SCT_RENDERABLE:
-		pSceneObjCom = HrMakeSharedPtr<HrRenderableComponent>("Renderable", shared_from_this());
+		pSceneObjCom = HrMakeSharedPtr<HrRenderableComponent>("Renderable", this);
 		break;
 	case HrSceneObjectComponent::SCT_INSTANCEBATCH:
-		pSceneObjCom = HrMakeSharedPtr<HrInstanceBatchComponent>("InstanceBatch", shared_from_this());
+		pSceneObjCom = HrMakeSharedPtr<HrInstanceBatchComponent>("InstanceBatch", this);
 		break;
 	case HrSceneObjectComponent::SCT_INSTANCEOBJ:
-		pSceneObjCom = HrMakeSharedPtr<HrInstanceObjectComponent>("InstanceObj", shared_from_this());
+		pSceneObjCom = HrMakeSharedPtr<HrInstanceObjectComponent>("InstanceObj", this);
 		break;
 	case HrSceneObjectComponent::SCT_TRACKBALLCAMERA:
-		pSceneObjCom = HrMakeSharedPtr<HrTrackBallCameraController>("TrackBallCameraController", shared_from_this());
+		pSceneObjCom = HrMakeSharedPtr<HrTrackBallCameraController>("TrackBallCameraController", this);
 		break;
 	case HrSceneObjectComponent::SCT_COM_COUNT:
 		break;
@@ -157,11 +158,8 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 		return nullptr;
 	}
 
-	if (!m_pContainerNode.expired())
-	{
-		if (m_pContainerNode.lock()->IsRunning())
-			pSceneObjCom->OnEnter();
-	}
+	if (m_pContainerNode->IsRunning())
+		pSceneObjCom->OnEnter();
 
 	m_mapComponents[comType] = pSceneObjCom;
 	m_pSceneObjMutexCom = pSceneObjCom->IsMutex() ? pSceneObjCom : nullptr;
@@ -170,6 +168,9 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 	{
 	case HrSceneObjectComponent::SCT_CAMERA:
 		m_pCachedCamera = HrCheckPointerCast<HrCameraComponet>(pSceneObjCom);
+		break;
+	case HrSceneObjectComponent::SCT_RENDERABLE:
+		m_pCachedRenderable = HrCheckPointerCast<HrRenderableComponent>(pSceneObjCom);
 		break;
 	}
 
@@ -184,13 +185,9 @@ void HrSceneObject::AddCameraToScene()
 
 void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
 {
-	if (!m_pContainerNode.expired())
+	if (m_pContainerNode->GetEnable())
 	{
-		HrSceneNodePtr pSceneNode = m_pContainerNode.lock();
-		if (pSceneNode->GetEnable())
-		{
-			HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetLightsData()->AddLight(pLight);
-		}
+		HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetLightsData()->AddLight(pLight);
 	}
 }
 
@@ -205,8 +202,13 @@ HrSceneObjectComponentPtr HrSceneObject::GetComponent(HrSceneObjectComponent::En
 	return nullptr;
 }
 
-HrSceneNodePtr HrSceneObject::GetSceneNode()
+const HrSceneNode* HrSceneObject::GetSceneNode() const
 {
-	return m_pContainerNode.lock();
+	return m_pContainerNode;
+}
+
+const HrRenderableComponentPtr& HrSceneObject::GetRenderableComponent()
+{
+	return m_pCachedRenderable;
 }
 

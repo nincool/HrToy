@@ -40,7 +40,7 @@ void HrD3D11RenderLayout::Active()
 				d3dInputELeDesc.Format = HrD3D11Mapping::GetInputElementFormat(vertexElement.m_elementType);
 				d3dInputELeDesc.InputSlot = i;
 				d3dInputELeDesc.AlignedByteOffset = vertexElement.GetOffset();
-				d3dInputELeDesc.InputSlotClass = HrD3D11Mapping::GetInputELementClassType(vertexElement.m_elementClassType);
+				d3dInputELeDesc.InputSlotClass = HrD3D11Mapping::GetInputElementClassType(vertexElement.m_elementClassType);
 				d3dInputELeDesc.InstanceDataStepRate = vertexElement.m_nInstanceStepRate;
 				m_vecInputElementDesc.emplace_back(d3dInputELeDesc);
 			}

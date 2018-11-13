@@ -83,6 +83,23 @@ std::string HrFileUtils::GetAppPath() const
 	return m_strAppPath;
 }
 
+std::string HrFileUtils::GetFileString(const std::string& strFile)
+{
+	std::string strFullPath = GetFullPathForFileName(strFile);
+	if (strFullPath.empty())
+	{
+		return "";
+	}
+
+	std::fstream fileStream(strFullPath.c_str(), std::ios::in);
+	BOOST_ASSERT(fileStream.is_open());
+	std::istreambuf_iterator<char> beg(fileStream), end;
+	std::string strContent(beg, end);
+	fileStream.close();
+
+	return strContent;
+}
+
 HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 {
 	HrStreamDataPtr pFileStream = std::make_shared<HrStreamData>();
@@ -93,10 +110,8 @@ HrStreamDataPtr HrFileUtils::GetFileData(const std::string& strFile)
 		return pFileStream;
 	}
 
-	std::fstream fileStream(strFullPath.c_str(), std::ios::in);
+	std::fstream fileStream(strFullPath.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
 	BOOST_ASSERT(fileStream.is_open());
-
-	fileStream.seekg(0, std::ios::end);
 	std::uint64_t nFileLength = fileStream.tellg();
 	fileStream.seekg(0, std::ios::beg);
 

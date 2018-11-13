@@ -37,15 +37,18 @@ namespace Hr
 		const HrIndexDataPtr& GetIndexStream();
 		EnumIndexType GetIndexBufferType();
 
+		size_t GetSimanticHashValue();
+
 		uint32 GetNextVertexSemanticIndex(EnumVertexElementSemantic semantic);
 
 		void SetInstanceNum(uint32 nInstance);
 		uint32 GetInstanceNum();
 	private:
-		void CreateVertexElementHashValue();
+		size_t CreateVertexElementHashValue();
 	protected:
 		EnumTopologyType m_topologyType;
 		bool m_bStreamsDirty;
+		size_t m_nSimanticHashValue;
 
 		std::vector<HrVertexDataPtr> m_vecVertexStreams;
 		HrIndexDataPtr m_pIndexData;

@@ -23,7 +23,7 @@ namespace Hr
 	protected:
 		bool CheckSceneRunning();
 	
-	private:
+	protected:
 		HrScenePtr m_pRunningScene;
 		HrRenderQueuePtr m_pRenderQueue;
 

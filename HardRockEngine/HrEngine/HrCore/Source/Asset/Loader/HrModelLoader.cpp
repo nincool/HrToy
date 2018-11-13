@@ -101,42 +101,6 @@ void HrModelLoader::MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData
 	Vector3 v3Zero = Vector3::Zero();
 
 	const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo = m_modelDesc.vecSubMeshInfo[nSubMeshIndex];
-	
-	//for (int nIndiceIndex = 0; nIndiceIndex < subMeshInfo.vecIndices.size(); ++nIndiceIndex)
-	//{
-	//	int nVertexIndex = subMeshInfo.vecIndices[nIndiceIndex];
-
-	//	for (size_t nEleIndex = 0; nEleIndex < vecVertexElement.size(); ++nEleIndex)
-	//	{
-	//		switch (vecVertexElement[nEleIndex].m_elementSemantic)
-	//		{
-	//		case VEU_POSITION:
-	//		{
-	//			streamData.AddBuffer((Byte*)(&subMeshInfo.vecVertexPos[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
-
-	//			break;
-	//		}
-	//		case VEU_TANGENT:
-	//		{
-	//			break;
-	//		}
-	//		case VEU_BINORMAL:
-	//		{
-	//			break;
-	//		}
-	//		case VEU_NORMAL:
-	//		{
-	//			streamData.AddBuffer((Byte*)(&subMeshInfo.vecNormal[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
-	//			break;
-	//		}
-	//		case VEU_TEXTURE_COORDINATES:
-	//		{
-	//			streamData.AddBuffer((Byte*)(&subMeshInfo.vecUV[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
-	//			break;
-	//		}
-	//		}
-	//	}
-	//}
 
 	for (int nVertexIndex = 0; nVertexIndex < subMeshInfo.vecVertexPos.size(); ++nVertexIndex)
 	{
@@ -180,4 +144,9 @@ void HrModelLoader::MakeIndexStream(int nSubMeshIndex, HrStreamData& indexData)
 	{
 		indexData.AddBuffer((Byte*)(&subMeshInfo.vecIndices[0]), subMeshInfo.vecIndices.size() * sizeof(subMeshInfo.vecIndices[0]));
 	}
+}
+
+const HrModelDataInfo& HrModelLoader::GetModelDataInfo()
+{
+	return m_modelDesc;
 }

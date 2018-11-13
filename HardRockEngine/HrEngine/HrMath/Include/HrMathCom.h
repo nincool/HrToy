@@ -175,6 +175,11 @@ namespace Hr
 			return KlayGE::MathLib::length_sq(rhs);
 		}
 
+		inline float Dot(Vector3 const& lhs, Vector3 const& rhs)
+		{
+			return KlayGE::MathLib::dot(lhs, rhs);
+		}
+
 		inline Vector3 Cross(Vector3 const& lhs, Vector3 const& rhs)
 		{
 			return KlayGE::MathLib::cross(lhs, rhs);
@@ -189,6 +194,11 @@ namespace Hr
 		inline Quaternion Normalize(Quaternion const& lhs)
 		{
 			return KlayGE::MathLib::normalize(lhs);
+		}
+
+		inline Quaternion Inverse(Quaternion const& lhs)
+		{
+			return KlayGE::MathLib::inverse(lhs);
 		}
 
 		inline Matrix4 ToMatrix(Quaternion const& lhs)
@@ -216,9 +226,13 @@ namespace Hr
 			return KlayGE::MathLib::rotation_axis(axis, angle);
 		}
 
+		inline Vector3 ToPitchYawRoll(const Quaternion& qua)
+		{
+			float fYaw, fPitch, fRoll;
+			KlayGE::MathLib::to_yaw_pitch_roll(fYaw, fPitch, fRoll, qua);
 
-
-
+			return Vector3(fPitch, fYaw, fRoll);
+		}
 
 		// 4D æÿ’Û
 		///////////////////////////////////////////////////////////////////////////////
@@ -328,20 +342,6 @@ namespace Hr
 		{
 			return KlayGE::MathLib::transform_quat(v, quat);
 		}
-
-		//inline Vector3 Mul(const Quaternion& lhs, const Vector3& rhs)
-		//{
-		//	//from ogre
-		//	// nVidia SDK implementation
-		//	Vector3 uv, uuv;
-		//	Vector3 qvec(lhs.x(), lhs.y(), lhs.z());
-		//	uv = Cross(qvec, rhs);
-		//	uuv = Cross(qvec, uv);
-		//	uv *= (2.0f * lhs.w());
-		//	uuv *= 2.0f;
-
-		//	return rhs + uv + uuv;
-		//}
 
 		inline Matrix4 RotationAroundTarget(const Vector3& vTarget, const Quaternion& q)
 		{

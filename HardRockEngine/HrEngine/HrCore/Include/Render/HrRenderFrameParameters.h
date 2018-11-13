@@ -77,7 +77,7 @@ namespace Hr
 
 		HrCameraPtr m_pCurrentCamera;
 		HrRenderablePtr m_pRenderable;
-		HrSceneNodePtr m_pSceneNode;
+		HrSceneNode* m_pSceneNode;
 		
 	};
 }

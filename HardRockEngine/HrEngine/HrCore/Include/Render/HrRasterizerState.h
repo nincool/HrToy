@@ -2,41 +2,11 @@
 #define _HR_RASTERIZERSTATE_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 namespace Hr
 {
-	//RasterizerFillMode
-	enum EnumRasterizerFillModel
-	{
-		RFM_WIREFRAME,
-		RFM_SOLD,
-	};
 
-	//RasterizerCullMode
-	enum EnumRasterizerCullModel
-	{
-		RCM_CULL_NONE,
-		RCM_CULL_FRONT,
-		RCM_CULL_BACK
-	};
-
-	inline EnumRasterizerFillModel RasterizerFillMode(const std::string& str)
-	{
-		if ("solid" == str) return RFM_SOLD;
-		if ("wireframe" == str) return RFM_WIREFRAME;
-		
-		return RFM_SOLD;
-	}
-
-	inline EnumRasterizerCullModel RasterizerCullMode(const std::string& str)
-	{
-		if ("none" == str) return RCM_CULL_NONE;
-		if ("front" == str) return RCM_CULL_FRONT;
-		if ("back" == str) return RCM_CULL_BACK;
-
-		return RCM_CULL_BACK;
-	}
 
 	class HR_CORE_API HrRasterizerState
 	{

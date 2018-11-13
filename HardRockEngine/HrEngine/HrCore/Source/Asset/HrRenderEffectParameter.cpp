@@ -550,8 +550,8 @@ void HrRenderVariableTexture::Value(HrTexture*& val) const
 ////////////////////////////////= HrRenderVarialbeSampler=////////////////////////////////////////
 HrRenderVariableSamplerState::HrRenderVariableSamplerState()
 {
-	//create defualt
-	m_pSamplerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateSamplerState();
+	HrSamplerState::HrSamplerStateDesc desc;
+	m_pSamplerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateSamplerState(desc);
 }
 
 HrRenderVariableSamplerState::~HrRenderVariableSamplerState()

@@ -17,7 +17,6 @@ namespace Hr
 		
 		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
 
-
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		virtual HrRenderFramePtr CreateDeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData) override;
@@ -42,7 +41,7 @@ namespace Hr
 			, EnumPixelFormat format) override;
 
 
-		virtual HrSamplerStatePtr CreateSamplerState() override;
+		virtual HrSamplerStatePtr CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc) override;
 
 		virtual HrDepthStencilStatePtr CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) override;
 

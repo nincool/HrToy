@@ -1,7 +1,6 @@
 #include "Asset/HrSceneObjectFactory.h"
 #include "Asset/HrMeshModel.h"
 #include "Asset/HrResourceManager.h"
-#include "Asset/HrModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
 #include "Render/HrViewPort.h"
@@ -29,10 +28,8 @@ HrSceneObjectFactory::~HrSceneObjectFactory()
 
 HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName)
 {
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
-	pSceneNode->SetSceneObject(pSceneObj);
-	HrCameraComponentPtr pCamera = pSceneObj->AddComponent<HrCameraComponet>();
+	HrCameraComponentPtr pCamera = pSceneNode->GetSceneObject()->AddComponent<HrCameraComponet>();
 
 	auto& pWinCom = HrDirector::Instance()->GetWindowModule();
 	uint32 nTopX = pWinCom->GetWindowX();
@@ -49,10 +46,8 @@ HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName)
 
 HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)
 {
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
-	pSceneNode->SetSceneObject(pSceneObj);
-	HrCameraComponentPtr pCamera = pSceneObj->AddComponent<HrCameraComponet>();
+	HrCameraComponentPtr pCamera = pSceneNode->GetSceneObject()->AddComponent<HrCameraComponet>();
 	pCamera->GetViewPort()->SetViewPortAttribute(fTopX, fTopY, fWidth, fHeight, nZOrder);
 
 	return pSceneNode;
@@ -73,45 +68,18 @@ HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)
 HrSceneNodePtr HrSceneObjectFactory::CreateMeshModelNode(HrMeshModelPtr& pMeshModel)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
 	pSceneNode->SetName(pMeshModel->GetFileName());
 
 	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
-		HrSceneObjectPtr pSubRenderObj = HrMakeSharedPtr<HrSceneObject>();
+		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
+		HrSceneObjectPtr pSubRenderObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSubRenderObj->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
 		pRenderableCom->SetRenderable(pRenderable);
 		pRenderable->SetSubMesh(pMeshModel->GetMesh()->GetSubMesh(i));
 		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
-		pNode->SetSceneObject(pSubRenderObj);
-		pSceneNode->AddChild(pNode);
-	}
-
-	return pSceneNode;
-}
-
-HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrModelPtr& pModel)
-{
-	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
-	pSceneNode->SetName(pModel->GetFileName());
-
-	for (size_t i = 0; i < pModel->GetMesh()->GetSubMeshNum(); ++i)
-	{
-		HrSceneObjectPtr pSubRenderObj = HrMakeSharedPtr<HrSceneObject>();
-		HrRenderableComponentPtr pRenderableCom = pSubRenderObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
-		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(pModel->GetMesh()->GetSubMesh(i));
-		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
-		
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pModel->GetMesh()->GetSubMesh(i)->GetName());
-		pNode->SetSceneObject(pSubRenderObj);
 		pSceneNode->AddChild(pNode);
 	}
 
@@ -120,12 +88,9 @@ HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(HrModelPtr& pModel)
 
 HrSceneNodePtr HrSceneObjectFactory::CreateLightNode(const std::string& strName, HrLight::EnumLightType lightType)
 {
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	HrLightComponentPtr pLight = HrMakeSharedPtr<HrLightComponent>(strName, pSceneObj, lightType);
-	pSceneObj->AddComponent(pLight);
-
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
-	pSceneNode->SetSceneObject(pSceneObj);
+	HrLightComponentPtr pLight = HrMakeSharedPtr<HrLightComponent>(strName, pSceneNode->GetSceneObject().get(), lightType);
+	pSceneNode->GetSceneObject()->AddComponent(pLight);
 
 	return pSceneNode; 
 }
@@ -145,21 +110,18 @@ HrSceneNodePtr HrSceneObjectFactory::CreateGridPlan()
 	}
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
 	pSceneNode->SetName(pMeshModel->GetFileName());
 
 	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
-		HrSceneObjectPtr pSubObj = HrMakeSharedPtr<HrSceneObject>();
+		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
+		HrSceneObjectPtr pSubObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSubObj->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
 		pRenderableCom->SetRenderable(pRenderable);
 		pRenderable->SetSubMesh(pMeshModel->GetMesh()->GetSubMesh(i));
 		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
-		pNode->SetSceneObject(pSubObj);
 		pSceneNode->AddChild(pNode);
 	}
 
@@ -190,8 +152,6 @@ HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodeP(const std::string& strName,
 HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(const std::string& strName)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
 	pSceneNode->SetName(strName);
 
 	return pSceneNode;

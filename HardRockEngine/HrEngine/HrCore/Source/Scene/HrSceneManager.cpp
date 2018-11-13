@@ -84,15 +84,16 @@ void HrSceneManager::RenderScene()
 
 	//×¼±¸äÖÈ¾¶ÓÁÐ
 	m_pRenderQueue->PrepareRenderQueue();
+
 	m_pRunningScene->FillRenderQueue(m_pRenderQueue);
 
 	//ÑÓ³ÙäÖÈ¾
-	pRenderComponent->RenderDeferredFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
+	//pRenderComponent->RenderDeferredFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
 
 	//äÖÈ¾ ÏÈÆÁ±ÎµôäÖÈ¾µ½Éî¶È»º´æ
 	//pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
 	
-	//pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
+	pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
 	pRenderComponent->Present();
 
 	pRenderComponent->OnRenderFrameEnd();

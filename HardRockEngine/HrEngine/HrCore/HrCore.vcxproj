@@ -141,7 +141,6 @@
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
     <ClInclude Include="Include\Asset\HrMeshModel.h" />
     <ClInclude Include="Include\Asset\HrMesh.h" />
-    <ClInclude Include="Include\Asset\HrModel.h" />
     <ClInclude Include="Include\Asset\HrRenderEffect.h" />
     <ClInclude Include="Include\Asset\HrResource.h" />
     <ClInclude Include="Include\Asset\HrResourceLoader.h" />
@@ -188,7 +187,7 @@
     <ClInclude Include="Include\Render\HrDepthStencil.h" />
     <ClInclude Include="Include\Render\HrDepthStencilState.h" />
     <ClInclude Include="Include\Render\HrFrustum.h" />
-    <ClInclude Include="Include\Render\HrDataFormat.h" />
+    <ClInclude Include="Include\Render\HrDataDefine.h" />
     <ClInclude Include="Include\Render\HrInstanceBatch.h" />
     <ClInclude Include="Include\Render\HrInstanceBatchHW.h" />
     <ClInclude Include="Include\Render\HrInstanceBatchObject.h" />
@@ -214,6 +213,9 @@
     <ClInclude Include="Include\Render\HrRenderLayout.h" />
     <ClInclude Include="Include\Render\HrRenderPass.h" />
     <ClInclude Include="Include\Render\HrRenderTechnique.h" />
+    <ClInclude Include="Include\Scene\HrOctNode.h" />
+    <ClInclude Include="Include\Scene\HrOctree.h" />
+    <ClInclude Include="Include\Scene\HrOctreeSceneManager.h" />
     <ClInclude Include="Include\Scene\HrScene.h" />
     <ClInclude Include="Include\Scene\HrSceneImported.h" />
     <ClInclude Include="Include\Scene\HrSceneManager.h" />
@@ -229,7 +231,6 @@
     <ClCompile Include="Source\Asset\HrSceneObjectFactory.cpp" />
     <ClCompile Include="Source\Asset\HrMeshModel.cpp" />
     <ClCompile Include="Source\Asset\HrMesh.cpp" />
-    <ClCompile Include="Source\Asset\HrModel.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffect.cpp" />
     <ClCompile Include="Source\Asset\HrResourceLoader.cpp" />
     <ClCompile Include="Source\Asset\HrResourceManager.cpp" />
@@ -295,6 +296,9 @@
     <ClCompile Include="Source\Render\HrVertex.cpp" />
     <ClCompile Include="Source\Render\HrViewPort.cpp" />
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp" />
+    <ClCompile Include="Source\Scene\HrOctNode.cpp" />
+    <ClCompile Include="Source\Scene\HrOctree.cpp" />
+    <ClCompile Include="Source\Scene\HrOctreeSceneManager.cpp" />
     <ClCompile Include="Source\Scene\HrScene.cpp" />
     <ClCompile Include="Source\Scene\HrSceneImported.cpp" />
     <ClCompile Include="Source\Scene\HrSceneManager.cpp" />

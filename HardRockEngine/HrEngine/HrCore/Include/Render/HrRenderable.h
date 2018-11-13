@@ -25,8 +25,8 @@ namespace Hr
 		/**
 		 @Comment: attach sceneobject [7/12/2018 By Hr]
 		*/
-		void SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj);
-		HrSceneObjectPtr GetAttachSceneObject();
+		void SetAttachSceneObject(HrSceneObject* pSceneObj);
+		HrSceneObject* GetAttachSceneObject() const;
 
 		/**
 		 @Comment: rendering [7/12/2018 By Hr]
@@ -35,6 +35,11 @@ namespace Hr
 		virtual void Render(const HrRenderTechniquePtr& pRenderTech = nullptr);
 		virtual void OnRenderEnd();
 		
+		/**
+		 @Comment: axis-aligned bounding box  [10/26/2018 By Hr]
+		 @Return: aabb
+		*/
+		const AABBox& GetAABBox();
 	protected:
 		bool CheckRenderLayoutMatchShader();
 
@@ -43,8 +48,11 @@ namespace Hr
 		HrRenderEffectPtr m_pRenderEffect;
 		HrRenderTechniquePtr m_pCurTechnique;
 		HrSubMeshPtr m_pSubMesh;
+		AABBox m_aabb;
 
-		std::weak_ptr<HrSceneObject> m_pAttachSceneObj;
+		//todo
+		//std::weak_ptr<HrSceneObject> m_pAttachSceneObj;
+		HrSceneObject* m_pSceneObj;
 	};
 }
 

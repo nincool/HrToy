@@ -42,8 +42,7 @@ void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
 	m_pRenderEffect = pRenderEff;
 
-	const std::vector<HrVertexDataPtr>& vecVertexData = m_pSubMesh->GetRenderLayout()->GetVertexStreams();
-	m_pCurTechnique = m_pRenderEffect->GetBestTechnique(vecVertexData);
+	m_pCurTechnique = m_pRenderEffect->GetBestTechnique(m_pSubMesh->GetRenderLayout());
 	BOOST_ASSERT(m_pCurTechnique);
 }
 
@@ -63,19 +62,14 @@ const HrSubMeshPtr& HrRenderable::GetSubMesh()
 	return m_pSubMesh;
 }
 
-void HrRenderable::SetAttachSceneObject(const HrSceneObjectPtr& pSceneObj)
+void HrRenderable::SetAttachSceneObject(HrSceneObject* pSceneObj)
 {
-	m_pAttachSceneObj = pSceneObj;
+	m_pSceneObj = pSceneObj;
 }
 
-HrSceneObjectPtr HrRenderable::GetAttachSceneObject()
+HrSceneObject* HrRenderable::GetAttachSceneObject() const
 {
-	if (!m_pAttachSceneObj.expired())
-	{
-		return m_pAttachSceneObj.lock();
-	}
-
-	return nullptr;
+	return m_pSceneObj;
 }
 
 void HrRenderable::Render(const HrRenderTechniquePtr& pRenderTech)
@@ -147,4 +141,9 @@ void HrRenderable::UpdateRenderEffectParam()
 	auto& pFlagUseNormalTex = GetRenderEffect()->GetParameterByName("flag_use_normalmap");
 	if (pFlagUseNormalTex)
 		*pFlagUseNormalTex = nUseNormalMap;
+}
+
+const AABBox& HrRenderable::GetAABBox()
+{
+	return m_aabb;
 }

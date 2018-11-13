@@ -61,14 +61,10 @@ BOOL HrRenderViewDlg::PreTranslateMessage(MSG* pMsg)
 
 void HrRenderViewDlg::OnOpenFile(const std::string& strFile)
 {
-	m_pRenderApp->LoadOriginalMeshData(strFile);
-
+	auto& modelDataInfo = m_pRenderApp->LoadOriginalMeshData(strFile);
+	m_pMeshView->FillClassView(modelDataInfo);
+	//todo
 	auto pConvertUtil = m_pRenderApp->GetEditorScene()->GetConvertUtil();
-	if (pConvertUtil)
-	{
-		auto& modelDataInfo = pConvertUtil->GetModelDataInfo();
-		m_pMeshView->FillClassView(modelDataInfo);
-	}
 }
 
 void HrRenderViewDlg::OnSaveFile(const std::string& strFile)

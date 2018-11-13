@@ -2,7 +2,7 @@
 #define _HR_TEXTURE_H_
 
 #include "HrCore/Include/Asset/HrResource.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 namespace Hr
 {

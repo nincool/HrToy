@@ -77,7 +77,7 @@ void HrMeshModel::DeclareResource(const std::string& strFileName, const std::str
 		m_strFilePath = strFileName;
 	else
 		m_strFilePath = strFilePath;
-	m_resType = HrResource::RT_MODEL;
+	m_resType = HrResource::RT_MESHMODEL;
 	m_resStatus = HrResource::RS_DECLARED;
 
 	m_nHashID = CreateHashName(m_strFilePath);
@@ -297,9 +297,9 @@ bool HrMeshModelObject::LoadImpl()
 	}
 
 	{
-		HrModelLoaderPtr pModelLoader = std::make_shared<HrModelLoader>();
-		pModelLoader->Load(strFullPath);
-		m_pMesh = pModelLoader->GetMesh();
+		m_pModelLoader = std::make_shared<HrModelLoader>();
+		m_pModelLoader->Load(strFullPath);
+		m_pMesh = m_pModelLoader->GetMesh();
 		m_pMesh->Retain(); //add Referrence
 	}
 }
@@ -314,4 +314,9 @@ bool HrMeshModelObject::UnloadImpl()
 	m_pMesh = nullptr;
 
 	return true;
+}
+
+const HrModelLoaderPtr& HrMeshModelObject::GetModelLoader()
+{
+	return m_pModelLoader;
 }

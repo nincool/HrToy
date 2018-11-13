@@ -515,7 +515,7 @@ IDR_RIBBON              RT_RIBBON_XML           "res\\ribbon.mfcribbon-ms"
 
 STRINGTABLE
 BEGIN
-    lass                    "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
+    Com                     "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
 END
 
 STRINGTABLE

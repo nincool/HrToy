@@ -31,13 +31,12 @@ namespace Hr
 		 @Return:
 		*/
 		HrSceneNodePtr CreateModelNode(const std::string& strName);
-		/**
-		 @Comment: 创建场景节点 [12/29/2017 By Hr]
-		 @Param:   场景资源
-		 @Return:  场景节点对象
-		*/
-		HrSceneNodePtr CreateSceneNode(HrModelPtr& pModel);
 
+		/**
+		 @Comment: 创建Scene节点 [10/30/2018 By Hr]
+		 @Param: HrMeshModelPtr 
+		 @Return: HrSceneNodePtr
+		*/
 		HrSceneNodePtr CreateMeshModelNode(HrMeshModelPtr& pMeshModel);
 
 

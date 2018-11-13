@@ -46,7 +46,7 @@ namespace Hr
 		*/
 		HrResourcePtr AddResource(const std::string& strFile, HrResource::EnumResourceType resType);
 
-		HrResourcePtr AddModelResource(const std::string& strFile);
+		//HrResourcePtr AddModelResource(const std::string& strFile);
 		HrResourcePtr AddMeshModelResource(const std::string& strFile);
 		HrResourcePtr AddEffectResource(const std::string& strFile);
 		HrResourcePtr AddMeshResource(const std::string& strFile);
@@ -61,7 +61,6 @@ namespace Hr
 		HrResourcePtr GetTexture2D(const std::string& strTextureName);
 		HrResourcePtr GetMesh(const std::string& strMeshName);
 		HrResourcePtr GetEffect(const std::string& strEffectName);
-		HrResourcePtr GetModel(const std::string& strModelName);
 		HrResourcePtr GetMeshModel(const std::string& strModelName);
 		HrResourcePtr GetMaterial(const std::string& strMaterialName);
 

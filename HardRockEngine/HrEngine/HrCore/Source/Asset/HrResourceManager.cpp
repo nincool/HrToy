@@ -1,7 +1,6 @@
 #include "Asset/HrResourceManager.h"
 #include "Asset/HrStreamData.h"
 #include "Asset/HrResourceLoader.h"
-#include "Asset/HrModel.h"
 #include "Asset/HrMesh.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMaterial.h"
@@ -110,7 +109,6 @@ HrResourcePtr HrResourceManager::LoadResource(const std::string& strFile, HrReso
 		break;
 	case Hr::HrResource::RT_MESH:
 	case Hr::HrResource::RT_EFFECT:
-	case Hr::HrResource::RT_MODEL:
 	case Hr::HrResource::RT_MESHMODEL:
 	case Hr::HrResource::RT_TEXTURE_1D:
 	case Hr::HrResource::RT_TEXTURE_2D:
@@ -156,8 +154,6 @@ HrResourcePtr HrResourceManager::RetriveResource(const std::string& strFile, HrR
 		return GetEffect(strFile);
 	case HrResource::RT_MATERIAL:
 		return GetMaterial(strFile);
-	case HrResource::RT_MODEL:
-		return GetModel(strFile);
 	case HrResource::RT_MESHMODEL:
 		return GetMeshModel(strFile);
 	default:
@@ -205,8 +201,6 @@ HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResou
 		return AddEffectResource(strFile);
 	case HrResource::RT_MATERIAL:
 		return AddMaterialResource(strFile);
-	case HrResource::RT_MODEL:
-		return AddModelResource(strFile);
 	case HrResource::RT_MESHMODEL:
 		return AddMeshModelResource(strFile);
 	default:
@@ -214,24 +208,6 @@ HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResou
 	}
 
 	return nullptr;
-}
-
-HrResourcePtr HrResourceManager::AddModelResource(const std::string& strFile)
-{
-	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	
-	HrModelPtr pRes = HrMakeSharedPtr<HrModel>();
-	pRes->DeclareResource(strFileName, strFile);
-	if (m_mapPrefabModels.find(pRes->GetHashID()) != m_mapPrefabModels.end())
-	{
-		pRes = nullptr;
-		HRASSERT(nullptr, "AddFBXResource Error!");
-		
-		return nullptr;
-	}
-	m_mapPrefabModels.insert(std::make_pair(pRes->GetHashID(), pRes));
-
-	return pRes;
 }
 
 HrResourcePtr HrResourceManager::AddMeshModelResource(const std::string& strFile)
@@ -388,18 +364,6 @@ HrResourcePtr HrResourceManager::GetMaterial(const std::string& strMaterialName)
 	size_t nHashID = HrMaterial::CreateHashName(strFullFileName);
 	auto item = m_mapMaterials.find(nHashID);
 	if (item != m_mapMaterials.end())
-	{
-		return item->second;
-	}
-	return nullptr;
-}
-
-HrResourcePtr HrResourceManager::GetModel(const std::string& strModelName)
-{
-	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strModelName);
-	size_t nHashID = HrModel::CreateHashName(strFullFileName);
-	auto item = m_mapPrefabModels.find(nHashID);
-	if (item != m_mapPrefabModels.end())
 	{
 		return item->second;
 	}

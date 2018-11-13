@@ -23,7 +23,7 @@ namespace Hr
 		static DXGI_FORMAT GetInputElementFormat(EnumVertexElementType type);
 		
 		//D3D11_INPUT_CLASSIFICATION <=> EnumVertexElementClassType
-		static D3D11_INPUT_CLASSIFICATION GetInputELementClassType(EnumVertexElementClassType type);
+		static D3D11_INPUT_CLASSIFICATION GetInputElementClassType(EnumVertexElementClassType type);
 		
 		//topology
 		static D3D_PRIMITIVE_TOPOLOGY GetTopologyType(EnumTopologyType topologyType);
@@ -64,6 +64,12 @@ namespace Hr
 		//HrTexture::EnumTextureUsage <=> D3D11_USAGE
 		static D3D11_USAGE GetTextureUsage(HrTexture::EnumTextureUsage usage);
 		static HrTexture::EnumTextureUsage GetTextureUsage(D3D11_USAGE usage);
+
+		//D3D11_FILTER <=> EnumSamplerFilter
+		static D3D11_FILTER GetFilter(EnumSamplerFilter filter);
+		
+		//D3D11_TEXTURE_ADDRESS_MODE <=> EnumTextureAddressMode
+		static D3D11_TEXTURE_ADDRESS_MODE GetTextureAddressMode(EnumTextureAddressMode addressMode);
 	};
 }
 

@@ -85,30 +85,8 @@ size_t HrRenderTechnique::CreateInputSimanticHashValue(const std::vector<std::tu
 	return nInputSimanticHash;
 }
 
-
-bool HrRenderTechnique::IsVertexElementMatch(const std::vector<HrVertexDataPtr>& vecVertexData)
+size_t HrRenderTechnique::GetInputSimanticHashValue()
 {
-	//todo
-	for (size_t i = 0; i < m_vecVertexInputSimantic.size(); ++i)
-	{
-		for (size_t j = 0; j < vecVertexData.size(); ++j)
-		{
-			const std::vector<HrVertexElement>& vecVertexElement = vecVertexData[j]->GetVertex()->GetVertexElement();
-			for (size_t k = 0; k < vecVertexElement.size(); ++k)
-			{
-				if (vecVertexElement[k].m_elementSemantic == std::get<0>(m_vecVertexInputSimantic[i]))
-				{
-					goto NEXT_INPUT_SIMANTIC;
-				}
-			}
-		}
-
-		return false;
-
-	NEXT_INPUT_SIMANTIC:
-		continue;
-	}
-
-	return true;
+	return m_nInputSimanticHash;
 }
 

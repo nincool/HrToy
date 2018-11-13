@@ -4,6 +4,7 @@
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderSystem.h"
+#include "HrUtilTools/Include/HrUtil.h"
 
 using namespace Hr;
 
@@ -13,6 +14,7 @@ HrRenderLayout::HrRenderLayout()
 	
 	m_bStreamsDirty = true;
 	m_nInstance = 1;
+	m_nSimanticHashValue = 0;
 }
 
 HrRenderLayout::~HrRenderLayout()
@@ -103,9 +105,21 @@ void HrRenderLayout::SetInstanceNum(uint32 nInstance)
 	m_nInstance = nInstance;
 }
 
-void HrRenderLayout::CreateVertexElementHashValue()
+size_t HrRenderLayout::CreateVertexElementHashValue()
 {
+	size_t nSimanticHashValue = 0;
+	for (size_t i = 0; i < m_vecVertexStreams.size(); ++i)
+	{
+		const std::vector<HrVertexElement>& vecElement = m_vecVertexStreams[i]->GetVertex()->GetVertexElement();
+		for (auto& ele : vecElement)
+		{
+			HrHashCombine(nSimanticHashValue, ele.m_elementSemantic);
+			HrHashCombine(nSimanticHashValue, ele.m_nSemanticIndex);
+			HrHashCombine(nSimanticHashValue, ele.m_elementType);
+		}
+	}
 
+	return nSimanticHashValue;
 }
 
 const HrIndexDataPtr& HrRenderLayout::GetIndexStream()
@@ -121,5 +135,14 @@ EnumIndexType HrRenderLayout::GetIndexBufferType()
 uint32 HrRenderLayout::GetIndicesNum()
 {
 	return m_pIndexData->GetIndexCount();
+}
+
+size_t HrRenderLayout::GetSimanticHashValue()
+{
+	if (m_nSimanticHashValue <= 0)
+	{
+		m_nSimanticHashValue = CreateVertexElementHashValue();
+	}
+	return m_nSimanticHashValue;
 }
 

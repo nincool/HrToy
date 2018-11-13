@@ -13,6 +13,7 @@ using namespace Hr;
 ///////////////////////////////////////////////////////////////////////////
 HrRenderAxis::HrRenderAxis()
 {
+	CreateAxisMesh();
 }
 
 HrRenderAxis::~HrRenderAxis()
@@ -27,21 +28,21 @@ void HrRenderAxis::CreateAxisMesh()
 	{
 		float fLineLength = 100.0f;
 		SAxisVertex pVertexBuff[6];
-		pVertexBuff[0].position = Vector4(0, 0, 0, 1);
+		pVertexBuff[0].position = Vector3(0, 0, 0);
 		pVertexBuff[0].color = Vector4(1, 0, 0, 1);
-		pVertexBuff[1].position = Vector4(fLineLength, 0, 0, 1);
+		pVertexBuff[1].position = Vector3(fLineLength, 0, 0);
 		pVertexBuff[1].color = Vector4(1, 0, 0, 1);
-		pVertexBuff[2].position = Vector4(0, 0, 0, 1);
+		pVertexBuff[2].position = Vector3(0, 0, 0);
 		pVertexBuff[2].color = Vector4(0, 1, 0, 1);;
-		pVertexBuff[3].position = Vector4(0, fLineLength, 0, 1);
+		pVertexBuff[3].position = Vector3(0, fLineLength, 0);
 		pVertexBuff[3].color = Vector4(0, 1, 0, 1);
-		pVertexBuff[4].position = Vector4(0, 0, 0, 1);
+		pVertexBuff[4].position = Vector3(0, 0, 0);
 		pVertexBuff[4].color = Vector4(0, 0, 1, 1);
-		pVertexBuff[5].position = Vector4(0, 0, fLineLength, 1);
+		pVertexBuff[5].position = Vector3(0, 0, fLineLength);
 		pVertexBuff[5].color = Vector4(0, 0, 1, 1);
 
 		std::vector<HrVertexElement> vecVertexElement;
-		vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT4));
+		vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 		vecVertexElement.push_back(HrVertexElement(VEU_COLOR, VET_FLOAT4));
 
 		pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)pVertexBuff
@@ -55,14 +56,6 @@ void HrRenderAxis::CreateAxisMesh()
 	auto pMaterial = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMaterial>(m_strFileName, true, true);
 	m_mapMaterials[pSubMesh->GetName()] = pMaterial;
 	pSubMesh->SetMaterial(pMaterial);
-}
-
-bool HrRenderAxis::LoadImpl()
-{
-	CreateAxisMesh();
-	m_resStatus = RS_LOADED;
-
-	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -98,35 +91,37 @@ void HrEditorScene::CreateSceneElements()
 	AddNode(m_pGodCamera);
 	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 	m_pCameraCom = m_pGodCamera->GetSceneObject()->GetComponent<HrCameraComponet>();
-	m_pCameraCom->SetFarPlane(300.0f);
+	m_pCameraCom->SetFarPlane(500.0f);
 	m_pTrackBallCameraCtrl = m_pGodCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 	
-	//CreateAxisNode();
+	CreateAxisNode();
 
 	m_pEleRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pEleRoot);
 
-	//auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
-	//m_pEleRoot->AddChild(pGridNode);
-	//pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
+	m_pEleRoot->AddChild(pGridNode);
+	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
 	UpdateAxisPos();
 }
 
-void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
+const HrModelDataInfo& HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 {
 	if (m_pModel)
 	{
 		m_pEleRoot->RemoveChild(m_pModel);
 	}
 
+	bool bHrMesh = false;
 	if (HrFileUtils::Instance()->GetFileSuffix(strFileName) == "hrmesh")
 	{
 		m_pModel = HrSceneObjectFactory::Instance()->CreateModelNode(strFileName);
+		bHrMesh = true;
 	}
 	else
 	{
@@ -137,10 +132,18 @@ void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 	if (m_pModel)
 	{
 		m_pModel->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-		//m_pModel->GetTransform()->SetScale(Vector3(0.1f, 0.1f, 0.1f));
 		m_pEleRoot->AddChild(m_pModel);
 	}
 
+	if (bHrMesh)
+	{
+		HrMeshModelObjectPtr pPrefabModel = HrCheckPointerCast<HrMeshModelObject>(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMeshModel>(strFileName));
+		return pPrefabModel->GetModelLoader()->GetModelDataInfo();
+	}
+	else
+	{
+		return m_pConvertUtil->GetModelDataInfo();
+	}
 }
 
 void HrEditorScene::CreateAxisNode()
@@ -148,26 +151,22 @@ void HrEditorScene::CreateAxisNode()
 	auto pRenderEffect = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/Effect/Hlsl/HrMeshConvert.json");
 
 	m_pAxisModel = std::make_shared<HrRenderAxis>();
-	m_pAxisModel->DeclareResource("AxisRoot");
-	m_pAxisModel->Load();
-
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
+
 	pSceneNode->SetName("AxisRoot");
 
-	for (size_t i = 0; i < m_pAxisModel->GetMesh()->GetSubMeshNum(); ++i)
+	for (uint32 i = 0; i < m_pAxisModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
-		HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(m_pAxisModel->GetMesh()->GetSubMesh(i)->GetName());
+
+		HrSceneObjectPtr pSceneObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
 		pRenderableCom->SetRenderable(pRenderable);
 		pRenderable->SetSubMesh(m_pAxisModel->GetMesh()->GetSubMesh(i));
 		pRenderable->SetRenderEffect(pRenderEffect);
 
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(m_pAxisModel->GetMesh()->GetSubMesh(i)->GetName());
-		pNode->SetSceneObject(pSceneObj);
 		pSceneNode->AddChild(pNode);
 	}
 
@@ -359,9 +358,9 @@ void HrRenderApp::OnMouseWheel(float fDelta)
 	m_pEditorScene->OnMouseWheel(fDelta);
 }
 
-void HrRenderApp::LoadOriginalMeshData(const std::string& strFileName)
+const HrModelDataInfo& HrRenderApp::LoadOriginalMeshData(const std::string& strFileName)
 {
-	m_pEditorScene->LoadOriginalMeshData(strFileName);
+	return m_pEditorScene->LoadOriginalMeshData(strFileName);
 }
 
 void HrRenderApp::SaveConvertMeshData(const std::string& strFileName)

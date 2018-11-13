@@ -10,6 +10,7 @@ namespace Hr
 	public:
 		HrStreamData();
 		HrStreamData(uint32 nStreamLength);
+		HrStreamData(const std::string& strContent);
 		~HrStreamData();
 
 		HrStreamData& operator=(const HrStreamData& streamData);

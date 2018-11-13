@@ -142,10 +142,7 @@ HrSceneNodePtr HrDeferredRender::CreateQuadNodeP(const std::string& strName, flo
 
 HrSceneNodePtr HrDeferredRender::CreateSceneNode(const std::string& strName)
 {
-	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
-	pSceneNode->SetName(strName);
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
 
 	return pSceneNode;
 }

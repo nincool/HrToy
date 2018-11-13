@@ -16,9 +16,7 @@ namespace Hr
 		};
 
 	public:
-		HrTransform(const std::function<void (bool, bool, bool)>& funDirtyTrans);
-
-		void SetParentTransform(const HrTransformPtr& pTrans);
+		HrTransform(HrSceneNode* pSceneNode);
 
 		void UpdateTransform(float fDelta);
 
@@ -29,6 +27,7 @@ namespace Hr
 		void SetOrientation(const Quaternion& orientation);
 		const Quaternion& GetOrientation() const;
 		void SetRotation(const Vector3& angle);
+		const Vector3 GetRotation();
 
 		const Vector3& GetForward() const;
 		const Vector3& GetRight() const;
@@ -37,28 +36,18 @@ namespace Hr
 		void SetScale(const Vector3& v3Scale);
 		const Vector3& GetScale();
 
-		void Translate(const Vector3& v3, EnumTransformSpace relativeTo = TS_LOCAL);
+		/**
+		 @Comment: 转换位置 [10/29/2018 By Hr]
+		 @Param: TS_LOCAL  以自身坐标系为基准 例如移动z轴相当于Forward
+				  TS_PARENT 以父节点坐标系为基准 这点和改变Unity属性栏的xyz一致
+				  TS_WORLD  以世界坐标系为基准 这点和Unity的Global一样
+		*/
+		void Translate(const Vector3& v3, EnumTransformSpace relativeTo = TS_PARENT);
 
 		const Vector3& GetWorldScale();
 		const Quaternion& GetWorldOriention();
 		const Vector3& GetWorldPosition();
-
 		const Matrix4& GetWorldMatrix();
-	
-		/*
-		@brief	Rotate the node around the z-axis [11/1/2016 By Hr]
-		*/
-		void Roll(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
-		/*
-		@brief	Rotate the node around the x-axis [11/1/2016 By Hr]
-		*/
-		void Pitch(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
-		/*
-		@brief	Rotate the node around the y-axis [11/1/2016 By Hr]
-		*/
-		void Yaw(const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
-
-		void Rotate(const Vector3& axis, const Radian& angle, EnumTransformSpace relativeTo = TS_LOCAL);
 
 		void Rotate(const Vector3& angle, EnumTransformSpace relativeTo = TS_LOCAL);
 
@@ -68,10 +57,17 @@ namespace Hr
 		void SetTransformDirty(bool bDirty);
 
 		void DirtyTransform(bool bDirtyPos = false, bool bDirtyScale = false, bool bDirtyOrientation = false);
+
 	protected:
-		void UpdateFromParent();
+		Vector3 ConvertWorldToLocalDirection(const Vector3& worldDir);
+
+		const Vector3& GetParentScale();
+		const Quaternion& GetParentOriention();
+		const Vector3& GetParentPosition();
+
+		void DecomposeOriention(const Quaternion& orientation);
 	protected:
-		HrTransformPtr m_pParentTransform;
+		HrSceneNode* m_pSceneNode;
 
 		Vector3 m_vPosition;
 		Vector3 m_vForward;
@@ -79,7 +75,6 @@ namespace Hr
 		Vector3 m_vUp;
 		Vector3 m_vScale;
 		Vector3 m_vEulerAngles;
-		Vector3 m_vLocalEulerAngles;
 		Quaternion m_orientation;
 
 		Matrix4 m_matLocalWorldMatrix;
@@ -96,7 +91,10 @@ namespace Hr
 
 		bool m_bDirtyTransform;
 
-		std::function<void(bool, bool, bool)> m_funDirtyTrans;
+		static Quaternion m_s_quaIdentity;
+		static Vector3 m_s_v3Zero;
+		static Vector3 m_s_v3One;
+
 	};
 }
 

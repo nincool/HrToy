@@ -6,6 +6,7 @@
 #include "HrCore/Include/Render/HrDepthStencilState.h"
 #include "HrCore/Include/Render/HrBlendState.h"
 #include "HrCore/Include/Render/HrRasterizerState.h"
+#include "HrCore/Include/Render/HrSamplerState.h"
 
 namespace Hr
 {
@@ -42,7 +43,7 @@ namespace Hr
 			, uint32 nAccessHint
 			, EnumPixelFormat format) = 0;
 
-		virtual HrSamplerStatePtr CreateSamplerState() = 0;
+		virtual HrSamplerStatePtr CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc) = 0;
 
 		virtual HrDepthStencilStatePtr CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc) = 0;
 

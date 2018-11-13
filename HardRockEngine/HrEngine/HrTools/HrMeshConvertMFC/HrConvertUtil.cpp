@@ -16,6 +16,7 @@ HrConvertUtil::HrConvertUtil()
 {
 	m_bLoadSuccess = false;
 	m_fUnitScale = 1.0f;
+	m_fOutputUnitScale = 1.0f;
 }
 
 HrConvertUtil::~HrConvertUtil()
@@ -83,9 +84,55 @@ bool HrConvertUtil::LoadOriginalData(std::string const & in_name)
 	
 	aiReleaseImport(scene);
 
+	ComputeAABB();
+
 	return true;
 }
 
+void HrConvertUtil::ComputeAABB()
+{
+	for (size_t nSubMeshIndex = 0; nSubMeshIndex < m_modelDesc.vecSubMeshInfo.size(); ++nSubMeshIndex)
+	{
+		uint32 nMaxIndex = 0, nMinIndex = 0;
+		Vector3 v3MinPoint, v3MaxPoint;
+		ComputeExtrameDistanceAlongDir(Vector3(1, 0, 0), m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos, nMaxIndex, nMinIndex);
+		v3MinPoint.x() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMinIndex].x();
+		v3MaxPoint.x() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMaxIndex].x();
+
+		ComputeExtrameDistanceAlongDir(Vector3(0, 1, 0), m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos, nMaxIndex, nMinIndex);
+		v3MinPoint.y() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMinIndex].y();
+		v3MaxPoint.y() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMaxIndex].y();
+
+		ComputeExtrameDistanceAlongDir(Vector3(0, 0, 1), m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos, nMaxIndex, nMinIndex);
+		v3MinPoint.z() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMinIndex].z();
+		v3MaxPoint.z() = m_modelDesc.vecSubMeshInfo[nSubMeshIndex].vecVertexPos[nMaxIndex].z();
+
+		m_modelDesc.vecSubMeshInfo[nSubMeshIndex].aabb = AABBox(v3MinPoint, v3MaxPoint);
+	}
+
+}
+
+
+void HrConvertUtil::ComputeExtrameDistanceAlongDir(const Vector3& vDir, const std::vector<Vector3>& vecVertices, uint32& nMax, uint32& nMin)
+{
+	float fMaxProj = -FLT_MAX, fMinProj = FLT_MAX;
+	for (size_t i = 0; i < vecVertices.size(); ++i)
+	{
+		float fProjection = HrMath::Dot(vecVertices[i], vDir);
+
+		if (fProjection > fMaxProj)
+		{
+			fMaxProj = fProjection;
+			nMax = i;
+		}
+
+		if (fProjection < fMinProj)
+		{
+			fMinProj = fMinProj;
+			nMin = i;
+		}
+	}
+}
 
 bool HrConvertUtil::WriteModelDataToFile(const std::string& strOutPath)
 {
@@ -358,7 +405,23 @@ std::string HrConvertUtil::MakeFloat3String(float3 v)
 	strRet += ",";
 	std::sprintf(cTemp, "%.2f", v[2]);
 	strRet += cTemp;
-	strRet += "|";
+
+	return strRet;
+}
+
+std::string HrConvertUtil::MakeFloat3StringWithEndMark(float3 v, const char c)
+{
+	std::string strRet;
+	char cTemp[50];
+	std::sprintf(cTemp, "%.2f", v[0]);
+	strRet += cTemp;
+	strRet += ",";
+	std::sprintf(cTemp, "%.2f", v[1]);
+	strRet += cTemp;
+	strRet += ",";
+	std::sprintf(cTemp, "%.2f", v[2]);
+	strRet += cTemp;
+	strRet += c;
 
 	return strRet;
 }
@@ -409,8 +472,8 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			std::string strVertices;
 			for (int nVerticeIndex = 0; nVerticeIndex < subMeshInfo.vecVertexPos.size(); ++nVerticeIndex)
 			{
-				Vector3 vPos = subMeshInfo.vecVertexPos[nVerticeIndex];
-				strVertices += MakeFloat3String(vPos);
+				Vector3 vPos = subMeshInfo.vecVertexPos[nVerticeIndex] * m_fOutputUnitScale;
+				strVertices += MakeFloat3StringWithEndMark(vPos);
 			}
 			rapidjson::Value verticesValueObj(rapidjson::kStringType);
 			verticesValueObj.SetString(strVertices.c_str(), doc.GetAllocator());
@@ -422,7 +485,7 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			for (int nTangentIndex = 0; nTangentIndex < subMeshInfo.vecTangent.size(); ++nTangentIndex)
 			{
 				Vector3 vTangent = subMeshInfo.vecTangent[nTangentIndex];
-				strTangents += MakeFloat3String(vTangent);
+				strTangents += MakeFloat3StringWithEndMark(vTangent);
 			}
 			rapidjson::Value tangentsValueObj(rapidjson::kStringType);
 			tangentsValueObj.SetString(strTangents.c_str(), doc.GetAllocator());
@@ -434,7 +497,7 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			for (int nBinormalIndex = 0; nBinormalIndex < subMeshInfo.vecBinormal.size(); ++nBinormalIndex)
 			{
 				Vector3 vBinormal = subMeshInfo.vecBinormal[nBinormalIndex];
-				strBinormals += MakeFloat3String(vBinormal);
+				strBinormals += MakeFloat3StringWithEndMark(vBinormal);
 			}
 			rapidjson::Value binormalValueObj(rapidjson::kStringType);
 			binormalValueObj.SetString(strBinormals.c_str(), doc.GetAllocator());
@@ -446,7 +509,7 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			for (int nNormalIndex = 0; nNormalIndex < subMeshInfo.vecNormal.size(); ++nNormalIndex)
 			{
 				Vector3 vecNormal = subMeshInfo.vecNormal[nNormalIndex];
-				strNormals += MakeFloat3String(vecNormal);
+				strNormals += MakeFloat3StringWithEndMark(vecNormal);
 			}
 			rapidjson::Value normalsValueObj(rapidjson::kStringType);
 			normalsValueObj.SetString(strNormals.c_str(), doc.GetAllocator());
@@ -469,6 +532,15 @@ void HrConvertUtil::WriteMeshData(rapidjson::Document& doc)
 			rapidjson::Value uvsValueObj(rapidjson::kStringType);
 			uvsValueObj.SetString(strUVs.c_str(), doc.GetAllocator());
 			subMeshValueObj.AddMember(rapidjson::StringRef("UVs"), uvsValueObj, doc.GetAllocator());
+		}
+
+		{
+			std::string strAABB;
+			strAABB += MakeFloat3StringWithEndMark(subMeshInfo.aabb.Min());
+			strAABB += MakeFloat3StringWithEndMark(subMeshInfo.aabb.Max());
+			rapidjson::Value aabbValueObj(rapidjson::kStringType);
+			aabbValueObj.SetString(strAABB.c_str(), doc.GetAllocator());
+			subMeshValueObj.AddMember(rapidjson::StringRef("AABB"), aabbValueObj, doc.GetAllocator());
 		}
 
 		meshesObj.AddMember(subMeshKeyObj, subMeshValueObj, doc.GetAllocator());
@@ -572,13 +644,13 @@ void HrConvertUtil::FlushDataToFile(const std::string& strOutputFile, rapidjson:
 	std::string strFileName = HrFileUtils::Instance()->GetFileName(strOutputFile);
 	std::string strSuffix = HrFileUtils::Instance()->GetFileSuffix(strOutputFile);
 	filesystem::path filePath(strRootPath);
-	filePath = filePath / strFileName;
-	if (!filesystem::exists(filePath))
-	{
-		filesystem::create_directories(filePath);
-	}
-	auto outputFilePath = filePath / (strFileName + "." + strSuffix);
-	std::string strRealOutputFilePath = outputFilePath.string();
+	//filePath = filePath / strFileName;
+	//if (!filesystem::exists(filePath))
+	//{
+	//	filesystem::create_directories(filePath);
+	//}
+	//auto outputFilePath = filePath / (strFileName + "." + strSuffix);
+	std::string strRealOutputFilePath = strOutputFile;//outputFilePath.string();
 	HrFileUtils::Instance()->WriteDataToFile(strRealOutputFilePath, strJsonContent);
 
 
@@ -701,7 +773,7 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 				std::string strTextureFileName = HrFileUtils::Instance()->GetFileNameWithSuffix(strTexture);
 				filesystem::path filePath(m_strOriginalPath);
 				filePath /= strTextureFileName;
-				BOOST_ASSERT(filesystem::exists(filePath));
+				//BOOST_ASSERT(filesystem::exists(filePath));
 
 				materialInfo.m_arrTexNames[nTexIndex] = filePath.string();
 			}
@@ -712,21 +784,17 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 	}
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
 	pSceneNode->SetName(m_strOriginalFile);
 
 	for (size_t i = 0; i < m_pLoadedMesh->GetSubMeshNum(); ++i)
 	{
-		HrSceneObjectPtr pSubRenderObj = HrMakeSharedPtr<HrSceneObject>();
+		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(m_pLoadedMesh->GetSubMesh(i)->GetName());
+		HrSceneObjectPtr pSubRenderObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSubRenderObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
+		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(m_pLoadedMesh->GetSubMesh(i));
 		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(m_pLoadedMesh->GetSubMesh(i));
 		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(m_pLoadedMesh->GetSubMesh(i)->GetName());
-		pNode->SetSceneObject(pSubRenderObj);
 		pSceneNode->AddChild(pNode);
 	}
 
@@ -968,5 +1036,4 @@ void HrConvertUtil::SetUnitScale(float fUnitScale)
 {
 	m_fUnitScale = fUnitScale;
 }
-
 

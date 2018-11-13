@@ -133,9 +133,6 @@
     <ClInclude Include="Include\Render\HrRenderFrameParameters.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrDataFormat.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderTarget.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -292,9 +289,6 @@
     <ClInclude Include="Include\Render\HrInstanceBatchHW.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrModel.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrMeshRenderable.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -333,6 +327,18 @@
     </ClInclude>
     <ClInclude Include="Include\Kernel\HrWindowModule.h">
       <Filter>Include\Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrDataDefine.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrOctreeSceneManager.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrOctree.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\HrOctNode.h">
+      <Filter>Include\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -531,9 +537,6 @@
     <ClCompile Include="Source\Render\HrInstanceBatchHW.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrModel.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrMeshRenderable.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
@@ -572,6 +575,15 @@
     </ClCompile>
     <ClCompile Include="Source\Kernel\HrWindowModule.cpp">
       <Filter>Source\Kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrOctreeSceneManager.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrOctree.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\HrOctNode.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -28,12 +28,13 @@ namespace Hr
 
 		virtual void StreamIn(const HrStreamDataPtr& streamBuffer, const std::string& strFile, const std::string& strName, EnumShaderType shaderType) = 0;
 
+		virtual void BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>&& vecRenderConstBuffer, std::vector<HrRenderEffectParameterPtr>&& vecShaderResouces);
+
 		EnumShaderType ShaderType() { return m_shaderType; }
 		std::string& Name() { return m_strName; }
 		size_t HashName() { return m_nHashName; }
 
-		virtual void BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>&& vecRenderConstBuffer, std::vector<HrRenderEffectParameterPtr>&& vecShaderResouces);
-
+		void SetSampler(const HrSamplerStatePtr& pSampler);
 	protected:
 		virtual void BindRenderParameterImpl() = 0;
 
@@ -42,10 +43,9 @@ namespace Hr
 		std::string m_strName;
 		size_t m_nHashName;
 
+		HrSamplerStatePtr m_pSampler;
 		std::vector<HrRenderEffectParameterPtr> m_vecBindRenderResources;
-		std::vector<HrRenderEffectConstantBufferPtr> m_vecBindRenderConstantBuffer;
-
-		
+		std::vector<HrRenderEffectConstantBufferPtr> m_vecBindRenderConstantBuffer;		
 	};
 }
 

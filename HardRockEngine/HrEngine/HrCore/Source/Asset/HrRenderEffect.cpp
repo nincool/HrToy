@@ -13,6 +13,8 @@
 #include "Render/HrRasterizerState.h"
 #include "Render/HrLight.h"
 #include "Render/HrRenderSystem.h"
+#include "Render/HrRenderLayout.h"
+#include "Render/HrSamplerState.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrRenderModule.h"
 #include "HrUtilTools/Include/HrUtil.h"
@@ -23,9 +25,6 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/format.hpp>
 #include <boost/functional/hash.hpp>
-
-
-
 
 using namespace Hr;
 
@@ -60,9 +59,9 @@ bool HrRenderEffect::LoadImpl()
 		HRERROR("HrRenderEffect::LoadImpl Error! FileName[%s]", m_strFilePath.c_str());
 		return false;
 	}
-	HrStreamDataPtr pStreamData = HrFileUtils::Instance()->GetFileData(strFullPath);
+	std::string strContentData = HrFileUtils::Instance()->GetFileString(strFullPath);
 	rapidjson::Document d;
-	d.Parse<0>(pStreamData->GetBufferPoint());
+	d.Parse<0>(strContentData.c_str());
 	if (d.HasParseError())
 	{
 		int nErrorCode = d.GetParseError();
@@ -111,6 +110,189 @@ void HrRenderEffect::LoadTechniques(const rapidjson::Value& sceneRootInfo, const
 	}
 }
 
+void HrRenderEffect::LoadSampler(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass)
+{
+	if (passInfo.HasMember("SAMPLER"))
+	{
+		const rapidjson::Value& samplerInfo = passInfo["SAMPLER"];
+		int nSamplerIndex = 0;
+		std::vector<HrSamplerStatePtr> vecSamplerState;
+		while (true)
+		{
+			std::string strItem = HrStringUtil::StringFormat("SAMPLER_%d", nSamplerIndex);
+			if (samplerInfo.HasMember(strItem.c_str()))
+			{
+				HrSamplerState::HrSamplerStateDesc samplerDesc;
+				if (samplerInfo.HasMember("SAMPLER_FILTER")) samplerDesc.samplerFilter = SamplerFilter(samplerInfo["SAMPLER_FILTER"].GetString());
+				if (samplerInfo.HasMember("ADDRESS_U")) samplerDesc.texAddressU = TextureAddressMode(samplerInfo["ADDRESS_U"].GetString());
+				if (samplerInfo.HasMember("ADDRESS_V")) samplerDesc.texAddressV = TextureAddressMode(samplerInfo["ADDRESS_V"].GetString());
+				if (samplerInfo.HasMember("ADDRESS_W")) samplerDesc.texAddressW = TextureAddressMode(samplerInfo["ADDRESS_W"].GetString());
+				if (samplerInfo.HasMember("MIPLODBIAS")) samplerDesc.fMipLODBias = samplerInfo["MIPLODBIAS"].GetFloat();
+				if (samplerInfo.HasMember("MAX_ANISOTROPY")) samplerDesc.nMaxAnisotropy = samplerInfo["MAX_ANISOTROPY"].GetInt();
+				if (samplerInfo.HasMember("COMPARISON_FUNC")) samplerDesc.comFunc = ComparisonFunc(samplerInfo["COMPARISON_FUNC"].GetString());
+				if (samplerInfo.HasMember("MIN_LOD"))
+					samplerDesc.fMinLOD = boost::lexical_cast<float>(samplerInfo["MIN_LOD"].GetString());
+				if (samplerInfo.HasMember("MAX_LOD"))
+				{
+					std::string strValue = samplerInfo["MAX_LOD"].GetString();
+					if (strValue == "MAX") samplerDesc.fMaxLOD = FLT_MAX;
+					else samplerDesc.fMaxLOD = boost::lexical_cast<float>(samplerInfo["MAX_LOD"].GetString());
+				}
+
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.samplerFilter);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.texAddressU);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.texAddressV);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.texAddressW);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.fMipLODBias);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.nMaxAnisotropy);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.comFunc);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.fMinLOD);
+				boost::hash_combine(samplerDesc.hashName, samplerDesc.fMaxLOD);
+
+				HrSamplerStatePtr pSamplerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateSamplerState(samplerDesc);
+				vecSamplerState.push_back(pSamplerState);
+
+				++nSamplerIndex;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		//pRenderPass->SetSamplerState(pSamplerState);
+	}
+	else
+	{
+		HrSamplerState::HrSamplerStateDesc samplerDesc;
+		HrSamplerStatePtr pSamplerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateSamplerState(samplerDesc);
+		pRenderPass->SetSamplerState(pSamplerState);
+	}
+}
+
+void HrRenderEffect::LoadRasterizer(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass)
+{
+	//Rasterizer
+	{
+		if (passInfo.HasMember("RASTERIZER"))
+		{
+			const rapidjson::Value& rasterizerInfo = passInfo["RASTERIZER"];
+			HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
+			if (rasterizerInfo.HasMember("FILL_MODE")) rasterizerDesc.fillMode = RasterizerFillMode(rasterizerInfo["FILL_MODE"].GetString());
+			if (rasterizerInfo.HasMember("CULL_MODE")) rasterizerDesc.cullMode = RasterizerCullMode(rasterizerInfo["CULL_MODE"].GetString());
+			if (rasterizerInfo.HasMember("FRONT_CCW")) rasterizerDesc.bfrontCounterClockWise = rasterizerInfo["FRONT_CCW"].GetBool();
+			if (rasterizerInfo.HasMember("DEPTH_BIAS")) rasterizerDesc.nDepthBias = rasterizerInfo["DEPTH_BIAS"].GetInt();
+			if (rasterizerInfo.HasMember("DEPTH_BIAS_CLAMP")) rasterizerDesc.fDepthBiasClamp = rasterizerInfo["DEPTH_BIAS_CLAMP"].GetFloat();
+			if (rasterizerInfo.HasMember("SLOPSCALEDEPTHBIAS")) rasterizerDesc.fSlopScaleDepthBias = rasterizerInfo["SLOPSCALEDEPTHBIAS"].GetFloat();
+			if (rasterizerInfo.HasMember("DEPTH_CLIP_ENABLE")) rasterizerDesc.bScissorEnable = rasterizerInfo["SCISSOR_ENABLE"].GetBool();
+			if (rasterizerInfo.HasMember("MULTISAMPLE_ENABLE")) rasterizerDesc.bMultisampleEnalbe = rasterizerInfo["MULTISAMPLE_ENABLE"].GetBool();
+			if (rasterizerInfo.HasMember("ANTIALIASEDLINE_ENABLE")) rasterizerDesc.bAntialiaseLineEnable = rasterizerInfo["ANTIALIASEDLINE_ENABLE"].GetBool();
+
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fillMode);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.cullMode);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bfrontCounterClockWise);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.nDepthBias);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fDepthBiasClamp);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fSlopScaleDepthBias);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bScissorEnable);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bMultisampleEnalbe);
+			boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bAntialiaseLineEnable);
+
+			HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+			pRenderPass->SetRasterizerState(pRasterizerState);
+		}
+		else
+		{
+			HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
+			HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
+			pRenderPass->SetRasterizerState(pRasterizerState);
+		}
+	}
+}
+
+void HrRenderEffect::LoadDepthStencil(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass)
+{
+	//DepthStencil
+	{
+		const rapidjson::Value& depthStencil = passInfo["DEPTH_STENCIL"];
+
+		HrDepthStencilState::HrDepthStencilStateDesc depthStencilDesc;
+		depthStencilDesc.bDepthEnable = depthStencil["DEPTH_ENABLE"].GetBool();
+		depthStencilDesc.depthWriteMask = DepthWriteMash(depthStencil["DEPTH_WRITE_MASK"].GetString());
+		depthStencilDesc.depthCompareFunc = ComparisonFunc(depthStencil["COMPARISON_FUNC"].GetString());
+		depthStencilDesc.bStencilEnable = depthStencil["STENCIL_ENABLE"].GetBool();
+		depthStencilDesc.stencilReadMask = depthStencil["STENCIL_READ_MASK"].GetUint();
+		depthStencilDesc.stencilWriteMask = depthStencil["STENCIL_WRITE_MASK"].GetUint();
+		depthStencilDesc.frontFaceCompareFunc = ComparisonFunc(depthStencil["FRONT_FACE_COMPARE_FUNC"].GetString());
+		depthStencilDesc.frontFaceStencilFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCIL_FAILED_OP"].GetString());
+		depthStencilDesc.frontFaceStencilDepthFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCILDEPTH_FAIL_OP"].GetString());
+		depthStencilDesc.frontFaceStencilPassOp = StencilOperation(depthStencil["FRONT_FACE_PASS_OP"].GetString());
+		depthStencilDesc.backFaceCompareFunc = ComparisonFunc(depthStencil["BACK_FACE_COMPARE_FUNC"].GetString());
+		depthStencilDesc.backFaceStencilFailOp = StencilOperation(depthStencil["BACK_FACE_STENCIL_FAILED_OP"].GetString());
+		depthStencilDesc.backFaceStencilDepthFailOp = StencilOperation(depthStencil["BACK_FACE_STENCILDEPTH_FAIL_OP"].GetString());
+		depthStencilDesc.backFaceStencilPassOp = StencilOperation(depthStencil["BACK_FACE_PASS_OP"].GetString());
+		depthStencilDesc.nStencilRef = std::stoul(depthStencil["STENCIL_REF"].GetString());
+
+		depthStencilDesc.hashName = 0;
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bDepthEnable);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthWriteMask);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthCompareFunc);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bStencilEnable);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilReadMask);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilWriteMask);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceCompareFunc);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilFailOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilDepthFailOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilPassOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceCompareFunc);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilFailOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilDepthFailOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
+		boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.nStencilRef);
+
+		HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
+		pRenderPass->SetDepthStencilState(pDepthStencilState);
+	}
+}
+
+void HrRenderEffect::LoadBlendState(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass)
+{
+	//Blend
+	{
+		const rapidjson::Value& blendInfo = passInfo["BLEND"];
+
+		HrBlendState::HrBlendStateDesc blendDesc;
+		blendDesc.bBlendEnable = blendInfo["BLEND_ENABLE"].GetBool();
+		blendDesc.blendOperation = BlendOperation(blendInfo["BLEND_OP"].GetString());
+		blendDesc.srcBlend = AlphaBlendFactor(blendInfo["SRC_BLEND"].GetString());
+		blendDesc.dstBlend = AlphaBlendFactor(blendInfo["DEST_BLEND"].GetString());
+		blendDesc.blendOperationAlpha = BlendOperation(blendInfo["BLEND_OP_ALPHA"].GetString());
+		blendDesc.srcBlendAlpha = AlphaBlendFactor(blendInfo["SRC_BLEND_ALPHA"].GetString());
+		blendDesc.dstBlendAlpha = AlphaBlendFactor(blendInfo["DEST_BLEND_ALPHA"].GetString());
+		std::vector<std::string> vecMaskColor = HrStringUtil::GetVector(blendInfo["RENDER_TARGET_WRITE_MASK"].GetString(), "|");
+		blendDesc.colorMask = ColorMask(vecMaskColor);
+		float4 blendFactorColor = HrStringUtil::GetFloat4FromString(blendInfo["BLEND_FACTOR_COLOR"].GetString(), "|");
+		blendDesc.blendFactor = HrColor(blendFactorColor[0], blendFactorColor[1], blendFactorColor[2], blendFactorColor[3]);
+
+		std::string strTemp = blendInfo["SAMPLE_MASK"].GetString();
+		blendDesc.nSampleMask = std::stoul(blendInfo["SAMPLE_MASK"].GetString(), nullptr, 16);
+
+		blendDesc.hashName = 0;
+		boost::hash_combine(blendDesc.hashName, blendDesc.bBlendEnable);
+		boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
+		boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
+		boost::hash_combine(blendDesc.hashName, blendDesc.srcBlend);
+		boost::hash_combine(blendDesc.hashName, blendDesc.dstBlend);
+		boost::hash_combine(blendDesc.hashName, blendDesc.blendOperationAlpha);
+		boost::hash_combine(blendDesc.hashName, blendDesc.srcBlendAlpha);
+		boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
+		boost::hash_combine(blendDesc.hashName, blendDesc.nSampleMask);
+
+		auto pBlendState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateBlendState(blendDesc);
+		pRenderPass->SetBlendState(pBlendState);
+	}
+}
+
 void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrShaderCompilerPtr& pShaderCompiler, const HrRenderTechniquePtr& pRenderTechnique)
 {
 	int nTempPassIndex = 0;
@@ -125,117 +307,12 @@ void HrRenderEffect::LoadPasses(const rapidjson::Value& techniqueInfo, const HrS
 				const rapidjson::Value& shaderInfo = passInfo["SHADER"];
 				LoadShaders(shaderInfo, pShaderCompiler, pRenderTechnique, pRenderPass);
 			}
-			//Rasterizer
-			{
-				if (passInfo.HasMember("RASTERIZER"))
-				{
-					const rapidjson::Value& rasterizerInfo = passInfo["RASTERIZER"];
-					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
-					if (rasterizerInfo.HasMember("FILL_MODE")) rasterizerDesc.fillMode = RasterizerFillMode(rasterizerInfo["FILL_MODE"].GetString());
-					if (rasterizerInfo.HasMember("CULL_MODE")) rasterizerDesc.cullMode = RasterizerCullMode(rasterizerInfo["CULL_MODE"].GetString());
-					if (rasterizerInfo.HasMember("FRONT_CCW")) rasterizerDesc.bfrontCounterClockWise = rasterizerInfo["FRONT_CCW"].GetBool();
-					if (rasterizerInfo.HasMember("DEPTH_BIAS")) rasterizerDesc.nDepthBias = rasterizerInfo["DEPTH_BIAS"].GetInt();
-					if (rasterizerInfo.HasMember("DEPTH_BIAS_CLAMP")) rasterizerDesc.fDepthBiasClamp = rasterizerInfo["DEPTH_BIAS_CLAMP"].GetFloat();
-					if (rasterizerInfo.HasMember("SLOPSCALEDEPTHBIAS")) rasterizerDesc.fSlopScaleDepthBias = rasterizerInfo["SLOPSCALEDEPTHBIAS"].GetFloat();
-					if (rasterizerInfo.HasMember("DEPTH_CLIP_ENABLE")) rasterizerDesc.bScissorEnable = rasterizerInfo["SCISSOR_ENABLE"].GetBool();
-					if (rasterizerInfo.HasMember("MULTISAMPLE_ENABLE")) rasterizerDesc.bMultisampleEnalbe = rasterizerInfo["MULTISAMPLE_ENABLE"].GetBool();
-					if (rasterizerInfo.HasMember("ANTIALIASEDLINE_ENABLE")) rasterizerDesc.bAntialiaseLineEnable = rasterizerInfo["ANTIALIASEDLINE_ENABLE"].GetBool();
 
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fillMode);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.cullMode);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bfrontCounterClockWise);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.nDepthBias);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fDepthBiasClamp);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.fSlopScaleDepthBias);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bScissorEnable);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bMultisampleEnalbe);
-					boost::hash_combine(rasterizerDesc.hashName, rasterizerDesc.bAntialiaseLineEnable);
+			LoadSampler(passInfo, pRenderPass);
+			LoadRasterizer(passInfo, pRenderPass);
+			LoadDepthStencil(passInfo, pRenderPass);
+			LoadBlendState(passInfo, pRenderPass);
 
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
-					pRenderPass->SetRasterizerState(pRasterizerState);
-				}
-				else
-				{
-					HrRasterizerState::HrRasterizerStateDesc rasterizerDesc;
-					HrRasterizerStatePtr pRasterizerState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateRasterizerState(rasterizerDesc);
-					pRenderPass->SetRasterizerState(pRasterizerState);
-				}
-			}
-			//DepthStencil
-			{
-				const rapidjson::Value& depthStencil = passInfo["DEPTH_STENCIL"];
-
-				HrDepthStencilState::HrDepthStencilStateDesc depthStencilDesc;
-				depthStencilDesc.bDepthEnable = depthStencil["DEPTH_ENABLE"].GetBool();
-				depthStencilDesc.depthWriteMask = DepthWriteMash(depthStencil["DEPTH_WRITE_MASK"].GetString());
-				depthStencilDesc.depthCompareFunc = ComparisonFunc(depthStencil["COMPARISON_FUNC"].GetString());
-				depthStencilDesc.bStencilEnable = depthStencil["STENCIL_ENABLE"].GetBool();
-				depthStencilDesc.stencilReadMask = depthStencil["STENCIL_READ_MASK"].GetUint();
-				depthStencilDesc.stencilWriteMask = depthStencil["STENCIL_WRITE_MASK"].GetUint();
-				depthStencilDesc.frontFaceCompareFunc = ComparisonFunc(depthStencil["FRONT_FACE_COMPARE_FUNC"].GetString());
-				depthStencilDesc.frontFaceStencilFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCIL_FAILED_OP"].GetString());
-				depthStencilDesc.frontFaceStencilDepthFailOp = StencilOperation(depthStencil["FRONT_FACE_STENCILDEPTH_FAIL_OP"].GetString());
-				depthStencilDesc.frontFaceStencilPassOp = StencilOperation(depthStencil["FRONT_FACE_PASS_OP"].GetString());
-				depthStencilDesc.backFaceCompareFunc = ComparisonFunc(depthStencil["BACK_FACE_COMPARE_FUNC"].GetString());
-				depthStencilDesc.backFaceStencilFailOp = StencilOperation(depthStencil["BACK_FACE_STENCIL_FAILED_OP"].GetString());
-				depthStencilDesc.backFaceStencilDepthFailOp = StencilOperation(depthStencil["BACK_FACE_STENCILDEPTH_FAIL_OP"].GetString());
-				depthStencilDesc.backFaceStencilPassOp = StencilOperation(depthStencil["BACK_FACE_PASS_OP"].GetString());
-				depthStencilDesc.nStencilRef = std::stoul(depthStencil["STENCIL_REF"].GetString());
-
-				depthStencilDesc.hashName = 0;
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bDepthEnable);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthWriteMask);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.depthCompareFunc);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.bStencilEnable);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilReadMask);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.stencilWriteMask);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceCompareFunc);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilFailOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilDepthFailOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.frontFaceStencilPassOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceCompareFunc);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilFailOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilDepthFailOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.backFaceStencilPassOp);
-				boost::hash_combine(depthStencilDesc.hashName, depthStencilDesc.nStencilRef);
-
-				HrDepthStencilStatePtr pDepthStencilState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateDepthStencilState(depthStencilDesc);
-				pRenderPass->SetDepthStencilState(pDepthStencilState);
-			}
-			//Blend
-			{
-				const rapidjson::Value& blendInfo = passInfo["BLEND"];
-
-				HrBlendState::HrBlendStateDesc blendDesc;
-				blendDesc.bBlendEnable = blendInfo["BLEND_ENABLE"].GetBool();
-				blendDesc.blendOperation = BlendOperation(blendInfo["BLEND_OP"].GetString());
-				blendDesc.srcBlend = AlphaBlendFactor(blendInfo["SRC_BLEND"].GetString());
-				blendDesc.dstBlend = AlphaBlendFactor(blendInfo["DEST_BLEND"].GetString());
-				blendDesc.blendOperationAlpha = BlendOperation(blendInfo["BLEND_OP_ALPHA"].GetString());
-				blendDesc.srcBlendAlpha = AlphaBlendFactor(blendInfo["SRC_BLEND_ALPHA"].GetString());
-				blendDesc.dstBlendAlpha = AlphaBlendFactor(blendInfo["DEST_BLEND_ALPHA"].GetString());
-				std::vector<std::string> vecMaskColor = HrStringUtil::GetVector(blendInfo["RENDER_TARGET_WRITE_MASK"].GetString(), "|");
-				blendDesc.colorMask = ColorMask(vecMaskColor);
-				float4 blendFactorColor = HrStringUtil::GetFloat4FromString(blendInfo["BLEND_FACTOR_COLOR"].GetString(), "|");
-				blendDesc.blendFactor = HrColor(blendFactorColor[0], blendFactorColor[1], blendFactorColor[2], blendFactorColor[3]);
-
-				std::string strTemp = blendInfo["SAMPLE_MASK"].GetString();
-				blendDesc.nSampleMask = std::stoul(blendInfo["SAMPLE_MASK"].GetString(), nullptr, 16);
-
-				blendDesc.hashName = 0;
-				boost::hash_combine(blendDesc.hashName, blendDesc.bBlendEnable);
-				boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
-				boost::hash_combine(blendDesc.hashName, blendDesc.blendOperation);
-				boost::hash_combine(blendDesc.hashName, blendDesc.srcBlend);
-				boost::hash_combine(blendDesc.hashName, blendDesc.dstBlend);
-				boost::hash_combine(blendDesc.hashName, blendDesc.blendOperationAlpha);
-				boost::hash_combine(blendDesc.hashName, blendDesc.srcBlendAlpha);
-				boost::hash_combine(blendDesc.hashName, blendDesc.dstBlendAlpha);
-				boost::hash_combine(blendDesc.hashName, blendDesc.nSampleMask);
-
-				auto pBlendState = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateBlendState(blendDesc);
-				pRenderPass->SetBlendState(pBlendState);
-			}
 		}
 		else
 		{
@@ -510,12 +587,11 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 
 }
 
-const HrRenderTechniquePtr HrRenderEffect::GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData)
+const HrRenderTechniquePtr HrRenderEffect::GetBestTechnique(const HrRenderLayoutPtr& pRenderLayout)
 {
-	//for (size_t i = m_vecRenderTechnique.size()-1; i >= 0; --i) 
 	for (size_t i = 0; i < m_vecRenderTechnique.size(); ++i)
 	{
-		if (m_vecRenderTechnique[i]->IsVertexElementMatch(vecVertexData))
+		if (m_vecRenderTechnique[i]->GetInputSimanticHashValue() == pRenderLayout->GetSimanticHashValue())
 		{
 			return m_vecRenderTechnique[i];
 		}

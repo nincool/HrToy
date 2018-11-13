@@ -10,10 +10,11 @@ namespace Hr
 	{
 
 	public:
-		HrSceneObject();
+		/**
+		 @Comment: 因为和Node是相辅相成的，所以作为Node的一个组成部分吧 [10/29/2018 By Hr]
+		*/
+		HrSceneObject(HrSceneNode* pSceneNode);
 		~HrSceneObject();
-
-		void AttachSceneNode(const HrSceneNodePtr& pSceneNode);
 
 		void OnEnter();
 		void OnExist();
@@ -23,22 +24,24 @@ namespace Hr
 		void AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent);
 		HrSceneObjectComponentPtr AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType);
 		HrSceneObjectComponentPtr GetComponent(HrSceneObjectComponent::EnumSceneComponentType comType);
+		const HrRenderableComponentPtr& GetRenderableComponent();
 
 		template <typename T>
 		std::shared_ptr<T> AddComponent();
 		template <typename T>
 		std::shared_ptr<T> GetComponent();
 
-		HrSceneNodePtr GetSceneNode();
+		const HrSceneNode* GetSceneNode() const;
 	private:
 		void AddCameraToScene();
 		void AddLightToScene(const HrLightPtr& pLight);
 	protected:
-		std::weak_ptr<HrSceneNode> m_pContainerNode;
+		HrSceneNode* m_pContainerNode;
 
 		std::unordered_map<HrSceneObjectComponent::EnumSceneComponentType, HrSceneObjectComponentPtr> m_mapComponents;
 		HrSceneObjectComponentPtr m_pSceneObjMutexCom;
 
+		HrRenderableComponentPtr m_pCachedRenderable;
 		HrCameraComponentPtr m_pCachedCamera;
 		HrLightComponentPtr m_pCachedLight;
 

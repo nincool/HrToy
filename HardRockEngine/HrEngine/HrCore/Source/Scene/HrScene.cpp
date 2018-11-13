@@ -99,3 +99,8 @@ std::shared_ptr<HrSceneLightData>& HrScene::GetLightsData()
 	return m_pLightsData;
 }
 
+const HrSceneNodePtr& HrScene::GetRootNode()
+{
+	return m_pSceneRootNode;
+}
+

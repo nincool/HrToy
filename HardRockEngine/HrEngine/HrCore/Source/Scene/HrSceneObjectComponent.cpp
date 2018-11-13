@@ -16,9 +16,9 @@
 
 using namespace Hr;
 
-HrSceneObjectComponent::HrSceneObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : m_strName(strName)
+HrSceneObjectComponent::HrSceneObjectComponent(const std::string& strName, HrSceneObject* pSceneObj) : m_strName(strName)
 {
-	m_pAttachSceneObj = pSceneObj;
+	m_pSceneObj = pSceneObj;
 }
 
 HrSceneObjectComponent::~HrSceneObjectComponent()
@@ -46,14 +46,9 @@ HrSceneObjectComponent::EnumSceneComponentType HrSceneObjectComponent::GetComTyp
 	return m_comType;
 }
 
-HrSceneObjectPtr HrSceneObjectComponent::GetAttachSceneObject()
+HrSceneObject* HrSceneObjectComponent::GetAttachSceneObject()
 {
-	if (!m_pAttachSceneObj.expired())
-	{
-		return m_pAttachSceneObj.lock();
-	}
-
-	return nullptr;
+	return m_pSceneObj;
 }
 
 void HrSceneObjectComponent::UpdateTransform(const HrTransformPtr& pTransform)
@@ -61,7 +56,7 @@ void HrSceneObjectComponent::UpdateTransform(const HrTransformPtr& pTransform)
 
 }
 
-HrSceneObjectMutexCom::HrSceneObjectMutexCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
+HrSceneObjectMutexCom::HrSceneObjectMutexCom(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
 {
 }
 
@@ -69,7 +64,7 @@ HrSceneObjectMutexCom::~HrSceneObjectMutexCom()
 {
 }
 
-HrSceneObjectSharedCom::HrSceneObjectSharedCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
+HrSceneObjectSharedCom::HrSceneObjectSharedCom(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
 {
 }
 
@@ -81,7 +76,7 @@ HrSceneObjectSharedCom::~HrSceneObjectSharedCom()
 //
 //////////////////////////////////////////////////////////////////////
 
-HrCameraComponet::HrCameraComponet(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
+HrCameraComponet::HrCameraComponet(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
 {
 	m_comType = HrSceneObjectComponent::SCT_CAMERA;
 	m_pCamera = HrMakeSharedPtr<HrCamera>(strName);
@@ -95,8 +90,7 @@ HrCameraComponet::~HrCameraComponet()
 
 void HrCameraComponet::OnEnter()
 {
-	auto pSceneObj = m_pAttachSceneObj.lock();
-	HrTransformPtr pTrans = pSceneObj->GetSceneNode()->GetTransform();
+	HrTransformPtr pTrans = m_pSceneObj->GetSceneNode()->GetTransform();
 	Vector3 vWorldPos = pTrans->GetWorldPosition();
 
 	m_pCamera->ViewParams(vWorldPos, pTrans->GetForward() * 1.0f, pTrans->GetUp());
@@ -144,12 +138,12 @@ void HrCameraComponet::SetFarPlane(float fFar)
 //HrTrackBallCameraController
 //////////////////////////////////////////////////////////////////////
 
-HrTrackBallCameraController::HrTrackBallCameraController(const std::string& strName, const HrSceneObjectPtr& pSceneObj) 
+HrTrackBallCameraController::HrTrackBallCameraController(const std::string& strName, HrSceneObject* pSceneObj)
 	: HrSceneObjectSharedCom(strName, pSceneObj)
 {
 	m_fRotationScaler = 0.0005;
 	m_fMoveScaler = 0.0005;
-	m_fZoomScaler = 0.005;
+	m_fZoomScaler = 0.01;
 
 	m_vTarget = Vector3::Zero();
 }
@@ -160,10 +154,8 @@ HrTrackBallCameraController::~HrTrackBallCameraController()
 
 void HrTrackBallCameraController::OnEnter()
 {
-	auto pSceneObj = m_pAttachSceneObj.lock();
-
 	//校验是否有其他CameraController
-	m_pCameraCom = pSceneObj->GetComponent<HrCameraComponet>();
+	m_pCameraCom = m_pSceneObj->GetComponent<HrCameraComponet>();
 	if (!m_pCameraCom)
 	{
 		HRERROR("HrTrackBallCameraController::OnEnter Error!");
@@ -172,7 +164,7 @@ void HrTrackBallCameraController::OnEnter()
 	{
 		m_vRight = m_pCameraCom->GetCamera()->GetRight();
 
-		HrTransformPtr pTrans = pSceneObj->GetSceneNode()->GetTransform();
+		HrTransformPtr pTrans = m_pSceneObj->GetSceneNode()->GetTransform();
 		Vector3 vWorldPos = pTrans->GetWorldPosition();
 
 		if (HrMath::CompareApproximately(m_vTarget, vWorldPos))
@@ -183,7 +175,7 @@ void HrTrackBallCameraController::OnEnter()
 		Vector3 vLookDir = m_vTarget - vWorldPos;
 		Vector3 vUpDir = HrMath::Cross(vLookDir, m_vRight);
 		Quaternion orientation = HrMath::ToQuaternion(HrMath::LookRotationToMatrix(vLookDir, vUpDir));
-		pSceneObj->GetSceneNode()->GetTransform()->SetOrientation(orientation);
+		m_pSceneObj->GetSceneNode()->GetTransform()->SetOrientation(orientation);
 	}
 }
 
@@ -206,13 +198,10 @@ void HrTrackBallCameraController::Rotate(const Vector3& v)
 	Vector3 vUpDir = HrMath::Cross(vLookDir, m_vRight);
 	vUpDir = HrMath::Normalize(vUpDir);
 
-	if (!m_pAttachSceneObj.expired())
-	{
-		HrSceneObjectPtr pSceneObj = m_pAttachSceneObj.lock();
-		pSceneObj->GetSceneNode()->GetTransform()->SetPosition(vPos2);
-		Quaternion orientation = HrMath::ToQuaternion(HrMath::LookRotationToMatrix(vLookDir, vUpDir));
-		pSceneObj->GetSceneNode()->GetTransform()->SetOrientation(orientation);
-	}
+	m_pSceneObj->GetSceneNode()->GetTransform()->SetPosition(vPos2);
+	Quaternion orientation = HrMath::ToQuaternion(HrMath::LookRotationToMatrix(vLookDir, vUpDir));
+	m_pSceneObj->GetSceneNode()->GetTransform()->SetOrientation(orientation);
+	
 }
 
 void HrTrackBallCameraController::Zoom(float fZ)
@@ -226,16 +215,14 @@ void HrTrackBallCameraController::Zoom(float fZ)
 	}
 
 	//计算距离
-	HrSceneObjectPtr pSceneObj = m_pAttachSceneObj.lock();
-	HrTransformPtr pTrans = pSceneObj->GetSceneNode()->GetTransform();
-	pTrans->Translate(Vector3(0, 0, fZ * m_fZoomScaler));
+	m_pSceneObj->GetSceneNode()->GetTransform()->Translate(Vector3(0, 0, fZ * m_fZoomScaler));
 }
 
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
-HrLightComponent::HrLightComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj, HrLight::EnumLightType lightType)
+HrLightComponent::HrLightComponent(const std::string& strName, HrSceneObject* pSceneObj, HrLight::EnumLightType lightType)
 	: HrSceneObjectMutexCom(strName, pSceneObj)
 {
 	m_comType = HrSceneObjectComponent::SCT_LIGHT;
@@ -285,7 +272,7 @@ void HrLightComponent::UpdateTransform(const HrTransformPtr& pTransform)
 //
 //////////////////////////////////////////////////////////////////////
 
-HrRenderableComponent::HrRenderableComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
+HrRenderableComponent::HrRenderableComponent(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
 {
 
 }
@@ -298,14 +285,17 @@ HrRenderableComponent::~HrRenderableComponent()
 void HrRenderableComponent::SetRenderable(const HrRenderablePtr& pRenderable)
 {
 	m_pRenderable = pRenderable;
-	m_pRenderable->SetAttachSceneObject(GetAttachSceneObject());
+	
+	//todo!! 按道理来讲 不应该传进来
+	m_pRenderable->SetAttachSceneObject(m_pSceneObj);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
-HrInstanceBatchComponent::HrInstanceBatchComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj)
+HrInstanceBatchComponent::HrInstanceBatchComponent(const std::string& strName, HrSceneObject* pSceneObj)
 	: HrSceneObjectSharedCom(strName, pSceneObj)
 {
 	const HrRenderableComponentPtr pRenderCom = pSceneObj->GetComponent<HrRenderableComponent>();
@@ -335,21 +325,21 @@ void HrInstanceBatchComponent::CreateInstanceBatch(const HrSubMeshPtr& pSubMesh)
 
 HrSceneNodePtr HrInstanceBatchComponent::CreateInstance(const std::string& strName)
 {
-	if (!m_pAttachSceneObj.expired())
-	{
-		HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-		HrSceneObjectPtr pSceneObj = m_pInsBatch->CreateInstance();
-		pSceneNode->SetSceneObject(pSceneObj);
+	//todo instance
 
-		HrSceneObjectPtr pParentObj = m_pAttachSceneObj.lock();
-		HrSceneNodePtr pAttachSceneNode = pParentObj->GetSceneNode();
-		if (pAttachSceneNode)
-		{
-			pAttachSceneNode->AddChild(pSceneNode);
-		}
+		//HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+		//HrSceneObjectPtr pSceneObj = m_pInsBatch->CreateInstance();
+		//pSceneNode->SetSceneObject(pSceneObj);
 
-		return pSceneNode;
-	}
+		//HrSceneObjectPtr pParentObj = m_pAttachSceneObj.lock();
+		//HrSceneNodePtr pAttachSceneNode = pParentObj->GetSceneNode();
+		//if (pAttachSceneNode)
+		//{
+		//	pAttachSceneNode->AddChild(pSceneNode);
+		//}
+
+		//return pSceneNode;
+	
 
 	return nullptr;
 }
@@ -364,7 +354,7 @@ const HrInstanceBatchPtr& HrInstanceBatchComponent::GetInstanceBatch()
 //////////////////////////////////////////////////////////////////////
 
 
-HrInstanceObjectComponent::HrInstanceObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj)
+HrInstanceObjectComponent::HrInstanceObjectComponent(const std::string& strName, HrSceneObject* pSceneObj)
 	: HrSceneObjectMutexCom(strName, pSceneObj)
 {
 }

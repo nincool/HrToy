@@ -30,7 +30,7 @@ void HrD3D11SSShaderParamRelationShip::UpdateSamplerState()
 	HrSamplerState* pSamplerState = nullptr;
 	m_pSamplerParam->Value(pSamplerState);
 	if (pSamplerState)
-		(*m_pVecD3D11SS)[m_nPosIndex] = HrCheckPointerCast<HrD3D11SamplerState>(pSamplerState)->GetD3D11SamplerState().get();
+		(*m_pVecD3D11SS)[m_nPosIndex] = HrCheckPointerCast<HrD3D11SamplerState>(pSamplerState)->RetriveD3DSamplerState().get();
 	else
 		(*m_pVecD3D11SS)[m_nPosIndex] = nullptr;
 }

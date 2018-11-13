@@ -90,7 +90,7 @@ const HrColor& HrLight::GetColor() const
 HrAmbientLight::HrAmbientLight()
 {
 	m_lightType = HrLight::LT_AMBIENT;
-	m_lightColor = HrColor(0.1f, 0.1f, 0.1f, 1.0f);
+	m_lightColor = HrColor(0.3f, 0.3f, 0.3f, 1.0f);
 }
 
 HrAmbientLight::HrAmbientLight(const HrColor& ambient)

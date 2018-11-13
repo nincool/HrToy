@@ -2,7 +2,7 @@
 #define _HR_RENDEREFFECT_H_
 
 #include "HrResource.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 #include "ThirdParty/rapidjson/include/rapidjson/document.h"
 
 namespace Hr
@@ -17,7 +17,7 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath) override;
 
-		const HrRenderTechniquePtr GetBestTechnique(const std::vector<HrVertexDataPtr>& vecVertexData);
+		const HrRenderTechniquePtr GetBestTechnique(const HrRenderLayoutPtr& pRenderLayout);
 		const HrRenderTechniquePtr GetTechniqueByIndex(uint32 nIndex);
 		const HrRenderTechniquePtr GetTechniqueByName(const std::string& strTechniqueName);
 
@@ -30,6 +30,10 @@ namespace Hr
 
 		void LoadTechniques(const rapidjson::Value& sceneRootInfo, const HrShaderCompilerPtr& pShaderCompiler);
 		void LoadPasses(const rapidjson::Value& techniqueInfo, const HrShaderCompilerPtr& pShaderCompiler, const HrRenderTechniquePtr& pRenderTechnique);
+		void LoadSampler(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass);
+		void LoadRasterizer(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass);
+		void LoadDepthStencil(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass);
+		void LoadBlendState(const rapidjson::Value& passInfo, const HrRenderPassPtr& pRenderPass);
 		void LoadShaders(const rapidjson::Value& shaderInfo
 			, const HrShaderCompilerPtr& pShaderCompiler
 			, const HrRenderTechniquePtr& pRenderTechnique

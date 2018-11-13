@@ -19,9 +19,9 @@ HrJsonLoader::~HrJsonLoader()
 
 void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 {
-	HrStreamDataPtr pStreamData = HrFileUtils::Instance()->GetFileData(strFile);
+	std::string strContentData = HrFileUtils::Instance()->GetFileString(strFile);
 	rapidjson::Document d;
-	d.Parse<0>(pStreamData->GetBufferPoint());
+	d.Parse<0>(strContentData.c_str());
 	if (d.HasParseError())
 	{
 		int nErrorCode = d.GetParseError();
@@ -30,8 +30,9 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		
 		return;
 	}
-
+	modelDesc.strFilePath = strFile;
 	std::string strTexturePath = strFile.substr(0, strFile.rfind('\\'));
+	modelDesc.strFileName = HrFileUtils::Instance()->GetFileName(strFile);
 
 	const rapidjson::Value& meshesInfo = d["Meshes"];
 	int nSubMeshCount = meshesInfo["SubMeshesCount"].GetInt();
@@ -39,8 +40,8 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 	{
 		modelDesc.vecSubMeshInfo.emplace_back();
 		HrModelDataInfo::HrSubMeshDataInfo& subMeshData = modelDesc.vecSubMeshInfo.back();
-		const rapidjson::Value& subMeshInfo = meshesInfo[HrStringUtil::StringFormat("SubMesh_%d", nSubMeshIndex).c_str()];
-		
+		subMeshData.strMeshName = HrStringUtil::StringFormat("SubMesh_%d", nSubMeshIndex);
+		const rapidjson::Value& subMeshInfo = meshesInfo[subMeshData.strMeshName.c_str()];
 		subMeshData.vecIndices = HrStringUtil::GetTVectorFromString<uint32>(subMeshInfo["Indices"].GetString(), ",");
 		subMeshData.vecVertexPos = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Vertices"].GetString(), "|", ",");
 		subMeshData.vecNormal = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Normals"].GetString(), "|", ",");

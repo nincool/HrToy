@@ -718,6 +718,8 @@ EnumVertexElementType HrD3D11ShaderCompiler::GetVertexInputVariableDataType(D3D_
 			return VET_UINT2;
 		else if (nMask == 7)
 			return VET_UINT3;
+		else if (nMask == 15)
+			return VET_UINT4;
 	case D3D_REGISTER_COMPONENT_SINT32:
 		if (nMask == 1)
 			return VET_INT1;
@@ -725,6 +727,8 @@ EnumVertexElementType HrD3D11ShaderCompiler::GetVertexInputVariableDataType(D3D_
 			return VET_INT2;
 		else if (nMask == 7)
 			return VET_INT3;
+		else if (nMask == 15)
+			return VET_INT4;
 	case D3D_REGISTER_COMPONENT_FLOAT32:
 		if (nMask == 1)
 			return VET_FLOAT1;
@@ -732,6 +736,8 @@ EnumVertexElementType HrD3D11ShaderCompiler::GetVertexInputVariableDataType(D3D_
 			return VET_FLOAT2;
 		else if (nMask == 7)
 			return VET_FLOAT3;
+		else if (nMask == 15)
+			return VET_FLOAT4;
 	default:
 		break;
 	}

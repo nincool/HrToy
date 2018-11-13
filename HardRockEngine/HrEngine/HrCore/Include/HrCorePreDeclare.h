@@ -138,6 +138,10 @@ namespace Hr
 	class HrInstanceBatchComponent;
 	typedef std::shared_ptr<HrInstanceBatchComponent> HrInstanceBatchComponentPtr;
 
+	class HrOctNode;
+	class HrOctree;
+	class HrOctreeSceneManager;
+
 	//Event
 	class HrEvent;
 	typedef std::shared_ptr<HrEvent> HrEventPtr;
@@ -161,10 +165,10 @@ namespace Hr
 	typedef std::shared_ptr<HrStreamData> HrStreamDataPtr;
 	class HrResource;
 	typedef std::shared_ptr<HrResource> HrResourcePtr;
-	class HrModel;
-	typedef std::shared_ptr<HrModel> HrModelPtr;
 	class HrMeshModel;
 	typedef std::shared_ptr<HrMeshModel> HrMeshModelPtr;
+	class HrMeshModelObject;
+	typedef std::shared_ptr<HrMeshModelObject> HrMeshModelObjectPtr;
 	class HrTexture;
 	typedef std::shared_ptr<HrTexture> HrTexturePtr;
 	class HrMesh;

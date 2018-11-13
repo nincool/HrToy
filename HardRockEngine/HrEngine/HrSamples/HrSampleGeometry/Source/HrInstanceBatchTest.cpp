@@ -63,32 +63,32 @@ void HrInstanceBatchTest::CreateSceneElements()
 
 	//尝试创建一个InstanceBatch节点
 	//SubMesh 限定只能有一个
-	HrModelPtr pModel = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrModel>("Model/HrPrefab3.model", true, true);
-	BOOST_ASSERT(pModel->GetMesh()->GetSubMeshNum() == 1);
+	//HrModelPtr pModel = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrModel>("Model/HrPrefab3.model", true, true);
+	//BOOST_ASSERT(pModel->GetMesh()->GetSubMeshNum() == 1);
 
-	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
-	pSceneNode->SetSceneObject(pSceneObj);
-	HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
-	HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(pModel->GetMesh()->GetSubMesh(0));
-	pRenderableCom->SetRenderable(pRenderable);
+	//HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+	//HrSceneObjectPtr pSceneObj = HrMakeSharedPtr<HrSceneObject>();
+	//pSceneNode->SetSceneObject(pSceneObj);
+	//HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
+	//HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(pModel->GetMesh()->GetSubMesh(0));
+	//pRenderableCom->SetRenderable(pRenderable);
 
-	HrInstanceBatchComponentPtr pInsBatchCom = pSceneObj->AddComponent<HrInstanceBatchComponent>();
-	auto pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(-5, 3.0, 0.0));
-	pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(5, 3.0, 0.0));
-	pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(-5, 0.0, 0.0));
-	pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(5, 0.0, 0.0));
-	pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(-5, -3.0, 0.0));
-	pInsSceneNode = pInsBatchCom->CreateInstance();
-	pInsSceneNode->GetTransform()->Translate(Vector3(5, -3.0, 0.0));
-	m_pTestNode = pInsSceneNode;
+	//HrInstanceBatchComponentPtr pInsBatchCom = pSceneObj->AddComponent<HrInstanceBatchComponent>();
+	//auto pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(-5, 3.0, 0.0));
+	//pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(5, 3.0, 0.0));
+	//pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(-5, 0.0, 0.0));
+	//pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(5, 0.0, 0.0));
+	//pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(-5, -3.0, 0.0));
+	//pInsSceneNode = pInsBatchCom->CreateInstance();
+	//pInsSceneNode->GetTransform()->Translate(Vector3(5, -3.0, 0.0));
+	//m_pTestNode = pInsSceneNode;
 
-	AddNode(pSceneNode);
+	//AddNode(pSceneNode);
 }
 
 //HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)

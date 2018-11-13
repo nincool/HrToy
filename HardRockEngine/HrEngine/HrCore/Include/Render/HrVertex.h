@@ -2,7 +2,7 @@
 #define _HR_Vertex_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 #include "HrCore/Include/Render/HrGraphicsBuffer.h"
 #include "HrUtilTools/Include/HrUtil.h"
 
@@ -149,12 +149,13 @@ namespace Hr
 
 		const HrVertexElement& GetVertexElement(uint32 nIndex);
 		const std::vector<HrVertexElement>& GetVertexElement();
+		
 	private:
 		void AddElement(const HrVertexElement& usage);
 	protected:
 		uint32 m_nVertexSize;
-
 		std::vector<HrVertexElement> m_vecVertexElement;
+
 	};
 
 	///////////////////////////////////////////////////////////

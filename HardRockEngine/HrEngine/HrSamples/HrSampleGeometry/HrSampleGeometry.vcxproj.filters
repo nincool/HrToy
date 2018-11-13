@@ -40,6 +40,9 @@
     <ClInclude Include="Include\HrDeferredShading.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\HrSceneManagerTest.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\HrExport.cpp">
@@ -67,6 +70,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\HrDeferredShading.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HrSceneManagerTest.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

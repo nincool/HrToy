@@ -5,6 +5,7 @@
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
 #define lass                            100
+#define Com                             100
 #define IDD_FORMVIEW                    101
 #define IDB_WRITESMALL                  110
 #define IDB_WRITELARGE                  111

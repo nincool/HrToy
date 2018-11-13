@@ -142,6 +142,7 @@
     <ClInclude Include="Include\HrGeometryScene.h" />
     <ClInclude Include="Include\HrInstanceBatchTest.h" />
     <ClInclude Include="Include\HrRenderQueue.h" />
+    <ClInclude Include="Include\HrSceneManagerTest.h" />
     <ClInclude Include="Include\HrShadowMapScene.h" />
     <ClInclude Include="Include\HrTestScene.h" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClCompile Include="Source\HrGeometryScene.cpp" />
     <ClCompile Include="Source\HrInstanceBatchTest.cpp" />
     <ClCompile Include="Source\HrRenderQueue.cpp" />
+    <ClCompile Include="Source\HrSceneManagerTest.cpp" />
     <ClCompile Include="Source\HrShadowMapScene.cpp" />
     <ClCompile Include="Source\HrTestScene.cpp" />
   </ItemGroup>

@@ -21,9 +21,7 @@ namespace Hr
 		void SetRasterizerState(const HrRasterizerStatePtr& pRasterizerState);
 		void SetDepthStencilState(const HrDepthStencilStatePtr& pDepthStencilState);
 		void SetBlendState(const HrBlendStatePtr& pBlendState);
-
-	private:
-
+		void SetSamplerState(const HrSamplerStatePtr& pSamplerState);
 	private:
 		std::string m_strPassName;
 
@@ -34,7 +32,7 @@ namespace Hr
 		HrBlendStatePtr m_pBlendState;
 		HrDepthStencilStatePtr m_pDepthStencilState;
 		HrRasterizerStatePtr m_pRasterizerState;
-
+		HrSamplerStatePtr m_pSamplerState;
 
 	};
 }

@@ -1,8 +1,8 @@
 #ifndef _HR_GEOMETRYFACTORY_H_
 #define _HR_GEOMETRYFACTORY_H_
 
+#include "HrCore/Include/Asset/HrResource.h"
 #include "HrCore/Include/Render/HrMeshRenderable.h"
-#include "HrCore/Include/Asset/HrModel.h"
 
 namespace Hr
 {
@@ -104,15 +104,19 @@ namespace Hr
 	//
 	////////////////////////////////////////////////////////////////
 
-	class HrMeshModelObject : public HrMeshModel
+	class HR_CORE_API HrMeshModelObject : public HrMeshModel
 	{
 	public:
 		HrMeshModelObject();
 		~HrMeshModelObject();
 
+		const HrModelLoaderPtr& GetModelLoader();
 	protected:
 		virtual bool LoadImpl() override;
 		virtual bool UnloadImpl() override;
+
+	private:
+		HrModelLoaderPtr m_pModelLoader;
 	};
 }
 

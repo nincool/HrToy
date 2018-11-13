@@ -1,29 +1,29 @@
-#include "HrCore/Include/Scene/HrTransform.h"
-#include "HrCore/Include/Scene/HrSceneNode.h"
+#include "Scene/HrTransform.h"
+#include "Scene/HrSceneNode.h"
 
 using namespace Hr;
 
-HrTransform::HrTransform(const std::function<void(bool, bool, bool)>& funDirtyTrans)
+Vector3 HrTransform::m_s_v3Zero = Vector3(0, 0, 0);
+Vector3 HrTransform::m_s_v3One = Vector3(1, 1, 1);
+Quaternion HrTransform::m_s_quaIdentity = Quaternion::Identity();
+
+HrTransform::HrTransform(HrSceneNode* pSceneNode)
 {
-	m_bDirtyTransform 
-		= m_bDirtyWorldScale 
-		= m_bDirtyWorldOriention 
-		= m_bDirtyWorldPosition  
+	m_pSceneNode = pSceneNode;
+
+	m_bDirtyTransform
+		= m_bDirtyWorldScale
+		= m_bDirtyWorldOriention
+		= m_bDirtyWorldPosition
 		= m_bDirtyWorldMatrix = true;
 
 	m_vPosition = Vector3(0.0f, 0.0f, 0.0f);
 	m_vScale = Vector3(1.0f, 1.0f, 1.0f);
 	m_orientation = Quaternion::Identity();
+	m_vEulerAngles = Vector3::Zero();
 
 	Rotate(m_orientation);
 
-	m_funDirtyTrans = funDirtyTrans;
-
-}
-
-void HrTransform::SetParentTransform(const HrTransformPtr& pTrans)
-{
-	m_pParentTransform = pTrans;
 }
 
 void HrTransform::SetPosition(const Vector3& v3Pos)
@@ -44,7 +44,8 @@ const Vector3& HrTransform::GetPosition()
 
 void HrTransform::SetRotation(const Vector3& angle)
 {
-	SetOrientation(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)));
+	m_vEulerAngles = angle;
+	DecomposeOriention(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)));
 }
 
 const Quaternion& HrTransform::GetOrientation() const
@@ -53,6 +54,12 @@ const Quaternion& HrTransform::GetOrientation() const
 }
 
 void HrTransform::SetOrientation(const Quaternion& orientation)
+{
+	DecomposeOriention(orientation);
+	m_vEulerAngles = HrMath::Radian2Degree(HrMath::ToPitchYawRoll(m_orientation));
+}
+
+void HrTransform::DecomposeOriention(const Quaternion& orientation)
 {
 	m_orientation = HrMath::Normalize(orientation);
 
@@ -67,7 +74,7 @@ void HrTransform::SetOrientation(const Quaternion& orientation)
 	Vector4 vForward = matOrientation.Row(2);
 	m_vForward = Vector3(vForward.x(), vForward.y(), vForward.z());
 
-	DirtyTransform(false, false, true);
+	DirtyTransform(true, false, true);
 }
 
 const Vector3& HrTransform::GetForward() const
@@ -93,31 +100,17 @@ void HrTransform::Translate(const Vector3& v3, EnumTransformSpace relativeTo /*=
 		m_vPosition += HrMath::TransformQuat(v3, m_orientation);
 		break;
 	case TS_WORLD:
+		if (m_pSceneNode)
+		{
+			//v3 表示为世界坐标系下的位移，所以需要转换为父节点坐标系下的位移
+			m_vPosition += ConvertWorldToLocalDirection(v3);
+		}
 		break;
 	case TS_PARENT:
+		m_vPosition += v3;
 		break;
 	}
 	DirtyTransform(true);
-}
-
-void HrTransform::Roll(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
-{
-
-}
-
-void HrTransform::Pitch(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
-{
-
-}
-
-void HrTransform::Yaw(const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
-{
-
-}
-
-void HrTransform::Rotate(const Vector3& axis, const Radian& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
-{
-
 }
 
 void HrTransform::Rotate(const Vector3& angle, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
@@ -145,9 +138,9 @@ const Vector3& HrTransform::GetWorldScale()
 {
 	if (m_bDirtyWorldScale)
 	{
-		if (m_pParentTransform)
+		if (m_pSceneNode->GetParent())
 		{
-			const Vector3& parentWorldScale = m_pParentTransform->GetWorldScale();
+			const Vector3& parentWorldScale = m_pSceneNode->GetParent()->GetTransform()->GetWorldScale();
 			m_vWorldScale = parentWorldScale * m_vScale;
 		}
 		else
@@ -165,9 +158,9 @@ const Quaternion& HrTransform::GetWorldOriention()
 {
 	if (m_bDirtyWorldOriention)
 	{
-		if (m_pParentTransform)
+		if (m_pSceneNode->GetParent())
 		{
-			const Quaternion& parentOriention = m_pParentTransform->GetWorldOriention();
+			const Quaternion& parentOriention = GetParentOriention();
 			m_worldOriention = parentOriention * m_orientation;
 		}
 		else
@@ -185,11 +178,12 @@ const Vector3& HrTransform::GetWorldPosition()
 {
 	if (m_bDirtyWorldPosition)
 	{
-		if (m_pParentTransform)
-		{
-			const Vector3& parentPosition = m_pParentTransform->GetWorldPosition();
-			m_vWorldPosition = m_vPosition;
-			m_vWorldPosition += parentPosition;
+		if (m_pSceneNode->GetParent())
+		{			
+			const Vector3& parentScale = GetParentScale();
+			const Quaternion& parentOriention = GetParentOriention();
+			m_vWorldPosition = HrMath::TransformQuat(parentScale * m_vPosition, parentOriention);
+			m_vWorldPosition += GetParentPosition();
 		}
 		else
 		{
@@ -212,16 +206,6 @@ const Matrix4& HrTransform::GetWorldMatrix()
 
 	return m_matWorldMatrix;
 }
-
-void HrTransform::UpdateFromParent()
-{
-	//Update orientation
-	//if (m_pSceneNode != nullptr)
-	//{
-	//	m_pSceneNode->GetTransform()->GetWorldScale();
-	//}
-}
-
 
 void HrTransform::SetScale(const Vector3& v3Scale)
 {
@@ -258,7 +242,48 @@ void HrTransform::DirtyTransform(bool bDirtyPos, bool bDirtyScale, bool bDirtyOr
 	if (bDirtyOrientation)
 		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldOriention = true;
 
-	if (m_funDirtyTrans)
-		m_funDirtyTrans(bDirtyPos, bDirtyScale, bDirtyOrientation);
+	m_pSceneNode->DirtyTransfrom(bDirtyPos, bDirtyScale, bDirtyOrientation);
+}
+
+Vector3 HrTransform::ConvertWorldToLocalDirection(const Vector3& worldDir)
+{
+	if (m_pSceneNode->GetParent())
+	{
+		const Quaternion& quaDerivedOrientation = GetParentOriention();
+		return HrMath::TransformQuat(worldDir, HrMath::Inverse(quaDerivedOrientation));
+	}
+	else
+	{
+		return worldDir;
+	}
+}
+
+const Vector3& HrTransform::GetParentScale()
+{
+	if (m_pSceneNode->GetParent())
+		return m_pSceneNode->GetParent()->GetTransform()->GetWorldScale();
+	else
+		return m_s_v3One;
+}
+
+const Quaternion& HrTransform::GetParentOriention()
+{
+	if (m_pSceneNode->GetParent())
+		return m_pSceneNode->GetParent()->GetTransform()->GetWorldOriention();
+	else
+		return m_s_quaIdentity;
+}
+
+const Vector3& HrTransform::GetParentPosition()
+{
+	if (m_pSceneNode->GetParent())
+		return m_pSceneNode->GetParent()->GetTransform()->GetWorldPosition();
+	else
+		return m_s_v3Zero;
+}
+
+const Vector3 HrTransform::GetRotation()
+{
+	return m_vEulerAngles;
 }
 

@@ -29,7 +29,6 @@ HrRenderPass::~HrRenderPass()
 
 void HrRenderPass::BindPass(const HrRenderPtr& pRender)
 {
-	
 	BOOST_ASSERT(m_pBlendState);
 	m_pBlendState->Accept(pRender);
 	
@@ -114,5 +113,11 @@ void HrRenderPass::SetDepthStencilState(const HrDepthStencilStatePtr& pDepthSten
 void HrRenderPass::SetBlendState(const HrBlendStatePtr& pBlendState)
 {
 	m_pBlendState = pBlendState;
+}
+
+void HrRenderPass::SetSamplerState(const HrSamplerStatePtr& pSamplerState)
+{
+	m_pSamplerState = pSamplerState;
+
 }
 

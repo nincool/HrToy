@@ -23,8 +23,7 @@ namespace Hr
 		void SetVertexInputSimantic(std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >&& vecVertexInputSimantic);
 		void SetVertexOutputSimantic(std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >&& vecVertexOutputSimantic);
 
-		bool IsVertexElementMatch(const std::vector<HrVertexDataPtr>& vecVertexData);
-
+		size_t GetInputSimanticHashValue();
 	private:
 		size_t CreateInputSimanticHashValue(const std::vector<std::tuple<EnumVertexElementSemantic, uint32, EnumVertexElementType> >& vecVertexInputSimantic);
 	protected:

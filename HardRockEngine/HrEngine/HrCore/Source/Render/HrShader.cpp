@@ -24,3 +24,8 @@ void HrShader::BindRenderParameter(std::vector<HrRenderEffectConstantBufferPtr>&
 	BindRenderParameterImpl();
 }
 
+void HrShader::SetSampler(const HrSamplerStatePtr& pSampler)
+{
+	m_pSampler = pSampler;
+}
+

@@ -48,6 +48,10 @@ namespace Hr
 		std::string FormatJsonData(const std::string& strContent);
 
 		std::string MakeFloat3String(float3 v);
+		std::string MakeFloat3StringWithEndMark(float3 v, const char c= '|');
+
+		void ComputeAABB();
+		void ComputeExtrameDistanceAlongDir(const Vector3& vDir, const std::vector<Vector3>& vecVertices, uint32& nMax, uint32& nMin);
 	private:
 		void MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement);
 		void MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData, const std::vector<HrVertexElement>& vecVertexElement);
@@ -68,6 +72,7 @@ namespace Hr
 		HrSceneNodePtr m_pSceneNode;
 
 		float m_fUnitScale;
+		float m_fOutputUnitScale;
 	};
 }
 

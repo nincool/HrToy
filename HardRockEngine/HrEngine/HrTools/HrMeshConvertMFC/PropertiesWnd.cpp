@@ -230,6 +230,8 @@ void CPropertiesWnd::InitPropList()
 			//m_pHrSettingGroup->AddSubItem(new CMFCPropertyGridFileProperty(_T("Texture"), TRUE, _T(""), _T("ico"), 0, szFilter, _T("Specifies the texture")));
 			auto pUnitScale = new CMFCPropertyGridProperty(_T("UnitScale"), (_variant_t)1.0f, _T("Specifies the window's height"));
 			m_pHrSettingGroup->AddSubItem(pUnitScale);
+			auto pOutputUnitScale = new CMFCPropertyGridProperty(_T("OutputUnitScale"), (_variant_t)1.0f, _T("Specifies the output unitscale'"));
+			m_pHrSettingGroup->AddSubItem(pOutputUnitScale);
 		}
 		{
 			static const TCHAR szFilter[] = _T("Material Files(*.material)|*.material|All Files(*.*)|*.*||");
@@ -430,7 +432,12 @@ LRESULT CPropertiesWnd::OnPropertyChanged(__in WPARAM wParam, __in LPARAM lParam
 		float fUnitScale = var.fltVal;
 		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetUnitScale(fUnitScale);
 	}
+	else if (str == _T("OutputUnitScale"))
+	{
+		COleVariant var = pProp->GetValue();
+		float fOutputScale = var.fltVal;
 
+	}
 	return 0;
 }
 

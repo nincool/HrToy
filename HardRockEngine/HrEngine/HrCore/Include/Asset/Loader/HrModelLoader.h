@@ -5,7 +5,7 @@
 
 namespace Hr
 {
-	class HrModelDataInfo
+	class HR_CORE_API HrModelDataInfo
 	{
 	public:
 		struct HrMaterialDataInfo
@@ -61,16 +61,19 @@ namespace Hr
 			std::vector<Vector3> vecNormal;
 			std::vector<float4> vecColor;
 			std::vector<float2> vecUV;
+
+			AABBox aabb;
 		};
 
 	public:
 		std::vector<HrSubMeshDataInfo> vecSubMeshInfo;
 		std::vector<HrMaterialDataInfo> vecMaterialDataInfo;
 
+		std::string strFilePath;
 		std::string strFileName;
 	};
 
-	class HrModelLoader
+	class HR_CORE_API HrModelLoader
 	{
 	public:
 		enum EnumModelTopologyVertexCount
@@ -84,6 +87,8 @@ namespace Hr
 		virtual ~HrModelLoader();
 
 		HrMeshPtr GetMesh() { return m_pMesh; }
+
+		const HrModelDataInfo& GetModelDataInfo();
 	public:
 		void Load(std::string& strFile);
 

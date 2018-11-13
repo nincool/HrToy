@@ -2,7 +2,7 @@
 #define _HR_DEPTHSTENCIL_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
-#include "HrCore/Include/Render/HrDataFormat.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 namespace Hr
 {

@@ -32,6 +32,7 @@ namespace Hr
 		std::string GetFilePath(const std::string& strFile) const;
 		std::string GetFileName(const std::string& strFile) const;
 
+		std::string GetFileString(const std::string& strFile);
 		HrStreamDataPtr GetFileData(const std::string& strFile);
 
 		bool WriteDataToFile(const std::string& strFile, const std::string& strData);

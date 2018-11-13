@@ -224,6 +224,177 @@ namespace Hr
 		// Number of pixel formats currently defined
 		PF_COUNT
 	};
+
+	enum EnumComparisonFunc
+	{
+		CF_NEVER,
+		CF_LESS,
+		CF_EQUAL,
+		CF_LESS_EQUAL,
+		CF_GREATER,
+		CF_NOT_EQUAL,
+		CF_GREATER_EQUAL,
+		CF_ALWAYS,
+	};
+
+	inline EnumComparisonFunc ComparisonFunc(const std::string& strComparisonFunc)
+	{
+		if ("never" == strComparisonFunc) return CF_NEVER;
+		if ("less" == strComparisonFunc) return CF_LESS;
+		if ("equal" == strComparisonFunc) return CF_EQUAL;
+		if ("less_equal" == strComparisonFunc) return CF_LESS_EQUAL;
+		if ("greater" == strComparisonFunc) return CF_GREATER;
+		if ("not_equal" == strComparisonFunc) return CF_NOT_EQUAL;
+		if ("greater_equal" == strComparisonFunc) return CF_GREATER_EQUAL;
+		if ("always" == strComparisonFunc) return CF_ALWAYS;
+		return CF_LESS;
+	}
+
+	enum EnumDepthWriteMask
+	{
+		DWM_ZERO,
+		DWM_ALL,
+	};
+
+	inline EnumDepthWriteMask DepthWriteMash(const std::string& strDepthWriteMask)
+	{
+		if ("zero" == strDepthWriteMask) return DWM_ZERO;
+		if ("all" == strDepthWriteMask) return DWM_ALL;
+		return DWM_ALL;
+	}
+
+	enum EnumStencilOperation
+	{
+		SO_KEEP,
+		SO_ZERO,
+		SO_REPLACE,
+		SO_INCR_SAT,
+		SO_DECR_SAT,
+		SO_INVERT,
+		SO_INCR,
+		SO_DECR,
+	};
+
+	inline EnumStencilOperation StencilOperation(const std::string& strStencilOp)
+	{
+		if ("keep" == strStencilOp) return SO_KEEP;
+		if ("zero" == strStencilOp) return SO_ZERO;
+		if ("replace" == strStencilOp) return SO_REPLACE;
+		if ("incr_sat" == strStencilOp) return SO_INCR_SAT;
+		if ("decr_sat" == strStencilOp) return SO_DECR_SAT;
+		if ("invert" == strStencilOp) return SO_INVERT;
+		if ("incr" == strStencilOp) return SO_INCR;
+		if ("decr" == strStencilOp) return SO_DECR;
+		return SO_KEEP;
+	};
+
+	//RasterizerFillMode
+	enum EnumRasterizerFillModel
+	{
+		RFM_WIREFRAME,
+		RFM_SOLD,
+	};
+
+	//RasterizerCullMode
+	enum EnumRasterizerCullModel
+	{
+		RCM_CULL_NONE,
+		RCM_CULL_FRONT,
+		RCM_CULL_BACK
+	};
+
+	inline EnumRasterizerFillModel RasterizerFillMode(const std::string& str)
+	{
+		if ("solid" == str) return RFM_SOLD;
+		if ("wireframe" == str) return RFM_WIREFRAME;
+
+		return RFM_SOLD;
+	};
+
+	inline EnumRasterizerCullModel RasterizerCullMode(const std::string& str)
+	{
+		if ("none" == str) return RCM_CULL_NONE;
+		if ("front" == str) return RCM_CULL_FRONT;
+		if ("back" == str) return RCM_CULL_BACK;
+
+		return RCM_CULL_BACK;
+	};
+
+	enum EnumSamplerFilter
+	{
+		SF_FILTER_MIN_MAG_MIP_POINT,
+		SF_FILTER_MIN_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MIN_POINT_MAG_MIP_LINEAR,
+		SF_FILTER_MIN_LINEAR_MAG_MIP_POINT,
+		SF_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MIN_MAG_MIP_LINEAR,
+		SF_FILTER_ANISOTROPIC,
+		SF_FILTER_COMPARISON_MIN_MAG_MIP_POINT,
+		SF_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR,
+		SF_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT,
+		SF_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR,
+		SF_FILTER_COMPARISON_ANISOTROPIC,
+		SF_FILTER_MINIMUM_MIN_MAG_MIP_POINT,
+		SF_FILTER_MINIMUM_MIN_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MINIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MINIMUM_MIN_POINT_MAG_MIP_LINEAR,
+		SF_FILTER_MINIMUM_MIN_LINEAR_MAG_MIP_POINT,
+		SF_FILTER_MINIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MINIMUM_MIN_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MINIMUM_MIN_MAG_MIP_LINEAR,
+		SF_FILTER_MINIMUM_ANISOTROPIC,
+		SF_FILTER_MAXIMUM_MIN_MAG_MIP_POINT,
+		SF_FILTER_MAXIMUM_MIN_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MAXIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MAXIMUM_MIN_POINT_MAG_MIP_LINEAR,
+		SF_FILTER_MAXIMUM_MIN_LINEAR_MAG_MIP_POINT,
+		SF_FILTER_MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+		SF_FILTER_MAXIMUM_MIN_MAG_LINEAR_MIP_POINT,
+		SF_FILTER_MAXIMUM_MIN_MAG_MIP_LINEAR,
+		SF_FILTER_MAXIMUM_ANISOTROPIC
+	};
+
+	inline EnumSamplerFilter SamplerFilter(const std::string& str)
+	{
+		if ("min_mag_mip_point" == str)
+			return SF_FILTER_MIN_MAG_MIP_POINT;
+		if ("min_mag_mip_linear" == str)
+			return SF_FILTER_MIN_MAG_MIP_LINEAR;
+
+		return SF_FILTER_MIN_MAG_MIP_POINT;
+	}
+
+	enum EnumTextureAddressMode
+	{
+		TAM_TEXTURE_ADDRESS_WRAP,
+		TAM_TEXTURE_ADDRESS_MIRROR,
+		TAM_TEXTURE_ADDRESS_CLAMP,
+		TAM_TEXTURE_ADDRESS_BORDER,
+		TAM_TEXTURE_ADDRESS_MIRROR_ONCE
+	};
+
+	inline EnumTextureAddressMode TextureAddressMode(const std::string& str)
+	{
+		if ("wrap" == str)
+			return TAM_TEXTURE_ADDRESS_WRAP;
+		else if ("mirror" == str)
+			return TAM_TEXTURE_ADDRESS_MIRROR;
+		else if ("clamp" == str)
+			return TAM_TEXTURE_ADDRESS_CLAMP;
+		else if ("border" == str)
+			return TAM_TEXTURE_ADDRESS_BORDER;
+		else if ("mirror_once" == str)
+			return TAM_TEXTURE_ADDRESS_MIRROR_ONCE;
+
+		return TAM_TEXTURE_ADDRESS_WRAP;
+	}
+
 }
 
 #endif

@@ -10,14 +10,14 @@ namespace Hr
 	class HrD3D11SamplerState : public HrSamplerState
 	{
 	public:
-		HrD3D11SamplerState(const ID3D11DevicePtr& pD3D11Device
-			, const ID3D11DeviceContextPtr& pContext);
+		HrD3D11SamplerState(const HrSamplerState::HrSamplerStateDesc& desc);
 		
-		const ID3D11SamplerStatePtr& GetD3D11SamplerState();
+		const ID3D11SamplerStatePtr& CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& desc);
 
+		const ID3D11SamplerStatePtr& RetriveD3DSamplerState();
+
+		virtual void Accept(const HrRenderPtr& pRender) override;
 	protected:
-		ID3D11DevicePtr m_pD3D11Device;
-		ID3D11DeviceContextPtr m_pImmediateContext;
 
 		ID3D11SamplerStatePtr m_pSamplerState;
 	};

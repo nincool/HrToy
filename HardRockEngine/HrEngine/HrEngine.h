@@ -18,7 +18,6 @@
 #include "HrCore/Include/Asset/HrResourceManager.h"
 #include "HrCore/Include/Asset/HrSceneObjectFactory.h"
 #include "HrCore/Include/Asset/HrMeshModel.h"
-#include "HrCore/Include/Asset/HrModel.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrMaterial.h"
 #include "HrCore/Include/Asset/HrStreamData.h"

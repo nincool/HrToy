@@ -23,7 +23,7 @@ namespace Hr
 			SCT_COM_COUNT,
 		};
 	public:
-		HrSceneObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrSceneObjectComponent(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrSceneObjectComponent();
 
 		virtual bool InitComponent() override;
@@ -37,19 +37,22 @@ namespace Hr
 		const std::string& GetName();
 		EnumSceneComponentType GetComType();
 
-		HrSceneObjectPtr GetAttachSceneObject();
+		HrSceneObject* GetAttachSceneObject();
 
 		virtual void UpdateTransform(const HrTransformPtr& pTransform);
 	protected:
 		std::string m_strName;
 		EnumSceneComponentType m_comType;
-		std::weak_ptr<HrSceneObject> m_pAttachSceneObj;
+		/*
+			@brief	宿主SceneObject 因为是主从关系 往往伴随着主的销毁而销毁 所以直接用原始指针或者引用 [10/29/2018 By Hr]
+		*/
+		HrSceneObject* m_pSceneObj;
 	};
 
 	class HR_CORE_API HrSceneObjectMutexCom : public HrSceneObjectComponent
 	{
 	public:
-		HrSceneObjectMutexCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrSceneObjectMutexCom(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrSceneObjectMutexCom();
 
 		virtual bool IsMutex() override
@@ -61,7 +64,7 @@ namespace Hr
 	class HR_CORE_API HrSceneObjectSharedCom : public HrSceneObjectComponent
 	{
 	public:
-		HrSceneObjectSharedCom(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrSceneObjectSharedCom(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrSceneObjectSharedCom();
 
 		virtual bool IsMutex() override
@@ -78,7 +81,7 @@ namespace Hr
 	{
 	public:
 
-		HrCameraComponet(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrCameraComponet(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrCameraComponet();
 
 		virtual void OnEnter() override;
@@ -99,7 +102,7 @@ namespace Hr
 	class HR_CORE_API HrTrackBallCameraController : public HrSceneObjectSharedCom
 	{
 	public:
-		HrTrackBallCameraController(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrTrackBallCameraController(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrTrackBallCameraController();
 
 		virtual void OnEnter() override;
@@ -125,15 +128,11 @@ namespace Hr
 	class HR_CORE_API HrLightComponent : public HrSceneObjectMutexCom
 	{
 	public:
-		HrLightComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj, HrLight::EnumLightType lightType);
+		HrLightComponent(const std::string& strName, HrSceneObject* pSceneObj, HrLight::EnumLightType lightType);
 		~HrLightComponent();
 
 		const HrLightPtr& GetLight();
 
-		//void SetDiffuse(const HrColor& diffuse);
-		//const HrColor& GetDiffuse() const;
-		//void SetSpecular(const HrColor& specular);
-		//const HrColor& GetSpecular() const;
 		void SetColor(const HrColor& color);
 		const HrColor& GetColor() const;
 
@@ -149,13 +148,15 @@ namespace Hr
 	class HR_CORE_API HrRenderableComponent : public HrSceneObjectMutexCom
 	{
 	public:
-		HrRenderableComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrRenderableComponent(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrRenderableComponent();
 
 		void SetRenderable(const HrRenderablePtr& pRenderable);
 		const HrRenderablePtr & GetRenderable() { return m_pRenderable; }
 	protected:
 		HrRenderablePtr m_pRenderable;
+
+		
 	};
 
 	///////////////////////////////////////////////////
@@ -164,7 +165,7 @@ namespace Hr
 	class HR_CORE_API HrInstanceBatchComponent : public HrSceneObjectSharedCom
 	{
 	public:
-		HrInstanceBatchComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrInstanceBatchComponent(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrInstanceBatchComponent();
 
 		void CreateInstanceBatch(const HrSubMeshPtr& pSubMesh);
@@ -179,7 +180,7 @@ namespace Hr
 	class HR_CORE_API HrInstanceObjectComponent : public HrSceneObjectMutexCom
 	{
 	public:
-		HrInstanceObjectComponent(const std::string& strName, const HrSceneObjectPtr& pSceneObj);
+		HrInstanceObjectComponent(const std::string& strName, HrSceneObject* pSceneObj);
 		~HrInstanceObjectComponent();
 	};
 

@@ -60,6 +60,110 @@ EnumVertexElementSemantic Hr::HrD3D11Mapping::GetInputElementSemanticName(const 
 	return VEU_POSITION;
 }
 
+D3D11_TEXTURE_ADDRESS_MODE HrD3D11Mapping::GetTextureAddressMode(EnumTextureAddressMode addressMode)
+{
+	switch (addressMode)
+	{
+	case Hr::TAM_TEXTURE_ADDRESS_WRAP:
+		return D3D11_TEXTURE_ADDRESS_WRAP;
+	case Hr::TAM_TEXTURE_ADDRESS_MIRROR:
+		return D3D11_TEXTURE_ADDRESS_MIRROR;
+	case Hr::TAM_TEXTURE_ADDRESS_CLAMP:
+		return D3D11_TEXTURE_ADDRESS_CLAMP;
+	case Hr::TAM_TEXTURE_ADDRESS_BORDER:
+		return D3D11_TEXTURE_ADDRESS_BORDER;
+	case Hr::TAM_TEXTURE_ADDRESS_MIRROR_ONCE:
+		return D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	default:
+		break;
+	}
+
+	return D3D11_TEXTURE_ADDRESS_WRAP;
+}
+
+D3D11_FILTER HrD3D11Mapping::GetFilter(EnumSamplerFilter filter)
+{
+	switch (filter)
+	{
+	case Hr::SF_FILTER_MIN_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MIN_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MIN_POINT_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MIN_LINEAR_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MIN_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MIN_MAG_MIP_LINEAR:
+		return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	case Hr::SF_FILTER_ANISOTROPIC:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_COMPARISON_ANISOTROPIC:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_POINT_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_LINEAR_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MINIMUM_MIN_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MINIMUM_ANISOTROPIC:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_POINT_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_LINEAR_MAG_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_MAG_LINEAR_MIP_POINT:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_MIN_MAG_MIP_LINEAR:
+		break;
+	case Hr::SF_FILTER_MAXIMUM_ANISOTROPIC:
+		break;
+	default:
+		break;
+	}
+
+	return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+}
+
 DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(EnumVertexElementType type)
 {
 	switch (type)
@@ -87,7 +191,7 @@ DXGI_FORMAT HrD3D11Mapping::GetInputElementFormat(EnumVertexElementType type)
 	return DXGI_FORMAT_R32G32B32_FLOAT;
 }
 
-D3D11_INPUT_CLASSIFICATION HrD3D11Mapping::GetInputELementClassType(EnumVertexElementClassType type)
+D3D11_INPUT_CLASSIFICATION HrD3D11Mapping::GetInputElementClassType(EnumVertexElementClassType type)
 {
 	switch (type)
 	{

@@ -23,7 +23,9 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 	m_strName = "NoName";
 	m_bEnable = true;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyTransfrom, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	m_pParentNode = nullptr;
+	m_pTransform = HrMakeSharedPtr<HrTransform>(this);
+	m_pSceneObject = HrMakeSharedPtr<HrSceneObject>(this);
 }
 
 HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::GenerateID<HrSceneNode>())
@@ -31,7 +33,9 @@ HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::Generate
 	m_strName = strName;
 	m_bEnable = true;
 	m_bRunning = false;
-	m_pTransform = HrMakeSharedPtr<HrTransform>(std::bind(&HrSceneNode::DirtyTransfrom, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	m_pParentNode = nullptr;
+	m_pTransform = HrMakeSharedPtr<HrTransform>(this);
+	m_pSceneObject = HrMakeSharedPtr<HrSceneObject>(this);
 }
 
 HrSceneNode::~HrSceneNode()
@@ -57,7 +61,7 @@ void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 		return;
 	}
 
-	pSceneNode->SetParent(shared_from_this());
+	pSceneNode->SetParent(this);
 	if (IsRunning())
 	{
 		pSceneNode->OnEnter();
@@ -85,6 +89,7 @@ void HrSceneNode::OnEnter()
 void HrSceneNode::OnExist()
 {
 	m_bRunning = false;
+	m_pParentNode = nullptr;
 	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnExist();
@@ -118,7 +123,7 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 	{
 		if (m_pSceneObject)
 		{
-			const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetComponent<HrRenderableComponent>();
+			const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
 			if (pRenderableCom)
 			{
 				const HrInstanceBatchComponentPtr pBatchCom = m_pSceneObject->GetComponent<HrInstanceBatchComponent>();
@@ -136,6 +141,24 @@ void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 		for (auto& item : m_vecChildrenNode)
 		{
 			item->FindVisibleRenderable(pRenderQueue);
+		}
+	}
+}
+
+void HrSceneNode::FindAllRenderables(std::vector<HrRenderablePtr>& vecRenderables)
+{
+	if (m_bEnable)
+	{
+		BOOST_ASSERT(m_pSceneObject);
+		const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
+		if (pRenderableCom)
+		{
+			//todo batch
+			vecRenderables.push_back(pRenderableCom->GetRenderable());
+		}
+		for (auto& item : m_vecChildrenNode)
+		{
+			item->FindAllRenderables(vecRenderables);
 		}
 	}
 }
@@ -167,10 +190,9 @@ void HrSceneNode::RemoveChildren()
 
 bool HrSceneNode::RemoveFromParent()
 {
-	auto pParent = GetParent();
-	if (pParent)
+	if (m_pParentNode)
 	{
-		return pParent->RemoveChild(shared_from_this());
+		return m_pParentNode->RemoveChild(shared_from_this());
 	}
 
 	return false;
@@ -198,27 +220,18 @@ bool HrSceneNode::IsRunning() const
 	return m_bRunning;
 }
 
-void HrSceneNode::SetParent(const HrSceneNodePtr& pParent)
+void HrSceneNode::SetParent(HrSceneNode* pParentNode)
 {
-	BOOST_ASSERT(pParent);
-	if (pParent->IsRunning())
+	m_pParentNode = pParentNode;
+	if (m_pParentNode->IsRunning())
 	{
 		m_bRunning = true;
 	}
-	m_pParent = pParent;
-	m_pTransform->SetParentTransform(pParent->GetTransform());
 }
 
-HrSceneNodePtr HrSceneNode::GetParent() const
+const HrSceneNode* HrSceneNode::GetParent() const
 {
-	if (m_pParent.expired())
-	{
-		return nullptr;
-	}
-	else
-	{
-		return m_pParent.lock();
-	}
+	return m_pParentNode;
 }
 
 const HrTransformPtr& HrSceneNode::GetTransform() const
@@ -269,12 +282,6 @@ bool HrSceneNode::GetEnable() const
 	return m_bEnable;
 }
 
-void HrSceneNode::SetSceneObject(const HrSceneObjectPtr& pSceneObj)
-{
-	m_pSceneObject = pSceneObj;
-	m_pSceneObject->AttachSceneNode(shared_from_this());
-}
-
 const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 {
 	return m_pSceneObject;
@@ -282,7 +289,8 @@ const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 
 void HrSceneNode::DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation)
 {
-	m_pSceneObject->OnNodeTransformDirty(m_pTransform);
+	if (m_pSceneObject)
+		m_pSceneObject->OnNodeTransformDirty(m_pTransform);
 	for (auto& iteChild : m_vecChildrenNode)
 	{
 		iteChild->GetTransform()->DirtyTransform(bDirtyPos, bDirtyScale, bDirtyOrientation);
@@ -303,4 +311,5 @@ size_t HrSceneNode::GetChildrenCount()
 {
 	return m_vecChildrenNode.size();
 }
+
 

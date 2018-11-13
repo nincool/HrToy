@@ -31,7 +31,8 @@ void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNo
 void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr pRenderable)
 {
 	m_pRenderable = pRenderable;
-	m_pSceneNode = m_pRenderable->GetAttachSceneObject()->GetSceneNode();
+	//todo 
+	m_pSceneNode = const_cast<HrSceneNode*>(m_pRenderable->GetAttachSceneObject()->GetSceneNode());
 
 	DirtyWorldMatrix();
 }

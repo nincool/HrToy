@@ -54,37 +54,6 @@ HrRenderFramePtr HrD3D11RenderFactory::CreateDeferredFrameBuffer(uint32 nWidth, 
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11DeferredFrameBuffer>(nWidth, nHeight, pDeferredGBufferData));
 }
 
-//HrTexturePtr HrD3D11RenderFactory::CreateTexture(HrTexture::EnumTextureType texType
-//	, uint32 nWidth
-//	, uint32 nHeight
-//	, uint32 nSampleCount
-//	, uint32 nSampleQuality
-//	, EnumPixelFormat format)
-//{
-//	switch (texType)
-//	{
-//	case HrTexture::TEX_TYPE_1D:
-//		break;
-//	case HrTexture::TEX_TYPE_2D:
-//		return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth
-//			, nHeight
-//			, nSampleCount
-//			, nSampleQuality
-//			, format
-//			, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW);
-//	case HrTexture::TEX_TYPE_3D:
-//		break;
-//	case HrTexture::TEX_TYPE_CUBE_MAP:
-//		break;
-//	case HrTexture::TEX_TYPE_2D_ARRAY:
-//		break;
-//	case HrTexture::TEX_TYPE_2D_RECT:
-//		break;
-//	default:
-//		return HrTexturePtr(nullptr);
-//	}
-//}
-
 HrRenderLayoutPtr HrD3D11RenderFactory::CreateRenderLayout()
 {
 	return HrMakeSharedPtr<HrD3D11RenderLayout>();
@@ -99,13 +68,6 @@ HrGraphicsBufferPtr HrD3D11RenderFactory::CreateGraphicsBuffer()
 {
 	return HrMakeSharedPtr<HrD3D11GraphicsBuffer>(HrD3D11Device::Instance()->GetD3DDevice(), HrD3D11Device::Instance()->GetD3DDeviceContext());
 }
-
-//HrRenderLayout* HrD3D11RenderFactory::CreateRenderLayout()
-//{
-//	HrRenderLayout* pRenderLayout = HR_NEW HrD3D11RenderLayout();
-//
-//	return pRenderLayout;
-//}
 
 HrShaderPtr HrD3D11RenderFactory::CreateShader()
 {
@@ -133,10 +95,9 @@ HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
 	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, format);
 }
 
-HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState()
+HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc)
 {
-	return HrMakeSharedPtr<HrD3D11SamplerState>(HrD3D11Device::Instance()->GetD3DDevice()
-		, HrD3D11Device::Instance()->GetD3DDeviceContext());
+	return HrMakeSharedPtr<HrD3D11SamplerState>(samplerDesc);
 }
 
 HrDepthStencilStatePtr HrD3D11RenderFactory::CreateDepthStencilState(const HrDepthStencilState::HrDepthStencilStateDesc& depthStencilStateDesc)

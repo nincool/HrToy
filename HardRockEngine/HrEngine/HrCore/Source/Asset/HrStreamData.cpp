@@ -11,6 +11,15 @@ HrStreamData::HrStreamData(uint32 nStreamLength)
 	ResizeBuffer(nStreamLength);
 }
 
+HrStreamData::HrStreamData(const std::string& strContent)
+{
+	m_vecStreamData.resize(strContent.length());
+	for (size_t i = 0; i < strContent.length(); ++i)
+	{
+		m_vecStreamData[i] = strContent[i];
+	}
+}
+
 HrStreamData::~HrStreamData()
 {
 }

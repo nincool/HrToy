@@ -35,9 +35,9 @@ bool HrSceneImported::LoadScene(const std::string& strSceneName)
 		HRERROR("HrSceneImported::LoadScene Error! SceneName[%s]", strSceneName.c_str());
 		return false;
 	}
-	HrStreamDataPtr pStreamData = HrFileUtils::Instance()->GetFileData(strFullPath);
+	std::string strContentData = HrFileUtils::Instance()->GetFileString(strFullPath);
 	rapidjson::Document d;
-	d.Parse<0>(pStreamData->GetBufferPoint());
+	d.Parse<0>(strContentData.c_str());
 	if (d.HasParseError())
 	{
 		int nErrorCode = d.GetParseError();

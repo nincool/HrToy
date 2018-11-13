@@ -38,6 +38,8 @@ namespace Hr
 	typedef KlayGE::float3 float3;
 	typedef KlayGE::float4 float4;
 
+	typedef KlayGE::AABBox AABBox;
+
 //#endif // HR_MATH_SIMD
 
 	class Radian;
