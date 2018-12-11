@@ -10,13 +10,23 @@ namespace Hr
 	public:
 		HrViewPortDeferredInfo();
 		~HrViewPortDeferredInfo();
-
-	private:
-		HrTexturePtr m_pPositionSRV;
-		HrTexturePtr m_pNormalSRV;
-		HrTexturePtr m_pAlbedoSRV;
-
 		
+		//GBuffers
+		enum EnumGBufferType
+		{
+			GBT_DEPTH,
+			GBT_NORMAL,
+			GBT_ROUGHNESS,
+			GBT_SUNLIGHT,
+			GBT_ALBEDO,
+			GBT_LIGHTINTENSITY,
+			GBT_SPECULARINTENSITY,
+			GBT_MAXNUM,
+		};
+		std::array<HrTexturePtr, EnumGBufferType::GBT_MAXNUM> m_arrGBuffers;
+		std::array<bool, EnumGBufferType::GBT_MAXNUM> m_arrGBuffersEnable;
+		
+		HrViewPortPtr m_pViewPort;
 	};
 
 	class HR_CORE_API HrViewPort : public std::enable_shared_from_this<HrViewPort> 

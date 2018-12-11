@@ -100,15 +100,17 @@
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_BTN_HROPEN                   32775
 #define ID_BTN_HRSAVE                   32776
-#define ID_BUTTON2                      32778
 #define ID_BTN_HROPENPREFAB             32778
+#define ID_BTN_HROPENMESH               32779
+#define ID_BTN_HRSAVEPREFABTEXT         32780
+#define ID_BTN_HRSAVEPREFABBINARY       32781
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        317
-#define _APS_NEXT_COMMAND_VALUE         32779
+#define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

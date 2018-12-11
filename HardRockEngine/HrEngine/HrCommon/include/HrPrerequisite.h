@@ -14,10 +14,12 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <array>
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <sstream>
+
 
 #include <boost/noncopyable.hpp>
 

@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Asset\HrGirlfriend.h" />
     <ClInclude Include="Include\Asset\HrMaterial.h" />
     <ClInclude Include="Include\Asset\HrRenderEffectParameter.h" />
     <ClInclude Include="Include\Asset\HrSceneObjectFactory.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Include\Asset\Loader\HrFBXLoader.h" />
     <ClInclude Include="Include\Asset\Loader\HrFBXUtilsImport.h" />
     <ClInclude Include="Include\Asset\Loader\HrJsonLoader.h" />
+    <ClInclude Include="Include\Asset\Loader\HrMeshUtils.h" />
     <ClInclude Include="Include\Asset\Loader\HrModelLoader.h" />
     <ClInclude Include="Include\Config\HrContextConfig.h" />
     <ClInclude Include="Include\Event\HrEvent.h" />
@@ -186,7 +188,6 @@
     <ClInclude Include="Include\Render\HrCamera.h" />
     <ClInclude Include="Include\Render\HrDepthStencil.h" />
     <ClInclude Include="Include\Render\HrDepthStencilState.h" />
-    <ClInclude Include="Include\Render\HrFrustum.h" />
     <ClInclude Include="Include\Render\HrDataDefine.h" />
     <ClInclude Include="Include\Render\HrInstanceBatch.h" />
     <ClInclude Include="Include\Render\HrInstanceBatchHW.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Include\Render\HrInstanceBatchShader.h" />
     <ClInclude Include="Include\Render\HrLight.h" />
     <ClInclude Include="Include\Render\HrMeshRenderable.h" />
+    <ClInclude Include="Include\Render\HrRenderProcessing.h" />
     <ClInclude Include="Include\Render\HrRasterizerState.h" />
     <ClInclude Include="Include\Render\HrRenderable.h" />
     <ClInclude Include="Include\Render\HrRenderFrame.h" />
@@ -225,6 +227,7 @@
     <ClInclude Include="Include\Scene\HrTransform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Asset\HrGirlfriend.cpp" />
     <ClCompile Include="Source\Asset\HrMaterial.cpp" />
     <ClCompile Include="Source\Asset\HrRenderEffectParameter.cpp" />
     <ClCompile Include="Source\Asset\HrResource.cpp" />
@@ -240,6 +243,7 @@
     <ClCompile Include="Source\Asset\Loader\HrFBXLoader.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrFBXUtilsImport.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrJsonLoader.cpp" />
+    <ClCompile Include="Source\Asset\Loader\HrMeshUtils.cpp" />
     <ClCompile Include="Source\Asset\Loader\HrModelLoader.cpp" />
     <ClCompile Include="Source\Config\HrContextConfig.cpp" />
     <ClCompile Include="Source\Event\HrEvent.cpp" />
@@ -271,7 +275,6 @@
     <ClCompile Include="Source\Render\HrCamera.cpp" />
     <ClCompile Include="Source\Render\HrDepthStencil.cpp" />
     <ClCompile Include="Source\Render\HrDepthStencilState.cpp" />
-    <ClCompile Include="Source\Render\HrFrustom.cpp" />
     <ClCompile Include="Source\Render\HrGraphicsBuffer.cpp" />
     <ClCompile Include="Source\Render\HrInstanceBatch.cpp" />
     <ClCompile Include="Source\Render\HrInstanceBatchHW.cpp" />
@@ -279,6 +282,7 @@
     <ClCompile Include="Source\Render\HrInstanceBatchShader.cpp" />
     <ClCompile Include="Source\Render\HrLight.cpp" />
     <ClCompile Include="Source\Render\HrMeshRenderable.cpp" />
+    <ClCompile Include="Source\Render\HrRenderProcessing.cpp" />
     <ClCompile Include="Source\Render\HrRasterizerState.cpp" />
     <ClCompile Include="Source\Render\HrRenderFactory.cpp" />
     <ClCompile Include="Source\Render\HrRenderFrame.cpp" />

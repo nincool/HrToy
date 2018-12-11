@@ -331,39 +331,39 @@ void HrD3D11DeferredFrameBuffer::ClearDepthStencil()
 
 void HrD3D11DeferredFrameBuffer::CreateGBuffers()
 {
-	m_pPositionSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
-		, m_nHeight
-		, 1, 1, 0
-		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
-	m_pPositionSRV->CreateRenderTargetView();
-	m_arrRenderTargets[RTL_0] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pPositionSRV->GetD3D11Texture());
-	m_pPositionSRV->CreateShaderResourceView();
+	//m_pPositionSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+	//	, m_nHeight
+	//	, 1, 1, 0
+	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//m_pPositionSRV->CreateRenderTargetView();
+	//m_arrRenderTargets[RTL_0] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pPositionSRV->GetD3D11Texture());
+	//m_pPositionSRV->CreateShaderResourceView();
 
-	m_pNormalSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
-		, m_nHeight
-		, 1, 1, 0
-		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
-	m_pNormalSRV->CreateRenderTargetView();
-	m_arrRenderTargets[RTL_1] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pNormalSRV->GetD3D11Texture()); //m_pPositionSRV->GetD3DRenderTargetView();
-	m_pNormalSRV->CreateShaderResourceView();
+	//m_pNormalSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+	//	, m_nHeight
+	//	, 1, 1, 0
+	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//m_pNormalSRV->CreateRenderTargetView();
+	//m_arrRenderTargets[RTL_1] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pNormalSRV->GetD3D11Texture()); //m_pPositionSRV->GetD3DRenderTargetView();
+	//m_pNormalSRV->CreateShaderResourceView();
 
-	m_pAlbedoSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
-		, m_nHeight
-		, 1, 1, 0
-		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-		, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
-	m_pAlbedoSRV->CreateRenderTargetView();
-	m_arrRenderTargets[RTL_2] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pAlbedoSRV->GetD3D11Texture()); //m_pAlbedoSRV->GetD3DRenderTargetView();
-	m_pAlbedoSRV->CreateShaderResourceView();
+	//m_pAlbedoSRV = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
+	//	, m_nHeight
+	//	, 1, 1, 0
+	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
+	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//m_pAlbedoSRV->CreateRenderTargetView();
+	//m_arrRenderTargets[RTL_2] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pAlbedoSRV->GetD3D11Texture()); //m_pAlbedoSRV->GetD3DRenderTargetView();
+	//m_pAlbedoSRV->CreateShaderResourceView();
 
-	m_pGBufferData->m_pGBufferPosition = m_pPositionSRV;
-	m_pGBufferData->m_pGBufferNormal = m_pNormalSRV;
-	m_pGBufferData->m_pGBufferAlbedo = m_pAlbedoSRV;
+	//m_pGBufferData->m_pGBufferPosition = m_pPositionSRV;
+	//m_pGBufferData->m_pGBufferNormal = m_pNormalSRV;
+	//m_pGBufferData->m_pGBufferAlbedo = m_pAlbedoSRV;
 }
 
 void HrD3D11DeferredFrameBuffer::CreateDepthStencilView()

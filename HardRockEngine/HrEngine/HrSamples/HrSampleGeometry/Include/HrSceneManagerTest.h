@@ -29,10 +29,8 @@ namespace Hr
 		void ResetKeyFlag();
 	private:
 		HrSceneNodePtr m_pSceneMainCamera;
-
 		HrSceneNodePtr m_pBuildingRoot;
-		HrSceneNodePtr m_pAddon1;
-		HrSceneNodePtr m_pAddon2_2;
+		HrTrackBallCameraComponentPtr m_pTrackBallCameraCtrl;
 
 		bool m_bKeyAPressed;
 		bool m_bKeyWPressed;

@@ -48,12 +48,12 @@ namespace Hr
 		void UnSchedule(size_t nTargetHashKeyID, size_t nHashID);
 
 	protected:
+		void CreateModules(void* pHwnd);
 		void CreateEventSystemModule();
 		void CreateWindowModule(void* pHwnd);
 		void CreateSceneModule();
 		void CreateRenderModule();
 		void CreateResourceModule();
-
 
 		bool CreateRenderState();
 		void ReleaseRenderState();
@@ -75,7 +75,19 @@ namespace Hr
 		float m_fDeltaTime;
 		/* last time the main loop was updated */
 		std::chrono::steady_clock::time_point m_lastUpdate;
-		
+
+
+		enum EnumModuleType
+		{
+			MT_EVENTSYSTEM,
+			MT_WINDOW,
+			MT_RENDER,
+			MT_SCENE,
+			MT_RESOURCE,
+			MT_MAX
+		};
+		std::array<HrModulePtr, MT_MAX> m_arrModules;
+
 		HrEventSystemModulePtr m_pEventSystemModule;
 		HrWindowModulePtr m_pWindowModule;
 		HrRenderModulePtr m_pRenderModule;

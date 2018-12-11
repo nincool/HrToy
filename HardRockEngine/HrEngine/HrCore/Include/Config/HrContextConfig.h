@@ -16,10 +16,11 @@ namespace Hr
 		uint32 GetWindowWidth() { return m_nWindowWidth; }
 		void SetWindowHeight(uint32 nHeight);
 		uint32 GetWindowHeight() { return m_nWindowHeight; }
-		void SetRenderTargetViewWidth(uint32 nWidth);
-		uint32 GetRenderTargetViewWidth() { return m_nRenderTargetViewWidth; }
-		void SetRenderTargetViewHeight(uint32 nHeight);
-		uint32 GetRenderTargetViewHeight() { return m_nRenderTargetViewHeight; }
+		
+		void SetRTVWidth(uint32 nWidth);
+		uint32 GetRTVWidth() { return m_nRenderTargetViewWidth; }
+		void SetRTVHeight(uint32 nHeight);
+		uint32 GetRTVHeight() { return m_nRenderTargetViewHeight; }
 
 		
 	protected:

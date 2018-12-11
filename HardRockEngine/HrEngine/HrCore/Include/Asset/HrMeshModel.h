@@ -73,10 +73,47 @@ namespace Hr
 	//
 	//////////////////////////////////////////////////////////////
 
+
+	class HR_CORE_API HrMeshModelQuadPN : public HrMeshModel
+	{
+	public:
+		HrMeshModelQuadPN(float fWidth, float fHeight);
+		~HrMeshModelQuadPN();
+
+	private:
+		void CreateQuadMesh();
+
+	private:
+		float m_fWidth;
+		float m_fHeight;
+	};
+
+	//////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////
+
+	class HR_CORE_API HrMeshModelQuadPNC : public HrMeshModel
+	{
+	public:
+		HrMeshModelQuadPNC(float fWidth, float fHeight);
+		~HrMeshModelQuadPNC();
+
+	private:
+		void CreateQuadMesh();
+
+	private:
+		float m_fWidth;
+		float m_fHeight;
+	};
+
+	//////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////
+
 	class HrMeshModelGrid : public HrMeshModel
 	{
 	public:
-		HrMeshModelGrid();
+		HrMeshModelGrid(float fSteps, float fStepLong);
 		~HrMeshModelGrid();
 
 	protected:

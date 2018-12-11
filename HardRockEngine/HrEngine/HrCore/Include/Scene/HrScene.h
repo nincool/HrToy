@@ -6,21 +6,44 @@
 
 namespace Hr
 {
+
+	/////////////////////////////////////////////////////////
+	//
+	/////////////////////////////////////////////////////////
+	enum EnumSceneItemStatus
+	{
+		SIS_ENABLE,
+		SIS_DISABLE,
+	};
+
 	class HrSceneLightData
 	{
 	public:
 		void AddLight(const HrLightPtr& pLight);
-		
 		void DeleteLight(const HrLightPtr& pLight);
 		
 		size_t GetLightsNum(HrLight::EnumLightType lightType);
-		
 		const HrLightPtr& GetLight(HrLight::EnumLightType lightType, uint32 nIndex);
-
 	protected:
-		std::array<std::pair<bool, std::vector<HrLightPtr> >, HrLight::LT_LIGHTTYPE_NUM> m_arrLights;
+		std::array<std::pair<EnumSceneItemStatus, std::vector<HrLightPtr> >, HrLight::LT_LIGHTTYPE_NUM> m_arrLights;
 	};
 
+	/////////////////////////////////////////////////////////
+	//
+	/////////////////////////////////////////////////////////
+
+	class HrSceneViewPortData
+	{
+	public:
+		void AddViewPort(const HrViewPortPtr& pViewPort);
+
+		const std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> >& GetAllViewPorts();
+	protected:
+		std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> > m_vecViewPorts;
+	};
+
+	/////////////////////////////////////////////////////////
+	//
 	/////////////////////////////////////////////////////////
 
 	class HR_CORE_API HrScene 
@@ -37,14 +60,17 @@ namespace Hr
 
 		virtual void Update(float fDelta);
 		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
+		virtual void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
 
 		const HrSceneNodePtr& GetRootNode();
 
-		std::shared_ptr<HrSceneLightData>& GetLightsData();
+		const std::shared_ptr<HrSceneLightData>& GetLightsData();
+		const std::shared_ptr<HrSceneViewPortData>& GetViewPortsData();
 	protected:
 		HrSceneNodePtr m_pSceneRootNode;
 
-		std::shared_ptr<HrSceneLightData> m_pLightsData;	
+		std::shared_ptr<HrSceneLightData> m_pLightsData;
+		std::shared_ptr<HrSceneViewPortData> m_pViewPortData;
 
 		std::vector<float3> m_vecDirectionalLightsDirections;
 		std::vector<float4> m_vecDirectionalDiffuseColor;

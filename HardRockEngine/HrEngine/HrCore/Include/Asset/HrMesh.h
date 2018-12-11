@@ -18,6 +18,9 @@ namespace Hr
 		void SetMaterial(const HrMaterialPtr& pMaterial);
 		const HrMaterialPtr& GetMaterial();
 
+		void SetMeshAABB(const AABBox& aabb);
+		const AABBox& GetAABB();
+
 		const HrRenderLayoutPtr& GetRenderLayout();
 
 		void Destroy();
@@ -28,6 +31,8 @@ namespace Hr
 		HrMesh* m_pParentMesh;
 		HrRenderLayoutPtr m_pRenderLayout;
 		HrMaterialPtr m_pMaterial;
+
+		AABBox m_aabb;
 	};
 
 	class HR_CORE_API HrMesh : public HrResource, public std::enable_shared_from_this<HrMesh>

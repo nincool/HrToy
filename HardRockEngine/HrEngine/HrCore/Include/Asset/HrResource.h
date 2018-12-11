@@ -19,7 +19,8 @@ namespace Hr
 			RT_TEXTURE_1D,
 			RT_TEXTURE_2D,
 			RT_TEXTURE_3D,
-			RT_TEXTURE_CUBE
+			RT_TEXTURE_CUBE,
+			RT_PREFAB,
 		};
 
 		enum EnumResourceStatus

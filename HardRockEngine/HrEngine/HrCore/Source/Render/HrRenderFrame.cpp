@@ -73,13 +73,13 @@ void HrRenderFrame::DetachRenderTarget(EnumRenderTargetLayer attachLayer)
 	}
 }
 
-const std::map<uint32, Hr::HrViewPortPtr>& HrRenderFrame::GetAllViewPorts()
+const std::map<uint32, HrViewPortPtr>& HrRenderFrame::GetAllViewPorts()
 {
 	return m_mapViewPorts;
 }
 
 
-Hr::HrDepthStencilPtr Hr::HrRenderFrame::GetDepthStencil()
+Hr::HrDepthStencilPtr HrRenderFrame::GetDepthStencil()
 {
 	return m_pDepthStencil;
 }

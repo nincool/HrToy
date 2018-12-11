@@ -10,6 +10,7 @@
 #include "HrCore/Include/Asset/HrRenderEffect.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrMeshModel.h"
+#include "HrCore/Include/Asset/HrGirlfriend.h"
 
 namespace Hr
 {
@@ -19,6 +20,8 @@ namespace Hr
 		HrResourceModule();
 		~HrResourceModule();
 
+		virtual bool InitComponent() override;
+
 		template <typename T>
 		std::shared_ptr<T> RetriveResource(const std::string& strFile = "", bool bAdd = true, bool bLoad = true);
 		
@@ -26,8 +29,9 @@ namespace Hr
 		bool RemoveResource(const std::string& strFile);
 
 		HrTexturePtr RetriveTexture(const std::string& strFile, HrTexture::EnumTextureType type);
-
 		HrMaterialPtr MakeMaterial(const std::string& strFile, const HrModelDataInfo::HrMaterialDataInfo& materialInfo);
+	private:
+		HrResource::EnumResourceType GetResourceType(const std::string& strName);
 	private:
 		HrResourceManagerPtr m_pResourceManager;
 	};
@@ -35,26 +39,9 @@ namespace Hr
 	template <typename T>
 	std::shared_ptr<T> HrResourceModule::RetriveResource(const std::string& strFile, bool bAdd /*= false*/, bool bLoad /*= false*/)
 	{
-		HrResource::EnumResourceType resType = HrResource::RT_UNKNOWN;
-		auto pTypeName = typeid(T).name();
-		if (pTypeName == typeid(HrMaterial).name())
-		{
-			resType = HrResource::RT_MATERIAL;
-		}
-		else if (pTypeName == typeid(HrRenderEffect).name())
-		{
-			resType = HrResource::RT_EFFECT;
-			if (strFile.empty())
-				return HrCheckPointerCast<T>(m_pResourceManager->GetDefaultRenderEffect());
-		}
-		else if (pTypeName == typeid(HrMesh).name())
-		{
-			resType = HrResource::RT_MESH;
-		}
-		else if (pTypeName == typeid(HrMeshModel).name())
-		{
-			resType = HrResource::RT_MESHMODEL;
-		}
+		HrResource::EnumResourceType resType = GetResourceType(typeid(T).name());
+		if (resType == HrResource::RT_EFFECT && strFile.empty())
+			return HrCheckPointerCast<T>(m_pResourceManager->GetDefaultRenderEffect());
 
 		if (!bAdd && !bLoad)
 		{

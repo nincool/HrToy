@@ -8,7 +8,7 @@ namespace Hr
 	class HrOctNode
 	{
 	public:
-		HrOctNode(const AABBox& aabb, int nDepth);
+		HrOctNode(const AABBox& aabb, int nDepth, bool bLeafNode = false);
 		~HrOctNode();
 
 		/**
@@ -16,16 +16,38 @@ namespace Hr
 			@Return: bool true or false
 		*/
 		bool IsLeafNode() const;
+		
+		/**
+		 @Comment: 设置AABB [11/16/2018 By Hr]
+		*/
+		void SetAABB(const AABBox& aabb);
+		const AABBox& GetAABB();
 
-		void InsertChild(const HrRenderablePtr& pRenderable, int nMaxDepth);
+		/**
+		 @Comment: 清除孩子节点 [11/16/2018 By Hr]
+		*/
+		void ClearChildren();
+
+		void WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode, float fThreshold, int nMaxDepth);
 	protected:
-		void CreateChildren();
+		void InitChildrenNode(int nMaxDepth);
+		bool DetectNodeVisible(const HrCameraPtr& pCamera, float fThreshold);
+		bool DetectDataVisible(const HrCameraPtr& pCamera, float fThreshold, const AABBox& dataAABB);
 	protected:
-		std::vector<HrOctNode*> m_vecChildren;
-		std::vector<HrRenderablePtr> m_vecDatas;
 		AABBox m_aabb;
-
+		
+		//当前深度
 		int m_nDepth;
+		
+		//是否为叶子节点
+		bool m_bLeafNode;
+
+		//是否重新初始化了AABB
+		bool m_bInitAABB;
+
+		HrMath::EnumVisibility m_selfNV;
+		
+		std::array<HrOctNode*, 8> m_arrChildren;
 	};
 }
 

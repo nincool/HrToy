@@ -16,7 +16,8 @@ namespace Hr
 
 		//todo
 		void SetLightsData(const HrSceneLightDataPtr& pLightData);
-		void SetCurrentCamera(const HrCameraPtr& pCamera);
+		void SetActiveCamera(const HrCameraPtr& pCamera);
+		const HrCameraPtr& GetActiveCamera();
 
 		void SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode);
 		void SetCurrentRenderable(const HrRenderablePtr pRenderable);
@@ -75,7 +76,7 @@ namespace Hr
 	private:
 		HrSceneLightDataPtr m_pLightsData;
 
-		HrCameraPtr m_pCurrentCamera;
+		HrCameraPtr m_pActiveCamera;
 		HrRenderablePtr m_pRenderable;
 		HrSceneNode* m_pSceneNode;
 		

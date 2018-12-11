@@ -15,35 +15,82 @@ namespace Hr
 
 		void AddViewPort(const HrViewPortPtr& pViewPort);
 
+		/**
+		 @Comment: 设置RenderTargets [11/15/2018 By Hr]
+		 @Param: HrRenderFramePtr 渲染帧指针 
+		*/
 		void BindFrameBuffer(const HrRenderFramePtr& pRenderFrame);
-
-		void OnRenderFrameBegin();
-		void OnRenderFrameEnd();
-
-		void RenderDeferredFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
-		void RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
-		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
-
-		void Present();
-
+		/**
+		 @Comment: 渲染一帧 [12/10/2018 By Hr]
+		*/
+		void RenderFrame();
+		/**
+		 @Comment: 渲染函数 [12/10/2018 By Hr]
+		 @Param:   pRenderTechnique 渲染效果 RenderLayout 可渲染物体
+		*/
 		void DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout);
 
-		///////////////////////////////////////////////////////////////////
 		/**
 		 @Comment: 获取渲染组件工厂 [7/11/2018 By Hr]
 		 @Return:  HrRenderFactoryPtr
 		*/
 		const HrRenderFactoryPtr& GetRenderFactory() const;
 		const HrRenderFramePtr& GetRenderFrameBuffer() const;
+
+		void ClearRenderFame();
+		void Present();
+		
+	protected:
+		void RenderFrameForward();
+		void RenderFrameDeferred();
+
+
+	public:
+
+
+
+
+
+
+
+
+
+
+		void RenderDeferredFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
+		void RenderShadowMapFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrSceneLightDataPtr& pLightData, const HrRenderFrameParametersPtr& pRenderFrameParam);
+		void RenderBindFrameBuffer(const HrRenderQueuePtr& pRenderQueue, const HrRenderFrameParametersPtr& pRenderFrameParam);
+
+
+
+
+		//todo RenderFrame
+	
+		void RenderBindFrameBuffer();
+		///////////////////////////////////////////////////////////////////
+
+
+		//todo test
+		//void SetViewPort(const HrViewPortPtr& pViewPort);
 	private:
 		bool CreateRenderFactory(const std::string& strRenderModule);
+		
 
-		void CreateRenderSystem();		
-		void ClearRenderFame();
+
+
+
+		//void OnRenderFrameBegin();
+		//void OnRenderFrameEnd();
 	protected:
 		std::unique_ptr<HrModuleLoader> m_pRenderModuleLoader;
 		HrRenderFactoryPtr m_pRenderFactory;
-		HrRenderSystemPtr m_pRenderSystem;
+		HrRenderPtr m_pRender;
+
+		//FrameBuffers
+		HrRenderFramePtr m_pCurFrameBuffer;
+		HrRenderFramePtr m_pScreenFrameBuffer;
+
+		HrForwardRenderSystemPtr m_pForwardRenderSystem;
+		HrDeferredRenderSystemPtr m_pDeferredRenderSystem;
 	};
 }
 

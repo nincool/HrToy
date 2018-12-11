@@ -4,12 +4,13 @@
 #include "Kernel/HrLog.h"
 #include "Event/HrEvent.h"
 #include "Scene/HrSceneManager.h"
+#include "Scene/HrOctreeSceneManager.h"
 
 using namespace Hr;
 
-HrSceneModule::HrSceneModule(EnumSceneManagerType sceneManagerType)
+HrSceneModule::HrSceneModule()
 {
-	CreateSceneManager(sceneManagerType);
+	CreateSceneManager(HrSceneModule::EnumSceneManagerType::SMT_OCTREE);
 
 	m_pEventUpdateBegin = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventBeginUpdateScene);
 	m_pEventUpdateEnd = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventEndUpdateScene);
@@ -40,6 +41,11 @@ bool HrSceneModule::CreateSceneManager(EnumSceneManagerType sceneManagerType)
 		m_pSceneManager = HrMakeSharedPtr<HrSceneManager>();
 		break;
 	}
+	case HrSceneModule::EnumSceneManagerType::SMT_OCTREE:
+	{
+		m_pSceneManager = HrMakeSharedPtr<HrOctreeSceneManager>();
+		break;
+	}
 	default:
 
 		return false;
@@ -58,11 +64,15 @@ void HrSceneModule::StopScene()
 	m_pSceneManager->StopScene();
 }
 
+
+
 void HrSceneModule::RenderScene()
 {
-	//todo
 	m_pSceneManager->RenderScene();
 }
+
+
+
 
 void HrSceneModule::Destroy()
 {
@@ -74,8 +84,23 @@ const HrScenePtr& HrSceneModule::GetRunningScene() const
 	return m_pSceneManager->GetRunningScene();
 }
 
-const HrRenderFrameParametersPtr& Hr::HrSceneModule::GetRenderFrameParameters()
+const HrRenderFrameParametersPtr& HrSceneModule::GetRenderFrameParameters()
 {
 	return m_pSceneManager->GetRenderFrameParamPtr();
+}
+
+void HrSceneModule::FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue)
+{
+	
+}
+
+void HrSceneModule::DirtyScene()
+{
+	m_pSceneManager->SetSceneDirty();
+}
+
+void HrSceneModule::RenderVisibleObjects()
+{
+	m_pSceneManager->RenderVisibleObjects();
 }
 

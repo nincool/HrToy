@@ -4,6 +4,7 @@
 #include <sstream>
 #include "HrEngine.h"
 #include "HrConvertUtil.h"
+#include "HrCore/Include/Asset/Loader/HrMeshUtils.h"
 #include <experimental/filesystem>
 #include <iostream>
 #include <fstream>
@@ -52,6 +53,8 @@ void HrRenderAxis::CreateAxisMesh()
 			, sizeof(pVertexBuff)
 			, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 			, vecVertexElement);
+
+		pSubMesh->SetMeshAABB(AABBox(Vector3::Zero(), Vector3(1, 1, 1)));
 	}
 
 	pSubMesh->GetRenderLayout()->SetTopologyType(TT_LINELIST);
@@ -94,23 +97,22 @@ void HrEditorScene::CreateSceneElements()
 	AddNode(m_pGodCamera);
 	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 	m_pCameraCom = m_pGodCamera->GetSceneObject()->GetComponent<HrCameraComponet>();
-	m_pCameraCom->SetFarPlane(500.0f);
+	m_pCameraCom->SetFarPlane(800.0f);
 	m_pTrackBallCameraCtrl = m_pGodCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 	
-	CreateAxisNode();
+	//CreateAxisNode();
+	//UpdateAxisPos();
 
 	m_pEleRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pEleRoot);
 
-	auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
-	m_pEleRoot->AddChild(pGridNode);
-	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-
-	UpdateAxisPos();
+	//auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
+	//m_pEleRoot->AddChild(pGridNode);
+	//pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
 	m_pModelRoot = HrMakeSharedPtr<HrSceneNode>("ModelRoot");
 	m_pEleRoot->AddChild(m_pModelRoot);
@@ -134,7 +136,7 @@ void HrEditorScene::LoadOriginalMeshData(const std::string& strFileName)
 		HrMeshModelObjectPtr pModelObj = HrCheckPointerCast<HrMeshModelObject>(pPrefabModel);
 		const HrModelDataInfo& modelDataInfo = pModelObj->GetModelLoader()->GetModelDataInfo();
 		const HrModelDataInfo* pModelDataInfo = &modelDataInfo;
-		m_vecModelDataInfos.push_back(pModelDataInfo);
+		m_vecModelDataInfos.emplace_back(pModelDataInfo, pSceneNode.get());
 	}
 }
 
@@ -176,8 +178,6 @@ void HrEditorScene::LoadPrefabData(const std::string& strFileName)
 			Vector3 v3Rotate = HrStringUtil::GetFloat3FromString(nodeInfo["Rotate"].GetString(), ",");
 			Vector3 v3Scale = HrStringUtil::GetFloat3FromString(nodeInfo["Scale"].GetString(), ",");
 
-			HrDirector::Instance()->GetResourceModule()->RemoveResource<HrMeshModel>(filePath.string());
-
 			HrMeshModelPtr pPrefabModel = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMeshModel>(filePath.string(), true, true);
 			if (pPrefabModel == nullptr)
 			{
@@ -196,7 +196,7 @@ void HrEditorScene::LoadPrefabData(const std::string& strFileName)
 			HrMeshModelObjectPtr pModelObj = HrCheckPointerCast<HrMeshModelObject>(pPrefabModel);
 			const HrModelDataInfo& modelDataInfo = pModelObj->GetModelLoader()->GetModelDataInfo();
 			const HrModelDataInfo* pModelDataInfo = &modelDataInfo;
-			m_vecModelDataInfos.push_back(pModelDataInfo);
+			m_vecModelDataInfos.emplace_back(pModelDataInfo, pSceneNode.get());
 		}
 	}
 }
@@ -208,7 +208,6 @@ void HrEditorScene::CreateAxisNode()
 	m_pAxisModel = std::make_shared<HrRenderAxis>();
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-
 	pSceneNode->SetName("AxisRoot");
 
 	for (uint32 i = 0; i < m_pAxisModel->GetMesh()->GetSubMeshNum(); ++i)
@@ -217,9 +216,8 @@ void HrEditorScene::CreateAxisNode()
 
 		HrSceneObjectPtr pSceneObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
+		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(m_pAxisModel->GetMesh()->GetSubMesh(i));
 		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(m_pAxisModel->GetMesh()->GetSubMesh(i));
 		pRenderable->SetRenderEffect(pRenderEffect);
 
 		pSceneNode->AddChild(pNode);
@@ -268,8 +266,8 @@ void HrEditorScene::UpdateAxisPos()
 
 void HrEditorScene::OnMouseMove(float fX, float fY)
 {
-	float fProjX = Convert2ScreenPosX(fX);
-	float fProjY = Convert2ScreenPosY(fY);
+	float fProjX = Convert2ScreenPosX(fX*2);
+	float fProjY = Convert2ScreenPosY(fY*2);
 
 	float fDiffValueX = fProjX - m_fOldMouseX;
 	float fDiffValueY = fProjY - m_fOldMouseY;
@@ -319,7 +317,7 @@ float HrEditorScene::Convert2ScreenPosY(float fY)
 
 void HrEditorScene::OnMouseWheel(float fDelta)
 {
-	m_pTrackBallCameraCtrl->Zoom(fDelta);
+	m_pTrackBallCameraCtrl->Forward(fDelta * 2);
 
 	m_bCameraMatrixDirty = true;
 }
@@ -334,7 +332,7 @@ const std::vector<Hr::HrSceneNodePtr>& HrEditorScene::GetModelNodes()
 	return m_vecModelNodes;
 }
 
-const std::vector<const HrModelDataInfo*>& HrEditorScene::GetModelDataInfos()
+const std::vector<HrModelDataPropertiesInfo>& HrEditorScene::GetModelDataInfos()
 {
 	return m_vecModelDataInfos;
 }
@@ -363,7 +361,7 @@ void HrEditorScene::WritePrefabModelInfo(rapidjson::Document& doc)
 
 	for (size_t nModelIndex = 0; nModelIndex < m_vecModelNodes.size(); ++nModelIndex)
 	{
-		const HrModelDataInfo* pModelDataInfo = m_vecModelDataInfos[nModelIndex];
+		HrModelDataPropertiesInfo modelDataProperties = m_vecModelDataInfos[nModelIndex];
 		HrSceneNodePtr pModelNode = m_vecModelNodes[nModelIndex];
 
 		rapidjson::Value modelDataKeyObj(rapidjson::kStringType);
@@ -373,7 +371,7 @@ void HrEditorScene::WritePrefabModelInfo(rapidjson::Document& doc)
 		rapidjson::Value modelNodeValueObj(rapidjson::kObjectType);
 		{
 			rapidjson::Value fileValueObj(rapidjson::kStringType);
-			std::string strFilePath = HrFileUtils::Instance()->GetFileNameWithSuffix(pModelDataInfo->strFilePath);
+			std::string strFilePath = HrFileUtils::Instance()->GetFileNameWithSuffix(modelDataProperties.m_pModelDataInfo->strFileName);
 			fileValueObj.SetString(strFilePath.c_str(), doc.GetAllocator());
 			modelNodeValueObj.AddMember(rapidjson::StringRef("File"), fileValueObj, doc.GetAllocator());
 

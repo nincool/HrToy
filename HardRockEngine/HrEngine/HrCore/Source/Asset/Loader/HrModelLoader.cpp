@@ -73,6 +73,7 @@ void HrModelLoader::Load(std::string& strFile)
 		MakeIndexStream(nMeshInfoIndex, streamIndexBuffer);
 		pSubMesh->GetRenderLayout()->BindIndexBuffer(streamIndexBuffer.GetBufferPoint(), streamIndexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_32BIT);
 		
+		pSubMesh->SetMeshAABB(subMeshInfo.aabb);
 
 		//todo material
 		const HrModelDataInfo::HrMaterialDataInfo& materialInfo = m_modelDesc.vecMaterialDataInfo[nMeshInfoIndex];

@@ -1,12 +1,21 @@
+
 #include "Scene/HrOctNode.h"
+#include "Scene/HrSceneNode.h"
+#include "Scene/HrTransform.h"
 #include "Render/HrRenderable.h"
+#include "Render/HrCamera.h"
+#include "Render/HrRenderQueue.h"
 
 using namespace Hr;
 
-HrOctNode::HrOctNode(const AABBox& aabb, int nDepth)
+HrOctNode::HrOctNode(const AABBox& aabb, int nDepth, bool bLeafNode)
 {
 	m_aabb = aabb;
 	m_nDepth = nDepth;
+	m_bLeafNode = bLeafNode;
+	m_bInitAABB = false;
+	m_selfNV = HrMath::NV_UNKNOWN;
+	m_arrChildren.assign(nullptr);
 }
 
 HrOctNode::~HrOctNode()
@@ -16,25 +25,114 @@ HrOctNode::~HrOctNode()
 
 bool HrOctNode::IsLeafNode() const
 {
-	return m_vecChildren.empty();
+	return m_bLeafNode;
 }
 
-void HrOctNode::InsertChild(const HrRenderablePtr& pRenderable, int nMaxDepth)
+void HrOctNode::SetAABB(const AABBox& aabb)
 {
+	m_aabb = aabb;
+}
+
+bool HrOctNode::DetectNodeVisible(const HrCameraPtr& pCamera, float fThreshold)
+{
+	if (m_selfNV == HrMath::NV_UNKNOWN)
+	{
+		if (fThreshold > 0)
+		{
+			if ((HrMath::OrthoArea(pCamera->GetForward(), m_aabb) > fThreshold)
+				&& HrMath::PerspectiveArea(pCamera->GetEyePos(), pCamera->GetViewProjMatrix(), m_aabb) > fThreshold)
+			{
+				m_selfNV = HrMath::Map(pCamera->ViewFrustum().Intersect(m_aabb));
+			}
+			else
+			{
+				m_selfNV = HrMath::NV_NONE;
+			}
+		}
+		else
+		{
+			m_selfNV = HrMath::Map(pCamera->ViewFrustum().Intersect(m_aabb));
+		}
+	}
+
+	return m_selfNV != HrMath::NV_NONE;
+}
+
+bool HrOctNode::DetectDataVisible(const HrCameraPtr& pCamera, float fThreshold, const AABBox& dataAABB)
+{
+	if (!m_bLeafNode)
+	{
+		return false;
+	}
+
+	if (m_selfNV == HrMath::NV_FULL)
+	{
+		if (fThreshold > 0)
+		{
+			if ((HrMath::OrthoArea(pCamera->GetForward(), dataAABB) > fThreshold)
+				&& HrMath::PerspectiveArea(pCamera->GetEyePos(), pCamera->GetViewProjMatrix(), dataAABB) > fThreshold)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	else if (m_selfNV == HrMath::NV_PARTIAL)
+	{
+		//判断是否包含
+		auto dataNV = HrMath::Map(pCamera->ViewFrustum().Intersect(dataAABB));
+		if (dataNV != HrMath::NV_NONE)
+		{
+			if (fThreshold > 0)
+			{
+				if ((HrMath::OrthoArea(pCamera->GetForward(), dataAABB) > fThreshold)
+					&& HrMath::PerspectiveArea(pCamera->GetEyePos(), pCamera->GetViewProjMatrix(), dataAABB) > fThreshold)
+				{
+					return true;
+				}
+			}
+			else
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void HrOctNode::WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode, float fThreshold, int nMaxDepth)
+{
+	//先判断是否可见 
+	//如果这个节点本身就不可见 
+	//那么就不用初始化了 落在这个区域的物体也不可见
+	if (!DetectNodeVisible(pCamera, fThreshold))
+	{
+		return;
+	}
+
 	// If this node doesn't have a data point yet assigned 
 	// and it is a leaf, then we're done!
 	if (m_nDepth == nMaxDepth)
 	{
-		m_vecDatas.push_back(pRenderable);
+		if (DetectDataVisible(pCamera, fThreshold, pSceneNode->GetTransform()->GetWorldAABBox()))
+		{
+			if (pSceneNode->GetFrustumVisible() != HrMath::NV_FULL)
+				pSceneNode->SetFrustumVisible(HrMath::NV_FULL);
+		}
 	}
 	else
 	{
-		if (m_vecChildren.empty())
+		if (!m_bInitAABB)
 		{
-			CreateChildren();
+			InitChildrenNode(nMaxDepth);
 		}
+
 		const float3& parentCenter = m_aabb.Center();
-		const AABBox& aabb = pRenderable->GetAABBox();
+		const AABBox& aabb = pSceneNode->GetTransform()->GetWorldAABBox();
 		int mark[6];
 		mark[0] = aabb.Min().x() >= parentCenter.x() ? 1 : 0;
 		mark[1] = aabb.Min().y() >= parentCenter.y() ? 2 : 0;
@@ -48,13 +146,13 @@ void HrOctNode::InsertChild(const HrRenderablePtr& pRenderable, int nMaxDepth)
 				+ ((j & 2) ? mark[4] : mark[1])
 				+ ((j & 4) ? mark[5] : mark[2]))
 			{
-				m_vecChildren[j]->InsertChild(pRenderable, nMaxDepth);
+				m_arrChildren[j]->WalkTree(pCamera, pSceneNode, fThreshold, nMaxDepth);
 			}
 		}
 	}
 }
 
-void HrOctNode::CreateChildren()
+void HrOctNode::InitChildrenNode(int nMaxDepth)
 {
 
 	/**
@@ -76,10 +174,28 @@ void HrOctNode::CreateChildren()
 		float3 max((i & 1) ? m_aabb.Max().x() : parentCenter.x(),
 			(i & 2) ? m_aabb.Max().y() : parentCenter.y(),
 			(i & 4) ? m_aabb.Max().z() : parentCenter.z());
-		m_vecChildren.push_back(new HrOctNode(AABBox(min, max), m_nDepth + 1));
+		if (!m_arrChildren[i])
+			m_arrChildren[i] = new HrOctNode(AABBox(min, max), m_nDepth + 1, (nMaxDepth == (m_nDepth + 1)));
+		else
+			m_arrChildren[i]->SetAABB(AABBox(min, max));
 	}
+	m_bInitAABB = true;
 }
 
+void HrOctNode::ClearChildren()
+{
+	for (auto& iteChild : m_arrChildren)
+	{
+		if (iteChild)
+			iteChild->ClearChildren();
+	}
 
+	m_selfNV = HrMath::NV_UNKNOWN;
+	m_bInitAABB = false;
+}
 
+const AABBox& HrOctNode::GetAABB()
+{
+	return m_aabb;
+}
 

@@ -43,9 +43,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	//ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnUpdateFilePrintPreview)
 
 	ON_WM_SETTINGCHANGE()
-	ON_COMMAND(ID_BTN_HRSAVE, &CMainFrame::OnButtonSave)
-	ON_COMMAND(ID_BTN_HROPEN, &CMainFrame::OnButtonOpen)
-	ON_COMMAND(ID_BTN_HRSAVEBINARY, &CMainFrame::OnBtnHrSaveBinary)
+	ON_COMMAND(ID_BTN_HRSAVEPREFABTEXT, &CMainFrame::OnButtonSavePrefabText)
+	ON_COMMAND(ID_BTN_HROPENMESH, &CMainFrame::OnButtonOpenMesh)
+	ON_COMMAND(ID_BTN_HRSAVEPREFABBINARY, &CMainFrame::OnBtnHrSavePrefabBinary)
 	ON_COMMAND(ID_BTN_HROPENPREFAB, &CMainFrame::OnBtnHrOpenPrefab)
 END_MESSAGE_MAP()
 
@@ -379,7 +379,7 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 
 
 
-void CMainFrame::OnButtonSave()
+void CMainFrame::OnButtonSavePrefabText()
 {
 	// TODO: Add your command handler code here
 	// szFilters is a text string that includes two file name filters:
@@ -402,7 +402,7 @@ void CMainFrame::OnButtonSave()
 }
 
 
-void CMainFrame::OnButtonOpen()
+void CMainFrame::OnButtonOpenMesh()
 {
 	// TODO: Add your command handler code here
 	// szFilters is a text string that includes two file name filters:
@@ -428,7 +428,7 @@ void CMainFrame::OnButtonOpen()
 }
 
 
-void CMainFrame::OnBtnHrSaveBinary()
+void CMainFrame::OnBtnHrSavePrefabBinary()
 {
 	// TODO: Add your command handler code here
 	TCHAR szFilters[] = _T("MyType Files (*.hrmb)|*.hrmb||");

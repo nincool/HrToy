@@ -115,7 +115,7 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 
 void HrSceneImported::CreateSceneFromData()
 {
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
+	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
 	AddNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
@@ -163,7 +163,6 @@ void HrSceneImported::CreateSceneNode(const HrSceneNodePtr& pParent, const std::
 			TRE("HrSceneImported::CreateSceneNode Error!");
 		}
 		pSceneNode->SetName(itemSceneNode.strName);
-		pSceneNode->SetEnable(itemSceneNode.nEnable == 1);
 		pSceneNode->GetTransform()->SetScale(itemSceneNode.v3Scale);
 		pSceneNode->GetTransform()->SetOrientation(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(itemSceneNode.v3Rotation)));
 		pSceneNode->GetTransform()->SetPosition(itemSceneNode.v3Position);

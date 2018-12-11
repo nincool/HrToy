@@ -64,6 +64,16 @@ void HrSubMesh::Destroy()
 	}
 }
 
+void HrSubMesh::SetMeshAABB(const AABBox& aabb)
+{
+	m_aabb = aabb;
+}
+
+const AABBox& HrSubMesh::GetAABB()
+{
+	return m_aabb;
+}
+
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////

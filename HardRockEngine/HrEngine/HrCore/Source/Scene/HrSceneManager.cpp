@@ -21,8 +21,10 @@ using namespace Hr;
 HrSceneManager::HrSceneManager()
 {
 	m_bSceneRunning = false;
+	m_bDirtyScene = false;
 
 	m_pRenderQueue = HrMakeSharedPtr<HrRenderQueue>();
+	m_pRenderQueueManager = HrMakeSharedPtr<HrRenderQueueManager>();
 	m_pRenderParameters = HrMakeUniquePtr<HrRenderFrameParameters>();
 }
 
@@ -74,29 +76,10 @@ void HrSceneManager::RenderScene()
 	{
 		return;
 	}
-	
-	const HrRenderModulePtr& pRenderComponent = HrDirector::Instance()->GetRenderModule();
-	
-	pRenderComponent->OnRenderFrameBegin();
 
-	//设置灯光数据
 	m_pRenderParameters->SetLightsData(m_pRunningScene->GetLightsData());
 
-	//准备渲染队列
-	m_pRenderQueue->PrepareRenderQueue();
-
-	m_pRunningScene->FillRenderQueue(m_pRenderQueue);
-
-	//延迟渲染
-	//pRenderComponent->RenderDeferredFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
-
-	//渲染 先屏蔽掉渲染到深度缓存
-	//pRenderComponent->RenderShadowMapFrameBuffer(m_pRenderQueue, m_pRunningScene->GetLightsData(), m_pRenderParameters);
-	
-	pRenderComponent->RenderBindFrameBuffer(m_pRenderQueue, m_pRenderParameters);
-	pRenderComponent->Present();
-
-	pRenderComponent->OnRenderFrameEnd();
+	HrDirector::Instance()->GetRenderModule()->RenderFrame();
 }
 
 void HrSceneManager::Destroy()
@@ -109,8 +92,26 @@ bool HrSceneManager::CheckSceneRunning()
 	return m_bSceneRunning;
 }
 
-const HrRenderFrameParametersPtr& Hr::HrSceneManager::GetRenderFrameParamPtr()
+const HrRenderFrameParametersPtr& HrSceneManager::GetRenderFrameParamPtr()
 {
 	return m_pRenderParameters;
 }
 
+void HrSceneManager::RenderVisibleObjects()
+{
+	m_pRenderQueueManager->PrepareRenderQueue();
+	FindVisibleSceneNodes(m_pRenderParameters->GetActiveCamera(), m_pRenderQueueManager);
+	m_pRenderQueueManager->SortRenderQueue();
+
+	const HrRenderQueuePtr& pRenderQueue = m_pRenderQueueManager->GetRenderQueue(HrRenderQueue::RQ_QUEUE_MAIN);
+	pRenderQueue->RenderRenderables();
+}
+
+void HrSceneManager::FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue)
+{
+}
+
+void HrSceneManager::SetSceneDirty()
+{
+	m_bDirtyScene = true;
+}

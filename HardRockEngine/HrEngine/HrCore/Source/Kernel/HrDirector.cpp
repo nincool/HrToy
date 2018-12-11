@@ -36,12 +36,8 @@ bool HrDirector::Init(void* pHwnd)
 {
 	HRLOG(_T("HrDirector Init!"));
 
-	CreateEventSystemModule();
-	CreateWindowModule(pHwnd);
-	CreateSceneModule();
-	CreateRenderModule();
-	CreateResourceModule();
-	
+	CreateModules(pHwnd);
+
 	if (!CreateRenderState())
 	{
 		HRERROR("CreateRenderState Error!");
@@ -61,6 +57,20 @@ bool HrDirector::Init(void* pHwnd)
 	m_lastUpdate = std::chrono::steady_clock::now();
 
 	return true;
+}
+
+void HrDirector::CreateModules(void* pHwnd)
+{
+	CreateEventSystemModule();
+	CreateWindowModule(pHwnd);
+	CreateSceneModule();
+	CreateRenderModule();
+	CreateResourceModule();
+
+	for (auto& item : m_arrModules)
+	{
+		item->InitComponent();
+	}
 }
 
 bool HrDirector::CreateRenderState()
@@ -108,8 +118,8 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::LoopOnce()
 {
-	Update();
 	Render();
+	Update();
 }
 
 void HrDirector::Update()
@@ -117,17 +127,21 @@ void HrDirector::Update()
 	CalculateDeltaTime();
 
 	HrInputManager::Instance()->Capture();
-
-	m_pWindowModule->Update(m_fDeltaTime);
-	m_pSceneModule->Update(m_fDeltaTime);
-	m_pRenderModule->Update(m_fDeltaTime);
-
 	m_pScheduler->Update(m_fDeltaTime);
+
+	for (auto& item : m_arrModules)
+	{
+		item->Update(m_fDeltaTime);
+	}
 }
 
 bool HrDirector::Render()
 {
 	m_pSceneModule->RenderScene();
+	
+	//todo new
+	//m_pRenderModule->RenderFrame();
+
 	return true;
 }
 
@@ -159,27 +173,31 @@ void HrDirector::Destroy()
 void HrDirector::CreateEventSystemModule()
 {
 	m_pEventSystemModule = HrMakeSharedPtr<HrEventSystemModule>();
+	m_arrModules[MT_EVENTSYSTEM] = m_pEventSystemModule;
 }
 
 void HrDirector::CreateWindowModule(void* pHwnd)
 {
 	m_pWindowModule = HrMakeSharedPtr<HrWindowModule>(pHwnd);
+	m_arrModules[MT_WINDOW] = m_pWindowModule;
 }
 
 void HrDirector::CreateRenderModule()
 {
 	m_pRenderModule = HrMakeSharedPtr<HrRenderModule>("HrRenderD3D11");
-	m_pRenderModule->InitComponent();
+	m_arrModules[MT_RENDER] = m_pRenderModule;
 }
 
 void HrDirector::CreateSceneModule()
 {
 	m_pSceneModule = HrMakeSharedPtr<HrSceneModule>();
+	m_arrModules[MT_SCENE] = m_pSceneModule;
 }
 
 void HrDirector::CreateResourceModule()
 {
 	m_pResourceModule = HrMakeSharedPtr<HrResourceModule>();
+	m_arrModules[MT_RESOURCE] = m_pResourceModule;
 }
 
 const HrEventSystemModulePtr& HrDirector::GetEventSystemModule()
@@ -221,3 +239,4 @@ const HrSchedulerPtr& HrDirector::GetScheduler()
 {
 	return m_pScheduler;
 }
+

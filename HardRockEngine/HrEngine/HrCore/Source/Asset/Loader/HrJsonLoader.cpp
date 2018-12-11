@@ -32,7 +32,7 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 	}
 	modelDesc.strFilePath = strFile;
 	std::string strTexturePath = strFile.substr(0, strFile.rfind('\\'));
-	modelDesc.strFileName = HrFileUtils::Instance()->GetFileName(strFile);
+	modelDesc.strFileName = HrFileUtils::Instance()->GetFileNameWithSuffix(strFile);
 
 	const rapidjson::Value& meshesInfo = d["Meshes"];
 	int nSubMeshCount = meshesInfo["SubMeshesCount"].GetInt();
@@ -46,6 +46,8 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		subMeshData.vecVertexPos = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Vertices"].GetString(), "|", ",");
 		subMeshData.vecNormal = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Normals"].GetString(), "|", ",");
 		subMeshData.vecUV = HrStringUtil::GetVectorFloat2FromString(subMeshInfo["UVs"].GetString(), "|", ",");
+		std::vector<float3> vecAABB = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["AABB"].GetString(), "|", ",");
+		subMeshData.aabb = AABBox(vecAABB[0], vecAABB[1]);
 	}
 
 	const rapidjson::Value& materialsInfo = d["Materials"];

@@ -34,7 +34,7 @@ namespace Hr
 		const HrSceneNode* GetSceneNode() const;
 	private:
 		void AddCameraToScene();
-		void AddLightToScene(const HrLightPtr& pLight);
+		void AddLightToScene();
 	protected:
 		HrSceneNode* m_pContainerNode;
 

@@ -128,7 +128,7 @@ void HrConvertUtil::ComputeExtrameDistanceAlongDir(const Vector3& vDir, const st
 
 		if (fProjection < fMinProj)
 		{
-			fMinProj = fMinProj;
+			fMinProj = fProjection;
 			nMin = i;
 		}
 	}
@@ -778,6 +778,8 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 				materialInfo.m_arrTexNames[nTexIndex] = filePath.string();
 			}
 		}
+
+		pSubMesh->SetMeshAABB(subMeshInfo.aabb);
 
 		HrMaterialPtr pMaterial = HrDirector::Instance()->GetResourceModule()->MakeMaterial(materialInfo.strMaterialName, materialInfo);
 		pSubMesh->SetMaterial(pMaterial);

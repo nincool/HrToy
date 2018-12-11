@@ -27,11 +27,11 @@ const HrRenderLayoutPtr& HrInstanceBatch::GetRenderLayout()
 {
 	return m_pBatchRenderLayout;
 }
-
-void HrInstanceBatch::SetSubMesh(const HrSubMeshPtr& pSubMesh)
-{
-	m_pSubMesh = pSubMesh;
-	BuildVertices(pSubMesh);
-}
-
-
+//
+//void HrInstanceBatch::SetSubMesh(const HrSubMeshPtr& pSubMesh)
+//{
+//	m_pSubMesh = pSubMesh;
+//	BuildVertices(pSubMesh);
+//}
+//
+//

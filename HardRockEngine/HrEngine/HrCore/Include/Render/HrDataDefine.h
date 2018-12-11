@@ -395,6 +395,18 @@ namespace Hr
 		return TAM_TEXTURE_ADDRESS_WRAP;
 	}
 
+
+	enum EnumRenderingPath
+	{
+		RP_FORWARD,
+		RP_DEFERRED,
+	};
+
+	enum EnumRenderProcessingType
+	{
+		RPT_FORWARD,
+		RPT_FINALMAPPING,
+	};
 }
 
 #endif

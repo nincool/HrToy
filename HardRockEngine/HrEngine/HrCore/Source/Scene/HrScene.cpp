@@ -16,7 +16,6 @@ using namespace Hr;
 void HrSceneLightData::AddLight(const HrLightPtr& pLight)
 {
 	HrLight::EnumLightType lightType = pLight->LightType();
-	m_arrLights[lightType].first = true;
 	m_arrLights[lightType].second.push_back(pLight);
 }
 
@@ -27,7 +26,6 @@ void HrSceneLightData::DeleteLight(const HrLightPtr& pLight)
 	{
 		if (*ite == pLight)
 		{
-			m_arrLights[lightType].first = true;
 			m_arrLights[lightType].second.erase(ite);
 			break;
 		}
@@ -48,10 +46,25 @@ const HrLightPtr& HrSceneLightData::GetLight(HrLight::EnumLightType lightType, u
 ////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////
+
+void HrSceneViewPortData::AddViewPort(const HrViewPortPtr& pViewPort)
+{
+	m_vecViewPorts.push_back(std::make_pair(SIS_ENABLE, pViewPort));
+}
+
+const std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> >& HrSceneViewPortData::GetAllViewPorts()
+{
+	return m_vecViewPorts;
+}
+
+////////////////////////////////////////////////
+//
+////////////////////////////////////////////////
+
 HrScene::HrScene()
 {
 	m_pLightsData = HrMakeSharedPtr<HrSceneLightData>();
-
+	m_pViewPortData = HrMakeSharedPtr<HrSceneViewPortData>();
 	m_pSceneRootNode = HrMakeSharedPtr<HrSceneNode>("Hr_Root");
 }
 
@@ -94,13 +107,22 @@ void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)
 	m_pSceneRootNode->FindVisibleRenderable(pRenderQueue);
 }
 
-std::shared_ptr<HrSceneLightData>& HrScene::GetLightsData()
+void HrScene::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
+{
+	m_pSceneRootNode->FindVisibleRenderables(pRenderQueueManager);
+}
+
+const std::shared_ptr<HrSceneLightData>& HrScene::GetLightsData()
 {
 	return m_pLightsData;
+}
+
+const std::shared_ptr<HrSceneViewPortData>& HrScene::GetViewPortsData()
+{
+	return m_pViewPortData;
 }
 
 const HrSceneNodePtr& HrScene::GetRootNode()
 {
 	return m_pSceneRootNode;
 }
-

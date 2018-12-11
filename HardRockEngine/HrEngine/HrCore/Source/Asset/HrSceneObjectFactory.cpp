@@ -67,21 +67,8 @@ HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)
 
 HrSceneNodePtr HrSceneObjectFactory::CreateMeshModelNode(HrMeshModelPtr& pMeshModel)
 {
-	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	pSceneNode->SetName(pMeshModel->GetFileName());
-
-	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
-	{
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
-		HrSceneObjectPtr pSubRenderObj = pNode->GetSceneObject();
-		HrRenderableComponentPtr pRenderableCom = pSubRenderObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
-		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(pMeshModel->GetMesh()->GetSubMesh(i));
-		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
-
-		pSceneNode->AddChild(pNode);
-	}
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetFileName());
+	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
 
 	return pSceneNode;
 }
@@ -98,32 +85,20 @@ HrSceneNodePtr HrSceneObjectFactory::CreateLightNode(const std::string& strName,
 HrSceneNodePtr HrSceneObjectFactory::CreateGridPlan()
 {
 	//the name of grid is default
-	//const std::string strGridMeshMode = 
-	HrMeshModelPtr pMeshModel = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrMeshModel>("BuildIn_Grid", true, false);
-	if (!pMeshModel)
+	std::shared_ptr< HrMeshModelGrid> pMeshModelGrid = HrMakeSharedPtr<HrMeshModelGrid>(100.0f, 30.0f);
+	pMeshModelGrid->DeclareResource("Buildin_Grid", "Buildin_Grid");
+	if (!pMeshModelGrid)
 	{
 		return nullptr;
 	}
 	else
 	{
-		pMeshModel->Load();
+		pMeshModelGrid->Load();
 	}
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	pSceneNode->SetName(pMeshModel->GetFileName());
-
-	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
-	{
-		HrSceneNodePtr pNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetMesh()->GetSubMesh(i)->GetName());
-		HrSceneObjectPtr pSubObj = pNode->GetSceneObject();
-		HrRenderableComponentPtr pRenderableCom = pSubObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
-		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(pMeshModel->GetMesh()->GetSubMesh(i));
-		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
-
-		pSceneNode->AddChild(pNode);
-	}
+	pSceneNode->SetName(pMeshModelGrid->GetFileName());
+	BuildUpSceneNodeWithMesh(pMeshModelGrid, pSceneNode);
 
 	return pSceneNode;
 }
@@ -131,17 +106,38 @@ HrSceneNodePtr HrSceneObjectFactory::CreateGridPlan()
 HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodeP(const std::string& strName, float fWidth, float fHeight)
 {
 	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
-
 	std::shared_ptr<HrMeshModelQuadP> pMeshModel = HrMakeSharedPtr<HrMeshModelQuadP>(fWidth, fHeight);
+	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
 
+	return pSceneNode;
+}
+
+HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodePN(const std::string& strName, float fWidth, float fHeight)
+{
+	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
+	std::shared_ptr<HrMeshModelQuadPN> pMeshModel = HrMakeSharedPtr<HrMeshModelQuadPN>(fWidth, fHeight);
+	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
+
+	return pSceneNode;
+}
+
+HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(const std::string& strName)
+{
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
+
+	return pSceneNode;
+}
+
+HrSceneNodePtr HrSceneObjectFactory::BuildUpSceneNodeWithMesh(const HrMeshModelPtr& pMeshModel, const HrSceneNodePtr& pSceneNode)
+{
 	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
 		auto& pSubMesh = pMeshModel->GetMesh()->GetSubMesh(i);
 		HrSceneNodePtr pSubMeshNode = CreateSceneNode(pSubMesh->GetName());
 		HrRenderableComponentPtr pRenderableCom = pSubMeshNode->GetSceneObject()->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(pSubMesh);
-		pRenderableCom->SetRenderable(pRenderable);
 		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
+		pRenderableCom->SetRenderable(pRenderable);
 
 		pSceneNode->AddChild(pSubMeshNode);
 	}
@@ -149,10 +145,3 @@ HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodeP(const std::string& strName,
 	return pSceneNode;
 }
 
-HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(const std::string& strName)
-{
-	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-	pSceneNode->SetName(strName);
-
-	return pSceneNode;
-}

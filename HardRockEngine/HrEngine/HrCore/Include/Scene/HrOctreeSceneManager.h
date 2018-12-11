@@ -11,13 +11,16 @@ namespace Hr
 		HrOctreeSceneManager();
 		~HrOctreeSceneManager();
 
+		virtual void FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue) override;
 	protected:
+		void BuildOctTree();
 		void RebuildOctree();
+		void WalkOctree(const HrCameraPtr& pCamera);
 
 	protected:
 		HrOctree* m_pOctree;
 
-		std::vector<HrRenderablePtr> m_vecSceneRenderables;
+		std::vector<HrSceneNodePtr> m_vecRenderableSceneNodes;
 	};
 }
 

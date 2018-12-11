@@ -11,7 +11,7 @@ using namespace Hr;
 
 HrRenderFrameParameters::HrRenderFrameParameters()
 {
-	m_pCurrentCamera = nullptr;
+	m_pActiveCamera = nullptr;
 
 	DirtyWorldMatrix();
 	DirtyViewMatrix();
@@ -43,19 +43,23 @@ void HrRenderFrameParameters::SetLightsData(const HrSceneLightDataPtr& pLightDat
 		m_pLightsData = pLightData;
 }
 
-void HrRenderFrameParameters::SetCurrentCamera(const HrCameraPtr& pCamera)
+void HrRenderFrameParameters::SetActiveCamera(const HrCameraPtr& pCamera)
 {
-	if (m_pCurrentCamera != pCamera)
+	if (m_pActiveCamera != pCamera)
 	{
-		m_pCurrentCamera = pCamera;
+		m_pActiveCamera = pCamera;
 		DirtyViewMatrix();
 	}
-	else if (m_pCurrentCamera->ViewProjDirty())
+	else if (m_pActiveCamera->ViewProjDirty())
 	{
 		DirtyViewMatrix();
 	}
 }
 
+const HrCameraPtr& HrRenderFrameParameters::GetActiveCamera()
+{
+	return m_pActiveCamera;
+}
 
 const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 {
@@ -78,14 +82,14 @@ const Matrix4& HrRenderFrameParameters::GetInverseWroldMatrix()
 
 const Matrix4& HrRenderFrameParameters::GetViewProjMatrix() const
 {
-	return m_pCurrentCamera->GetViewProjMatrix();
+	return m_pActiveCamera->GetViewProjMatrix();
 }
 
 const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix()
 {
 	if (m_bWorldViewProjMatrixDirty)
 	{
-		m_worldViewProjMatrix = GetWorldMatrix() * m_pCurrentCamera->GetViewProjMatrix();
+		m_worldViewProjMatrix = GetWorldMatrix() * m_pActiveCamera->GetViewProjMatrix();
 		m_bWorldViewProjMatrixDirty = false;
 	}
 	
@@ -130,7 +134,7 @@ const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
 	{
-		m_cameraPosition = m_pCurrentCamera->GetEyePos();
+		m_cameraPosition = m_pActiveCamera->GetEyePos();
 		m_bCameraDirty = false;
 	}
 	return m_cameraPosition;

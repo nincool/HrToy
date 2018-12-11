@@ -107,9 +107,9 @@ private:
 	std::shared_ptr<HrRenderViewDlg> m_pRenderViewDlg;
 public:
 	afx_msg void OnViewStatusBar();
-	afx_msg void OnButtonSave();
-	afx_msg void OnButtonOpen();
-	afx_msg void OnBtnHrSaveBinary();
+	afx_msg void OnButtonSavePrefabText();
+	afx_msg void OnButtonOpenMesh();
+	afx_msg void OnBtnHrSavePrefabBinary();
 	afx_msg void OnBtnHrOpenPrefab();
 };
 

@@ -3,7 +3,7 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrMath/Include/HrMath.h"
-
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 namespace Hr
 {
@@ -38,6 +38,11 @@ namespace Hr
 		bool ViewProjDirty() { return m_bViewProjDirty; }
 		Matrix4 const& GetViewProjMatrix();
 		Matrix4 const& GetInverseViewProjMatrix();
+
+		const Frustum& ViewFrustum();
+
+		EnumRenderingPath GetRenderPath();
+		void SetRenderPath(EnumRenderingPath renderPath);
 	private:
 		float m_fLookAtDistance;
 
@@ -49,6 +54,7 @@ namespace Hr
 		mutable Matrix4 m_matInverseViewProj;
 		
 		bool m_bViewProjDirty;
+		bool m_bFrustumDirty;
 
 		Vector3 m_v3EyePos;
 		Vector3 m_v3Forward;
@@ -61,6 +67,10 @@ namespace Hr
 		float m_fAspect;
 		float m_fNearPlane;
 		float m_fFarPlane;
+
+		Frustum m_frustum;
+
+		EnumRenderingPath m_renderingPath;
 	};
 }
 

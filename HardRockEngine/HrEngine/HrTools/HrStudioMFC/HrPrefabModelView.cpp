@@ -160,7 +160,7 @@ void HrPrefabModelView::FillClassView(const Hr::HrModelDataInfo& modelInfo)
 	//m_wndClassView.Expand(hRoot, TVE_EXPAND);
 }
 
-void HrPrefabModelView::FillModelDataView(const std::vector<const Hr::HrModelDataInfo*>& vecModelDataInfos)
+void HrPrefabModelView::FillModelDataView(const std::vector<HrModelDataPropertiesInfo>& vecModelDataInfos)
 {
 	m_wndClassView.DeleteAllItems();
 
@@ -172,17 +172,18 @@ void HrPrefabModelView::FillModelDataView(const std::vector<const Hr::HrModelDat
 
 	for (size_t i = 0; i < vecModelDataInfos.size(); ++i)
 	{
-		auto pModelDataInfo = vecModelDataInfos[i];
-		std::wstring strModelRootName = HrStringUtil::Utf8ToWstring(pModelDataInfo->strFileName);
+		auto modelDataInfo = vecModelDataInfos[i];
+		std::wstring strModelRootName = HrStringUtil::Utf8ToWstring(std::string(modelDataInfo.m_pModelDataInfo->strFileName + "_" + std::to_string(modelDataInfo.m_pSceneNode->GetID())));
 		HTREEITEM hModelRoot = m_wndClassView.InsertItem(strModelRootName.c_str(), 0, 0, hRoot);
 
-		m_mapModels[hModelRoot] = pModelDataInfo->strFileName;
-		for (size_t nSubMeshIndex = 0; nSubMeshIndex < pModelDataInfo->vecSubMeshInfo.size(); ++nSubMeshIndex)
+		m_mapModels[hModelRoot] = modelDataInfo;
+		for (size_t nSubMeshIndex = 0; nSubMeshIndex < modelDataInfo.m_pModelDataInfo->vecSubMeshInfo.size(); ++nSubMeshIndex)
 		{
-			std::wstring strMeshName = HrStringUtil::Utf8ToWstring(pModelDataInfo->vecSubMeshInfo[i].strMeshName);
+			std::wstring strMeshName = HrStringUtil::Utf8ToWstring(modelDataInfo.m_pModelDataInfo->vecSubMeshInfo[nSubMeshIndex].strMeshName);
 			HTREEITEM hMesh = m_wndClassView.InsertItem(strMeshName.c_str(), 1, 1, hModelRoot);
 		}
 	}
+	m_wndClassView.Expand(hRoot, TVE_EXPAND);
 }
 
 void HrPrefabModelView::SetMainFrame(CMainFrame* pMainFrame)
@@ -204,28 +205,7 @@ void HrPrefabModelView::OnViewTreeLBtnDown(HTREEITEM hitItem)
 			return;
 		}
 		
-		auto& vecModelDatas = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetModelDataInfos();
-		auto& vecModelNodes = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetModelNodes();
-		for (size_t i = 0; i < vecModelDatas.size(); ++i)
-		{
-			if (vecModelDatas[i]->strFileName == iteModelName->second)
-			{
-				auto pModelData = vecModelDatas[i];
-				auto pModelNode = vecModelNodes[i];
-
-				m_pMainFrame->GetPropertiesWnd().OnSelectModel(pModelData, pModelNode);
-			}
-		}
-
-		//auto& modelData = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
-		//for (size_t i = 0; i < modelData.vecSubMeshInfo.size(); ++i)
-		//{
-		//	if (iteMeshName->second == modelData.vecSubMeshInfo[i].strMeshName)
-		//	{
-		//		auto& materialInfo = modelData.vecMaterialDataInfo[i];
-		//		m_pMainFrame->GetPropertiesWnd().OnSelectMeshDisplaMaterial(i, materialInfo);
-		//	}
-		//}
+		m_pMainFrame->GetPropertiesWnd().OnSelectModel(iteModelName->second.m_pModelDataInfo, iteModelName->second.m_pSceneNode);
 	}
 }
 

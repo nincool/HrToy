@@ -18,6 +18,7 @@
 #include "Kernel/HrResourceModule.h"
 #include "Kernel/HrFileUtils.h"
 
+
 using namespace Hr;
 
 std::vector<HrVertexElement> SVertexStructP::m_s_vecVertexElementP;
@@ -165,12 +166,142 @@ void HrMeshModelQuadP::CreateQuadMesh()
 //
 ///////////////////////////////////////////////////
 
-HrMeshModelGrid::HrMeshModelGrid()
+HrMeshModelQuadPN::HrMeshModelQuadPN(float fWidth, float fHeight)
 {
-	m_nSteps = 100;
-	m_fStepLong = 30.0f;
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
 
+	CreateQuadMesh();
+}
 
+HrMeshModelQuadPN::~HrMeshModelQuadPN()
+{
+}
+
+void HrMeshModelQuadPN::CreateQuadMesh()
+{
+	auto pResCom = HrDirector::Instance()->GetResourceModule();
+
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	{
+		//why 0? because i want to sign the submesh's pos in the array
+		const HrSubMeshPtr& pSubMesh = m_pMesh->AddSubMesh("0_Quad");
+		{
+			float fHalfWidth = m_fWidth / 2;
+			float fHalfHeight = m_fHeight / 2;
+
+			SVertexStructPN vertexData[4];
+			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
+			vertexData[0].m_normal = float3(0, 0, -1);
+			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
+			vertexData[1].m_normal = float3(0, 0, -1);
+			vertexData[2].m_position = float3(fHalfWidth, -fHalfHeight, 0);
+			vertexData[2].m_normal = float3(0, 0, -1);
+			vertexData[3].m_position = float3(-fHalfWidth, -fHalfHeight, 0);
+			vertexData[3].m_normal = float3(0, 0, -1);
+
+			//Build vertexbuffer
+			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
+				, sizeof(vertexData)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, SVertexStructPN::m_s_vecVertexElementPN);
+
+			pSubMesh->SetMeshAABB(AABBox(Vector3(-fHalfWidth, -fHalfHeight, 0), Vector3(fHalfWidth, fHalfHeight, 0)));
+		}
+
+		{
+			//Build indexbuffer
+			unsigned short indices[6] = { 0, 1, 2, 0, 2, 3 };
+
+			pSubMesh->GetRenderLayout()->BindIndexBuffer(reinterpret_cast<char*>(indices)
+				, sizeof(indices)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, IT_16BIT);
+		}
+		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
+
+		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
+		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
+		//todo
+		pSubMesh->SetMaterial(pMaterial);
+	}
+}
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
+HrMeshModelQuadPNC::HrMeshModelQuadPNC(float fWidth, float fHeight)
+{
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
+
+	CreateQuadMesh();
+}
+
+HrMeshModelQuadPNC::~HrMeshModelQuadPNC()
+{
+}
+
+void HrMeshModelQuadPNC::CreateQuadMesh()
+{
+	auto pResCom = HrDirector::Instance()->GetResourceModule();
+
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	{
+		//why 0? because i want to sign the submesh's pos in the array
+		const HrSubMeshPtr& pSubMesh = m_pMesh->AddSubMesh("0_Quad");
+		{
+			float fHalfWidth = m_fWidth / 2;
+			float fHalfHeight = m_fHeight / 2;
+
+			SVertexStructPNC vertexData[4];
+			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
+			vertexData[0].m_tex = float2(0, 0);
+			vertexData[0].m_normal = float3(0, 0, -1);
+			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
+			vertexData[1].m_tex = float2(1, 0);
+			vertexData[1].m_normal = float3(0, 0, -1);
+			vertexData[2].m_position = float3(fHalfWidth, -fHalfHeight, 0);
+			vertexData[2].m_tex = float2(1, 1);
+			vertexData[2].m_normal = float3(0, 0, -1);
+			vertexData[3].m_position = float3(-fHalfWidth, -fHalfHeight, 0);
+			vertexData[3].m_tex = float2(0, 1);
+			vertexData[3].m_normal = float3(0, 0, -1);
+
+			//Build vertexbuffer
+			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
+				, sizeof(vertexData)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, SVertexStructPNC::m_s_vecVertexElementPNC);
+		}
+
+		{
+			//Build indexbuffer
+			unsigned short indices[6] = { 0, 1, 2, 0, 2, 3 };
+
+			pSubMesh->GetRenderLayout()->BindIndexBuffer(reinterpret_cast<char*>(indices)
+				, sizeof(indices)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, IT_16BIT);
+		}
+		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
+
+		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
+		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
+		//todo
+		pSubMesh->SetMaterial(pMaterial);
+	}
+}
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
+HrMeshModelGrid::HrMeshModelGrid(float fSteps, float fStepLong)
+{
+	m_nSteps = fSteps;
+	m_fStepLong = fStepLong;
 }
 
 HrMeshModelGrid::~HrMeshModelGrid()
@@ -191,7 +322,8 @@ void HrMeshModelGrid::CreateGridMesh()
 {
 	auto pResCom = HrDirector::Instance()->GetResourceModule();
 
-	m_pMesh = pResCom->RetriveResource<HrMesh>("BuildIn_GridMesh", true, false);
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	m_pMesh->DeclareResource("Buildin_GridMesh", "Buildin_GridMesh");
 	if (!m_pMesh->IsLoaded())
 	{
 		auto pDefualtEff = pResCom->RetriveResource<HrRenderEffect>();
@@ -226,6 +358,8 @@ void HrMeshModelGrid::CreateGridMesh()
 
 			delete pVertexBuff;
 			pVertexBuff = nullptr;
+
+			pSubMesh->SetMeshAABB(AABBox(Vector3(-fWidth, 0, -fWidth), Vector3(fWidth, 0, fWidth)));
 		}
 		
 		{
@@ -302,6 +436,8 @@ bool HrMeshModelObject::LoadImpl()
 		m_pMesh = m_pModelLoader->GetMesh();
 		m_pMesh->Retain(); //add Referrence
 	}
+
+	return true;
 }
 
 bool HrMeshModelObject::UnloadImpl()

@@ -29,7 +29,8 @@ namespace Hr
 		void ResetKeyFlag();
 	private:
 		HrSceneNodePtr m_pSceneMainCamera;
-		HrSceneNodePtr m_pTestNode;
+		HrSceneNodePtr m_pBuildingRoot;
+		HrTrackBallCameraComponentPtr m_pTrackBallCameraCtrl;
 
 		bool m_bKeyAPressed;
 		bool m_bKeyWPressed;
@@ -39,6 +40,8 @@ namespace Hr
 		bool m_bKey0Pressed;
 		bool m_bKey1Pressed;
 
+		bool m_bLeftMousePressed;
+		bool m_bRightMousePressed;
 	};
 }
 

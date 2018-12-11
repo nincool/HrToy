@@ -14,9 +14,8 @@ HrStaticMeshRenderable::HrStaticMeshRenderable()
 {
 }
 
-HrStaticMeshRenderable::HrStaticMeshRenderable(const HrSubMeshPtr& pSubMesh)
+HrStaticMeshRenderable::HrStaticMeshRenderable(const HrSubMeshPtr& pSubMesh) : HrRenderable(pSubMesh)
 {
-	m_pSubMesh = pSubMesh;
 }
 
 HrStaticMeshRenderable::~HrStaticMeshRenderable()

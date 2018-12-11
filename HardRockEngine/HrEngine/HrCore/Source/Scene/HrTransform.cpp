@@ -17,10 +17,14 @@ HrTransform::HrTransform(HrSceneNode* pSceneNode)
 		= m_bDirtyWorldPosition
 		= m_bDirtyWorldMatrix = true;
 
+	m_bDirtyAABBox = true;
+
 	m_vPosition = Vector3(0.0f, 0.0f, 0.0f);
 	m_vScale = Vector3(1.0f, 1.0f, 1.0f);
 	m_orientation = Quaternion::Identity();
 	m_vEulerAngles = Vector3::Zero();
+
+	m_localAABBox = m_worldAABBox = AABBox(Vector3::Zero(), Vector3::Zero());
 
 	Rotate(m_orientation);
 
@@ -236,11 +240,11 @@ void HrTransform::UpdateTransform(float fDelta)
 void HrTransform::DirtyTransform(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation)
 {
 	if (bDirtyPos)
-		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldPosition = true;
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldPosition = m_bDirtyAABBox = true;
 	if (bDirtyScale)
-		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldScale = true;
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldScale = m_bDirtyAABBox = true;
 	if (bDirtyOrientation)
-		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldOriention = true;
+		m_bDirtyTransform = m_bDirtyWorldMatrix = m_bDirtyWorldOriention = m_bDirtyAABBox = true;
 
 	m_pSceneNode->DirtyTransfrom(bDirtyPos, bDirtyScale, bDirtyOrientation);
 }
@@ -285,5 +289,26 @@ const Vector3& HrTransform::GetParentPosition()
 const Vector3 HrTransform::GetRotation()
 {
 	return m_vEulerAngles;
+}
+
+void HrTransform::SetAABBox(const AABBox& aabb)
+{
+	m_localAABBox = aabb;
+	m_bDirtyAABBox = true;
+}
+
+const AABBox& HrTransform::GetLocalAABBox()
+{
+	return m_localAABBox;
+}
+
+const AABBox& HrTransform::GetWorldAABBox()
+{
+	if (m_bDirtyAABBox)
+	{
+		m_worldAABBox = HrMath::TransformAABB(m_localAABBox, GetWorldMatrix());
+		m_bDirtyAABBox = false;
+	}
+	return m_worldAABBox;
 }
 

@@ -2,6 +2,7 @@
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrLog.h"
 #include "Kernel/HrResourceModule.h"
+#include "Kernel/HrSceneModule.h"
 #include "Render/HrCamera.h"
 #include "Render/HrInstanceBatchHW.h"
 #include "Render/HrInstanceBatchObject.h"
@@ -107,6 +108,9 @@ void HrCameraComponet::UpdateTransform(const HrTransformPtr& pTransform)
 	Vector3 vLookAt = m_pCamera->GetLookAt();
 	Vector3 vUp = pTransform->GetUp();
 	m_pCamera->ViewParams(vPosition, vLookAt, vUp);
+
+	//todo
+	HrDirector::Instance()->GetSceneModule()->DirtyScene();
 }
 
 const HrViewPortPtr& HrCameraComponet::GetViewPort()
@@ -204,18 +208,18 @@ void HrTrackBallCameraController::Rotate(const Vector3& v)
 	
 }
 
-void HrTrackBallCameraController::Zoom(float fZ)
+void HrTrackBallCameraController::Forward(float fZ)
 {
 	//假如无限接近的话，那么不运动
 	float fLookAtDistance = m_pCameraCom->GetCamera()->GetLookAtDistance();
 	std::cout << " TrackBallCamera Distance:" << fLookAtDistance << std::endl;
-	if (fZ > 0 && fLookAtDistance <= 3.0f)
+	if (fZ > 0 && fLookAtDistance <= 5.0f)
 	{
 		return;
 	}
 
 	//计算距离
-	m_pSceneObj->GetSceneNode()->GetTransform()->Translate(Vector3(0, 0, fZ * m_fZoomScaler));
+	m_pSceneObj->GetSceneNode()->GetTransform()->Translate(Vector3(0, 0, fZ * m_fZoomScaler), HrTransform::TS_LOCAL);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -288,6 +292,7 @@ void HrRenderableComponent::SetRenderable(const HrRenderablePtr& pRenderable)
 	
 	//todo!! 按道理来讲 不应该传进来
 	m_pRenderable->SetAttachSceneObject(m_pSceneObj);
+	m_pSceneObj->GetSceneNode()->GetTransform()->SetAABBox(m_pRenderable->GetAABBox());
 }
 
 
@@ -318,7 +323,7 @@ void HrInstanceBatchComponent::CreateInstanceBatch(const HrSubMeshPtr& pSubMesh)
 	}
 
 	m_pInsBatch = HrMakeSharedPtr<HrInstanceBatchHW>();
-	m_pInsBatch->SetSubMesh(pSubMesh);
+	//m_pInsBatch->SetSubMesh(pSubMesh);
 	m_pInsBatch->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/HrShader/HrInstanceEffect.json"));
 	m_pInsBatch->SetAttachSceneObject(GetAttachSceneObject());
 }

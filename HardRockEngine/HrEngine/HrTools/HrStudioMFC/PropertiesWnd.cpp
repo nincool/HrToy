@@ -83,7 +83,7 @@ void CPropertiesWnd::SetMainFrame(CMainFrame* pMainFrame)
 	m_pMainFrame = pMainFrame;
 }
 
-void CPropertiesWnd::OnSelectModel(const Hr::HrModelDataInfo* pModelDataInfo, Hr::HrSceneNodePtr& pSceneNode)
+void CPropertiesWnd::OnSelectModel(const Hr::HrModelDataInfo* pModelDataInfo, Hr::HrSceneNode* pSceneNode)
 {
 	m_pModelData = pModelDataInfo;
 	m_pSceneNode = pSceneNode;
@@ -279,48 +279,6 @@ void CPropertiesWnd::InitPropList()
 	}
 	m_wndPropList.AddProperty(m_pHrSettingGroup);
 
-	//m_pMaterialGroup = new CMFCPropertyGridProperty(_T("Material"));
-	//{
-	//	m_pMaterialName = new CMFCPropertyGridProperty(_T("Name"), (_variant_t)_T(""), _T("Specifies the text that will be displayed in the window's title bar"));
-	//	m_pMaterialGroup->AddSubItem(m_pMaterialName);
-	//	
-	//	m_pMaterialAlbedo = new CMFCPropertyGridColorProperty(_T("Albedo"), RGB(210, 192, 254), NULL, _T("Specifies the default window color"));
-	//	m_pMaterialAlbedo->EnableOtherButton(_T("Other..."));
-	//	m_pMaterialAlbedo->EnableAutomaticButton(_T("Default"), ::GetSysColor(COLOR_3DFACE));
-	//	m_pMaterialGroup->AddSubItem(m_pMaterialAlbedo);
-
-	//	m_pMaterialEmissive = new CMFCPropertyGridColorProperty(_T("Emissive"), RGB(210, 192, 254), NULL, _T("Specifies the default window color"));
-	//	m_pMaterialEmissive->EnableOtherButton(_T("Other..."));
-	//	m_pMaterialEmissive->EnableAutomaticButton(_T("Default"), ::GetSysColor(COLOR_3DFACE));
-	//	m_pMaterialGroup->AddSubItem(m_pMaterialEmissive);
-
-	//	auto variantValue = _variant_t(3.0f, VT_R8);
-	//	m_pMaterialShininess = new CMFCPropertyGridProperty(_T("Glossiness"), variantValue, _T("Specifies the window's width"));
-	//	//m_pMaterialShininess->EnableSpinControl(TRUE, 0, 20);
-	//	m_pMaterialGroup->AddSubItem(m_pMaterialShininess);
-
-	//	variantValue = _variant_t(1.0f, VT_R8);
-	//	m_pMaterialReflective = new CMFCPropertyGridProperty(_T("Reflective"), variantValue, _T("Specifies the window's width"));
-	//	m_pMaterialGroup->AddSubItem(m_pMaterialReflective);
-
-	//	std::array<std::wstring, HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> arrTextureTypeName;
-	//	arrTextureTypeName[0] = _T("TEX_ALBEDO");
-	//	arrTextureTypeName[1] = _T("TEX_METALNESS");
-	//	arrTextureTypeName[2] = _T("TEX_GLOSSINESS");
-	//	arrTextureTypeName[3] = _T("TEX_EMISSIVE");
-	//	arrTextureTypeName[4] = _T("TEX_NORMAL");
-	//	arrTextureTypeName[5] = _T("TEX_HEIGHT");
-	//	arrTextureTypeName[6] = _T("TEX_BUMP");
-	//	for (size_t i = 0; i < arrTextureTypeName.size(); ++i)
-	//	{
-	//		static const TCHAR szFilter[] = _T("png Files(*.png)|*.png|All Files(*.*)|*.*||");
-	//		m_arrMaterialTexture[i] = new CMFCPropertyGridFileProperty(arrTextureTypeName[i].c_str(), TRUE, _T(""), _T("png"), 0, szFilter, _T("Specifies the window icon"));
-	//		//m_pMaterialGroup->AddSubItem(new CMFCPropertyGridFileProperty(_T("Icon"), TRUE, _T(""), _T("ico"), 0, szFilter, _T("Specifies the window icon")));
-	//		m_pMaterialGroup->AddSubItem(m_arrMaterialTexture[i]);
-	//	}
-	//}
-	//m_wndPropList.AddProperty(m_pMaterialGroup);
-
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Appearance"));
 
 	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("3D Look"), (_variant_t) false, _T("Specifies the window's font will be non-bold and controls will have a 3D border")));
@@ -481,21 +439,21 @@ LRESULT CPropertiesWnd::OnPropertyChanged(__in WPARAM wParam, __in LPARAM lParam
 	else if (str == _T("scale x"))
 	{
 		COleVariant var = pProp->GetValue();
-		float posValue = var.intVal;
+		float posValue = var.dblVal;
 		auto oldPos = m_pSceneNode->GetTransform()->GetScale();
 		m_pSceneNode->GetTransform()->SetScale(Vector3(posValue, oldPos.y(), oldPos.z()));
 	}
 	else if (str == _T("scale y"))
 	{
 		COleVariant var = pProp->GetValue();
-		float posValue = var.intVal;
+		float posValue = var.dblVal;
 		auto oldPos = m_pSceneNode->GetTransform()->GetScale();
 		m_pSceneNode->GetTransform()->SetScale(Vector3(oldPos.x(), posValue, oldPos.z()));
 	}
 	else if (str == _T("scale z"))
 	{
 		COleVariant var = pProp->GetValue();
-		float posValue = var.intVal;
+		float posValue = var.dblVal;
 		auto oldPos = m_pSceneNode->GetTransform()->GetScale();
 		m_pSceneNode->GetTransform()->SetScale(Vector3(oldPos.x(), oldPos.y(), posValue));
 	}

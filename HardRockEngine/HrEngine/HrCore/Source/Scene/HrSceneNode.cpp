@@ -10,6 +10,7 @@
 #include "Scene/HrSceneObjectComponent.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrRenderModule.h"
+#include "Kernel/HrSceneModule.h"
 #include "Kernel/HrEventSystemModule.h"
 #include "Kernel/HrLog.h"
 #include "Event/HrEvent.h"
@@ -21,9 +22,9 @@ using namespace Hr;
 HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_strName = "NoName";
-	m_bEnable = true;
 	m_bRunning = false;
 	m_pParentNode = nullptr;
+	m_nFrustumVisibleMark = HrMath::NV_UNKNOWN;
 	m_pTransform = HrMakeSharedPtr<HrTransform>(this);
 	m_pSceneObject = HrMakeSharedPtr<HrSceneObject>(this);
 }
@@ -31,9 +32,9 @@ HrSceneNode::HrSceneNode() : HrIDObject(HrID::GenerateID<HrSceneNode>())
 HrSceneNode::HrSceneNode(const std::string& strName) : HrIDObject(HrID::GenerateID<HrSceneNode>())
 {
 	m_strName = strName;
-	m_bEnable = true;
 	m_bRunning = false;
 	m_pParentNode = nullptr;
+	m_nFrustumVisibleMark = HrMath::NV_UNKNOWN;
 	m_pTransform = HrMakeSharedPtr<HrTransform>(this);
 	m_pSceneObject = HrMakeSharedPtr<HrSceneObject>(this);
 }
@@ -64,6 +65,8 @@ void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 	pSceneNode->SetParent(this);
 	if (IsRunning())
 	{
+		//todo is this node can be rendered?
+		HrDirector::Instance()->GetSceneModule()->DirtyScene();
 		pSceneNode->OnEnter();
 	}
 
@@ -119,47 +122,49 @@ void HrSceneNode::OnEndRenderScene(const HrEventPtr& pEvent)
 
 void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
 {
-	if (this->m_bEnable)
+	if (m_pSceneObject)
 	{
-		if (m_pSceneObject)
-		{
-			const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
-			if (pRenderableCom)
-			{
-				const HrInstanceBatchComponentPtr pBatchCom = m_pSceneObject->GetComponent<HrInstanceBatchComponent>();
-				if (pBatchCom)
-				{
-					HrRenderablePtr pRenderable = pBatchCom->GetInstanceBatch();
-					pRenderQueue->AddRenderable(pRenderable);
-				}
-				else
-				{
-					pRenderQueue->AddRenderable(pRenderableCom->GetRenderable());
-				}
-			}
-		}
-		for (auto& item : m_vecChildrenNode)
-		{
-			item->FindVisibleRenderable(pRenderQueue);
-		}
-	}
-}
-
-void HrSceneNode::FindAllRenderables(std::vector<HrRenderablePtr>& vecRenderables)
-{
-	if (m_bEnable)
-	{
-		BOOST_ASSERT(m_pSceneObject);
 		const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
 		if (pRenderableCom)
 		{
-			//todo batch
-			vecRenderables.push_back(pRenderableCom->GetRenderable());
+			const HrInstanceBatchComponentPtr pBatchCom = m_pSceneObject->GetComponent<HrInstanceBatchComponent>();
+			if (pBatchCom)
+			{
+				HrRenderablePtr pRenderable = pBatchCom->GetInstanceBatch();
+				pRenderQueue->AddRenderable(pRenderable);
+			}
+			else
+			{
+				pRenderQueue->AddRenderable(pRenderableCom->GetRenderable());
+			}
 		}
-		for (auto& item : m_vecChildrenNode)
-		{
-			item->FindAllRenderables(vecRenderables);
-		}
+	}
+	for (auto& item : m_vecChildrenNode)
+	{
+		item->FindVisibleRenderable(pRenderQueue);
+	}
+}
+
+void HrSceneNode::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
+{
+	if (m_pSceneObject->GetRenderableComponent())
+	{
+		pRenderQueueManager->AddRenderableNode(shared_from_this());
+	}
+}
+
+void HrSceneNode::FindAllRenderables(std::vector<HrSceneNodePtr>& vecRenderables)
+{
+	BOOST_ASSERT(m_pSceneObject);
+	const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
+	if (pRenderableCom)
+	{
+		//todo batch
+		vecRenderables.push_back(shared_from_this());
+	}
+	for (auto& item : m_vecChildrenNode)
+	{
+		item->FindAllRenderables(vecRenderables);
 	}
 }
 
@@ -171,7 +176,9 @@ bool HrSceneNode::RemoveChild(const HrSceneNodePtr& pChild)
 		{
 			pChild->OnExist();
 			m_vecChildrenNode.erase(m_vecChildrenNode.begin() + i);
-			
+			if (IsRunning())
+				HrDirector::Instance()->GetSceneModule()->DirtyScene();
+
 			return true;
 		}
 	}
@@ -272,16 +279,6 @@ const HrSceneNodePtr& HrSceneNode::GetNodeByNameFromHierarchy(const std::string&
 	}
 }
 
-void HrSceneNode::SetEnable(bool bEnable)
-{
-	m_bEnable = bEnable;
-}
-
-bool HrSceneNode::GetEnable() const
-{
-	return m_bEnable;
-}
-
 const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 {
 	return m_pSceneObject;
@@ -289,6 +286,11 @@ const HrSceneObjectPtr& HrSceneNode::GetSceneObject()
 
 void HrSceneNode::DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation)
 {
+	if (IsRunning())
+	{
+		HrDirector::Instance()->GetSceneModule()->DirtyScene();
+	}
+
 	if (m_pSceneObject)
 		m_pSceneObject->OnNodeTransformDirty(m_pTransform);
 	for (auto& iteChild : m_vecChildrenNode)
@@ -312,4 +314,12 @@ size_t HrSceneNode::GetChildrenCount()
 	return m_vecChildrenNode.size();
 }
 
+HrMath::EnumVisibility HrSceneNode::GetFrustumVisible()
+{
+	return m_nFrustumVisibleMark;
+}
 
+void HrSceneNode::SetFrustumVisible(HrMath::EnumVisibility visible)
+{
+	m_nFrustumVisibleMark = visible;
+}

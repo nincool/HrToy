@@ -3,6 +3,7 @@
 
 #include "HrCore/Include/HrCorePrerequisite.h"
 #include "HrCore/Include/Kernel/HrIDObject.h"
+#include "HrCore/Include/Scene/HrTransform.h"
 
 namespace Hr
 {
@@ -18,12 +19,6 @@ namespace Hr
 		const std::string& GetName() const;
 
 		const HrSceneObjectPtr& GetSceneObject();
-
-		/**
-		 @Comment: Enable Disable TODO 屏蔽场景节点 [10/29/2018 By Hr]
-		*/
-		void SetEnable(bool bEnable);
-		bool GetEnable() const;
 
 		const HrSceneNode* GetParent() const;
 
@@ -61,17 +56,21 @@ namespace Hr
 		virtual void UpdateNode(float fDt = 0.0f);
 
 		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
+		void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
 
 		/**
 		 @Comment: 获取节点包含子节点的Renderables [10/26/2018 By Hr]
 		 @Param:   in|out vector 
 		*/
-		void FindAllRenderables(std::vector<HrRenderablePtr>& vecRenderables);
+		void FindAllRenderables(std::vector<HrSceneNodePtr>& vecRenderables);
 
 		void OnBeginRenderScene(const HrEventPtr& pEvent);
 		void OnEndRenderScene(const HrEventPtr& pEvent);
 
 		void DirtyTransfrom(bool bDirtyPos, bool bDirtyScale, bool bDirtyOrientation);
+
+		HrMath::EnumVisibility GetFrustumVisible();
+		void SetFrustumVisible(HrMath::EnumVisibility visible);
 	protected:
 		void SetParent(HrSceneNode* pParentNode);
 		
@@ -81,8 +80,8 @@ namespace Hr
 
 	protected:
 		std::string m_strName;
-		bool m_bEnable;
 		bool m_bRunning;
+		HrMath::EnumVisibility m_nFrustumVisibleMark;
 
 		HrSceneObjectPtr m_pSceneObject;
 

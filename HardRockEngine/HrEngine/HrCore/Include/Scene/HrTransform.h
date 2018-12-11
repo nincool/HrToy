@@ -50,8 +50,11 @@ namespace Hr
 		const Matrix4& GetWorldMatrix();
 
 		void Rotate(const Vector3& angle, EnumTransformSpace relativeTo = TS_LOCAL);
-
 		void Rotate(const Quaternion& q, EnumTransformSpace relativeTo = TS_LOCAL);
+
+		void SetAABBox(const AABBox& aabb);
+		const AABBox& GetLocalAABBox();
+		const AABBox& GetWorldAABBox();
 
 		bool GetTransformDirty();
 		void SetTransformDirty(bool bDirty);
@@ -95,6 +98,9 @@ namespace Hr
 		static Vector3 m_s_v3Zero;
 		static Vector3 m_s_v3One;
 
+		bool m_bDirtyAABBox;
+		AABBox m_localAABBox;
+		AABBox m_worldAABBox;
 	};
 }
 

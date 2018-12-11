@@ -52,7 +52,7 @@ void HrGeometryApp::LoadAssets()
 void HrGeometryApp::CreateScene()
 {
 	//auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
-	auto pTestScene = HrMakeSharedPtr<HrSceneManagerTest>();
+	auto pTestScene = HrMakeSharedPtr<HrDeferredShading>();
 	HrDirector::Instance()->GetSceneModule()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();

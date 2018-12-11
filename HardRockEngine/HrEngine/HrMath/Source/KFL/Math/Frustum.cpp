@@ -82,6 +82,7 @@ namespace KlayGE
 	template <typename T>
 	void Frustum_T<T>::ClipMatrix(Matrix4_T<T> const & clip, Matrix4_T<T> const & inv_clip) KLAYGE_NOEXCEPT
 	{
+		http://www8.cs.umu.se/kurser/5DV051/HT12/lab/plane_extraction.pdf
 		corners_[0] = MathLib::transform_coord(Vector_T<T, 3>(-1, -1, 0), inv_clip); // left bottom near
 		corners_[1] = MathLib::transform_coord(Vector_T<T, 3>(+1, -1, 0), inv_clip); // right bottom near
 		corners_[2] = MathLib::transform_coord(Vector_T<T, 3>(-1, +1, 0), inv_clip); // left top near

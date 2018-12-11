@@ -97,9 +97,6 @@
     <ClInclude Include="Include\Render\HrCamera.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Render\HrFrustum.h">
-      <Filter>Include\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderPass.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
@@ -340,6 +337,15 @@
     <ClInclude Include="Include\Scene\HrOctNode.h">
       <Filter>Include\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Asset\Loader\HrMeshUtils.h">
+      <Filter>Include\Asset\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrGirlfriend.h">
+      <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderProcessing.h">
+      <Filter>Include\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MemoryAlloc\HrMemoryAllocatedObject.cpp">
@@ -355,9 +361,6 @@
       <Filter>Source\MemoryAlloc</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrCamera.cpp">
-      <Filter>Source\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render\HrFrustom.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\Render\HrRenderTechnique.cpp">
@@ -584,6 +587,15 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HrOctNode.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\Loader\HrMeshUtils.cpp">
+      <Filter>Source\Asset\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrGirlfriend.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderProcessing.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

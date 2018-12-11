@@ -19,17 +19,12 @@ using namespace Hr;
 
 HrD3D11Render::HrD3D11Render()
 {
+	HrD3D11Device::Instance()->CreateD3D11Device();
+
 }
 
 HrD3D11Render::~HrD3D11Render()
 {
-}
-
-bool HrD3D11Render::Init()
-{
-	HrD3D11Device::Instance()->CreateD3D11Device();
-
-	return true;
 }
 
 void HrD3D11Render::BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer)
@@ -256,13 +251,12 @@ void HrD3D11Render::Render(const HrRenderTechniquePtr& pRenderTechnique, const H
 	GetD3D11DeviceContext()->IASetVertexBuffers(0, nVertexStreams, &vecD3DVertexBuffers[0], &vecStrides[0], &vecOffsets[0]);
 	GetD3D11DeviceContext()->IASetPrimitiveTopology(HrD3D11Mapping::GetTopologyType(pD3D11RenderLayout->GetTopologyType()));
 
-	uint32 nInstanceCount = pRenderLayout->GetInstanceNum();
-	
 	if (pD3D11RenderLayout->UseIndices())
 	{
 		GetD3D11DeviceContext()->IASetIndexBuffer(pD3D11RenderLayout->GetD3DIndexBuffer(), HrD3D11Mapping::GetIndexBufferFormat(pD3D11RenderLayout->GetIndexBufferType()), 0);
 	}
 
+	uint32 nInstanceCount = pRenderLayout->GetInstanceNum();
 	const uint32 nPassNum = pRenderTechnique->GetRenderPassNum();
 	if (pD3D11RenderLayout->UseIndices())
 	{

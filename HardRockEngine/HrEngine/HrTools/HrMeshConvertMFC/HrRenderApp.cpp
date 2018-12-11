@@ -162,10 +162,9 @@ void HrEditorScene::CreateAxisNode()
 
 		HrSceneObjectPtr pSceneObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
-		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>();
-		pRenderableCom->SetRenderable(pRenderable);
-		pRenderable->SetSubMesh(m_pAxisModel->GetMesh()->GetSubMesh(i));
+		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(m_pAxisModel->GetMesh()->GetSubMesh(i));
 		pRenderable->SetRenderEffect(pRenderEffect);
+		pRenderableCom->SetRenderable(pRenderable);
 
 		pSceneNode->AddChild(pNode);
 	}
@@ -265,7 +264,7 @@ float HrEditorScene::Convert2ScreenPosY(float fY)
 
 void HrEditorScene::OnMouseWheel(float fDelta)
 {
-	m_pTrackBallCameraCtrl->Zoom(fDelta);
+	m_pTrackBallCameraCtrl->Forward(fDelta);
 
 	m_bCameraMatrixDirty = true;
 }

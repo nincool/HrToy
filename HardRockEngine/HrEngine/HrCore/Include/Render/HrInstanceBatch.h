@@ -17,7 +17,7 @@ namespace Hr
 
 		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
-		virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh) override;
+		//virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh) override;
 
 		virtual HrSceneObjectPtr CreateInstance() = 0;
 	protected:

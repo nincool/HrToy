@@ -13,6 +13,9 @@ namespace Hr
 	typedef std::shared_ptr<HrWindow> HrWindowPtr;
 	class HrWindowWin;
 	typedef std::shared_ptr<HrWindowWin> HrWindowWinPtr;
+	
+	class HrModule;
+	typedef class std::shared_ptr<HrModule> HrModulePtr;
 	class HrWindowModule;
 	typedef class std::shared_ptr<HrWindowModule> HrWindowModulePtr;;
 	class HrScheduler;
@@ -31,12 +34,21 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderFactory> HrRenderFactoryPtr;
 	class HrRenderSystem;
 	typedef std::shared_ptr<HrRenderSystem> HrRenderSystemPtr;
+	class HrForwardRenderSystem;
+	typedef std::shared_ptr<HrForwardRenderSystem> HrForwardRenderSystemPtr;
+	class HrDeferredRenderSystem;
+	typedef std::shared_ptr<HrDeferredRenderSystem> HrDeferredRenderSystemPtr;
+	class HrRenderProcessing;
+	typedef std::shared_ptr<HrRenderProcessing> HrRenderProcessingPtr;
+
 	class HrRender;
 	typedef std::shared_ptr<HrRender> HrRenderPtr;
 	class HrRenderFrame;
 	typedef std::shared_ptr<HrRenderFrame> HrRenderFramePtr;
 	class HrViewPort;
 	typedef std::shared_ptr<HrViewPort> HrViewPortPtr;
+	class HrViewPortDeferredInfo;
+	typedef std::shared_ptr<HrViewPortDeferredInfo> HrViewPortDeferredInfoPtr;
 	class HrRenderTarget;
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
 	class HrRenderTextureTarget;
@@ -58,8 +70,6 @@ namespace Hr
 	typedef std::shared_ptr<HrIndexData> HrIndexDataPtr;
 	class HrGraphicsBuffer;
 	typedef std::shared_ptr<HrGraphicsBuffer> HrGraphicsBufferPtr;
-	class HrRenderQueue;
-	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
 	class HrRenderLayout;
 	typedef std::shared_ptr<HrRenderLayout> HrRenderLayoutPtr;
 	class HrRenderable;
@@ -68,6 +78,11 @@ namespace Hr
 	typedef std::shared_ptr<HrStaticMeshRenderable> HrStaticMeshRenderablePtr;
 	class HrSkinnedMeshRenderable;
 	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
+
+	class HrRenderQueue;
+	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
+	class HrRenderQueueManager;
+	typedef std::shared_ptr<HrRenderQueueManager> HrRenderQueueManagerPtr;
 
 	//effect
 	class HrRenderPass;
@@ -179,12 +194,13 @@ namespace Hr
 	typedef std::shared_ptr<HrModelLoader> HrModelLoaderPtr;
 	class HrMaterial;
 	typedef std::shared_ptr<HrMaterial> HrMaterialPtr;
+	class HrPrefabData;
+	typedef std::shared_ptr<HrPrefabData> HrPrefabDataPtr;
 	class HrShaderCompiler;
 	typedef std::shared_ptr<HrShaderCompiler> HrShaderCompilerPtr;
 
 	class HrResourceManager;
 	typedef std::shared_ptr<HrResourceManager> HrResourceManagerPtr;
-
 
 	//InstanceBatch
 	class HrInstanceBatch;

@@ -6,6 +6,8 @@ using namespace Hr;
 HrCamera::HrCamera(const std::string& strName) : m_fLookAtDistance(0.0f), m_fFov(0.0f), m_fAspect(0.0f), m_fNearPlane(0.0f), m_fFarPlane(0.0f)
 {
 	m_bViewProjDirty = false;
+	m_bFrustumDirty = false;
+	m_renderingPath = RP_FORWARD;
 
 	this->ViewParams(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f));
 }
@@ -23,6 +25,7 @@ void HrCamera::ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vec
 	m_v3LookAt = m_v3EyePos + m_v3Forward * m_fLookAtDistance;
 
 	m_bViewProjDirty = true;
+	m_bFrustumDirty = true;
 }
 
 void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane)
@@ -36,6 +39,7 @@ void HrCamera::ProjectParams(float fFov, float fAspect, float fNearPlane, float 
 	m_matInverseProject = HrMath::Inverse(m_matProject);
 
 	m_bViewProjDirty = true;
+	m_bFrustumDirty = true;
 }
 
 Matrix4 const& HrCamera::GetViewMatrix() const
@@ -144,4 +148,25 @@ void HrCamera::FarPlane(float fFar)
 {
 	m_fFarPlane = fFar;
 	ProjectParams(m_fFov, m_fAspect, m_fNearPlane, m_fFarPlane);
+}
+
+const Frustum& HrCamera::ViewFrustum()
+{
+	if (m_bFrustumDirty)
+	{
+		m_frustum.ClipMatrix(GetViewProjMatrix(), GetInverseViewProjMatrix());
+		m_bFrustumDirty = false;
+	}
+
+	return m_frustum;
+}
+
+EnumRenderingPath HrCamera::GetRenderPath()
+{
+	return m_renderingPath;
+}
+
+void HrCamera::SetRenderPath(EnumRenderingPath renderPath)
+{
+	m_renderingPath = renderPath;
 }

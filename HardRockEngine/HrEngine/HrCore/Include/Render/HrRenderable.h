@@ -9,12 +9,13 @@ namespace Hr
 	{
 	public:
 		HrRenderable();
+		HrRenderable(const HrSubMeshPtr& pSubMesh);
 		virtual ~HrRenderable();
 
 		virtual const HrRenderLayoutPtr& GetRenderLayout();
 		virtual const HrRenderTechniquePtr& GetRenderTechnique();
 
-		virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh);
+		//virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh);
 		const HrSubMeshPtr& GetSubMesh();
 
 		void SetRenderEffect(const HrRenderEffectPtr& pRenderEff);
@@ -48,7 +49,6 @@ namespace Hr
 		HrRenderEffectPtr m_pRenderEffect;
 		HrRenderTechniquePtr m_pCurTechnique;
 		HrSubMeshPtr m_pSubMesh;
-		AABBox m_aabb;
 
 		//todo
 		//std::weak_ptr<HrSceneObject> m_pAttachSceneObj;

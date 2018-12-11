@@ -13,7 +13,7 @@
 
 #include "ViewTree.h"
 #include "HrCore/Include/Asset/Loader/HrModelLoader.h"
-
+#include "HrRenderApp.h"
 #include <unordered_map>
 
 class CMainFrame;
@@ -38,7 +38,7 @@ public:
 	void OnChangeVisualStyle();
 
 	void FillClassView(const Hr::HrModelDataInfo& modelInfo);
-	void FillModelDataView(const std::vector<const Hr::HrModelDataInfo*>& vecModelDataInfos);
+	void FillModelDataView(const std::vector<Hr::HrModelDataPropertiesInfo>& vecModelDataInfos);
 
 	void SetMainFrame(CMainFrame* pMainFrame);
 
@@ -51,7 +51,7 @@ protected:
 
 	CMainFrame* m_pMainFrame;
 
-	std::unordered_map<HTREEITEM, std::string> m_mapModels;
+	std::unordered_map<HTREEITEM, Hr::HrModelDataPropertiesInfo> m_mapModels;
 
 	// Overrides
 public:

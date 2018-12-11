@@ -50,7 +50,6 @@ HrMaterial::HrMaterial(const HrMaterialPtr& pMaterial)
 
 HrMaterial::~HrMaterial()
 {
-
 }
 
 size_t HrMaterial::CreateHashName(const std::string& strHashValue)

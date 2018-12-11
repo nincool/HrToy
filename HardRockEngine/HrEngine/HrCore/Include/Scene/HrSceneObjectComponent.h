@@ -109,7 +109,7 @@ namespace Hr
 
 		void Move() {};
 		void Rotate(const Vector3& v);
-		void Zoom(float fZ);
+		void Forward(float fZ);
 	protected:
 		HrCameraComponentPtr m_pCameraCom;
 

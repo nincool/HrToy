@@ -12,9 +12,6 @@ namespace Hr
 	public:
 		HrRenderAxis();
 		~HrRenderAxis();
-
-
-
 	protected:
 		struct SAxisVertex
 		{
@@ -28,6 +25,21 @@ namespace Hr
 		};
 	private:
 		void CreateAxisMesh();
+	};
+
+	class HrModelDataPropertiesInfo
+	{
+	public:
+		HrModelDataPropertiesInfo() : m_pModelDataInfo(nullptr), m_pSceneNode(nullptr)
+		{}
+		HrModelDataPropertiesInfo(const HrModelDataInfo* pModelDataInfo, const HrSceneNode* pSceneNode)
+		{
+			m_pModelDataInfo = const_cast<HrModelDataInfo*>(pModelDataInfo);
+			m_pSceneNode = const_cast<HrSceneNode*>(pSceneNode);
+		}
+
+		HrModelDataInfo* m_pModelDataInfo;
+		HrSceneNode* m_pSceneNode;
 	};
 
 	class HrEditorScene : public HrScene
@@ -53,7 +65,7 @@ namespace Hr
 		void SavePrefabData(const std::string& strFileName);
 
 		const std::vector<HrSceneNodePtr>& GetModelNodes();
-		const std::vector<const HrModelDataInfo*>& GetModelDataInfos();
+		const std::vector<HrModelDataPropertiesInfo>& GetModelDataInfos();
 	private:
 		void CreateSceneElements();
 		void CreateAxisNode();
@@ -81,7 +93,7 @@ namespace Hr
 
 		HrSceneNodePtr m_pModelRoot;
 		std::vector<HrSceneNodePtr> m_vecModelNodes;
-		std::vector<const HrModelDataInfo*> m_vecModelDataInfos;
+		std::vector<HrModelDataPropertiesInfo> m_vecModelDataInfos;
 
 		HrSceneNodePtr m_pGodCamera;
 		HrCameraComponentPtr m_pCameraCom;

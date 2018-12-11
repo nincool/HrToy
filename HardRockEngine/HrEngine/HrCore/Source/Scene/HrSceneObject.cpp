@@ -20,11 +20,6 @@ HrSceneObject::~HrSceneObject()
 {
 }
 
-//void HrSceneObject::AttachSceneNode(HrSceneNode* pContainerNode)
-//{
-//	m_pContainerNode = pContainerNode;
-//}
-
 void HrSceneObject::OnEnter()
 {
 	for (auto& item : m_mapComponents)
@@ -33,11 +28,7 @@ void HrSceneObject::OnEnter()
 	}
 
 	AddCameraToScene();
-	
-	if (m_pCachedLight)
-	{
-		AddLightToScene(m_pCachedLight->GetLight());
-	}
+	AddLightToScene();
 }
 
 void HrSceneObject::OnExist()
@@ -180,14 +171,16 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 void HrSceneObject::AddCameraToScene()
 {
 	if (m_pCachedCamera)
-		HrDirector::Instance()->GetRenderModule()->AddViewPort(m_pCachedCamera->GetViewPort());
+	{
+		HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetViewPortsData()->AddViewPort(m_pCachedCamera->GetViewPort());
+	}
 }
 
-void HrSceneObject::AddLightToScene(const HrLightPtr& pLight)
+void HrSceneObject::AddLightToScene()
 {
-	if (m_pContainerNode->GetEnable())
+	if (m_pCachedLight)
 	{
-		HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetLightsData()->AddLight(pLight);
+		HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetLightsData()->AddLight(m_pCachedLight->GetLight());
 	}
 }
 

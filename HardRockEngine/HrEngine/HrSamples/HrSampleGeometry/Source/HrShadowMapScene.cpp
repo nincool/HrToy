@@ -46,7 +46,7 @@ void HrShadowMapScene::CreateSceneElements()
 
 
 	//Ìí¼ÓÉãÏñ»ú
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRenderTargetViewWidth(), HrContextConfig::Instance()->GetRenderTargetViewHeight(), 0);
+	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
 	AddNode(m_pSceneMainCamera);
 	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
 	//auto pCamera = m_pSceneMainCamera->GetSceneObject()->GetComponent<HrCameraComponet>()->GetCamera();

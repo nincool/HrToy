@@ -11,9 +11,10 @@ namespace Hr
 		enum class EnumSceneManagerType
 		{
 			SMT_NORMAL,
+			SMT_OCTREE
 		};
 	public:
-		HrSceneModule(EnumSceneManagerType sceneManagerType = EnumSceneManagerType::SMT_NORMAL);
+		HrSceneModule();
 		~HrSceneModule();
 
 		bool Update(float fDelta) override;
@@ -25,8 +26,16 @@ namespace Hr
 		void Destroy();
 
 		const HrScenePtr& GetRunningScene() const;
-
 		const HrRenderFrameParametersPtr& GetRenderFrameParameters();
+
+		void RenderVisibleObjects();
+
+		void DirtyScene();
+
+		//todo new 
+		void FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue);
+
+
 	private:
 		bool CreateSceneManager(EnumSceneManagerType sceneManagerType);
 	private:

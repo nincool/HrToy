@@ -39,6 +39,7 @@ namespace Hr
 	typedef KlayGE::float4 float4;
 
 	typedef KlayGE::AABBox AABBox;
+	typedef KlayGE::Frustum Frustum;
 
 //#endif // HR_MATH_SIMD
 

@@ -10,10 +10,6 @@ namespace Hr
 	{
 	public:
 		virtual ~HrRender(){};
-		/**
-		*	@Brief:  ´´½¨äÖÈ¾Æ÷[10/28/2015 By Hr]
-		*/
-		virtual bool Init() = 0;
 		
 		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) = 0;
 		

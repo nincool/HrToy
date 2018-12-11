@@ -9,11 +9,16 @@ using namespace Hr;
 HrResourceModule::HrResourceModule()
 {
 	m_pResourceManager = HrMakeSharedPtr<HrResourceManager>();
-	m_pResourceManager->InitResourceManager();
 }
 
 HrResourceModule::~HrResourceModule()
 {
+}
+
+bool HrResourceModule::InitComponent()
+{
+	m_pResourceManager->InitResourceManager();
+	return true;
 }
 
 HrTexturePtr HrResourceModule::RetriveTexture(const std::string& strFile, HrTexture::EnumTextureType type)
@@ -44,5 +49,31 @@ HrMaterialPtr HrResourceModule::MakeMaterial(const std::string& strFile, const H
 	}
 
 	return HrCheckPointerCast<HrMaterial>(pMat);
+}
+
+HrResource::EnumResourceType HrResourceModule::GetResourceType(const std::string& strName)
+{
+	if (strName == typeid(HrMaterial).name())
+	{
+		return HrResource::RT_MATERIAL;
+	}
+	else if (strName == typeid(HrRenderEffect).name())
+	{
+		return HrResource::RT_EFFECT;
+	}
+	else if (strName == typeid(HrMesh).name())
+	{
+		return HrResource::RT_MESH;
+	}
+	else if (strName == typeid(HrMeshModel).name())
+	{
+		return HrResource::RT_MESHMODEL;
+	}
+	else if (strName == typeid(HrPrefabData).name())
+	{
+		return HrResource::RT_PREFAB;
+	}
+
+	return HrResource::RT_UNKNOWN;
 }
 

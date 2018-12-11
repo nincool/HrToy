@@ -9,6 +9,29 @@ namespace Hr
 {
 	namespace HrMath
 	{
+		enum EnumVisibility
+		{
+			NV_UNKNOWN,
+			NV_NONE,
+			NV_PARTIAL,
+			NV_FULL,
+		};
+
+		inline EnumVisibility Map(KlayGE::BoundOverlap bo)
+		{
+			switch (bo)
+			{
+			case KlayGE::BO_No:
+				return NV_NONE;
+			case KlayGE::BO_Partial:
+				return NV_PARTIAL;
+			case KlayGE::BO_Yes:
+				return NV_FULL;
+			default:
+				return NV_NONE;
+			}
+		}
+
 		const float EPSILON = 0.0001f;
 
 		inline float PI() { return KlayGE::PI; }
@@ -252,6 +275,16 @@ namespace Hr
 			return KlayGE::MathLib::perspective_fov_lh(fov, aspect, nearPlane, farPlane);
 		}
 
+		inline float OrthoArea(Vector3 const& viewDir, const AABBox& aabb)
+		{
+			return KlayGE::MathLib::ortho_area(viewDir, aabb);
+		}
+
+		inline float PerspectiveArea(Vector3 const& viewDir, Matrix4 const& viewProj, AABBox const& aabbox)
+		{
+			return KlayGE::MathLib::perspective_area(viewDir, viewProj, aabbox);
+		}
+
 		inline Matrix4 Transpose(Matrix4 const & rhs)
 		{
 			return KlayGE::MathLib::transpose(rhs);
@@ -343,6 +376,11 @@ namespace Hr
 			return KlayGE::MathLib::transform_quat(v, quat);
 		}
 
+		inline AABBox TransformAABB(const AABBox& aabb, const Matrix4& mat)
+		{
+			return KlayGE::MathLib::transform_aabb(aabb, mat);
+		}
+
 		inline Matrix4 RotationAroundTarget(const Vector3& vTarget, const Quaternion& q)
 		{
 			Matrix4 mat1 = Translation(-vTarget);
@@ -370,6 +408,8 @@ namespace Hr
 		{
 			return SqrLength(v1 - v0) < fMaxDist * fMaxDist;
 		}
+
+		//
 	}
 }
 

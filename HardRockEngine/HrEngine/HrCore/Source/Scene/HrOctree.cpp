@@ -6,6 +6,7 @@ using namespace Hr;
 HrOctree::HrOctree()
 {
 	m_pRootNode = new HrOctNode(m_aabb, 1);
+	m_fThreshold = 0.0f;
 }
 
 HrOctree::~HrOctree()
@@ -15,11 +16,21 @@ HrOctree::~HrOctree()
 
 void HrOctree::InitOctree(const AABBox& aabb)
 {
-	
+	m_pRootNode->SetAABB(aabb);
 }
 
-void HrOctree::InsertOctNode(const HrRenderablePtr& pRenderable)
+void HrOctree::Clear()
 {
-	m_pRootNode->InsertChild(pRenderable, 16);
+	m_pRootNode->ClearChildren();
+}
+
+const AABBox& HrOctree::GetAABB()
+{
+	return m_pRootNode->GetAABB();
+}
+
+void HrOctree::WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode)
+{
+	m_pRootNode->WalkTree(pCamera, pSceneNode, m_fThreshold, m_sc_nMaxDepth);
 }
 

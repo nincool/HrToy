@@ -37,7 +37,7 @@ public:
 	void SetMainFrame(CMainFrame* pMainFrame);
 
 	//void OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo);
-	void OnSelectModel(const Hr::HrModelDataInfo* pModelDataInfo, Hr::HrSceneNodePtr& pSceneNode);
+	void OnSelectModel(const Hr::HrModelDataInfo* pModelDataInfo, Hr::HrSceneNode* pSceneNode);
 // Attributes
 public:
 	void SetVSDotNetLook(BOOL bSet)
@@ -81,7 +81,7 @@ protected:
 	CMainFrame* m_pMainFrame;
 
 	const Hr::HrModelDataInfo* m_pModelData;
-	Hr::HrSceneNodePtr m_pSceneNode;
+	Hr::HrSceneNode* m_pSceneNode;
 // Implementation
 public:
 	virtual ~CPropertiesWnd();

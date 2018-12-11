@@ -17,6 +17,12 @@ using namespace Hr;
 
 HrRenderable::HrRenderable()
 {	
+	m_pSceneObj = nullptr;
+}
+
+HrRenderable::HrRenderable(const HrSubMeshPtr& pSubMesh)
+{
+	m_pSubMesh = pSubMesh;
 }
 
 HrRenderable::~HrRenderable()
@@ -33,10 +39,10 @@ const HrRenderTechniquePtr& HrRenderable::GetRenderTechnique()
 	return m_pCurTechnique;
 }
 
-void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
-{
-	m_pSubMesh = pSubMesh;
-}
+//void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
+//{
+//	m_pSubMesh = pSubMesh;
+//}
 
 void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
@@ -145,5 +151,5 @@ void HrRenderable::UpdateRenderEffectParam()
 
 const AABBox& HrRenderable::GetAABBox()
 {
-	return m_aabb;
+	return m_pSubMesh->GetAABB();
 }

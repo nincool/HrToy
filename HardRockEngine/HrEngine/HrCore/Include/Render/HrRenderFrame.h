@@ -42,6 +42,7 @@ namespace Hr
 		const std::map<uint32, HrViewPortPtr>& GetAllViewPorts();
 
 		HrDepthStencilPtr GetDepthStencil();
+	
 	protected:
 		uint32 m_nWidth;
 		uint32 m_nHeight;

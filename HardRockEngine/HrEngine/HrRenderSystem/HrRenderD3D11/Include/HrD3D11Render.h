@@ -22,8 +22,6 @@ namespace Hr
 		~HrD3D11Render();
 
 	public:
-		virtual bool Init() override;
-
 		virtual void BindFrameBuffer(const HrRenderFramePtr& pRenderFrameBuffer) override;
 		
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
