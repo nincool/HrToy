@@ -17,8 +17,21 @@ namespace Hr
 
 	public:
 		virtual HrRenderPtr CreateRender() = 0;
-		
+		virtual HrRenderFramePtr CreateRenderFrame(uint32 nWidth, uint32 nHeight) = 0;
+		/*
+			@brief	render target [12/17/2018 By Hr]
+		*/
 		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) = 0;
+		/*
+			@brief	depth stencil [12/17/2018 By Hr]
+		*/
+		virtual HrDepthStencilPtr CreateDepthStencil(uint32 nWidth, uint32 nHeight) = 0;
+
+
+
+
+
+
 
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
 		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) = 0;
@@ -37,10 +50,10 @@ namespace Hr
 		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
 			, uint32 nHeight
 			, uint32 nNumMipMaps
-			, uint32 nArraySize
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
 			, uint32 nAccessHint
+			, uint32 nUsedFor
 			, EnumPixelFormat format) = 0;
 
 		virtual HrSamplerStatePtr CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc) = 0;

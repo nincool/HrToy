@@ -11,7 +11,7 @@ namespace Hr
 		HrOctreeSceneManager();
 		~HrOctreeSceneManager();
 
-		virtual void FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue) override;
+		virtual void FindRenderablesToQueue() override;
 	protected:
 		void BuildOctTree();
 		void RebuildOctree();

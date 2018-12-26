@@ -309,10 +309,14 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 		HRASSERT(nullptr, "AddMeshResource Error!");
 		return nullptr;
 	}
-
 	std::string strFileName = strFile.substr(strFile.rfind(HrFileUtils::m_s_strSeparator) + 1, strFile.size());
-	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateTexture2D(1, 1, 1, 1, 1, 0
-		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE, EnumPixelFormat::PF_R8G8B8A8_UINT);
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateTexture2D(1, 1 //Width Height
+		, 1 //MipMaps
+		, 1 //SampleCount
+		, 0 //SampleQuality
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, HrTexture::TUF_TEX_DEFAULT
+		, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
 	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
 	m_mapTextures2D.insert(std::make_pair(pTexture->GetHashID(), pTexture));

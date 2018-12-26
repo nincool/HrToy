@@ -47,8 +47,16 @@ namespace Hr
 			EAH_GPU_READ = 1 << 3,
 			EAH_GPU_WRITE = 1 << 4,
 		};
+
+		enum EnumTextureUsedFor
+		{
+			TUF_TEX_DEFAULT = 1 << 0,
+			TUF_TEX_RENDERTARGETVIEW = 1 << 1,
+			TUF_TEX_DEPTHSTENCILVIEW = 1 << 2,
+			TUF_TEX_SHADERRESOURCEVIEW = 1 << 3
+		};
 	public:
-		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint);
+		explicit HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint, uint32 nUsedFor);
 		virtual ~HrTexture();
 
 
@@ -92,6 +100,7 @@ namespace Hr
 		uint32 m_nSampleCount;
 		uint32 m_nSampleQuality;
 		uint32 m_nAccessHint;
+		uint32 m_nUsedFor;
 		EnumPixelFormat m_format;
 		EnumTextureUsage m_textureUsage;
 

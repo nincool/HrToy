@@ -101,12 +101,6 @@ void HrScene::Update(float fDelta)
 	m_pSceneRootNode->UpdateNode(fDelta);
 }
 
-void HrScene::FillRenderQueue(HrRenderQueuePtr& pRenderQueue)
-{
-	//²éÕÒ¿ÉÊÓ
-	m_pSceneRootNode->FindVisibleRenderable(pRenderQueue);
-}
-
 void HrScene::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
 {
 	m_pSceneRootNode->FindVisibleRenderables(pRenderQueueManager);

@@ -120,31 +120,6 @@ void HrSceneNode::OnEndRenderScene(const HrEventPtr& pEvent)
 
 }
 
-void HrSceneNode::FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue)
-{
-	if (m_pSceneObject)
-	{
-		const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
-		if (pRenderableCom)
-		{
-			const HrInstanceBatchComponentPtr pBatchCom = m_pSceneObject->GetComponent<HrInstanceBatchComponent>();
-			if (pBatchCom)
-			{
-				HrRenderablePtr pRenderable = pBatchCom->GetInstanceBatch();
-				pRenderQueue->AddRenderable(pRenderable);
-			}
-			else
-			{
-				pRenderQueue->AddRenderable(pRenderableCom->GetRenderable());
-			}
-		}
-	}
-	for (auto& item : m_vecChildrenNode)
-	{
-		item->FindVisibleRenderable(pRenderQueue);
-	}
-}
-
 void HrSceneNode::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
 {
 	if (m_pSceneObject->GetRenderableComponent())

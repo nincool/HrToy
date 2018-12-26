@@ -6,32 +6,32 @@
 
 namespace Hr
 {
-	struct SVertexStructP
+	struct SVertexStruct_P
 	{
-		SVertexStructP();
+		SVertexStruct_P();
 		float3 m_position;
-		static std::vector<HrVertexElement> m_s_vecVertexElementP;
+		static std::vector<HrVertexElement> m_s_vecVertexElement_P;
 	};
 
-	struct SVertexStructPC : public SVertexStructP
+	struct SVertexStruct_P_UV : public SVertexStruct_P
 	{
-		SVertexStructPC();
+		SVertexStruct_P_UV();
 		float2 m_tex;
-		static std::vector<HrVertexElement> m_s_vecVertexElementPC;
+		static std::vector<HrVertexElement> m_s_vecVertexElement_P_UV;
 	};
 
-	struct SVertexStructPN : public SVertexStructP
+	struct SVertexStruct_P_N : public SVertexStruct_P
 	{
-		SVertexStructPN();
+		SVertexStruct_P_N();
 		float3 m_normal;
-		static std::vector<HrVertexElement> m_s_vecVertexElementPN;
+		static std::vector<HrVertexElement> m_s_vecVertexElement_P_N;
 	};
 
-	struct SVertexStructPNC : public SVertexStructPN
+	struct SVertexStruct_P_N_UV : public SVertexStruct_P_N
 	{
-		SVertexStructPNC();
+		SVertexStruct_P_N_UV();
 		float2 m_tex;
-		static std::vector<HrVertexElement> m_s_vecVertexElementPNC;
+		static std::vector<HrVertexElement> m_s_vecVertexElement_P_N_UV;
 	};
 
 	class HR_CORE_API HrMeshModel : public HrResource

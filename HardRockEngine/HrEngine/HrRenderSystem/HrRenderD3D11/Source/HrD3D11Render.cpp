@@ -51,14 +51,14 @@ void HrD3D11Render::SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, cons
 	GetD3D11DeviceContext()->OMSetRenderTargets(1, pD3DRenderTargetView, pD3DDepthStencilView);
 }
 
-void HrD3D11Render::SetRenderTarget(int nRenderTargetCounts, const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil)
+void HrD3D11Render::SetRenderTarget(const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil)
 {
 	//todo cached
 	std::vector<ID3D11RenderTargetView*> vecD3DRenderTargets;
-	vecD3DRenderTargets.reserve(nRenderTargetCounts);
-	for (size_t i = 0; i < nRenderTargetCounts; ++i)
+	for (size_t i = 0; i < vecRenderTargers.size(); ++i)
 	{
-		vecD3DRenderTargets.push_back(HrCheckPointerCast<HrD3D11RenderTarget>(vecRenderTargers[i])->GetRenderTargetView().get());
+		if (vecRenderTargers[i])
+			vecD3DRenderTargets.push_back(HrCheckPointerCast<HrD3D11RenderTarget>(vecRenderTargers[i])->GetRenderTargetView().get());
 	}
 	ID3D11DepthStencilView* pD3DDepthStencilView = HrCheckPointerCast<HrD3D11DepthStencil>(pDepthStencil)->GetDepthStencilView().get();
 

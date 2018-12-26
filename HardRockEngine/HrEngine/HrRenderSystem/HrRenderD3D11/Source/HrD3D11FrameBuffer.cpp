@@ -14,14 +14,10 @@ using namespace Hr;
 using namespace DirectX;
 
 HrD3D11FrameBuffer::HrD3D11FrameBuffer(uint32 nWidth, uint32 nHeight) : HrRenderFrame(nWidth, nHeight)
-{
-
-}
+{}
 
 HrD3D11FrameBuffer::~HrD3D11FrameBuffer()
-{
-		
-}
+{}
 
 void HrD3D11FrameBuffer::AttachRenderTarget(EnumRenderTargetLayer attachLayer, HrRenderTargetPtr& pRenderTarget)
 {
@@ -35,6 +31,12 @@ void HrD3D11FrameBuffer::DetachRenderTarget(EnumRenderTargetLayer attachLayer)
 
 void HrD3D11FrameBuffer::OnBind(const HrRenderPtr& pRender)
 {
+	if (!m_pDepthStencil)
+	{
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW);
+	}
+
+	pRender->SetRenderTarget(m_arrRenderTargets, m_pDepthStencil);
 }
 
 void HrD3D11FrameBuffer::OnUnBind()
@@ -72,6 +74,14 @@ void HrD3D11FrameBuffer::ClearDepthStencil()
 void HrD3D11FrameBuffer::Present()
 {	
 }
+
+
+
+
+
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -199,7 +209,7 @@ void HrD3D11ScreenFrameBuffer::CreateDepthStencilView()
 {
 	if (!m_pDepthStencil)
 	{
-		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW);
 	}
 }
 
@@ -260,7 +270,7 @@ void HrD3D11DepthStencilFrameBuffer::CreateDepthStencilView()
 {
 	if (!m_pDepthStencil)
 	{
-		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW | HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW);
 		HrCheckPointerCast<HrD3D11DepthStencil>(m_pDepthStencil)->GetDepthStencilShaderResouceView();
 	}
 }
@@ -295,7 +305,6 @@ HrD3D11DeferredFrameBuffer::HrD3D11DeferredFrameBuffer(uint32 nWidth, uint32 nHe
 	CreateDepthStencilView();
 
 	m_clearColor = HrColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 }
 
 HrD3D11DeferredFrameBuffer::~HrD3D11DeferredFrameBuffer()
@@ -304,7 +313,7 @@ HrD3D11DeferredFrameBuffer::~HrD3D11DeferredFrameBuffer()
 
 void HrD3D11DeferredFrameBuffer::OnBind(const HrRenderPtr& pRender)
 {
-	pRender->SetRenderTarget(3, m_arrRenderTargets, m_pDepthStencil);
+	pRender->SetRenderTarget(m_arrRenderTargets, m_pDepthStencil);
 }
 
 void HrD3D11DeferredFrameBuffer::OnUnBind()
@@ -336,7 +345,7 @@ void HrD3D11DeferredFrameBuffer::CreateGBuffers()
 	//	, 1, 1, 0
 	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
 	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//	, HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW | HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW);
 	//m_pPositionSRV->CreateRenderTargetView();
 	//m_arrRenderTargets[RTL_0] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pPositionSRV->GetD3D11Texture());
 	//m_pPositionSRV->CreateShaderResourceView();
@@ -346,7 +355,7 @@ void HrD3D11DeferredFrameBuffer::CreateGBuffers()
 	//	, 1, 1, 0
 	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
 	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//	, HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW | HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW);
 	//m_pNormalSRV->CreateRenderTargetView();
 	//m_arrRenderTargets[RTL_1] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pNormalSRV->GetD3D11Texture()); //m_pPositionSRV->GetD3DRenderTargetView();
 	//m_pNormalSRV->CreateShaderResourceView();
@@ -356,7 +365,7 @@ void HrD3D11DeferredFrameBuffer::CreateGBuffers()
 	//	, 1, 1, 0
 	//	, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
 	//	, EnumPixelFormat::PF_R32G32B32A32_FLOAT
-	//	, HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW | HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW);
+	//	, HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW | HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW);
 	//m_pAlbedoSRV->CreateRenderTargetView();
 	//m_arrRenderTargets[RTL_2] = HrMakeSharedPtr<HrD3D11RenderTarget>(m_pAlbedoSRV->GetD3D11Texture()); //m_pAlbedoSRV->GetD3DRenderTargetView();
 	//m_pAlbedoSRV->CreateShaderResourceView();
@@ -370,7 +379,7 @@ void HrD3D11DeferredFrameBuffer::CreateDepthStencilView()
 {
 	if (!m_pDepthStencil)
 	{
-		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW);
+		m_pDepthStencil = HrMakeSharedPtr<HrD3D11DepthStencil>(m_nWidth, m_nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW);
 	}
 }
 

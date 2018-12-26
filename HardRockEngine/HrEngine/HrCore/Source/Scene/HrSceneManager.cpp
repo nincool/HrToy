@@ -77,9 +77,20 @@ void HrSceneManager::RenderScene()
 		return;
 	}
 
-	m_pRenderParameters->SetLightsData(m_pRunningScene->GetLightsData());
+	auto& pRenderModule = HrDirector::Instance()->GetRenderModule();
+	auto& vecViewPorts = m_pRunningScene->GetViewPortsData()->GetAllViewPorts();
+	for (auto& iteViewProt : vecViewPorts)
+	{
+		const HrViewPortPtr& pViewPort = iteViewProt.second;
+		m_pRenderParameters->SetCurViewPort(pViewPort);
 
-	HrDirector::Instance()->GetRenderModule()->RenderFrame();
+		//填充渲染队列
+		FindRenderablesToQueue();
+		//查找影响到的光源
+		FindEffectLights();
+
+		pRenderModule->RenderSceneView(pViewPort);
+	}
 }
 
 void HrSceneManager::Destroy()
@@ -97,21 +108,21 @@ const HrRenderFrameParametersPtr& HrSceneManager::GetRenderFrameParamPtr()
 	return m_pRenderParameters;
 }
 
-void HrSceneManager::RenderVisibleObjects()
+void HrSceneManager::RenderVisibleObjects(HrRenderProcessing* pProcessing)
 {
-	m_pRenderQueueManager->PrepareRenderQueue();
-	FindVisibleSceneNodes(m_pRenderParameters->GetActiveCamera(), m_pRenderQueueManager);
-	m_pRenderQueueManager->SortRenderQueue();
-
-	const HrRenderQueuePtr& pRenderQueue = m_pRenderQueueManager->GetRenderQueue(HrRenderQueue::RQ_QUEUE_MAIN);
-	pRenderQueue->RenderRenderables();
+	m_pRenderQueueManager->GetRenderQueue(HrRenderQueue::RQ_QUEUE_MAIN)->AcceptRenderProcessing(pProcessing);
 }
 
-void HrSceneManager::FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue)
+void HrSceneManager::FindRenderablesToQueue()
 {
 }
 
 void HrSceneManager::SetSceneDirty()
 {
 	m_bDirtyScene = true;
+}
+
+void HrSceneManager::FindEffectLights()
+{
+	m_pRenderParameters->SetLightsData(m_pRunningScene->GetLightsData());
 }

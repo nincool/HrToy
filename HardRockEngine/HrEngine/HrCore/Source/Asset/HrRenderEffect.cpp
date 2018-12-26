@@ -66,7 +66,7 @@ bool HrRenderEffect::LoadImpl()
 	{
 		int nErrorCode = d.GetParseError();
 		int nOffset = d.GetErrorOffset();
-		HRERROR("HrRenderEffect::LoadImpl Error! ParseJsonFile Error! ErrorCode[%d] Offset[%d]", nErrorCode, nOffset);
+		HRERROR("HrRenderEffect::LoadImpl Error! ParseJsonFile Error! ErrorCode[%d] Offset[%d] FileName[%s]", nErrorCode, nOffset, m_strFilePath.c_str());
 		return false;
 	}
 
@@ -626,12 +626,10 @@ const HrRenderTechniquePtr HrRenderEffect::GetTechniqueByName(const std::string&
 const HrRenderEffectParameterPtr HrRenderEffect::GetParameterByName(const std::string& strParamName)
 {
 	size_t const nHashName = HrHashValue(strParamName);
-	for (const auto& item : m_mapRenderEffectParameters)
+	auto& iteParam = m_mapRenderEffectParameters.find(nHashName);
+	if (iteParam != m_mapRenderEffectParameters.end())
 	{
-		if (item.first == nHashName)
-		{
-			return item.second;
-		}
+		return iteParam->second;
 	}
 
 	return nullptr;

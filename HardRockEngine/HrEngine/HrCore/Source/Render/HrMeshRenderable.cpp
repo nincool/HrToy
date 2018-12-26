@@ -10,10 +10,6 @@
 
 using namespace Hr;
 
-HrStaticMeshRenderable::HrStaticMeshRenderable()
-{
-}
-
 HrStaticMeshRenderable::HrStaticMeshRenderable(const HrSubMeshPtr& pSubMesh) : HrRenderable(pSubMesh)
 {
 }
@@ -23,17 +19,17 @@ HrStaticMeshRenderable::~HrStaticMeshRenderable()
 
 }
 
-const HrRenderLayoutPtr& HrStaticMeshRenderable::GetRenderLayout()
-{
-	if (m_pSubMesh != nullptr)
-	{
-		return m_pSubMesh->GetRenderLayout();
-	}
-	else
-	{
-		TRE("HrStaticMeshRenderable::GerRenderLayout Error!");
-	}
-}
+//const HrRenderLayoutPtr& HrStaticMeshRenderable::GetRenderLayout()
+//{
+//	if (m_pSubMesh != nullptr)
+//	{
+//		return m_pSubMesh->GetRenderLayout();
+//	}
+//	else
+//	{
+//		TRE("HrStaticMeshRenderable::GerRenderLayout Error!");
+//	}
+//}
 
 
 
@@ -41,27 +37,27 @@ const HrRenderLayoutPtr& HrStaticMeshRenderable::GetRenderLayout()
 //
 ////////////////////////////////////////////////////
 
-HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
-{
-	m_pSubMesh = nullptr;
-}
-
-HrSkinnedMeshRenderable::~HrSkinnedMeshRenderable()
-{
-	m_pSubMesh = nullptr;
-}
-
-const HrRenderLayoutPtr& HrSkinnedMeshRenderable::GetRenderLayout()
-{
-	if (m_pSubMesh != nullptr)
-	{
-		return m_pSubMesh->GetRenderLayout();
-	}
-	else
-	{
-		TRE("HrSkinnedMeshRenderable::GerRenderLayout Error!");
-	}
-}
+//HrSkinnedMeshRenderable::HrSkinnedMeshRenderable()
+//{
+//	m_pSubMesh = nullptr;
+//}
+//
+//HrSkinnedMeshRenderable::~HrSkinnedMeshRenderable()
+//{
+//	m_pSubMesh = nullptr;
+//}
+//
+//const HrRenderLayoutPtr& HrSkinnedMeshRenderable::GetRenderLayout()
+//{
+//	if (m_pSubMesh != nullptr)
+//	{
+//		return m_pSubMesh->GetRenderLayout();
+//	}
+//	else
+//	{
+//		TRE("HrSkinnedMeshRenderable::GerRenderLayout Error!");
+//	}
+//}
 
 
 

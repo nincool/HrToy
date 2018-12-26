@@ -29,24 +29,16 @@ bool HrD3D11DepthStencil::CreateDepthStencilView()
 {
 	m_pTexDepthStencilView = HrMakeSharedPtr<HrD3D11Texture2D>(m_nWidth
 		, m_nHeight
-		, 1
-		, 1
-		, 0
+		, 1, 1, 0
 		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, m_format
-		, m_texD3DUsage);
-	m_pTexDepthStencilView->CreateDepthStencilView();
+		, m_texD3DUsage
+		, m_format);
 
 	return true;
 }
 
 const ID3D11ShaderResourceViewPtr& HrD3D11DepthStencil::GetDepthStencilShaderResouceView()
 {
-	if (!m_pTexDepthStencilView->GetD3D11ShaderResourceView())
-	{
-		m_pTexDepthStencilView->CreateShaderResourceView();
-	}
-
 	return m_pTexDepthStencilView->GetD3D11ShaderResourceView();
 }
 

@@ -14,9 +14,13 @@ namespace Hr
 
 	public:
 		virtual HrRenderPtr CreateRender() override;
-		
-		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
+		virtual HrRenderFramePtr CreateRenderFrame(uint32 nWidth, uint32 nHeight) override;
 
+		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
+		virtual HrDepthStencilPtr CreateDepthStencil(uint32 nWidth, uint32 nHeight) override;
+
+
+		
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		virtual HrRenderFramePtr CreateDepthStencilFrameBuffer(uint32 nWidth, uint32 nHeight) override;
 		virtual HrRenderFramePtr CreateDeferredFrameBuffer(uint32 nWidth, uint32 nHeight, const HrDeferredGBufferDataPtr& pDeferredGBufferData) override;
@@ -34,10 +38,10 @@ namespace Hr
 		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
 			, uint32 nHeight
 			, uint32 nNumMipMaps
-			, uint32 nArraySize
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
 			, uint32 nAccessHint
+			, uint32 texUsedFor
 			, EnumPixelFormat format) override;
 
 

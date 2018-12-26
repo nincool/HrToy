@@ -13,6 +13,7 @@
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11DepthStencilState.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11BlendState.h"
 #include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11RasterizerState.h"
+#include "HrRenderSystem/HrRenderD3D11/Include/HrD3D11DepthStencil.h"
 #include "HrCore/Include/Render/HrVertex.h"
 #include <boost/cast.hpp>
 
@@ -30,13 +31,23 @@ HrD3D11RenderFactory::~HrD3D11RenderFactory()
 
 HrRenderPtr HrD3D11RenderFactory::CreateRender()
 {
-	return std::static_pointer_cast<HrRender>(HrMakeSharedPtr<HrD3D11Render>());
+	return HrCheckPointerCast<HrRender>(HrMakeSharedPtr<HrD3D11Render>());
+}
+
+HrRenderFramePtr HrD3D11RenderFactory::CreateRenderFrame(uint32 nWidth, uint32 nHeight)
+{
+	return HrCheckPointerCast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11FrameBuffer>(nWidth, nHeight));
 }
 
 HrRenderTargetPtr HrD3D11RenderFactory::CreateRenderTarget(const HrTexturePtr& pTexture)
 {
-	//return std::static_pointer_cast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderTarget>());
-	return nullptr;
+	HrD3D11Texture2DPtr& pD3DTexture2D = HrCheckPointerCast<HrD3D11Texture2D>(pTexture);
+	return HrCheckPointerCast<HrRenderTarget>(HrMakeSharedPtr<HrD3D11RenderTarget>(pD3DTexture2D));
+}
+
+HrDepthStencilPtr HrD3D11RenderFactory::CreateDepthStencil(uint32 nWidth, uint32 nHeight)
+{
+	return HrMakeSharedPtr<HrD3D11DepthStencil>(nWidth, nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW);;
 }
 
 HrRenderFramePtr HrD3D11RenderFactory::CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight)
@@ -86,13 +97,13 @@ HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler(const std::string
 HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
 	, uint32 nHeight
 	, uint32 nNumMipMaps
-	, uint32 nArraySize
 	, uint32 nSampleCount
 	, uint32 nSampleQuality
 	, uint32 nAccessHint
+	, uint32 texUsedFor
 	, EnumPixelFormat format)
 {
-	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, format);
+	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, texUsedFor, format);
 }
 
 HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc)
@@ -147,5 +158,4 @@ HrRasterizerStatePtr HrD3D11RenderFactory::CreateRasterizerState(HrRasterizerSta
 		return pRasterizerState;
 	}	
 }
-
 

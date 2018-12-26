@@ -8,17 +8,22 @@
 #include "Render/HrRenderFactory.h"
 #include "Render/HrRenderFrame.h"
 #include "Render/HrRender.h"
+#include "Render/HrRenderable.h"
 #include "Render/HrViewPort.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFrameParameters.h"
 #include "Scene/HrScene.h"
+#include "Scene/HrSceneNode.h"
+#include "Scene/HrSceneObject.h"
+#include "Scene/HrSceneObjectComponent.h"
 
 
 using namespace Hr;
 
 HrRenderModule::HrRenderModule(const std::string& strRenderModule)
 {
-	this->CreateRenderFactory(strRenderModule);
+	CreateRenderFactory(strRenderModule);
+	m_pRender = m_pRenderFactory->CreateRender();
 }
 
 HrRenderModule::~HrRenderModule()
@@ -51,72 +56,62 @@ const HrRenderFactoryPtr& HrRenderModule::GetRenderFactory() const
 
 bool HrRenderModule::InitComponent()
 {
-	m_pRender = m_pRenderFactory->CreateRender();
 	m_pForwardRenderSystem = HrMakeSharedPtr<HrForwardRenderSystem>();
 	m_pDeferredRenderSystem = HrMakeSharedPtr<HrDeferredRenderSystem>();
-
-	m_pScreenFrameBuffer = m_pRenderFactory->CreateScreenRenderFrameBuffer(HrSingleTon<HrContextConfig>::Instance()->GetRTVWidth()
-		, HrSingleTon<HrContextConfig>::Instance()->GetRTVHeight());
 
 	return true;
 }
 
+const HrRenderSystemPtr& HrRenderModule::GetCurRenderSystem() const
+{
+	return m_pCurRenderSystem;
+}
+
 void HrRenderModule::BindFrameBuffer(const HrRenderFramePtr& pRenderFrame)
 {
-	if (pRenderFrame == nullptr)
-	{
-		if (m_pCurFrameBuffer != m_pScreenFrameBuffer)
-		{
-			m_pCurFrameBuffer = m_pScreenFrameBuffer;
-			m_pRender->BindFrameBuffer(m_pCurFrameBuffer);
-		}
-	}
-	else if (m_pCurFrameBuffer != pRenderFrame)
+	if (m_pCurFrameBuffer != pRenderFrame)
 	{
 		m_pCurFrameBuffer = pRenderFrame;
 		m_pRender->BindFrameBuffer(pRenderFrame);
 	}
 }
 
-void HrRenderModule::ClearRenderFame()
+void HrRenderModule::ClearRenderFrame()
 {
 	m_pCurFrameBuffer->ClearTarget();
 	m_pCurFrameBuffer->ClearDepthStencil();
 }
 
-void HrRenderModule::RenderFrame()
+void HrRenderModule::RenderSceneView(const HrViewPortPtr& pViewPort)
 {
-	auto& pSceneModel = HrDirector::Instance()->GetSceneModule();
-	auto& pRenderParam = pSceneModel->GetRenderFrameParameters();
-	auto& vecViewPorts = pSceneModel->GetRunningScene()->GetViewPortsData()->GetAllViewPorts();
-	for (auto& iteViewProt : vecViewPorts)
-	{
-		const HrViewPortPtr& pViewPort = iteViewProt.second;
-		const HrCameraPtr& pCamera = pViewPort->GetCamera();
-		pRenderParam->SetActiveCamera(pCamera);
-		m_pRender->SetViewPort(pViewPort);
+	m_pRender->SetViewPort(pViewPort);
 
-		switch (pCamera->GetRenderPath())
-		{
-		case RP_FORWARD:
-			RenderFrameForward();
-			break;
-		case RP_DEFERRED:
-			RenderFrameDeferred();
-			break;
-		default:
-			break;
-		}
-	}
+	const HrCameraPtr& pCamera = pViewPort->GetCamera();
+	RenderFrameForward();
+	//RenderFrameDeferred();
+
+	//switch (pCamera->GetRenderPath())
+	//{
+	//case RP_FORWARD:
+	//	RenderFrameForward();
+	//	break;
+	//case RP_DEFERRED:
+	//	RenderFrameDeferred();
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void HrRenderModule::RenderFrameForward()
 {
+	m_pCurRenderSystem = m_pForwardRenderSystem;
 	m_pForwardRenderSystem->StartRenderProcess();
 }
 
 void HrRenderModule::RenderFrameDeferred()
 {
+	m_pCurRenderSystem = m_pDeferredRenderSystem;
 	m_pDeferredRenderSystem->StartRenderProcess();
 }
 
@@ -125,14 +120,25 @@ void HrRenderModule::Present()
 	m_pCurFrameBuffer->Present();
 }
 
+//void HrRenderModule::VisitRenderableNode(const HrSceneNodePtr& pNode)
+//{
+//	auto& pRenderParam = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters();
+//	pRenderParam->SetCurrentSceneNode(pNode);
+//
+//	if (m_pCurRenderSystem == m_pForwardRenderSystem)
+//	{
+//		pNode->GetSceneObject()->GetRenderableComponent()->GetRenderable()->Render();
+//	}
+//	else if (m_pCurRenderSystem == m_pDeferredRenderSystem)
+//	{
+//		
+//	}
+//}
+
 void HrRenderModule::DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
 {
 	m_pRender->Render(pRenderTechnique, pRenderLayout);
 }
-
-
-
-
 
 
 
@@ -234,7 +240,7 @@ void HrRenderModule::AddViewPort(const HrViewPortPtr& pViewPort)
 
 const HrRenderFramePtr& HrRenderModule::GetRenderFrameBuffer() const
 {
-	return m_pScreenFrameBuffer;
+	return m_pCurFrameBuffer;
 }
 
 //void HrRenderModule::SetViewPort(const HrViewPortPtr& pViewPort)

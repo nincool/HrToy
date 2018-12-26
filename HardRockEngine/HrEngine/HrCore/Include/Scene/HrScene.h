@@ -59,7 +59,7 @@ namespace Hr
 		virtual void ClearSceneNode();
 
 		virtual void Update(float fDelta);
-		virtual void FillRenderQueue(HrRenderQueuePtr& pRenderQueue);
+
 		virtual void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
 
 		const HrSceneNodePtr& GetRootNode();

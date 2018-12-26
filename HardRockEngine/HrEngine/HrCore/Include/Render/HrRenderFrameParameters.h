@@ -16,11 +16,11 @@ namespace Hr
 
 		//todo
 		void SetLightsData(const HrSceneLightDataPtr& pLightData);
-		void SetActiveCamera(const HrCameraPtr& pCamera);
 		const HrCameraPtr& GetActiveCamera();
+		void SetCurViewPort(const HrViewPortPtr& pViewPort);
+		const HrViewPortPtr& GetViewPort();
 
 		void SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode);
-		void SetCurrentRenderable(const HrRenderablePtr pRenderable);
 
 		const Matrix4& GetViewProjMatrix() const;
 
@@ -76,9 +76,9 @@ namespace Hr
 	private:
 		HrSceneLightDataPtr m_pLightsData;
 
-		HrCameraPtr m_pActiveCamera;
+		HrViewPortPtr m_pCurViewPort;
 		HrRenderablePtr m_pRenderable;
-		HrSceneNode* m_pSceneNode;
+		HrSceneNodePtr m_pCurSceneNode;
 		
 	};
 }

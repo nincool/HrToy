@@ -25,6 +25,9 @@ namespace Hr
 		virtual void ClearDepthStencil() override;
 
 		virtual void Present() override;
+
+	protected:
+
 	};
 
 	/////////////////////////////////////////////////////////////////
@@ -101,3 +104,5 @@ namespace Hr
 
 
 #endif
+
+

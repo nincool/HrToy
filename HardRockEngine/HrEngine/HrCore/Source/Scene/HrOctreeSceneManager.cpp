@@ -6,6 +6,7 @@
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrCamera.h"
+#include "Render/HrRenderFrameParameters.h"
 
 using namespace Hr;
 
@@ -21,16 +22,21 @@ HrOctreeSceneManager::~HrOctreeSceneManager()
 	SAFE_DELETE(m_pOctree);
 }
 
-void HrOctreeSceneManager::FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue)
+void HrOctreeSceneManager::FindRenderablesToQueue()
 {
+	m_pRenderQueueManager->PrepareRenderQueue();
+
+	auto& pCamera = m_pRenderParameters->GetActiveCamera(); 
 	WalkOctree(pCamera);
 	for (size_t i = 0; i < m_vecRenderableSceneNodes.size(); ++i)
 	{
 		if (m_vecRenderableSceneNodes[i]->GetFrustumVisible() == HrMath::NV_FULL)
 		{
-			pRenderQueue->AddRenderableNode(m_vecRenderableSceneNodes[i]);
+			m_pRenderQueueManager->AddRenderableNode(m_vecRenderableSceneNodes[i]);
 		}
 	}
+
+	m_pRenderQueueManager->SortRenderQueue();
 }
 
 void HrOctreeSceneManager::WalkOctree(const HrCameraPtr& pCamera)

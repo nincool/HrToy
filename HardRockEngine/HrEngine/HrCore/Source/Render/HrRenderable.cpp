@@ -15,14 +15,11 @@
 
 using namespace Hr;
 
-HrRenderable::HrRenderable()
-{	
-	m_pSceneObj = nullptr;
-}
-
 HrRenderable::HrRenderable(const HrSubMeshPtr& pSubMesh)
 {
 	m_pSubMesh = pSubMesh;
+
+	SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 }
 
 HrRenderable::~HrRenderable()
@@ -31,25 +28,22 @@ HrRenderable::~HrRenderable()
 
 const HrRenderLayoutPtr& HrRenderable::GetRenderLayout()
 {
-	return nullptr;
+	return m_pSubMesh->GetRenderLayout();
 }
 
-const HrRenderTechniquePtr& HrRenderable::GetRenderTechnique()
+const HrRenderTechniquePtr& HrRenderable::GetTechnique()
 {
-	return m_pCurTechnique;
+	return m_pTechnique;
 }
-
-//void HrRenderable::SetSubMesh(const HrSubMeshPtr& pSubMesh)
-//{
-//	m_pSubMesh = pSubMesh;
-//}
 
 void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 {
-	m_pRenderEffect = pRenderEff;
-
-	m_pCurTechnique = m_pRenderEffect->GetBestTechnique(m_pSubMesh->GetRenderLayout());
-	BOOST_ASSERT(m_pCurTechnique);
+	if (m_pRenderEffect != pRenderEff)
+	{
+		m_pRenderEffect = pRenderEff;
+		m_pTechnique = m_pRenderEffect->GetBestTechnique(m_pSubMesh->GetRenderLayout());
+		BOOST_ASSERT(m_pTechnique);
+	}
 }
 
 const HrRenderEffectPtr& HrRenderable::GetRenderEffect() const
@@ -68,24 +62,11 @@ const HrSubMeshPtr& HrRenderable::GetSubMesh()
 	return m_pSubMesh;
 }
 
-void HrRenderable::SetAttachSceneObject(HrSceneObject* pSceneObj)
-{
-	m_pSceneObj = pSceneObj;
-}
-
-HrSceneObject* HrRenderable::GetAttachSceneObject() const
-{
-	return m_pSceneObj;
-}
-
-void HrRenderable::Render(const HrRenderTechniquePtr& pRenderTech)
+void HrRenderable::Render()
 {
 	OnRenderBegin();
 
-	if (pRenderTech)
-		HrDirector::Instance()->GetRenderModule()->DoRender(pRenderTech, GetRenderLayout());
-	else
-		HrDirector::Instance()->GetRenderModule()->DoRender(GetRenderTechnique(), GetRenderLayout());
+	HrDirector::Instance()->GetRenderModule()->DoRender(GetTechnique(), GetRenderLayout());
 
 	OnRenderEnd();
 }
@@ -101,7 +82,7 @@ void HrRenderable::OnRenderEnd()
 
 bool HrRenderable::CheckRenderLayoutMatchShader()
 {
-	if (m_pSubMesh && m_pCurTechnique)
+	if (m_pSubMesh && m_pTechnique)
 	{
 		std::vector<std::pair<std::string, uint32> > vecInputSemantics;
 		auto vecVertexStreams = m_pSubMesh->GetRenderLayout()->GetVertexStreams();
@@ -153,3 +134,4 @@ const AABBox& HrRenderable::GetAABBox()
 {
 	return m_pSubMesh->GetAABB();
 }
+

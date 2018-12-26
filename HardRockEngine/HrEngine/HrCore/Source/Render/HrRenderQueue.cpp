@@ -2,9 +2,11 @@
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrSceneModule.h"
 #include "Kernel/HrLog.h"
+#include "Kernel/HrRenderModule.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrRenderProcessing.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrTransform.h"
@@ -21,8 +23,6 @@ HrRenderQueue::~HrRenderQueue()
 void HrRenderQueue::ClearRenderQueue()
 {
 	m_vecRenderableNodes.clear();
-
-	m_vecRenderables.clear();
 }
 
 void HrRenderQueue::AddRenderableSceneNode(const HrSceneNodePtr& pSceneNode)
@@ -32,7 +32,7 @@ void HrRenderQueue::AddRenderableSceneNode(const HrSceneNodePtr& pSceneNode)
 
 void HrRenderQueue::Sort()
 {
-	HRLOG("RenderQueue::Sort RenderQueue's size [%d]", m_vecRenderableNodes.size());
+	//HRLOG("RenderQueue::Sort RenderQueue's size [%d]", m_vecRenderableNodes.size());
 	if (m_vecRenderableNodes.empty())
 	{
 		return;
@@ -73,26 +73,21 @@ void HrRenderQueue::Sort()
 	m_vecRenderableNodes.swap(vecSortedNodes);
 }
 
+//void HrRenderQueue::RenderRenderables()
+//{
+//	auto& pRenderModule = HrDirector::Instance()->GetRenderModule();
+//	for (const auto& iteNode : m_vecRenderableNodes)
+//	{
+//		pRenderModule->VisitRenderableNode(iteNode);
+//	}
+//}
 
-
-
-
-void HrRenderQueue::AddRenderable(const HrRenderablePtr& pRenderable)
-{
-	m_vecRenderables.push_back(pRenderable);
-}
-
-const std::vector<HrRenderablePtr>& HrRenderQueue::GetRenderables()
-{
-	return m_vecRenderables;
-}
-
-void HrRenderQueue::RenderRenderables()
+void HrRenderQueue::AcceptRenderProcessing(HrRenderProcessing* pProcessing)
 {
 	for (const auto& iteNode : m_vecRenderableNodes)
 	{
-		HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->SetCurrentRenderable(iteNode->GetSceneObject()->GetRenderableComponent()->GetRenderable());
-		iteNode->GetSceneObject()->GetRenderableComponent()->GetRenderable()->Render();
+		HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->SetCurrentSceneNode(iteNode);
+		pProcessing->VisitRenderable(iteNode->GetSceneObject()->GetRenderableComponent()->GetRenderable());
 	}
 }
 

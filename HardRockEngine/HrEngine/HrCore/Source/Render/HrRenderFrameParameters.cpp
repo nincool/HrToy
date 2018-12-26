@@ -1,6 +1,7 @@
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrCamera.h"
+#include "Render/HrViewPort.h"
 #include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrTransform.h"
@@ -11,8 +12,6 @@ using namespace Hr;
 
 HrRenderFrameParameters::HrRenderFrameParameters()
 {
-	m_pActiveCamera = nullptr;
-
 	DirtyWorldMatrix();
 	DirtyViewMatrix();
 
@@ -25,15 +24,9 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 
 void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode)
 {
-
-}
-
-void HrRenderFrameParameters::SetCurrentRenderable(const HrRenderablePtr pRenderable)
-{
-	m_pRenderable = pRenderable;
-	//todo 
-	m_pSceneNode = const_cast<HrSceneNode*>(m_pRenderable->GetAttachSceneObject()->GetSceneNode());
-
+	m_pCurSceneNode = pSceneNode;
+	m_pRenderable = pSceneNode->GetSceneObject()->GetRenderableComponent()->GetRenderable();
+	
 	DirtyWorldMatrix();
 }
 
@@ -43,22 +36,27 @@ void HrRenderFrameParameters::SetLightsData(const HrSceneLightDataPtr& pLightDat
 		m_pLightsData = pLightData;
 }
 
-void HrRenderFrameParameters::SetActiveCamera(const HrCameraPtr& pCamera)
+const HrCameraPtr& HrRenderFrameParameters::GetActiveCamera()
 {
-	if (m_pActiveCamera != pCamera)
+	return m_pCurViewPort->GetCamera();
+}
+
+void HrRenderFrameParameters::SetCurViewPort(const HrViewPortPtr& pViewPort)
+{
+	if (m_pCurViewPort != pViewPort)
 	{
-		m_pActiveCamera = pCamera;
+		m_pCurViewPort = pViewPort;
 		DirtyViewMatrix();
 	}
-	else if (m_pActiveCamera->ViewProjDirty())
+	else if (m_pCurViewPort->GetCamera()->ViewProjDirty())
 	{
 		DirtyViewMatrix();
 	}
 }
 
-const HrCameraPtr& HrRenderFrameParameters::GetActiveCamera()
+const HrViewPortPtr& HrRenderFrameParameters::GetViewPort()
 {
-	return m_pActiveCamera;
+	return m_pCurViewPort;
 }
 
 const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
@@ -66,7 +64,7 @@ const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 	if (m_bWorldMatrixDirty)
 	{
 		m_bWorldMatrixDirty = false;
-		m_worldMatrix = m_pSceneNode->GetTransform()->GetWorldMatrix();
+		m_worldMatrix = m_pCurSceneNode->GetTransform()->GetWorldMatrix();
 	}
 	return m_worldMatrix;
 }
@@ -82,14 +80,14 @@ const Matrix4& HrRenderFrameParameters::GetInverseWroldMatrix()
 
 const Matrix4& HrRenderFrameParameters::GetViewProjMatrix() const
 {
-	return m_pActiveCamera->GetViewProjMatrix();
+	return m_pCurViewPort->GetCamera()->GetViewProjMatrix();
 }
 
 const Matrix4& HrRenderFrameParameters::GetWorldViewProjMatrix()
 {
 	if (m_bWorldViewProjMatrixDirty)
 	{
-		m_worldViewProjMatrix = GetWorldMatrix() * m_pActiveCamera->GetViewProjMatrix();
+		m_worldViewProjMatrix = GetWorldMatrix() * m_pCurViewPort->GetCamera()->GetViewProjMatrix();
 		m_bWorldViewProjMatrixDirty = false;
 	}
 	
@@ -134,7 +132,7 @@ const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
 	{
-		m_cameraPosition = m_pActiveCamera->GetEyePos();
+		m_cameraPosition = m_pCurViewPort->GetCamera()->GetEyePos();
 		m_bCameraDirty = false;
 	}
 	return m_cameraPosition;

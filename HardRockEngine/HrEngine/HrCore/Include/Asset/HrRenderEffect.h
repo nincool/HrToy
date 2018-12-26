@@ -52,7 +52,7 @@ namespace Hr
 		
 		std::unordered_map<std::string, HrShaderPtr> m_mapVertexShaders;
 		std::unordered_map<std::string, HrShaderPtr> m_mapPixelShaders;
-		//std::vector<HrShaderPtr> m_vecVertexShaders;
+
 		std::vector<HrShaderPtr> m_vecPixelShaders;
 
 		std::vector<HrRenderTechniquePtr> m_vecRenderTechnique;

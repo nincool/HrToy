@@ -64,15 +64,10 @@ void HrSceneModule::StopScene()
 	m_pSceneManager->StopScene();
 }
 
-
-
 void HrSceneModule::RenderScene()
 {
 	m_pSceneManager->RenderScene();
 }
-
-
-
 
 void HrSceneModule::Destroy()
 {
@@ -89,18 +84,18 @@ const HrRenderFrameParametersPtr& HrSceneModule::GetRenderFrameParameters()
 	return m_pSceneManager->GetRenderFrameParamPtr();
 }
 
-void HrSceneModule::FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue)
-{
-	
-}
-
 void HrSceneModule::DirtyScene()
 {
 	m_pSceneManager->SetSceneDirty();
 }
 
-void HrSceneModule::RenderVisibleObjects()
+void HrSceneModule::FindRenderablesToQueue(const HrCameraPtr& pCamera)
 {
-	m_pSceneManager->RenderVisibleObjects();
+	m_pSceneManager->FindRenderablesToQueue();
+}
+
+void HrSceneModule::RenderVisibleObjects(HrRenderProcessing* pProcessing)
+{
+	m_pSceneManager->RenderVisibleObjects(pProcessing);
 }
 

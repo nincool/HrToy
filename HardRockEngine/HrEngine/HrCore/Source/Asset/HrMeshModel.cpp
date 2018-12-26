@@ -21,44 +21,44 @@
 
 using namespace Hr;
 
-std::vector<HrVertexElement> SVertexStructP::m_s_vecVertexElementP;
-std::vector<HrVertexElement> SVertexStructPC::m_s_vecVertexElementPC;
-std::vector<HrVertexElement> SVertexStructPN::m_s_vecVertexElementPN;
-std::vector<HrVertexElement> SVertexStructPNC::m_s_vecVertexElementPNC;
+std::vector<HrVertexElement> SVertexStruct_P::m_s_vecVertexElement_P;
+std::vector<HrVertexElement> SVertexStruct_P_UV::m_s_vecVertexElement_P_UV;
+std::vector<HrVertexElement> SVertexStruct_P_N::m_s_vecVertexElement_P_N;
+std::vector<HrVertexElement> SVertexStruct_P_N_UV::m_s_vecVertexElement_P_N_UV;
 
-SVertexStructP::SVertexStructP() : m_position(float3::Zero())
+SVertexStruct_P::SVertexStruct_P() : m_position(float3::Zero())
 {
-	if (m_s_vecVertexElementP.empty())
+	if (m_s_vecVertexElement_P.empty())
 	{
-		m_s_vecVertexElementP.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElement_P.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 	}
 }
 
-SVertexStructPC::SVertexStructPC() : m_tex(float2::Zero())
+SVertexStruct_P_UV::SVertexStruct_P_UV() : m_tex(float2::Zero())
 {
-	if (m_s_vecVertexElementPC.empty())
+	if (m_s_vecVertexElement_P_UV.empty())
 	{
-		m_s_vecVertexElementPC.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-		m_s_vecVertexElementPC.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+		m_s_vecVertexElement_P_UV.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElement_P_UV.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 	}
 }
 
-SVertexStructPN::SVertexStructPN() : m_normal(float3::Zero())
+SVertexStruct_P_N::SVertexStruct_P_N() : m_normal(float3::Zero())
 {
-	if (m_s_vecVertexElementPN.empty())
+	if (m_s_vecVertexElement_P_N.empty())
 	{
-		m_s_vecVertexElementPN.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-		m_s_vecVertexElementPN.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+		m_s_vecVertexElement_P_N.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElement_P_N.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	}
 }
 
-SVertexStructPNC::SVertexStructPNC() : m_tex(float2(0.0f, 0.0f))
+SVertexStruct_P_N_UV::SVertexStruct_P_N_UV() : m_tex(float2(0.0f, 0.0f))
 {
-	if (m_s_vecVertexElementPNC.empty())
+	if (m_s_vecVertexElement_P_N_UV.empty())
 	{
-		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
-		m_s_vecVertexElementPNC.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 	}
 }
 
@@ -131,7 +131,7 @@ void HrMeshModelQuadP::CreateQuadMesh()
 			float fHalfWidth = m_fWidth / 2;
 			float fHalfHeight = m_fHeight / 2;
 
-			SVertexStructP vertexData[4];
+			SVertexStruct_P vertexData[4];
 			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
 			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
 			vertexData[2].m_position = float3(fHalfWidth, -fHalfHeight, 0);
@@ -141,7 +141,7 @@ void HrMeshModelQuadP::CreateQuadMesh()
 			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
 				, sizeof(vertexData) 
 				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-				, SVertexStructP::m_s_vecVertexElementP);
+				, SVertexStruct_P::m_s_vecVertexElement_P);
 		}
 
 		{
@@ -159,6 +159,7 @@ void HrMeshModelQuadP::CreateQuadMesh()
 		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
 		//todo
 		pSubMesh->SetMaterial(pMaterial);
+		//todo aabb
 	}
 }
 
@@ -190,7 +191,7 @@ void HrMeshModelQuadPN::CreateQuadMesh()
 			float fHalfWidth = m_fWidth / 2;
 			float fHalfHeight = m_fHeight / 2;
 
-			SVertexStructPN vertexData[4];
+			SVertexStruct_P_N vertexData[4];
 			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
 			vertexData[0].m_normal = float3(0, 0, -1);
 			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
@@ -204,7 +205,7 @@ void HrMeshModelQuadPN::CreateQuadMesh()
 			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
 				, sizeof(vertexData)
 				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-				, SVertexStructPN::m_s_vecVertexElementPN);
+				, SVertexStruct_P_N::m_s_vecVertexElement_P_N);
 
 			pSubMesh->SetMeshAABB(AABBox(Vector3(-fHalfWidth, -fHalfHeight, 0), Vector3(fHalfWidth, fHalfHeight, 0)));
 		}
@@ -255,7 +256,7 @@ void HrMeshModelQuadPNC::CreateQuadMesh()
 			float fHalfWidth = m_fWidth / 2;
 			float fHalfHeight = m_fHeight / 2;
 
-			SVertexStructPNC vertexData[4];
+			SVertexStruct_P_N_UV vertexData[4];
 			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
 			vertexData[0].m_tex = float2(0, 0);
 			vertexData[0].m_normal = float3(0, 0, -1);
@@ -273,7 +274,7 @@ void HrMeshModelQuadPNC::CreateQuadMesh()
 			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
 				, sizeof(vertexData)
 				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
-				, SVertexStructPNC::m_s_vecVertexElementPNC);
+				, SVertexStruct_P_N_UV::m_s_vecVertexElement_P_N_UV);
 		}
 
 		{

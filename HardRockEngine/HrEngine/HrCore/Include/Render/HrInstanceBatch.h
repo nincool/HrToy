@@ -15,7 +15,7 @@ namespace Hr
 		HrInstanceBatch();
 		~HrInstanceBatch();
 
-		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
+		//virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
 		//virtual void SetSubMesh(const HrSubMeshPtr& pSubMesh) override;
 

@@ -289,9 +289,6 @@ HrRenderableComponent::~HrRenderableComponent()
 void HrRenderableComponent::SetRenderable(const HrRenderablePtr& pRenderable)
 {
 	m_pRenderable = pRenderable;
-	
-	//todo!! 按道理来讲 不应该传进来
-	m_pRenderable->SetAttachSceneObject(m_pSceneObj);
 	m_pSceneObj->GetSceneNode()->GetTransform()->SetAABBox(m_pRenderable->GetAABBox());
 }
 
@@ -325,7 +322,7 @@ void HrInstanceBatchComponent::CreateInstanceBatch(const HrSubMeshPtr& pSubMesh)
 	m_pInsBatch = HrMakeSharedPtr<HrInstanceBatchHW>();
 	//m_pInsBatch->SetSubMesh(pSubMesh);
 	m_pInsBatch->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/HrShader/HrInstanceEffect.json"));
-	m_pInsBatch->SetAttachSceneObject(GetAttachSceneObject());
+	//m_pInsBatch->SetAttachSceneObject(GetAttachSceneObject());
 }
 
 HrSceneNodePtr HrInstanceBatchComponent::CreateInstance(const std::string& strName)

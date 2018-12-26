@@ -55,7 +55,6 @@ namespace Hr
 		virtual void OnExist();
 		virtual void UpdateNode(float fDt = 0.0f);
 
-		void FindVisibleRenderable(HrRenderQueuePtr& pRenderQueue);
 		void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
 
 		/**
@@ -85,7 +84,7 @@ namespace Hr
 
 		HrSceneObjectPtr m_pSceneObject;
 
-		//parent
+		//parent 如果父节点没有持有单位的话，会被释放掉
 		HrSceneNode* m_pParentNode;
 
 		//children

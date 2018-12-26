@@ -1,19 +1,19 @@
-#include "HrDeferredShading.h"
+#include "HrPBRScene.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
 
 using namespace Hr;
 
-HrDeferredShading::HrDeferredShading()
+HrPBRScene::HrPBRScene()
 {
 	ResetKeyFlag();
 }
 
-HrDeferredShading::~HrDeferredShading()
+HrPBRScene::~HrPBRScene()
 {
 
 }
 
-void HrDeferredShading::ResetKeyFlag()
+void HrPBRScene::ResetKeyFlag()
 {
 	m_bKeyAPressed = false;
 	m_bKeyWPressed = false;
@@ -26,7 +26,7 @@ void HrDeferredShading::ResetKeyFlag()
 	m_bRightMousePressed = false;
 }
 
-void HrDeferredShading::OnEnter()
+void HrPBRScene::OnEnter()
 {
 	HrScene::OnEnter();
 
@@ -34,15 +34,15 @@ void HrDeferredShading::OnEnter()
 
 	CreateInputEvent();
 
-	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrDeferredShading::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
+	HrDirector::Instance()->Schedule(HR_CALLBACK_1(HrPBRScene::SceneUpdate, this), this, "HR_GEOMETRY_MOUSE_UPDATE", 0.01, 0, 0);
 }
 
-void HrDeferredShading::CreateSceneElements()
+void HrPBRScene::CreateSceneElements()
 {
 	//Ìí¼ÓÉãÏñ»ú
 	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
 	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -300.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -200.0f));
 	m_pSceneMainCamera->GetTransform()->SetRotation(Vector3(30, 0, 0));
 	m_pTrackBallCameraCtrl = m_pSceneMainCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
@@ -50,13 +50,12 @@ void HrDeferredShading::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("SceneDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	m_pBuildingRoot = HrMakeSharedPtr<HrSceneNode>("Building_Root");
-	AddNode(m_pBuildingRoot);
-	m_pBuildingRoot->GetTransform()->SetPosition(Vector3(0.0f, -100.0f, 0.0f));
+	m_pModelNode = HrMakeSharedPtr<HrSceneNode>("Building_Root");
+	AddNode(m_pModelNode);
+	m_pModelNode->GetTransform()->SetPosition(Vector3(0.0f, -100.0f, 0.0f));
 
-	HrPrefabDataPtr pPrefabData = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrPrefabData>("Building1/Building1.hrpref", true, true);
-	HrSceneNodePtr pBuildingNode = pPrefabData->CreateSceneNode();
-	m_pBuildingRoot->AddChild(pBuildingNode);
+	auto& pDragonblade = HrSceneObjectFactory::Instance()->CreateModelNode("DragonbladePBR/Dragonblade.hrmesh");
+	m_pModelNode->AddChild(pDragonblade);
 
 	HrSceneNodePtr pPlane = HrSceneObjectFactory::Instance()->CreateQuadNodePN("Ground", 1000, 1000);
 	AddNode(pPlane);
@@ -64,18 +63,18 @@ void HrDeferredShading::CreateSceneElements()
 	pPlane->GetTransform()->SetRotation(Vector3(90, 0, 0));
 }
 
-void HrDeferredShading::CreateInputEvent()
+void HrPBRScene::CreateInputEvent()
 {
-	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrDeferredShading::OnKeyPressed, this)
-		, HR_CALLBACK_2(HrDeferredShading::OnKeyReleased, this));
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrPBRScene::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrPBRScene::OnKeyReleased, this));
 	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerKeyboard, this);
 
-	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrDeferredShading::OnMousePressed, this)
-		, HR_CALLBACK_2(HrDeferredShading::OnMouseReleased, this), HR_CALLBACK_1(HrDeferredShading::OnMouseMove, this));
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrPBRScene::OnMousePressed, this)
+		, HR_CALLBACK_2(HrPBRScene::OnMouseReleased, this), HR_CALLBACK_1(HrPBRScene::OnMouseMove, this));
 	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerMouse, this);
 }
 
-void HrDeferredShading::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrPBRScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	ResetKeyFlag();
 	switch (keyCode)
@@ -103,7 +102,7 @@ void HrDeferredShading::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const
 	}
 }
 
-void HrDeferredShading::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+void HrPBRScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
 	switch (keyCode)
 	{
@@ -130,37 +129,37 @@ void HrDeferredShading::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, cons
 	}
 }
 
-void HrDeferredShading::SceneUpdate(float fDelta)
+void HrPBRScene::SceneUpdate(float fDelta)
 {
 	float fSpeed = 1.0f;
 	float fRotateSpeed = 5;
 	if (m_bKeyAPressed)
 	{
-		m_pBuildingRoot->GetTransform()->Rotate(Vector3(0, -fSpeed, 0));
+		m_pModelNode->GetTransform()->Rotate(Vector3(0, -fSpeed, 0));
 	}
 	else if (m_bKeyWPressed)
 	{
-		m_pBuildingRoot->GetTransform()->Rotate(Vector3(fSpeed, 0, 0.0f));
+		m_pModelNode->GetTransform()->Rotate(Vector3(fSpeed, 0, 0.0f));
 	}
 	else if (m_bKeySPressed)
 	{
-		m_pBuildingRoot->GetTransform()->Rotate(Vector3(-fSpeed, 0, 0.0f));
+		m_pModelNode->GetTransform()->Rotate(Vector3(-fSpeed, 0, 0.0f));
 	}
 	else if (m_bKeyDPressed)
 	{
-		m_pBuildingRoot->GetTransform()->Rotate(Vector3(0, fSpeed, 0.0f));
+		m_pModelNode->GetTransform()->Rotate(Vector3(0, fSpeed, 0.0f));
 	}
 	else if (m_bKey0Pressed)
 	{
-		m_pBuildingRoot->GetTransform()->Translate(Vector3(-fSpeed, 0, 0.0f));
+		m_pModelNode->GetTransform()->Translate(Vector3(-fSpeed, 0, 0.0f));
 	}
 	else if (m_bKey1Pressed)
 	{
-		m_pBuildingRoot->GetTransform()->Translate(Vector3(fSpeed, 0, 0.0f));
+		m_pModelNode->GetTransform()->Translate(Vector3(fSpeed, 0, 0.0f));
 	}
 }
 
-void HrDeferredShading::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrPBRScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -177,7 +176,7 @@ void HrDeferredShading::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, 
 	}
 }
 
-void HrDeferredShading::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+void HrPBRScene::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
 	switch (mouseID)
 	{
@@ -194,7 +193,7 @@ void HrDeferredShading::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID,
 	}
 }
 
-void HrDeferredShading::OnMouseMove(const HrEventPtr& pEvent)
+void HrPBRScene::OnMouseMove(const HrEventPtr& pEvent)
 {
 	//HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
 	//static float s_floatX = 0;

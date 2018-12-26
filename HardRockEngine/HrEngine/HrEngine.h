@@ -37,6 +37,8 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFrame.h"
 
+#include "HrCore/Include/Config/HrContextConfig.h"
+
 #include "HrUtilTools/Include/HrStringUtil.h"
 
 #include "HrMath/Include/HrMath.h"

@@ -2,6 +2,7 @@
 #define _HR_VIEWPORT_H_
 
 #include "HrCore/Include/HrCorePrerequisite.h"
+#include "HrCore/Include/Render/HrDataDefine.h"
 
 namespace Hr
 {
@@ -12,21 +13,9 @@ namespace Hr
 		~HrViewPortDeferredInfo();
 		
 		//GBuffers
-		enum EnumGBufferType
-		{
-			GBT_DEPTH,
-			GBT_NORMAL,
-			GBT_ROUGHNESS,
-			GBT_SUNLIGHT,
-			GBT_ALBEDO,
-			GBT_LIGHTINTENSITY,
-			GBT_SPECULARINTENSITY,
-			GBT_MAXNUM,
-		};
-		std::array<HrTexturePtr, EnumGBufferType::GBT_MAXNUM> m_arrGBuffers;
 		std::array<bool, EnumGBufferType::GBT_MAXNUM> m_arrGBuffersEnable;
-		
-		HrViewPortPtr m_pViewPort;
+		std::array<HrTexturePtr, EnumGBufferType::GBT_MAXNUM> m_arrGBuffers;
+		std::array<HrRenderTargetPtr, EnumGBufferType::GBT_MAXNUM> m_arrGBufferRenderTargets;
 	};
 
 	class HR_CORE_API HrViewPort : public std::enable_shared_from_this<HrViewPort> 
@@ -45,6 +34,7 @@ namespace Hr
 		int GetZOrder() const;
 
 		const HrCameraPtr& GetCamera() const;
+		const HrViewPortDeferredInfoPtr& GetViewPortDeferredInfo() const;
 	private:
 		HrCameraPtr m_pCamera;
 
@@ -54,9 +44,8 @@ namespace Hr
 		float m_fHeight;
 
 		int m_nZOrder;
-
-
-		//deferred
+	
+		HrViewPortDeferredInfoPtr m_pViewProtDeferredInfo;
 		
 	};
 

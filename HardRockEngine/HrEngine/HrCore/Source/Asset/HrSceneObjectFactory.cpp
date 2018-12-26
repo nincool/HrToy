@@ -136,7 +136,6 @@ HrSceneNodePtr HrSceneObjectFactory::BuildUpSceneNodeWithMesh(const HrMeshModelP
 		HrSceneNodePtr pSubMeshNode = CreateSceneNode(pSubMesh->GetName());
 		HrRenderableComponentPtr pRenderableCom = pSubMeshNode->GetSceneObject()->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(pSubMesh);
-		pRenderable->SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 		pRenderableCom->SetRenderable(pRenderable);
 
 		pSceneNode->AddChild(pSubMeshNode);

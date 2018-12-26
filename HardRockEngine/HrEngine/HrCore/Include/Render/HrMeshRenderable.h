@@ -9,11 +9,10 @@ namespace Hr
 	class HR_CORE_API HrStaticMeshRenderable : public HrRenderable
 	{
 	public:
-		HrStaticMeshRenderable();
 		HrStaticMeshRenderable(const HrSubMeshPtr& pSubMesh);
 		~HrStaticMeshRenderable();
 
-		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
+		//virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
 	protected:
 
@@ -23,17 +22,17 @@ namespace Hr
 	//
 	////////////////////////////////////////////////////
 
-	class HrSkinnedMeshRenderable : public HrRenderable
-	{
-	public:
-		HrSkinnedMeshRenderable();
-		~HrSkinnedMeshRenderable();
+	//class HrSkinnedMeshRenderable : public HrRenderable
+	//{
+	//public:
+	//	HrSkinnedMeshRenderable();
+	//	~HrSkinnedMeshRenderable();
 
-		virtual const HrRenderLayoutPtr& GetRenderLayout() override;
+	//	virtual const HrRenderLayoutPtr& GetRenderLayout() override;
 
-	protected:
+	//protected:
 
-	};
+	//};
 }
 
 

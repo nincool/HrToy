@@ -9,7 +9,7 @@
 
 using namespace Hr;
 
-HrInstanceBatch::HrInstanceBatch()
+HrInstanceBatch::HrInstanceBatch() : HrRenderable(nullptr)
 {
 
 }
@@ -23,10 +23,10 @@ void HrInstanceBatch::BuildVertices(const HrSubMeshPtr& pSubMesh)
 {
 }
 
-const HrRenderLayoutPtr& HrInstanceBatch::GetRenderLayout()
-{
-	return m_pBatchRenderLayout;
-}
+//const HrRenderLayoutPtr& HrInstanceBatch::GetRenderLayout()
+//{
+//	return m_pBatchRenderLayout;
+//}
 //
 //void HrInstanceBatch::SetSubMesh(const HrSubMeshPtr& pSubMesh)
 //{

@@ -5,7 +5,8 @@ using namespace Hr;
 
 HrViewPortDeferredInfo::HrViewPortDeferredInfo()
 {
-
+	m_arrGBuffers.assign(nullptr);
+	m_arrGBuffersEnable.assign(false);
 }
 
 HrViewPortDeferredInfo::~HrViewPortDeferredInfo()
@@ -25,6 +26,8 @@ HrViewPort::HrViewPort(const HrCameraPtr& pCamera)
 
 	m_pCamera = pCamera;
 	m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_fWidth / m_fHeight, 0.1f, 1000.0f);
+
+	m_pViewProtDeferredInfo = HrMakeSharedPtr<HrViewPortDeferredInfo>();
 }
 
 HrViewPort::HrViewPort(const HrCameraPtr& pCamera, float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)
@@ -76,4 +79,10 @@ void HrViewPort::SetViewPortAttribute(float fTopX, float fTopY, float fWidth, fl
 
 	m_pCamera->ProjectParams(m_pCamera->FOV(), m_fWidth / m_fHeight, m_pCamera->NearPlane(), m_pCamera->FarPlane());
 }
+
+const HrViewPortDeferredInfoPtr& HrViewPort::GetViewPortDeferredInfo() const
+{
+	return m_pViewProtDeferredInfo;
+}
+
 

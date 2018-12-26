@@ -6,15 +6,15 @@
 
 namespace Hr
 {
-	class HrSkyBox : public HrRenderable
-	{
-	public:
-		HrSkyBox();
-		~HrSkyBox();
+	//class HrSkyBox : public HrRenderable
+	//{
+	//public:
+	//	HrSkyBox();
+	//	~HrSkyBox();
 
-	public:
+	//public:
 
-	};
+	//};
 }
 
 #endif

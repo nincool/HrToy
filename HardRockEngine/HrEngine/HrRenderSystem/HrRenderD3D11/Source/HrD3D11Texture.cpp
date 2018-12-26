@@ -8,8 +8,7 @@ HrD3D11Texture::HrD3D11Texture(EnumTextureType texType
 	, uint32 nSampleCount
 	, uint32 nSampleQuality
 	, uint32 nAccessHint
-	, uint32 texD3DUsage) : HrTexture(texType, nSampleCount, nSampleQuality, nAccessHint)
-	, m_texD3DUsedType(texD3DUsage)
+	, uint32 texUsedFor) : HrTexture(texType, nSampleCount, nSampleQuality, nAccessHint, texUsedFor)
 {
 	m_pD3D11Device = HrD3D11Device::Instance()->GetD3DDevice();
 	m_pD3D11Context = HrD3D11Device::Instance()->GetD3DDeviceContext();
@@ -43,16 +42,17 @@ const ID3D11ResourcePtr& HrD3D11Texture::GetD3D11Resource()
 UINT HrD3D11Texture::GetD3DTextureBindFlags()
 {
 	UINT nBindFlags = 0;
-	if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_DEPTHSTENCILVIEW)
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW)
 	{
 		nBindFlags |= D3D11_BIND_DEPTH_STENCIL;
 	}
-	else if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_RENDERTARGETVIEW)
+	
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW)
 	{
 		nBindFlags |= D3D11_BIND_RENDER_TARGET;
 	}
 
-	if (m_texD3DUsedType & HrD3D11Texture::D3D_TEX_SHADERRESOURCEVIEW)
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW)
 	{
 		nBindFlags |= D3D11_BIND_SHADER_RESOURCE;
 	}
@@ -77,23 +77,39 @@ UINT HrD3D11Texture::GetD3DCPUAccessFlags()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 HrD3D11Texture2D::HrD3D11Texture2D(uint32 nWidth
 	, uint32 nHeight
 	, uint32 nNumMipMaps
 	, uint32 nSampleCount
 	, uint32 nSampleQuality
 	, uint32 nAccessHint
-	, EnumPixelFormat format
-	, uint32 texUsage) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, nSampleCount, nSampleQuality, nAccessHint, texUsage)
+	, uint32 texUsedFor
+	, EnumPixelFormat format) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, nSampleCount, nSampleQuality, nAccessHint, texUsedFor)
 {
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
 	m_nMipMapsNum = nNumMipMaps;
 	m_format = format;
+
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW)
+	{
+		CreateDepthStencilView();
+	}
+
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW)
+	{
+		CreateRenderTargetView();
+	}
+
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW)
+	{
+		CreateShaderResourceView();
+	}
 }
 
-HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DTEXTURE_USED texUsage) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, 0, 0, 0, texUsage)
+HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumTextureUsedFor texUsedFor) : HrD3D11Texture(HrTexture::TEX_TYPE_2D, 0, 0, 0, texUsedFor)
 {
 	D3D11_TEXTURE2D_DESC desc;
 	pD3DTex2D->GetDesc(&desc);
@@ -144,6 +160,11 @@ HrD3D11Texture2D::HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumD3DT
 
 	m_pD3D11Texture2D = pD3DTex2D;
 	m_pD3DResource = m_pD3D11Texture2D;
+
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW)
+	{
+		CreateRenderTargetView();
+	}
 }
 
 HrD3D11Texture2D::~HrD3D11Texture2D()
@@ -300,7 +321,7 @@ void HrD3D11Texture2D::CreateHWResource()
 bool HrD3D11Texture2D::LoadImpl()
 {
 	//加载纹理资源 作为Resource只存在加载纹理
-	m_texD3DUsedType = D3D_TEX_RENDERTARGETVIEW | D3D_TEX_SHADERRESOURCEVIEW;
+	m_nUsedFor = TUF_TEX_RENDERTARGETVIEW | TUF_TEX_SHADERRESOURCEVIEW;
 
 	HrD3D11Texture::LoadImpl();
 	CreateShaderResourceView();

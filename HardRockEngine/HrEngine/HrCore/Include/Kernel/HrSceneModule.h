@@ -28,14 +28,10 @@ namespace Hr
 		const HrScenePtr& GetRunningScene() const;
 		const HrRenderFrameParametersPtr& GetRenderFrameParameters();
 
-		void RenderVisibleObjects();
+		void FindRenderablesToQueue(const HrCameraPtr& pCamera);
+		void RenderVisibleObjects(HrRenderProcessing* pProcessing);
 
 		void DirtyScene();
-
-		//todo new 
-		void FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue);
-
-
 	private:
 		bool CreateSceneManager(EnumSceneManagerType sceneManagerType);
 	private:

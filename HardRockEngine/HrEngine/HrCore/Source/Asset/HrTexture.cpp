@@ -7,7 +7,7 @@
 
 using namespace Hr;
 
-HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint):
+HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampleQuality, uint32 nAccessHint, uint32 nUsedFor):
 	m_nWidth(0)
 	, m_nHeight(0)
 	, m_nDepth(0)
@@ -19,6 +19,7 @@ HrTexture::HrTexture(EnumTextureType texType, uint32 nSampleCount, uint32 nSampl
 	, m_nAccessHint(nAccessHint)
 	, m_format(PF_R8G8B8A8)
 	, m_textureUsage(TU_GPUREAD_IMMUTABLE)
+	, m_nUsedFor(nUsedFor)
 	, m_pTexData(HrMakeSharedPtr<HrStreamData>())
 {
 	if (m_nAccessHint & EAH_GPU_READ)

@@ -9,6 +9,7 @@ namespace Hr
 	class HrD3D11RenderTarget : public HrRenderTarget
 	{
 	public:
+		HrD3D11RenderTarget(const HrTexturePtr& pTexture);
 		HrD3D11RenderTarget(const ID3D11Texture2DPtr& pBackBuffer);
 
 		const ID3D11RenderTargetViewPtr& GetRenderTargetView();

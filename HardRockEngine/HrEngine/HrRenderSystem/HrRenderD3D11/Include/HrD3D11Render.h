@@ -27,7 +27,7 @@ namespace Hr
 		virtual const HrRenderFramePtr& GetBindFrameBuffer() override;
 		
 		virtual void SetRenderTarget(const HrRenderTargetPtr& pRenderTarget, const HrDepthStencilPtr& pDepthStencil) override;
-		virtual void SetRenderTarget(int nRenderTargetCounts, const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil) override;
+		virtual void SetRenderTarget(const std::array<HrRenderTargetPtr, HrRenderFrame::RTL_MAX>& vecRenderTargers, const HrDepthStencilPtr& pDepthStencil) override;
 		virtual void SetViewPort(const HrViewPortPtr& pViewPort) override;
 
 		virtual void BindRasterizerState(const HrRasterizerStatePtr& pRasterizerState) override;

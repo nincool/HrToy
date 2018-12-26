@@ -21,15 +21,17 @@ namespace Hr
 		const HrScenePtr& GetRunningScene();
 		const HrRenderFrameParametersPtr& GetRenderFrameParamPtr();
 
-		void RenderVisibleObjects();
+		virtual void FindRenderablesToQueue();
+		virtual void FindEffectLights();
 
-		//todo new 
-		virtual void FindVisibleSceneNodes(const HrCameraPtr& pCamera, const HrRenderQueueManagerPtr& pRenderQueue);
+		void RenderVisibleObjects(HrRenderProcessing* pProcessing);
 
+		
 		void SetSceneDirty();
 	protected:
-		bool CheckSceneRunning();
-	
+		
+
+		bool CheckSceneRunning();	
 	protected:
 		// «∑Ò”–Scene∆Ù∂Ø
 		bool m_bSceneRunning;
@@ -42,10 +44,6 @@ namespace Hr
 
 
 		HrRenderFrameParametersPtr m_pRenderParameters;
-
-
-
-
 
 		HrRenderQueuePtr m_pRenderQueue;
 

@@ -62,10 +62,10 @@ bool HrDirector::Init(void* pHwnd)
 void HrDirector::CreateModules(void* pHwnd)
 {
 	CreateEventSystemModule();
+	CreateResourceModule();
 	CreateWindowModule(pHwnd);
 	CreateSceneModule();
 	CreateRenderModule();
-	CreateResourceModule();
 
 	for (auto& item : m_arrModules)
 	{
@@ -139,9 +139,6 @@ bool HrDirector::Render()
 {
 	m_pSceneModule->RenderScene();
 	
-	//todo new
-	//m_pRenderModule->RenderFrame();
-
 	return true;
 }
 

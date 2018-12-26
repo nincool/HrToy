@@ -23,12 +23,16 @@ namespace Hr
 		/**
 		 @Comment: 渲染一帧 [12/10/2018 By Hr]
 		*/
-		void RenderFrame();
+		void RenderSceneView(const HrViewPortPtr& pViewPort);
+		
+		//void VisitRenderableNode(const HrSceneNodePtr& pNode);
+
 		/**
 		 @Comment: 渲染函数 [12/10/2018 By Hr]
 		 @Param:   pRenderTechnique 渲染效果 RenderLayout 可渲染物体
 		*/
 		void DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout);
+
 
 		/**
 		 @Comment: 获取渲染组件工厂 [7/11/2018 By Hr]
@@ -36,8 +40,12 @@ namespace Hr
 		*/
 		const HrRenderFactoryPtr& GetRenderFactory() const;
 		const HrRenderFramePtr& GetRenderFrameBuffer() const;
+		/**
+		 @Comment: 获取当前的渲染模式 [12/14/2018 By Hr]
+		*/
+		const HrRenderSystemPtr& GetCurRenderSystem() const;
 
-		void ClearRenderFame();
+		void ClearRenderFrame();
 		void Present();
 		
 	protected:
@@ -87,8 +95,9 @@ namespace Hr
 
 		//FrameBuffers
 		HrRenderFramePtr m_pCurFrameBuffer;
-		HrRenderFramePtr m_pScreenFrameBuffer;
-
+		
+		//RenderSystem
+		HrRenderSystemPtr m_pCurRenderSystem;
 		HrForwardRenderSystemPtr m_pForwardRenderSystem;
 		HrDeferredRenderSystemPtr m_pDeferredRenderSystem;
 	};

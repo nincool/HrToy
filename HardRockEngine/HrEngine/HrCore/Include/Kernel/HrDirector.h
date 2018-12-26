@@ -80,10 +80,11 @@ namespace Hr
 		enum EnumModuleType
 		{
 			MT_EVENTSYSTEM,
+			MT_RESOURCE,
 			MT_WINDOW,
 			MT_RENDER,
 			MT_SCENE,
-			MT_RESOURCE,
+			
 			MT_MAX
 		};
 		std::array<HrModulePtr, MT_MAX> m_arrModules;

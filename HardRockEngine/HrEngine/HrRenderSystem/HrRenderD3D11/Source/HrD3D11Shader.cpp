@@ -73,7 +73,8 @@ void HrD3D11Shader::Accept(const HrRenderPtr& pRender)
 
 void HrD3D11Shader::Unaccept(const HrRenderPtr& pRender)
 {
-
+	//todo
+	pRender->UnbindShader(shared_from_this());
 }
 
 void HrD3D11Shader::StreamIn(const HrStreamDataPtr& pStreamBuf, const std::string& strFile, const std::string& strName, EnumShaderType shaderType)

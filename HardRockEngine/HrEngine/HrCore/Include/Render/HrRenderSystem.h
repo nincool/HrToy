@@ -12,14 +12,14 @@ namespace Hr
 		HrRenderSystem();
 		virtual ~HrRenderSystem();
 
-		virtual void BuildRenderProcesses();
 		virtual void StartRenderProcess();
-
-	protected:
-		void AppendRenderProcess(EnumRenderProcessingType type);
+		const HrSceneNodePtr& GetScreenQuadRenderable();
+		const HrRenderFramePtr& GetScreenFrameBuffer();
 	protected:
 		EnumRenderingPath m_renderPath;
 		std::list< HrRenderProcessingPtr > m_lisRenderProcessing;
+		HrSceneNodePtr m_pScreenQuad;
+		HrRenderFramePtr m_pScreenFrameBuffer;
 	};
 
 	///////////////////////////////////////////////////////////////////////
@@ -31,8 +31,11 @@ namespace Hr
 		HrForwardRenderSystem();
 		~HrForwardRenderSystem();
 		
+		virtual void StartRenderProcess() override;
 	protected:
-		virtual void BuildRenderProcesses() override;
+		void BuildRenderProcesses();
+
+
 	};
 
 
@@ -46,8 +49,13 @@ namespace Hr
 		HrDeferredRenderSystem();
 		~HrDeferredRenderSystem();
 
+		virtual void StartRenderProcess() override;
+
+		const HrRenderFramePtr& GetDeferredRenderFrame();
 	protected:
-		HrViewPortDeferredInfoPtr m_pViewPortInfo;
+		void BuildRenderProcesses();
+	protected:
+		HrRenderFramePtr m_pDeferredFrameBuffer;
 	};
 
 	//class HrDeferredGBufferData

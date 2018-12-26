@@ -47,7 +47,7 @@ void HrRenderPass::BindPass(const HrRenderPtr& pRender)
 
 void HrRenderPass::UnBindPass(const HrRenderPtr& pRender)
 {
-
+	m_pPixelShader->Unaccept(pRender);
 }
 
 const HrShaderPtr& HrRenderPass::GetShader(HrShader::EnumShaderType shaderType)

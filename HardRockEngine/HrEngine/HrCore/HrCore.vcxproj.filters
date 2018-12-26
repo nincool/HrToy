@@ -605,18 +605,6 @@
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
       <Filter>Effects</Filter>
     </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonOutput.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.hlsl">
       <Filter>Effects</Filter>
     </Text>
@@ -628,17 +616,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandard.json">
-      <Filter>Effects</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardSampler.json">
-      <Filter>Effects</Filter>
-    </None>
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
       <Filter>Material</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMeshConvert.json">
-      <Filter>Effects</Filter>
     </None>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
       <Filter>Effects</Filter>

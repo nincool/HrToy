@@ -19,11 +19,11 @@ namespace Hr
 		struct SAxisVertex
 		{
 			float3 position;
-			float4 color;
+			float3 color;
 			SAxisVertex()
 			{
 				position = Vector3::Zero();
-				color = Vector4::Zero();
+				color = Vector3::Zero();
 			}
 		};
 	private:

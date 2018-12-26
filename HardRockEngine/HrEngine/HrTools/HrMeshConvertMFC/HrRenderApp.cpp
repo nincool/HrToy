@@ -29,21 +29,21 @@ void HrRenderAxis::CreateAxisMesh()
 		float fLineLength = 100.0f;
 		SAxisVertex pVertexBuff[6];
 		pVertexBuff[0].position = Vector3(0, 0, 0);
-		pVertexBuff[0].color = Vector4(1, 0, 0, 1);
+		pVertexBuff[0].color = Vector3(1, 0, 0);
 		pVertexBuff[1].position = Vector3(fLineLength, 0, 0);
-		pVertexBuff[1].color = Vector4(1, 0, 0, 1);
+		pVertexBuff[1].color = Vector3(1, 0, 0);
 		pVertexBuff[2].position = Vector3(0, 0, 0);
-		pVertexBuff[2].color = Vector4(0, 1, 0, 1);;
+		pVertexBuff[2].color = Vector3(1, 0, 0);
 		pVertexBuff[3].position = Vector3(0, fLineLength, 0);
-		pVertexBuff[3].color = Vector4(0, 1, 0, 1);
+		pVertexBuff[3].color = Vector3(1, 0, 0);
 		pVertexBuff[4].position = Vector3(0, 0, 0);
-		pVertexBuff[4].color = Vector4(0, 0, 1, 1);
+		pVertexBuff[4].color = Vector3(1, 0, 0);
 		pVertexBuff[5].position = Vector3(0, 0, fLineLength);
-		pVertexBuff[5].color = Vector4(0, 0, 1, 1);
+		pVertexBuff[5].color = Vector3(1, 0, 0);
 
 		std::vector<HrVertexElement> vecVertexElement;
 		vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-		vecVertexElement.push_back(HrVertexElement(VEU_COLOR, VET_FLOAT4));
+		vecVertexElement.push_back(HrVertexElement(VEU_COLOR, VET_FLOAT3));
 
 		pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)pVertexBuff
 			, sizeof(pVertexBuff)
@@ -77,8 +77,8 @@ void HrEditorScene::OnEnter()
 {
 	HrScene::OnEnter();
 
-	m_fFrameWidth = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer()->GetFrameWidth();
-	m_fFrameHeight = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer()->GetFrameHeight();
+	m_fFrameWidth = HrContextConfig::Instance()->GetRTVWidth();
+	m_fFrameHeight = HrContextConfig::Instance()->GetRTVHeight();
 	m_bRButtonDown = false;
 
 	CreateSceneElements();
@@ -148,12 +148,9 @@ const HrModelDataInfo& HrEditorScene::LoadOriginalMeshData(const std::string& st
 
 void HrEditorScene::CreateAxisNode()
 {
-	auto pRenderEffect = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("Media/Effect/Hlsl/HrMeshConvert.json");
-
 	m_pAxisModel = std::make_shared<HrRenderAxis>();
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-
 	pSceneNode->SetName("AxisRoot");
 
 	for (uint32 i = 0; i < m_pAxisModel->GetMesh()->GetSubMeshNum(); ++i)
@@ -163,7 +160,6 @@ void HrEditorScene::CreateAxisNode()
 		HrSceneObjectPtr pSceneObj = pNode->GetSceneObject();
 		HrRenderableComponentPtr pRenderableCom = pSceneObj->AddComponent<HrRenderableComponent>();
 		HrRenderablePtr pRenderable = HrMakeSharedPtr<HrStaticMeshRenderable>(m_pAxisModel->GetMesh()->GetSubMesh(i));
-		pRenderable->SetRenderEffect(pRenderEffect);
 		pRenderableCom->SetRenderable(pRenderable);
 
 		pSceneNode->AddChild(pNode);
@@ -192,9 +188,9 @@ void HrEditorScene::UpdateAxisPos()
 	{
 		return;
 	}
-	HrRenderFramePtr pRenderFrame = HrDirector::Instance()->GetRenderModule()->GetRenderFrameBuffer();
-	uint32 nFrameWidth = pRenderFrame->GetFrameWidth();
-	uint32 nFrameHeight = pRenderFrame->GetFrameHeight();
+	
+	uint32 nFrameWidth = HrContextConfig::Instance()->GetRTVWidth();
+	uint32 nFrameHeight = HrContextConfig::Instance()->GetRTVHeight();
 
 	float fAxisXPos = -1 + 100 / (static_cast<float>(nFrameWidth));
 	float fAxisYPos = -1 + 100 / (static_cast<float>(nFrameHeight));

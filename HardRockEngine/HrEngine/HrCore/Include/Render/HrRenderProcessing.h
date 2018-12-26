@@ -11,7 +11,15 @@ namespace Hr
 		HrRenderProcessing();
 		~HrRenderProcessing();
 
-		virtual void Run() = 0;
+		enum EnumRenderProcessingResult
+		{
+			RPR_DO_NOTHING = 1 << 0,
+			RPR_NEED_PRESENT = 1 << 1,
+		};
+
+		virtual uint32 Run(HrRenderSystem* pRenderSystem) = 0;
+		virtual void VisitRenderable(const HrRenderablePtr& pRenderable);
+
 	};
 
 	///////////////////////////////////////////////////
@@ -24,7 +32,48 @@ namespace Hr
 		HrForwardProcessing();
 		~HrForwardProcessing();
 
-		virtual void Run() override;
+		virtual uint32 Run(HrRenderSystem* pRenderSystem) override;
+		virtual void VisitRenderable(const HrRenderablePtr& pRenderable) override;
+	private:
+		HrRenderEffectPtr m_pDefaultEffect;
+	};
+
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+
+	class HrDeferredGBufferProcessing : public HrRenderProcessing
+	{
+	public:
+		HrDeferredGBufferProcessing();
+		~HrDeferredGBufferProcessing();
+
+		virtual uint32 Run(HrRenderSystem* pRenderSystem) override;
+		virtual void VisitRenderable(const HrRenderablePtr& pRenderable) override;
+	protected:
+		void CreateGBuffers(const HrViewPortPtr& pViewPort, HrDeferredRenderSystem* pDeferredSystem);
+		void RenderSceneToGBuffers(HrDeferredRenderSystem* pDeferredSystem);
+
+	private:
+		HrRenderEffectPtr m_pMakeGBuffers;
+	};
+
+	///////////////////////////////////////////////////
+	//
+	///////////////////////////////////////////////////
+
+	class HrFinalMappingProcessing : public HrRenderProcessing
+	{
+	public:
+		HrFinalMappingProcessing();
+		~HrFinalMappingProcessing();
+
+		virtual uint32 Run(HrRenderSystem* pRenderSystem) override;
+	
+	private:
+		HrRenderEffectPtr m_pFinalPresentEffect;
+	
+
 	};
 }
 

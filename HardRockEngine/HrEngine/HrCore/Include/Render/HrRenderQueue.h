@@ -26,10 +26,6 @@ namespace Hr
 
 		void ClearRenderQueue();
 
-		void AddRenderable(const HrRenderablePtr& pRenderable);
-
-		const std::vector<HrRenderablePtr>& GetRenderables();
-
 		void AddRenderableSceneNode(const HrSceneNodePtr& pSceneNode);
 
 		/**
@@ -37,12 +33,12 @@ namespace Hr
 		*/
 		void Sort();
 
-		void RenderRenderables();
+		//void RenderRenderables();
+
+		void AcceptRenderProcessing(HrRenderProcessing* pProcessing);
 	protected:
 		EnumOrganisationMode m_organisationMode;
 		std::vector<HrSceneNodePtr> m_vecRenderableNodes;
-
-		std::vector<HrRenderablePtr> m_vecRenderables;
 	};
 
 	class HrRenderQueueManager

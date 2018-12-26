@@ -407,6 +407,17 @@ namespace Hr
 		RPT_FORWARD,
 		RPT_FINALMAPPING,
 	};
+
+	enum EnumGBufferType
+	{
+		GBT_POSITION,
+		GBT_NORMAL,
+		GBT_DEPTH,
+		GBT_ALBEDO,
+		GBT_LIGHTINTENSITY,
+		GBT_SPECULARINTENSITY,
+		GBT_MAXNUM,
+	};
 }
 
 #endif
