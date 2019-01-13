@@ -1,0 +1,17 @@
+{
+	"Models":{
+		"ModelCount":2,
+		"Node_0":{
+			"File":"Addon1Ex.hrmesh",
+			"Position":"0.00,0.00,0.00",
+			"Rotate":"0.00,0.00,0.00",
+			"Scale":"1.00,1.00,1.00"
+		},
+		"Node_1":{
+			"File":"Addon2bEx.hrmesh",
+			"Position":"0.00,70.00,-40.00",
+			"Rotate":"0.00,0.00,0.00",
+			"Scale":"1.00,1.00,1.00"
+		}
+	}
+}

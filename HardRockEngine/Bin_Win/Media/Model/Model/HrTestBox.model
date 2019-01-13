@@ -1,6 +1,0 @@
-{
-    "ASSET_ROOT": {
-        "RESOURCE_FILE": "FBX/HrBox100.FBX",
-	"TEXTURE_SAMPLER" : "Texture/fish_dragonBall_bg.png"
-    }
-}

@@ -1,0 +1,226 @@
+{
+  "EFFECT_ROOT": {
+    "SHADER_FILE": "Media/Effect/Hlsl/HrStandardPro.hlsl",
+    "TECHNIQUE_0": {
+      "NAME": "Tec_Stand_P",
+      "PASS_0": {
+        "NAME": "Pass_Stand_P",
+        "SHADER": {
+          "VERTEX_SHADER": "StandardVSInputP",
+          "PIXEL_SHADER": "StandPSPWVP"
+        },
+        "DEPTH_STENCIL": {
+          "DEPTH_ENABLE": true,
+          "DEPTH_WRITE_MASK": "all",
+          "COMPARISON_FUNC": "less",
+          "STENCIL_ENABLE": true,
+          "STENCIL_READ_MASK": 255,
+          "STENCIL_WRITE_MASK": 255,
+          "FRONT_FACE_COMPARE_FUNC": "always",
+          "FRONT_FACE_STENCIL_FAILED_OP": "keep",
+          "FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "FRONT_FACE_PASS_OP": "replace",
+          "BACK_FACE_COMPARE_FUNC": "always",
+          "BACK_FACE_STENCIL_FAILED_OP": "keep",
+          "BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "BACK_FACE_PASS_OP": "keep",
+          "STENCIL_REF": "0xffffffff"
+        },
+        "BLEND": {
+          "BLEND_ENABLE": true,
+          "SRC_BLEND": "one",
+          "DEST_BLEND": "zero",
+          "BLEND_OP": "add",
+          "SRC_BLEND_ALPHA": "one",
+          "DEST_BLEND_ALPHA": "zero",
+          "BLEND_OP_ALPHA": "add",
+          "RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+          "BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+          "SAMPLE_MASK": "0xffffffff"
+        }
+      }
+    },
+    "TECHNIQUE_1": {
+      "NAME": "Tec_Stand_PC",
+      "PASS_0": {
+        "NAME": "Pass_Stand_PC",
+        "SHADER": {
+          "VERTEX_SHADER": "StandardVSInputPC",
+          "PIXEL_SHADER": "StandPSPWVP_C"
+        },
+        "DEPTH_STENCIL": {
+          "DEPTH_ENABLE": true,
+          "DEPTH_WRITE_MASK": "all",
+          "COMPARISON_FUNC": "less",
+          "STENCIL_ENABLE": true,
+          "STENCIL_READ_MASK": 255,
+          "STENCIL_WRITE_MASK": 255,
+          "FRONT_FACE_COMPARE_FUNC": "always",
+          "FRONT_FACE_STENCIL_FAILED_OP": "keep",
+          "FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "FRONT_FACE_PASS_OP": "replace",
+          "BACK_FACE_COMPARE_FUNC": "always",
+          "BACK_FACE_STENCIL_FAILED_OP": "keep",
+          "BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "BACK_FACE_PASS_OP": "keep",
+          "STENCIL_REF": "0xffffffff"
+        },
+        "BLEND": {
+          "BLEND_ENABLE": true,
+          "SRC_BLEND": "one",
+          "DEST_BLEND": "zero",
+          "BLEND_OP": "add",
+          "SRC_BLEND_ALPHA": "one",
+          "DEST_BLEND_ALPHA": "zero",
+          "BLEND_OP_ALPHA": "add",
+          "RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+          "BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+          "SAMPLE_MASK": "0xffffffff"
+        }
+      }
+    },
+    "TECHNIQUE_2": {
+      "NAME": "Tec_Stand_PN",
+      "PASS_0": {
+        "NAME": "Pass_Stand_PN",
+        "SHADER": {
+          "VERTEX_SHADER": "StandardVSInputPN",
+          "PIXEL_SHADER": "StandPSPWVP_PW_NW"
+        },
+        "DEPTH_STENCIL": {
+          "DEPTH_ENABLE": true,
+          "DEPTH_WRITE_MASK": "all",
+          "COMPARISON_FUNC": "less",
+          "STENCIL_ENABLE": true,
+          "STENCIL_READ_MASK": 255,
+          "STENCIL_WRITE_MASK": 255,
+          "FRONT_FACE_COMPARE_FUNC": "always",
+          "FRONT_FACE_STENCIL_FAILED_OP": "keep",
+          "FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "FRONT_FACE_PASS_OP": "replace",
+          "BACK_FACE_COMPARE_FUNC": "always",
+          "BACK_FACE_STENCIL_FAILED_OP": "keep",
+          "BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "BACK_FACE_PASS_OP": "keep",
+          "STENCIL_REF": "0xffffffff"
+        },
+        "BLEND": {
+          "BLEND_ENABLE": true,
+          "SRC_BLEND": "one",
+          "DEST_BLEND": "zero",
+          "BLEND_OP": "add",
+          "SRC_BLEND_ALPHA": "one",
+          "DEST_BLEND_ALPHA": "zero",
+          "BLEND_OP_ALPHA": "add",
+          "RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+          "BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+          "SAMPLE_MASK": "0xffffffff"
+        }
+      }
+    },
+    "TECHNIQUE_3": {
+      "NAME": "Tec_Stand_PNC",
+      "PASS_0": {
+        "NAME": "Pass_Stand_PNC",
+        "SHADER": {
+          "VERTEX_SHADER": "StandardVSInputPNC",
+          "PIXEL_SHADER": "StandPSPWVP_PW_NW_UV"
+        },
+        "SAMPLER": {
+          "SAMPLER_0": {
+            "SAMPLER_FILTER": "min_mag_mip_linear",
+            "ADDRESS_U": "wrap",
+            "ADDRESS_V": "wrap",
+            "ADDRESS_W": "wrap",
+            "MIPLODBIAS": 0.0,
+            "MAX_ANISOTROPY": 1,
+            "COMPARISON_FUNC": "never",
+            "BORDER_COLOR": "0.0|0.0|0.0|0.0|",
+            "MIN_LOD": "0",
+            "MAX_LOD": "MAX"
+          }
+        },
+        "RASTERIZER": {
+          "FILL_MODE": "solid",
+          "CULL_MODE": "back",
+          "FRONT_CCW": false,
+          "DEPTH_BIAS": 0,
+          "DEPTH_BIAS_CLAMP": 0.0,
+          "SLOPSCALEDEPTHBIAS": 0.0,
+          "DEPTH_CLIP_ENABLE": true,
+          "SCISSOR_ENABLE": false,
+          "MULTISAMPLE_ENABLE": false,
+          "ANTIALIASEDLINE_ENABLE": false
+        },
+        "DEPTH_STENCIL": {
+          "DEPTH_ENABLE": true,
+          "DEPTH_WRITE_MASK": "all",
+          "COMPARISON_FUNC": "less",
+          "STENCIL_ENABLE": true,
+          "STENCIL_READ_MASK": 255,
+          "STENCIL_WRITE_MASK": 255,
+          "FRONT_FACE_COMPARE_FUNC": "always",
+          "FRONT_FACE_STENCIL_FAILED_OP": "keep",
+          "FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "FRONT_FACE_PASS_OP": "replace",
+          "BACK_FACE_COMPARE_FUNC": "always",
+          "BACK_FACE_STENCIL_FAILED_OP": "keep",
+          "BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "BACK_FACE_PASS_OP": "keep",
+          "STENCIL_REF": "0xffffffff"
+        },
+        "BLEND": {
+          "BLEND_ENABLE": true,
+          "SRC_BLEND": "one",
+          "DEST_BLEND": "zero",
+          "BLEND_OP": "add",
+          "SRC_BLEND_ALPHA": "one",
+          "DEST_BLEND_ALPHA": "zero",
+          "BLEND_OP_ALPHA": "add",
+          "RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+          "BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+          "SAMPLE_MASK": "0xffffffff"
+        }
+      }
+    },
+    "TECHNIQUE_4": {
+      "NAME": "Tec_Stand_PTBNC",
+      "PASS_0": {
+        "NAME": "Pass_Stand_PTBNC",
+        "SHADER": {
+          "VERTEX_SHADER": "StandardVSInputPTBNC",
+          "PIXEL_SHADER": "StandPSPWVP_PW_NW_TW_UV"
+        },
+        "DEPTH_STENCIL": {
+          "DEPTH_ENABLE": true,
+          "DEPTH_WRITE_MASK": "all",
+          "COMPARISON_FUNC": "less",
+          "STENCIL_ENABLE": true,
+          "STENCIL_READ_MASK": 255,
+          "STENCIL_WRITE_MASK": 255,
+          "FRONT_FACE_COMPARE_FUNC": "always",
+          "FRONT_FACE_STENCIL_FAILED_OP": "keep",
+          "FRONT_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "FRONT_FACE_PASS_OP": "replace",
+          "BACK_FACE_COMPARE_FUNC": "always",
+          "BACK_FACE_STENCIL_FAILED_OP": "keep",
+          "BACK_FACE_STENCILDEPTH_FAIL_OP": "keep",
+          "BACK_FACE_PASS_OP": "keep",
+          "STENCIL_REF": "0xffffffff"
+        },
+        "BLEND": {
+          "BLEND_ENABLE": true,
+          "SRC_BLEND": "one",
+          "DEST_BLEND": "zero",
+          "BLEND_OP": "add",
+          "SRC_BLEND_ALPHA": "one",
+          "DEST_BLEND_ALPHA": "zero",
+          "BLEND_OP_ALPHA": "add",
+          "RENDER_TARGET_WRITE_MASK": "r|g|b|a|",
+          "BLEND_FACTOR_COLOR": "0.0|0.0|0.0|0.0|",
+          "SAMPLE_MASK": "0xffffffff"
+        }
+      }
+    }
+  }
+}
