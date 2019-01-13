@@ -599,34 +599,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.hlsl">
-      <Filter>Effects</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
       <Filter>Material</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
-      <Filter>Effects</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.json">
-      <Filter>Effects</Filter>
-    </None>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.json">
-      <Filter>Effects</Filter>
     </None>
   </ItemGroup>
 </Project>

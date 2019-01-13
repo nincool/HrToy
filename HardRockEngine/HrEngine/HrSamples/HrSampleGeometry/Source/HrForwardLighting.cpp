@@ -52,21 +52,21 @@ void HrForwardLighting::CreateSceneElements()
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
 	AddNode(pDirectionLight);
 
-	m_pPointLight1 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight1", HrLight::LT_POINT);
-	AddNode(m_pPointLight1);
-	m_pPointLight1->GetTransform()->SetPosition(Vector3(-50.0f, 0.0f, -60.0f));
+	//m_pPointLight1 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight1", HrLight::LT_POINT);
+	//AddNode(m_pPointLight1);
+	//m_pPointLight1->GetTransform()->SetPosition(Vector3(-50.0f, 0.0f, -60.0f));
 
-	m_pPointLight2 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight2", HrLight::LT_POINT);
-	AddNode(m_pPointLight2);
-	m_pPointLight2->GetTransform()->SetPosition(Vector3(50.0f, 0.0f, -60.0f));
+	//m_pPointLight2 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight2", HrLight::LT_POINT);
+	//AddNode(m_pPointLight2);
+	//m_pPointLight2->GetTransform()->SetPosition(Vector3(50.0f, 0.0f, -60.0f));
 
-	m_pPointLight3 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
-	AddNode(m_pPointLight3);
-	m_pPointLight3->GetTransform()->SetPosition(Vector3(50.0f, -50.0f, -60.0f));
+	//m_pPointLight3 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
+	//AddNode(m_pPointLight3);
+	//m_pPointLight3->GetTransform()->SetPosition(Vector3(50.0f, -50.0f, -60.0f));
 
-	m_pPointLight4 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
-	AddNode(m_pPointLight4);
-	m_pPointLight4->GetTransform()->SetPosition(Vector3(-50.0f, -50.0f, -60.0f));
+	//m_pPointLight4 = HrSceneObjectFactory::Instance()->CreateLightNode("TestPointLight3", HrLight::LT_POINT);
+	//AddNode(m_pPointLight4);
+	//m_pPointLight4->GetTransform()->SetPosition(Vector3(-50.0f, -50.0f, -60.0f));
 
 	m_pTestRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pTestRoot);

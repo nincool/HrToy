@@ -735,7 +735,7 @@ std::string HrConvertUtil::FormatJsonData(const std::string& strContent)
 
 HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 {
-	BOOST_ASSERT(m_modelDesc.vecSubMeshInfo.size() == m_modelDesc.vecMaterialDataInfo.size());
+	//BOOST_ASSERT(m_modelDesc.vecSubMeshInfo.size() == m_modelDesc.vecMaterialDataInfo.size());
 	if (m_pLoadedMesh)
 	{
 		HrDirector::Instance()->GetResourceModule()->RemoveResource<HrMesh>(m_pLoadedMesh->GetFilePath());
@@ -763,7 +763,11 @@ HrSceneNodePtr HrConvertUtil::CreateSceneNode()
 		pSubMesh->GetRenderLayout()->BindIndexBuffer(streamIndexBuffer.GetBufferPoint(), streamIndexBuffer.GetBufferSize(), HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE, IT_32BIT);
 
 		//Material
-		HrModelDataInfo::HrMaterialDataInfo& materialInfo = m_modelDesc.vecMaterialDataInfo[nMeshInfoIndex];
+		int nMaterialDataIndex = nMeshInfoIndex;
+		if (nMaterialDataIndex >= m_modelDesc.vecMaterialDataInfo.size())
+			nMaterialDataIndex = 0;
+
+		HrModelDataInfo::HrMaterialDataInfo& materialInfo = m_modelDesc.vecMaterialDataInfo[nMaterialDataIndex];
 		//CheckTexture
 		for (size_t nTexIndex = 0; nTexIndex < materialInfo.m_arrTexNames.size(); ++nTexIndex)
 		{

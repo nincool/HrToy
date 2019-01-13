@@ -317,33 +317,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonInput.hlsl">
-      <FileType>Document</FileType>
-    </Text>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
-      <FileType>Document</FileType>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.json" />
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.json" />
-    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json" />
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.hlsl">
-      <FileType>Document</FileType>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrDeferredShading.hlsl">
-      <FileType>Document</FileType>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrMakeGBuffer.hlsl">
-      <FileType>Document</FileType>
-    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

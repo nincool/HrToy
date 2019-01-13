@@ -33,13 +33,13 @@ void HrRenderAxis::CreateAxisMesh()
 		pVertexBuff[1].position = Vector3(fLineLength, 0, 0);
 		pVertexBuff[1].color = Vector3(1, 0, 0);
 		pVertexBuff[2].position = Vector3(0, 0, 0);
-		pVertexBuff[2].color = Vector3(1, 0, 0);
+		pVertexBuff[2].color = Vector3(0, 1, 0);
 		pVertexBuff[3].position = Vector3(0, fLineLength, 0);
-		pVertexBuff[3].color = Vector3(1, 0, 0);
+		pVertexBuff[3].color = Vector3(0, 1, 0);
 		pVertexBuff[4].position = Vector3(0, 0, 0);
-		pVertexBuff[4].color = Vector3(1, 0, 0);
+		pVertexBuff[4].color = Vector3(0, 0, 1);
 		pVertexBuff[5].position = Vector3(0, 0, fLineLength);
-		pVertexBuff[5].color = Vector3(1, 0, 0);
+		pVertexBuff[5].color = Vector3(0, 0, 1);
 
 		std::vector<HrVertexElement> vecVertexElement;
 		vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
@@ -49,6 +49,8 @@ void HrRenderAxis::CreateAxisMesh()
 			, sizeof(pVertexBuff)
 			, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
 			, vecVertexElement);
+
+		pSubMesh->SetMeshAABB(AABBox(Vector3(0, 0, 0), Vector3(fLineLength, fLineLength, fLineLength)));
 	}
 
 	pSubMesh->GetRenderLayout()->SetTopologyType(TT_LINELIST);
@@ -91,7 +93,7 @@ void HrEditorScene::CreateSceneElements()
 	AddNode(m_pGodCamera);
 	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 	m_pCameraCom = m_pGodCamera->GetSceneObject()->GetComponent<HrCameraComponet>();
-	m_pCameraCom->SetFarPlane(500.0f);
+	m_pCameraCom->SetFarPlane(1000.0f);
 	m_pTrackBallCameraCtrl = m_pGodCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
