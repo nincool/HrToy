@@ -81,7 +81,6 @@ namespace Hr
 
 		HrTexture* m_pDefaultTexture;
 		HrRenderEffectPtr m_pDefaultRenderEffect;
-		HrMaterialPtr m_pDefaultMaterial;
 	};
 
 }

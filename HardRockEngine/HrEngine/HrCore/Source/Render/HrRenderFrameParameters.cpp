@@ -103,31 +103,6 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 	return m_inverseTransposeWorldMatrix;
 }
 
-float HrRenderFrameParameters::GetMaterialGlossiness() const
-{
-	return m_pRenderable->GetMaterial()->GetGlossiness();
-}
-
-float HrRenderFrameParameters::GetMaterialReflective() const
-{
-	return m_pRenderable->GetMaterial()->GetReflective();
-}
-
-float4 HrRenderFrameParameters::GetMaterialAlbedo() const
-{
-	return m_pRenderable->GetMaterial()->GetAlebdo();
-}
-
-float4 HrRenderFrameParameters::GetMaterialEmissive() const
-{
-	return m_pRenderable->GetMaterial()->GetEmissive();
-}
-
-float HrRenderFrameParameters::GetMaterialOpacity() const
-{
-	return m_pRenderable->GetMaterial()->GetOpacity();
-}
-
 const float3& HrRenderFrameParameters::GetCameraPosition()
 {
 	if (m_bCameraDirty)
@@ -212,3 +187,43 @@ void HrRenderFrameParameters::DirtyViewMatrix()
 	m_bWorldViewProjMatrixDirty = true;
 }
 
+float4 HrRenderFrameParameters::GetMaterialAlbedo() const
+{
+	return m_pRenderable->GetMaterial()->GetAlebdo();
+}
+
+float HrRenderFrameParameters::GetMaterialMetalness() const
+{
+	return m_pRenderable->GetMaterial()->GetMetalness();
+}
+
+float HrRenderFrameParameters::GetMaterialRoughness() const
+{
+	return m_pRenderable->GetMaterial()->GetRoughness();
+}
+
+
+//float HrRenderFrameParameters::GetMaterialGlossiness() const
+//{
+//	return m_pRenderable->GetMaterial()->GetGlossiness();
+//}
+//
+//float HrRenderFrameParameters::GetMaterialReflective() const
+//{
+//	return m_pRenderable->GetMaterial()->GetReflective();
+//}
+//
+//float4 HrRenderFrameParameters::GetMaterialAlbedo() const
+//{
+//	return m_pRenderable->GetMaterial()->GetAlebdo();
+//}
+//
+//float4 HrRenderFrameParameters::GetMaterialEmissive() const
+//{
+//	return m_pRenderable->GetMaterial()->GetEmissive();
+//}
+//
+//float HrRenderFrameParameters::GetMaterialOpacity() const
+//{
+//	return m_pRenderable->GetMaterial()->GetOpacity();
+//}

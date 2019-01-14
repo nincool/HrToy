@@ -41,11 +41,11 @@ namespace Hr
 		void SetEmissive(const float4& emissive);
 		const float4& GetEmissive() const;
 		
-		void SetGlossiness(float fGls);
-		float GetGlossiness() const;
+		void SetMetalness(float fMetalness);
+		float GetMetalness() const;
 		
-		void SetReflective(float fReflective);
-		float GetReflective() const;
+		void SetRoughness(float fRoughness);
+		float GetRoughness() const;
 
 		float GetOpacity() const;
 
@@ -57,6 +57,8 @@ namespace Hr
 		virtual bool UnloadImpl() override;
 
 	private:
+		void InitMaterialData(const HrMaterial* pMaterial);
+	private:
 		std::string m_strMaterialName;
 
 		//the amount of light the surface reflects and absorbs
@@ -64,9 +66,8 @@ namespace Hr
 		//The colour of light emitted from the object
 		float4 m_emissive;
 
-		float m_fGlossiness;
-
-		float m_fReflective;
+		float m_fMetalness;
+		float m_fRoughness;
 
 		float m_fOpacity;
 

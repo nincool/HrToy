@@ -97,8 +97,8 @@ HrDeferredRenderSystem::HrDeferredRenderSystem()
 	
 	m_pScreenQuad = HrSceneObjectFactory::Instance()->CreateQuadNodeP("FinalMapping", HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight());
 	auto& pRenderableQuad = m_pScreenQuad->GetChildByIndex(0);
-	auto& pDeferredShading = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrDeferredShading.json");
-	pRenderableQuad->GetSceneObject()->GetRenderableComponent()->GetRenderable()->SetRenderEffect(pDeferredShading);
+	//auto& pDeferredShading = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrDeferredShading.json");
+	//pRenderableQuad->GetSceneObject()->GetRenderableComponent()->GetRenderable()->SetRenderEffect(pDeferredShading);
 
 
 }

@@ -963,7 +963,7 @@ void HrConvertUtil::SetMaterialGlossiness(int nMeshIndex, float fGlo)
 				if (pChildNode->GetName() == m_modelDesc.vecSubMeshInfo[nMeshIndex].strMeshName)
 				{
 					auto pMaterial = pChildNode->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->GetSubMesh()->GetMaterial();
-					pMaterial->SetGlossiness(fGlo);
+					//pMaterial->SetGlossiness(fGlo);
 				}
 			}
 		}
@@ -984,7 +984,7 @@ void HrConvertUtil::SetMaterialReflective(int nMeshIndex, float fReflective)
 				if (pChildNode->GetName() == m_modelDesc.vecSubMeshInfo[nMeshIndex].strMeshName)
 				{
 					auto pMaterial = pChildNode->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->GetSubMesh()->GetMaterial();
-					pMaterial->SetReflective(fReflective);
+					//pMaterial->SetReflective(fReflective);
 				}
 			}
 		}

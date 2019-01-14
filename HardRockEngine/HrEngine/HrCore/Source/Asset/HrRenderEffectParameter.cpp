@@ -33,11 +33,13 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 	HrRenderParamDefine(RPT_POINT_LIGHT_COLOR, "point_light_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_ATTENUATION, "point_light_range_attenuation", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_POINT_LIGHT_POSITION, "point_light_position", REDT_FLOAT4, 1, 16),
-	//////////////////////////////////////////////////////////////////////////////////////////
 
-	HrRenderParamDefine(RPT_MATERIAL_GLOSSINESS, "material_glossiness", REDT_FLOAT1, 1, 4),
+	///////////////////////////////////-- Material --///////////////////////////////////////////
 	HrRenderParamDefine(RPT_MATERIAL_ALBEDO, "material_albedo", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_MATERIAL_REFLECTIVE, "material_reflective", REDT_FLOAT1, 1, 4),
+	HrRenderParamDefine(RPT_MATERIAL_METALNESS, "material_metalness", REDT_FLOAT1, 1, 4),
+	HrRenderParamDefine(RPT_MATERIAL_ROUGHNESS, "material_roughness", REDT_FLOAT1, 1, 4),
+	HrRenderParamDefine(RPT_MATERIAL_PARAM0, "material_param0", REDT_UINT1, 1, 4),
+	HrRenderParamDefine(RPT_MATERIAL_PARAM1, "material_param1", REDT_UINT1, 1, 4),
 
 	HrRenderParamDefine(RPT_FOG_COLOR, "fog_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_FOG_START, "fog_start", REDT_FLOAT1, 1, 4),
@@ -636,6 +638,13 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		m_pRenderVariable = HR_NEW HrRenderVariableUInt4();
 		break;
 	}
+	case RPT_MATERIAL_PARAM0:
+	case RPT_MATERIAL_PARAM1:
+	{
+		BOOST_ASSERT(m_dataType == REDT_UINT1 && m_nArraySize == 1);
+		m_pRenderVariable = HR_NEW HrRenderVariableUInt();
+		break;
+	}
 	case RPT_AMBIENT_COLOR:
 	case RPT_MATERIAL_ALBEDO:
 	case RPT_FOG_COLOR:
@@ -650,8 +659,8 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 		m_pRenderVariable = HR_NEW HrRenderVariableFloat3();
 		break;
 	}
-	case RPT_MATERIAL_GLOSSINESS:
-	case RPT_MATERIAL_REFLECTIVE:
+	case RPT_MATERIAL_METALNESS:
+	case RPT_MATERIAL_ROUGHNESS:
 	case RPT_FOG_START:
 	case RPT_FOG_RANGE:
 	{

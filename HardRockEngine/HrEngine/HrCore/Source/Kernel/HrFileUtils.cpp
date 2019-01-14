@@ -21,7 +21,6 @@ HrFileUtils::HrFileUtils()
 	AddSearchDirectory(m_strAppPath += "\\");
 	AddSearchDirectory(strAssetPath + "\\");
 	AddSearchDirectory(m_strMediaPath);
-	AddSearchDirectory(strAssetPath + "\\Media\\Material\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Model\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Scene\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Effect\\Hlsl\\");

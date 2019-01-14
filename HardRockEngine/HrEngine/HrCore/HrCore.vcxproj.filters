@@ -602,5 +602,19 @@
     <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
       <Filter>Material</Filter>
     </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
+      <Filter>Effects</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrBaseInclude.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
   </ItemGroup>
 </Project>

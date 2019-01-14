@@ -24,7 +24,6 @@ using namespace Hr;
 
 HrResourceManager::HrResourceManager()
 	:m_pDefaultTexture(nullptr),
-	m_pDefaultMaterial(nullptr),
 	m_pDefaultRenderEffect(nullptr)
 {
 }
@@ -70,14 +69,14 @@ void HrResourceManager::CreateBuildInEffects()
 	//LoadResource("Media/Effect/Hlsl/HrStandardSampler.json", HrResource::RT_EFFECT);
 	//LoadResource("Media/Effect/Hlsl/HrShadowMapDepth.json", HrResource::RT_EFFECT);
 	//LoadResource("Media/Effect/Hlsl/HrShadowMap.json", HrResource::RT_EFFECT); 
-	LoadResource("Media/Effect/Hlsl/HrMakeGBuffer.json", HrResource::RT_EFFECT);
-	LoadResource("Media/Effect/Hlsl/HrDeferredShading.json", HrResource::RT_EFFECT);
+	//LoadResource("Media/Effect/Hlsl/HrMakeGBuffer.json", HrResource::RT_EFFECT);
+	//LoadResource("Media/Effect/Hlsl/HrDeferredShading.json", HrResource::RT_EFFECT);
 }
 
 void HrResourceManager::CreateBuildInMaterial()
 {
 	HRLOG("HrResourceManager::CreateBuildInMaterial Start to create buildin material!");
-	m_pDefaultMaterial = HrCheckPointerCast<HrMaterial>(LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL));
+	//m_pDefaultMaterial = HrCheckPointerCast<HrMaterial>(LoadResource("Media/Material/MaterialDefault.material", HrResource::RT_MATERIAL));
 }
 
 HrTexture* HrResourceManager::GetDefaultTexture()
@@ -283,8 +282,7 @@ HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 		pDefaultMaterial->DeclareResource(strMaterialName, strMaterialName);
 		m_mapMaterials.insert(std::make_pair(pDefaultMaterial->GetHashID(), pDefaultMaterial));
 
-		pDefaultMaterial->CopyFrom(m_pDefaultMaterial);
-
+		//pDefaultMaterial->CopyFrom(m_pDefaultMaterial);
 		return pDefaultMaterial;
 
 	}

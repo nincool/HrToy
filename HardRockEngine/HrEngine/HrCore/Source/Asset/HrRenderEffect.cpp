@@ -571,16 +571,16 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialAlbedo();
 		break;
 	}
-	case RPT_MATERIAL_REFLECTIVE:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialReflective();
-		break;
-	}
-	case RPT_MATERIAL_GLOSSINESS:
-	{
-		*pRenderEffectParameter = pRenderFrameParameters->GetMaterialGlossiness();
-		break;
-	}
+	//case RPT_MATERIAL_REFLECTIVE:
+	//{
+	//	*pRenderEffectParameter = pRenderFrameParameters->GetMaterialReflective();
+	//	break;
+	//}
+	//case RPT_MATERIAL_GLOSSINESS:
+	//{
+	//	*pRenderEffectParameter = pRenderFrameParameters->GetMaterialGlossiness();
+	//	break;
+	//}
 	default:
 		break;
 	}

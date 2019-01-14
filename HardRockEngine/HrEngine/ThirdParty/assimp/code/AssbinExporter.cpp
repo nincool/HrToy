@@ -720,11 +720,11 @@ inline size_t WriteArray(IOStream * stream, const T* in, unsigned int size)
 
             char cmd[] = "\0";
             strncpy(buff,cmd,128);
-            out->Write(buff,sizeof(char),128);
+            out->Write(buff,sizeof(char),128); 
 
             // leave 64 bytes free for future extensions
             memset(buff,0xcd,64);
-            out->Write(buff,sizeof(char),64);
+            out->Write(buff,sizeof(char),64);  
             // == 435 bytes
 
             // ==== total header size: 512 bytes

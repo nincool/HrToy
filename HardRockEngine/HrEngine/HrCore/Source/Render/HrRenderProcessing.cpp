@@ -63,7 +63,7 @@ void HrForwardProcessing::VisitRenderable(const HrRenderablePtr& pRenderable)
 
 HrDeferredGBufferProcessing::HrDeferredGBufferProcessing()
 {
-	m_pMakeGBuffers = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrMakeGBuffer.json");
+	//m_pMakeGBuffers = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrMakeGBuffer.json");
 }
 
 HrDeferredGBufferProcessing::~HrDeferredGBufferProcessing()
@@ -144,7 +144,7 @@ void HrDeferredGBufferProcessing::VisitRenderable(const HrRenderablePtr& pRender
 ///////////////////////////////////////////////////
 HrFinalMappingProcessing::HrFinalMappingProcessing()
 {
-	m_pFinalPresentEffect = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrDeferredShading.json");
+	//m_pFinalPresentEffect = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrDeferredShading.json");
 }
 
 HrFinalMappingProcessing::~HrFinalMappingProcessing()

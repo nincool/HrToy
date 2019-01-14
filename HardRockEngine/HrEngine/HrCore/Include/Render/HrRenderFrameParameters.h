@@ -47,11 +47,9 @@ namespace Hr
 		const void GetFogParam(float4& fogColor, float& fogStart, float& fogRange);
 
 		//获取材质信息
-		float GetMaterialGlossiness() const;
-		float GetMaterialReflective() const;
 		float4 GetMaterialAlbedo() const;
-		float4 GetMaterialEmissive() const;
-		float GetMaterialOpacity() const;
+		float GetMaterialMetalness() const;
+		float GetMaterialRoughness() const;
 
 	private:
 		void DirtyWorldMatrix();
