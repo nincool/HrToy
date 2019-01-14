@@ -1,14 +1,14 @@
-#include "HrCommonInput.hlsl"
+#include "HrBaseInclude.hlsl"
 #include "HrCommonLights.hlsl"
 
 cbuffer cbPerFrame
 {
-		float4 ambientLightColor;
-		uint4 lightParam;
-		DirectionLight directLight[4];
+    float4 ambientLightColor;
+    uint4 lightParam;
+    DirectionLight directLight[4];
     PointLight pointLight[4];
-
-		float3 camera_position;
+    
+    float3 camera_position;
 };
 
 cbuffer cbPerObject
@@ -25,6 +25,42 @@ Texture2D texMetallic;
 Texture2D texNormal;
 
 SamplerState samBaseTexture;
+
+
+HrPixelInput_PWVP StandardVSInput_P(HrVertexInput_P vIn)
+{
+    HrPixelInput_PWVP vOut;
+
+    float4x4 worldViewProjMatrix = mul(world_matrix, view_proj_matrix);
+    vOut.posWorldViewProj = mul(float4(vIn.vertexPosition, 1.f), worldViewProjMatrix);
+
+    return vOut;
+}
+
+float4 StandPS_PWVP(HrPixelInput_PWVP pixIn) : SV_TARGET
+{
+    return float4(1.0f, 0.0f, 0.0f, 1.0f);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+HrPixelInput_PWVP_C StandardVSInputPC(HrVertexInput_P_C vIn)
+{
+    HrPixelInput_PWVP_C vOut;
+
+    float4x4 worldViewProjMatrix = mul(world_matrix, view_proj_matrix);
+    vOut.posWorldViewProj = mul(float4(vIn.vertexPosition, 1.0), worldViewProjMatrix);
+    vOut.color = float4(vIn.color, 1.0f);
+
+    return vOut;
+}
+
+float4 StandPS_PWVP_C(HrPixelInput_PWVP_C pixIn) : SV_TARGET
+{
+    return pixIn.color;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 HrPixelInput_PWVP_UV_NW_TW_BW_PW StandardVSInput_P_T_B_N_UV(HrVertexInput_P_T_B_N_UV vIn)
 {
@@ -68,7 +104,7 @@ float4 StandPS_PWVP_UV_NW_TW_BW_PW(HrPixelInput_PWVP_UV_NW_TW_BW_PW pixIn) : SV_
     float roughness = 1 - metalTex.a; //在Metallicmap的alpha通道里存的是smoothness
 
     float3 finalColor = { 0.0f, 0.0f, 0.0f};
-    for (uint nDirLightIndex = 0; nDirLightIndex < lightsNum.y; ++nDirLightIndex)
+    for (uint nDirLightIndex = 0; nDirLightIndex < lightParam.y; ++nDirLightIndex)
     {
         finalColor += CalcPBRDirectionLight(directLight[nDirLightIndex], normalDir, viewDir, albedo, roughness, metalness);
     }
