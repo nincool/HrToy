@@ -118,8 +118,8 @@ void HrDirector::StartMainLoop()
 
 void HrDirector::LoopOnce()
 {
-	Render();
 	Update();
+	Render();
 }
 
 void HrDirector::Update()

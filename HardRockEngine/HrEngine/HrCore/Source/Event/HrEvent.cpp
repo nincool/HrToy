@@ -4,6 +4,8 @@ using namespace Hr;
 
 const std::string HrEvent::scEventBeginUpdateScene = "_HR_EVENT_BEGINUPDATESCENE_";
 const std::string HrEvent::scEventEndUpdateScene = "_HR_EVENT_ENDUPDATESCENE_";
+const std::string HrEvent::scEventBeginRenderScene = "_HR_EVENT_BEGINRENDERSCENE_";
+const std::string HrEvent::scEventEndRenderScene = "_HR_EVENT_ENDRENDERSCENE_";
 
 HrEvent::HrEvent(const std::string& strEvent) : m_strEvent(strEvent), m_nHashID(boost::hash_value(strEvent))
 {

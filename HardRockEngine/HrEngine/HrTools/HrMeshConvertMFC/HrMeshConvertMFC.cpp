@@ -24,6 +24,7 @@
 #include "HrMeshConvertMFCDoc.h"
 #include "HrMeshConvertMFCView.h"
 #include "HrUIDefine.h"
+#include "HrRenderViewDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -162,6 +163,15 @@ void CHrMeshConvertMFCApp::InitConsoleWindow()
 	if (!AllocConsole() || !freopen("CONOUT$", "w", stdout))
 		AfxMessageBox(_T("InitConsoleWindow Failed!")); //分配控制台在重定向输出流至控制台
 #pragma warning(pop)
+}
+
+BOOL CHrMeshConvertMFCApp::OnIdle(LONG lCount)
+{
+	BOOL rt = CWinAppEx::OnIdle(lCount);
+
+	((CMainFrame*)m_pMainWnd)->GetRenderViewDlg()->Update();
+
+	return rt;
 }
 
 int CHrMeshConvertMFCApp::ExitInstance()

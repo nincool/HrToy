@@ -26,6 +26,7 @@
 #define new DEBUG_NEW
 #endif
 
+using namespace Hr;
 // CMainFrame
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWndEx)
@@ -45,6 +46,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_BTN_HRSAVE, &CMainFrame::OnButtonSave)
 	ON_COMMAND(ID_BTN_HROPEN, &CMainFrame::OnButtonOpen)
+	ON_COMMAND(ID_BTN_HROPEN2, &CMainFrame::OnButtonOpenHrMesh)
 	ON_COMMAND(ID_BTN_HRSAVEBINARY, &CMainFrame::OnBtnHrSaveBinary)
 END_MESSAGE_MAP()
 
@@ -118,19 +120,18 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// set the visual manager and style based on persisted value
 	OnApplicationLook(theApp.m_nAppLook);
 
-	m_pRenderViewDlg = std::make_shared<HrRenderViewDlg>(&m_wndMeshView);
+
+
+	m_pRenderViewDlg = std::make_shared<HrRenderViewDlg>();
 	m_pRenderViewDlg->Create(IDD_RENDERVIEW_DLG, this);
-	//m_pRenderViewDlg->MoveWindow(rvPos);
 	m_pRenderViewDlg->ShowWindow(SW_SHOW);
 
-	m_wndMeshView.SetMainFrame(this);
+	m_pManager = std::make_shared<Hr::HrManager>(&m_wndMeshView, m_pRenderViewDlg->GetRenderApp().get(), &m_wndProperties);
+
+	m_wndMeshView.SetManager(m_pManager.get());
 	m_wndProperties.SetMainFrame(this);
-	//RECT rc;
-	//::GetClientRect(m_hWnd, &rc);
-	//m_nLeft = rc.left;
-	//m_nTop = rc.top;
-	//m_nWidth = rc.right - rc.left;
-	//m_nHeight = rc.bottom - rc.top;
+	m_wndProperties.SetManager(m_pManager.get());
+	
 	return 0;
 }
 
@@ -368,7 +369,54 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 	m_wndOutput.UpdateFonts();
 }
 
+void CMainFrame::OnButtonOpen()
+{
+	// TODO: Add your command handler code here
+	// szFilters is a text string that includes two file name filters:
+	// "*.my" for "MyType Files" and "*.*' for "All Files."
+	
+	//TCHAR szFilters[] = _T("HrMesh Files (*.hrmesh)|*.hrmesh|Fbx Files (*.fbx)|*.fbx|All Files (*.*)|*.*||");
+	TCHAR szFilters[] = _T("HrMesh Files (*.fbx)|*.fbx||");
 
+	// Create an Open dialog; the default file name extension is ".hrmesh".
+	
+	CFileDialog fileDlg(TRUE, _T("fbx"), _T(".fbx"),
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString pathName = fileDlg.GetPathName();
+		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
+		m_strCurrentOpenFile = Hr::HrFileUtils::Instance()->GetFileName(strFile);
+		m_pRenderViewDlg->OnOpenFile(strFile);
+
+		m_pManager->LoadOriginalMeshData(strFile);
+	}
+}
+
+void CMainFrame::OnButtonOpenHrMesh()
+{
+	TCHAR szFilters[] = _T("HrMesh Files(*.hrmesh)|*.hrmesh||");
+
+	// Create an Open dialog; the default file name extension is ".hrmesh".
+
+	CFileDialog fileDlg(TRUE, _T("fbx"), _T(".fbx"),
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString pathName = fileDlg.GetPathName();
+		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
+		m_strCurrentOpenFile = Hr::HrFileUtils::Instance()->GetFileName(strFile);
+		m_pRenderViewDlg->OnOpenFile(strFile);
+
+		m_pManager->LoadHrMeshData(strFile);
+	}
+}
 
 void CMainFrame::OnButtonSave()
 {
@@ -388,33 +436,7 @@ void CMainFrame::OnButtonSave()
 		CString pathName = fileDlg.GetPathName();
 		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
 
-		m_pRenderViewDlg->OnSaveFile(strFile);
-	}
-}
-
-
-void CMainFrame::OnButtonOpen()
-{
-	// TODO: Add your command handler code here
-	// szFilters is a text string that includes two file name filters:
-	// "*.my" for "MyType Files" and "*.*' for "All Files."
-	
-	//TCHAR szFilters[] = _T("HrMesh Files (*.hrmesh)|*.hrmesh|Fbx Files (*.fbx)|*.fbx|All Files (*.*)|*.*||");
-	TCHAR szFilters[] = _T("HrMesh Files (*.fbx)|*.fbx|Fbx Files (*.hrmesh)|*.hrmesh|All Files (*.*)|*.*||");
-
-	// Create an Open dialog; the default file name extension is ".my".
-	
-	CFileDialog fileDlg(TRUE, _T("hrmesh"), _T(".hrmesh"),
-		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
-
-	// Display the file dialog. When user clicks OK, fileDlg.DoModal() 
-	// returns IDOK.
-	if (fileDlg.DoModal() == IDOK)
-	{
-		CString pathName = fileDlg.GetPathName();
-		std::string strFile = Hr::HrStringUtil::WstringToUtf8(pathName.GetBuffer());
-		m_strCurrentOpenFile = Hr::HrFileUtils::Instance()->GetFileName(strFile);
-		m_pRenderViewDlg->OnOpenFile(strFile);
+		m_pManager->GetConvertUtil()->WriteModelDataToFile(strFile);
 	}
 }
 

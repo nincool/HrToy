@@ -66,7 +66,6 @@ namespace Hr
 		bool m_bWorldViewProjMatrixDirty = true;
 
 		mutable float3 m_cameraPosition;
-		bool m_bCameraDirty = true;
 
 		mutable float4 m_fogColor;
 		mutable float m_fogStart;

@@ -1,6 +1,7 @@
 #include "HrD3D11Texture.h"
 #include "HrD3D11Mapping.h"
 #include "HrCore/Include/Asset/HrStreamData.h"
+#include "HrCore/Include/Asset/HrImage.h"
 
 using namespace Hr;
 
@@ -93,19 +94,9 @@ HrD3D11Texture2D::HrD3D11Texture2D(uint32 nWidth
 	m_nMipMapsNum = nNumMipMaps;
 	m_format = format;
 
-	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW)
+	if (!(m_nUsedFor & HrD3D11Texture::TUF_TEX_DEFAULTTEXTURE))
 	{
-		CreateDepthStencilView();
-	}
-
-	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW)
-	{
-		CreateRenderTargetView();
-	}
-
-	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW)
-	{
-		CreateShaderResourceView();
+		CreateHWResource(nullptr);
 	}
 }
 
@@ -174,8 +165,6 @@ HrD3D11Texture2D::~HrD3D11Texture2D()
 
 bool HrD3D11Texture2D::CreateRenderTargetView()
 {
-	CreateHWResource();
-
 	ID3D11RenderTargetView* pRenderTargetView = nullptr;
 	HRESULT hr = m_pD3D11Device->CreateRenderTargetView(m_pD3DResource.get(), 0, &pRenderTargetView);
 	if (FAILED(hr))
@@ -190,8 +179,6 @@ bool HrD3D11Texture2D::CreateRenderTargetView()
 
 bool HrD3D11Texture2D::CreateDepthStencilView()
 {
-	CreateHWResource();
-
 	//Create the depth stencil view
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	ZeroMemory(&descDSV, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
@@ -264,11 +251,17 @@ bool HrD3D11Texture2D::CreateShaderResourceView()
 	return true;
 }
 
-void HrD3D11Texture2D::CreateHWResource()
+void HrD3D11Texture2D::CreateHWResource(HrImage* pImage)
 {
 	if (m_pD3D11Texture2D)
 	{
 		return;
+	}
+
+	if (pImage)
+	{
+		m_nWidth = pImage->GetWidht();
+		m_nHeight = pImage->GetHeight();
 	}
 
 	D3D11_TEXTURE2D_DESC textureDesc;
@@ -297,13 +290,12 @@ void HrD3D11Texture2D::CreateHWResource()
 	textureDesc.MiscFlags = 0;
 
 	std::vector<D3D11_SUBRESOURCE_DATA> vecSubRes;
-	if (m_pTexData->GetBufferSize() > 0)
+	if (pImage && pImage->GetData()->GetBufferSize() > 0)
 	{
-		//array_size * mipmap
 		vecSubRes.resize(1);
 
-		vecSubRes[0].pSysMem = m_pTexData->GetBufferPoint();
-		vecSubRes[0].SysMemPitch = m_nSrcPitch;
+		vecSubRes[0].pSysMem = pImage->GetData()->GetBufferPoint();
+		vecSubRes[0].SysMemPitch = pImage->GetSrcPitch();
 		vecSubRes[0].SysMemSlicePitch = 0;
 	}
 
@@ -316,17 +308,21 @@ void HrD3D11Texture2D::CreateHWResource()
 	}
 	m_pD3D11Texture2D = MakeComPtr(pTempTexture2D);
 	m_pD3DResource = m_pD3D11Texture2D;
-}
 
-bool HrD3D11Texture2D::LoadImpl()
-{
-	//加载纹理资源 作为Resource只存在加载纹理
-	m_nUsedFor = TUF_TEX_RENDERTARGETVIEW | TUF_TEX_SHADERRESOURCEVIEW;
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW)
+	{
+		CreateDepthStencilView();
+	}
 
-	HrD3D11Texture::LoadImpl();
-	CreateShaderResourceView();
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_RENDERTARGETVIEW)
+	{
+		CreateRenderTargetView();
+	}
 
-	return true;
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW)
+	{
+		CreateShaderResourceView();
+	}
 }
 
 ID3D11Texture2DPtr HrD3D11Texture2D::GetD3D11Texture()

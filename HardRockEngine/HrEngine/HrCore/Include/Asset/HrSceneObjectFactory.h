@@ -58,7 +58,7 @@ namespace Hr
 		HrSceneNodePtr CreateQuadNodePN(const std::string& strName, float fWidth, float fHeight);
 	private:
 		HrSceneNodePtr CreateSceneNode(const std::string& strName);
-		HrSceneNodePtr BuildUpSceneNodeWithMesh(const HrMeshModelPtr& pMeshModel, const HrSceneNodePtr& pSceneNode);
+		HrSceneNodePtr BuildupSceneNodeWithMesh(const HrMeshModelPtr& pMeshModel, const HrSceneNodePtr& pSceneNode);
 	};
 }
 

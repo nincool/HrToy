@@ -50,6 +50,8 @@ namespace Hr
 		{
 			return m_pConvertUtil;
 		}
+
+		void DisplayMeshDataInScene(const HrSceneNodePtr& pMeshData);
 	private:
 		void CreateSceneElements();
 		void CreateAxisNode();
@@ -121,6 +123,8 @@ namespace Hr
 		{
 			return m_pEditorScene;
 		}
+
+
 	private:
 		void LoadAssets();
 		void CreateScene();

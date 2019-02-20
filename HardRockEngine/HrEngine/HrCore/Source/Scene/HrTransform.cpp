@@ -49,7 +49,8 @@ const Vector3& HrTransform::GetPosition()
 void HrTransform::SetRotation(const Vector3& angle)
 {
 	m_vEulerAngles = angle;
-	DecomposeOriention(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)));
+	DecomposeLocalOriention(HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(angle)));
+	DirtyTransform(true, false, true);
 }
 
 const Quaternion& HrTransform::GetOrientation() const
@@ -59,11 +60,12 @@ const Quaternion& HrTransform::GetOrientation() const
 
 void HrTransform::SetOrientation(const Quaternion& orientation)
 {
-	DecomposeOriention(orientation);
+	DecomposeLocalOriention(orientation);
 	m_vEulerAngles = HrMath::Radian2Degree(HrMath::ToPitchYawRoll(m_orientation));
+	DirtyTransform(true, false, true);
 }
 
-void HrTransform::DecomposeOriention(const Quaternion& orientation)
+void HrTransform::DecomposeLocalOriention(const Quaternion& orientation)
 {
 	m_orientation = HrMath::Normalize(orientation);
 
@@ -77,8 +79,22 @@ void HrTransform::DecomposeOriention(const Quaternion& orientation)
 
 	Vector4 vForward = matOrientation.Row(2);
 	m_vForward = Vector3(vForward.x(), vForward.y(), vForward.z());
+}
 
-	DirtyTransform(true, false, true);
+void HrTransform::DecomposeWorldOriention(const Quaternion& orientation)
+{
+	m_worldOriention = HrMath::Normalize(orientation);
+
+	Matrix4 matOrientation = HrMath::ToMatrix(m_worldOriention);
+
+	Vector4 vRight = matOrientation.Row(0);
+	m_vWorldRight = Vector3(vRight.x(), vRight.y(), vRight.z());
+
+	Vector4 vUp = matOrientation.Row(1);
+	m_vWorldUp = Vector3(vUp.x(), vUp.y(), vUp.z());
+
+	Vector4 vForward = matOrientation.Row(2);
+	m_vWorldForward = Vector3(vForward.x(), vForward.y(), vForward.z());
 }
 
 const Vector3& HrTransform::GetForward() const
@@ -95,6 +111,30 @@ const Vector3& HrTransform::GetUp() const
 {
 	return m_vUp;
 }
+
+const Vector3& HrTransform::GetWorldForward() 
+{
+	if (m_bDirtyWorldOriention)
+	{
+		GetWorldOriention();
+	}
+	return m_vWorldForward;
+}
+
+const Vector3& HrTransform::GetWorldRight() 
+{
+	if (m_bDirtyWorldOriention)
+	{
+		GetWorldOriention();
+	}
+	return m_vWorldRight;
+}
+
+const Vector3& HrTransform::GetWorldUp() 
+{
+	return m_vWorldUp;
+}
+
 
 void HrTransform::Translate(const Vector3& v3, EnumTransformSpace relativeTo /*= TS_LOCAL*/)
 {
@@ -173,6 +213,7 @@ const Quaternion& HrTransform::GetWorldOriention()
 		}
 
 		m_bDirtyWorldOriention = false;
+		DecomposeWorldOriention(m_worldOriention);
 	}
 
 	return m_worldOriention;

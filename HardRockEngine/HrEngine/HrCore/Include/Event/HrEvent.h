@@ -17,6 +17,8 @@ namespace Hr
 
 		static const std::string scEventBeginUpdateScene;
 		static const std::string scEventEndUpdateScene;
+		static const std::string scEventBeginRenderScene;
+		static const std::string scEventEndRenderScene;
 	public:
 		HrEvent(const std::string& strEvent);
 		virtual ~HrEvent();

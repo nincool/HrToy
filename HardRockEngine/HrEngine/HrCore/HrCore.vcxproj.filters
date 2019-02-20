@@ -74,9 +74,6 @@
     <Filter Include="Source\Platform\AppWin">
       <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Material">
-      <UniqueIdentifier>{ac2e9c91-c2de-4314-8e39-a79d2060883a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
@@ -340,11 +337,12 @@
     <ClInclude Include="Include\Asset\Loader\HrMeshUtils.h">
       <Filter>Include\Asset\Loader</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrGirlfriend.h">
-      <Filter>Include\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Render\HrRenderProcessing.h">
       <Filter>Include\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrSceneItems.h" />
+    <ClInclude Include="Include\Asset\HrImage.h">
+      <Filter>Include\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -591,17 +589,15 @@
     <ClCompile Include="Source\Asset\Loader\HrMeshUtils.cpp">
       <Filter>Source\Asset\Loader</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrGirlfriend.cpp">
-      <Filter>Source\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Render\HrRenderProcessing.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Asset\HrSceneItems.cpp" />
+    <ClCompile Include="Source\Asset\HrImage.cpp">
+      <Filter>Source\Asset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Bin_Win\Media\Material\MaterialDefault.material">
-      <Filter>Material</Filter>
-    </None>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
       <Filter>Effects</Filter>
     </None>

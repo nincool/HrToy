@@ -86,10 +86,10 @@ void HrModelLoader::Load(std::string& strFile)
 void HrModelLoader::MakeVertexElements(const HrModelDataInfo::HrSubMeshDataInfo& subMeshInfo, std::vector<HrVertexElement>& vecVertexElement)
 {
 	vecVertexElement.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-	//if (m_modelDesc.vecTangent.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_TANGENT, VET_FLOAT3));
-	//if (m_modelDesc.vecBinormal.size() > 0)
-	//	vecVertexElement.push_back(HrVertexElement(VEU_BINORMAL, VET_FLOAT3));
+	if (subMeshInfo.vecTangent.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_TANGENT, VET_FLOAT3));
+	if (subMeshInfo.vecBinormal.size() > 0)
+		vecVertexElement.push_back(HrVertexElement(VEU_BINORMAL, VET_FLOAT3));
 	if (subMeshInfo.vecNormal.size() > 0)
 		vecVertexElement.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 	if (subMeshInfo.vecUV.size() > 0)
@@ -117,10 +117,12 @@ void HrModelLoader::MakeVertexStream(int nSubMeshIndex, HrStreamData& streamData
 			}
 			case VEU_TANGENT:
 			{
+				streamData.AddBuffer((Byte*)(&subMeshInfo.vecTangent[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_BINORMAL:
 			{
+				streamData.AddBuffer((Byte*)(&subMeshInfo.vecBinormal[nVertexIndex][0]), vecVertexElement[nEleIndex].GetTypeSize());
 				break;
 			}
 			case VEU_NORMAL:

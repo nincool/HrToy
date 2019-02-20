@@ -14,6 +14,11 @@
 
 class CMainFrame;
 
+namespace Hr
+{
+	class HrManager;
+}
+
 class CPropertiesToolBar : public CMFCToolBar
 {
 public:
@@ -34,8 +39,10 @@ public:
 	void AdjustLayout();
 
 	void SetMainFrame(CMainFrame* pMainFrame);
+	void SetManager(Hr::HrManager* pManager);
 
-	void OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo);
+	void SetSuggestUnitScale(float fSuggestUnitScale);
+	void OnSelectMeshDisplaMaterial(int nMeshIndex, const std::string& strMeshName, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo);
 // Attributes
 public:
 	void SetVSDotNetLook(BOOL bSet)
@@ -51,8 +58,11 @@ protected:
 	CMFCPropertyGridCtrl m_wndPropList;
 
 	int m_nMeshIndex = 0;
+	std::string m_strMeshName;
 
 	CMFCPropertyGridProperty* m_pHrSettingGroup;
+	CMFCPropertyGridProperty* m_pSuggestUnitScale;
+	CMFCPropertyGridProperty* m_pMeshName;
 	CMFCPropertyGridProperty* m_pMateiralSetting;
 	
 	std::string m_strCachedMaterialName;
@@ -60,12 +70,13 @@ protected:
 	CMFCPropertyGridProperty* m_pMaterialName;
 	CMFCPropertyGridColorProperty* m_pMaterialAlbedo;
 	CMFCPropertyGridColorProperty* m_pMaterialEmissive;
-	CMFCPropertyGridProperty* m_pMaterialShininess;
-	CMFCPropertyGridProperty* m_pMaterialReflective;
+	CMFCPropertyGridProperty* m_pMaterialMetalness;
+	CMFCPropertyGridProperty* m_pMaterialRoughness;
 
 	std::array<CMFCPropertyGridProperty*, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> m_arrMaterialTexture;
 
 	CMainFrame* m_pMainFrame;
+	Hr::HrManager* m_pManager;
 // Implementation
 public:
 	virtual ~CPropertiesWnd();

@@ -63,6 +63,9 @@ namespace Hr
 		*/
 		void FindAllRenderables(std::vector<HrSceneNodePtr>& vecRenderables);
 
+
+		void OnBeginUpdateScene(const HrEventPtr& pEvent);
+		void OnEndUpdateScene(const HrEventPtr& pEvent);
 		void OnBeginRenderScene(const HrEventPtr& pEvent);
 		void OnEndRenderScene(const HrEventPtr& pEvent);
 

@@ -20,16 +20,21 @@ namespace Hr
 		~HrConvertUtil();
 
 		bool LoadOriginalData(std::string const & in_name);
+		void SetOriginalData(const HrSceneNodePtr& node, const HrModelDataInfo& modelDataInfo);
 
 		bool WriteModelDataToFile(const std::string& strOutPath);
 
 		HrSceneNodePtr CreateSceneNode();
-
 		const HrModelDataInfo& GetModelDataInfo();
+		void SetModelDataInfo(const HrModelDataInfo& modelDataInfo);
+		float GetSuggestScale();
 
 		void ChangeMaterial(int nMeshIndex, const std::string& strMaterialName);
-		void SetMaterialGlossiness(int nMeshIndex, float fGlo);
-		void SetMaterialReflective(int nMeshIndex, float fReflective);
+
+		void SetMaterialMetalness(int nMeshIndex, float fMetalness);
+		void SetMaterialRoughness(int nMeshIndex, float fRoughness);
+		
+		void SetMaterialAlbedo(int nMeshIndex, float r, float g, float b);
 		void SetMaterialTexture(int nMeshIndex, int nTexIndex, const std::string& strTextureName);
 		void SetUnitScale(float fUnitScale);
 	private:
@@ -73,6 +78,9 @@ namespace Hr
 
 		float m_fUnitScale;
 		float m_fOutputUnitScale;
+		float m_fSuggestScale;
+
+		AABBox m_modelAABB;
 	};
 }
 

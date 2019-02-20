@@ -103,31 +103,39 @@ void HrRenderable::UpdateRenderEffectParam()
 	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters();
 	GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
 
-	uint32 nUseBaseTex = 0u;
+	uint32 nEnableAlbedoTex = 0u;
 	const HrTexturePtr& pDiffuseTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_ALBEDO);
 	if (pDiffuseTex)
 	{
 		auto& pDiffuseTexParam = GetRenderEffect()->GetParameterByName("texAlbedo");
 		if (pDiffuseTexParam)
 			pDiffuseTexParam->operator=(pDiffuseTex.get());
-		nUseBaseTex = 1u;
+		nEnableAlbedoTex = 1u;
 	}
-	auto& pFlagUseBaseTex = GetRenderEffect()->GetParameterByName("flag_use_basetex");
-	if (pFlagUseBaseTex)
-		*pFlagUseBaseTex = nUseBaseTex;
 
-	uint32 nUseNormalMap = 0u;
-	const HrTexturePtr& pNormalmapTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_NORMAL);
+	uint32 nEnableMetalTex = 0u;
+	const HrTexturePtr& pMetalnessTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_METALNESS);
+	if (pMetalnessTex)
+	{
+		auto& pMetalnessParam = GetRenderEffect()->GetParameterByName("texMetallic");
+		if (pMetalnessParam)
+			pMetalnessParam->operator=(pMetalnessTex.get());
+		nEnableMetalTex = 1u;
+	}
+
+	uint32 nEnableNormalmap = 0u;
+	const HrTexturePtr& pNormalmapTex = GetSubMesh()->GetMaterial()->GetTexture(HrMaterial::TS_NORMALMAP);
 	if (pNormalmapTex)
 	{
 		auto& pNormalmapTexParam = GetRenderEffect()->GetParameterByName("texNormal");
 		if (pNormalmapTexParam)
 			pNormalmapTexParam->operator=(pNormalmapTex.get());
-		nUseNormalMap = 1u;
+		nEnableNormalmap = 1u;
 	}
-	auto& pFlagUseNormalTex = GetRenderEffect()->GetParameterByName("flag_use_normalmap");
-	if (pFlagUseNormalTex)
-		*pFlagUseNormalTex = nUseNormalMap;
+
+	auto& pMaterialParam0 = GetRenderEffect()->GetMaterialParameterByName("material_param0");
+	if (pMaterialParam0)
+		*pMaterialParam0 = (nEnableAlbedoTex | (nEnableMetalTex << 1) | (nEnableNormalmap << 2) );
 }
 
 const AABBox& HrRenderable::GetAABBox()

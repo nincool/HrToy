@@ -120,11 +120,9 @@ namespace Hr
 		struct SGridVertex 
 		{
 			float3 position;
-			float3 normal;
 			SGridVertex()
 			{
 				position = Vector3::Zero();
-				normal = Vector3::Zero();
 			}
 		};
 

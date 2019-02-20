@@ -72,6 +72,9 @@
     <ClInclude Include="HrMeshView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HrManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HrMeshConvertMFC.cpp">
@@ -120,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HrMeshView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HrManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

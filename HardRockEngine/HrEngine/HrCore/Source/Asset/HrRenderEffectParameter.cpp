@@ -25,7 +25,7 @@ std::vector<HrRenderParamDefine> HrRenderParamDefine::m_s_vecRenderParamDefine =
 
 	////////////////////////////////////-- light --///////////////////////////////////////////
 	HrRenderParamDefine(RPT_AMBIENT_COLOR, "ambientLightColor", REDT_FLOAT4, 1, 16),
-	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightsNum", REDT_UINT4, 1, 16),
+	HrRenderParamDefine(RPT_LIGHTS_NUM, "lightParam", REDT_UINT4, 1, 16),
 
 	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_COLOR, "directional_light_color", REDT_FLOAT4, 1, 16),
 	HrRenderParamDefine(RPT_DIRECTIONAL_LIGHT_DIRECTION, "directional_light_direction", REDT_FLOAT4, 1, 16),

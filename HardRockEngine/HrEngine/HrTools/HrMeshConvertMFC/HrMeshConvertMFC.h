@@ -37,6 +37,7 @@ public:
 
 	void InitConsoleWindow();
 
+	virtual BOOL OnIdle(LONG lCount) override;
 // Implementation
 	UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;

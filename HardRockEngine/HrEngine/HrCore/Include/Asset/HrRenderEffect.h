@@ -22,6 +22,7 @@ namespace Hr
 		const HrRenderTechniquePtr GetTechniqueByName(const std::string& strTechniqueName);
 
 		const HrRenderEffectParameterPtr GetParameterByName(const std::string& strParamName);
+		const HrRenderEffectParameterPtr GetMaterialParameterByName(const std::string& strParamName);
 
 		void UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pRenderFrameParameters);
 	protected:

@@ -530,6 +530,8 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	{
 	case RPT_WORLD_MATRIX:
 	{
+		//auto worldMaxtrix = pRenderFrameParameters->GetWorldMatrix();
+		//std::cout << " Axis Position2 :" << worldMaxtrix.Row(3).x() << "," << worldMaxtrix.Row(3).y() << "," << worldMaxtrix.Row(3).z() << std::endl;
 		*pRenderEffectParameter = pRenderFrameParameters->GetWorldMatrix();
 		break;
 	}
@@ -558,6 +560,8 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	}
 	case RPT_CAMERA_POSITION:
 	{
+		auto worldMaxtrix = pRenderFrameParameters->GetCameraPosition();
+		std::cout << " Camera Position2 :" << worldMaxtrix.x() << "," << worldMaxtrix.y() << "," << worldMaxtrix.z() << std::endl;
 		*pRenderEffectParameter = pRenderFrameParameters->GetCameraPosition();
 		break;
 	}
@@ -635,3 +639,12 @@ const HrRenderEffectParameterPtr HrRenderEffect::GetParameterByName(const std::s
 	return nullptr;
 }
 
+const HrRenderEffectParameterPtr HrRenderEffect::GetMaterialParameterByName(const std::string& strParamName)
+{
+	size_t nHashParamName = HrHashValue(std::string("mat"));
+	HrHashCombine(nHashParamName, 0);
+	HrHashCombine(nHashParamName, strParamName);
+	auto iteRenderParam = m_mapRenderEffectParameters.find(nHashParamName);
+	if (iteRenderParam != m_mapRenderEffectParameters.end())
+		return iteRenderParam->second;
+}

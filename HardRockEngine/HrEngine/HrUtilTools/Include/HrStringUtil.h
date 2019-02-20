@@ -78,6 +78,29 @@ namespace Hr
 			return result;
 		}
 
+		template<typename T>
+		static void FastGetTVectorFromString(std::vector<T>& vecResult, const std::string& strContent, const char p1 = 'p1')
+		{
+			size_t nArrAssignIndex = 0;
+		
+			std::string::const_iterator first = strContent.begin();
+			std::string::const_iterator last = strContent.begin();
+			std::string strTempNum;
+			strTempNum.reserve(100);
+			for (std::string::const_iterator iteChar = strContent.begin(); iteChar != strContent.end(); ++iteChar)
+			{
+				if (*iteChar == p1)
+				{
+					last = iteChar;
+					strTempNum.assign(first, last);
+					vecResult.push_back(std::stof(strTempNum));
+
+					first = (iteChar + 1);
+					++nArrAssignIndex;
+				}
+			}
+		}
+
 		static std::vector<float> GetFloatVectorFromString(const std::string& strContent, const char* p1 = "|")
 		{
 			std::vector<float> result;
@@ -166,7 +189,69 @@ namespace Hr
 
 			return result;
 		}
+
+		static void FastGetVectorFloat2FromString(std::vector<Vector2>& vecResult
+			, const std::string& strContent
+			, const char p1, const char p2)
+		{
+			size_t nArrAssignIndex = 0;
+			Vector2 arr;
+
+			std::string::const_iterator first = strContent.begin();
+			std::string::const_iterator last = strContent.begin();
+			std::string strTempNum;
+			strTempNum.reserve(100);
+			for (std::string::const_iterator iteChar = strContent.begin(); iteChar != strContent.end(); ++iteChar)
+			{
+				if (*iteChar == p1 || *iteChar == p2)
+				{
+					last = iteChar;
+					strTempNum.assign(first, last);
+					arr[nArrAssignIndex] = std::stof(strTempNum);
+
+					first = (iteChar + 1);
+					if (*iteChar == p2)
+						++nArrAssignIndex;
+					else
+					{
+						vecResult.push_back(arr);
+						nArrAssignIndex = 0;
+					}
+				}
+			}
+		}
 		
+		static void FastGetVectorFloat3FromString(std::vector< Vector3 >& vecResult
+			, const std::string& strContent
+			, const char p1, const char p2)
+		{
+			size_t nArrAssignIndex = 0;
+			Vector3 arr;
+
+			std::string::const_iterator first = strContent.begin();
+			std::string::const_iterator last = strContent.begin();
+			std::string strTempNum;
+			strTempNum.reserve(100);
+			for (std::string::const_iterator iteChar = strContent.begin(); iteChar != strContent.end(); ++iteChar)
+			{
+				if (*iteChar == p1 || *iteChar == p2)
+				{
+					last = iteChar;
+					strTempNum.assign(first, last);
+					arr[nArrAssignIndex] = std::stof(strTempNum);
+
+					first = (iteChar + 1);
+					if (*iteChar == p2)
+						++nArrAssignIndex;
+					else
+					{
+						vecResult.push_back(arr);
+						nArrAssignIndex = 0;
+					}
+				}
+			}
+		}
+
 		//static std::vector<std::string> GetVector(const std::string& strContent, const std::string& strDelim)
 		//{
 		//	std::string strReDelim = "[" + strDelim + "]";

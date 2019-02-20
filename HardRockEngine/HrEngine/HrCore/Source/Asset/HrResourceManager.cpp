@@ -6,7 +6,7 @@
 #include "Asset/HrMaterial.h"
 #include "Asset/HrTexture.h"
 #include "Asset/HrMeshModel.h"
-#include "Asset/HrGirlfriend.h"
+#include "Asset/HrSceneItems.h"
 #include "Kernel/HrDirector.h"
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
@@ -313,7 +313,7 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 		, 1 //SampleCount
 		, 0 //SampleQuality
 		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
-		, HrTexture::TUF_TEX_DEFAULT
+		, HrTexture::TUF_TEX_RENDERTARGETVIEW | HrTexture::TUF_TEX_SHADERRESOURCEVIEW | HrTexture::TUF_TEX_DEFAULTTEXTURE
 		, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
 	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);

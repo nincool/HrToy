@@ -14,11 +14,8 @@ namespace Hr
 			//NormalTexture
 			TS_ALBEDO,
 			TS_METALNESS,
-			TS_GLOSSINESS,
-			TS_EMISSIVE,
-			TS_NORMAL,
-			TS_HEIGHT,
-			TS_BUMP,
+			TS_NORMALMAP,
+
 			TS_NUMTEXTURESLOTS,
 		};
 	public:

@@ -43,15 +43,15 @@ const HrCameraPtr& HrRenderFrameParameters::GetActiveCamera()
 
 void HrRenderFrameParameters::SetCurViewPort(const HrViewPortPtr& pViewPort)
 {
-	if (m_pCurViewPort != pViewPort)
-	{
+	//if (m_pCurViewPort != pViewPort)
+	//{
 		m_pCurViewPort = pViewPort;
 		DirtyViewMatrix();
-	}
-	else if (m_pCurViewPort->GetCamera()->ViewProjDirty())
-	{
-		DirtyViewMatrix();
-	}
+	//}
+	//else if (m_pCurViewPort->GetCamera()->ViewProjDirty())
+	//{
+	//	DirtyViewMatrix();
+	//}
 }
 
 const HrViewPortPtr& HrRenderFrameParameters::GetViewPort()
@@ -105,11 +105,8 @@ const Matrix4& HrRenderFrameParameters::GetInverseTransposeWorldMatrix()
 
 const float3& HrRenderFrameParameters::GetCameraPosition()
 {
-	if (m_bCameraDirty)
-	{
-		m_cameraPosition = m_pCurViewPort->GetCamera()->GetEyePos();
-		m_bCameraDirty = false;
-	}
+	m_cameraPosition = m_pCurViewPort->GetCamera()->GetEyePos();
+
 	return m_cameraPosition;
 }
 
@@ -145,6 +142,7 @@ const int HrRenderFrameParameters::GetLightNum(HrLight::EnumLightType lightType)
 const float4 HrRenderFrameParameters::GetDirectionalLightDirection(int nLightIndex)
 {
 	const Vector3& v3Direction = m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetDirection();
+	//std::cout << "GetDirectionalLightDirection  x:" << v3Direction[0] << " y:" << v3Direction[1] << " z:" << v3Direction[2] << std::endl;
 	return float4(v3Direction.x(), v3Direction.y(), v3Direction.z(), 0.0f);
 }
 
@@ -183,7 +181,6 @@ void HrRenderFrameParameters::DirtyWorldMatrix()
 
 void HrRenderFrameParameters::DirtyViewMatrix()
 {
-	m_bCameraDirty = true;
 	m_bWorldViewProjMatrixDirty = true;
 }
 

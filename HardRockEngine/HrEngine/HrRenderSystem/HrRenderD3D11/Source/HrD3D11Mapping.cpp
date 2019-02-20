@@ -450,6 +450,10 @@ DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
 		return DXGI_FORMAT_R32G32B32A32_SINT;
 	case PF_R32G32B32A32_FLOAT:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+	case PF_R16G16B16_SNORM:
+		return DXGI_FORMAT_R16G16B16A16_SNORM;
+	case PF_R16G16B16A16_UINT:
+		return DXGI_FORMAT_R16G16B16A16_UINT;
 	default:
 		return DXGI_FORMAT_UNKNOWN;
 	}
@@ -458,7 +462,7 @@ DXGI_FORMAT HrD3D11Mapping::GetPixelFormat(EnumPixelFormat pixelFormat)
 EnumPixelFormat HrD3D11Mapping::GetPixelFormat(DXGI_FORMAT dxPixelFormat)
 {
 	//todo
-	return PF_R8G8B8A8;
+	//return PF_R8G8B8A8;
 
 	switch (dxPixelFormat)
 	{
@@ -705,6 +709,7 @@ EnumPixelFormat HrD3D11Mapping::GetPixelFormat(DXGI_FORMAT dxPixelFormat)
 	default:
 		break;
 	}
+	return PF_R8G8B8A8;
 }
 
 D3D11_FILL_MODE HrD3D11Mapping::GetFillMode(EnumRasterizerFillModel fillMode)

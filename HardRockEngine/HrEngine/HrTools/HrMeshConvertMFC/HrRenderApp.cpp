@@ -93,21 +93,22 @@ void HrEditorScene::CreateSceneElements()
 	AddNode(m_pGodCamera);
 	m_pGodCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -200.0f));
 	m_pCameraCom = m_pGodCamera->GetSceneObject()->GetComponent<HrCameraComponet>();
+	m_pCameraCom->SetNearPlane(0.1f);
 	m_pCameraCom->SetFarPlane(1000.0f);
 	m_pTrackBallCameraCtrl = m_pGodCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
-	AddNode(pDirectionLight);
+	m_pGodCamera->AddChild(pDirectionLight);
 	
 	CreateAxisNode();
 
 	m_pEleRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pEleRoot);
 
-	auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
-	m_pEleRoot->AddChild(pGridNode);
-	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	//auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
+	//m_pEleRoot->AddChild(pGridNode);
+	//pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
 	UpdateAxisPos();
 }
@@ -146,6 +147,17 @@ const HrModelDataInfo& HrEditorScene::LoadOriginalMeshData(const std::string& st
 	{
 		return m_pConvertUtil->GetModelDataInfo();
 	}
+}
+
+void HrEditorScene::DisplayMeshDataInScene(const HrSceneNodePtr& pMeshData)
+{
+	if (m_pModel)
+	{
+		m_pEleRoot->RemoveChild(m_pModel);
+	}
+	m_pModel = pMeshData;
+	m_pModel->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	m_pEleRoot->AddChild(m_pModel);
 }
 
 void HrEditorScene::CreateAxisNode()
@@ -190,16 +202,17 @@ void HrEditorScene::UpdateAxisPos()
 	{
 		return;
 	}
-	
+
 	uint32 nFrameWidth = HrContextConfig::Instance()->GetRTVWidth();
 	uint32 nFrameHeight = HrContextConfig::Instance()->GetRTVHeight();
 
 	float fAxisXPos = -1 + 100 / (static_cast<float>(nFrameWidth));
 	float fAxisYPos = -1 + 100 / (static_cast<float>(nFrameHeight));
-	float fAxisZPos = 0.1f;
+	float fAxisZPos = 0.11f;
 
 	Vector3 vWorldPos = HrMath::TransformCoord(Vector3(fAxisXPos, fAxisYPos, fAxisZPos), m_pCameraCom->GetCamera()->GetInverseViewProjMatrix());
 	m_pAxisNode->GetTransform()->SetPosition(vWorldPos);
+	auto vAxisWorldPos = m_pAxisNode->GetTransform()->GetWorldPosition();
 
 	float fAxisXOrigin = -1 + 95 / (static_cast<float>(nFrameWidth));
 	float fAxisZOrigin = 0.1f;
@@ -211,6 +224,7 @@ void HrEditorScene::UpdateAxisPos()
 
 void HrEditorScene::OnMouseMove(float fX, float fY)
 {
+	
 	float fProjX = Convert2ScreenPosX(fX);
 	float fProjY = Convert2ScreenPosY(fY);
 
@@ -226,6 +240,10 @@ void HrEditorScene::OnMouseMove(float fX, float fY)
 		{
 			m_bCameraMatrixDirty = true;
 			m_pTrackBallCameraCtrl->Rotate(Vector3(fDiffValueX, fDiffValueY, 0));
+			auto vWorldForward = m_pGodCamera->GetTransform()->GetWorldForward();
+			//auto vWorldForward = m_pLight->GetDirection();
+			//std::cout << "LightForward  x:" << vWorldForward[0] << " y:" << vWorldForward[1] << " z:" << vWorldForward[2] << std::endl;
+
 		}
 	}
 }

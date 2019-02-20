@@ -50,7 +50,7 @@ namespace Hr
 
 		enum EnumTextureUsedFor
 		{
-			TUF_TEX_DEFAULT = 1 << 0,
+			TUF_TEX_DEFAULTTEXTURE = 1 << 0,
 			TUF_TEX_RENDERTARGETVIEW = 1 << 1,
 			TUF_TEX_DEPTHSTENCILVIEW = 1 << 2,
 			TUF_TEX_SHADERRESOURCEVIEW = 1 << 3
@@ -79,19 +79,18 @@ namespace Hr
 
 		EnumPixelFormat GetPixFormat(void) const { return m_format; }
 
-		virtual void CreateHWResource();
+		virtual void CreateHWResource(HrImage* pImage = nullptr);
 	protected:
 		virtual bool LoadImpl();
 		virtual bool UnloadImpl();
 
-		//virtual void CreateTexture() = 0;
-		//virtual void CreateSRV() = 0;
+
+		void InitWithImageData();
 	protected:
 		uint32 m_nWidth;
 		uint32 m_nHeight;
 		uint32 m_nDepth;
 
-		uint32 m_nSrcPitch;
 
 		uint32 m_nMipMapsNum;
 		uint32 m_nArraySize;
@@ -101,12 +100,10 @@ namespace Hr
 		uint32 m_nSampleQuality;
 		uint32 m_nAccessHint;
 		uint32 m_nUsedFor;
+
 		EnumPixelFormat m_format;
+
 		EnumTextureUsage m_textureUsage;
-
-
-		HrStreamDataPtr m_pTexData;
-
 	};
 }
 

@@ -18,6 +18,7 @@
 #include "HrMeshView.h"
 #include "HrRenderApp.h"
 #include "HrConvertUtil.h"
+#include "HrManager.h"
 
 using namespace Hr;
 
@@ -55,6 +56,7 @@ IMPLEMENT_SERIAL(CMeshViewMenuButton, CMFCToolBarMenuButton, 1)
 HrMeshView::HrMeshView()
 {
 	m_nCurrSort = ID_SORTING_GROUPBYTYPE;
+	m_pManager = nullptr;
 }
 
 HrMeshView::~HrMeshView()
@@ -160,9 +162,9 @@ void HrMeshView::FillClassView(const Hr::HrModelDataInfo& modelInfo)
 	m_wndClassView.Expand(hRoot, TVE_EXPAND);
 }
 
-void HrMeshView::SetMainFrame(CMainFrame* pMainFrame)
+void HrMeshView::SetManager(HrManager* pManager)
 {
-	m_pMainFrame = pMainFrame;
+	m_pManager = pManager;
 }
 
 void HrMeshView::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -241,13 +243,13 @@ void HrMeshView::OnLBtnDown(HTREEITEM hitItem)
 		{
 			return;
 		}
-		auto& modelData = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
+		auto& modelData = m_pManager->GetConvertUtil()->GetModelDataInfo();
 		for (size_t i = 0; i < modelData.vecSubMeshInfo.size(); ++i)
 		{
 			if (iteMeshName->second == modelData.vecSubMeshInfo[i].strMeshName)
 			{
 				auto& materialInfo = modelData.vecMaterialDataInfo[i];
-				m_pMainFrame->GetPropertiesWnd().OnSelectMeshDisplaMaterial(i, materialInfo);
+				m_pManager->GetPropertiesWnd()->OnSelectMeshDisplaMaterial(i, modelData.vecSubMeshInfo[i].strMeshName,  materialInfo);
 			}
 		}
 	}

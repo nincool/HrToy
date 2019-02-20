@@ -3,6 +3,8 @@
 #include "Kernel/HrLog.h"
 #include "Kernel/HrResourceModule.h"
 #include "Kernel/HrSceneModule.h"
+#include "Kernel/HrEventSystemModule.h"
+#include "Event/HrEvent.h"
 #include "Render/HrCamera.h"
 #include "Render/HrInstanceBatchHW.h"
 #include "Render/HrInstanceBatchObject.h"
@@ -11,7 +13,6 @@
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrTransform.h"
-#include "Scene/HrSceneObjectComponent.h"
 #include "Asset/HrRenderEffect.h"
 #include <iostream>
 
@@ -82,6 +83,7 @@ HrCameraComponet::HrCameraComponet(const std::string& strName, HrSceneObject* pS
 	m_comType = HrSceneObjectComponent::SCT_CAMERA;
 	m_pCamera = HrMakeSharedPtr<HrCamera>(strName);
 	m_pViewPort = HrMakeSharedPtr<HrViewPort>(m_pCamera);
+
 }
 
 HrCameraComponet::~HrCameraComponet()
@@ -93,8 +95,9 @@ void HrCameraComponet::OnEnter()
 {
 	HrTransformPtr pTrans = m_pSceneObj->GetSceneNode()->GetTransform();
 	Vector3 vWorldPos = pTrans->GetWorldPosition();
-
 	m_pCamera->ViewParams(vWorldPos, pTrans->GetForward() * 1.0f, pTrans->GetUp());
+
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventEndRenderScene, std::bind(&HrCameraComponet::OnEndRenderScene, this, std::placeholders::_1), this);
 }
 
 const HrCameraPtr& HrCameraComponet::GetCamera()
@@ -136,6 +139,11 @@ void HrCameraComponet::SetNearPlane(float fNear)
 void HrCameraComponet::SetFarPlane(float fFar)
 {
 	m_pCamera->ProjectParams(m_pCamera->FOV(), m_pCamera->Aspect(), m_pCamera->NearPlane(), fFar);
+}
+
+void HrCameraComponet::OnEndRenderScene(const HrEventPtr& pEvent)
+{
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -212,7 +220,6 @@ void HrTrackBallCameraController::Forward(float fZ)
 {
 	//假如无限接近的话，那么不运动
 	float fLookAtDistance = m_pCameraCom->GetCamera()->GetLookAtDistance();
-	std::cout << " TrackBallCamera Distance:" << fLookAtDistance << std::endl;
 	if (fZ > 0 && fLookAtDistance <= 5.0f)
 	{
 		return;
@@ -269,7 +276,13 @@ const HrColor& HrLightComponent::GetColor() const
 
 void HrLightComponent::UpdateTransform(const HrTransformPtr& pTransform)
 {
-	m_pLight->SetPosition(pTransform->GetPosition());
+	m_pLight->SetPosition(pTransform->GetWorldPosition());
+	m_pLight->SetDirection(pTransform->GetWorldForward());
+	//auto vLightPosition = m_pLight->GetPosition();
+	//std::cout << "LightPosition x:" << vLightPosition[0] << " y:" << vLightPosition[1] << " z:" << vLightPosition[2] << std::endl;
+	//auto vWorldForward = m_pLight->GetDirection();
+	//std::cout << "LightForward  x:" << vWorldForward[0] << " y:" << vWorldForward[1] << " z:" << vWorldForward[2] << std::endl;
+
 }
 
 //////////////////////////////////////////////////////////////////////

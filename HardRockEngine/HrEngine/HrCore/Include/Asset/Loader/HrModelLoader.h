@@ -14,11 +14,8 @@ namespace Hr
 			{
 				TS_ALBEDO,
 				TS_METALNESS,
-				TS_GLOSSINESS,
-				TS_EMISSIVE,
-				TS_NORMAL,
-				TS_HEIGHT,
-				TS_BUMP,
+				TS_NORMALMAP,
+
 				TS_NUMTEXTURESLOTS,
 			};
 
@@ -27,21 +24,22 @@ namespace Hr
 				, nMaterialIndex(0)
 				, v4Albedo(Vector4::Zero())
 				, v4Emissive(Vector4::Zero())
+				, fMetalness(1.0f)
+				, fRoughness(0.3f)
 				, fOpacity(1.0f)
-				, fShininess(1.0f)
-				, fGlossiness(10.0f)
-				, fReflective(1.0f)
 				, bTwoSided(false)
 			{}
 			int nMaterialIndex;
 			std::string strMaterialName;
+			
 			Vector4 v4Albedo;
 			Vector4 v4Emissive;
 
+			float fMetalness;
+			float fRoughness;
+
 			float fOpacity;
-			float fShininess;
-			float fGlossiness;
-			float fReflective;
+
 			bool bTwoSided;
 
 			std::array<std::string, TS_NUMTEXTURESLOTS> m_arrTexNames;

@@ -17,6 +17,10 @@
 #include <unordered_map>
 
 class CMainFrame;
+namespace Hr
+{
+	class HrManager;
+}
 
 class CMeshToolBar : public CMFCToolBar
 {
@@ -39,14 +43,14 @@ public:
 
 	void FillClassView(const Hr::HrModelDataInfo& modelInfo);
 
-	void SetMainFrame(CMainFrame* pMainFrame);
+	void SetManager(Hr::HrManager* pManager);
 protected:
 	CMeshToolBar m_wndToolBar;
 	CViewTree m_wndClassView;
 	CImageList m_ClassViewImages;
 	UINT m_nCurrSort;
 
-	CMainFrame* m_pMainFrame;
+	Hr::HrManager* m_pManager;
 
 	std::unordered_map<HTREEITEM, std::string> m_mapItemsInfo;
 
@@ -72,5 +76,6 @@ protected:
 
 
 	DECLARE_MESSAGE_MAP()
+
 };
 

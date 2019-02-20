@@ -94,6 +94,9 @@ namespace Hr
 		void SetAspect(float fAspect);
 		void SetNearPlane(float fNear);
 		void SetFarPlane(float fFar);
+
+		void OnEndRenderScene(const HrEventPtr& pEvent);
+
 	protected:
 		HrViewPortPtr m_pViewPort;
 		HrCameraPtr m_pCamera;

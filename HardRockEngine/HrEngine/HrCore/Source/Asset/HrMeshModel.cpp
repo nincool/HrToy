@@ -343,13 +343,11 @@ void HrMeshModelGrid::CreateGridMesh()
 				{
 					int nIndexVertex = nRowIndex * nLinesCount + nColIndex;
 					pVertexBuff[nIndexVertex].position = Vector3(fStartX + m_fStepLong * nColIndex, 0.0f, fStartZ - nRowIndex * m_fStepLong);
-					pVertexBuff[nIndexVertex].normal = Vector3::Zero();
 				}
 			}
 
 			std::vector<HrVertexElement> vecVertexElemet;
 			vecVertexElemet.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
-			vecVertexElemet.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 
 			//Build vertexbuffer
 			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)pVertexBuff

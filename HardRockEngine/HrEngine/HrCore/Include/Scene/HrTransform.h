@@ -32,6 +32,9 @@ namespace Hr
 		const Vector3& GetForward() const;
 		const Vector3& GetRight() const;
 		const Vector3& GetUp() const;
+		const Vector3& GetWorldForward();
+		const Vector3& GetWorldRight();
+		const Vector3& GetWorldUp();
 
 		void SetScale(const Vector3& v3Scale);
 		const Vector3& GetScale();
@@ -68,7 +71,8 @@ namespace Hr
 		const Quaternion& GetParentOriention();
 		const Vector3& GetParentPosition();
 
-		void DecomposeOriention(const Quaternion& orientation);
+		void DecomposeLocalOriention(const Quaternion& orientation);
+		void DecomposeWorldOriention(const Quaternion& orientation);
 	protected:
 		HrSceneNode* m_pSceneNode;
 
@@ -89,6 +93,9 @@ namespace Hr
 		Vector3 m_vWorldScale;
 		bool m_bDirtyWorldOriention;
 		Quaternion m_worldOriention;
+		Vector3 m_vWorldForward;
+		Vector3 m_vWorldRight;
+		Vector3 m_vWorldUp;
 		bool m_bDirtyWorldPosition;
 		Vector3 m_vWorldPosition;
 

@@ -22,10 +22,9 @@ BEGIN_MESSAGE_MAP(HrRenderViewDlg, CDialogEx)
 	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
-HrRenderViewDlg::HrRenderViewDlg(HrMeshView* pMeshView, CWnd* pParent /*=NULL*/)
+HrRenderViewDlg::HrRenderViewDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_RENDERVIEW_DLG, pParent)
 {
-	m_pMeshView = pMeshView;
 }
 
 HrRenderViewDlg::~HrRenderViewDlg()
@@ -54,17 +53,20 @@ BOOL HrRenderViewDlg::PreTranslateMessage(MSG* pMsg)
 {
 	bool rt = CDialogEx::PreTranslateMessage(pMsg);
 
-	m_pRenderApp->RenderOnce();
-
 	return rt;
+}
+
+void HrRenderViewDlg::Update()
+{
+	m_pRenderApp->RenderOnce();
 }
 
 void HrRenderViewDlg::OnOpenFile(const std::string& strFile)
 {
-	auto& modelDataInfo = m_pRenderApp->LoadOriginalMeshData(strFile);
-	m_pMeshView->FillClassView(modelDataInfo);
+	//auto& modelDataInfo = m_pRenderApp->LoadOriginalMeshData(strFile);
+	//m_pMeshView->FillClassView(modelDataInfo);
 	//todo
-	auto pConvertUtil = m_pRenderApp->GetEditorScene()->GetConvertUtil();
+	//auto pConvertUtil = m_pRenderApp->GetEditorScene()->GetConvertUtil();
 }
 
 void HrRenderViewDlg::OnSaveFile(const std::string& strFile)
@@ -76,7 +78,6 @@ void HrRenderViewDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
-
 
 void HrRenderViewDlg::OnPaint()
 {

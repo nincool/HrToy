@@ -33,6 +33,10 @@ void HrSceneObject::OnEnter()
 
 void HrSceneObject::OnExist()
 {
+	for (auto& item : m_mapComponents)
+	{
+		item.second->OnExist();
+	}
 }
 
 void HrSceneObject::Update(float fDelta)

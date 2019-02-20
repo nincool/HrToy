@@ -184,6 +184,7 @@ namespace Hr
 	typedef std::shared_ptr<HrMeshModel> HrMeshModelPtr;
 	class HrMeshModelObject;
 	typedef std::shared_ptr<HrMeshModelObject> HrMeshModelObjectPtr;
+	class HrImage;
 	class HrTexture;
 	typedef std::shared_ptr<HrTexture> HrTexturePtr;
 	class HrMesh;

@@ -48,17 +48,14 @@ namespace Hr
 			, uint32 nSampleCount
 			, uint32 nSampleQuality
 			, uint32 nAccessHint
-			, uint32 texUsedFor = TUF_TEX_DEFAULT
+			, uint32 texUsedFor = TUF_TEX_DEFAULTTEXTURE
 			, EnumPixelFormat format = PF_R8G8B8A8);
 		HrD3D11Texture2D(const ID3D11Texture2DPtr& pD3DTex2D, EnumTextureUsedFor texUsedFor);
 
 		~HrD3D11Texture2D();
 
-		virtual void CreateHWResource() override;
+		virtual void CreateHWResource(HrImage* pImage = nullptr) override;
 		
-		//todo for testing
-		virtual bool LoadImpl() override;
-
 		ID3D11Texture2DPtr GetD3D11Texture();
 
 	private:

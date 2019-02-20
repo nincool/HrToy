@@ -83,13 +83,26 @@ void CPropertiesWnd::SetMainFrame(CMainFrame* pMainFrame)
 	m_pMainFrame = pMainFrame;
 }
 
-void CPropertiesWnd::OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo)
+void CPropertiesWnd::SetManager(Hr::HrManager* pManager)
+{
+	m_pManager = pManager;
+}
+
+void CPropertiesWnd::SetSuggestUnitScale(float fSuggestUnitScale)
+{
+	auto variantValue = _variant_t(fSuggestUnitScale, VT_R8);
+	m_pSuggestUnitScale->SetValue(variantValue);
+}
+
+void CPropertiesWnd::OnSelectMeshDisplaMaterial(int nMeshIndex, const std::string& strMeshName, const Hr::HrModelDataInfo::HrMaterialDataInfo& materialInfo)
 {
 	if (m_strCachedMaterialName == materialInfo.strMaterialName)
 	{
 		return;
 	}
 	m_nMeshIndex = nMeshIndex;
+	m_strMeshName = strMeshName;
+	m_pMeshName->SetValue((_variant_t)(Hr::HrStringUtil::Utf8ToWstring(m_strMeshName).c_str()));
 
 	m_pMateiralSetting->SetValue((_variant_t)(Hr::HrStringUtil::Utf8ToWstring(materialInfo.strMaterialName).c_str()));
 
@@ -98,10 +111,10 @@ void CPropertiesWnd::OnSelectMeshDisplaMaterial(int nMeshIndex, const Hr::HrMode
 	m_pMaterialAlbedo->SetColor(albedoValue);
 	COLORREF emissiveValue = RGB(materialInfo.v4Emissive[0] * 255, materialInfo.v4Emissive[1] * 255, materialInfo.v4Emissive[2] * 255);
 	m_pMaterialEmissive->SetColor(emissiveValue);
-	auto variantValue = _variant_t(materialInfo.fGlossiness, VT_R8);
-	m_pMaterialShininess->SetValue(variantValue);
-	auto reflectValue = _variant_t(materialInfo.fReflective, VT_R8);
-	m_pMaterialReflective->SetValue(reflectValue);
+	auto variantValue = _variant_t(materialInfo.fMetalness, VT_R8);
+	m_pMaterialMetalness->SetValue(variantValue);
+	variantValue = _variant_t(materialInfo.fRoughness, VT_R8);
+	m_pMaterialRoughness->SetValue(variantValue);
 
 	for (int i = 0; i < m_arrMaterialTexture.size(); ++i)
 	{
@@ -226,21 +239,22 @@ void CPropertiesWnd::InitPropList()
 	m_pHrSettingGroup = new CMFCPropertyGridProperty(_T("HrSetting"));
 	{
 		{
-			//static const TCHAR szFilter[] = _T("Texture Files(*.png)|*.png|All Files(*.*)|*.*||");
-			//m_pHrSettingGroup->AddSubItem(new CMFCPropertyGridFileProperty(_T("Texture"), TRUE, _T(""), _T("ico"), 0, szFilter, _T("Specifies the texture")));
 			auto pUnitScale = new CMFCPropertyGridProperty(_T("UnitScale"), (_variant_t)1.0f, _T("Specifies the window's height"));
 			m_pHrSettingGroup->AddSubItem(pUnitScale);
 			auto pOutputUnitScale = new CMFCPropertyGridProperty(_T("OutputUnitScale"), (_variant_t)1.0f, _T("Specifies the output unitscale'"));
 			m_pHrSettingGroup->AddSubItem(pOutputUnitScale);
+			m_pMeshName = new CMFCPropertyGridProperty(_T("MeshName"), _T("MeshName"), _T(""));
+			m_pHrSettingGroup->AddSubItem(m_pMeshName);
+			auto variantValue = _variant_t(1.0, VT_R8);
+			m_pSuggestUnitScale = new CMFCPropertyGridProperty(_T("SuggestUnitScale"), variantValue, _T("Specifies the suggest unitscale'"));
+			m_pHrSettingGroup->AddSubItem(m_pSuggestUnitScale);
+
 		}
 		{
 			static const TCHAR szFilter[] = _T("Material Files(*.material)|*.material|All Files(*.*)|*.*||");
 			m_pMateiralSetting = new CMFCPropertyGridProperty(_T("Material"), _T("Default"), _T("One of: None, Thin, Resizable, or Dialog Frame"));
 			m_pMateiralSetting->AddOption(_T("Default"));
 			m_pMateiralSetting->AddOption(_T("Standard"));
-			m_pMateiralSetting->AddOption(_T("Thin"));
-			m_pMateiralSetting->AddOption(_T("Resizable"));
-			m_pMateiralSetting->AddOption(_T("Dialog Frame"));
 			m_pMateiralSetting->AllowEdit(FALSE);
 			m_pHrSettingGroup->AddSubItem(m_pMateiralSetting);
 		}
@@ -263,27 +277,22 @@ void CPropertiesWnd::InitPropList()
 		m_pMaterialGroup->AddSubItem(m_pMaterialEmissive);
 
 		auto variantValue = _variant_t(3.0f, VT_R8);
-		m_pMaterialShininess = new CMFCPropertyGridProperty(_T("Glossiness"), variantValue, _T("Specifies the window's width"));
-		//m_pMaterialShininess->EnableSpinControl(TRUE, 0, 20);
-		m_pMaterialGroup->AddSubItem(m_pMaterialShininess);
+		m_pMaterialMetalness = new CMFCPropertyGridProperty(_T("Metalness"), variantValue, _T("Specifies the window's width"));
+		//m_pMaterialMetalness->EnableSpinControl(TRUE, 0, 20);
+		m_pMaterialGroup->AddSubItem(m_pMaterialMetalness);
 
 		variantValue = _variant_t(1.0f, VT_R8);
-		m_pMaterialReflective = new CMFCPropertyGridProperty(_T("Reflective"), variantValue, _T("Specifies the window's width"));
-		m_pMaterialGroup->AddSubItem(m_pMaterialReflective);
+		m_pMaterialRoughness = new CMFCPropertyGridProperty(_T("Roughness"), variantValue, _T("Specifies the window's width"));
+		m_pMaterialGroup->AddSubItem(m_pMaterialRoughness);
 
 		std::array<std::wstring, HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS> arrTextureTypeName;
 		arrTextureTypeName[0] = _T("TEX_ALBEDO");
 		arrTextureTypeName[1] = _T("TEX_METALNESS");
-		arrTextureTypeName[2] = _T("TEX_GLOSSINESS");
-		arrTextureTypeName[3] = _T("TEX_EMISSIVE");
-		arrTextureTypeName[4] = _T("TEX_NORMAL");
-		arrTextureTypeName[5] = _T("TEX_HEIGHT");
-		arrTextureTypeName[6] = _T("TEX_BUMP");
+		arrTextureTypeName[2] = _T("TEX_NORMALMAP");
 		for (size_t i = 0; i < arrTextureTypeName.size(); ++i)
 		{
 			static const TCHAR szFilter[] = _T("png Files(*.png)|*.png|All Files(*.*)|*.*||");
 			m_arrMaterialTexture[i] = new CMFCPropertyGridFileProperty(arrTextureTypeName[i].c_str(), TRUE, _T(""), _T("png"), 0, szFilter, _T("Specifies the window icon"));
-			//m_pMaterialGroup->AddSubItem(new CMFCPropertyGridFileProperty(_T("Icon"), TRUE, _T(""), _T("ico"), 0, szFilter, _T("Specifies the window icon")));
 			m_pMaterialGroup->AddSubItem(m_arrMaterialTexture[i]);
 		}
 	}
@@ -393,51 +402,64 @@ LRESULT CPropertiesWnd::OnPropertyChanged(__in WPARAM wParam, __in LPARAM lParam
 		if (strValue == _T("Standard"))
 		{
 			std::string strMaterialName = HrStringUtil::WstringToUtf8(var.bstrVal);
-			m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->ChangeMaterial(m_nMeshIndex, strMaterialName);
-			auto& modelDataInfo = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
-			OnSelectMeshDisplaMaterial(m_nMeshIndex, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
+			m_pMainFrame->GetManager()->GetConvertUtil()->ChangeMaterial(m_nMeshIndex, strMaterialName);
+			auto& modelDataInfo = m_pMainFrame->GetManager()->GetConvertUtil()->GetModelDataInfo();
+			OnSelectMeshDisplaMaterial(m_nMeshIndex, m_strMeshName, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
 		}
 	}
-	else if (str == _T("Glossiness"))
+	else if (str == _T("Albedo"))
 	{
 		COleVariant var = pProp->GetValue();
-		float fGlossiness = var.dblVal;
-		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialGlossiness(m_nMeshIndex, fGlossiness);
-	}
-	else if (str == _T("Reflective"))
-	{
-		COleVariant var = pProp->GetValue();
-		float fReflective = var.dblVal;
-		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialReflective(m_nMeshIndex, fReflective);
+		LONG colorValue = var.lVal;
+		float r = GetRValue(colorValue) / 255.0;
+		float g = GetGValue(colorValue) / 255.0;
+		float b = GetBValue(colorValue) / 255.0;
+		m_pManager->GetConvertUtil()->SetMaterialAlbedo(m_nMeshIndex, r, g, b);
 	}
 	else if (str == _T("TEX_ALBEDO"))
 	{
 		COleVariant var = pProp->GetValue();
 		std::string strTexPath = HrStringUtil::WstringToUtf8(var.bstrVal);
-		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialTexture(m_nMeshIndex, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_ALBEDO, strTexPath);
-		auto& modelDataInfo = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
-		OnSelectMeshDisplaMaterial(m_nMeshIndex, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
+		m_pMainFrame->GetManager()->GetConvertUtil()->SetMaterialTexture(m_nMeshIndex, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_ALBEDO, strTexPath);
+		auto& modelDataInfo = m_pMainFrame->GetManager()->GetConvertUtil()->GetModelDataInfo();
+		OnSelectMeshDisplaMaterial(m_nMeshIndex, m_strMeshName, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
 	}
-	else if (str == _T("TEX_NORMAL"))
+	else if (str == _T("TEX_METALNESS"))
 	{
 		COleVariant var = pProp->GetValue();
 		std::string strTexPath = HrStringUtil::WstringToUtf8(var.bstrVal);
-		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialTexture(m_nMeshIndex, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_NORMAL, strTexPath);
-		auto& modelDataInfo = m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->GetModelDataInfo();
-		OnSelectMeshDisplaMaterial(m_nMeshIndex, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
+		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialTexture(m_nMeshIndex, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_ALBEDO, strTexPath);
+		auto& modelDataInfo = m_pMainFrame->GetManager()->GetConvertUtil()->GetModelDataInfo();
+		OnSelectMeshDisplaMaterial(m_nMeshIndex, m_strMeshName, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
 	}
+	else if (str == _T("TEX_NORMALMAP"))
+	{
+		COleVariant var = pProp->GetValue();
+		std::string strTexPath = HrStringUtil::WstringToUtf8(var.bstrVal);
+		m_pManager->GetConvertUtil()->SetMaterialTexture(m_nMeshIndex, Hr::HrModelDataInfo::HrMaterialDataInfo::TS_NORMALMAP, strTexPath);
+		auto& modelDataInfo = m_pManager->GetConvertUtil()->GetModelDataInfo();
+		OnSelectMeshDisplaMaterial(m_nMeshIndex, m_strMeshName, modelDataInfo.vecMaterialDataInfo[m_nMeshIndex]);
+	}
+	else if (str == _T("Metalness"))
+	{
+		COleVariant var = pProp->GetValue();
+		float fGlossiness = var.dblVal;
+		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialMetalness(m_nMeshIndex, fGlossiness);
+	}
+	else if (str == _T("Roughness"))
+	{
+		COleVariant var = pProp->GetValue();
+		float fReflective = var.dblVal;
+		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetMaterialRoughness(m_nMeshIndex, fReflective);
+	}
+
 	else if (str == _T("UnitScale"))
 	{
 		COleVariant var = pProp->GetValue();
 		float fUnitScale = var.fltVal;
 		m_pMainFrame->GetRenderViewDlg()->GetRenderApp()->GetEditorScene()->GetConvertUtil()->SetUnitScale(fUnitScale);
 	}
-	else if (str == _T("OutputUnitScale"))
-	{
-		COleVariant var = pProp->GetValue();
-		float fOutputScale = var.fltVal;
 
-	}
 	return 0;
 }
 

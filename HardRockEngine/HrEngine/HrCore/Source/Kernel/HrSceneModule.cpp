@@ -14,6 +14,8 @@ HrSceneModule::HrSceneModule()
 
 	m_pEventUpdateBegin = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventBeginUpdateScene);
 	m_pEventUpdateEnd = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventEndUpdateScene);
+	m_pEventRenderBegin = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventBeginRenderScene);
+	m_pEventRenderEnd = HrMakeSharedPtr<HrEventCustom>(HrEvent::scEventEndRenderScene);
 }
 
 HrSceneModule::~HrSceneModule()
@@ -66,7 +68,9 @@ void HrSceneModule::StopScene()
 
 void HrSceneModule::RenderScene()
 {
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(m_pEventRenderBegin);
 	m_pSceneManager->RenderScene();
+	HrDirector::Instance()->GetEventSystemModule()->DispatcherEvent(m_pEventRenderEnd);
 }
 
 void HrSceneModule::Destroy()

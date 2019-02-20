@@ -199,6 +199,7 @@
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="HrConvertUtil.h" />
+    <ClInclude Include="HrManager.h" />
     <ClInclude Include="HrMeshConvertMFC.h" />
     <ClInclude Include="HrMeshConvertMFCDoc.h" />
     <ClInclude Include="HrMeshConvertMFCView.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="HrConvertUtil.cpp" />
+    <ClCompile Include="HrManager.cpp" />
     <ClCompile Include="HrMeshConvertMFC.cpp" />
     <ClCompile Include="HrMeshConvertMFCDoc.cpp" />
     <ClCompile Include="HrMeshConvertMFCView.cpp" />

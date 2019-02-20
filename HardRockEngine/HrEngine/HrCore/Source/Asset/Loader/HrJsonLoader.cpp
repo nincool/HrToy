@@ -42,10 +42,13 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		HrModelDataInfo::HrSubMeshDataInfo& subMeshData = modelDesc.vecSubMeshInfo.back();
 		subMeshData.strMeshName = HrStringUtil::StringFormat("SubMesh_%d", nSubMeshIndex);
 		const rapidjson::Value& subMeshInfo = meshesInfo[subMeshData.strMeshName.c_str()];
-		subMeshData.vecIndices = HrStringUtil::GetTVectorFromString<uint32>(subMeshInfo["Indices"].GetString(), ",");
-		subMeshData.vecVertexPos = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Vertices"].GetString(), "|", ",");
-		subMeshData.vecNormal = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["Normals"].GetString(), "|", ",");
-		subMeshData.vecUV = HrStringUtil::GetVectorFloat2FromString(subMeshInfo["UVs"].GetString(), "|", ",");
+		//subMeshData.vecIndices = HrStringUtil::GetTVectorFromString<uint32>(subMeshInfo["Indices"].GetString(), ",");
+		HrStringUtil::FastGetTVectorFromString<uint32>(subMeshData.vecIndices, subMeshInfo["Indices"].GetString(), ',');
+		HrStringUtil::FastGetVectorFloat3FromString(subMeshData.vecVertexPos, subMeshInfo["Vertices"].GetString(), '|', ',');
+		HrStringUtil::FastGetVectorFloat3FromString(subMeshData.vecTangent, subMeshInfo["Tangents"].GetString(), '|', ',');
+		HrStringUtil::FastGetVectorFloat3FromString(subMeshData.vecBinormal, subMeshInfo["Binormals"].GetString(), '|', ',');
+		HrStringUtil::FastGetVectorFloat3FromString(subMeshData.vecNormal, subMeshInfo["Normals"].GetString(), '|', ',');
+		HrStringUtil::FastGetVectorFloat2FromString(subMeshData.vecUV, subMeshInfo["UVs"].GetString(), '|', ',');
 		std::vector<float3> vecAABB = HrStringUtil::GetVectorFloat3FromString(subMeshInfo["AABB"].GetString(), "|", ",");
 		subMeshData.aabb = AABBox(vecAABB[0], vecAABB[1]);
 	}
@@ -59,14 +62,14 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 		const rapidjson::Value& materialInfo = materialsInfo[HrStringUtil::StringFormat("Material_%d", nMaterialIndex).c_str()];
 
 		materialData.nMaterialIndex = nMaterialIndex;
-
+		materialData.strMaterialName = materialInfo["Name"].GetString();
 		materialData.v4Albedo = HrStringUtil::GetFloat4FromString(materialInfo["Albedo"].GetString());
 		materialData.v4Emissive = HrStringUtil::GetFloat4FromString(materialInfo["Emissibe"].GetString());
+		materialData.fMetalness = materialInfo["Metalness"].GetFloat();
+		materialData.fRoughness = materialInfo["Roughness"].GetFloat();
 		materialData.fOpacity = materialInfo["Opacity"].GetFloat();
-		materialData.fShininess = 0;
-		materialData.fGlossiness = materialInfo["Glossiness"].GetFloat();
-		materialData.fReflective = materialInfo["Reflective"].GetFloat();
 		materialData.bTwoSided = materialInfo["TwoSided"].GetInt() == 0;
+
 		for (int nTexIndex = 0; nTexIndex < HrModelDataInfo::HrMaterialDataInfo::TS_NUMTEXTURESLOTS; ++nTexIndex)
 		{
 			std::string strTextureKey = "Texture_" + std::to_string(nTexIndex);
@@ -78,6 +81,5 @@ void HrJsonLoader::Load(std::string& strFile, HrModelDataInfo& modelDesc)
 			}
 		}
 	}
-
-
 }
+

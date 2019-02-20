@@ -19,11 +19,13 @@
 #include "PropertiesWnd.h"
 #include "HrRenderViewDlg.h"
 #include "HrMeshView.h"
+#include "HrManager.h"
 
 #include <memory>
 namespace Hr
 {
 	class HrRenderApp;
+	class HrManager;
 }
 
 
@@ -60,6 +62,11 @@ public:
 	std::shared_ptr<HrRenderViewDlg> GetRenderViewDlg()
 	{
 		return m_pRenderViewDlg;
+	}
+
+	std::shared_ptr<Hr::HrManager> GetManager()
+	{
+		return m_pManager;
 	}
 protected:  // control bar embedded members
 	CMFCRibbonBar     m_wndRibbonBar;
@@ -103,10 +110,12 @@ private:
 	std::string m_strCurrentOpenFile;
 
 	std::shared_ptr<HrRenderViewDlg> m_pRenderViewDlg;
+	std::shared_ptr<Hr::HrManager> m_pManager;
 public:
-	afx_msg void OnViewStatusBar();
+	//afx_msg void OnViewStatusBar();
 	afx_msg void OnButtonSave();
 	afx_msg void OnButtonOpen();
+	afx_msg void OnButtonOpenHrMesh();
 	afx_msg void OnBtnHrSaveBinary();
 };
 

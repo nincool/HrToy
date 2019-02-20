@@ -10,7 +10,7 @@
 #include "HrCore/Include/Asset/HrRenderEffect.h"
 #include "HrCore/Include/Asset/HrMesh.h"
 #include "HrCore/Include/Asset/HrMeshModel.h"
-#include "HrCore/Include/Asset/HrGirlfriend.h"
+#include "HrCore/Include/Asset/HrSceneItems.h"
 
 namespace Hr
 {

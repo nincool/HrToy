@@ -39,6 +39,8 @@ namespace Hr
 
 		HrEventPtr m_pEventUpdateBegin;
 		HrEventPtr m_pEventUpdateEnd;
+		HrEventPtr m_pEventRenderBegin;
+		HrEventPtr m_pEventRenderEnd;
 	};
 }
 

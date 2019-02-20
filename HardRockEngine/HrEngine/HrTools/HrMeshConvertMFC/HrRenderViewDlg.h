@@ -16,7 +16,7 @@ class HrRenderViewDlg : public CDialogEx
 	DECLARE_DYNAMIC(HrRenderViewDlg)
 
 public:
-	HrRenderViewDlg(HrMeshView* pMeshView = nullptr, CWnd* pParent = NULL);   // standard constructor
+	HrRenderViewDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~HrRenderViewDlg();
 
 	std::shared_ptr<Hr::HrRenderApp> GetRenderApp()
@@ -32,6 +32,8 @@ public:
 	virtual BOOL OnInitDialog() override;
 	virtual BOOL PreTranslateMessage(MSG* pMsg) override;
 
+	void Update();
+	
 	void OnOpenFile(const std::string& strFile);
 	void OnSaveFile(const std::string& strFile);
 protected:
@@ -46,6 +48,4 @@ protected:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 private:
 	std::shared_ptr<Hr::HrRenderApp> m_pRenderApp;
-
-	HrMeshView* m_pMeshView;
 };

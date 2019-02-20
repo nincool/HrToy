@@ -80,9 +80,8 @@ void HrSceneNode::OnEnter()
 	AddEventListeners();
 
 	if (m_pSceneObject)
-	{
 		m_pSceneObject->OnEnter();
-	}
+	
 	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnEnter();
@@ -93,6 +92,10 @@ void HrSceneNode::OnExist()
 {
 	m_bRunning = false;
 	m_pParentNode = nullptr;
+
+	if (m_pSceneObject)
+		m_pSceneObject->OnExist();
+
 	for (auto& itemChild : m_vecChildrenNode)
 	{
 		itemChild->OnExist();
@@ -101,13 +104,25 @@ void HrSceneNode::OnExist()
 
 void HrSceneNode::AddEventListeners()
 {
-	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventBeginUpdateScene, std::bind(&HrSceneNode::OnBeginRenderScene, this, std::placeholders::_1), this);
-	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventEndUpdateScene, std::bind(&HrSceneNode::OnEndRenderScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventBeginUpdateScene, std::bind(&HrSceneNode::OnBeginUpdateScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventEndUpdateScene, std::bind(&HrSceneNode::OnEndUpdateScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventBeginRenderScene, std::bind(&HrSceneNode::OnBeginRenderScene, this, std::placeholders::_1), this);
+	HrDirector::Instance()->GetEventSystemModule()->AddEventCustomListener(HrEvent::scEventEndRenderScene, std::bind(&HrSceneNode::OnEndRenderScene, this, std::placeholders::_1), this);
 }
 
 void HrSceneNode::RemoveEventListeners()
 {
 	
+}
+
+void HrSceneNode::OnBeginUpdateScene(const HrEventPtr& pEvent)
+{
+
+}
+
+void HrSceneNode::OnEndUpdateScene(const HrEventPtr& pEvent)
+{
+
 }
 
 void HrSceneNode::OnBeginRenderScene(const HrEventPtr& pEvent)
@@ -298,3 +313,4 @@ void HrSceneNode::SetFrustumVisible(HrMath::EnumVisibility visible)
 {
 	m_nFrustumVisibleMark = visible;
 }
+

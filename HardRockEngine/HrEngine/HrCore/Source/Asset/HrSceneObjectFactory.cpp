@@ -68,7 +68,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateModelNode(const std::string& strName)
 HrSceneNodePtr HrSceneObjectFactory::CreateMeshModelNode(HrMeshModelPtr& pMeshModel)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(pMeshModel->GetFileName());
-	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
+	BuildupSceneNodeWithMesh(pMeshModel, pSceneNode);
 
 	return pSceneNode;
 }
@@ -98,7 +98,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateGridPlan()
 
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
 	pSceneNode->SetName(pMeshModelGrid->GetFileName());
-	BuildUpSceneNodeWithMesh(pMeshModelGrid, pSceneNode);
+	BuildupSceneNodeWithMesh(pMeshModelGrid, pSceneNode);
 
 	return pSceneNode;
 }
@@ -107,7 +107,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodeP(const std::string& strName,
 {
 	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
 	std::shared_ptr<HrMeshModelQuadP> pMeshModel = HrMakeSharedPtr<HrMeshModelQuadP>(fWidth, fHeight);
-	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
+	BuildupSceneNodeWithMesh(pMeshModel, pSceneNode);
 
 	return pSceneNode;
 }
@@ -116,7 +116,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodePN(const std::string& strName
 {
 	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
 	std::shared_ptr<HrMeshModelQuadPN> pMeshModel = HrMakeSharedPtr<HrMeshModelQuadPN>(fWidth, fHeight);
-	BuildUpSceneNodeWithMesh(pMeshModel, pSceneNode);
+	BuildupSceneNodeWithMesh(pMeshModel, pSceneNode);
 
 	return pSceneNode;
 }
@@ -128,7 +128,7 @@ HrSceneNodePtr HrSceneObjectFactory::CreateSceneNode(const std::string& strName)
 	return pSceneNode;
 }
 
-HrSceneNodePtr HrSceneObjectFactory::BuildUpSceneNodeWithMesh(const HrMeshModelPtr& pMeshModel, const HrSceneNodePtr& pSceneNode)
+HrSceneNodePtr HrSceneObjectFactory::BuildupSceneNodeWithMesh(const HrMeshModelPtr& pMeshModel, const HrSceneNodePtr& pSceneNode)
 {
 	for (size_t i = 0; i < pMeshModel->GetMesh()->GetSubMeshNum(); ++i)
 	{
