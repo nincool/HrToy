@@ -25,6 +25,7 @@ HrFileUtils::HrFileUtils()
 	AddSearchDirectory(strAssetPath + "\\Media\\Scene\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Effect\\Hlsl\\");
 	AddSearchDirectory(strAssetPath + "\\Media\\Prefab\\");
+	AddSearchDirectory(strAssetPath + "\\Media\\Texture\\");
 }
 
 bool HrFileUtils::IsFileExist(const std::string& strFile) const

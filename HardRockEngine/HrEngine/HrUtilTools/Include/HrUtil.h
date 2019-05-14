@@ -5,6 +5,19 @@
 #include <boost/functional/hash.hpp>
 #include <boost/cast.hpp>
 
+//置位特定位
+#define   SET_NTH_BIT(x, n)                    ( x | ((1U)<<(n)) )
+#define   SET_NTH_BIT64(x, n)                  ( x | (uint64(1)<<(n)) )
+//置位n到m位				                  
+#define   SET_BIT_N_TO_M(x,n,m)                ( x | (~((~0u)<<(m-n+1)))<<(n))
+//复位特定位					              
+#define   CLEAR_NTH_BIT(x, n)                  ( x & ~((1U)<<(n)) )
+#define   CLEAR_NTH_BIT64(x, n)                ( x & ~(uint64(1)<<(n)) )
+#define   CLEAR_BIT_N_TO_M(x,n,m)              ( x & ((~0u)<<(m-n+1))<<(n))
+#define   CLEAR_BIT_N_TO_M64(x,n,m)            ( x & ((~0u)<<(m-n+1))<<(n))
+//截取特定位						           
+#define	  GETBIT(x, n)                         ( x & ((1u) << (n)))
+#define   GETBIT64(x, n)                       ( x & (uint64(1) << (n)))
 
 namespace Hr
 {

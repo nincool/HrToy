@@ -74,6 +74,12 @@
     <Filter Include="Source\Platform\AppWin">
       <UniqueIdentifier>{bab6b5ef-e900-4909-b899-9f513236b5c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\UI">
+      <UniqueIdentifier>{c6596c89-8517-420f-bf80-516df18d3a1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI">
+      <UniqueIdentifier>{cd089ad5-11ff-4759-99f7-2933026f09a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MemoryAlloc\HrMemoryAllocatedObject.h">
@@ -340,9 +346,29 @@
     <ClInclude Include="Include\Render\HrRenderProcessing.h">
       <Filter>Include\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Asset\HrSceneItems.h" />
     <ClInclude Include="Include\Asset\HrImage.h">
       <Filter>Include\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\HrUIButton.h">
+      <Filter>Include\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\HrUIWidget.h">
+      <Filter>Include\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\HrUISprite.h">
+      <Filter>Include\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\HrUICanvas.h">
+      <Filter>Include\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\HrUIFactory.h">
+      <Filter>Include\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Asset\HrSceneItems.h">
+      <Filter>Include\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Render\HrRenderCommand.h">
+      <Filter>Include\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -592,13 +618,42 @@
     <ClCompile Include="Source\Render\HrRenderProcessing.cpp">
       <Filter>Source\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Asset\HrSceneItems.cpp" />
     <ClCompile Include="Source\Asset\HrImage.cpp">
       <Filter>Source\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HrUIButton.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HrUIWidget.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HrUISprite.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HrUICanvas.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HrUIFactory.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Asset\HrSceneItems.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render\HrRenderCommand.cpp">
+      <Filter>Source\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrStandardPro.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrUIEffect.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrReflect.json">
+      <Filter>Effects</Filter>
+    </None>
+    <None Include="..\..\Bin_Win\Media\Effect\Hlsl\HrSky.json">
       <Filter>Effects</Filter>
     </None>
   </ItemGroup>
@@ -610,6 +665,15 @@
       <Filter>Effects</Filter>
     </Text>
     <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrCommonLights.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrUIEffect.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrReflect.hlsl">
+      <Filter>Effects</Filter>
+    </Text>
+    <Text Include="..\..\Bin_Win\Media\Effect\Hlsl\HrSky.hlsl">
       <Filter>Effects</Filter>
     </Text>
   </ItemGroup>

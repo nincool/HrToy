@@ -408,11 +408,6 @@ void HrRenderEffect::UpdateAutoEffectParams(const HrRenderFrameParametersPtr& pR
 	{
 		UpdateOneEffectParameter(item.second, pRenderFrameParameters);
 	}
-
-	//for (auto& item : m_mapRenderConstantBuffers)
-	//{
-	//	item.second->UpdateConstantBuffer();
-	//}
 }
 
 void HrRenderEffect::UpdateLightsEffectParameter(const HrRenderFrameParametersPtr& pRenderFrameParameters)
@@ -425,7 +420,8 @@ void HrRenderEffect::UpdateLightsEffectParameter(const HrRenderFrameParametersPt
 		auto iteEffParam = m_mapRenderEffectParameters.find(nHashLightNumName);
 		if (iteEffParam != m_mapRenderEffectParameters.end())
 		{
-			*(iteEffParam->second) = pRenderFrameParameters->GetAmbientColor();
+			//todo
+			//*(iteEffParam->second) = pRenderFrameParameters->GetAmbientColor();
 		}
 	}
 
@@ -530,8 +526,6 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	{
 	case RPT_WORLD_MATRIX:
 	{
-		//auto worldMaxtrix = pRenderFrameParameters->GetWorldMatrix();
-		//std::cout << " Axis Position2 :" << worldMaxtrix.Row(3).x() << "," << worldMaxtrix.Row(3).y() << "," << worldMaxtrix.Row(3).z() << std::endl;
 		*pRenderEffectParameter = pRenderFrameParameters->GetWorldMatrix();
 		break;
 	}
@@ -560,8 +554,6 @@ void HrRenderEffect::UpdateOneEffectParameter(const HrRenderEffectParameterPtr& 
 	}
 	case RPT_CAMERA_POSITION:
 	{
-		auto worldMaxtrix = pRenderFrameParameters->GetCameraPosition();
-		std::cout << " Camera Position2 :" << worldMaxtrix.x() << "," << worldMaxtrix.y() << "," << worldMaxtrix.z() << std::endl;
 		*pRenderEffectParameter = pRenderFrameParameters->GetCameraPosition();
 		break;
 	}

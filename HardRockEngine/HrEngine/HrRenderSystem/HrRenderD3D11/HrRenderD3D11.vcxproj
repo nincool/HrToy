@@ -68,27 +68,6 @@
       <Project>{0688b1ee-0e99-4453-8455-da4be372aefc}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Bin_Win\Media\HrShader\HrLightingCommon.hlsl">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </EntryPointName>
-    </None>
-    <None Include="..\..\..\Bin_Win\Media\HrShader\HrSimple.hlsl">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </EntryPointName>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Bin_Win\Media\HrShader\HrInstanceHW.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{489A0806-F326-48DB-83DC-1575C3025D14}</ProjectGuid>
     <RootNamespace>HrRenderD3D11</RootNamespace>

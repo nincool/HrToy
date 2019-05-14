@@ -15,6 +15,7 @@ using namespace Hr;
 HrMaterial::HrMaterial()
 {
 	m_fOpacity = 0.0f;
+	m_albedo = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_fMetalness = std::numeric_limits<float>::min();
 	m_fRoughness = std::numeric_limits<float>::min();
 	m_arrTextures.assign(nullptr);
@@ -136,6 +137,7 @@ float HrMaterial::GetOpacity() const
 void HrMaterial::SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTexture)
 {
 	m_arrTextures[tsSlot] = pTexture;
+	m_material_param0 = SET_NTH_BIT(m_material_param0, tsSlot);
 }
 
 const HrTexturePtr& HrMaterial::GetTexture(EnumMaterialTexSlot tsSlot)

@@ -61,10 +61,30 @@ const std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> >& HrSceneViewP
 //
 ////////////////////////////////////////////////
 
+bool HrEnvironmentData::IsSkyBoxEnable()
+{
+	return m_pSkyBox != nullptr;
+}
+
+void HrEnvironmentData::SetSkyBox(const HrSkyBoxComponentPtr& pSkyBox)
+{
+	m_pSkyBox = pSkyBox;
+}
+
+const HrSkyBoxComponentPtr& HrEnvironmentData::GetSkyBox()
+{
+	return m_pSkyBox;
+}
+
+////////////////////////////////////////////////
+//
+////////////////////////////////////////////////
+
 HrScene::HrScene()
 {
 	m_pLightsData = HrMakeSharedPtr<HrSceneLightData>();
 	m_pViewPortData = HrMakeSharedPtr<HrSceneViewPortData>();
+	m_pEnvironmentData = HrMakeSharedPtr<HrEnvironmentData>();
 	m_pSceneRootNode = HrMakeSharedPtr<HrSceneNode>("Hr_Root");
 }
 
@@ -76,9 +96,6 @@ HrScene::~HrScene()
 void HrScene::OnEnter()
 {
 	m_pSceneRootNode->OnEnter();
-
-	auto pAmbientLight = HrSceneObjectFactory::Instance()->CreateLightNode("Default Ambient Light", HrLight::LT_AMBIENT);
-	m_pSceneRootNode->AddChild(pAmbientLight);
 }
 
 void HrScene::OnExit()
@@ -101,9 +118,9 @@ void HrScene::Update(float fDelta)
 	m_pSceneRootNode->UpdateNode(fDelta);
 }
 
-void HrScene::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
+const std::shared_ptr<HrEnvironmentData>& HrScene::GetEnvironmentData()
 {
-	m_pSceneRootNode->FindVisibleRenderables(pRenderQueueManager);
+	return m_pEnvironmentData;
 }
 
 const std::shared_ptr<HrSceneLightData>& HrScene::GetLightsData()
@@ -120,3 +137,4 @@ const HrSceneNodePtr& HrScene::GetRootNode()
 {
 	return m_pSceneRootNode;
 }
+

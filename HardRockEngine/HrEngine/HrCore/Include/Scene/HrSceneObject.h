@@ -24,26 +24,36 @@ namespace Hr
 		void AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent);
 		HrSceneObjectComponentPtr AddComponent(HrSceneObjectComponent::EnumSceneComponentType comType);
 		HrSceneObjectComponentPtr GetComponent(HrSceneObjectComponent::EnumSceneComponentType comType);
+		
 		const HrRenderableComponentPtr& GetRenderableComponent();
+		const HrSkyBoxComponentPtr& GetSkyBoxComponent();
+		
+		const HrUICanvasComponentPtr& GetUICanvasComponent();
+		const HrUIComponentPtr& GetUIComponent();
 
 		template <typename T>
 		std::shared_ptr<T> AddComponent();
 		template <typename T>
 		std::shared_ptr<T> GetComponent();
 
-		const HrSceneNode* GetSceneNode() const;
+		HrSceneNode* GetSceneNode() const;
+		HrRenderCommand* GetRenderCommand();
 	private:
+		void AddSkyBoxToScene();
 		void AddCameraToScene();
 		void AddLightToScene();
 	protected:
 		HrSceneNode* m_pContainerNode;
 
-		std::unordered_map<HrSceneObjectComponent::EnumSceneComponentType, HrSceneObjectComponentPtr> m_mapComponents;
+		std::unordered_map<size_t, HrSceneObjectComponentPtr> m_mapComponents;
 		HrSceneObjectComponentPtr m_pSceneObjMutexCom;
 
+		HrSkyBoxComponentPtr m_pCachedSkyBox;
 		HrRenderableComponentPtr m_pCachedRenderable;
 		HrCameraComponentPtr m_pCachedCamera;
 		HrLightComponentPtr m_pCachedLight;
+		HrUICanvasComponentPtr m_pCachedUICanvas;
+		HrUIComponentPtr m_pCachedUI;
 
 	};
 
@@ -71,6 +81,18 @@ namespace Hr
 		{
 			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_TRACKBALLCAMERA));
 		}
+		else if (typeInfo == typeid(HrUICanvasComponent))
+		{
+			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_UICANVAS));
+		}
+		else if (typeInfo == typeid(HrUIComponent))
+		{
+			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_UI));
+		}
+		else if (typeInfo == typeid(HrSkyBoxComponent))
+		{
+			return HrCheckPointerCast<T>(AddComponent(HrSceneObjectComponent::SCT_SKYBOX));
+		}
 		else
 		{
 			TRE("invalid component!");
@@ -96,6 +118,10 @@ namespace Hr
 		else if (typeid(T) == typeid(HrLightComponent))
 		{
 			pSceneObjCom = GetComponent(HrSceneObjectComponent::SCT_LIGHT);
+		}
+		else if (typeid(T) == typeid(HrUIComponent))
+		{
+			pSceneObjCom = GetComponent(HrSceneObjectComponent::SCT_UI);
 		}
 		else
 		{

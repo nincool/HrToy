@@ -37,6 +37,11 @@
 #include "HrCore/Include/Render/HrRenderLayout.h"
 #include "HrCore/Include/Render/HrRenderFrame.h"
 
+#include "HrCore/Include/UI/HrUIFactory.h"
+#include "HrCore/Include/UI/HrUICanvas.h"
+#include "HrCore/Include/UI/HrUIWidget.h"
+#include "HrCore/Include/UI/HrUISprite.h"
+
 #include "HrCore/Include/Config/HrContextConfig.h"
 
 #include "HrUtilTools/Include/HrStringUtil.h"

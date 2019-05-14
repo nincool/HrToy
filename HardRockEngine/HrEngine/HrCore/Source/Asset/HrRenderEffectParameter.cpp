@@ -677,6 +677,11 @@ void HrRenderEffectParameter::ParamInfo(EnumRenderParamType paramType
 			m_pRenderVariable = HR_NEW HrRenderVariableTexture();
 			break;
 		}
+		case REDT_TEXTURECUBE:
+		{
+			m_pRenderVariable = HR_NEW HrRenderVariableTexture();
+			break;
+		}
 		}
 		break;
 	}

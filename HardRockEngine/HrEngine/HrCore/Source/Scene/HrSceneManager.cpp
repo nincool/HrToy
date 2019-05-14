@@ -23,7 +23,6 @@ HrSceneManager::HrSceneManager()
 	m_bSceneRunning = false;
 	m_bDirtyScene = false;
 
-	m_pRenderQueue = HrMakeSharedPtr<HrRenderQueue>();
 	m_pRenderQueueManager = HrMakeSharedPtr<HrRenderQueueManager>();
 	m_pRenderParameters = HrMakeUniquePtr<HrRenderFrameParameters>();
 }
@@ -85,7 +84,8 @@ void HrSceneManager::RenderScene()
 		m_pRenderParameters->SetCurViewPort(pViewPort);
 
 		//填充渲染队列
-		FindRenderablesToQueue();
+		FindRenderablesToQueue(pViewPort->GetCamera());
+
 		//查找影响到的光源
 		FindEffectLights();
 
@@ -110,10 +110,10 @@ const HrRenderFrameParametersPtr& HrSceneManager::GetRenderFrameParamPtr()
 
 void HrSceneManager::RenderVisibleObjects(HrRenderProcessing* pProcessing)
 {
-	m_pRenderQueueManager->GetRenderQueue(HrRenderQueue::RQ_QUEUE_MAIN)->AcceptRenderProcessing(pProcessing);
+	m_pRenderQueueManager->GetRenderQueue(HrRenderCommandQueue::RQ_QUEUE_MAIN)->AcceptRenderProcessing(pProcessing);
 }
 
-void HrSceneManager::FindRenderablesToQueue()
+void HrSceneManager::FindRenderablesToQueue(const HrCameraPtr& pCamera)
 {
 }
 

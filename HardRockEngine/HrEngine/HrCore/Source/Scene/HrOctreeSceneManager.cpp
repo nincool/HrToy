@@ -3,10 +3,12 @@
 #include "Scene/HrScene.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrTransform.h"
+#include "Scene/HrSceneObject.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderQueue.h"
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrSkyBox.h"
 
 using namespace Hr;
 
@@ -22,26 +24,35 @@ HrOctreeSceneManager::~HrOctreeSceneManager()
 	SAFE_DELETE(m_pOctree);
 }
 
-void HrOctreeSceneManager::FindRenderablesToQueue()
+void HrOctreeSceneManager::FindRenderablesToQueue(const HrCameraPtr& pCamera)
 {
 	m_pRenderQueueManager->PrepareRenderQueue();
 
-	auto& pCamera = m_pRenderParameters->GetActiveCamera(); 
+	uint32 nCameraMaskLayer = pCamera->GetCameraMaskLayer();
+
 	WalkOctree(pCamera);
+	
 	for (size_t i = 0; i < m_vecRenderableSceneNodes.size(); ++i)
 	{
 		if (m_vecRenderableSceneNodes[i]->GetFrustumVisible() == HrMath::NV_FULL)
 		{
-			m_pRenderQueueManager->AddRenderableNode(m_vecRenderableSceneNodes[i]);
+			m_pRenderQueueManager->PushCommand(m_vecRenderableSceneNodes[i]->GetSceneObject()->GetRenderCommand());
 		}
 	}
 
+	//add sky box
+	if (m_pRunningScene->GetEnvironmentData()->IsSkyBoxEnable())
+	{
+		m_pRenderQueueManager->PushCommand(m_pRunningScene->GetEnvironmentData()->GetSkyBox()->GetAttachSceneObject()->GetRenderCommand());
+	}
+
+	//sort
 	m_pRenderQueueManager->SortRenderQueue();
 }
 
 void HrOctreeSceneManager::WalkOctree(const HrCameraPtr& pCamera)
 {
-	BuildOctTree();
+	BuildOctTree(pCamera);
 
 	//判断该节点是否在摄像机范围内
 	const AABBox& octTreeAABB = m_pOctree->GetAABB();
@@ -59,20 +70,20 @@ void HrOctreeSceneManager::WalkOctree(const HrCameraPtr& pCamera)
 	}
 }
 
-void HrOctreeSceneManager::BuildOctTree()
+void HrOctreeSceneManager::BuildOctTree(const HrCameraPtr& pCamera)
 {
 	if (m_bDirtyScene)
 	{
-		RebuildOctree();
+		RebuildOctree(pCamera);
 		m_bDirtyScene = false;
 	}
 }
 
-void HrOctreeSceneManager::RebuildOctree()
+void HrOctreeSceneManager::RebuildOctree(const HrCameraPtr& pCamera)
 {
 	m_pOctree->Clear();
 	m_vecRenderableSceneNodes.clear();
-	GetRunningScene()->GetRootNode()->FindAllRenderables(m_vecRenderableSceneNodes);
+	GetRunningScene()->GetRootNode()->FindAllRenderables(m_vecRenderableSceneNodes, pCamera->GetCameraMaskLayer());
 	if (m_vecRenderableSceneNodes.empty())
 	{
 		return;

@@ -93,11 +93,6 @@ void HrSceneModule::DirtyScene()
 	m_pSceneManager->SetSceneDirty();
 }
 
-void HrSceneModule::FindRenderablesToQueue(const HrCameraPtr& pCamera)
-{
-	m_pSceneManager->FindRenderablesToQueue();
-}
-
 void HrSceneModule::RenderVisibleObjects(HrRenderProcessing* pProcessing)
 {
 	m_pSceneManager->RenderVisibleObjects(pProcessing);

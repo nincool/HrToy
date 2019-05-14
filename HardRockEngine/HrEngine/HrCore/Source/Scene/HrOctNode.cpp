@@ -104,7 +104,7 @@ bool HrOctNode::DetectDataVisible(const HrCameraPtr& pCamera, float fThreshold, 
 	return false;
 }
 
-void HrOctNode::WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode, float fThreshold, int nMaxDepth)
+void HrOctNode::WalkTree(const HrCameraPtr& pCamera, HrSceneNode* pSceneNode, float fThreshold, int nMaxDepth)
 {
 	//先判断是否可见 
 	//如果这个节点本身就不可见 

@@ -21,17 +21,14 @@ namespace Hr
 		const HrScenePtr& GetRunningScene();
 		const HrRenderFrameParametersPtr& GetRenderFrameParamPtr();
 
-		virtual void FindRenderablesToQueue();
+		virtual void FindRenderablesToQueue(const HrCameraPtr& pCamera);
 		virtual void FindEffectLights();
 
 		void RenderVisibleObjects(HrRenderProcessing* pProcessing);
 
-		
 		void SetSceneDirty();
 	protected:
-		
-
-		bool CheckSceneRunning();	
+		bool CheckSceneRunning();
 	protected:
 		// «∑Ò”–Scene∆Ù∂Ø
 		bool m_bSceneRunning;

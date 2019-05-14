@@ -40,11 +40,11 @@ void HrDeferredShading::OnEnter()
 void HrDeferredShading::CreateSceneElements()
 {
 	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
-	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -300.0f));
-	m_pSceneMainCamera->GetTransform()->SetRotation(Vector3(30, 0, 0));
-	m_pTrackBallCameraCtrl = m_pSceneMainCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
+	//m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
+	//AddNode(m_pSceneMainCamera);
+	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -300.0f));
+	//m_pSceneMainCamera->GetTransform()->SetRotation(Vector3(30, 0, 0));
+	//m_pTrackBallCameraCtrl = m_pSceneMainCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("SceneDirectionLight", HrLight::LT_DIRECTIONAL);

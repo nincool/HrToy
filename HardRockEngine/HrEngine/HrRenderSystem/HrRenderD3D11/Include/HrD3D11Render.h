@@ -38,6 +38,7 @@ namespace Hr
 		virtual void UnbindShader(const HrShaderPtr& pShader) override;
 
 		virtual void Render(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout) override;
+		virtual void DoRender(HrRenderCommand* pCommand) override;
 
 		virtual void SwapChain() override;
 

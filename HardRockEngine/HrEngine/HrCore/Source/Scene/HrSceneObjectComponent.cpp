@@ -4,16 +4,23 @@
 #include "Kernel/HrResourceModule.h"
 #include "Kernel/HrSceneModule.h"
 #include "Kernel/HrEventSystemModule.h"
-#include "Event/HrEvent.h"
+#include "Kernel/HrWindowModule.h"
 #include "Render/HrCamera.h"
 #include "Render/HrInstanceBatchHW.h"
 #include "Render/HrInstanceBatchObject.h"
 #include "Render/HrMeshRenderable.h"
 #include "Render/HrViewPort.h"
+#include "Render/HrDataDefine.h"
+#include "Render/HrSkyBox.h"
+#include "Render/HrRenderCommand.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrTransform.h"
 #include "Asset/HrRenderEffect.h"
+#include "Asset/HrMesh.h"
+#include "Asset/HrMeshModel.h"
+#include "Event/HrEventListener.h"
+#include "UI/HrUIWidget.h"
 #include <iostream>
 
 using namespace Hr;
@@ -43,7 +50,7 @@ const std::string& HrSceneObjectComponent::GetName()
 	return m_strName;
 }
 
-HrSceneObjectComponent::EnumSceneComponentType HrSceneObjectComponent::GetComType()
+int HrSceneObjectComponent::GetComType()
 {
 	return m_comType;
 }
@@ -58,32 +65,24 @@ void HrSceneObjectComponent::UpdateTransform(const HrTransformPtr& pTransform)
 
 }
 
-HrSceneObjectMutexCom::HrSceneObjectMutexCom(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
-{
-}
-
-HrSceneObjectMutexCom::~HrSceneObjectMutexCom()
-{
-}
-
-HrSceneObjectSharedCom::HrSceneObjectSharedCom(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
-{
-}
-
-HrSceneObjectSharedCom::~HrSceneObjectSharedCom()
-{
-}
-
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
-HrCameraComponet::HrCameraComponet(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
+HrCameraComponet::HrCameraComponet(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectComponent(strName, pSceneObj)
 {
 	m_comType = HrSceneObjectComponent::SCT_CAMERA;
 	m_pCamera = HrMakeSharedPtr<HrCamera>(strName);
 	m_pViewPort = HrMakeSharedPtr<HrViewPort>(m_pCamera);
-
+	auto& pWinCom = HrDirector::Instance()->GetWindowModule();
+	uint32 nTopX = pWinCom->GetWindowX();
+	uint32 nTopY = pWinCom->GetWindowY();
+	uint32 nWidth = pWinCom->GetWindowWidth();
+	uint32 nHeight = pWinCom->GetWindowHeight();
+	m_pViewPort->SetViewPortAttribute(static_cast<float>(nTopX)
+		, static_cast<float>(nTopY)
+		, static_cast<float>(nWidth)
+		, static_cast<float>(nHeight), 0);
 }
 
 HrCameraComponet::~HrCameraComponet()
@@ -108,11 +107,14 @@ const HrCameraPtr& HrCameraComponet::GetCamera()
 void HrCameraComponet::UpdateTransform(const HrTransformPtr& pTransform)
 {
 	Vector3 vPosition = pTransform->GetWorldPosition();
-	Vector3 vLookAt = m_pCamera->GetLookAt();
+	Vector3 vLookAt = pTransform->GetForward() * m_pCamera->GetLookAtDistance();
 	Vector3 vUp = pTransform->GetUp();
+
+	std::cout << "222Pitch [" << vUp[0] << "]  [" << vUp[1] << "] [" << vUp[2] << "]" << std::endl;
+
 	m_pCamera->ViewParams(vPosition, vLookAt, vUp);
 
-	//todo
+
 	HrDirector::Instance()->GetSceneModule()->DirtyScene();
 }
 
@@ -146,12 +148,27 @@ void HrCameraComponet::OnEndRenderScene(const HrEventPtr& pEvent)
 
 }
 
+void HrCameraComponet::SetCameraType(HrCamera::EnumCameraType cameraType)
+{
+	m_pCamera->SetCameraType(cameraType);
+}
+
+int HrCameraComponet::GetCameraMaskLayer()
+{
+	return m_pCamera->GetCameraMaskLayer();
+}
+
+void HrCameraComponet::SetCameraMaskLayer(int nMaskLayer)
+{
+	m_pCamera->SetCameraMaskLayer(nMaskLayer);
+}
+
 //////////////////////////////////////////////////////////////////////
 //HrTrackBallCameraController
 //////////////////////////////////////////////////////////////////////
 
 HrTrackBallCameraController::HrTrackBallCameraController(const std::string& strName, HrSceneObject* pSceneObj)
-	: HrSceneObjectSharedCom(strName, pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
 {
 	m_fRotationScaler = 0.0005;
 	m_fMoveScaler = 0.0005;
@@ -229,12 +246,162 @@ void HrTrackBallCameraController::Forward(float fZ)
 	m_pSceneObj->GetSceneNode()->GetTransform()->Translate(Vector3(0, 0, fZ * m_fZoomScaler), HrTransform::TS_LOCAL);
 }
 
+HrFirstPersonCameraController::HrFirstPersonCameraController(const std::string& strName, HrSceneObject* pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
+{
+	m_comType = std::hash_value(strName);
+
+	m_fRotationY = 0;
+	m_fOldMouseX = m_fOldMouseY = 0;
+
+	m_fForwardSpeed = 0.01f;
+
+	m_bKeyAPressed = false;
+	m_bKeyWPressed = false;
+	m_bKeySPressed = false;
+	m_bKeyDPressed = false;
+
+	CreateInputEvent();
+}
+
+void HrFirstPersonCameraController::CreateInputEvent()
+{
+	HrEventListenerKeyboardPtr pEventListenerKeyboard = HrMakeSharedPtr<HrEventListenerKeyboard>(HR_CALLBACK_2(HrFirstPersonCameraController::OnKeyPressed, this)
+		, HR_CALLBACK_2(HrFirstPersonCameraController::OnKeyReleased, this));
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerKeyboard, this);
+
+	HrEventListenerMousePtr pEventListenerMouse = HrMakeSharedPtr<HrEventListenerMouse>(HR_CALLBACK_2(HrFirstPersonCameraController::OnMousePressed, this)
+		, HR_CALLBACK_2(HrFirstPersonCameraController::OnMouseReleased, this), HR_CALLBACK_1(HrFirstPersonCameraController::OnMouseMove, this));
+	HrDirector::Instance()->GetEventSystemModule()->AddEventListener(pEventListenerMouse, this);
+}
+
+bool HrFirstPersonCameraController::Update(float fDelta)
+{
+	float fForward = 0, fBack = 0, fLeft = 0, fRight = 0;
+	if (m_bKeyWPressed)
+		fForward += fDelta * m_fForwardSpeed;
+	if (m_bKeySPressed)
+		fBack += fDelta * m_fForwardSpeed;
+	if (m_bKeyAPressed)
+		fLeft += fDelta * m_fForwardSpeed;
+	if (m_bKeyDPressed)
+		fRight += fDelta * m_fForwardSpeed;
+
+	if (m_bKeyWPressed || m_bKeySPressed || m_bKeyAPressed || m_bKeyDPressed)
+	{
+		m_pSceneObj->GetSceneNode()->GetTransform()->Translate(Vector3(fRight - fLeft, 0, fForward - fBack), HrTransform::TS_LOCAL);
+
+		return true;
+	}
+	
+	return false;
+}
+
+void HrFirstPersonCameraController::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+{
+	switch (keyCode)
+	{
+	case HrEventKeyboard::EnumKeyCode::KEY_A:
+		m_bKeyAPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_D:
+		m_bKeyDPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_W:
+		m_bKeyWPressed = true;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_S:
+		m_bKeySPressed = true;
+		break;
+	default:
+		break;
+	}
+}
+
+void HrFirstPersonCameraController::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
+{
+	switch (keyCode)
+	{
+	case HrEventKeyboard::EnumKeyCode::KEY_A:
+		m_bKeyAPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_D:
+		m_bKeyDPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_W:
+		m_bKeyWPressed = false;
+		break;
+	case HrEventKeyboard::EnumKeyCode::KEY_S:
+		m_bKeySPressed = false;
+		break;
+	default:
+		break;
+	}
+}
+
+void HrFirstPersonCameraController::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+{
+	switch (mouseID)
+	{
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_LEFT:
+		break;
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
+		break;
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
+		break;
+	default:
+		break;
+	}
+}
+
+void HrFirstPersonCameraController::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
+{
+	switch (mouseID)
+	{
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_LEFT:
+		break;
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
+		break;
+	case Hr::HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
+		break;
+	default:
+		break;
+	}
+}
+
+void HrFirstPersonCameraController::OnMouseMove(const HrEventPtr& pEvent)
+{
+	HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
+
+	static float s_x = 0, s_y = 0, s_z = 0;
+
+	float x = pMouseEvent->GetX();
+	float y = pMouseEvent->GetY();
+	float z = pMouseEvent->GetZ();
+
+
+	{
+		Vector3 vEulerAngle = m_pSceneObj->GetSceneNode()->GetTransform()->GetRotation();
+		float fRX = vEulerAngle[1] + (x - m_fOldMouseX);
+		
+		m_fRotationY += (y - m_fOldMouseY);
+		m_fRotationY = HrMath::Clamp(m_fRotationY, -60, 60);
+		
+		auto ori = HrMath::RotationQuaternionPitchYawRoll(HrMath::Degree2Radian(Vector3(m_fRotationY, fRX, 0)));
+		m_pSceneObj->GetSceneNode()->GetTransform()->SetOrientation(ori);
+
+		m_fOldMouseX = x;
+		m_fOldMouseY = y;
+	}
+
+}
+
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
 HrLightComponent::HrLightComponent(const std::string& strName, HrSceneObject* pSceneObj, HrLight::EnumLightType lightType)
-	: HrSceneObjectMutexCom(strName, pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
 {
 	m_comType = HrSceneObjectComponent::SCT_LIGHT;
 
@@ -277,19 +444,15 @@ const HrColor& HrLightComponent::GetColor() const
 void HrLightComponent::UpdateTransform(const HrTransformPtr& pTransform)
 {
 	m_pLight->SetPosition(pTransform->GetWorldPosition());
-	m_pLight->SetDirection(pTransform->GetWorldForward());
-	//auto vLightPosition = m_pLight->GetPosition();
-	//std::cout << "LightPosition x:" << vLightPosition[0] << " y:" << vLightPosition[1] << " z:" << vLightPosition[2] << std::endl;
-	//auto vWorldForward = m_pLight->GetDirection();
-	//std::cout << "LightForward  x:" << vWorldForward[0] << " y:" << vWorldForward[1] << " z:" << vWorldForward[2] << std::endl;
-
+	m_pLight->SetDirection(pTransform->GetWorldForward()); 
 }
 
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
-HrRenderableComponent::HrRenderableComponent(const std::string& strName, HrSceneObject* pSceneObj) : HrSceneObjectMutexCom(strName, pSceneObj)
+HrRenderableComponent::HrRenderableComponent(const std::string& strName, HrSceneObject* pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
 {
 
 }
@@ -302,16 +465,24 @@ HrRenderableComponent::~HrRenderableComponent()
 void HrRenderableComponent::SetRenderable(const HrRenderablePtr& pRenderable)
 {
 	m_pRenderable = pRenderable;
-	m_pSceneObj->GetSceneNode()->GetTransform()->SetAABBox(m_pRenderable->GetAABBox());
+
+	HrTransform* pTransform = m_pSceneObj->GetSceneNode()->GetTransform().get();
+	pTransform->SetAABBox(m_pRenderable->GetAABBox());
+	m_pRenderable->GetRenderCommand()->SetTransform(pTransform);
 }
 
+void HrRenderableComponent::SetRenderEffect(const HrRenderEffectPtr& pRenderEffect)
+{
+	if (m_pRenderable)
+		m_pRenderable->SetRenderEffect(pRenderEffect);
+}
 
 //////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////
 
 HrInstanceBatchComponent::HrInstanceBatchComponent(const std::string& strName, HrSceneObject* pSceneObj)
-	: HrSceneObjectSharedCom(strName, pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
 {
 	const HrRenderableComponentPtr pRenderCom = pSceneObj->GetComponent<HrRenderableComponent>();
 	if (pRenderCom)
@@ -342,20 +513,19 @@ HrSceneNodePtr HrInstanceBatchComponent::CreateInstance(const std::string& strNa
 {
 	//todo instance
 
-		//HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
-		//HrSceneObjectPtr pSceneObj = m_pInsBatch->CreateInstance();
-		//pSceneNode->SetSceneObject(pSceneObj);
+	//HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>();
+	//HrSceneObjectPtr pSceneObj = m_pInsBatch->CreateInstance();
+	//pSceneNode->SetSceneObject(pSceneObj);
 
-		//HrSceneObjectPtr pParentObj = m_pAttachSceneObj.lock();
-		//HrSceneNodePtr pAttachSceneNode = pParentObj->GetSceneNode();
-		//if (pAttachSceneNode)
-		//{
-		//	pAttachSceneNode->AddChild(pSceneNode);
-		//}
+	//HrSceneObjectPtr pParentObj = m_pAttachSceneObj.lock();
+	//HrSceneNodePtr pAttachSceneNode = pParentObj->GetSceneNode();
+	//if (pAttachSceneNode)
+	//{
+	//	pAttachSceneNode->AddChild(pSceneNode);
+	//}
 
-		//return pSceneNode;
+	//return pSceneNode;
 	
-
 	return nullptr;
 }
 
@@ -370,12 +540,84 @@ const HrInstanceBatchPtr& HrInstanceBatchComponent::GetInstanceBatch()
 
 
 HrInstanceObjectComponent::HrInstanceObjectComponent(const std::string& strName, HrSceneObject* pSceneObj)
-	: HrSceneObjectMutexCom(strName, pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
 {
 }
 
 HrInstanceObjectComponent::~HrInstanceObjectComponent()
 {
 
+}
+
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+
+HrUICanvasComponent::HrUICanvasComponent(const std::string& strName, HrSceneObject* pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
+{
+}
+
+HrUICanvasComponent::~HrUICanvasComponent()
+{
+		
+}
+
+void HrUICanvasComponent::OnEnter()
+{
+	m_pCameraCom = m_pSceneObj->GetComponent<HrCameraComponet>();
+	if (!m_pCameraCom)
+	{
+		HRERROR("HrUICanvasComponent::OnEnter Error!");
+	}
+	else
+	{
+		m_pCameraCom->SetCameraMaskLayer(CML_UI);
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+
+HrUIComponent::HrUIComponent(const std::string& strName, HrSceneObject* pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
+{
+}
+
+HrUIComponent::~HrUIComponent()
+{
+}
+
+void HrUIComponent::SetUI(const HrUIWidgetPtr& pUIWidget)
+{
+	m_pUIWidget = pUIWidget;
+	const HrRenderablePtr& pRenderable = pUIWidget->GetRenderable();
+	m_pSceneObj->GetSceneNode()->GetTransform()->SetAABBox(pRenderable->GetAABBox());
+}
+
+const HrUIWidgetPtr& HrUIComponent::GetUIWidget() const
+{
+	return m_pUIWidget;
+}
+
+//////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////
+
+HrSkyBoxComponent::HrSkyBoxComponent(const std::string& strName, HrSceneObject* pSceneObj)
+	: HrSceneObjectComponent(strName, pSceneObj)
+{
+	m_pMeshModelSphere = HrMakeSharedPtr<HrMeshModelSpherePTNUV>(200, 30, 30);
+	m_pSkyBox = HrMakeSharedPtr<HrSkyBox>(m_pMeshModelSphere->GetMesh()->GetSubMesh(0));
+	HrRenderableComponentPtr& pRenderCom = m_pSceneObj->AddComponent<HrRenderableComponent>();
+	pRenderCom->SetRenderable(m_pSkyBox);
+}
+
+void HrSkyBoxComponent::SetCubeMap(const HrTexturePtr& pCubeMap)
+{
+	m_pCubeMap = pCubeMap;
+	m_pSkyBox->SetCubeMap(m_pCubeMap);
 }
 

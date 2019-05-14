@@ -12,6 +12,7 @@
 #include "Render/HrRenderSystem.h"
 #include "Render/HrRenderable.h"
 #include "Render/HrRenderFrame.h"
+#include "Render/HrRenderCommand.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrSceneObjectComponent.h"
@@ -27,6 +28,10 @@ HrRenderProcessing::~HrRenderProcessing()
 }
 
 void HrRenderProcessing::VisitRenderable(const HrRenderablePtr& pRenderable)
+{
+}
+
+void HrRenderProcessing::VisitRenderCommand(HrRenderCommand* pRenderCommand)
 {
 }
 
@@ -51,10 +56,18 @@ uint32 HrForwardProcessing::Run(HrRenderSystem* pRenderSystem)
 	return RPR_NEED_PRESENT;
 }
 
-void HrForwardProcessing::VisitRenderable(const HrRenderablePtr& pRenderable)
+void HrForwardProcessing::VisitRenderCommand(HrRenderCommand* pRenderCommand)
 {
-	pRenderable->SetRenderEffect(m_pDefaultEffect);
-	pRenderable->Render();
+	auto& pRenderFrameParam = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters();
+	
+	pRenderFrameParam->SetTransform(pRenderCommand->GetTransform());
+	pRenderFrameParam->SetMaterial(pRenderCommand->GetMaterial());
+
+	pRenderCommand->GetRenderEffect()->UpdateAutoEffectParams(pRenderFrameParam);
+	
+	pRenderCommand->OnRenderBegin();
+	HrDirector::Instance()->GetRenderModule()->DoRender(pRenderCommand);
+	pRenderCommand->OnRenderEnd();
 }
 
 ///////////////////////////////////////////////////
@@ -136,7 +149,7 @@ void HrDeferredGBufferProcessing::VisitRenderable(const HrRenderablePtr& pRender
 {
 	pRenderable->SetRenderEffect(m_pMakeGBuffers);
 
-	pRenderable->Render();
+	//pRenderable->Render();
 }
 
 ///////////////////////////////////////////////////
@@ -161,7 +174,7 @@ uint32 HrFinalMappingProcessing::Run(HrRenderSystem* pRenderSystem)
 	auto& pQuadRenderable = pRenderSystem->GetScreenQuadRenderable()->GetChildByIndex(0);
 	pQuadRenderable->GetSceneObject()->GetRenderableComponent()->GetRenderable()->SetRenderEffect(m_pFinalPresentEffect);
 	
-	HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->SetCurrentSceneNode(pQuadRenderable);
+	//HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->SetCurrentSceneNode(pQuadRenderable.get());
 	auto& pViewPort = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->GetViewPort();
 	auto& pGBufferPosParam = m_pFinalPresentEffect->GetParameterByName("texGBufferPos");
 	if (pGBufferPosParam)
@@ -175,7 +188,7 @@ uint32 HrFinalMappingProcessing::Run(HrRenderSystem* pRenderSystem)
 	if (pGBufferAlbedoParam)
 		pGBufferAlbedoParam->operator=(pViewPort->GetViewPortDeferredInfo()->m_arrGBuffers[GBT_ALBEDO].get());
 
-	pQuadRenderable->GetSceneObject()->GetRenderableComponent()->GetRenderable()->Render();
+	//pQuadRenderable->GetSceneObject()->GetRenderableComponent()->GetRenderable()->Render();
 
 	return RPR_NEED_PRESENT;
 }

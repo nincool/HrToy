@@ -81,6 +81,7 @@ namespace Hr
 			resType = HrResource::RT_MESHMODEL;
 		}
 
+
 		return m_pResourceManager->RemoveResource(strFile, resType);
 	}
 

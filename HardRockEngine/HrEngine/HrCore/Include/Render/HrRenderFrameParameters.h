@@ -14,16 +14,15 @@ namespace Hr
 		HrRenderFrameParameters();
 		~HrRenderFrameParameters();
 
-		//todo
 		void SetLightsData(const HrSceneLightDataPtr& pLightData);
 		const HrCameraPtr& GetActiveCamera();
 		void SetCurViewPort(const HrViewPortPtr& pViewPort);
 		const HrViewPortPtr& GetViewPort();
 
-		void SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode);
+		//transform
+		void SetTransform(HrTransform* pTransfrom);
 
 		const Matrix4& GetViewProjMatrix() const;
-
 		const Matrix4& GetWorldMatrix();
 		const Matrix4& GetInverseWroldMatrix();
 		const Matrix4& GetInverseTransposeWorldMatrix();
@@ -46,7 +45,8 @@ namespace Hr
 		void SetFogParam(float4& fogColor, float fogStart, float fogRange);
 		const void GetFogParam(float4& fogColor, float& fogStart, float& fogRange);
 
-		//获取材质信息
+		//Material
+		void SetMaterial(HrMaterial* pMaterial);
 		float4 GetMaterialAlbedo() const;
 		float GetMaterialMetalness() const;
 		float GetMaterialRoughness() const;
@@ -74,9 +74,11 @@ namespace Hr
 		HrSceneLightDataPtr m_pLightsData;
 
 		HrViewPortPtr m_pCurViewPort;
-		HrRenderablePtr m_pRenderable;
-		HrSceneNodePtr m_pCurSceneNode;
 		
+		HrSceneNode* m_pCurSceneNode;
+		
+		HrTransform* m_pTransfrom;
+		HrMaterial* m_pMaterial;
 	};
 }
 

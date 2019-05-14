@@ -50,6 +50,38 @@ HrDepthStencilPtr HrD3D11RenderFactory::CreateDepthStencil(uint32 nWidth, uint32
 	return HrMakeSharedPtr<HrD3D11DepthStencil>(nWidth, nHeight, PF_D24S8, HrD3D11Texture::TUF_TEX_DEPTHSTENCILVIEW);;
 }
 
+HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
+	, uint32 nHeight
+	, uint32 nNumMipMaps
+	, uint32 nSampleCount
+	, uint32 nSampleQuality
+	, uint32 nAccessHint
+	, uint32 texUsedFor
+	, EnumPixelFormat format)
+{
+	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, texUsedFor, format);
+}
+
+HrTexturePtr HrD3D11RenderFactory::CreateTextureCubeMap(uint32 nWidth
+	, uint32 nHeight
+	, uint32 nNumMipMaps
+	, uint32 nSampleCount
+	, uint32 nSampleQuality
+	, uint32 nAccessHint
+	, uint32 texUsedFor
+	, EnumPixelFormat format)
+{
+	return HrMakeSharedPtr<HrD3D11TextureCubeMap>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, texUsedFor, format);
+}
+
+
+
+
+
+
+
+
+
 HrRenderFramePtr HrD3D11RenderFactory::CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight)
 {
 	return std::static_pointer_cast<HrRenderFrame>(HrMakeSharedPtr<HrD3D11ScreenFrameBuffer>(nWidth, nHeight));
@@ -94,17 +126,8 @@ HrShaderCompilerPtr HrD3D11RenderFactory::CreateShaderCompiler(const std::string
 	return pShaderCompiler;
 }
 
-HrTexturePtr HrD3D11RenderFactory::CreateTexture2D(uint32 nWidth
-	, uint32 nHeight
-	, uint32 nNumMipMaps
-	, uint32 nSampleCount
-	, uint32 nSampleQuality
-	, uint32 nAccessHint
-	, uint32 texUsedFor
-	, EnumPixelFormat format)
-{
-	return HrMakeSharedPtr<HrD3D11Texture2D>(nWidth, nHeight, nNumMipMaps, nSampleCount, nSampleQuality, nAccessHint, texUsedFor, format);
-}
+
+
 
 HrSamplerStatePtr HrD3D11RenderFactory::CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc)
 {

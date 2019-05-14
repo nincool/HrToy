@@ -1,5 +1,6 @@
 #include "HrGeometryScene.h"
 #include "HrCore/Include/Config/HrContextConfig.h"
+#include "HrCore/Include/Render/HrSkyBox.h"
 
 using namespace Hr;
 
@@ -37,19 +38,29 @@ void HrGeometryScene::OnEnter()
 void HrGeometryScene::CreateSceneElements()
 {
 	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
+	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", HrCamera::CT_PERSPECTIVE);
 	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -300.0f));
+	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -110.0f));
+	std::shared_ptr<HrFirstPersonCameraController> pFirstPersonCameraCtrl = std::make_shared<HrFirstPersonCameraController>("TestFirstCameraCtrl", m_pSceneMainCamera->GetSceneObject().get());
+	m_pSceneMainCamera->GetSceneObject()->AddComponent(pFirstPersonCameraCtrl);
 
 	//创建直线光
-	//auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
-	//AddNode(pDirectionLight);
+	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);
+	AddNode(pDirectionLight);
+	pDirectionLight->GetTransform()->Rotate(Vector3(45, 45, 0));
 
-	//m_pTestNode = HrSceneObjectFactory::Instance()->CreateModelNode("Model/HrTestPlan.model");
-	m_pTestNode = HrSceneObjectFactory::Instance()->CreateQuadNodeP("TestQuad", 200.0f, 200.0f);
-	//auto pEffSampler = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("HrStandardSampler.json");
-	//m_pTestNode->GetChildByName("Plane001")->GetSceneObject()->GetComponent<HrRenderableComponent>()->GetRenderable()->SetRenderEffect(pEffSampler);
-	AddNode(m_pTestNode);
+	HrTexturePtr pTextureCube = HrDirector::Instance()->GetResourceModule()->RetriveTexture("\\SkyBox\\SkyBox01.sky", HrTexture::TEX_TYPE_CUBE_MAP);
+	auto pSkyBox = HrSceneObjectFactory::Instance()->CreateSkyBoxNode("TestSkyBox", pTextureCube);
+	AddNode(pSkyBox);
+
+	auto pReflectEff = HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>("\\HrReflect.json");
+	auto pSphere = HrSceneObjectFactory::Instance()->CreateSphereNode("TestSphere", 50, 30, 30);
+	auto pEffParam = pReflectEff->GetParameterByName("texReflectCube");
+	pEffParam->operator = (pTextureCube.get());
+		
+	pSphere->GetChildByIndex(0)->GetSceneObject()->GetRenderableComponent()->SetRenderEffect(pReflectEff);
+	AddNode(pSphere);
+
 }
 
 void HrGeometryScene::CreateInputEvent()
@@ -65,165 +76,31 @@ void HrGeometryScene::CreateInputEvent()
 
 void HrGeometryScene::OnKeyPressed(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
-	ResetKeyFlag();
-	switch (keyCode)
-	{
-	case HrEventKeyboard::EnumKeyCode::KEY_A:
-		m_bKeyAPressed = true;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_D:
-		m_bKeyDPressed = true;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_W:
-		m_bKeyWPressed = true;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_S:
-		m_bKeySPressed = true;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_Z:
 
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_0:
-		m_bKey0Pressed = true;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_1:
-		m_bKey1Pressed = true;
-		break;
-	default:
-		break;
-	}
 }
 
 void HrGeometryScene::OnKeyReleased(HrEventKeyboard::EnumKeyCode keyCode, const HrEventPtr& pEvent)
 {
-	switch (keyCode)
-	{
-	case HrEventKeyboard::EnumKeyCode::KEY_A:
-		m_bKeyAPressed = false;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_D:
-		m_bKeyDPressed = false;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_W:
-		m_bKeyWPressed = false;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_S:
-		m_bKeySPressed = false;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_0:
-		m_bKey0Pressed = false;
-		break;
-	case HrEventKeyboard::EnumKeyCode::KEY_1:
-		m_bKey1Pressed = false;
-		break;
-	default:
-		break;
-	}
+
 }
 
 void HrGeometryScene::SceneUpdate(float fDelta)
 {
-	float fSpeed = 1.0f;
-	float fRotateSpeed = 5;
-	if (m_bKeyAPressed)
-	{
-		m_pTestNode->GetTransform()->Translate(Vector3(-fSpeed, 0, 0));
-	}
-	else if (m_bKeyWPressed)
-	{
-		m_pTestNode->GetTransform()->Translate(Vector3(0.0f, fSpeed, 0.0f));
-	}
-	else if (m_bKeySPressed)
-	{
-		m_pTestNode->GetTransform()->Translate(Vector3(0.0f, -fSpeed, 0.0f));
-	}
-	else if (m_bKeyDPressed)
-	{
-		m_pTestNode->GetTransform()->Translate(Vector3(fSpeed, 0.0f, 0.0f));
-	}
-	else if (m_bKey0Pressed)
-	{
-		m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -fSpeed));
-	}
-	else if (m_bKey1Pressed)
-	{
-		m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, fSpeed));
-	}
-	//else if (m_bKeyF1Pressed)
-	//{
-	//	m_pSceneMainCamera->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
-	//}
-	//else if (m_bKeyF2Pressed)
-	//{
-
-	//}
-	//else if (m_bKeyLeftPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, -fRotateSpeed, 0.0f));
-
-	//}
-	//else if (m_bKeyRightPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(0.0f, fRotateSpeed, 0.0f));
-
-	//}
-	//else if (m_bKeyUpPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(fRotateSpeed, 0.0f, 0.0f));
-
-	//}
-	//else if (m_bKeyDownPressed)
-	//{
-	//	m_pTestSceneNode->GetTransform()->Rotate(Vector3(-fRotateSpeed, 0.0f, 0.0f));
-
-	//}
+	//m_pTestNode->GetTransform()->Rotate(Vector3(0, fDelta * 10, 0));
 }
 
 void HrGeometryScene::OnMousePressed(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
-	//switch (mouseID)
-	//{
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_LEFT:
-	//	m_bLeftMousePressed = true;
-	//	break;
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
-	//	m_bRightMousePressed = true;
-	//	break;
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
-	//	break;
-	//default:
-	//	break;
-	//}
+
 }
 
 void HrGeometryScene::OnMouseReleased(HrEventMouse::EnumMouseButtonID mouseID, const HrEventPtr& pEvent)
 {
-	//switch (mouseID)
-	//{
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_LEFT:
-	//	m_bLeftMousePressed = false;
-	//	break;
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_RIGHT:
-	//	m_bRightMousePressed = false;
-	//	break;
-	//case Hr::HrEventMouse::EnumMouseButtonID::MBI_MIDDLE:
-	//	break;
-	//default:
-	//	break;
-	//}
+
 }
 
 void HrGeometryScene::OnMouseMove(const HrEventPtr& pEvent)
 {
-	HrEventMousePtr pMouseEvent = HrCheckPointerCast<HrEventMouse>(pEvent);
-	static float s_floatX = 0;
-	static float s_floatY = 0;
 
-	float x = pMouseEvent->GetX();
-	float y = pMouseEvent->GetY();
-	float z = pMouseEvent->GetZ();
-
-	float fSpeed = 0.01f;
-	m_pTestNode->GetTransform()->Translate(Vector3(0, 0, fSpeed * z));
 }
 

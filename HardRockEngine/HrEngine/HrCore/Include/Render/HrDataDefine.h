@@ -418,6 +418,13 @@ namespace Hr
 		GBT_SPECULARINTENSITY,
 		GBT_MAXNUM,
 	};
+
+	enum EnumCameraMaskLayer
+	{
+		CML_ALL = 1,
+		CML_UI = 1 << 1,
+		CML_CUSTOM = 1 << 2,
+	};
 }
 
 #endif

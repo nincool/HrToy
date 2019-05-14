@@ -170,8 +170,10 @@ void HrTransform::Rotate(const Quaternion& q, EnumTransformSpace relativeTo /*= 
 		m_orientation = m_orientation * q;
 		break;
 	case TS_WORLD:
+		m_orientation += GetWorldOriention() * q;
 		break;
 	case TS_PARENT:
+		m_orientation += GetParentOriention() * q;
 		break;
 	}
 

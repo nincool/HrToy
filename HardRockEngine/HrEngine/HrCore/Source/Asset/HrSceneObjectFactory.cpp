@@ -26,16 +26,16 @@ HrSceneObjectFactory::~HrSceneObjectFactory()
 {
 }
 
-HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName)
+HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, HrCamera::EnumCameraType cameraType)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
 	HrCameraComponentPtr pCamera = pSceneNode->GetSceneObject()->AddComponent<HrCameraComponet>();
-
+	pCamera->SetCameraType(cameraType);
 	auto& pWinCom = HrDirector::Instance()->GetWindowModule();
 	uint32 nTopX = pWinCom->GetWindowX();
 	uint32 nTopY = pWinCom->GetWindowY();
-	uint32 nWidth = HrDirector::Instance()->GetWindowModule()->GetWindowWidth();
-	uint32 nHeight = HrDirector::Instance()->GetWindowModule()->GetWindowHeight();
+	uint32 nWidth = pWinCom->GetWindowWidth();
+	uint32 nHeight = pWinCom->GetWindowHeight();
 	pCamera->GetViewPort()->SetViewPortAttribute(static_cast<float>(nTopX)
 		, static_cast<float>(nTopY)
 		, static_cast<float>(nWidth)
@@ -44,10 +44,11 @@ HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName)
 	return pSceneNode;
 }
 
-HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)
+HrSceneNodePtr HrSceneObjectFactory::CreateCamera(const std::string& strName, HrCamera::EnumCameraType cameraType, float fTopX, float fTopY, float fWidth, float fHeight, int nZOrder)
 {
 	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
 	HrCameraComponentPtr pCamera = pSceneNode->GetSceneObject()->AddComponent<HrCameraComponet>();
+	pCamera->SetCameraType(cameraType);
 	pCamera->GetViewPort()->SetViewPortAttribute(fTopX, fTopY, fWidth, fHeight, nZOrder);
 
 	return pSceneNode;
@@ -80,6 +81,15 @@ HrSceneNodePtr HrSceneObjectFactory::CreateLightNode(const std::string& strName,
 	pSceneNode->GetSceneObject()->AddComponent(pLight);
 
 	return pSceneNode; 
+}
+
+HrSceneNodePtr HrSceneObjectFactory::CreateSkyBoxNode(const std::string& strName, const HrTexturePtr& pCubeMap)
+{
+	HrSceneNodePtr pSceneNode = HrMakeSharedPtr<HrSceneNode>(strName);
+	HrSkyBoxComponentPtr pSkyBox = pSceneNode->GetSceneObject()->AddComponent<HrSkyBoxComponent>();
+	pSkyBox->SetCubeMap(pCubeMap);
+
+	return pSceneNode;
 }
 
 HrSceneNodePtr HrSceneObjectFactory::CreateGridPlan()
@@ -117,6 +127,15 @@ HrSceneNodePtr HrSceneObjectFactory::CreateQuadNodePN(const std::string& strName
 	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
 	std::shared_ptr<HrMeshModelQuadPN> pMeshModel = HrMakeSharedPtr<HrMeshModelQuadPN>(fWidth, fHeight);
 	BuildupSceneNodeWithMesh(pMeshModel, pSceneNode);
+
+	return pSceneNode;
+}
+
+HrSceneNodePtr HrSceneObjectFactory::CreateSphereNode(const std::string& strName, float fRadius, int fSlice, int fStack)
+{
+	HrSceneNodePtr pSceneNode = CreateSceneNode(strName);
+	std::shared_ptr<HrMeshModelSpherePTNUV> pMeshSphere = HrMakeSharedPtr<HrMeshModelSpherePTNUV>(fRadius, fSlice, fStack);
+	BuildupSceneNodeWithMesh(pMeshSphere, pSceneNode);
 
 	return pSceneNode;
 }

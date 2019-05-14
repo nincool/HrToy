@@ -5,42 +5,37 @@
 
 namespace Hr
 {
-	
-	class HrRenderQueue 
+	//////////////////////////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	class HrRenderCommandQueue
 	{
 	public:
-		~HrRenderQueue();
-
 		enum EnumRenderQueueID
 		{
-			//RQ_QUEUE_BACKGROUND,
-			RQ_QUEUE_MAIN,
-			RQ_QUEUE_MAX
-		};
+		
+			/// The default render queue
+			RQ_QUEUE_MAIN = 0,
 
-		enum EnumOrganisationMode
-		{
-			OM_SORT_DESCENDING = 1,
-			OM_SORT_ASCENDING,
+			QUEUE_COUNT,
 		};
 
 		void ClearRenderQueue();
-
-		void AddRenderableSceneNode(const HrSceneNodePtr& pSceneNode);
-
+		void PushBack(HrRenderCommand* pCommand);
 		/**
-		 @Comment: 对渲染队列进行排序 [11/13/2018 By Hr]
+			@Comment: 对渲染队列进行排序 [11/13/2018 By Hr]
 		*/
 		void Sort();
 
-		//void RenderRenderables();
-
-		void AcceptRenderProcessing(HrRenderProcessing* pProcessing);
-	protected:
-		EnumOrganisationMode m_organisationMode;
-		std::vector<HrSceneNodePtr> m_vecRenderableNodes;
+		virtual void AcceptRenderProcessing(HrRenderProcessing* pProcessing);
+	public:
+		std::vector<HrRenderCommand*> m_vecRenderCommands;
 	};
 
+	//////////////////////////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////////////////////////
 	class HrRenderQueueManager
 	{
 	public:
@@ -50,11 +45,10 @@ namespace Hr
 		void PrepareRenderQueue();
 		void SortRenderQueue();
 
-		void AddRenderableNode(const HrSceneNodePtr& pNode);
-
-		const HrRenderQueuePtr& GetRenderQueue(HrRenderQueue::EnumRenderQueueID queueID);
+		void PushCommand(HrRenderCommand* pCommand);
+		const HrRenderCommandQueuePtr& GetRenderQueue(HrRenderCommandQueue::EnumRenderQueueID queueID = HrRenderCommandQueue::RQ_QUEUE_MAIN);
 	protected:
-		std::array<HrRenderQueuePtr, HrRenderQueue::RQ_QUEUE_MAX> m_arrRenderQueue;
+		std::array<HrRenderCommandQueuePtr, HrRenderCommandQueue::QUEUE_COUNT> m_arrRenderCommandQueue;
 	};
 
 }

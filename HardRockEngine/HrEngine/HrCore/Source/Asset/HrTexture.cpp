@@ -4,7 +4,10 @@
 #include "Kernel/HrFileUtils.h"
 #include "Kernel/HrLog.h"
 #include "HrUtilTools/Include/HrUtil.h"
+#include "HrUtilTools/Include/HrStringUtil.h"
 #include "ThirdParty/FreeImage/Include/FreeImage.h"
+#include "ThirdParty/rapidjson/include/rapidjson/document.h"
+
 
 using namespace Hr;
 
@@ -57,17 +60,11 @@ size_t HrTexture::CreateHashName(const std::string& strFullFilePath)
 
 void HrTexture::DeclareResource(const std::string& strFileName, const std::string& strFilePath)
 {
-	m_strFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFilePath);
-	HRASSERT(!m_strFilePath.empty(), "HrTexture::DeclareResource");
+	m_strFilePath = strFilePath;
 	m_strFileName = strFileName;
 	m_resStatus = HrResource::RS_DECLARED;
 
 	m_nHashID = CreateHashName(m_strFilePath);
-}
-
-void HrTexture::SetTextureType(EnumTextureType type)
-{
-	m_textureType = type;
 }
 
 bool HrTexture::LoadImpl()
@@ -86,17 +83,55 @@ bool HrTexture::UnloadImpl()
 	return true;
 }
 
-void HrTexture::CreateHWResource(HrImage* pImage)
+void HrTexture::CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage)
 {
 }
 
 void HrTexture::InitWithImageData()
 {
-	std::shared_ptr<HrImage> m_pImage = HrMakeSharedPtr<HrImage>(m_strFilePath);
-	if (m_pImage->IsLoaded())
+
+	switch (m_textureType)
 	{
-		m_format = m_pImage->GetFormat();
-		CreateHWResource(m_pImage.get());
+	case HrTexture::TEX_TYPE_2D:
+	{
+		std::shared_ptr<HrImage> pImage = HrMakeSharedPtr<HrImage>(m_strFilePath);
+		std::vector<std::shared_ptr<HrImage> > vecImage(1, pImage);
+		if (pImage->IsLoaded())
+		{
+			CreateHWResource(vecImage);
+		}
+		break;
+	}
+	case HrTexture::TEX_TYPE_CUBE_MAP:
+	{
+		std::string strContentData = HrFileUtils::Instance()->GetFileString(m_strFilePath);
+		rapidjson::Document d;
+		d.Parse<0>(strContentData.c_str());
+		if (d.HasParseError())
+		{
+			int nErrorCode = d.GetParseError();
+			size_t nOffset = d.GetErrorOffset();
+			HRERROR("HrTexture::InitWithImageData Error! ParseJsonFile Error! ErrorCode[%d] Offset[%d]", nErrorCode, nOffset);
+			return;
+		}
+
+		std::array<std::string, 6> vecTextureFile;
+		vecTextureFile[0] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_POS_X"].GetString());
+		vecTextureFile[1] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_NEG_X"].GetString());
+		vecTextureFile[2] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_POS_Y"].GetString());
+		vecTextureFile[3] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_NEG_Y"].GetString());
+		vecTextureFile[4] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_POS_Z"].GetString());
+		vecTextureFile[5] = HrFileUtils::Instance()->GetFullPathForFileName(d["SKY_TEX_NEG_Z"].GetString());
+
+		std::vector<std::shared_ptr<HrImage> > vecImage;
+		for (int i = 0; i < vecTextureFile.size(); ++i)
+		{
+			std::shared_ptr<HrImage> pIamge = HrMakeSharedPtr<HrImage>(vecTextureFile[i]);
+			vecImage.push_back(pIamge);
+		}
+		CreateHWResource(vecImage);
+		break;
+	}
 	}
 }
 

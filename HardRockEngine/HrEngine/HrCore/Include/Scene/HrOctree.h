@@ -16,7 +16,7 @@ namespace Hr
 
 		void Clear();
 
-		void WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode);
+		void WalkTree(const HrCameraPtr& pCamera, HrSceneNode* pSceneNode);
 	protected:
 		HrOctNode* m_pRootNode;
 		AABBox m_aabb;

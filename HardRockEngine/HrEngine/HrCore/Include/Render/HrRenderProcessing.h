@@ -19,7 +19,7 @@ namespace Hr
 
 		virtual uint32 Run(HrRenderSystem* pRenderSystem) = 0;
 		virtual void VisitRenderable(const HrRenderablePtr& pRenderable);
-
+		virtual void VisitRenderCommand(HrRenderCommand* pRenderCommand);
 	};
 
 	///////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace Hr
 		~HrForwardProcessing();
 
 		virtual uint32 Run(HrRenderSystem* pRenderSystem) override;
-		virtual void VisitRenderable(const HrRenderablePtr& pRenderable) override;
+		virtual void VisitRenderCommand(HrRenderCommand* pRenderCommand) override;
 	private:
 		HrRenderEffectPtr m_pDefaultEffect;
 	};

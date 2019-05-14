@@ -64,7 +64,6 @@ namespace Hr
 
 		virtual void DeclareResource(const std::string& strFileName, const std::string& strFilePath);
 
-		void SetTextureType(EnumTextureType type);
 		/** Returns the height of the texture.
 		*/
 		uint32 GetHeight(void) const { return m_nHeight; }
@@ -79,7 +78,7 @@ namespace Hr
 
 		EnumPixelFormat GetPixFormat(void) const { return m_format; }
 
-		virtual void CreateHWResource(HrImage* pImage = nullptr);
+		virtual void CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage);
 	protected:
 		virtual bool LoadImpl();
 		virtual bool UnloadImpl();
@@ -104,6 +103,8 @@ namespace Hr
 		EnumPixelFormat m_format;
 
 		EnumTextureUsage m_textureUsage;
+
+		
 	};
 }
 

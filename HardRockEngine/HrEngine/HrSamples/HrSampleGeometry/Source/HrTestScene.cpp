@@ -5,7 +5,6 @@ using namespace Hr;
 HrTestScene::HrTestScene()
 {
 	m_bSphereDir = true;
-	m_nShiness = 10;
 }
 
 HrTestScene::~HrTestScene()

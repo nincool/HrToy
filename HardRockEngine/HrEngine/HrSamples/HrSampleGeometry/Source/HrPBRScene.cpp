@@ -40,11 +40,11 @@ void HrPBRScene::OnEnter()
 void HrPBRScene::CreateSceneElements()
 {
 	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
-	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -200.0f));
-	m_pSceneMainCamera->GetTransform()->SetRotation(Vector3(30, 0, 0));
-	m_pTrackBallCameraCtrl = m_pSceneMainCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
+	//m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
+	//AddNode(m_pSceneMainCamera);
+	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 100.0f, -200.0f));
+	//m_pSceneMainCamera->GetTransform()->SetRotation(Vector3(30, 0, 0));
+	//m_pTrackBallCameraCtrl = m_pSceneMainCamera->GetSceneObject()->AddComponent<HrTrackBallCameraController>();
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("SceneDirectionLight", HrLight::LT_DIRECTIONAL);
@@ -54,7 +54,7 @@ void HrPBRScene::CreateSceneElements()
 	AddNode(m_pModelNode);
 	m_pModelNode->GetTransform()->SetPosition(Vector3(0.0f, -100.0f, 0.0f));
 
-	auto& pDragonblade = HrSceneObjectFactory::Instance()->CreateModelNode("DragonbladePBR/Dragonblade.hrmesh");
+	auto pDragonblade = HrSceneObjectFactory::Instance()->CreateModelNode("DragonbladePBR/Dragonblade.hrmesh");
 	m_pModelNode->AddChild(pDragonblade);
 
 	HrSceneNodePtr pPlane = HrSceneObjectFactory::Instance()->CreateQuadNodePN("Ground", 1000, 1000);

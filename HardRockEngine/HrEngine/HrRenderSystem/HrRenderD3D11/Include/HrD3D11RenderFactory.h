@@ -19,6 +19,27 @@ namespace Hr
 		virtual HrRenderTargetPtr CreateRenderTarget(const HrTexturePtr& pTexture) override;
 		virtual HrDepthStencilPtr CreateDepthStencil(uint32 nWidth, uint32 nHeight) override;
 
+		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
+			, uint32 nHeight
+			, uint32 nNumMipMaps
+			, uint32 nSampleCount
+			, uint32 nSampleQuality
+			, uint32 nAccessHint
+			, uint32 texUsedFor
+			, EnumPixelFormat format) override;
+
+		virtual HrTexturePtr CreateTextureCubeMap(uint32 nWidth
+			, uint32 nHeight
+			, uint32 nNumMipMaps
+			, uint32 nSampleCount
+			, uint32 nSampleQuality
+			, uint32 nAccessHint
+			, uint32 texUsedFor
+			, EnumPixelFormat format) override;
+
+
+
+
 
 		
 		virtual HrRenderFramePtr CreateScreenRenderFrameBuffer(uint32 nWidth, uint32 nHeight) override;
@@ -35,14 +56,7 @@ namespace Hr
 
 		virtual HrShaderCompilerPtr CreateShaderCompiler(const std::string& strFileName) override;
 
-		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
-			, uint32 nHeight
-			, uint32 nNumMipMaps
-			, uint32 nSampleCount
-			, uint32 nSampleQuality
-			, uint32 nAccessHint
-			, uint32 texUsedFor
-			, EnumPixelFormat format) override;
+
 
 
 		virtual HrSamplerStatePtr CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc) override;

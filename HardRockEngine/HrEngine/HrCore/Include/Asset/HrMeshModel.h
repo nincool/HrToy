@@ -34,6 +34,23 @@ namespace Hr
 		static std::vector<HrVertexElement> m_s_vecVertexElement_P_N_UV;
 	};
 
+	struct SVertexStruct_P_T_N_UV
+	{
+		SVertexStruct_P_T_N_UV();
+		float3 m_position;
+		float3 m_tangent;
+		float3 m_normal;
+		float2 m_tex;
+		static std::vector<HrVertexElement> m_s_vecVertexElement_P_T_N_UV;
+	};
+
+	class HrQuad_P_UV
+	{
+	public:
+		SVertexStruct_P_UV m_vecVertices[4];
+		HrMeshPtr m_pMesh;
+	};
+
 	class HR_CORE_API HrMeshModel : public HrResource
 	{
 	public:
@@ -60,6 +77,24 @@ namespace Hr
 	public:
 		HrMeshModelQuadP(float fWidth, float fHeight);
 		~HrMeshModelQuadP();
+
+	private:
+		void CreateQuadMesh();
+
+	private:
+		float m_fWidth;
+		float m_fHeight;
+	};
+
+	//////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////
+
+	class HR_CORE_API HrMeshModelQuad_P_UV : public HrMeshModel
+	{
+	public:
+		HrMeshModelQuad_P_UV(float fWidth, float fHeight);
+		~HrMeshModelQuad_P_UV();
 
 	private:
 		void CreateQuadMesh();
@@ -104,6 +139,20 @@ namespace Hr
 	private:
 		float m_fWidth;
 		float m_fHeight;
+	};
+
+
+	//////////////////////////////////////////////////////////////
+	//
+	//////////////////////////////////////////////////////////////
+
+	class HR_CORE_API HrMeshModelSpherePTNUV : public HrMeshModel
+	{
+	public:
+		HrMeshModelSpherePTNUV(float radius, int slice, int stack);
+
+	private:
+		void CreateSphereMesh(float radius, int slice, int stack);
 	};
 
 	//////////////////////////////////////////////////////////////
@@ -153,6 +202,12 @@ namespace Hr
 	private:
 		HrModelLoaderPtr m_pModelLoader;
 	};
+
+	////////////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////////////
+
+
 }
 
 

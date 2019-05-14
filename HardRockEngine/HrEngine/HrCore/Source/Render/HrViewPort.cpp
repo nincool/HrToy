@@ -1,5 +1,7 @@
 #include "HrCore/Include/Render/HrViewPort.h"
 #include "HrCore/Include/Render/HrCamera.h"
+#include "HrCore/Include/Kernel/HrDirector.h"
+#include "HrCore/Include/Kernel/HrWindowModule.h"
 
 using namespace Hr;
 
@@ -20,12 +22,19 @@ HrViewPortDeferredInfo::~HrViewPortDeferredInfo()
 
 HrViewPort::HrViewPort(const HrCameraPtr& pCamera)
 {
-	m_fTopX = m_fTopY = 0;
-	m_fWidth = m_fHeight = 100;
 	m_nZOrder = 0;
 
+	auto& pWinCom = HrDirector::Instance()->GetWindowModule();
+	m_fTopX = pWinCom->GetWindowX();
+	m_fTopY = pWinCom->GetWindowY();
+	m_fWidth = pWinCom->GetWindowWidth();
+	m_fHeight = pWinCom->GetWindowHeight();
+
 	m_pCamera = pCamera;
-	m_pCamera->ProjectParams(HrMath::PI() / 3.0f, m_fWidth / m_fHeight, 0.1f, 1000.0f);
+	m_pCamera->Fov(HrMath::PI() / 3.0f);
+	m_pCamera->Width(m_fWidth);
+	m_pCamera->Height(m_fHeight);
+	m_pCamera->Aspect(m_fWidth / m_fHeight);
 
 	m_pViewProtDeferredInfo = HrMakeSharedPtr<HrViewPortDeferredInfo>();
 }
@@ -76,8 +85,6 @@ void HrViewPort::SetViewPortAttribute(float fTopX, float fTopY, float fWidth, fl
 	m_fWidth = fWidth;
 	m_fHeight = fHeight;
 	m_nZOrder = nZOrder;
-
-	m_pCamera->ProjectParams(m_pCamera->FOV(), m_fWidth / m_fHeight, m_pCamera->NearPlane(), m_pCamera->FarPlane());
 }
 
 const HrViewPortDeferredInfoPtr& HrViewPort::GetViewPortDeferredInfo() const

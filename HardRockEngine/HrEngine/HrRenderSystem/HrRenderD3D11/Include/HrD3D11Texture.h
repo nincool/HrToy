@@ -39,6 +39,10 @@ namespace Hr
 		ID3D11ShaderResourceViewPtr m_pShaderResourceView;
 	};
 
+	/////////////////////////////////////////////////////
+	//
+	/////////////////////////////////////////////////////
+
 	class HrD3D11Texture2D : public HrD3D11Texture
 	{
 	public:
@@ -54,7 +58,7 @@ namespace Hr
 
 		~HrD3D11Texture2D();
 
-		virtual void CreateHWResource(HrImage* pImage = nullptr) override;
+		virtual void CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage) override;
 		
 		ID3D11Texture2DPtr GetD3D11Texture();
 
@@ -62,6 +66,30 @@ namespace Hr
 		bool CreateRenderTargetView();
 		bool CreateDepthStencilView();
 		bool CreateShaderResourceView();
+	protected:
+		ID3D11Texture2DPtr m_pD3D11Texture2D;
+	};
+
+	/////////////////////////////////////////////////////
+	//
+	/////////////////////////////////////////////////////
+
+	class HrD3D11TextureCubeMap : public HrD3D11Texture
+	{
+	public:
+		HrD3D11TextureCubeMap(uint32 nWidth
+			, uint32 nHeight
+			, uint32 nNumMipMaps
+			, uint32 nSampleCount
+			, uint32 nSampleQuality
+			, uint32 nAccessHint
+			, uint32 texUsedFor
+			, EnumPixelFormat format);
+
+		virtual void CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage) override;
+	protected:
+		bool CreateShaderResourceView();
+
 	protected:
 		ID3D11Texture2DPtr m_pD3D11Texture2D;
 	};

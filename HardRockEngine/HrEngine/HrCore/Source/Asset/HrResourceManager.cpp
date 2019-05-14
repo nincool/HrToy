@@ -113,7 +113,7 @@ HrResourcePtr HrResourceManager::LoadResource(const std::string& strFile, HrReso
 	case HrResource::RT_TEXTURE_1D:
 	case HrResource::RT_TEXTURE_2D:
 	case HrResource::RT_TEXTURE_3D:
-	case HrResource::RT_TEXTURE_CUBE:
+	
 	case HrResource::RT_PREFAB:
 	{
 		std::string strFullFilePath = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
@@ -135,6 +135,12 @@ HrResourcePtr HrResourceManager::LoadResource(const std::string& strFile, HrReso
 
 		break;
 	}
+	case HrResource::RT_TEXTURE_CUBE:
+	{
+		pReturnRes = AddResource(strFile, resType);
+		pReturnRes->Load();
+		break;
+	}
 	default:
 		break;
 	}
@@ -149,6 +155,8 @@ HrResourcePtr HrResourceManager::RetriveResource(const std::string& strFile, HrR
 	{
 	case HrResource::RT_TEXTURE_2D:
 		return GetTexture2D(strFile);
+	case HrResource::RT_TEXTURE_CUBE:
+		return GetTextureCube(strFile);
 	case HrResource::RT_MESH:
 		return GetMesh(strFile);
 	case HrResource::RT_EFFECT:
@@ -197,7 +205,9 @@ HrResourcePtr HrResourceManager::AddResource(const std::string& strFile, HrResou
 	switch (resType)
 	{
 	case HrResource::RT_TEXTURE_2D:
-		return AddTesture2DResource(strFile);
+		return AddTexture2DResource(strFile);
+	case HrResource::RT_TEXTURE_CUBE:
+		return AddTextureCubeResource(strFile);
 	case HrResource::RT_MESH:
 		return AddMeshResource(strFile);
 	case HrResource::RT_EFFECT:
@@ -298,7 +308,7 @@ HrResourcePtr HrResourceManager::AddMaterialResource(const std::string& strFile)
 
 }
 
-HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile)
+HrResourcePtr HrResourceManager::AddTexture2DResource(const std::string& strFile)
 {
 	std::string strFullFileName = HrFileUtils::Instance()->GetFullPathForFileName(strFile);
 	size_t nHashID = HrTexture::CreateHashName(strFullFileName);
@@ -316,8 +326,24 @@ HrResourcePtr HrResourceManager::AddTesture2DResource(const std::string& strFile
 		, HrTexture::TUF_TEX_RENDERTARGETVIEW | HrTexture::TUF_TEX_SHADERRESOURCEVIEW | HrTexture::TUF_TEX_DEFAULTTEXTURE
 		, EnumPixelFormat::PF_R8G8B8A8_UINT);
 	pTexture->DeclareResource(strFileName, strFile);
-	pTexture->SetTextureType(HrTexture::TEX_TYPE_2D);
 	m_mapTextures2D.insert(std::make_pair(pTexture->GetHashID(), pTexture));
+
+	return pTexture;
+}
+
+HrResourcePtr HrResourceManager::AddTextureCubeResource(const std::string& strFile)
+{
+	//todo
+	HrTexturePtr pTexture = HrDirector::Instance()->GetRenderModule()->GetRenderFactory()->CreateTextureCubeMap(1, 1
+		, 1
+		, 1
+		, 0
+		, HrTexture::EAH_GPU_READ | HrTexture::EAH_GPU_WRITE
+		, HrTexture::TUF_TEX_SHADERRESOURCEVIEW | HrTexture::TUF_TEX_DEFAULTTEXTURE
+		, EnumPixelFormat::PF_R8G8B8A8_UINT);
+	pTexture->DeclareResource(strFile, strFile);
+	size_t nHashID = HrTexture::CreateHashName(strFile);
+	m_mapTexturesCube[nHashID] = pTexture;
 
 	return pTexture;
 }
@@ -350,6 +376,11 @@ HrResourcePtr HrResourceManager::GetTexture2D(const std::string& strTextureName)
 		return item->second;
 	}
 
+	return nullptr;
+}
+
+HrResourcePtr HrResourceManager::GetTextureCube(const std::string& strName)
+{
 	return nullptr;
 }
 

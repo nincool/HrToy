@@ -46,7 +46,6 @@ namespace Hr
 
 		float GetOpacity() const;
 
-
 		void SetTexture(EnumMaterialTexSlot tsSlot, const HrTexturePtr& pTexture);
 		const HrTexturePtr& GetTexture(EnumMaterialTexSlot stSlot);
 	protected:
@@ -69,8 +68,12 @@ namespace Hr
 		float m_fOpacity;
 
 		std::array<HrTexturePtr, TS_NUMTEXTURESLOTS> m_arrTextures;
+
+		uint32 m_material_param0;
+		uint32 m_material_param1;
 	};
 }
+
 
 
 #endif

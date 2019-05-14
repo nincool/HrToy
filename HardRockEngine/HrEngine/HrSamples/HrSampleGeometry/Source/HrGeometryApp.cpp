@@ -8,6 +8,7 @@
 #include "HrDeferredShading.h"
 #include "HrSceneManagerTest.h"
 #include "HrPBRScene.h"
+#include "HrUITestScene.h"
 #include <sstream>
 #include "HrEngine.h"
 
@@ -53,7 +54,7 @@ void HrGeometryApp::LoadAssets()
 void HrGeometryApp::CreateScene()
 {
 	//auto pTestScene = HrMakeSharedPtr<HrInstanceBatchTest>();
-	auto pTestScene = HrMakeSharedPtr<HrPBRScene>();
+	auto pTestScene = HrMakeSharedPtr<HrGeometryScene>();
 	HrDirector::Instance()->GetSceneModule()->RunScene(pTestScene);
 
 	//std::shared_ptr<HrTestScene> pTestScene = HrMakeSharedPtr<HrTestScene>();

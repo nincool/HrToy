@@ -564,7 +564,13 @@ void HrD3D11ShaderCompiler::CreateEffectParameters(std::unordered_map<size_t, Hr
 				case D3D_SRV_DIMENSION_TEXTURE3D:
 					break;
 				case D3D_SRV_DIMENSION_TEXTURECUBE:
+				{
+					HrRenderEffectParameterPtr pEffectParameter = HrMakeSharedPtr<HrRenderEffectParameter>(bindResDesc.name, bindResDesc.name_hash);
+					pEffectParameter->ParamInfo(RPT_TEXTURE, REDT_TEXTURECUBE, HrRenderEffectParameter::REPBT_RESOURCE, 0, 1);
+					mapParameters[bindResDesc.name_hash] = pEffectParameter;
+					mapShaderResources[bindResDesc.name_hash] = pEffectParameter;
 					break;
+				}
 				case D3D_SRV_DIMENSION_TEXTURECUBEARRAY:
 					break;
 				default:

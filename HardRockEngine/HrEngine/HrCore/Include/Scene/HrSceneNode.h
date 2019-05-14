@@ -23,18 +23,21 @@ namespace Hr
 		const HrSceneNode* GetParent() const;
 
 		size_t GetChildrenCount();
+		
 		/**
 		 @Comment: 获取子节点 [10/29/2018 By Hr]
 		 @Param: int 节点索引
 		 @Return: 子节点智能指针 如果没有找到返回nullptr
 		*/
 		const HrSceneNodePtr& GetChildByIndex(int nNodeIndex);
+		
 		/**
 		 @Comment: 获取子节点 [10/29/2018 By Hr]
 		 @Param: string 节点名字
 		 @Return: 子节点智能指针 如果没有找到返回nullptr
 		*/
 		const HrSceneNodePtr& GetChildByName(const std::string& strName) const;
+		
 		/**
 		 @Comment: 遍历以此节点为根节点的子树形结构 获取子节点 [10/29/2018 By Hr]
 		 @Param: string 节点名字
@@ -55,13 +58,11 @@ namespace Hr
 		virtual void OnExist();
 		virtual void UpdateNode(float fDt = 0.0f);
 
-		void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
-
 		/**
 		 @Comment: 获取节点包含子节点的Renderables [10/26/2018 By Hr]
 		 @Param:   in|out vector 
 		*/
-		void FindAllRenderables(std::vector<HrSceneNodePtr>& vecRenderables);
+		void FindAllRenderables(std::vector<HrSceneNode*>& vecRenderables, int nMaskLayer);
 
 
 		void OnBeginUpdateScene(const HrEventPtr& pEvent);
@@ -75,7 +76,6 @@ namespace Hr
 		void SetFrustumVisible(HrMath::EnumVisibility visible);
 	protected:
 		void SetParent(HrSceneNode* pParentNode);
-		
 	private:
 		void AddEventListeners();
 		void RemoveEventListeners();

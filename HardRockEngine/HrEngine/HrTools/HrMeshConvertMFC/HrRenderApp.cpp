@@ -106,9 +106,9 @@ void HrEditorScene::CreateSceneElements()
 	m_pEleRoot = HrMakeSharedPtr<HrSceneNode>("TestRootNode");
 	AddNode(m_pEleRoot);
 
-	//auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
-	//m_pEleRoot->AddChild(pGridNode);
-	//pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	auto pGridNode = HrSceneObjectFactory::Instance()->CreateGridPlan();
+	m_pEleRoot->AddChild(pGridNode);
+	pGridNode->GetTransform()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
 	UpdateAxisPos();
 }
@@ -195,7 +195,6 @@ void HrEditorScene::Update(float fDelta)
 	}
 }
 
-
 void HrEditorScene::UpdateAxisPos()
 {
 	if (!m_pAxisNode)
@@ -241,9 +240,6 @@ void HrEditorScene::OnMouseMove(float fX, float fY)
 			m_bCameraMatrixDirty = true;
 			m_pTrackBallCameraCtrl->Rotate(Vector3(fDiffValueX, fDiffValueY, 0));
 			auto vWorldForward = m_pGodCamera->GetTransform()->GetWorldForward();
-			//auto vWorldForward = m_pLight->GetDirection();
-			//std::cout << "LightForward  x:" << vWorldForward[0] << " y:" << vWorldForward[1] << " z:" << vWorldForward[2] << std::endl;
-
 		}
 	}
 }

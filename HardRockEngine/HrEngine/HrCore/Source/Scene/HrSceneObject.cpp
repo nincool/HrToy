@@ -8,6 +8,7 @@
 #include "Kernel/HrRenderModule.h"
 #include "Kernel/HrSceneModule.h"
 #include "Render/HrCamera.h"
+#include "Render/HrRenderable.h"
 
 using namespace Hr;
 
@@ -27,6 +28,7 @@ void HrSceneObject::OnEnter()
 		item.second->OnEnter();
 	}
 
+	AddSkyBoxToScene();
 	AddCameraToScene();
 	AddLightToScene();
 }
@@ -41,6 +43,10 @@ void HrSceneObject::OnExist()
 
 void HrSceneObject::Update(float fDelta)
 {
+	for (auto& iteCom : m_mapComponents)
+	{
+		iteCom.second->Update(fDelta);
+	}
 }
 
 void HrSceneObject::OnNodeTransformDirty(const HrTransformPtr& pTrans)
@@ -53,13 +59,6 @@ void HrSceneObject::OnNodeTransformDirty(const HrTransformPtr& pTrans)
 
 void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjComponent)
 {
-	if (pSceneObjComponent->IsMutex() && m_pSceneObjMutexCom)
-	{
-		TRE("Can't add mutex component again!");
-		return;
-	}
-	m_pSceneObjMutexCom = pSceneObjComponent->IsMutex() ? pSceneObjComponent : nullptr;
-
 	auto comType = pSceneObjComponent->GetComType();
 	switch (comType)
 	{
@@ -77,6 +76,7 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 		{
 			HRERROR("HrSceneObject::AddComponent Error! Can not add a camera again!");
 		}
+		break;
 	}
 	case HrSceneObjectComponent::SCT_LIGHT:
 	{
@@ -88,6 +88,15 @@ void HrSceneObject::AddComponent(const HrSceneObjectComponentPtr& pSceneObjCompo
 		else
 		{
 			HRERROR("HrSceneObject::AddComponent Error! Can not add a light again!");
+		}
+		break;
+	}
+	case HrSceneObjectComponent::SCT_SKYBOX:
+	{
+		if (!m_pCachedSkyBox)
+		{
+			m_mapComponents[comType] = pSceneObjComponent;
+			m_pCachedSkyBox = HrCheckPointerCast<HrSkyBoxComponent>(pSceneObjComponent);
 		}
 		break;
 	}
@@ -135,16 +144,19 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 	case HrSceneObjectComponent::SCT_TRACKBALLCAMERA:
 		pSceneObjCom = HrMakeSharedPtr<HrTrackBallCameraController>("TrackBallCameraController", this);
 		break;
+	case HrSceneObjectComponent::SCT_UICANVAS:
+		pSceneObjCom = HrMakeSharedPtr<HrUICanvasComponent>("UICanvas", this);
+		break;
+	case HrSceneObjectComponent::SCT_UI:
+		pSceneObjCom = HrMakeSharedPtr<HrUIComponent>("UIComponent", this);
+		break;
+	case HrSceneObjectComponent::SCT_SKYBOX:
+		pSceneObjCom = HrMakeSharedPtr<HrSkyBoxComponent>("SkyBoxComponent", this);
+		break;
 	case HrSceneObjectComponent::SCT_COM_COUNT:
 		break;
 	default:
 		break;
-	}
-
-	if (pSceneObjCom->IsMutex() && m_pSceneObjMutexCom)
-	{
-		TRE("Can't add mutex component again!");
-		return nullptr;
 	}
 
 	if (!pSceneObjCom->InitComponent())
@@ -157,7 +169,6 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 		pSceneObjCom->OnEnter();
 
 	m_mapComponents[comType] = pSceneObjCom;
-	m_pSceneObjMutexCom = pSceneObjCom->IsMutex() ? pSceneObjCom : nullptr;
 
 	switch (comType)
 	{
@@ -167,9 +178,26 @@ HrSceneObjectComponentPtr HrSceneObject::AddComponent(HrSceneObjectComponent::En
 	case HrSceneObjectComponent::SCT_RENDERABLE:
 		m_pCachedRenderable = HrCheckPointerCast<HrRenderableComponent>(pSceneObjCom);
 		break;
+	case HrSceneObjectComponent::SCT_UICANVAS:
+		m_pCachedUICanvas = HrCheckPointerCast<HrUICanvasComponent>(pSceneObjCom);
+		break;
+	case HrSceneObjectComponent::SCT_UI:
+		m_pCachedUI = HrCheckPointerCast<HrUIComponent>(pSceneObjCom);
+		break;
+	case HrSceneObjectComponent::SCT_SKYBOX:
+		m_pCachedSkyBox = HrCheckPointerCast<HrSkyBoxComponent>(pSceneObjCom);
+		break;
 	}
 
 	return m_mapComponents[comType];
+}
+
+void HrSceneObject::AddSkyBoxToScene()
+{
+	if (m_pCachedSkyBox)
+	{
+		HrDirector::Instance()->GetSceneModule()->GetRunningScene()->GetEnvironmentData()->SetSkyBox(m_pCachedSkyBox);
+	}
 }
 
 void HrSceneObject::AddCameraToScene()
@@ -199,7 +227,7 @@ HrSceneObjectComponentPtr HrSceneObject::GetComponent(HrSceneObjectComponent::En
 	return nullptr;
 }
 
-const HrSceneNode* HrSceneObject::GetSceneNode() const
+HrSceneNode* HrSceneObject::GetSceneNode() const
 {
 	return m_pContainerNode;
 }
@@ -207,5 +235,39 @@ const HrSceneNode* HrSceneObject::GetSceneNode() const
 const HrRenderableComponentPtr& HrSceneObject::GetRenderableComponent()
 {
 	return m_pCachedRenderable;
+}
+
+const HrSkyBoxComponentPtr& HrSceneObject::GetSkyBoxComponent()
+{
+	return m_pCachedSkyBox;
+}
+
+HrRenderCommand* HrSceneObject::GetRenderCommand()
+{
+	if (m_pCachedRenderable)
+	{
+		return m_pCachedRenderable->GetRenderable()->GetRenderCommand();
+	}
+
+	return nullptr;
+}
+
+
+
+
+
+
+
+
+
+
+const HrUICanvasComponentPtr& HrSceneObject::GetUICanvasComponent()
+{
+	return m_pCachedUICanvas;
+}
+
+const HrUIComponentPtr& HrSceneObject::GetUIComponent()
+{
+	return m_pCachedUI;
 }
 

@@ -25,6 +25,9 @@ std::vector<HrVertexElement> SVertexStruct_P::m_s_vecVertexElement_P;
 std::vector<HrVertexElement> SVertexStruct_P_UV::m_s_vecVertexElement_P_UV;
 std::vector<HrVertexElement> SVertexStruct_P_N::m_s_vecVertexElement_P_N;
 std::vector<HrVertexElement> SVertexStruct_P_N_UV::m_s_vecVertexElement_P_N_UV;
+std::vector<HrVertexElement> SVertexStruct_P_T_N_UV::m_s_vecVertexElement_P_T_N_UV;
+
+
 
 SVertexStruct_P::SVertexStruct_P() : m_position(float3::Zero())
 {
@@ -59,6 +62,17 @@ SVertexStruct_P_N_UV::SVertexStruct_P_N_UV() : m_tex(float2(0.0f, 0.0f))
 		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
 		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
 		m_s_vecVertexElement_P_N_UV.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
+	}
+}
+
+SVertexStruct_P_T_N_UV::SVertexStruct_P_T_N_UV() : m_tangent(float3::Zero())
+{
+	if (m_s_vecVertexElement_P_T_N_UV.empty())
+	{
+		m_s_vecVertexElement_P_T_N_UV.push_back(HrVertexElement(VEU_POSITION, VET_FLOAT3));
+		m_s_vecVertexElement_P_T_N_UV.push_back(HrVertexElement(VEU_TANGENT, VET_FLOAT3));
+		m_s_vecVertexElement_P_T_N_UV.push_back(HrVertexElement(VEU_NORMAL, VET_FLOAT3));
+		m_s_vecVertexElement_P_T_N_UV.push_back(HrVertexElement(VEU_TEXTURE_COORDINATES, VET_FLOAT2));
 	}
 }
 
@@ -232,6 +246,72 @@ void HrMeshModelQuadPN::CreateQuadMesh()
 //
 ///////////////////////////////////////////////////
 
+HrMeshModelQuad_P_UV::HrMeshModelQuad_P_UV(float fWidth, float fHeight)
+{
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
+
+	CreateQuadMesh();
+}
+
+HrMeshModelQuad_P_UV::~HrMeshModelQuad_P_UV()
+{
+}
+
+void HrMeshModelQuad_P_UV::CreateQuadMesh()
+{
+	auto pResCom = HrDirector::Instance()->GetResourceModule();
+
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	{
+		//why 0? because i want to sign the submesh's pos in the array
+		const HrSubMeshPtr& pSubMesh = m_pMesh->AddSubMesh("0_Quad");
+		{
+			float fHalfWidth = m_fWidth / 2;
+			float fHalfHeight = m_fHeight / 2;
+
+			SVertexStruct_P_UV vertexData[4];
+			vertexData[0].m_position = float3(-fHalfWidth, fHalfHeight, 0);
+			vertexData[0].m_tex = float2(0, 0);
+			vertexData[1].m_position = float3(fHalfWidth, fHalfHeight, 0);
+			vertexData[1].m_tex = float2(1, 0);
+			vertexData[2].m_position = float3(fHalfWidth, -fHalfHeight, 0);
+			vertexData[2].m_tex = float2(1, 1);
+			vertexData[3].m_position = float3(-fHalfWidth, -fHalfHeight, 0);
+			vertexData[3].m_tex = float2(0, 1);
+
+			//Build vertexbuffer
+			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)vertexData
+				, sizeof(vertexData)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, SVertexStruct_P_UV::m_s_vecVertexElement_P_UV);
+
+			pSubMesh->SetMeshAABB(AABBox(Vector3(-fHalfWidth, -fHalfHeight, 0), Vector3(fHalfWidth, fHalfHeight, 0)));
+
+		}
+
+		{
+			//Build indexbuffer
+			unsigned short indices[6] = { 0, 1, 2, 0, 2, 3 };
+
+			pSubMesh->GetRenderLayout()->BindIndexBuffer(reinterpret_cast<char*>(indices)
+				, sizeof(indices)
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, IT_16BIT);
+		}
+		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
+
+		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
+		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
+		//todo
+		pSubMesh->SetMaterial(pMaterial);
+	}
+}
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
 HrMeshModelQuadPNC::HrMeshModelQuadPNC(float fWidth, float fHeight)
 {
 	m_fWidth = fWidth;
@@ -246,7 +326,6 @@ HrMeshModelQuadPNC::~HrMeshModelQuadPNC()
 
 void HrMeshModelQuadPNC::CreateQuadMesh()
 {
-	auto pResCom = HrDirector::Instance()->GetResourceModule();
 
 	m_pMesh = HrMakeSharedPtr<HrMesh>();
 	{
@@ -287,12 +366,138 @@ void HrMeshModelQuadPNC::CreateQuadMesh()
 				, IT_16BIT);
 		}
 		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
-
+		auto pResCom = HrDirector::Instance()->GetResourceModule();
 		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
 		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
 		//todo
 		pSubMesh->SetMaterial(pMaterial);
 	}
+}
+
+///////////////////////////////////////////////////
+//
+///////////////////////////////////////////////////
+
+HrMeshModelSpherePTNUV::HrMeshModelSpherePTNUV(float radius, int slice, int stack)
+{
+	CreateSphereMesh(radius, slice, stack);
+}
+
+void HrMeshModelSpherePTNUV::CreateSphereMesh(float radius, int slice, int stack)
+{
+	int vertsPerRow = slice + 1;
+	int nRows = stack - 1;
+
+	int nVerts = vertsPerRow * nRows + 2;
+	int nIndices = nRows * slice * 6;
+
+	std::vector<SVertexStruct_P_T_N_UV> vecVertexData;
+	vecVertexData.reserve(nVerts);
+	std::vector<short> vecIndices;
+	vecIndices.reserve(nIndices);
+
+	for (int i = 1; i <= nRows; ++i)
+	{
+		float phy = HrMath::PI() * i / stack;
+		float tmpRadius = radius * std::sin(phy);
+		for (int j = 0; j < vertsPerRow; ++j)
+		{
+			float theta = HrMath::PI2() * j / slice;
+			UINT index = (i - 1)*vertsPerRow + j;
+
+			float x = tmpRadius * cos(theta);
+			float y = radius * cos(phy);
+			float z = tmpRadius * sin(theta);
+
+			SVertexStruct_P_T_N_UV vertex;
+			//位置
+			vertex.m_position = float3(x, y, z);
+			//法线
+			vertex.m_normal = float3(x, y, z);
+			//切线 ?
+			vertex.m_tangent = float3(-sin(theta), 0.f, cos(theta));
+			//纹理坐标
+			vertex.m_tex = float2(j*1.f / slice, i*1.f / stack);
+			vecVertexData.push_back(vertex);
+		}
+	}
+
+	int size = vertsPerRow * nRows;
+	//添加顶部和底部两个顶点信息
+	SVertexStruct_P_T_N_UV topVertex;
+	topVertex.m_position = float3(0.f, radius, 0.f);
+	topVertex.m_normal = float3(0.f, 1.f, 0.f);
+	topVertex.m_tangent = float3(1.f, 0.f, 0.f);
+	topVertex.m_tex = float2(0.f, 0.f);
+	vecVertexData.push_back(topVertex);
+
+	topVertex.m_position = float3(0.f, -radius, 0.f);
+	topVertex.m_normal = float3(0.f, -1.f, 0.f);
+	topVertex.m_tangent = float3(1.f, 0.f, 0.f);
+	topVertex.m_tex = float2(0.f, 1.f);
+	vecVertexData.push_back(topVertex);
+
+	UINT tmp(0);
+	int start1 = 0;
+	int start2 = vecVertexData.size() - vertsPerRow - 2;
+	int top = size;
+	int bottom = size + 1;
+	for (int i = 0; i < slice; ++i)
+	{
+		vecIndices.push_back(top);
+		vecIndices.push_back(start1 + i + 1);
+		vecIndices.push_back(start1 + i);
+	}
+
+	for (int i = 0; i < slice; ++i)
+	{
+		vecIndices.push_back(bottom);
+		vecIndices.push_back(start2 + i);
+		vecIndices.push_back(start2 + i + 1);
+	}
+
+	for (int i = 0; i < nRows - 1; ++i)
+	{
+		for (int j = 0; j < slice; ++j)
+		{
+			vecIndices.push_back(i * vertsPerRow + j);
+			vecIndices.push_back((i + 1) * vertsPerRow + j + 1);
+			vecIndices.push_back((i + 1) * vertsPerRow + j);
+			vecIndices.push_back(i * vertsPerRow + j);
+			vecIndices.push_back(i * vertsPerRow + j + 1);
+			vecIndices.push_back((i + 1) * vertsPerRow + j + 1);
+		}
+	}
+
+	m_pMesh = HrMakeSharedPtr<HrMesh>();
+	{
+		//why 0? because i want to sign the submesh's pos in the array
+		const HrSubMeshPtr& pSubMesh = m_pMesh->AddSubMesh("0_Sphere");
+		{
+			//Build vertexbuffer
+			pSubMesh->GetRenderLayout()->BindVertexBuffer((char*)(vecVertexData.data())
+				, sizeof(SVertexStruct_P_T_N_UV) * vecVertexData.size()
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, SVertexStruct_P_T_N_UV::m_s_vecVertexElement_P_T_N_UV);
+
+			pSubMesh->SetMeshAABB(AABBox(Vector3(-radius, -radius, -radius), Vector3(radius, radius, radius)));
+		}
+
+		{
+			//Build indexbuffer
+			pSubMesh->GetRenderLayout()->BindIndexBuffer(reinterpret_cast<char*>(vecIndices.data())
+				, sizeof(short) * vecIndices.size()
+				, HrGraphicsBuffer::HBU_GPUREAD_IMMUTABLE
+				, IT_16BIT);
+		}
+		pSubMesh->GetRenderLayout()->SetTopologyType(TT_TRIANGLELIST);
+		auto pResCom = HrDirector::Instance()->GetResourceModule();
+		auto pMaterial = pResCom->RetriveResource<HrMaterial>();
+		m_mapMaterials[pSubMesh->GetName()] = pMaterial;
+		//todo
+		pSubMesh->SetMaterial(pMaterial);
+	}
+
 }
 
 ///////////////////////////////////////////////////
@@ -405,7 +610,6 @@ void HrMeshModelGrid::CreateGridMesh()
 	}
 }
 
-
 ///////////////////////////////////////////////////
 //
 ///////////////////////////////////////////////////
@@ -455,3 +659,4 @@ const HrModelLoaderPtr& HrMeshModelObject::GetModelLoader()
 {
 	return m_pModelLoader;
 }
+

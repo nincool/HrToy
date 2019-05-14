@@ -24,7 +24,6 @@ namespace Hr
 		 @Comment: rendering [7/12/2018 By Hr]
 		*/
 		virtual void OnRenderBegin();
-		virtual void Render();
 		virtual void OnRenderEnd();
 		
 		/**
@@ -32,6 +31,8 @@ namespace Hr
 		 @Return: aabb
 		*/
 		const AABBox& GetAABBox();
+
+		HrRenderCommand* GetRenderCommand();
 	protected:
 		bool CheckRenderLayoutMatchShader();
 
@@ -41,7 +42,8 @@ namespace Hr
 		HrRenderTechniquePtr m_pTechnique;
 
 		HrSubMeshPtr m_pSubMesh;
-		//HrSceneObject* m_pSceneObj;
+
+		std::shared_ptr<HrRenderCommand> m_pRenderCommand;
 	};
 }
 

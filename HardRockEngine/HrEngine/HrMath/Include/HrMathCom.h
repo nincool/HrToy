@@ -35,6 +35,7 @@ namespace Hr
 		const float EPSILON = 0.0001f;
 
 		inline float PI() { return KlayGE::PI; }
+		inline float PI2() { return KlayGE::PI2; }
 		inline float PIDIV2() { return KlayGE::PIdiv2; }
 		inline float DEG90() { return KlayGE::DEG90; }
 
@@ -268,6 +269,11 @@ namespace Hr
 		inline Matrix4 LookAtLh(Vector3 const& vEye, Vector3 const& vAt, Vector3 const& vUp)
 		{
 			return KlayGE::MathLib::look_at_lh(vEye, vAt, vUp);
+		}
+
+		inline Matrix4 OrthoLh(float w, float h, float nearPlane, float farPlane)
+		{
+			return KlayGE::MathLib::ortho_lh(w, h, nearPlane, farPlane);
 		}
 
 		inline Matrix4 PerspectiveFovLh(float const& fov, float const& aspect, float const& nearPlane, float const& farPlane)

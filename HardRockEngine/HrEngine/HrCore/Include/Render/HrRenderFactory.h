@@ -26,8 +26,26 @@ namespace Hr
 			@brief	depth stencil [12/17/2018 By Hr]
 		*/
 		virtual HrDepthStencilPtr CreateDepthStencil(uint32 nWidth, uint32 nHeight) = 0;
+		/*
+			@brief ´´½¨Textue2D [3/21/2019 By Hr]
+		*/
+		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
+			, uint32 nHeight
+			, uint32 nNumMipMaps
+			, uint32 nSampleCount
+			, uint32 nSampleQuality
+			, uint32 nAccessHint
+			, uint32 nUsedFor
+			, EnumPixelFormat format) = 0;
 
-
+		virtual HrTexturePtr CreateTextureCubeMap(uint32 nWidth
+			, uint32 nHeight
+			, uint32 nNumMipMaps
+			, uint32 nSampleCount
+			, uint32 nSampleQuality
+			, uint32 nAccessHint
+			, uint32 texUsedFor
+			, EnumPixelFormat format) = 0;
 
 
 
@@ -47,14 +65,7 @@ namespace Hr
 		
 		virtual HrShaderCompilerPtr CreateShaderCompiler(const std::string& strFileName) = 0;
 
-		virtual HrTexturePtr CreateTexture2D(uint32 nWidth
-			, uint32 nHeight
-			, uint32 nNumMipMaps
-			, uint32 nSampleCount
-			, uint32 nSampleQuality
-			, uint32 nAccessHint
-			, uint32 nUsedFor
-			, EnumPixelFormat format) = 0;
+
 
 		virtual HrSamplerStatePtr CreateSamplerState(const HrSamplerState::HrSamplerStateDesc& samplerDesc) = 0;
 

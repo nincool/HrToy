@@ -28,7 +28,7 @@ namespace Hr
 		*/
 		void ClearChildren();
 
-		void WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode, float fThreshold, int nMaxDepth);
+		void WalkTree(const HrCameraPtr& pCamera, HrSceneNode* pSceneNode, float fThreshold, int nMaxDepth);
 	protected:
 		void InitChildrenNode(int nMaxDepth);
 		bool DetectNodeVisible(const HrCameraPtr& pCamera, float fThreshold);

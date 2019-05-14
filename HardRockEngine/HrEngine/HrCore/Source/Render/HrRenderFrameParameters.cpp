@@ -6,6 +6,8 @@
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrTransform.h"
 #include "Scene/HrSceneObject.h"
+#include "Scene/HrSceneObjectComponent.h"
+#include "UI/HrUIWidget.h"
 #include "Asset/HrMaterial.h"
 
 using namespace Hr;
@@ -22,11 +24,10 @@ HrRenderFrameParameters::~HrRenderFrameParameters()
 {
 }
 
-void HrRenderFrameParameters::SetCurrentSceneNode(const HrSceneNodePtr& pSceneNode)
+void HrRenderFrameParameters::SetTransform(HrTransform* pTransfrom)
 {
-	m_pCurSceneNode = pSceneNode;
-	m_pRenderable = pSceneNode->GetSceneObject()->GetRenderableComponent()->GetRenderable();
-	
+	m_pTransfrom = pTransfrom;
+
 	DirtyWorldMatrix();
 }
 
@@ -43,6 +44,7 @@ const HrCameraPtr& HrRenderFrameParameters::GetActiveCamera()
 
 void HrRenderFrameParameters::SetCurViewPort(const HrViewPortPtr& pViewPort)
 {
+	//todo 
 	//if (m_pCurViewPort != pViewPort)
 	//{
 		m_pCurViewPort = pViewPort;
@@ -64,7 +66,7 @@ const Matrix4& HrRenderFrameParameters::GetWorldMatrix()
 	if (m_bWorldMatrixDirty)
 	{
 		m_bWorldMatrixDirty = false;
-		m_worldMatrix = m_pCurSceneNode->GetTransform()->GetWorldMatrix();
+		m_worldMatrix = m_pTransfrom->GetWorldMatrix();
 	}
 	return m_worldMatrix;
 }
@@ -142,7 +144,6 @@ const int HrRenderFrameParameters::GetLightNum(HrLight::EnumLightType lightType)
 const float4 HrRenderFrameParameters::GetDirectionalLightDirection(int nLightIndex)
 {
 	const Vector3& v3Direction = m_pLightsData->GetLight(HrLight::LT_DIRECTIONAL, nLightIndex)->GetDirection();
-	//std::cout << "GetDirectionalLightDirection  x:" << v3Direction[0] << " y:" << v3Direction[1] << " z:" << v3Direction[2] << std::endl;
 	return float4(v3Direction.x(), v3Direction.y(), v3Direction.z(), 0.0f);
 }
 
@@ -184,43 +185,23 @@ void HrRenderFrameParameters::DirtyViewMatrix()
 	m_bWorldViewProjMatrixDirty = true;
 }
 
+void HrRenderFrameParameters::SetMaterial(HrMaterial* pMaterial)
+{
+	m_pMaterial = pMaterial;
+}
+
 float4 HrRenderFrameParameters::GetMaterialAlbedo() const
 {
-	return m_pRenderable->GetMaterial()->GetAlebdo();
+	return m_pMaterial->GetAlebdo();
 }
 
 float HrRenderFrameParameters::GetMaterialMetalness() const
 {
-	return m_pRenderable->GetMaterial()->GetMetalness();
+	return m_pMaterial->GetMetalness();
 }
 
 float HrRenderFrameParameters::GetMaterialRoughness() const
 {
-	return m_pRenderable->GetMaterial()->GetRoughness();
+	return m_pMaterial->GetRoughness();
 }
 
-
-//float HrRenderFrameParameters::GetMaterialGlossiness() const
-//{
-//	return m_pRenderable->GetMaterial()->GetGlossiness();
-//}
-//
-//float HrRenderFrameParameters::GetMaterialReflective() const
-//{
-//	return m_pRenderable->GetMaterial()->GetReflective();
-//}
-//
-//float4 HrRenderFrameParameters::GetMaterialAlbedo() const
-//{
-//	return m_pRenderable->GetMaterial()->GetAlebdo();
-//}
-//
-//float4 HrRenderFrameParameters::GetMaterialEmissive() const
-//{
-//	return m_pRenderable->GetMaterial()->GetEmissive();
-//}
-//
-//float HrRenderFrameParameters::GetMaterialOpacity() const
-//{
-//	return m_pRenderable->GetMaterial()->GetOpacity();
-//}

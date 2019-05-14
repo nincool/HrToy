@@ -10,7 +10,14 @@ namespace Hr
 	class HR_CORE_API HrCamera
 	{
 	public:
+		enum EnumCameraType
+		{
+			CT_PERSPECTIVE,
+			CT_OTHOGRAPHIC,
+		};
+
 		HrCamera(const std::string& strName);
+		HrCamera(const std::string& strName, EnumCameraType cameraType);
 
 		const Vector3& GetEyePos() const;
 		const Vector3& GetForward() const;
@@ -20,22 +27,30 @@ namespace Hr
 		const Vector3& GetLookAt() const;
 		float GetLookAtDistance();
 
-
 		void Fov(float fFov);
 		float FOV() const;
+		
 		void Aspect(float fAspect);
 		float Aspect() const;
+		
 		void NearPlane(float fNear);
 		float NearPlane() const;
+		
 		void FarPlane(float fFar);
 		float FarPlane() const;
 
+		void Width(float fWidth);
+		float Width() const;
+
+		void Height(float fHeight);
+		float Height() const;
+
 		void ViewParams(Vector3 const & v3EvePos, Vector3 const& v3LookAt, Vector3 const& v3Up);
-		virtual void ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane);
+		void ProjectParams(float fFov, float fAspect, float fNearPlane, float fFarPlane);
+		void ProjectOrthoParams(float fWidth, float fHeight, float fNearPlane, float fFarPlane);
 
 		Matrix4 const& GetViewMatrix() const;
-		Matrix4 const& GetProjectMatrix() const;
-		bool ViewProjDirty() { return m_bViewProjDirty; }
+		Matrix4 const& GetProjectMatrix();
 		Matrix4 const& GetViewProjMatrix();
 		Matrix4 const& GetInverseViewProjMatrix();
 
@@ -43,7 +58,18 @@ namespace Hr
 
 		EnumRenderingPath GetRenderPath();
 		void SetRenderPath(EnumRenderingPath renderPath);
+
+		EnumCameraType GetCameraType();
+		void SetCameraType(EnumCameraType cameraType);
+
+		uint32 GetCameraMaskLayer();
+		void SetCameraMaskLayer(uint32 nMaskLayer);
+
+	protected:
+		void UpdateCameraParams();
 	private:
+		EnumCameraType m_cameraType;
+
 		float m_fLookAtDistance;
 
 		mutable Matrix4 m_matView;
@@ -53,8 +79,7 @@ namespace Hr
 		mutable Matrix4 m_matViewProj;
 		mutable Matrix4 m_matInverseViewProj;
 		
-		bool m_bViewProjDirty;
-		bool m_bFrustumDirty;
+		bool m_bDirtyCamera;
 
 		Vector3 m_v3EyePos;
 		Vector3 m_v3Forward;
@@ -67,10 +92,13 @@ namespace Hr
 		float m_fAspect;
 		float m_fNearPlane;
 		float m_fFarPlane;
+		float m_fWidth;
+		float m_fHeight;
 
 		Frustum m_frustum;
 
 		EnumRenderingPath m_renderingPath;
+		uint32 m_nCameraMaskLayer;
 	};
 }
 

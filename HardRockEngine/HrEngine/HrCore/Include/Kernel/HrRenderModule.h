@@ -32,7 +32,7 @@ namespace Hr
 		 @Param:   pRenderTechnique 渲染效果 RenderLayout 可渲染物体
 		*/
 		void DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout);
-
+		void DoRender(HrRenderCommand* pCommand);
 
 		/**
 		 @Comment: 获取渲染组件工厂 [7/11/2018 By Hr]

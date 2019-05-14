@@ -29,6 +29,8 @@ HrTexturePtr HrResourceModule::RetriveTexture(const std::string& strFile, HrText
 		break;
 	case HrTexture::TEX_TYPE_2D:
 		return HrCheckPointerCast<HrTexture>(m_pResourceManager->RetriveOrLoadResource(strFile, HrResource::RT_TEXTURE_2D));
+	case HrTexture::TEX_TYPE_CUBE_MAP:
+		return HrCheckPointerCast<HrTexture>(m_pResourceManager->RetriveOrLoadResource(strFile, HrResource::RT_TEXTURE_CUBE));
 	}
 
 	return nullptr;

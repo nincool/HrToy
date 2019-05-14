@@ -14,7 +14,6 @@ namespace Hr
 		virtual HrSceneObjectPtr CreateInstance() override;
 
 		virtual void OnRenderBegin() override;
-
 		virtual void OnRenderEnd() override;
 	protected:
 		virtual void BuildVertices(const HrSubMeshPtr& pSubMesh);

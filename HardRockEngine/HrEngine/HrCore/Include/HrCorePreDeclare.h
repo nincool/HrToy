@@ -53,12 +53,15 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderTarget> HrRenderTargetPtr;
 	class HrRenderTextureTarget;
 	typedef std::shared_ptr<HrRenderTextureTarget> HrRenderTextureTargetPtr;
-
 	class HrDepthStencil;
 	typedef std::shared_ptr<HrDepthStencil> HrDepthStencilPtr;
-
 	class HrDeferredGBufferData;
 	typedef std::shared_ptr<HrDeferredGBufferData> HrDeferredGBufferDataPtr;
+
+	class HrCamera;
+	typedef std::shared_ptr<HrCamera> HrCameraPtr;
+	class HrSkyBox;
+	typedef std::shared_ptr<HrSkyBox> HrSkyBoxPtr;
 
 	//renderable
 	class HrVertexElement;
@@ -79,8 +82,12 @@ namespace Hr
 	class HrSkinnedMeshRenderable;
 	typedef std::shared_ptr<HrSkinnedMeshRenderable> HrSkinnedMeshRenderablePtr;
 
+	//renderqueue
 	class HrRenderQueue;
 	typedef std::shared_ptr<HrRenderQueue> HrRenderQueuePtr;
+	class HrRenderCommand;
+	class HrRenderCommandQueue;
+	typedef std::shared_ptr<HrRenderCommandQueue> HrRenderCommandQueuePtr;
 	class HrRenderQueueManager;
 	typedef std::shared_ptr<HrRenderQueueManager> HrRenderQueueManagerPtr;
 
@@ -96,8 +103,7 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderEffectParameter> HrRenderEffectParameterPtr;
 	class HrRenderEffectConstantBuffer;
 	typedef std::shared_ptr<HrRenderEffectConstantBuffer> HrRenderEffectConstantBufferPtr;
-	class HrCamera;
-	typedef std::shared_ptr<HrCamera> HrCameraPtr;
+
 	class HrShader;
 	typedef std::shared_ptr<HrShader> HrShaderPtr;
 	class HrRenderFrameParameters;
@@ -152,6 +158,12 @@ namespace Hr
 	typedef std::shared_ptr<HrRenderableComponent> HrRenderableComponentPtr;
 	class HrInstanceBatchComponent;
 	typedef std::shared_ptr<HrInstanceBatchComponent> HrInstanceBatchComponentPtr;
+	class HrUICanvasComponent;
+	typedef std::shared_ptr<HrUICanvasComponent> HrUICanvasComponentPtr;
+	class HrUIComponent;
+	typedef std::shared_ptr<HrUIComponent> HrUIComponentPtr;
+	class HrSkyBoxComponent;
+	typedef std::shared_ptr<HrSkyBoxComponent> HrSkyBoxComponentPtr;
 
 	class HrOctNode;
 	class HrOctree;
@@ -210,6 +222,14 @@ namespace Hr
 	typedef std::shared_ptr<HrInstanceBatchHW> HrInstanceBatchHWPtr;
 	class HrInstanceBatchObject;
 	typedef std::shared_ptr<HrInstanceBatchObject> HrInstanceBatchObjectPtr;
+
+	//UI
+	class HrUIWidget;
+	typedef std::shared_ptr<HrUIWidget> HrUIWidgetPtr;
+	class HrUISprite;
+	typedef std::shared_ptr<HrUISprite> HrUISpritePtr;
+	class HrUIButton;
+	typedef std::shared_ptr<HrUIButton> HrUIButtonPtr;
 }
 
 

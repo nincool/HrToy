@@ -28,7 +28,6 @@ namespace Hr
 		const HrScenePtr& GetRunningScene() const;
 		const HrRenderFrameParametersPtr& GetRenderFrameParameters();
 
-		void FindRenderablesToQueue(const HrCameraPtr& pCamera);
 		void RenderVisibleObjects(HrRenderProcessing* pProcessing);
 
 		void DirtyScene();

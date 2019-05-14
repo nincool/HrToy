@@ -16,7 +16,7 @@ namespace Hr
 		SIS_DISABLE,
 	};
 
-	class HrSceneLightData
+	class HR_CORE_API HrSceneLightData
 	{
 	public:
 		void AddLight(const HrLightPtr& pLight);
@@ -32,14 +32,27 @@ namespace Hr
 	//
 	/////////////////////////////////////////////////////////
 
-	class HrSceneViewPortData
+	class HR_CORE_API HrSceneViewPortData
 	{
 	public:
 		void AddViewPort(const HrViewPortPtr& pViewPort);
-
 		const std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> >& GetAllViewPorts();
 	protected:
 		std::vector< std::pair<EnumSceneItemStatus, HrViewPortPtr> > m_vecViewPorts;
+	};
+
+	/////////////////////////////////////////////////////////
+	//
+	/////////////////////////////////////////////////////////
+
+	class HR_CORE_API HrEnvironmentData
+	{
+	public:
+		bool IsSkyBoxEnable();
+		void SetSkyBox(const HrSkyBoxComponentPtr& pSkyBox);
+		const HrSkyBoxComponentPtr& GetSkyBox();
+	protected:
+		HrSkyBoxComponentPtr m_pSkyBox;
 	};
 
 	/////////////////////////////////////////////////////////
@@ -60,15 +73,16 @@ namespace Hr
 
 		virtual void Update(float fDelta);
 
-		virtual void FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager);
-
 		const HrSceneNodePtr& GetRootNode();
 
+		const std::shared_ptr<HrEnvironmentData>& GetEnvironmentData();
 		const std::shared_ptr<HrSceneLightData>& GetLightsData();
 		const std::shared_ptr<HrSceneViewPortData>& GetViewPortsData();
+		
 	protected:
 		HrSceneNodePtr m_pSceneRootNode;
 
+		std::shared_ptr<HrEnvironmentData> m_pEnvironmentData;
 		std::shared_ptr<HrSceneLightData> m_pLightsData;
 		std::shared_ptr<HrSceneViewPortData> m_pViewPortData;
 

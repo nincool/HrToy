@@ -36,9 +36,9 @@ void HrInstanceBatchTest::OnEnter()
 void HrInstanceBatchTest::CreateSceneElements()
 {
 	//添加摄像机
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
-	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -10.0f));
+	//m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
+	//AddNode(m_pSceneMainCamera);
+	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -10.0f));
 
 	//创建直线光
 	auto pDirectionLight = HrSceneObjectFactory::Instance()->CreateLightNode("TestDirectionLight", HrLight::LT_DIRECTIONAL);

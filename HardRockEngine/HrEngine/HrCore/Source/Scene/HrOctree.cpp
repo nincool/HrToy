@@ -29,7 +29,7 @@ const AABBox& HrOctree::GetAABB()
 	return m_pRootNode->GetAABB();
 }
 
-void HrOctree::WalkTree(const HrCameraPtr& pCamera, const HrSceneNodePtr& pSceneNode)
+void HrOctree::WalkTree(const HrCameraPtr& pCamera, HrSceneNode* pSceneNode)
 {
 	m_pRootNode->WalkTree(pCamera, pSceneNode, m_fThreshold, m_sc_nMaxDepth);
 }

@@ -20,7 +20,7 @@ void HrD3D11SRVShaderParamRelationShip::UpdateShaderResourceView()
 	HrTexture* pTex = nullptr;
 	m_pTextureParam->Value(pTex);
 	if (pTex)
-		(*m_pVecD3D11SRV)[m_nPosIndex] = HrCheckPointerCast<HrD3D11Texture2D>(pTex)->GetD3D11ShaderResourceView().get();
+		(*m_pVecD3D11SRV)[m_nPosIndex] = HrCheckPointerCast<HrD3D11Texture>(pTex)->GetD3D11ShaderResourceView().get();
 	else
 		(*m_pVecD3D11SRV)[m_nPosIndex] = nullptr;
 }
@@ -143,7 +143,12 @@ void HrD3D11Shader::BindRenderParameterImpl()
 		if (m_vecBindRenderResources[i]->DataType() == REDT_TEXTURE2D)
 		{
 			m_vecD3D11SRV.push_back(nullptr);
-			m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV, m_vecD3D11SRV.size()-1);
+			m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV, m_vecD3D11SRV.size() - 1);
+		}
+		else if (m_vecBindRenderResources[i]->DataType() == REDT_TEXTURECUBE)
+		{
+			m_vecD3D11SRV.push_back(nullptr);
+			m_vecSRVParamRelationships.emplace_back(m_vecBindRenderResources[i].get(), &m_vecD3D11SRV, m_vecD3D11SRV.size() - 1);
 		}
 		else if (m_vecBindRenderResources[i]->DataType() == REDT_SAMPLER_STATE)
 		{

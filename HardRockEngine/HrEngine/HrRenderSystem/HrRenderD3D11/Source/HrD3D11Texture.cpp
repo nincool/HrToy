@@ -96,7 +96,7 @@ HrD3D11Texture2D::HrD3D11Texture2D(uint32 nWidth
 
 	if (!(m_nUsedFor & HrD3D11Texture::TUF_TEX_DEFAULTTEXTURE))
 	{
-		CreateHWResource(nullptr);
+		CreateHWResource(std::vector<std::shared_ptr<HrImage> >());
 	}
 }
 
@@ -251,17 +251,29 @@ bool HrD3D11Texture2D::CreateShaderResourceView()
 	return true;
 }
 
-void HrD3D11Texture2D::CreateHWResource(HrImage* pImage)
+void HrD3D11Texture2D::CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage)
 {
 	if (m_pD3D11Texture2D)
 	{
 		return;
 	}
 
-	if (pImage)
+	std::vector<D3D11_SUBRESOURCE_DATA> vecSubRes;
+	if (!vecImage.empty())
 	{
-		m_nWidth = pImage->GetWidht();
-		m_nHeight = pImage->GetHeight();
+		std::shared_ptr<HrImage> pImage = vecImage[0];
+		if (pImage && pImage->GetData()->GetBufferSize() > 0)
+		{
+			m_nWidth = pImage->GetWidth();
+			m_nHeight = pImage->GetHeight();
+			m_format = pImage->GetFormat();
+
+			vecSubRes.resize(1);
+
+			vecSubRes[0].pSysMem = pImage->GetData()->GetBufferPoint();
+			vecSubRes[0].SysMemPitch = pImage->GetSrcPitch();
+			vecSubRes[0].SysMemSlicePitch = 0;
+		}
 	}
 
 	D3D11_TEXTURE2D_DESC textureDesc;
@@ -288,16 +300,6 @@ void HrD3D11Texture2D::CreateHWResource(HrImage* pImage)
 	textureDesc.BindFlags = GetD3DTextureBindFlags();
 	textureDesc.CPUAccessFlags = GetD3DCPUAccessFlags();
 	textureDesc.MiscFlags = 0;
-
-	std::vector<D3D11_SUBRESOURCE_DATA> vecSubRes;
-	if (pImage && pImage->GetData()->GetBufferSize() > 0)
-	{
-		vecSubRes.resize(1);
-
-		vecSubRes[0].pSysMem = pImage->GetData()->GetBufferPoint();
-		vecSubRes[0].SysMemPitch = pImage->GetSrcPitch();
-		vecSubRes[0].SysMemSlicePitch = 0;
-	}
 
 	ID3D11Texture2D* pTempTexture2D = nullptr;
 	HRESULT hr = m_pD3D11Device->CreateTexture2D(&textureDesc, vecSubRes.data(), &pTempTexture2D);
@@ -328,4 +330,107 @@ void HrD3D11Texture2D::CreateHWResource(HrImage* pImage)
 ID3D11Texture2DPtr HrD3D11Texture2D::GetD3D11Texture()
 {
 	return m_pD3D11Texture2D;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////
+
+HrD3D11TextureCubeMap::HrD3D11TextureCubeMap(uint32 nWidth
+	, uint32 nHeight
+	, uint32 nNumMipMaps
+	, uint32 nSampleCount
+	, uint32 nSampleQuality
+	, uint32 nAccessHint
+	, uint32 texUsedFor
+	, EnumPixelFormat format)
+	: HrD3D11Texture(HrTexture::TEX_TYPE_CUBE_MAP, nSampleCount, nSampleQuality, nAccessHint, texUsedFor)
+{
+
+}
+
+void HrD3D11TextureCubeMap::CreateHWResource(std::vector<std::shared_ptr<HrImage> >& vecImage)
+{
+	m_nWidth = vecImage[0]->GetWidth();
+	m_nHeight = vecImage[0]->GetHeight();
+	m_format = vecImage[0]->GetFormat();
+
+	D3D11_TEXTURE2D_DESC textureDesc;
+	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	textureDesc.Width = m_nWidth;
+	textureDesc.Height = m_nHeight;
+	textureDesc.MipLevels = m_nMipMapsNum;
+	textureDesc.ArraySize = 6 * m_nArraySize;
+	textureDesc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+	
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+
+	textureDesc.Usage = HrD3D11Mapping::GetTextureUsage(m_textureUsage);
+
+	textureDesc.BindFlags = GetD3DTextureBindFlags();
+	textureDesc.CPUAccessFlags = GetD3DCPUAccessFlags();
+	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+
+	BOOST_ASSERT(vecImage.size() == 6 * m_nArraySize * m_nMipMapsNum);
+	m_nWidth = vecImage[0]->GetWidth();
+	m_nHeight = vecImage[0]->GetHeight();
+	std::vector<D3D11_SUBRESOURCE_DATA> vecSubRes;
+	vecSubRes.resize(vecImage.size());
+	for (size_t i = 0; i < vecImage.size(); ++i)
+	{
+		vecSubRes[i].pSysMem = vecImage[i]->GetData()->GetBufferPoint();
+		vecSubRes[i].SysMemPitch = vecImage[i]->GetSrcPitch();
+		vecSubRes[i].SysMemSlicePitch = 0;
+	}
+
+	ID3D11Texture2D* pTempTexture2D = nullptr;
+	HRESULT hr = m_pD3D11Device->CreateTexture2D(&textureDesc, vecSubRes.data(), &pTempTexture2D);
+	if (FAILED(hr))
+	{
+		TRE("HrD3D11Texture2D::CreateDepthStencilView create texture Error!");
+		return;
+	}
+	m_pD3D11Texture2D = MakeComPtr(pTempTexture2D);
+	m_pD3DResource = m_pD3D11Texture2D;
+
+	if (m_nUsedFor & HrD3D11Texture::TUF_TEX_SHADERRESOURCEVIEW)
+	{
+		CreateShaderResourceView();
+	}
+}
+
+bool HrD3D11TextureCubeMap::CreateShaderResourceView()
+{
+	if (m_pShaderResourceView)
+	{
+		return true;
+	}
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	switch (m_format)
+	{
+	case PF_D24S8:
+		desc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+		break;
+	default:
+		desc.Format = HrD3D11Mapping::GetPixelFormat(m_format);
+		break;
+	}
+
+	desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+	desc.TextureCube.MostDetailedMip = 0;
+	desc.TextureCube.MipLevels = m_nMipMapsNum;
+
+	ID3D11ShaderResourceView* pShaderResourceView = nullptr;
+	HRESULT hr = m_pD3D11Device->CreateShaderResourceView(m_pD3DResource.get(), &desc, &pShaderResourceView);
+	if (FAILED(hr))
+	{
+		TRE("HrD3D11TextureCubeMap::CreateShaderResourceView error!");
+		return false;
+	}
+	m_pShaderResourceView = MakeComPtr(pShaderResourceView);
+
+	return true;
 }

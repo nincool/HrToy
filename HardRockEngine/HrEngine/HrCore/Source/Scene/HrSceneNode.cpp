@@ -65,9 +65,8 @@ void HrSceneNode::AddChild(const HrSceneNodePtr& pSceneNode)
 	pSceneNode->SetParent(this);
 	if (IsRunning())
 	{
-		//todo is this node can be rendered?
-		HrDirector::Instance()->GetSceneModule()->DirtyScene();
 		pSceneNode->OnEnter();
+		pSceneNode->DirtyTransfrom(true, true, true);
 	}
 
 	m_vecChildrenNode.push_back(pSceneNode);
@@ -135,26 +134,21 @@ void HrSceneNode::OnEndRenderScene(const HrEventPtr& pEvent)
 
 }
 
-void HrSceneNode::FindVisibleRenderables(const HrRenderQueueManagerPtr& pRenderQueueManager)
-{
-	if (m_pSceneObject->GetRenderableComponent())
-	{
-		pRenderQueueManager->AddRenderableNode(shared_from_this());
-	}
-}
-
-void HrSceneNode::FindAllRenderables(std::vector<HrSceneNodePtr>& vecRenderables)
+void HrSceneNode::FindAllRenderables(std::vector<HrSceneNode*>& vecRenderables, int nMaskLayer)
 {
 	BOOST_ASSERT(m_pSceneObject);
+
 	const HrRenderableComponentPtr& pRenderableCom = m_pSceneObject->GetRenderableComponent();
 	if (pRenderableCom)
 	{
-		//todo batch
-		vecRenderables.push_back(shared_from_this());
+		if (!m_pSceneObject->GetSkyBoxComponent())
+		{
+			vecRenderables.push_back(this);
+		}
 	}
 	for (auto& item : m_vecChildrenNode)
 	{
-		item->FindAllRenderables(vecRenderables);
+		item->FindAllRenderables(vecRenderables, nMaskLayer);
 	}
 }
 

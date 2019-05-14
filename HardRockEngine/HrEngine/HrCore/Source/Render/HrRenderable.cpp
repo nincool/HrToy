@@ -4,6 +4,7 @@
 #include "Render/HrRenderFactory.h"
 #include "Render/HrVertex.h"
 #include "Render/HrRenderFrameParameters.h"
+#include "Render/HrRenderCommand.h"
 #include "Asset/HrMaterial.h"
 #include "Asset/HrRenderEffect.h"
 #include "Asset/HrMesh.h"
@@ -18,6 +19,10 @@ using namespace Hr;
 HrRenderable::HrRenderable(const HrSubMeshPtr& pSubMesh)
 {
 	m_pSubMesh = pSubMesh;
+
+	m_pRenderCommand = HrMakeSharedPtr<HrRenderCommand>(std::bind(&HrRenderable::OnRenderBegin, this), std::bind(&HrRenderable::OnRenderEnd, this));
+	m_pRenderCommand->SetRenderLayout(GetRenderLayout().get());
+	m_pRenderCommand->SetMaterial(m_pSubMesh->GetMaterial().get());
 
 	SetRenderEffect(HrDirector::Instance()->GetResourceModule()->RetriveResource<HrRenderEffect>());
 }
@@ -43,6 +48,8 @@ void HrRenderable::SetRenderEffect(const HrRenderEffectPtr& pRenderEff)
 		m_pRenderEffect = pRenderEff;
 		m_pTechnique = m_pRenderEffect->GetBestTechnique(m_pSubMesh->GetRenderLayout());
 		BOOST_ASSERT(m_pTechnique);
+		m_pRenderCommand->SetRenderEffect(pRenderEff.get());
+		m_pRenderCommand->SetRenderTechnique(m_pTechnique.get());
 	}
 }
 
@@ -62,18 +69,8 @@ const HrSubMeshPtr& HrRenderable::GetSubMesh()
 	return m_pSubMesh;
 }
 
-void HrRenderable::Render()
-{
-	OnRenderBegin();
-
-	HrDirector::Instance()->GetRenderModule()->DoRender(GetTechnique(), GetRenderLayout());
-
-	OnRenderEnd();
-}
-
 void HrRenderable::OnRenderBegin()
 {
-	UpdateRenderEffectParam();
 }
 
 void HrRenderable::OnRenderEnd()
@@ -141,5 +138,10 @@ void HrRenderable::UpdateRenderEffectParam()
 const AABBox& HrRenderable::GetAABBox()
 {
 	return m_pSubMesh->GetAABB();
+}
+
+HrRenderCommand* HrRenderable::GetRenderCommand()
+{
+	return m_pRenderCommand.get();
 }
 

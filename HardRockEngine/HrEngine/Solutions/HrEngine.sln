@@ -64,6 +64,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HrSceneManager", "HrSceneMa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrMeshConvertMFC", "..\HrTools\HrMeshConvertMFC\HrMeshConvertMFC.vcxproj", "{BFFB2C8C-8722-4FA2-83A1-FEC0B4298913}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HrPrefabMaker", "..\HrTools\HrPrefabMaker\HrPrefabMaker.vcxproj", "{28AA3011-188D-45F9-AA0B-20D6C460EE29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -809,6 +811,44 @@ Global
 		{BFFB2C8C-8722-4FA2-83A1-FEC0B4298913}.RelWithDebInfo|Win32.Build.0 = Release|Win32
 		{BFFB2C8C-8722-4FA2-83A1-FEC0B4298913}.RelWithDebInfo|x64.ActiveCfg = Release|x64
 		{BFFB2C8C-8722-4FA2-83A1-FEC0B4298913}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|Win32.Build.0 = Debug|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|x64.ActiveCfg = Debug|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Debug|x64.Build.0 = Debug|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Any CPU.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Any CPU.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Mixed Platforms.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Win32.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|Win32.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.MinSizeRel|x64.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Any CPU.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Any CPU.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Mixed Platforms.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Win32.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|Win32.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|x64.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Profile|x64.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|Any CPU.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|Win32.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|Win32.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|x64.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.Release|x64.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Any CPU.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Any CPU.Build.0 = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Mixed Platforms.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Mixed Platforms.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|Win32.Build.0 = Release|Win32
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29}.RelWithDebInfo|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -836,6 +876,7 @@ Global
 		{E29115E6-1F4F-4860-81AF-527AFCE21C53} = {F671231A-BEA4-48DA-A37F-188BC6AECDCC}
 		{3993DB23-E51D-4BA4-B470-8F102FBC579F} = {F671231A-BEA4-48DA-A37F-188BC6AECDCC}
 		{BFFB2C8C-8722-4FA2-83A1-FEC0B4298913} = {79C5E2EA-E7A8-4ECC-B680-CB284DDC569B}
+		{28AA3011-188D-45F9-AA0B-20D6C460EE29} = {79C5E2EA-E7A8-4ECC-B680-CB284DDC569B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBEBA872-E371-41AF-BBF3-43B1CD206342}

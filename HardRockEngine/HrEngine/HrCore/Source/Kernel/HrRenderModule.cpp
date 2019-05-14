@@ -88,6 +88,7 @@ void HrRenderModule::RenderSceneView(const HrViewPortPtr& pViewPort)
 
 	const HrCameraPtr& pCamera = pViewPort->GetCamera();
 	RenderFrameForward();
+	
 	//RenderFrameDeferred();
 
 	//switch (pCamera->GetRenderPath())
@@ -120,26 +121,15 @@ void HrRenderModule::Present()
 	m_pCurFrameBuffer->Present();
 }
 
-//void HrRenderModule::VisitRenderableNode(const HrSceneNodePtr& pNode)
-//{
-//	auto& pRenderParam = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters();
-//	pRenderParam->SetCurrentSceneNode(pNode);
-//
-//	if (m_pCurRenderSystem == m_pForwardRenderSystem)
-//	{
-//		pNode->GetSceneObject()->GetRenderableComponent()->GetRenderable()->Render();
-//	}
-//	else if (m_pCurRenderSystem == m_pDeferredRenderSystem)
-//	{
-//		
-//	}
-//}
-
 void HrRenderModule::DoRender(const HrRenderTechniquePtr& pRenderTechnique, const HrRenderLayoutPtr& pRenderLayout)
 {
 	m_pRender->Render(pRenderTechnique, pRenderLayout);
 }
 
+void HrRenderModule::DoRender(HrRenderCommand* pCommand)
+{
+	m_pRender->DoRender(pCommand);
+}
 
 
 

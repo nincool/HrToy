@@ -115,9 +115,9 @@ void HrSceneImported::LoadSceneNode(const rapidjson::Value& jsonValue, std::vect
 
 void HrSceneImported::CreateSceneFromData()
 {
-	m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
-	AddNode(m_pSceneMainCamera);
-	m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
+	//m_pSceneMainCamera = HrSceneObjectFactory::Instance()->CreateCamera("MainCamera", 0, 0, HrContextConfig::Instance()->GetRTVWidth(), HrContextConfig::Instance()->GetRTVHeight(), 0);
+	//AddNode(m_pSceneMainCamera);
+	//m_pSceneMainCamera->GetTransform()->Translate(Vector3(0.0f, 0.0f, -100.0f));
 
 	//SetAmbientLight(m_sceneDataInfo.ambientColor);
 

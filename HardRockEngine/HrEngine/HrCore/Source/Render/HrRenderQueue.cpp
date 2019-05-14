@@ -7,33 +7,34 @@
 #include "Render/HrCamera.h"
 #include "Render/HrRenderFrameParameters.h"
 #include "Render/HrRenderProcessing.h"
+#include "Render/HrRenderCommand.h"
 #include "Scene/HrSceneNode.h"
 #include "Scene/HrSceneObject.h"
 #include "Scene/HrTransform.h"
 #include "Scene/HrSceneObjectComponent.h"
+#include "UI/HrUIWidget.h"
 
 
 using namespace Hr;
 
-HrRenderQueue::~HrRenderQueue()
-{
 
+//////////////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+void HrRenderCommandQueue::ClearRenderQueue()
+{
+	m_vecRenderCommands.clear();
 }
 
-void HrRenderQueue::ClearRenderQueue()
+void HrRenderCommandQueue::PushBack(HrRenderCommand* pCommand)
 {
-	m_vecRenderableNodes.clear();
+	m_vecRenderCommands.push_back(pCommand);
 }
 
-void HrRenderQueue::AddRenderableSceneNode(const HrSceneNodePtr& pSceneNode)
+void HrRenderCommandQueue::Sort()
 {
-	m_vecRenderableNodes.push_back(pSceneNode);
-}
-
-void HrRenderQueue::Sort()
-{
-	//HRLOG("RenderQueue::Sort RenderQueue's size [%d]", m_vecRenderableNodes.size());
-	if (m_vecRenderableNodes.empty())
+	if (m_vecRenderCommands.empty())
 	{
 		return;
 	}
@@ -41,13 +42,13 @@ void HrRenderQueue::Sort()
 	const HrCameraPtr& pCamera = HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->GetActiveCamera();
 	const float4& viewMatZ = pCamera->GetViewMatrix().Col(2);
 
-	std::vector<std::pair<float, uint32>> vecMinDepths(m_vecRenderableNodes.size());
-	for (size_t i = 0; i < m_vecRenderableNodes.size(); ++i)
+	std::vector<std::pair<float, uint32>> vecMinDepths(m_vecRenderCommands.size());
+	for (size_t i = 0; i < m_vecRenderCommands.size(); ++i)
 	{
-		const HrSceneNodePtr& pSceneNode = m_vecRenderableNodes[i];
+		HrRenderCommand* pRenderCommand = m_vecRenderCommands[i];
 		//from klayge SceneManager.cpp 650
-		const AABBox& aabb = pSceneNode->GetTransform()->GetLocalAABBox();
-		const Matrix4& mat = pSceneNode->GetTransform()->GetWorldMatrix();
+		const AABBox& aabb = pRenderCommand->GetTransform()->GetLocalAABBox();
+		const Matrix4& mat = pRenderCommand->GetTransform()->GetWorldMatrix();
 		float md = std::numeric_limits<float>::infinity();
 		//世界变换到视变换
 		const float4 zvec(HrMath::Dot(mat.Row(0), viewMatZ),
@@ -63,31 +64,21 @@ void HrRenderQueue::Sort()
 
 		vecMinDepths[i] = std::make_pair(md, static_cast<uint32>(i));
 	}
-	
+
 	std::sort(vecMinDepths.begin(), vecMinDepths.end());
-	std::vector<HrSceneNodePtr> vecSortedNodes(vecMinDepths.size());
+	std::vector<HrRenderCommand*> vecSortedCommands(vecMinDepths.size());
 	for (size_t i = 0; i < vecMinDepths.size(); ++i)
 	{
-		vecSortedNodes[i] = m_vecRenderableNodes[vecMinDepths[i].second];
+		vecSortedCommands[i] = m_vecRenderCommands[vecMinDepths[i].second];
 	}
-	m_vecRenderableNodes.swap(vecSortedNodes);
+	m_vecRenderCommands.swap(vecSortedCommands);
 }
 
-//void HrRenderQueue::RenderRenderables()
-//{
-//	auto& pRenderModule = HrDirector::Instance()->GetRenderModule();
-//	for (const auto& iteNode : m_vecRenderableNodes)
-//	{
-//		pRenderModule->VisitRenderableNode(iteNode);
-//	}
-//}
-
-void HrRenderQueue::AcceptRenderProcessing(HrRenderProcessing* pProcessing)
+void HrRenderCommandQueue::AcceptRenderProcessing(HrRenderProcessing* pProcessing)
 {
-	for (const auto& iteNode : m_vecRenderableNodes)
+	for (const auto& iteNode : m_vecRenderCommands)
 	{
-		HrDirector::Instance()->GetSceneModule()->GetRenderFrameParameters()->SetCurrentSceneNode(iteNode);
-		pProcessing->VisitRenderable(iteNode->GetSceneObject()->GetRenderableComponent()->GetRenderable());
+		pProcessing->VisitRenderCommand(iteNode);
 	}
 }
 
@@ -96,8 +87,7 @@ void HrRenderQueue::AcceptRenderProcessing(HrRenderProcessing* pProcessing)
 ///////////////////////////////////////////////////////////////////
 HrRenderQueueManager::HrRenderQueueManager()
 {
-	//m_arrRenderQueue[HrRenderQueue::RQ_QUEUE_BACKGROUND] = HrMakeSharedPtr<HrRenderQueue>();
-	m_arrRenderQueue[HrRenderQueue::RQ_QUEUE_MAIN] = HrMakeSharedPtr<HrRenderQueue>();
+	m_arrRenderCommandQueue[HrRenderCommandQueue::RQ_QUEUE_MAIN] = HrMakeSharedPtr<HrRenderCommandQueue>();
 }
 
 HrRenderQueueManager::~HrRenderQueueManager()
@@ -105,31 +95,33 @@ HrRenderQueueManager::~HrRenderQueueManager()
 
 }
 
-void HrRenderQueueManager::AddRenderableNode(const HrSceneNodePtr& pNode)
+const HrRenderCommandQueuePtr& HrRenderQueueManager::GetRenderQueue(HrRenderCommandQueue::EnumRenderQueueID queueID)
 {
-	//todo 
-	auto pRenderQueue = GetRenderQueue(HrRenderQueue::RQ_QUEUE_MAIN);
-	pRenderQueue->AddRenderableSceneNode(pNode);
-}
-
-const HrRenderQueuePtr& HrRenderQueueManager::GetRenderQueue(HrRenderQueue::EnumRenderQueueID queueID)
-{
-	return m_arrRenderQueue[queueID];
+	return m_arrRenderCommandQueue[queueID];
 }
 
 void HrRenderQueueManager::PrepareRenderQueue()
 {
-	for (auto& iteQueue : m_arrRenderQueue)
+	for (auto& iteQueue : m_arrRenderCommandQueue)
 	{
-		iteQueue->ClearRenderQueue();
+		if (iteQueue)
+			iteQueue->ClearRenderQueue();
 	}
 }
 
 void HrRenderQueueManager::SortRenderQueue()
 {
-	for (auto& iteQueue : m_arrRenderQueue)
+	for (auto& iteQueue : m_arrRenderCommandQueue)
 	{
-		iteQueue->Sort();
+		if (iteQueue)
+			iteQueue->Sort();
 	}
 }
+
+
+void HrRenderQueueManager::PushCommand(HrRenderCommand* pCommand)
+{
+	m_arrRenderCommandQueue[HrRenderCommandQueue::RQ_QUEUE_MAIN]->PushBack(pCommand);
+}
+
 
